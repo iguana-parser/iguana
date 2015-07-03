@@ -37,6 +37,7 @@ import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.symbol.Align;
 import org.iguana.grammar.symbol.Associativity;
 import org.iguana.grammar.symbol.Block;
@@ -182,6 +183,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Alt.builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
+				freeVars.removeAll(state);
 				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
@@ -215,6 +217,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			visitor.visitSymbol(in);
 			
 			if (!freeVars.isEmpty()) {
+				freeVars.removeAll(state);
 				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
@@ -255,6 +258,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			visitor.visitSymbol(S);
 			
 			if (!freeVars.isEmpty()) {
+				freeVars.removeAll(state);
 				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
@@ -294,6 +298,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Sequence.builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
+				freeVars.removeAll(state);
 				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
@@ -328,6 +333,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			visitor.visitSymbol(S);
 			
 			if (!freeVars.isEmpty()) {
+				freeVars.removeAll(state);
 				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
@@ -345,6 +351,112 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+		
+		/**
+		 * S_IF(cond) ::= [ cond] S 
+		 *              | [!cond] epsilon 
+		 */
+		@Override
+		public Symbol visit(IfThen symbol) {
+			
+			Expression cond = symbol.getExpression();
+			Symbol thenPart = symbol.getThenPart();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			thenPart.setEmpty();
+			visitor.visitSymbol(thenPart);
+			
+			String id = "condIF";
+			
+			if (!freeVars.isEmpty()) {
+				
+				freeVars.removeAll(state);
+				
+				parameters = new String[freeVars.size() + 1];
+				arguments = new Expression[freeVars.size() + 1];
+				
+				parameters[0] = id;
+				arguments[0] = cond;
+				
+				int i = 1;
+				for (String var : freeVars) {
+					parameters[i] = var;
+					arguments[i] = AST.var(var);
+					i++;
+				}
+			}
+			
+			Nonterminal newNt = Nonterminal.builder(thenPart.getName() + "_IF").addParameters(parameters).build();
+			
+			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+									.setLayout(layout).setLayoutStrategy(strategy)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			
+			// FIXME: epsilon rule can have a condition
+			addedRules.add(Rule.withHead(newNt)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			
+			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
+		}
+		
+		/**
+		 * AB_IF_ELSE(cond) ::= [ cond] A
+		 *                    | [!cond] B
+		 */
+		@Override
+		public Symbol visit(IfThenElse symbol) {
+			
+			Expression cond = symbol.getExpression();
+			Symbol thenPart = symbol.getThenPart();
+			Symbol elsePart = symbol.getElsePart();
+			
+			init();
+			String[] parameters = null;
+			Expression[] arguments = null;
+			
+			thenPart.setEmpty();
+			visitor.visitSymbol(thenPart);
+			
+			String id = "condIF";
+			
+			if (!freeVars.isEmpty()) {
+				
+				freeVars.removeAll(state);
+				
+				parameters = new String[freeVars.size() + 1];
+				arguments = new Expression[freeVars.size() + 1];
+				
+				parameters[0] = id;
+				arguments[0] = cond;
+				
+				int i = 1;
+				for (String var : freeVars) {
+					parameters[i] = var;
+					arguments[i] = AST.var(var);
+					i++;
+				}
+			}
+			
+			Nonterminal newNt = Nonterminal.builder(thenPart.getName() + elsePart.getName() + "_IF_THEN_ELSE").addParameters(parameters).build();
+			
+			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+									.setLayout(layout).setLayoutStrategy(strategy)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			
+			// FIXME: epsilon rule can have a condition
+			addedRules.add(Rule.withHead(newNt).addSymbol(elsePart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
+									.setLayout(layout).setLayoutStrategy(strategy)
+									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+			
+			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 		
 		/**
@@ -412,26 +524,6 @@ public class EBNFToBNF implements GrammarTransformation {
 		@Override
 		public Symbol visit(Epsilon symbol) {
 			return symbol;
-		}
-
-		@Override
-		public Symbol visit(IfThen symbol) {
-			Symbol sym = symbol.getThenPart().accept(this);
-			if (sym == symbol.getThenPart())
-				return symbol;
-			
-			return IfThen.builder(symbol.getExpression(), sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
-		}
-
-		@Override
-		public Symbol visit(IfThenElse symbol) {
-			Symbol thenPart = symbol.getThenPart().accept(this);
-			Symbol elsePart = symbol.getElsePart().accept(this);
-			if (thenPart == symbol.getThenPart() 
-					&& elsePart == symbol.getElsePart())
-				return symbol;
-			
-			return IfThenElse.builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override
