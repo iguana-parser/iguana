@@ -29,10 +29,12 @@ package org.iguana.datadependent.traversal;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
+import org.eclipse.imp.pdb.facts.util.TrieSet;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.ast.Expression.AndIndent;
@@ -77,6 +79,7 @@ import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Offside;
 import org.iguana.grammar.symbol.Return;
+import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.symbol.While;
@@ -91,6 +94,9 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
 	
+	/*
+	 * Free variables of a symbol and updates to free variables
+	 */
 	private final Set<java.lang.String> freeVariables;
 	private final Set<java.lang.String> updates;
 	
@@ -107,8 +113,34 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.nonterminals = null;
 	}
 	
-	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates;
-	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns;
+	public void compute(Rule rule) {
+		
+		ImmutableSet<java.lang.String> env = TrieSet.of();
+		
+		java.lang.String[] parameters = rule.getHead().getParameters();
+		if (parameters != null) {
+			for (java.lang.String parameter : parameters)
+				env.__insert(parameter);
+		}
+		
+		ImmutableSet<java.lang.String> _env = env;
+		
+		for (Symbol symbol : rule.getBody()) {
+			
+			symbol.setEnv(_env);
+			this.visitSymbol(symbol);
+			_env = symbol.getEnv();
+			
+			symbol.setEmpty();
+		}
+		
+	}
+	
+	/*
+	 * State variable bindings of nonterminals in the rule
+	 */
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates; // Given assignments to state variables within a nonterminal
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns; // Given uses of updated state variables after a use of a nonterminal 
 	
 	private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
 	private Set<Nonterminal> nonterminals;
@@ -122,13 +154,15 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.nonterminals = new HashSet<>();
 	}
 	
-	public void init() {
-		this.nonterminals = new HashSet<>();
-		this.nonterminal_bindings = new HashMap<>();
+	public Map<Nonterminal, Set<java.lang.String>> computeBindings(Rule rule) {
+		initBindings();
+		compute(rule);
+		return nonterminal_bindings;
 	}
 	
-	public Map<Nonterminal, Set<java.lang.String>> getBindings() {
-		return nonterminal_bindings;
+	private void initBindings() {
+		this.nonterminals = new HashSet<>();
+		this.nonterminal_bindings = new HashMap<>();
 	}
 	
 	@Override
@@ -172,7 +206,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 					if (nonterminal_bindings.containsKey(nonterminal))
 						nonterminal_bindings.get(nonterminal).add(name);
 					else {
-						Set<java.lang.String> names = new HashSet<>();
+						Set<java.lang.String> names = new LinkedHashSet<>();
 						names.add(name);
 						nonterminal_bindings.put(nonterminal, names);
 					}

@@ -149,20 +149,8 @@ public class DesugarState implements GrammarTransformation {
 			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>(); 
 			bindings.put(head, nonterminal_bindings);
 			
-			for (Rule rule : grammar.getAlternatives(head)) {
-				
-				ImmutableSet<String> _env = env;
-				visitor.init();
-				
-				for (Symbol symbol : rule.getBody()) {
-					symbol.setEnv(_env);
-					visitor.visitSymbol(symbol);
-					_env = symbol.getEnv();
-					symbol.setEmpty();
-				}
-				
-				nonterminal_bindings.add(visitor.getBindings());
-			}
+			for (Rule rule : grammar.getAlternatives(head))	
+				nonterminal_bindings.add(visitor.computeBindings(rule));
 		}
 		
 //		Set<Rule> newRules = new LinkedHashSet<>();
