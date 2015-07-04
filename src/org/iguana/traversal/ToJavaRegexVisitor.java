@@ -86,7 +86,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
-		Map<Boolean, List<E>> parition = alt.getSymbols().stream().collect(Collectors.partitioningBy(s -> s instanceof Character || s instanceof CharacterRange));
+		Map<Boolean, List<E>> parition = alt.getSymbols().stream().collect(Collectors.partitioningBy(s -> isCharClass(s)));
 		List<E> charClasses = parition.get(true);
 		List<E> other = parition.get(false);
 
@@ -94,13 +94,13 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 
 		if (!charClasses.isEmpty() && !other.isEmpty()) {
 			sb.append("(?:");
-			sb.append("[" + charClasses.stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]");
+			sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
 			sb.append("|");
 			sb.append(other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")));
 			sb.append(")");
 		} 
 		else if (!charClasses.isEmpty()) {
-			sb.append("[" + charClasses.stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]");
+			sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
 		} 
 		else {
 			sb.append("(?:" + other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")");
@@ -109,9 +109,20 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 		return sb.toString() + getConditions(alt);
 	}
 	
-	private String getCharClassElement(Symbol s) {
-		if (s instanceof Character) return getChar(((Character) s).getValue());
-		if (s instanceof CharacterRange) return getRange((CharacterRange) s);
+	private boolean isCharClass(Symbol s) {
+		if (!s.getPostConditions().isEmpty()) return false;
+		return s instanceof Character || s instanceof CharacterRange;
+	}
+	
+	private String asCharClass(Symbol s) {
+		if (s instanceof Character) {
+			Character c = (Character) s;
+			return getChar(c.getValue()) + getConditions(c);
+		} 
+		else if (s instanceof CharacterRange) {
+			CharacterRange r = (CharacterRange) s;
+			return getRange(r) + getConditions(r);
+		}
 		
 		throw new RuntimeException(s + " is not a character or character class.");
 	}
