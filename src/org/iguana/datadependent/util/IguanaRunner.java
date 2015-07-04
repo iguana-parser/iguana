@@ -82,6 +82,7 @@ public class IguanaRunner {
 
 		Iterator<Input> it = inputs.iterator();
 		
+		nextFile:
 		while (it.hasNext()) {
 			
 			Input input = it.next();
@@ -89,23 +90,27 @@ public class IguanaRunner {
 			
 			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 
-			System.out.print("Warming up:");
+			System.out.print("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
-					System.out.print(" " + (i + 1) + (result.isParseSuccess() ? "(success)" : "(error)"));
+					if (result.isParseError()) {
+						System.out.println(result.asParseError());
+						continue nextFile;
+					}
+					System.out.print((i + 1) + " ");
 				} catch (Exception e) {
 					continue;
 				}
 			}
 			System.out.println();
 						
-			System.out.print("Running:");
+			System.out.print("Running: ");
 			for (int i = 0; i < runCount; i++) {			
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
 					results.add(result);
-					System.out.print(" " + (i + 1));
+					System.out.print((i + 1) + " ");
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
 					e.printStackTrace();
