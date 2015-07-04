@@ -163,13 +163,36 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
+		
 		if (label != null)
 			env = env.declare(label, sppfNode);
 		
-		// TODO: State variables;
-		
-		if (variable != null)
+		if (variable != null && state == null)
 			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());
+		
+		if (variable == null && state != null) {
+			Object[] values = (Object[]) ((NonterminalNode) sppfNode).getValue();
+			
+			int i = 0;
+			for (String v : state) {
+				if (!v.equals("_"))
+					env = env.declare(v, values[i]);
+				i++;
+			}
+		}
+		
+		if (variable != null && state != null) {
+			Object[] values = (Object[]) ((NonterminalNode) sppfNode).getValue();
+			
+			env = env.declare(variable, values[0]);
+			
+			int i = 1;
+			for (String v : state) {
+				if (!v.equals("_"))
+					env = env.declare(v, values[i]);
+				i++;
+			}
+		}
 		
 		return env;
 	}
