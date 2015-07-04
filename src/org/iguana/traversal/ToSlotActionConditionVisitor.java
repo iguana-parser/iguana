@@ -74,6 +74,11 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
 				return (!(Boolean) value);
 			}
+			
+			@Override
+			public String toString() {
+				return condition.toString();
+			}
 		};
 	}
 

@@ -445,7 +445,7 @@ public class GrammarGraph implements Serializable {
 			Set<Condition> preConditions = new HashSet<>();
 			preConditions.addAll(rule.symbolAt(0).getPreConditions());
 			 
-			rule.symbolAt(0).getPreConditions().clear();
+			rule.symbolAt(0).getPreConditions().clear(); // FIXME: this is really not good!
 			
 			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions));
 		}

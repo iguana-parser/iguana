@@ -388,6 +388,9 @@ public class EBNFToBNF implements GrammarTransformation {
 					arguments[i] = AST.var(var);
 					i++;
 				}
+			} else {
+				parameters = new String[] { id };
+				arguments = new Expression[] { cond };
 			}
 			
 			Nonterminal newNt = Nonterminal.builder(thenPart.getName() + "_IF").addParameters(parameters).build();
@@ -443,6 +446,9 @@ public class EBNFToBNF implements GrammarTransformation {
 					arguments[i] = AST.var(var);
 					i++;
 				}
+			} else {
+				parameters = new String[] { id };
+				arguments = new Expression[] { cond };
 			}
 			
 			Nonterminal newNt = Nonterminal.builder("_" + thenPart.getName() + elsePart.getName() + "_IF_THEN_ELSE").addParameters(parameters).build();
@@ -452,7 +458,6 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
-			// FIXME: epsilon rule can have a condition
 			addedRules.add(Rule.withHead(newNt).addSymbol(elsePart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
