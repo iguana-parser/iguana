@@ -56,6 +56,7 @@ import org.iguana.datadependent.ast.Expression.OrIndent;
 import org.iguana.datadependent.ast.Expression.Real;
 import org.iguana.datadependent.ast.Expression.RightExtent;
 import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Expression.Tuple;
 import org.iguana.datadependent.ast.Expression.Val;
 import org.iguana.datadependent.ast.Expression.Yield;
 import org.iguana.datadependent.ast.Statement.Expression;
@@ -180,6 +181,17 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(String expression) {
+		return null;
+	}
+	
+	@Override
+	public Void visit(Tuple expression) {
+		
+		for (org.iguana.datadependent.ast.Expression element : expression.getElements()) {
+			element.setEnv(expression.getEnv());
+			element.accept(this);
+		}
+		
 		return null;
 	}
 

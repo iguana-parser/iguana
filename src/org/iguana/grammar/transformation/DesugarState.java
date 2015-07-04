@@ -190,13 +190,14 @@ public class DesugarState implements GrammarTransformation {
 		
 		Set<String> rets = returns.get(rule.getHead());
 		
+		// FIXME: if the last symbol is return
 		if (rets != null && !rets.isEmpty()) {
-			Expression[] values = new Expression[rets.size()];
+			Expression[] exps = new Expression[rets.size()];
 			int i = 0;
 			for (String ret : rets)
-				values[i++] = AST.var(ret);
+				exps[i++] = AST.var(ret);
 			
-			symbols.add(Return.ret(null));
+			symbols.add(Return.ret(AST.tuple(exps)));
 		}
 		
 		return builder.build();
