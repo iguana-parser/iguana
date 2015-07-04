@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.traversal;
 
+import org.iguana.datadependent.ast.Expression.Tuple;
 import org.iguana.datadependent.ast.Expression.Val;
 import org.iguana.datadependent.ast.Expression.Yield;
 import org.iguana.datadependent.ast.Statement;
@@ -61,6 +62,8 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(Real expression);
 	
 	public T visit(String expression);
+	
+	public T visit(Tuple expression);
 	
 	public T visit(Name expression);
 	

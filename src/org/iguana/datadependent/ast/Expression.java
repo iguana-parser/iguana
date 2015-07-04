@@ -27,12 +27,16 @@
 
 package org.iguana.datadependent.ast;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.generator.GeneratorUtil;
 
 
 public abstract class Expression extends AbstractAST {
@@ -217,6 +221,47 @@ public abstract class Expression extends AbstractAST {
 			return value;
 		}
 
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+	}
+	
+	static public class Tuple extends Expression {
+		
+		private static final long serialVersionUID = 1L;
+		
+		private final Expression[] elements;
+		
+		Tuple(Expression... elements) {
+			this.elements = elements;
+		}
+		
+		public Expression[] getElements() {
+			return elements;
+		}
+		
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			Object[] values = new Object[elements.length];
+			
+			int i = 0;
+			for (Expression element : elements)
+				values[i++] = element.interpret(ctx);
+			
+			return values;
+		}
+		
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.tuple(" + GeneratorUtil.listToString(Arrays.stream(elements).map(elem -> elem.getConstructorCode()).collect(Collectors.toList()), ",") + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return "(" + GeneratorUtil.listToString(Arrays.stream(elements).map(elem -> elem.toString()).collect(Collectors.toList()), ",") + ")";
+		}
+		
 		@Override
 		public <T> T accept(IAbstractASTVisitor<T> visitor) {
 			return visitor.visit(this);

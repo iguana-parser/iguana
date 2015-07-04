@@ -57,6 +57,10 @@ public class AST {
 		return new Expression.String(value);
 	}
 	
+	static public Expression tuple(Expression... args) {
+		return new Expression.Tuple(args);
+	}
+	
 	static public Expression var(java.lang.String name) {
 		return new Expression.Name(name);
 	}

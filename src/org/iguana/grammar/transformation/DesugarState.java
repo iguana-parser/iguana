@@ -30,10 +30,13 @@ package org.iguana.grammar.transformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iguana.datadependent.ast.AST;
+import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.UnexpectedSymbol;
@@ -50,6 +53,7 @@ import org.iguana.grammar.symbol.IfThen;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Nonterminal.Builder;
 import org.iguana.grammar.symbol.Offside;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
@@ -95,14 +99,12 @@ public class DesugarState implements GrammarTransformation {
 			uses.put(head, current_uses);
 			updates.put(head, current_updates);
 			
-			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);
-			
+			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);			
 			for (Rule rule : grammar.getAlternatives(head))
 				visitor.compute(rule);
 		}
 		
-		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
-		
+		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();		
 		for (Map.Entry<Nonterminal, Set<Nonterminal>> entry : reachabilityGraph.entrySet()) {
 			current_uses = uses.get(entry.getKey());
 			current_updates = updates.get(entry.getKey());
@@ -113,8 +115,7 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		
-		// Compute returns
-		
+		// Compute returns		
 		for (Nonterminal nonterminal : updates.keySet())
 			returns.put(nonterminal, new HashSet<>());
 		
@@ -152,22 +153,76 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		
-//		Set<Rule> newRules = new LinkedHashSet<>();
-//		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
-//		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
-		return null;
+		Set<Rule> newRules = new LinkedHashSet<>();
+		// grammar.getRules().forEach(r -> newRules.add(transform(r)));
+		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
 	@SuppressWarnings("unused")
-	private Rule transform(Rule rule, Set<String> uses, Set<String> returns, Map<Nonterminal, Set<String>> bindings) {
-		return null;
+	private Rule transform(Rule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
+		if (rule.getBody() == null)
+			return rule;
+		
+		Set<String> head_uses = uses.get(rule.getHead());
+		
+		Rule.Builder builder = null;
+		if (!head_uses.isEmpty()) {
+			
+			String[] parameters = new String[head_uses.size()];
+			int i = 0;
+			for (String parameter : head_uses)
+			    parameters[i++] = parameter;
+			    
+			builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
+		}
+		
+		if (builder == null)
+			builder = rule.copyBuilder();
+		
+		List<Symbol> symbols = new ArrayList<>();
+		
+		builder = builder.setSymbols(symbols);
+		
+		DesugarStateVisitor visitor = new DesugarStateVisitor(uses, returns, bindings);
+		
+		Return rsym = null;
+		for (Symbol symbol : rule.getBody()) {
+			if (symbol instanceof Return)
+				rsym = (Return) symbol;
+			else
+				symbols.add(symbol.accept(visitor));
+		}
+		
+		Set<String> rets = returns.get(rule.getHead());
+		
+		if (rets != null && !rets.isEmpty()) {
+			Expression[] exps;
+			int i = 0;
+			if (rsym != null) {
+				exps = new Expression[rets.size() + 1];
+				exps[i++] = rsym.getExpression();
+			} else {
+				exps = new Expression[rets.size()];
+			}
+			
+			for (String ret : rets)
+				exps[i++] = AST.var(ret);
+			
+			symbols.add(Return.ret(AST.tuple(exps)));
+		}
+		
+		return builder.build();
 	}
 	
 	static public class DesugarStateVisitor implements ISymbolVisitor<Symbol> {
 		
+		private final Map<Nonterminal, Set<String>> uses;
+		private final Map<Nonterminal, Set<String>> returns;
 		private final Map<Nonterminal, Set<String>> bindings;
 		
-		public DesugarStateVisitor(Map<Nonterminal, Set<String>> bindings) {
+		public DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
+			this.uses = uses;
+			this.returns = returns;
 			this.bindings = bindings;
 		}
 
@@ -241,12 +296,39 @@ public class DesugarState implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
-			if (bindings.containsKey(symbol)) {
-				Set<String> state = bindings.get(symbol);
-				return symbol.copyBuilder().setState(state).build();
+			
+			Builder builder = symbol.copyBuilder();
+			
+			boolean changed = false;
+			
+			Set<String> pass = uses.get(symbol);
+			
+			if (pass != null && !pass.isEmpty()) {
+				
+				Expression[] arguments = new Expression[pass.size()];
+				int i = 0;
+				for (String argument : pass)
+					arguments[i++] = AST.val(argument);
+				
+				builder.apply(arguments);
+				changed = true;
 			}
 			
-			return symbol;
+			Set<String> bind = bindings.get(symbol);
+			
+			if (bind != null) {
+				Set<String> state = new LinkedHashSet<>();
+				
+				for (String ret : returns.get(symbol)) {
+					if (bind.contains(ret)) state.add(ret);
+					else state.add("_");
+				}
+				
+				builder.setState(state);
+				changed = true;
+			}
+			
+			return changed? builder.build() : symbol;
 		}
 
 		@Override
