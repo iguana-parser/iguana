@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iguana.datadependent.ast.AST;
+import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.UnexpectedSymbol;
@@ -51,6 +53,7 @@ import org.iguana.grammar.symbol.IfThen;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.Ignore;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Nonterminal.Builder;
 import org.iguana.grammar.symbol.Offside;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
@@ -164,20 +167,13 @@ public class DesugarState implements GrammarTransformation {
 		
 		Rule.Builder builder = null;
 		if (!head_uses.isEmpty()) {
-			String[] parameters;
-			int i = 0;
 			
-			if (rule.getHead().getParameters() != null) {
-			    parameters = new String[rule.getHead().getParameters().length + head_uses.size()];
+			String[] parameters = new String[head_uses.size()];
+			int i = 0;
+			for (String parameter : head_uses)
+			    parameters[i++] = parameter;
 			    
-			    for (String parameter : rule.getHead().getParameters())
-			    	parameters[i++] = parameter;
-			    
-			    for (String parameter : head_uses)
-			    	parameters[i++] = parameter;
-			    
-			    builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
-			}
+			builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
 		}
 		
 		if (builder == null)
@@ -191,6 +187,17 @@ public class DesugarState implements GrammarTransformation {
 			
 		for (Symbol symbol : rule.getBody())
 			symbols.add(symbol.accept(visitor));
+		
+		Set<String> rets = returns.get(rule.getHead());
+		
+		if (rets != null && !rets.isEmpty()) {
+			Expression[] values = new Expression[rets.size()];
+			int i = 0;
+			for (String ret : rets)
+				values[i++] = AST.var(ret);
+			
+			symbols.add(Return.ret(null));
+		}
 		
 		return builder.build();
 	}
@@ -277,12 +284,39 @@ public class DesugarState implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
-			if (bindings.containsKey(symbol)) {
-				Set<String> state = bindings.get(symbol);
-				return symbol.copyBuilder().setState(state).build();
+			
+			Builder builder = symbol.copyBuilder();
+			
+			boolean changed = false;
+			
+			Set<String> pass = uses.get(symbol);
+			
+			if (pass != null && !pass.isEmpty()) {
+				
+				Expression[] arguments = new Expression[pass.size()];
+				int i = 0;
+				for (String argument : pass)
+					arguments[i++] = AST.val(argument);
+				
+				builder.apply(arguments);
+				changed = true;
 			}
 			
-			return symbol;
+			Set<String> bind = bindings.get(symbol);
+			
+			if (bind != null) {
+				Set<String> state = new LinkedHashSet<>();
+				
+				for (String ret : returns.get(symbol)) {
+					if (bind.contains(ret)) state.add(ret);
+					else state.add("_");
+				}
+				
+				builder.setState(state);
+				changed = true;
+			}
+			
+			return changed? builder.build() : symbol;
 		}
 
 		@Override
