@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
-import org.eclipse.imp.pdb.facts.util.TrieSet;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.UnexpectedSymbol;
@@ -90,6 +88,7 @@ public class DesugarState implements GrammarTransformation {
 	@Override
 	public Grammar transform(Grammar grammar) {
 		for (Nonterminal head : grammar.getNonterminals()) {
+			
 			current_uses = new HashSet<>();
 			current_updates = new HashSet<>();
 			
@@ -98,28 +97,10 @@ public class DesugarState implements GrammarTransformation {
 			
 			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);
 			
-			ImmutableSet<String> env = TrieSet.of();
-			
-			String[] parameters = head.getParameters();
-			if (parameters != null) {
-				for (String parameter : parameters)
-					env.__insert(parameter);
-			}
-			
-			for (Rule rule : grammar.getAlternatives(head)) {
-				
-				ImmutableSet<String> _env = env;
-				
-				for (Symbol symbol : rule.getBody()) {
-					symbol.setEnv(_env);
-					visitor.visitSymbol(symbol);
-					_env = symbol.getEnv();
-					symbol.setEmpty();
-				}
-			}
+			for (Rule rule : grammar.getAlternatives(head))
+				visitor.compute(rule);
 		}
 		
-		// After EBNF translation
 		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
 		
 		for (Map.Entry<Nonterminal, Set<Nonterminal>> entry : reachabilityGraph.entrySet()) {
@@ -132,19 +113,13 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		
+		// Compute returns
+		
 		for (Nonterminal nonterminal : updates.keySet())
 			returns.put(nonterminal, new HashSet<>());
 		
 		for (Nonterminal head : grammar.getNonterminals()) {
-			FreeVariableVisitor visitor = new FreeVariableVisitor(updates, returns);
-			
-			ImmutableSet<String> env = TrieSet.of();
-			
-			String[] parameters = head.getParameters();
-			if (parameters != null) {
-				for (String parameter : parameters)
-					env.__insert(parameter);
-			}
+			FreeVariableVisitor visitor = new FreeVariableVisitor(uses, updates, returns);
 			
 			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>(); 
 			bindings.put(head, nonterminal_bindings);

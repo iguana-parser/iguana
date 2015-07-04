@@ -29,7 +29,6 @@ package org.iguana.datadependent.traversal;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -107,10 +106,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public FreeVariableVisitor(Set<java.lang.String> freeVariables, Set<java.lang.String> updates) {
 		this.freeVariables = freeVariables;
 		this.updates = updates;
+		this.nonterminal_uses = null;
 		this.nonterminal_updates = null;
 		this.nonterminal_returns = null;
 		this.nonterminal_bindings = null;
-		this.nonterminals = null;
 	}
 	
 	public void compute(Rule rule) {
@@ -139,19 +138,19 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	/*
 	 * State variable bindings of nonterminals in the rule
 	 */
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_uses;
 	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates; // Given assignments to state variables within a nonterminal
-	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns; // Given uses of updated state variables after a use of a nonterminal 
+	private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns; // Given uses of updated state variables of a nonterminal after a use of a nonterminal in all the rules
 	
-	private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
-	private Set<Nonterminal> nonterminals;
+	private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings; // Given uses of updated state variables of a nonterminal after a use of the nonterminal in the current rule
 	
-	public FreeVariableVisitor(Map<Nonterminal, Set<java.lang.String>> nonterminal_updates, Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
+	public FreeVariableVisitor(Map<Nonterminal, Set<java.lang.String>> nonterminal_uses, Map<Nonterminal, Set<java.lang.String>> nonterminal_updates, Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
 		this.freeVariables = null;
 		this.updates = null;
+		this.nonterminal_uses = nonterminal_uses;
 		this.nonterminal_updates = nonterminal_updates;
 		this.nonterminal_returns = nonterminal_returns;
 		this.nonterminal_bindings = new HashMap<>();
-		this.nonterminals = new HashSet<>();
 	}
 	
 	public Map<Nonterminal, Set<java.lang.String>> computeBindings(Rule rule) {
@@ -161,7 +160,6 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 	
 	private void initBindings() {
-		this.nonterminals = new HashSet<>();
 		this.nonterminal_bindings = new HashMap<>();
 	}
 	
@@ -199,18 +197,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		if (freeVariables != null)
 			freeVariables.add(name);
 		
-		if (nonterminals != null) {
-			for (Nonterminal nonterminal : nonterminals) {
+		if (!nonterminal_bindings.isEmpty()) {
+			for (Nonterminal nonterminal : nonterminal_bindings.keySet()) {
 				if (nonterminal_updates.get(nonterminal).contains(name)) {
 					nonterminal_returns.get(nonterminal).add(name);
-					if (nonterminal_bindings.containsKey(nonterminal))
-						nonterminal_bindings.get(nonterminal).add(name);
-					else {
-						Set<java.lang.String> names = new LinkedHashSet<>();
-						names.add(name);
-						nonterminal_bindings.put(nonterminal, names);
-					}
-						
+					nonterminal_bindings.get(nonterminal).add(name);
 				}
 			}
 		}
@@ -659,8 +650,19 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		if (symbol.getVariable() != null)
 			env = env.__insert(symbol.getVariable());
 		
-		if (nonterminals != null && nonterminal_updates.containsKey(symbol) )
-			nonterminals.add(symbol);
+		if (!nonterminal_bindings.containsKey(symbol) 
+				&& nonterminal_updates.containsKey(symbol) )
+			nonterminal_bindings.put(symbol, new HashSet<>());
+		
+		if (symbol.getArguments() != null) {
+			for (org.iguana.datadependent.ast.Expression argument : symbol.getArguments())
+				argument.accept(this);
+		}
+		
+		if (nonterminal_uses != null && nonterminal_uses.containsKey(symbol)) {
+			for (java.lang.String parameter : nonterminal_uses.get(symbol))
+				use(parameter);
+		}
 		
 		symbol.setEnv(env);
 		
