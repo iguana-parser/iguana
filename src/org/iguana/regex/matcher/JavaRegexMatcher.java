@@ -52,6 +52,7 @@ public class JavaRegexMatcher implements Matcher {
 		RegularExpressionVisitor<String> visitor = new ToJavaRegexVisitor();
 		String pattern = regex.accept(visitor);
 		
+//		System.out.println(pattern);
 		this.pattern = Pattern.compile(pattern);
 	}
 	

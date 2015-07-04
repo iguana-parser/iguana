@@ -492,8 +492,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			
 			final GSSNode __gssNode = gssNode;
 			
-			setEnvironment(newEnv);
 			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+				
+				setEnvironment(newEnv);
+				
 				if (s.getLabel() != null)
 					this.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
 				

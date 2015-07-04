@@ -84,7 +84,7 @@ public class ConditionsFactory {
 				@Override
 				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
 					for (SlotAction c : actions) {
-			            if (c.execute(input, u, i, ctx)) {
+					    if (c.execute(input, u, i, ctx)) {
 			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
 			                return true;
 			            }

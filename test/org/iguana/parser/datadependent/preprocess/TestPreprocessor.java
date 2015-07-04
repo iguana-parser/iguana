@@ -70,8 +70,9 @@ public class TestPreprocessor {
 			System.out.println(expected);
 			
 			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+			
 			ParseResult result = parser.parse(input, grammar, start, variables);
-
+			
 			Map<String, NonterminalNode> nodes = new HashMap<>();
 			
 			NonterminalNodeVisitor.create(n -> {
