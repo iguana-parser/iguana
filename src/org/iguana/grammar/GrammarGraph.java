@@ -287,9 +287,8 @@ public class GrammarGraph implements Serializable {
 			
 			validateNumberOfArguments(nonterminalSlot.getNonterminal(), arguments);
 			
-			Set<Condition> preConditions = symbol.getPreConditions();
+			Set<Condition> preConditions = (i == 0 && j == -1)? new HashSet<>() : symbol.getPreConditions();
 			currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, getConditions(preConditions)));
-			
 			currentSlot = slot;
 			
 			return null;
@@ -327,11 +326,11 @@ public class GrammarGraph implements Serializable {
 				
 		public Void visit(Return symbol) {
 			BodyGrammarSlot done;
-			if (i != rule.size() - 1) {
+			if (i != rule.size() - 1)
 				throw new RuntimeException("Return symbol can only be used at the end of a grammar rule!");
-			} else {
+			else
 				done = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-			}
+			
 			currentSlot.addTransition(new ReturnTransition(symbol.getExpression(), currentSlot, done));
 			currentSlot = done;
 			
@@ -349,9 +348,8 @@ public class GrammarGraph implements Serializable {
 			else
 				slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null, null);
 			
-			Set<Condition> preConditions = symbol.getPreConditions();
-			Set<Condition> postConditions = symbol.getPostConditions();
-			currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, postConditions));
+			Set<Condition> preConditions = (i == 0 && j == -1)? new HashSet<>() : symbol.getPreConditions();
+			currentSlot.addTransition(getTerminalTransition(rule, i + 1, terminalSlot, currentSlot, slot, preConditions, symbol.getPostConditions()));
 			currentSlot = slot;
 			
 			return null;
@@ -367,13 +365,15 @@ public class GrammarGraph implements Serializable {
 				return;
 			}
 			
+			Conditions preconditions = i == 0? ConditionsFactory.DEFAULT : getConditions(symbol.getPreConditions());
+			
 			if (symbol.getLabel() != null) {
 				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), getConditions(symbol.getPreConditions()), currentSlot, declared));
+				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), preconditions, currentSlot, declared));
 				currentSlot = declared;
 			} else {
 				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-				currentSlot.addTransition(new EpsilonTransition(getConditions(symbol.getPreConditions()), currentSlot, checked));
+				currentSlot.addTransition(new EpsilonTransition(preconditions, currentSlot, checked));
 				currentSlot = checked;
 			}
 			
@@ -440,13 +440,11 @@ public class GrammarGraph implements Serializable {
 		if (rule.size() == 0) {
 			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, DummyNodeLookup.getInstance(), ConditionsFactory.DEFAULT, rule.getAction());
 		} else {
-			// TODO: this is a temporarily solution, which should be re-thought; 
-			//       in particular, not any precondition of the first symbol can be moved to the first slot.  
+			// TODO: This is not a final solution; in particular, 
+			//       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.  
 			Set<Condition> preConditions = new HashSet<>();
 			preConditions.addAll(rule.symbolAt(0).getPreConditions());
 			 
-			rule.symbolAt(0).getPreConditions().clear(); // FIXME: this is really not good!
-			
 			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions));
 		}
 		add(slot);
