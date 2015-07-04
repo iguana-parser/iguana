@@ -49,8 +49,6 @@ public class Star extends AbstractRegularExpression {
 	
 	private final Symbol s;
 	
-	private final boolean allRegularExpression;
-	
 	private final List<Symbol> separators;
 	
 	public static Star from(Symbol s) {
@@ -61,7 +59,6 @@ public class Star extends AbstractRegularExpression {
 		super(builder);
 		this.s = builder.s;
 		this.separators = Collections.unmodifiableList(builder.separators);
-		this.allRegularExpression = s instanceof RegularExpression;
 	}
 	
 	private static String getName(Symbol s) {
@@ -70,17 +67,11 @@ public class Star extends AbstractRegularExpression {
 	
 	@Override
 	public int length() {
-		if (allRegularExpression)
-			((RegularExpression)s).length();
-		return super.length();
+		return ((RegularExpression)s).length();
 	}
 	
 	@Override
 	protected Automaton createAutomaton() {
-		
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-		
 		//TODO: add separators to the DFA
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
@@ -109,17 +100,11 @@ public class Star extends AbstractRegularExpression {
 
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-		
 		return ((RegularExpression) s).getFirstSet();
 	}
 	
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-		
 		return ((RegularExpression) s).getFirstSet();
 	}
 	

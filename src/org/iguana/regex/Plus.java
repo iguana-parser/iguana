@@ -48,8 +48,6 @@ public class Plus extends AbstractRegularExpression {
 	
 	private final List<Symbol> separators;
 	
-	private final boolean allRegularExpression;
-	
 	public static Plus from(Symbol s) {
 		return builder(s).build();
 	}
@@ -58,7 +56,6 @@ public class Plus extends AbstractRegularExpression {
 		super(builder);
 		this.s = builder.s;
 		this.separators = Collections.unmodifiableList(builder.separators);
-		this.allRegularExpression = s instanceof RegularExpression;
 	}
 	
 	private static String getName(Symbol s) {
@@ -67,51 +64,31 @@ public class Plus extends AbstractRegularExpression {
 	
 	@Override
 	public int length() {
-		if (allRegularExpression) {
-			return ((RegularExpression) s).length();
-		}
-		return 0;
+		return ((RegularExpression) s).length();
 	}
 	
 	@Override
 	protected Automaton createAutomaton() {
-		
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-
 		return Sequence.from(s, Star.from(s)).getAutomaton();		
 	}
 	
 	@Override
 	public boolean isNullable() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-
 		return ((RegularExpression) s).isNullable();
 	}
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-
 		return ((RegularExpression) s).getFirstSet();
 	}
 	
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-
 		return ((RegularExpression) s).getFirstSet();
 	}
 	
 	public List<Symbol> getSeparators() {
 		return separators;
-	}
-	
-	public boolean isAllRegularExpression() {
-		return allRegularExpression;
 	}
 	
 	@Override

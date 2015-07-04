@@ -54,13 +54,9 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 
 	protected final List<T> symbols;
 	
-	private boolean allRegularExpression;
-
 	public Alt(Builder<T> builder) {
 		super(builder);
 		this.symbols = builder.symbols;
-		if (symbols.stream().allMatch(x -> x instanceof RegularExpression))
-			allRegularExpression = true;
 	}	
 	
 	@SafeVarargs
@@ -78,9 +74,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	@Override
 	public Automaton createAutomaton() {
-		
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable if all arguments are regular expressions");
 		
 		if (symbols.size() == 1)
 			return ((RegularExpression) symbols.get(0)).getAutomaton();
@@ -110,7 +103,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 
 	@Override
 	public boolean isNullable() {
-		return allRegularExpression && symbols.stream().anyMatch(e -> ((RegularExpression)e).isNullable()); 
+		return symbols.stream().anyMatch(e -> ((RegularExpression)e).isNullable()); 
 	}
 	
 	@Override
@@ -124,11 +117,10 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	@Override
 	public int length() {
-		if (allRegularExpression) {
-			Optional<T> max = symbols.stream().max(RegularExpression.lengthComparator());
-			if (max.isPresent()) 
-				return ((RegularExpression) max.get()).length();
-		}
+		Optional<T> max = symbols.stream().max(RegularExpression.lengthComparator());
+		if (max.isPresent()) 
+			return ((RegularExpression) max.get()).length();
+		else
 		return 0;
 	}
 	
@@ -157,9 +149,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable if all arguments are regular expressions");
-		
 		return symbols.stream().flatMap(x -> ((RegularExpression)x).getFirstSet().stream()).collect(Collectors.toSet());
 	}
 	
