@@ -184,16 +184,27 @@ public class DesugarState implements GrammarTransformation {
 		builder = builder.setSymbols(symbols);
 		
 		DesugarStateVisitor visitor = new DesugarStateVisitor(uses, returns, bindings);
-			
-		for (Symbol symbol : rule.getBody())
-			symbols.add(symbol.accept(visitor));
+		
+		Return rsym = null;
+		for (Symbol symbol : rule.getBody()) {
+			if (symbol instanceof Return)
+				rsym = (Return) symbol;
+			else
+				symbols.add(symbol.accept(visitor));
+		}
 		
 		Set<String> rets = returns.get(rule.getHead());
 		
-		// FIXME: if the last symbol is return
 		if (rets != null && !rets.isEmpty()) {
-			Expression[] exps = new Expression[rets.size()];
+			Expression[] exps;
 			int i = 0;
+			if (rsym != null) {
+				exps = new Expression[rets.size() + 1];
+				exps[i++] = rsym.getExpression();
+			} else {
+				exps = new Expression[rets.size()];
+			}
+			
 			for (String ret : rets)
 				exps[i++] = AST.var(ret);
 			
