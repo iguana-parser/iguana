@@ -421,7 +421,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			Expression[] arguments = null;
 			
 			thenPart.setEmpty();
+			elsePart.setEmpty();
 			visitor.visitSymbol(thenPart);
+			visitor.visitSymbol(elsePart);
 			
 			String id = "condIF";
 			
@@ -443,7 +445,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				}
 			}
 			
-			Nonterminal newNt = Nonterminal.builder(thenPart.getName() + elsePart.getName() + "_IF_THEN_ELSE").addParameters(parameters).build();
+			Nonterminal newNt = Nonterminal.builder("_" + thenPart.getName() + elsePart.getName() + "_IF_THEN_ELSE").addParameters(parameters).build();
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
