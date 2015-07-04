@@ -46,13 +46,12 @@ public class JavaRegexMatcher implements Matcher {
 	private final Pattern pattern;
 	
 	public JavaRegexMatcher(RegularExpression regex) {
-		RegularExpressionOptimizer optimizer = new RegularExpressionOptimizer();
-		regex = regex.accept(optimizer);
+//		RegularExpressionOptimizer optimizer = new RegularExpressionOptimizer();
+//		regex = regex.accept(optimizer);
 		
 		RegularExpressionVisitor<String> visitor = new ToJavaRegexVisitor();
 		String pattern = regex.accept(visitor);
 		
-		System.out.println(pattern);
 		this.pattern = Pattern.compile(pattern);
 	}
 	
