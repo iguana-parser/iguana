@@ -45,12 +45,9 @@ public class Opt extends AbstractRegularExpression {
 
 	private final Symbol s;
 	
-	private final boolean isRegularExpression;
-	
 	private Opt(Builder builder) {
 		super(builder);
 		this.s = builder.s;
-		this.isRegularExpression = s instanceof RegularExpression;
 	}
 
 	public static Opt from(Symbol s) {
@@ -67,18 +64,11 @@ public class Opt extends AbstractRegularExpression {
 	
 	@Override
 	public int length() {
-		if (isRegularExpression) {
-			return ((RegularExpression) s).length();
-		}
-		return 0;
+		return ((RegularExpression) s).length();
 	}
 	
 	@Override
 	public Automaton createAutomaton() {
-		
-		if (!isRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");		
-		
 		State startState = new State();
 		
 		State finalState = new State(StateType.FINAL);
@@ -104,9 +94,6 @@ public class Opt extends AbstractRegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!isRegularExpression)
-			throw new RuntimeException("Only applicable to regular expressions");
-		
 		return ((RegularExpression) s).getFirstSet();
 	}
 	

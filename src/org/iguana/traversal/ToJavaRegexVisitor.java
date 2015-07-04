@@ -96,7 +96,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 			sb.append("(?:");
 			sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
 			sb.append("|");
-			sb.append(other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")));
+			sb.append(other.stream().map(s -> s.accept(this)).collect(Collectors.joining("|")));
 			sb.append(")");
 		} 
 		else if (!charClasses.isEmpty()) {

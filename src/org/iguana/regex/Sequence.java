@@ -57,8 +57,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 
 	private final List<T> symbols;
 	
-	private boolean allRegularExpression;
-	
 	public static Sequence<Character> from(String s) {
 		return from(Input.toIntArray(s));
 	}
@@ -79,8 +77,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	private Sequence(Builder<T> builder) {
 		super(builder);
 		this.symbols = builder.symbols;
-		if (symbols.stream().allMatch(x -> x instanceof RegularExpression))
-			allRegularExpression = true;
 	}
 	
 	private static <T extends Symbol> String getName(List<T> elements) {
@@ -89,18 +85,11 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	
 	@Override
 	public int length() {
-		if (allRegularExpression) {
-			return symbols.stream().mapToInt(s -> ((RegularExpression)s).length()).sum();
-		}
-		return 0;
+		return symbols.stream().mapToInt(s -> ((RegularExpression)s).length()).sum();
 	}
 		
 	@Override
 	public Automaton createAutomaton() {
-		
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable if all arguments are regular expressions");
-		
 		List<Automaton> automatons = new ArrayList<>();
 		
 		for (int i = 0; i < symbols.size(); i++) {
@@ -129,7 +118,7 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	
 	@Override
 	public boolean isNullable() {
-		return allRegularExpression && symbols.stream().allMatch(e -> ((RegularExpression)e).isNullable()); 
+		return symbols.stream().allMatch(e -> ((RegularExpression)e).isNullable()); 
 	}
 	
 	public int size() {
@@ -165,9 +154,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		if (!allRegularExpression)
-			throw new RuntimeException("Only applicable if all arguments are regular expressions");
-		
 		Set<CharacterRange> firstSet = new HashSet<>();
 		for(Symbol e : symbols) {
 			RegularExpression regex = (RegularExpression) e;

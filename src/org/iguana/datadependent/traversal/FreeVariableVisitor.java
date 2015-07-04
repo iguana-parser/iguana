@@ -650,7 +650,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		if (symbol.getVariable() != null)
 			env = env.__insert(symbol.getVariable());
 		
-		if (!nonterminal_bindings.containsKey(symbol) 
+		if (nonterminal_bindings != null 
+				&& !nonterminal_bindings.containsKey(symbol) 
 				&& nonterminal_updates.containsKey(symbol) )
 			nonterminal_bindings.put(symbol, new HashSet<>());
 		
