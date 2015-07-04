@@ -30,6 +30,7 @@ package org.iguana.grammar.transformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,14 +96,12 @@ public class DesugarState implements GrammarTransformation {
 			uses.put(head, current_uses);
 			updates.put(head, current_updates);
 			
-			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);
-			
+			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);			
 			for (Rule rule : grammar.getAlternatives(head))
 				visitor.compute(rule);
 		}
 		
-		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
-		
+		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();		
 		for (Map.Entry<Nonterminal, Set<Nonterminal>> entry : reachabilityGraph.entrySet()) {
 			current_uses = uses.get(entry.getKey());
 			current_updates = updates.get(entry.getKey());
@@ -113,8 +112,7 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		
-		// Compute returns
-		
+		// Compute returns		
 		for (Nonterminal nonterminal : updates.keySet())
 			returns.put(nonterminal, new HashSet<>());
 		
@@ -152,22 +150,60 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		
-//		Set<Rule> newRules = new LinkedHashSet<>();
-//		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
-//		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
-		return null;
+		Set<Rule> newRules = new LinkedHashSet<>();
+		// grammar.getRules().forEach(r -> newRules.add(transform(r)));
+		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
 	@SuppressWarnings("unused")
-	private Rule transform(Rule rule, Set<String> uses, Set<String> returns, Map<Nonterminal, Set<String>> bindings) {
-		return null;
+	private Rule transform(Rule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
+		if (rule.getBody() == null)
+			return rule;
+		
+		Set<String> head_uses = uses.get(rule.getHead());
+		
+		Rule.Builder builder = null;
+		if (!head_uses.isEmpty()) {
+			String[] parameters;
+			int i = 0;
+			
+			if (rule.getHead().getParameters() != null) {
+			    parameters = new String[rule.getHead().getParameters().length + head_uses.size()];
+			    
+			    for (String parameter : rule.getHead().getParameters())
+			    	parameters[i++] = parameter;
+			    
+			    for (String parameter : head_uses)
+			    	parameters[i++] = parameter;
+			    
+			    builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
+			}
+		}
+		
+		if (builder == null)
+			builder = rule.copyBuilder();
+		
+		List<Symbol> symbols = new ArrayList<>();
+		
+		builder = builder.setSymbols(symbols);
+		
+		DesugarStateVisitor visitor = new DesugarStateVisitor(uses, returns, bindings);
+			
+		for (Symbol symbol : rule.getBody())
+			symbols.add(symbol.accept(visitor));
+		
+		return builder.build();
 	}
 	
 	static public class DesugarStateVisitor implements ISymbolVisitor<Symbol> {
 		
+		private final Map<Nonterminal, Set<String>> uses;
+		private final Map<Nonterminal, Set<String>> returns;
 		private final Map<Nonterminal, Set<String>> bindings;
 		
-		public DesugarStateVisitor(Map<Nonterminal, Set<String>> bindings) {
+		public DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
+			this.uses = uses;
+			this.returns = returns;
 			this.bindings = bindings;
 		}
 
