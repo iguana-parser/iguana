@@ -63,6 +63,10 @@ public class RegularExpressionOptimizer implements RegularExpressionVisitor<Regu
 
 	@Override
 	public <E extends Symbol> RegularExpression visit(Alt<E> alt) {
+		if (alt.size() == 1) {
+			// Somehow fix this annoying thing: addConditions returns <? extends Symbol> which cannot be verified by type checker
+			return (RegularExpression) alt.getSymbols().get(0).copyBuilder().addConditions(alt).build();
+		}
 		return Alt.builder(alt.getSymbols().stream()
 										   .flatMap(s -> { if (s instanceof Alt) return ((Alt<?>)s).getSymbols().stream(); else return Stream.of(s);})
 				                           .map(s -> s.accept(this))
@@ -71,6 +75,9 @@ public class RegularExpressionOptimizer implements RegularExpressionVisitor<Regu
 	
 	@Override
 	public <E extends Symbol> RegularExpression visit(Sequence<E> seq) {
+		if (seq.size() == 1)
+			return (RegularExpression) seq.getSymbols().get(0).copyBuilder().addConditions(seq).build();
+		
 		return Sequence.builder(seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.toList())).addConditions(seq).build();
 	}
 

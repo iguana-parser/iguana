@@ -27,6 +27,8 @@
 
 package org.iguana.traversal;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.iguana.grammar.condition.Condition;
@@ -84,10 +86,27 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
-		if (alt.getSymbols().stream().allMatch(s -> s instanceof Character || s instanceof CharacterRange))
-			return "[" + alt.getSymbols().stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]";
+		Map<Boolean, List<E>> parition = alt.getSymbols().stream().collect(Collectors.partitioningBy(s -> s instanceof Character || s instanceof CharacterRange));
+		List<E> charClasses = parition.get(true);
+		List<E> other = parition.get(false);
+
+		StringBuilder sb = new StringBuilder();
+
+		if (!charClasses.isEmpty() && !other.isEmpty()) {
+			sb.append("(?:");
+			sb.append("[" + charClasses.stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]");
+			sb.append("|");
+			sb.append(other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")));
+			sb.append(")");
+		} 
+		else if (!charClasses.isEmpty()) {
+			sb.append("[" + charClasses.stream().map(s -> getCharClassElement(s)).collect(Collectors.joining()) + "]");
+		} 
+		else {
+			sb.append("(?:" + other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")");
+	    }
 		
-		return "(?:" +  alt.getSymbols().stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")" + getConditions(alt);
+		return sb.toString() + getConditions(alt);
 	}
 	
 	private String getCharClassElement(Symbol s) {

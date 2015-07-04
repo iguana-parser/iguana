@@ -92,8 +92,8 @@ public class IguanaRunner {
 			System.out.print("Warming up:");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
-					run(parser, grammarGraph, input, start);
-					System.out.print(" " + (i + 1));
+					ParseResult result = run(parser, grammarGraph, input, start);
+					System.out.print(" " + (i + 1) + (result.isParseSuccess() ? "(success)" : "(error)"));
 				} catch (Exception e) {
 					continue;
 				}

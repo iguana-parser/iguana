@@ -53,7 +53,9 @@ import org.junit.Test;
 
 public class TestPreprocessor {
 
-	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Preprocessor.grammar));
+	private static final Grammar TRANSFORM = new EBNFToBNF().transform(Preprocessor.grammar);
+
+	private static Grammar grammar = new LayoutWeaver().transform(TRANSFORM);
 	
 	private static Nonterminal start = Start.from(Nonterminal.withName("A"));
 	
@@ -70,8 +72,10 @@ public class TestPreprocessor {
 			System.out.println(expected);
 			
 			GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+			
+			// System.out.println(TRANSFORM);
 			ParseResult result = parser.parse(input, grammar, start, variables);
-
+			
 			Map<String, NonterminalNode> nodes = new HashMap<>();
 			
 			NonterminalNodeVisitor.create(n -> {
@@ -80,6 +84,8 @@ public class TestPreprocessor {
 					nodes.put(yield, n);
 				}
 			}).visit(result.asParseSuccess().getRoot());
+			
+			System.out.println(expected + " ; " + nodes.keySet());
 			
 			assertEquals(expected, nodes.keySet());
 		}		
