@@ -37,7 +37,6 @@ import org.iguana.grammar.symbol.AbstractRegularExpression;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.regex.automaton.Automaton;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Plus extends AbstractRegularExpression {
@@ -65,11 +64,6 @@ public class Plus extends AbstractRegularExpression {
 	@Override
 	public int length() {
 		return ((RegularExpression) s).length();
-	}
-	
-	@Override
-	protected Automaton createAutomaton() {
-		return Sequence.from(s, Star.from(s)).getAutomaton();		
 	}
 	
 	@Override

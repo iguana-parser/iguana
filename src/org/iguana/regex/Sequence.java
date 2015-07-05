@@ -43,10 +43,6 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
-import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Input;
 import org.iguana.util.generator.GeneratorUtil;
@@ -86,34 +82,6 @@ public class Sequence<T extends Symbol> extends AbstractRegularExpression implem
 	@Override
 	public int length() {
 		return symbols.stream().mapToInt(s -> ((RegularExpression)s).length()).sum();
-	}
-		
-	@Override
-	public Automaton createAutomaton() {
-		List<Automaton> automatons = new ArrayList<>();
-		
-		for (int i = 0; i < symbols.size(); i++) {
-			automatons.add(((RegularExpression) symbols.get(i)).getAutomaton().copy());
-		}
-		
-		Automaton current = automatons.get(0);
-		State startState = current.getStartState();
-		
-		for (int i = 1; i < automatons.size(); i++) {
-			Automaton next = automatons.get(i);
-			
-			for (State s : current.getFinalStates()) {
-				s.setStateType(StateType.NORMAL);
-				// Merge the end state with the start state of the next automaton
-				for (Transition t : next.getStartState().getTransitions()) {
-					s.addTransition(new Transition(t.getRange(), t.getDestination()));
-				}
-			}
-			
-			current = next;
-		}
-		
-		return Automaton.builder(startState).build();
 	}
 	
 	@Override

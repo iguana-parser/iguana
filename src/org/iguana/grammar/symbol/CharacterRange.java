@@ -27,18 +27,13 @@
 
 package org.iguana.grammar.symbol;
 
+import static org.iguana.util.CollectionsUtil.*;
+
 import java.util.Collections;
 import java.util.Set;
 
 import org.iguana.parser.HashFunctions;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
-import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
-
-
-import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * 
@@ -120,14 +115,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		CharacterRange other = (CharacterRange) obj;
 		
 		return start == other.start && end == other.end;
-	}
-
-	@Override
-	protected Automaton createAutomaton() {
-		State startState = new State();
-		State finalState = new State(StateType.FINAL);
-		startState.addTransition(new Transition(start, end, finalState));
-		return Automaton.builder(startState).build();
 	}
 
 	@Override

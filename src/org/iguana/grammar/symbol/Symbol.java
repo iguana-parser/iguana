@@ -33,6 +33,7 @@ import java.util.Set;
 import org.iguana.datadependent.attrs.Attr;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.CollectionsUtil;
 import org.iguana.util.generator.ConstructorCode;
 
 /**
@@ -64,6 +65,14 @@ public interface Symbol extends ConstructorCode, Serializable, Attr {
 	public Set<Condition> getPreConditions();
 	
 	public Set<Condition> getPostConditions();
+	
+	default Set<Condition> getConditions() {
+		return CollectionsUtil.union(getPreConditions(), getPostConditions());
+	}
+	
+	default boolean hasConditions() {
+		return !getConditions().isEmpty();
+	}
 	
 	public Object getObject();
 	

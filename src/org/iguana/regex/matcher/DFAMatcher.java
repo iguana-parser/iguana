@@ -27,6 +27,7 @@
 
 package org.iguana.regex.matcher;
 
+import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
@@ -42,6 +43,10 @@ public class DFAMatcher implements Matcher {
 	
 	protected final int start;
 
+	public DFAMatcher(RegularExpression regex) {
+		this(regex.getAutomaton());
+	}
+	
 	public DFAMatcher(Automaton automaton) {
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 

@@ -42,10 +42,6 @@ import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Constants;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.AutomatonBuilder;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Alt<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
@@ -70,35 +66,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	
 	private static <T extends Symbol> String getName(List<T> elements) {
 		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" | ")) + ")";
-	}
-	
-	@Override
-	public Automaton createAutomaton() {
-		
-		if (symbols.size() == 1)
-			return ((RegularExpression) symbols.get(0)).getAutomaton();
-		
-		List<Automaton> automatons = new ArrayList<>();
-				
-		for (Symbol e : symbols) {
-			RegularExpression regexp = (RegularExpression) e;
-			automatons.add(regexp.getAutomaton().copy());
-		}
-		
-		State startState = new State();
-		State finalState = new State(StateType.FINAL);
-		
-		for (Automaton automaton : automatons) {
-			startState.addEpsilonTransition(automaton.getStartState());
-			
-			Set<State> finalStates = automaton.getFinalStates();
-			for (State s : finalStates) {
-				s.setStateType(StateType.NORMAL);
-				s.addEpsilonTransition(finalState);				
-			}
-		}
-		
-		return new AutomatonBuilder(startState).build(); 
 	}
 
 	@Override

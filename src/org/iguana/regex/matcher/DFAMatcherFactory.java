@@ -27,12 +27,17 @@
 
 package org.iguana.regex.matcher;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
 
 public class DFAMatcherFactory implements MatcherFactory {
+	
+	private Map<RegularExpression, Matcher> cache = new HashMap<>();
 
     public Matcher getMatcher(RegularExpression regex) {
         
@@ -45,7 +50,7 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex instanceof CharacterRange)
             return characterRangeMatcher((CharacterRange) regex);
             
-        return createMatcher(regex);
+        return cache.computeIfAbsent(regex, DFAMatcher::new);
     }
     
     public Matcher getBackwardsMatcher(RegularExpression regex) {
@@ -59,7 +64,7 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex instanceof CharacterRange)
             return characterRangeBackwardsMatcher((CharacterRange) regex);
         
-        return createBackwardsMatcher(regex);
+        return cache.computeIfAbsent(regex, DFABackwardsMatcher::new);
     }
     
     public static Matcher characterMatcher(Character c) {
@@ -76,14 +81,6 @@ public class DFAMatcherFactory implements MatcherFactory {
     
     public static Matcher characterRangeBackwardsMatcher(CharacterRange range) {
         return (input, i) -> i == 0 ? -1 : ( input.charAt(i - 1) >= range.getStart() && input.charAt(i - 1) <= range.getEnd() ? 1 : -1 );
-    }
-    
-    public static Matcher createMatcher(RegularExpression regex) {
-        return new DFAMatcher(regex.getAutomaton());
-    }
-    
-    public static Matcher createBackwardsMatcher(RegularExpression regex) {
-        return new DFABackwardsMatcher(regex.getAutomaton());
-    }
+    }        
 	
 }

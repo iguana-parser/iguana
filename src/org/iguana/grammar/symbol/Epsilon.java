@@ -27,17 +27,14 @@
 
 package org.iguana.grammar.symbol;
 
+import static org.iguana.util.CollectionsUtil.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.Set;
 
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
 import org.iguana.traversal.ISymbolVisitor;
-
-import static org.iguana.util.CollectionsUtil.*;
 
 public class Epsilon extends AbstractRegularExpression {
 
@@ -75,12 +72,6 @@ public class Epsilon extends AbstractRegularExpression {
 	    ois.defaultReadObject();
 	    instance = this;
 	}
-
-	@Override
-    protected Automaton createAutomaton() {
-    	State state = new State(StateType.FINAL);
-        return Automaton.builder(state).build();
-    }
 
 	@Override
 	public boolean isNullable() {
