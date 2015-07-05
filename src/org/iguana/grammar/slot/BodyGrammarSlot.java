@@ -159,7 +159,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public boolean requiresBinding() {
-		return !(label == null && variable == null); 
+		return label != null || variable != null || state != null; 
 	}
 	
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {

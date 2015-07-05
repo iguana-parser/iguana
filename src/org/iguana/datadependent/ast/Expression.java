@@ -916,11 +916,11 @@ public abstract class Expression extends AbstractAST {
 			Object rhs = this.rhs.interpret(ctx);
 			
 			if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
-				return ((java.lang.Integer) lhs) == ((java.lang.Integer) rhs);
+				return ((java.lang.Integer) lhs).equals((java.lang.Integer) rhs);
 			}
 			
 			if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float) {
-				return ((java.lang.Float) lhs) == ((java.lang.Float) rhs);
+				return ((java.lang.Float) lhs).equals((java.lang.Float) rhs);
 			}
 			
 			if (lhs instanceof java.lang.String && rhs instanceof java.lang.String) {
