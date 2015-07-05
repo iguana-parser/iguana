@@ -3,6 +3,7 @@ package org.iguana.datadependent.traversal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.iguana.datadependent.ast.Expression.And;
 import org.iguana.datadependent.ast.Expression.AndIndent;
 import org.iguana.datadependent.ast.Expression.Assignment;
 import org.iguana.datadependent.ast.Expression.Boolean;
@@ -283,6 +284,13 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(Or expression) {
+		expression.getLhs().accept(this);
+		expression.getRhs().accept(this);
+		return null;
+	}
+	
+	@Override
+	public Void visit(And expression) {
 		expression.getLhs().accept(this);
 		expression.getRhs().accept(this);
 		return null;

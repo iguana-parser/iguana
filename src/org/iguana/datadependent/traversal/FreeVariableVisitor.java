@@ -36,6 +36,7 @@ import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.eclipse.imp.pdb.facts.util.TrieSet;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
+import org.iguana.datadependent.ast.Expression.And;
 import org.iguana.datadependent.ast.Expression.AndIndent;
 import org.iguana.datadependent.ast.Expression.Assignment;
 import org.iguana.datadependent.ast.Expression.Boolean;
@@ -326,6 +327,21 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
+		
+		return null;
+	}
+	
+	@Override
+	public Void visit(And expression) {
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
+		
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+		
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(lhs.getEnv());
 		rhs.accept(this);
 		
 		return null;

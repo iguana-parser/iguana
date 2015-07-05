@@ -631,6 +631,52 @@ public abstract class Expression extends AbstractAST {
 		}
 		
 	}
+	
+	static public class And extends Expression {
+		
+		private static final long serialVersionUID = 1L;
+		
+		private final Expression lhs;
+		private final Expression rhs;
+		
+		And(Expression lhs, Expression rhs) {
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+		
+		public Expression getLhs() {
+			return lhs;
+		}
+		
+		public Expression getRhs() {
+			return rhs;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx);
+			if (lhs == false)
+				return lhs;
+			
+			return (java.lang.Boolean) this.rhs.interpret(ctx);
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			return "AST.and(" + lhs.getConstructorCode() + "," + rhs.getConstructorCode() + ")";
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("%s && %s", lhs, rhs);
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+		
+	}
 		
 	static public class Less extends Expression {
 		

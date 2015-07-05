@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.traversal;
 
+import org.iguana.datadependent.ast.Expression.And;
 import org.iguana.datadependent.ast.Expression.Tuple;
 import org.iguana.datadependent.ast.Expression.Val;
 import org.iguana.datadependent.ast.Expression.Yield;
@@ -78,6 +79,8 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(AndIndent expression);
 	
 	public T visit(Or expression);
+	
+	public T visit(And expression);
 	
 	public T visit(Less expression);
 	
