@@ -27,18 +27,14 @@
 
 package org.iguana.grammar.symbol;
 
+import static org.iguana.util.CollectionsUtil.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.Set;
 
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
-import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
-
-import static org.iguana.util.CollectionsUtil.*;
 
 public class EOF extends AbstractRegularExpression {
 	
@@ -75,13 +71,6 @@ public class EOF extends AbstractRegularExpression {
 	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
 	    ois.defaultReadObject();
 	    instance = this;
-	}
-	
-	protected Automaton createAutomaton() {
-    	State startState = new State();
-    	State endState = new State(StateType.FINAL);
-    	startState.addTransition(new Transition(VALUE, endState));
-        return Automaton.builder(startState).build();		
 	}
 
 	@Override

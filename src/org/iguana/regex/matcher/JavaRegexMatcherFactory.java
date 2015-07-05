@@ -34,6 +34,7 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
+import org.iguana.traversal.HasConditionsVisitor;
 
 public class JavaRegexMatcherFactory implements MatcherFactory {
 
@@ -42,7 +43,12 @@ public class JavaRegexMatcherFactory implements MatcherFactory {
 	
 	@Override
 	public Matcher getMatcher(RegularExpression regex) {
-		return cache.computeIfAbsent(regex, JavaRegexMatcher::new);
+		Boolean hasConditions = regex.accept(new HasConditionsVisitor());
+		
+ 		if (hasConditions) 
+			return cache.computeIfAbsent(regex, JavaRegexMatcher::new);
+		else 
+			return cache.computeIfAbsent(regex, DFAMatcher::new);
 	}
 
     public Matcher getBackwardsMatcher(RegularExpression regex) {
@@ -59,6 +65,6 @@ public class JavaRegexMatcherFactory implements MatcherFactory {
         if (regex instanceof CharacterRange)
             return DFAMatcherFactory.characterRangeBackwardsMatcher((CharacterRange) regex);
         
-        return DFAMatcherFactory.createBackwardsMatcher(regex);
+        return backwardsCache.computeIfAbsent(regex, DFABackwardsMatcher::new);
     }
 }

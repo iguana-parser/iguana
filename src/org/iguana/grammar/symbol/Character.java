@@ -31,10 +31,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
-import org.iguana.regex.automaton.Transition;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.unicode.UnicodeUtil;
 
@@ -91,14 +87,6 @@ public class Character extends AbstractRegularExpression {
 		}
 	}
 	
-	@Override
-	protected Automaton createAutomaton() {
-		State startState = new State();
-		State finalState = new State(StateType.FINAL);
-		startState.addTransition(new Transition(c, finalState));
-		return Automaton.builder(startState).build();
-	}
-
 	@Override
 	public boolean isNullable() {
 		return false;

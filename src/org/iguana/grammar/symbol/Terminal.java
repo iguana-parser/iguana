@@ -30,7 +30,6 @@ package org.iguana.grammar.symbol;
 import java.util.Set;
 
 import org.iguana.regex.RegularExpression;
-import org.iguana.regex.automaton.Automaton;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractRegularExpression {
@@ -117,11 +116,6 @@ public class Terminal extends AbstractRegularExpression {
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
 		return regex.getNotFollowSet();
-	}
-
-	@Override
-	protected Automaton createAutomaton() {
-		return regex.getAutomaton();
 	}
 	
 	@Override

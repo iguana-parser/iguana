@@ -34,20 +34,7 @@ public abstract class AbstractRegularExpression extends AbstractSymbol implement
 
 	private static final long serialVersionUID = 1L;
 	
-	protected transient Automaton automaton;
-	
 	public AbstractRegularExpression(SymbolBuilder<? extends RegularExpression> builder) {
 		super(builder);
-	}
-	
-	@Override
-	public final Automaton getAutomaton() {
-		if (automaton == null) {
-			automaton = createAutomaton();
-		}
-		return automaton;
-	}
-		
-	protected abstract Automaton createAutomaton();
-	
+	}		
 }

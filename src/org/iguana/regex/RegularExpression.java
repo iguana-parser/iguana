@@ -34,12 +34,12 @@ import java.util.Set;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.automaton.Automaton;
+import org.iguana.traversal.ToAutomatonRegexVisitor;
+import org.iguana.traversal.ToJavaRegexVisitor;
 import org.iguana.util.generator.ConstructorCode;
 
 public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
 
-	public Automaton getAutomaton();
-	
 	public boolean isNullable();
 	
 	public Set<CharacterRange> getFirstSet();
@@ -51,6 +51,14 @@ public interface RegularExpression extends Serializable, Symbol, ConstructorCode
 		
 	default int length() {
 		return 1;
+	}
+	
+	default Automaton getAutomaton() {
+		return accept(new ToAutomatonRegexVisitor());
+	}
+
+	default String getJavaRegexPattern() {
+		return accept(new ToJavaRegexVisitor());
 	}
 	
 	public static <T> Comparator<T> lengthComparator() {

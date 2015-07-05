@@ -37,11 +37,7 @@ import org.iguana.grammar.symbol.AbstractRegularExpression;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
 import org.iguana.traversal.ISymbolVisitor;
-
 
 public class Star extends AbstractRegularExpression {
 
@@ -68,29 +64,6 @@ public class Star extends AbstractRegularExpression {
 	@Override
 	public int length() {
 		return ((RegularExpression)s).length();
-	}
-	
-	@Override
-	protected Automaton createAutomaton() {
-		//TODO: add separators to the DFA
-		State startState = new State();
-		State finalState = new State(StateType.FINAL);
-		
-		Automaton automaton = ((RegularExpression) s).getAutomaton().copy();
-		
-		startState.addEpsilonTransition(automaton.getStartState());
-		
-		Set<State> finalStates = automaton.getFinalStates();
-		
-		for(State s : finalStates) {
-			s.setStateType(StateType.NORMAL);
-			s.addEpsilonTransition(finalState);
-			s.addEpsilonTransition(automaton.getStartState());
-		}
-		
-		startState.addEpsilonTransition(finalState);
-		
-		return Automaton.builder(startState).build();
 	}
 	
 	@Override
