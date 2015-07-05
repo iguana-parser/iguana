@@ -36,6 +36,7 @@ import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.eclipse.imp.pdb.facts.util.TrieSet;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
+import org.iguana.datadependent.ast.Expression.And;
 import org.iguana.datadependent.ast.Expression.AndIndent;
 import org.iguana.datadependent.ast.Expression.Assignment;
 import org.iguana.datadependent.ast.Expression.Boolean;
@@ -209,7 +210,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		if (freeVariables != null)
 			freeVariables.add(name);
 		
-		if (!nonterminal_bindings.isEmpty()) {
+		if (nonterminal_bindings != null && !nonterminal_bindings.isEmpty()) {
 			for (Nonterminal nonterminal : nonterminal_bindings.keySet()) {
 				if (nonterminal_updates.get(nonterminal).contains(name)) {
 					nonterminal_returns.get(nonterminal).add(name);
@@ -326,6 +327,21 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
 		
 		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
+		
+		return null;
+	}
+	
+	@Override
+	public Void visit(And expression) {
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
+		
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+		
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
+		
+		rhs.setEnv(lhs.getEnv());
 		rhs.accept(this);
 		
 		return null;
@@ -662,11 +678,6 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		if (symbol.getVariable() != null)
 			env = env.__insert(symbol.getVariable());
 		
-		if (nonterminal_bindings != null 
-				&& !nonterminal_bindings.containsKey(symbol) 
-				&& nonterminal_updates.containsKey(symbol) )
-			nonterminal_bindings.put(symbol, new HashSet<>());
-		
 		if (symbol.getArguments() != null) {
 			for (org.iguana.datadependent.ast.Expression argument : symbol.getArguments())
 				argument.accept(this);
@@ -676,6 +687,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 			for (java.lang.String parameter : nonterminal_uses.get(symbol))
 				use(parameter);
 		}
+		
+		if (nonterminal_bindings != null 
+				&& !nonterminal_bindings.containsKey(symbol) 
+				&& nonterminal_updates.containsKey(symbol) )
+			nonterminal_bindings.put(symbol, new HashSet<>());
 		
 		symbol.setEnv(env);
 		

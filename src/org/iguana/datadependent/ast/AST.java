@@ -356,6 +356,10 @@ public class AST {
 		return new Expression.Or(lhs, rhs);
 	}
 	
+	static public Expression and(Expression lhs, Expression rhs) {
+		return new Expression.And(lhs, rhs);
+	}
+	
 	static public Expression less(Expression lhs, Expression rhs) {
 		return new Expression.Less(lhs, rhs);
 	}

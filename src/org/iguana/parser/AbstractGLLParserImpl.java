@@ -122,7 +122,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ? extends Object> map) {
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ? extends Object> map, boolean global) {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
 		
@@ -130,7 +130,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		 * Data-dependent GLL parsing
 		 */
 		this.ctx = new PersistentEvaluatorContext(input);
-		map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));
+		
+		if (global)
+			map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));
 		
 		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
 		
@@ -149,7 +151,19 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		NonterminalNode root;
 		
-		parse(startSymbol);
+		Environment env = null;
+		
+		if (!global && !map.isEmpty()) {
+			Object[] values = new Object[map.size()];
+			
+			int i = 0;
+			for (String parameter : nonterminal.getParameters())
+				values[i++] = map.get(parameter);
+			
+			env = getEmptyEnvironment().declare(nonterminal.getParameters(), values);
+		}
+		
+		parse(startSymbol, env);
 		
 		root = sppfLookup.getStartSymbol(startSymbol, input.length());
 
@@ -189,14 +203,17 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return grammarGraph.getHead(nonterminal);
 	}
 	
-	protected void parse(NonterminalGrammarSlot startSymbol) {
+	protected void parse(NonterminalGrammarSlot startSymbol, Environment env) {
 		
 		if(!startSymbol.testPredict(input.charAt(ci))) {
 			recordParseError(startSymbol);
 			return;
 		}
 		
-		startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
+		if (env == null)
+			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
+		else 
+			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, cu, ci, DummyNode.getInstance(), env)));
 		
 		while(descriptorLookup.hasNextDescriptor()) {
 			Descriptor descriptor = descriptorLookup.nextDescriptor();
