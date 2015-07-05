@@ -154,11 +154,16 @@ public class DesugarState implements GrammarTransformation {
 		}
 		
 		Set<Rule> newRules = new LinkedHashSet<>();
-		// grammar.getRules().forEach(r -> newRules.add(transform(r)));
+		for (Nonterminal nonterminal : grammar.getNonterminals()) {
+			int i = 0;
+			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = bindings.get(nonterminal);
+			for (Rule rule : grammar.getAlternatives(nonterminal)) {
+				newRules.add(transform(rule, uses, nonterminal_bindings == null? new HashMap<>() : nonterminal_bindings.get(i++), returns));
+			}
+		}
 		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
-	@SuppressWarnings("unused")
 	private Rule transform(Rule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
 		if (rule.getBody() == null)
 			return rule;
@@ -308,7 +313,7 @@ public class DesugarState implements GrammarTransformation {
 				Expression[] arguments = new Expression[pass.size()];
 				int i = 0;
 				for (String argument : pass)
-					arguments[i++] = AST.val(argument);
+					arguments[i++] = AST.var(argument);
 				
 				builder.apply(arguments);
 				changed = true;

@@ -239,8 +239,7 @@ public class ReachabilityGraph {
 		
 		@Override
 		public Boolean visit(Return symbol) {
-			// TODO: support for return
-			return null;
+			return false;
 		}
 
 		@Override
