@@ -109,7 +109,8 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return (variable != null? variable + (state != null? ":" + GeneratorUtil.listToString(state, ":"): "") + " = " : "")
+		return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
+				+ (state != null && !state.isEmpty()? GeneratorUtil.listToString(state, ":") + "=" : "")
 				+ (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
