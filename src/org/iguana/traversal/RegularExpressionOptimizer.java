@@ -68,7 +68,7 @@ public class RegularExpressionOptimizer implements RegularExpressionVisitor<Regu
 			return (RegularExpression) alt.getSymbols().get(0).copyBuilder().addConditions(alt).build();
 		}
 		return Alt.builder(alt.getSymbols().stream()
-										   .flatMap(s -> { if (s instanceof Alt && !s.getPostConditions().isEmpty()) return ((Alt<?>)s).getSymbols().stream(); else return Stream.of(s);})
+										   .flatMap(s -> { if (s instanceof Alt && s.getPostConditions().isEmpty()) return ((Alt<?>)s).getSymbols().stream(); else return Stream.of(s);})
 				                           .map(s -> s.accept(this))
 				                           .collect(Collectors.toList())).addConditions(alt).build();
 	}

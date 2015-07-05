@@ -93,10 +93,19 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 		StringBuilder sb = new StringBuilder();
 
 		if (!charClasses.isEmpty() && !other.isEmpty()) {
+			int left  = charClasses.size();
+			int right = other.stream().map(s -> (RegularExpression) s).mapToInt(r -> r.length()).max().getAsInt();
+			
 			sb.append("(?:");
-			sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
-			sb.append("|");
-			sb.append(other.stream().map(s -> s.accept(this)).collect(Collectors.joining("|")));
+			if (left > right) {
+				sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
+				sb.append("|");
+				sb.append(other.stream().map(s -> s.accept(this)).collect(Collectors.joining("|")));
+			} else {
+				sb.append(other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")));
+				sb.append("|");
+				sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
+			}
 			sb.append(")");
 		} 
 		else if (!charClasses.isEmpty()) {
