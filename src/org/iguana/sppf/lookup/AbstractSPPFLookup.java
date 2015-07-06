@@ -27,8 +27,6 @@
 
 package org.iguana.sppf.lookup;
 
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.NonterminalOrIntermediateNode;
@@ -115,18 +113,6 @@ public abstract class AbstractSPPFLookup implements SPPFLookup {
 	
 	public int getAmbiguousNodesCount() {
 		return countAmbiguousNodes;
-	}
-	
-	protected IntermediateNode createIntermediateNode(BodyGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
-	}
-	
-	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent) {
-		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true);
-	}
-	
-	protected NonterminalNode createNonterminalNode(NonterminalGrammarSlot grammarSlot, int leftExtent, int rightExtent, Object value) {
-		return new NonterminalNode(grammarSlot, leftExtent, rightExtent, (x, y) -> true, value);
 	}
 	
 	@Override

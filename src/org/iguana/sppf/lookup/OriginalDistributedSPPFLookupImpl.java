@@ -49,7 +49,7 @@ public class OriginalDistributedSPPFLookupImpl extends DistributedSPPFLookupImpl
 	}
 	
 	@Override
-	protected IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+	public IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
 		return new IntermediateNode(slot, leftExtent, rightExtent, new OriginalPackedNodeSet(inputSize));
 	}
 	

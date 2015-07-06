@@ -40,6 +40,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.NonterminalOrIntermediateNode;
 import org.iguana.sppf.PackedNode;
 import org.iguana.sppf.TerminalNode;
+import org.iguana.util.collections.Key;
 
 public interface SPPFLookup {
 
@@ -114,17 +115,33 @@ public interface SPPFLookup {
 	}
 	
 	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
+		NodeCreator<IntermediateNode> creator = key -> {
+			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
+			intermediateNodeAdded(newNode);
+			return newNode;
+		};
+		
+		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), creator);
 		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		return newNode;
 	}
 	
+	// If the node exists, attach the packed node and return null
+	// If the node does not exit, create one, attach the packed node and return it
+//	(k, v) -> if (v ==  null) {  }
+		
 	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
 	}
 	
 	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
+		NodeCreator<IntermediateNode> creator = key -> {
+			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
+			intermediateNodeAdded(newNode);
+			return newNode;
+		};
+		
+		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env, creator);
 		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
 		return newNode;
 	}
@@ -141,11 +158,11 @@ public interface SPPFLookup {
 	
 	public <T> NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, GSSNodeData<T> data, Object value);
 	
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, NodeCreator<IntermediateNode> creator);
 	
 	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent);
 	
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env, NodeCreator<IntermediateNode> creator);
 	
 	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env);
 	
@@ -204,5 +221,23 @@ public interface SPPFLookup {
 	public int getAmbiguousNodesCount();
 	
 	public void reset();
+
+	default IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+		return new IntermediateNode(slot, leftExtent, rightExtent, (x, y) -> true);
+	}
+	
+	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		return new NonterminalNode(slot, leftExtent, rightExtent, (x, y) -> true);
+	}
+	
+	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, Object value) {
+		return new NonterminalNode(slot, leftExtent, rightExtent, (x, y) -> true, value);
+	}
+	
+	@FunctionalInterface
+	public static interface NodeCreator<T extends NonPackedNode> {
+		public T create(Key key);
+	}
+
 	
 }

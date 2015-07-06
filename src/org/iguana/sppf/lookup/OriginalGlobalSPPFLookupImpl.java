@@ -50,7 +50,7 @@ public class OriginalGlobalSPPFLookupImpl extends GlobalSPPFLookupImpl {
 	}
 	
 	@Override
-	protected IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
+	public IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
 		return new IntermediateNode(slot, leftExtent, rightExtent, new OriginalPackedNodeSet(inputSize));
 	}
 

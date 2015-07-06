@@ -29,8 +29,6 @@ package org.iguana.grammar.slot;
 
 import java.util.HashMap;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
@@ -42,6 +40,7 @@ import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.lookup.SPPFLookup.NodeCreator;
 import org.iguana.util.Input;
 import org.iguana.util.collections.Key;
 
@@ -91,11 +90,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.isFirst();
 	}
 	
-	public IntermediateNode getIntermediateNode(Key key, Supplier<IntermediateNode> s, Consumer<IntermediateNode> c) {
-		return intermediateNodes.computeIfAbsent(key, k -> { IntermediateNode val = s.get();
-															 c.accept(val);
-															 return val; 
-														   });
+	public IntermediateNode getIntermediateNode(Key key, NodeCreator<IntermediateNode> creator) {
+		return intermediateNodes.computeIfAbsent(key, k -> creator.create(k));
 	}
 	
 	public IntermediateNode findIntermediateNode(Key key) {

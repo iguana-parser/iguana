@@ -79,10 +79,8 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 
 	@Override
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.getIntermediateNode(IntKey2.from(leftExtent, rightExtent, f), 
-				 						() -> createIntermediateNode(slot, leftExtent, rightExtent),
-				 						this::intermediateNodeAdded);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, NodeCreator<IntermediateNode> creator) {
+		return slot.getIntermediateNode(IntKey2.from(leftExtent, rightExtent, f), creator);
 	}
 
 	@Override
@@ -108,10 +106,8 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	}
 	
 	@Override
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env) {
-		return slot.getIntermediateNode(IntKey2PlusObject.from(env, leftExtent, rightExtent, f3), 
-									    () -> createIntermediateNode(slot, leftExtent, rightExtent),
-									    this::intermediateNodeAdded);
+	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env, NodeCreator<IntermediateNode> creator) {
+		return slot.getIntermediateNode(IntKey2PlusObject.from(env, leftExtent, rightExtent, f3), creator);
 	}
 
 }
