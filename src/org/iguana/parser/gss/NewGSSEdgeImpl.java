@@ -122,12 +122,13 @@ public class NewGSSEdgeImpl implements GSSEdge {
 		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
 			return null;
 		
-		y = parser.getNode(returnSlot, node, sppfNode);
+//		y = parser.getNode(returnSlot, node, sppfNode);
+//		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
+//			return new Descriptor(returnSlot, destination, inputIndex, y);
 		
-		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
-			return new Descriptor(returnSlot, destination, inputIndex, y);
+		y = parser.getIntermediateNode2(returnSlot, node, sppfNode);
 		
-		return null;
+		return y != null ? new Descriptor(returnSlot, destination, inputIndex, y) : null;
 	}
 
 }

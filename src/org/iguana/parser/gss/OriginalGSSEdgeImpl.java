@@ -102,12 +102,14 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 			
 			env = parser.getEnvironment();
 			
-			y = parser.getNode(returnSlot, node, sppfNode, env);
+//			y = parser.getNode(returnSlot, node, sppfNode, env);
+//			
+//			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
+//				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
+
+			y = parser.getIntermediateNode2(returnSlot, node, sppfNode, env);
 			
-			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
-				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
-			
-			return null;
+			return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env) : null;
 		}
 		
 		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
@@ -117,6 +119,7 @@ public class OriginalGSSEdgeImpl implements GSSEdge {
 //		
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 //			return new Descriptor(returnSlot, destination, inputIndex, y);
+//		return null;
 		
 		y = parser.getIntermediateNode2(returnSlot, node, sppfNode);
 		

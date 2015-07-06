@@ -18,6 +18,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.imp.pdb.values"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
