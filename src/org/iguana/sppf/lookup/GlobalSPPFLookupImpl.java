@@ -104,7 +104,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 	
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, NodeCreator<IntermediateNode> creator) {
-		return intermediateNodes.computeIfAbsent(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), k -> creator.create(k));
+		return intermediateNodes.compute(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), (k, v) -> creator.create(k, v));
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 
 	@Override
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent, Environment env, NodeCreator<IntermediateNode> creator) {
-		return intermediateNodes.computeIfAbsent(IntKey3PlusObject.from(env, slot.getId(), leftExtent, rightExtent, f4), k -> creator.create(k));
+		return intermediateNodes.compute(IntKey3PlusObject.from(env, slot.getId(), leftExtent, rightExtent, f4), (k, v) -> creator.create(k, v));
 	}
 
 }

@@ -91,7 +91,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public IntermediateNode getIntermediateNode(Key key, NodeCreator<IntermediateNode> creator) {
-		return intermediateNodes.computeIfAbsent(key, k -> creator.create(k));
+		return intermediateNodes.compute(key, (k, v) -> creator.create(k, v));
 	}
 	
 	public IntermediateNode findIntermediateNode(Key key) {

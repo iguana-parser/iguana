@@ -115,7 +115,7 @@ public interface SPPFLookup {
 	}
 	
 	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		NodeCreator<IntermediateNode> creator = key -> {
+		NodeCreator<IntermediateNode> creator = (key, val) -> {
 			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
 			intermediateNodeAdded(newNode);
 			return newNode;
@@ -126,16 +126,38 @@ public interface SPPFLookup {
 		return newNode;
 	}
 	
-	// If the node exists, attach the packed node and return null
-	// If the node does not exit, create one, attach the packed node and return it
-//	(k, v) -> if (v ==  null) {  }
+	/**
+	 * 
+	 * If the node exists, attach the packed node and return null.
+	 * If the node does not exit, create one, attach the packed node and return it.
+	 * 
+	 */
+	default IntermediateNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+		Holder<IntermediateNode> holder = new Holder<>();
+		NodeCreator<IntermediateNode> creator = (key, value) -> {
+			if (value != null) {
+				addPackedNode(value, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+				return value;
+			} else {
+				IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
+				addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
+				intermediateNodeAdded(newNode);
+				holder.val = newNode;
+				return newNode;				
+			}
+		};
 		
+		getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env, creator);
+		
+		return holder.has() ? holder.val : null;
+	}	
+	
 	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
 	}
 	
 	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		NodeCreator<IntermediateNode> creator = key -> {
+		NodeCreator<IntermediateNode> creator = (key, val) -> {
 			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
 			intermediateNodeAdded(newNode);
 			return newNode;
@@ -149,7 +171,7 @@ public interface SPPFLookup {
 	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
 	}
-	
+		
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent);
 	
 	public NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent);
@@ -236,8 +258,13 @@ public interface SPPFLookup {
 	
 	@FunctionalInterface
 	public static interface NodeCreator<T extends NonPackedNode> {
-		public T create(Key key);
+		public T create(Key key, T val);
 	}
 
+	static class Holder<T> {
+		T val;
+		
+		public boolean has() { return val != null; }
+	}
 	
 }
