@@ -63,7 +63,7 @@ public class Return extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return expression.toString();
+		return String.format("{%s}", expression.toString());
 	}
 	
 	public static Builder builder(Expression expression) {
@@ -80,7 +80,7 @@ public class Return extends AbstractSymbol {
 		}
 		
 		public Builder(Expression expression) {
-			super(expression.toString());
+			super(String.format("{%s}", expression.toString()));
 			this.expression = expression;
 		}
 

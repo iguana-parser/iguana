@@ -77,7 +77,7 @@ public class Code extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("%s do %s;", symbol.toString(), GeneratorUtil.listToString(statements, ";"));
+		return String.format("%s {%s}", symbol.toString(), GeneratorUtil.listToString(statements, ";"));
 	}
 		
 	public static Builder builder(Symbol symbol, org.iguana.datadependent.ast.Statement... statements) {
@@ -96,7 +96,7 @@ public class Code extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol, Statement... statements) {
-			super(String.format("%s do %s", symbol.toString(), GeneratorUtil.listToString(statements, ";")));
+			super(String.format("%s {%s}", symbol.toString(), GeneratorUtil.listToString(statements, ";")));
 			
 			assert statements.length != 0;
 			
