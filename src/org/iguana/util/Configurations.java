@@ -78,7 +78,7 @@ public class Configurations {
 			}			
 		}
 		
-		all_configs.addAll(newConfigs);
+//		all_configs.addAll(newConfigs);
 		all_configs.addAll(originalConfigs);
 	}
 }

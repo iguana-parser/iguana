@@ -327,6 +327,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild);
+	}
+	
+	@Override
 	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
 	}
@@ -552,6 +557,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild, env);
+	}
+	
+	@Override
+	public IntermediateNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild, env);
 	}
 	
