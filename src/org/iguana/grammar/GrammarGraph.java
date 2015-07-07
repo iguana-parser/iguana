@@ -164,6 +164,8 @@ public class GrammarGraph implements Serializable {
 			Rule startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
 			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);
 			
+			getNonterminalGrammarSlot(nt).setFollowTest(FollowTest.NO_FOLLOW);
+			
 			nonterminalGrammarSlot.setFollowTest(FollowTest.NO_FOLLOW);
 			nonterminalGrammarSlot.setLookAheadTest(LookAheadTest.NO_LOOKAYOUT);
 			addRule(nonterminalGrammarSlot, startRule);
@@ -196,7 +198,7 @@ public class GrammarGraph implements Serializable {
 		List<Rule> rules = grammar.getAlternatives(nonterminal);
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
 		rules.forEach(r -> addRule(nonterminalSlot, r));
-		nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal, nonterminalSlot));
+		nonterminalSlot.setLookAheadTest(LookAheadTest.NO_LOOKAYOUT);
 		nonterminalSlot.setFollowTest(getFollowTest(nonterminal));
 	}
 
