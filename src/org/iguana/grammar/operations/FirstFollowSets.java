@@ -70,7 +70,6 @@ public class FirstFollowSets {
 		definitions.keySet().forEach(k -> { firstSets.put(k, new HashSet<>()); followSets.put(k, new HashSet<>()); });
 
 		calculateFirstSets();
-				
 		calculateFollowSets();
 		calcualtePredictionSets();
 	}
@@ -270,7 +269,8 @@ public class FirstFollowSets {
 		if (alternate == null)
 			return;
 		
-		for (int i = index; i < alternate.size(); i++) {
+		int i;
+		for (i = index; i < alternate.size(); i++) {
 			
 			Symbol symbol = alternate.get(i);
 			
@@ -290,10 +290,11 @@ public class FirstFollowSets {
 				}
 			}
 		}
-		
-		if (isChainNullable(alternate, 0)) {
+
+		// if reaching the end of the alternative
+//		if (isChainNullable(alternate, 0)) {
+		if (i == alternate.size())
 			predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(followSets.get(rule.getHead()));
-		}
 		
 		predictionSets.remove(position, Epsilon.getInstance());
 	}

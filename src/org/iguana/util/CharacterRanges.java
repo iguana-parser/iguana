@@ -44,6 +44,21 @@ public class CharacterRanges {
 	public static Set<CharacterRange> toNonOverlappingSet(Iterable<CharacterRange> ranges) {
 		return toNonOverlapping(toList(ranges)).values().stream().flatMap(l -> l.stream()).collect(Collectors.toSet());
 	}
+
+	/**
+	 * 
+	 * @return a map from the new, non-overlapping ranges to original ranges
+	 */
+	public static Map<CharacterRange, CharacterRange> toNonOverlapping2(Iterable<CharacterRange> ranges) {
+		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(toList(ranges));
+		Map<CharacterRange, CharacterRange> map = new HashMap<>();
+		nonOverlapping.forEach((k, v) -> v.forEach(r -> map.put(r, k)));
+		return map;
+	}
+	
+	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(Iterable<CharacterRange> ranges) {
+		return toNonOverlapping(toList(ranges));
+	}
 	
 	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(CharacterRange...ranges) {
 		return toNonOverlapping(Arrays.asList(ranges));

@@ -212,11 +212,17 @@ public class GrammarGraph implements Serializable {
 		for (int i = 0; i < alternatives.size(); i++) {
 			Rule rule = alternatives.get(i);
 			BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);
-			Set<CharacterRange> set = toNonOverlappingSet(firstFollow.getPredictionSet(rule, 0));
+			Set<CharacterRange> set = firstFollow.getPredictionSet(rule, 0);
 			set.forEach(cr -> map.computeIfAbsent(cr, k -> new ArrayList<>()).add(firstSlot));			
 		}
 		
-		map.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue()));
+		Map<CharacterRange, CharacterRange> rangeMap = toNonOverlapping2(map.keySet());
+		
+		Map<CharacterRange, List<BodyGrammarSlot>> nonOverlappingMap = new HashMap<>();
+		
+		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(map.get(rangeMap.get(r)))); 
+		
+		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue()));
 		
 		return i -> rangeTree.get(i);
 	}
