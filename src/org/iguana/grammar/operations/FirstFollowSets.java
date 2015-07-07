@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.EOF;
 import org.iguana.grammar.symbol.Epsilon;
@@ -59,8 +60,8 @@ public class FirstFollowSets {
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
-	public FirstFollowSets(Map<Nonterminal, List<Rule>> definitions) {
-		this.definitions = definitions;
+	public FirstFollowSets(Grammar grammar) {
+		this.definitions = grammar.getDefinitions();
 		this.firstSets = new HashMap<>();
 		this.nullableNonterminals = new HashSet<>();
 		this.followSets = new HashMap<>();

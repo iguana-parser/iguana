@@ -62,12 +62,11 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		
-		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
-			parser.recordParseError(origin);
-			return;
-		}
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {		
+//		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
+//			parser.recordParseError(origin);
+//			return;
+//		}
 		
 		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
 			

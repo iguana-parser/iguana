@@ -134,16 +134,21 @@ public class GrammarGraph implements Serializable {
 			matcherFactory = new DFAMatcherFactory();
 		}
 
-		// Adding start rules for each nonterminal
-		List<Rule> startRules = grammar.getNonterminals().stream()
-                .map(n -> Rule.withHead(Start.from(n)).addSymbol(layout).addSymbol(n).addSymbol(layout).build())
-                .collect(Collectors.toList());
+		// Adding start rules for each nonterminal, further optimize it to not add it for lexicals
+		List<Rule> startRules;
+		if (layout != null)
+			startRules = grammar.getNonterminals().stream()
+	                .map(n -> Rule.withHead(Start.from(n)).addSymbol(layout).addSymbol(n).addSymbol(layout).build())
+	                .collect(Collectors.toList());
+		else
+			startRules = grammar.getNonterminals().stream()
+	                .map(n -> Rule.withHead(Start.from(n)).addSymbol(n).build()).collect(Collectors.toList());
 
 		// FIXME: make getDefinitions immutable! this is bad, and then uncomment startRules.forEach(r -> convert(r)) 
 		Map<Nonterminal, List<Rule>> definitions = grammar.getDefinitions();
 		startRules.forEach(r -> definitions.put(r.getHead(), Arrays.asList(r)));
 		
-		this.firstFollow = new FirstFollowSets(definitions);
+		this.firstFollow = new FirstFollowSets(grammar);
 		
 		epsilonSlot = new TerminalGrammarSlot(0, Epsilon.getInstance(), matcherFactory);
 		
@@ -151,8 +156,10 @@ public class GrammarGraph implements Serializable {
 
 		add(epsilonSlot);
 
-		grammar.getNonterminals().forEach(n -> getNonterminalGrammarSlot(n));
-		grammar.getNonterminals().forEach(n -> grammar.getAlternatives(n).forEach(r -> convert(r)));
+		Set<Nonterminal> nonterminals = grammar.getNonterminals();
+		nonterminals.forEach(n -> getNonterminalGrammarSlot(n));
+		nonterminals.forEach(n -> grammar.getAlternatives(n).forEach(r -> convert(r)));
+		nonterminals.forEach(n -> setFirstFollowTests(n));
 //		startRules.forEach(r -> convert(r));
 	}
 	
@@ -182,9 +189,13 @@ public class GrammarGraph implements Serializable {
 	private void convert(Rule rule) {
 		Nonterminal nonterminal = rule.getHead();
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
-		nonterminalSlot.setLookAheadTest(LookAheadTest.DEFAULT);
+		addRule(nonterminalSlot, rule);
+	}
+	
+	private void setFirstFollowTests(Nonterminal nonterminal) {
+		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
+		nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal, nonterminalSlot));
 		nonterminalSlot.setFollowTest(getFollowTest(nonterminal));
-		addRule(nonterminalSlot, rule);		
 	}
 
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
@@ -201,7 +212,7 @@ public class GrammarGraph implements Serializable {
 		for (int i = 0; i < alternatives.size(); i++) {
 			Rule rule = alternatives.get(i);
 			BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);
-			Set<CharacterRange> set = firstFollow.getPredictionSet(rule, 0);
+			Set<CharacterRange> set = toNonOverlappingSet(firstFollow.getPredictionSet(rule, 0));
 			set.forEach(cr -> map.computeIfAbsent(cr, k -> new ArrayList<>()).add(firstSlot));			
 		}
 		

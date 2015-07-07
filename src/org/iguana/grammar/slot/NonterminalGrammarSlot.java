@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	public List<BodyGrammarSlot> getFirstSlots() {
 		return firstSlots;
+	}
+	
+	public List<BodyGrammarSlot> getFirstSlots(int v) {
+		List<BodyGrammarSlot> lookaheadSlots = lookAheadTest.get(v);
+		return lookaheadSlots == null ? firstSlots : lookaheadSlots;
 	}
 	
 	public void setLookAheadTest(LookAheadTest lookAheadTest) {

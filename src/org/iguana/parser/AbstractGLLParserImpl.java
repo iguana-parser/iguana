@@ -236,7 +236,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			
 			final GSSNode __gssNode = gssNode;
 			
-			for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
+			for (BodyGrammarSlot s : nonterminal.getFirstSlots(input.charAt(i))) {
 				if (!s.getConditions().execute(getInput(), __gssNode, i))
 					scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
 			}

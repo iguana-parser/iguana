@@ -1,6 +1,5 @@
 package org.iguana.grammar.slot.lookahead;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -24,6 +23,6 @@ public interface LookAheadTest {
 		public boolean test(int v) { return true; };
 		
 		@Override
-		public List<BodyGrammarSlot> get(int v) { return Collections.emptyList(); }
+		public List<BodyGrammarSlot> get(int v) { return null; }
 	};
 }
