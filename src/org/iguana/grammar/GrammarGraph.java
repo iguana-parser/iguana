@@ -134,20 +134,6 @@ public class GrammarGraph implements Serializable {
 		} else {
 			matcherFactory = new DFAMatcherFactory();
 		}
-
-		// Adding start rules for each nonterminal, further optimize it to not add it for lexicals
-		List<Rule> startRules;
-		if (layout != null)
-			startRules = grammar.getNonterminals().stream()
-	                .map(n -> Rule.withHead(Start.from(n)).addSymbol(layout).addSymbol(n).addSymbol(layout).build())
-	                .collect(Collectors.toList());
-		else
-			startRules = grammar.getNonterminals().stream()
-	                .map(n -> Rule.withHead(Start.from(n)).addSymbol(n).build()).collect(Collectors.toList());
-
-		// FIXME: make getDefinitions immutable! this is bad, and then uncomment startRules.forEach(r -> convert(r)) 
-		Map<Nonterminal, List<Rule>> definitions = grammar.getDefinitions();
-		startRules.forEach(r -> definitions.put(r.getHead(), Arrays.asList(r)));
 		
 		this.firstFollow = new FirstFollowSets(grammar);
 		
@@ -161,11 +147,26 @@ public class GrammarGraph implements Serializable {
 		nonterminals.forEach(n -> getNonterminalGrammarSlot(n));
 		nonterminals.forEach(n -> grammar.getAlternatives(n).forEach(r -> convert(r)));
 		nonterminals.forEach(n -> setFirstFollowTests(n));
-//		startRules.forEach(r -> convert(r));
 	}
 	
-	public NonterminalGrammarSlot getHead(Nonterminal nonterminal) {
-		return nonterminalsMap.get(nonterminal);
+	public NonterminalGrammarSlot getHead(Nonterminal start) {
+		if (start instanceof Start) {			
+			NonterminalGrammarSlot s = nonterminalsMap.get(start);
+			
+			if (s != null) return s;
+
+			Nonterminal nt = ((Start)start).getNonterminal();
+
+			if (layout == null) return nonterminalsMap.get(nt);
+			
+			Rule startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
+			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);			
+			nonterminalGrammarSlot.setFollowTest(FollowTest.DEFAULT);
+			nonterminalGrammarSlot.setLookAheadTest(LookAheadTest.DEFAULT);
+			addRule(nonterminalGrammarSlot, startRule);
+			return nonterminalGrammarSlot;
+		}
+		return nonterminalsMap.get(start);
 	}	
 	
 	public TerminalGrammarSlot getTerminal(RegularExpression regex) {
