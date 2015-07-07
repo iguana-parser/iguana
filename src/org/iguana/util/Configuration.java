@@ -147,7 +147,7 @@ public class Configuration {
 		private LookupStrategy sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
 		private LookupStrategy descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;;
 		private final MatcherType matcherType = MatcherType.JAVA_REGEX;
-		private int lookaheadCount = 0;
+		private int lookaheadCount = 1;
 				
 		public Configuration build() {
 			return new Configuration(this);

@@ -60,6 +60,9 @@ public class FirstFollowSets {
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
+	private final Set<CharacterRange> layoutSet;
+	
+	// TODO: Calculate First/Follow sets before layout insertion
 	public FirstFollowSets(Grammar grammar) {
 		this.definitions = grammar.getDefinitions();
 		this.firstSets = new HashMap<>();
@@ -68,10 +71,17 @@ public class FirstFollowSets {
 		this.predictionSets = new HashMap<>();
 		
 		definitions.keySet().forEach(k -> { firstSets.put(k, new HashSet<>()); followSets.put(k, new HashSet<>()); });
+
+		calculateFirstSets();
 		
-//		calculateFirstSets();
-//		calculateFollowSets();
-//		calcualtePredictionSets();
+		Symbol layout = grammar.getLayout();
+		if (layout instanceof RegularExpression) 
+			layoutSet = ((RegularExpression) layout).getFirstSet();
+		else 
+			layoutSet = getFirstSet((Nonterminal) layout);
+		
+		calculateFollowSets();
+		calcualtePredictionSets();
 	}
 	
 	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
@@ -245,6 +255,9 @@ public class FirstFollowSets {
 			// Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
 			followSets.get(head).addAll(EOF.getInstance().getFirstSet());
+			
+			// Add layout to the follow set of all nonterminals
+			followSets.get(head).addAll(layoutSet);
 		}
 	}
 	
