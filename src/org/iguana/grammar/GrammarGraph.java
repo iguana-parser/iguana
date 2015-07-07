@@ -39,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.iguana.datadependent.ast.Expression;
@@ -216,11 +217,16 @@ public class GrammarGraph implements Serializable {
 			set.forEach(cr -> map.computeIfAbsent(cr, k -> new ArrayList<>()).add(firstSlot));			
 		}
 		
-		Map<CharacterRange, CharacterRange> rangeMap = toNonOverlapping2(map.keySet());
+		// A map from non-overlapping ranges to a list of original ranges
+		Map<CharacterRange, List<CharacterRange>> rangeMap = toNonOverlapping2(map.keySet());
 		
+		// A map from non-overlapping ranges to a list associated body grammar slots
 		Map<CharacterRange, List<BodyGrammarSlot>> nonOverlappingMap = new HashMap<>();
 		
-		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(map.get(rangeMap.get(r)))); 
+		// compute a list of body grammar slots from a non-overlapping range
+		Function<CharacterRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toSet());
+		
+		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(f.apply(r))); 
 		
 		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue()));
 		

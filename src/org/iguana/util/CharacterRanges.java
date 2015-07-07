@@ -49,12 +49,13 @@ public class CharacterRanges {
 	 * 
 	 * @return a map from the new, non-overlapping ranges to original ranges
 	 */
-	public static Map<CharacterRange, CharacterRange> toNonOverlapping2(Iterable<CharacterRange> ranges) {
+	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping2(Iterable<CharacterRange> ranges) {
 		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(toList(ranges));
-		Map<CharacterRange, CharacterRange> map = new HashMap<>();
-		nonOverlapping.forEach((k, v) -> v.forEach(r -> map.put(r, k)));
+		Map<CharacterRange, List<CharacterRange>> map = new HashMap<>();
+		nonOverlapping.forEach((k, v) -> v.forEach(r -> map.computeIfAbsent(r, key -> new ArrayList<>()).add(k)));
 		return map;
 	}
+
 	
 	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(Iterable<CharacterRange> ranges) {
 		return toNonOverlapping(toList(ranges));
