@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.operations;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -75,7 +76,10 @@ public class FirstFollowSets {
 		calculateFirstSets();
 		
 		Symbol layout = grammar.getLayout();
-		if (layout instanceof RegularExpression) 
+		
+		if (layout == null) 
+			layoutSet = Collections.emptySet();
+		else if (layout instanceof RegularExpression) 
 			layoutSet = ((RegularExpression) layout).getFirstSet();
 		else 
 			layoutSet = getFirstSet((Nonterminal) layout);
@@ -194,7 +198,7 @@ public class FirstFollowSets {
 				if(!((RegularExpression)s).isNullable()) {
 					return false;
 				}
-			} else {
+			} else if (s instanceof Nonterminal) {
 				if(!isNullable((Nonterminal) s)) {
 					return false;
 				}				
