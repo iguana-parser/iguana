@@ -29,8 +29,15 @@ package org.iguana.util.collections;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.util.CharacterRanges;
 import org.iguana.util.collections.IntRangeTree;
 import org.junit.Test;
+
+import static org.iguana.util.CollectionsUtil.*;
+import static org.iguana.grammar.symbol.CharacterRange.*; 
 
 public class IntRangeTest {
 	
@@ -106,6 +113,24 @@ public class IntRangeTest {
 		tree.insert(14, 10);
 		assertEquals(10, tree.size());
 		assertEquals(3, tree.getRoot().getHeight());
+	}
+	
+	@Test
+	public void test8() {
+		IntRangeTree tree = new IntRangeTree();
+		// [*, \u0000, \, \\u000A, \\u000D, \uFFFFFFFF, ]-\u10FFFF, \u0001-[]
+		List<CharacterRange> list = list(in('*', '*'), 
+				                         in('\u0000', '\u0000'), 
+				                         in('\\', '\\'), 
+				                         in('\r', '\r'), 
+				                         in('\n', '\n'),
+				                         in(']', 1_114_111),
+				                         in(1, '[')
+										 );
+		
+		CharacterRanges.toNonOverlappingSet(list).forEach(range -> tree.insert(range, 1));
+
+		assertEquals(1, tree.get(' '));
 	}
 
 }

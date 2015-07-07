@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import java.util.stream.Stream.Builder;
 
 public class CollectionsUtil {
@@ -126,6 +127,10 @@ public class CollectionsUtil {
 		}
 		
 		return result;
+	}
+	
+	public static <T> List<T> toList(Iterable<T> it) {
+		return StreamSupport.stream(it.spliterator(), false).collect(Collectors.toList());
 	}
 
 }

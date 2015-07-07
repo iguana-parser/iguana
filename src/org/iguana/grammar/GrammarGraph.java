@@ -27,8 +27,11 @@
 
 package org.iguana.grammar;
 
+import static org.iguana.util.CharacterRanges.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -129,50 +133,31 @@ public class GrammarGraph implements Serializable {
 		} else {
 			matcherFactory = new DFAMatcherFactory();
 		}
+
+		// Adding start rules for each nonterminal
+		List<Rule> startRules = grammar.getNonterminals().stream()
+                .map(n -> Rule.withHead(Start.from(n)).addSymbol(layout).addSymbol(n).addSymbol(layout).build())
+                .collect(Collectors.toList());
+
+		// FIXME: make getDefinitions immutable! this is bad, and then uncomment startRules.forEach(r -> convert(r)) 
+		Map<Nonterminal, List<Rule>> definitions = grammar.getDefinitions();
+		startRules.forEach(r -> definitions.put(r.getHead(), Arrays.asList(r)));
 		
-		this.firstFollow = new FirstFollowSets(grammar);
+		this.firstFollow = new FirstFollowSets(definitions);
 		
 		epsilonSlot = new TerminalGrammarSlot(0, Epsilon.getInstance(), matcherFactory);
 		
 		terminalsMap.put(Epsilon.getInstance(), epsilonSlot);
 
 		add(epsilonSlot);
-		
-		for (Nonterminal nonterminal : grammar.getNonterminals()) {
-			getNonterminalGrammarSlot(nonterminal);
-		}
-		
-		for (Nonterminal nonterminal : grammar.getNonterminals()) {
-			convert(nonterminal, grammar);
-		}
+
+		grammar.getNonterminals().forEach(n -> getNonterminalGrammarSlot(n));
+		grammar.getNonterminals().forEach(n -> grammar.getAlternatives(n).forEach(r -> convert(r)));
+//		startRules.forEach(r -> convert(r));
 	}
 	
-	public NonterminalGrammarSlot getHead(Nonterminal start) {
-		if (start instanceof Start) {
-			
-			NonterminalGrammarSlot s = nonterminalsMap.get(start);
-			if (s != null) {
-				return s;
-			}
-			
-			Nonterminal nt = ((Start)start).getNonterminal();
-
-			if (layout == null) {
-				return nonterminalsMap.get(nt);
-			}
-			
-			Rule startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
-			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);
-			
-			getNonterminalGrammarSlot(nt).setFollowTest(FollowTest.NO_FOLLOW);
-			
-			nonterminalGrammarSlot.setFollowTest(FollowTest.NO_FOLLOW);
-			nonterminalGrammarSlot.setLookAheadTest(LookAheadTest.NO_LOOKAYOUT);
-			addRule(nonterminalGrammarSlot, startRule);
-			return nonterminalGrammarSlot;
-		}
-		
-		return nonterminalsMap.get(start);
+	public NonterminalGrammarSlot getHead(Nonterminal nonterminal) {
+		return nonterminalsMap.get(nonterminal);
 	}	
 	
 	public TerminalGrammarSlot getTerminal(RegularExpression regex) {
@@ -193,19 +178,19 @@ public class GrammarGraph implements Serializable {
 			throw new RuntimeException("No regular expression for " + s + " found.");
 		return ((TerminalGrammarSlot) names.get(s)).getRegularExpression();
 	}
-		
-	private void convert(Nonterminal nonterminal, Grammar grammar) {
-		List<Rule> rules = grammar.getAlternatives(nonterminal);
+	
+	private void convert(Rule rule) {
+		Nonterminal nonterminal = rule.getHead();
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalGrammarSlot(nonterminal);
-		rules.forEach(r -> addRule(nonterminalSlot, r));
-		nonterminalSlot.setLookAheadTest(LookAheadTest.NO_LOOKAYOUT);
+		nonterminalSlot.setLookAheadTest(LookAheadTest.DEFAULT);
 		nonterminalSlot.setFollowTest(getFollowTest(nonterminal));
+		addRule(nonterminalSlot, rule);		
 	}
 
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
 		
 		if (config.getLookAheadCount() == 0)
-			return LookAheadTest.NO_LOOKAYOUT;
+			return LookAheadTest.DEFAULT;
 		
 		RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
 		
@@ -228,9 +213,10 @@ public class GrammarGraph implements Serializable {
 	private FollowTest getFollowTest(Nonterminal nonterminal) {
 		
 		if (config.getLookAheadCount() == 0)
-			return FollowTest.NO_FOLLOW;
+			return FollowTest.DEFAULT;
 		
-		Set<CharacterRange> followSet = firstFollow.getFollowSet(nonterminal);
+		// TODO: move toNonOverlapping to first follow itself
+		Set<CharacterRange> followSet = toNonOverlappingSet(firstFollow.getFollowSet(nonterminal));
 		IntRangeTree rangeTree = new IntRangeTree();
 		followSet.forEach(cr -> rangeTree.insert(cr, 1));
 		

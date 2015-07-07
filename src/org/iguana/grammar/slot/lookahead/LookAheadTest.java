@@ -18,7 +18,7 @@ public interface LookAheadTest {
 	 */
 	public List<BodyGrammarSlot> get(int v);
 	
-	public static final LookAheadTest NO_LOOKAYOUT = new LookAheadTest() {
+	public static final LookAheadTest DEFAULT = new LookAheadTest() {
 		
 		@Override
 		public boolean test(int v) { return true; };
