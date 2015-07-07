@@ -2,14 +2,11 @@ package org.iguana.util.collections;
 
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 
@@ -20,8 +17,8 @@ public class IntHashSet implements Set<Integer>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 64;
-	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
+	private static final int DEFAULT_INITIAL_CAPACITY = 16;
+	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 	
 	private int initialCapacity;
 	
@@ -77,10 +74,7 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		
 		threshold = (int) (loadFactor * capacity);
 		table = new int[capacity];
-		
-		for(int i = 0; i < table.length; i++) {
-			table[i] = -1;
-		}
+		Arrays.fill(table, -1);
 	}
 	
 	public boolean contains(int key) {
@@ -119,6 +113,7 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		bitMask = capacity - 1;
 		
 		int[] newTable = new int[capacity];
+		Arrays.fill(newTable, -1);
 		
 		label:
 		for(int key : table) {

@@ -76,7 +76,7 @@ public class GSSNode {
 		this.gssEdges = new ArrayList<>();
 		
 		this.poppedElementsSet = new HashSet<>();
-		this.descriptors = new HashSet<>();
+		this.descriptors = null;
 	}
 	
 	public boolean addToPoppedElements(NonPackedNode node) {
@@ -125,7 +125,7 @@ public class GSSNode {
 	}
 	
 	public int countDescriptors() {
-		return descriptors.size();
+		return descriptors == null ? 0 : descriptors.size();
 	}
 	
 	public Iterable<GSSEdge> getGSSEdges() {
@@ -159,15 +159,16 @@ public class GSSNode {
 	}
 
 	public boolean hasDescriptor(Key key) {
+		if (descriptors == null) descriptors = new HashSet<>();
 		return !descriptors.add(key);
 	}
 
 	public void clearDescriptors() {
-		children.clear();;
-		poppedElements.clear();;
+		children.clear();
+		poppedElements.clear();
 		poppedElementsSet.clear();
 		gssEdges.clear();
-		descriptors.clear();;
+		if (descriptors != null) descriptors.clear();
 	}
 	
 	
