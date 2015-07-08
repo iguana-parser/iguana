@@ -31,7 +31,6 @@ import static org.iguana.util.CharacterRanges.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -73,7 +72,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.DummyNodeLookup;
@@ -150,22 +148,6 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	public NonterminalGrammarSlot getHead(Nonterminal start) {
-		if (start instanceof Start) {			
-			NonterminalGrammarSlot s = nonterminalsMap.get(start);
-			
-			if (s != null) return s;
-
-			Nonterminal nt = ((Start)start).getNonterminal();
-
-			if (layout == null) return nonterminalsMap.get(nt);
-			
-			Rule startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
-			NonterminalGrammarSlot nonterminalGrammarSlot = getNonterminalGrammarSlot(start);			
-			nonterminalGrammarSlot.setFollowTest(FollowTest.DEFAULT);
-			nonterminalGrammarSlot.setLookAheadTest(LookAheadTest.DEFAULT);
-			addRule(nonterminalGrammarSlot, startRule);
-			return nonterminalGrammarSlot;
-		}
 		return nonterminalsMap.get(start);
 	}	
 	

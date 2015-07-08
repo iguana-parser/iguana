@@ -27,7 +27,7 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.listToString;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -54,8 +54,10 @@ import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
+import org.iguana.util.CollectionsUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.generator.ConstructorCode;
@@ -102,6 +104,21 @@ public class Grammar implements ConstructorCode, Serializable {
 	
 	public List<Rule> getRules() {
 		return rules;
+	}
+	
+	public Start getStartSymbol(Nonterminal nt) {
+		Start start = Start.from(nt);
+		if (definitions.keySet().contains(start)) return start;
+		
+		Rule startRule;
+		if (layout != null)
+			startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
+		else 
+			startRule = Rule.withHead(start).addSymbol(nt).build();
+		
+		definitions.put(start, CollectionsUtil.list(startRule));
+		
+		return start;
 	}
 	
 	public int sizeRules() {
