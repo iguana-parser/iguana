@@ -338,7 +338,8 @@ public class FirstFollowSets {
 //		return ll1SubGrammarNonterminals;
 //	}
 	
-    private boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions) {
+    @SuppressWarnings("unused")
+	private boolean isLL1(Nonterminal nonterminal, Map<Tuple<Nonterminal, Integer>, Set<Integer>> predictions) {
     	
     	int size = definitions.get(nonterminal).size();
     	
@@ -371,16 +372,16 @@ public class FirstFollowSets {
     	}
     	
 		@Override
-		public Set<CharacterRange> visit(Code symbol) { return null; }
+		public Set<CharacterRange> visit(Code symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
-		public Set<CharacterRange> visit(Conditional symbol) { return null; }
+		public Set<CharacterRange> visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
 		public Set<CharacterRange> visit(Nonterminal symbol) { return firstSets.get(symbol); }
 
 		@Override
-		public Set<CharacterRange> visit(Return symbol) { return null; }
+		public Set<CharacterRange> visit(Return symbol) { return new HashSet<>(); }
 
 		@Override
 		public Set<CharacterRange> visit(RegularExpression symbol) {
@@ -392,10 +393,10 @@ public class FirstFollowSets {
     
     private static class NonterminalVisitor extends AbstractGrammarGraphSymbolVisitor<Nonterminal> {
 		@Override
-		public Nonterminal visit(Code symbol) { return null; }
+		public Nonterminal visit(Code symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
-		public Nonterminal visit(Conditional symbol) { return null; }
+		public Nonterminal visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
 		public Nonterminal visit(Nonterminal symbol) { return symbol; }
@@ -417,16 +418,16 @@ public class FirstFollowSets {
 		}
     	
 		@Override
-		public Boolean visit(Code symbol) { return null; }
+		public Boolean visit(Code symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
-		public Boolean visit(Conditional symbol) { return null; }
+		public Boolean visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
 		public Boolean visit(Nonterminal symbol) { return nullableNonterminals.contains(symbol); }
 
 		@Override
-		public Boolean visit(Return symbol) { return null; }
+		public Boolean visit(Return symbol) { return true; }
 
 		@Override
 		public Boolean visit(RegularExpression symbol) { return symbol.isNullable(); }
