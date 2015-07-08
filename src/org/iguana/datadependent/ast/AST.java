@@ -29,6 +29,7 @@ package org.iguana.datadependent.ast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.IEvaluatorContext;
@@ -321,7 +322,7 @@ public class AST {
 						
 						NonPackedNode node = (NonPackedNode) value;
 						
-						return  node.getRightExtent() - node.getLeftExtent();
+						return node.getRightExtent() - node.getLeftExtent();
 					}
 					
 					@Override
@@ -332,6 +333,69 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("len(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression put(Expression arg1, Expression arg2) {
+		return new Expression.Call("put", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg1.interpret(ctx);
+						if (!(value instanceof Set<?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						@SuppressWarnings("unchecked")
+						Set<Object> s = (Set<Object>) value;
+						
+						value = arg2.interpret(ctx);
+						s.add(value);
+						
+						return s;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.put(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("put(%s,%s)", arg1, arg2);
+					}
+		};
+	}
+	
+	static public Expression contains(Expression arg1, Expression arg2) {
+		return new Expression.Call("contains", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg1.interpret(ctx);
+						if (!(value instanceof Set<?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						@SuppressWarnings("unchecked")
+						Set<Object> s = (Set<Object>) value;
+						
+						value = arg2.interpret(ctx);
+						
+						return s.contains(value);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.contains(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("contains(%s,%s)", arg1, arg2);
 					}
 		};
 	}
