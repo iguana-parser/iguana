@@ -1,6 +1,7 @@
 package org.iguana.parser.datadependent;
 
 import java.util.Arrays;
+
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -8,7 +9,9 @@ import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
+
 import static org.iguana.grammar.symbol.LayoutStrategy.*;
+
 import org.iguana.grammar.transformation.DesugarAlignAndOffside;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -20,11 +23,11 @@ import org.iguana.regex.*;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.Visualization;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
+
 import static org.iguana.util.CollectionsUtil.*;
 
 @SuppressWarnings("unused")
@@ -75,6 +78,7 @@ Grammar.builder()
          grammar = new LayoutWeaver().transform(grammar);
 
          Input input = Input.fromString("<note> <to>John</to> <from>Alice</from> </note>");
+         
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
