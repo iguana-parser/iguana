@@ -109,8 +109,6 @@ public class GrammarGraph implements Serializable {
 
 	private Input input;
 	
-	private final Symbol layout;
-	
 	private int id = 1;
 	
 	private final MatcherFactory matcherFactory;
@@ -121,7 +119,6 @@ public class GrammarGraph implements Serializable {
 		this.grammar = grammar;
 		this.input = input;
 		this.config = config;
-		this.layout = grammar.getLayout();
 		this.nonterminalsMap = new LinkedHashMap<>();
 		this.terminalsMap = new LinkedHashMap<>();
 		this.names = new HashMap<>();
