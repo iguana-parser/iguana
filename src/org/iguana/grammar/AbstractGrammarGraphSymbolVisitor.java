@@ -49,92 +49,92 @@ import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
 
-public abstract class AbstractGrammarGraphSymbolVisitor implements ISymbolVisitor<Void> {
+public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVisitor<T> {
 	
 	@Override
-	public Void visit(Align symbol) {
+	public T visit(Align symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
-	public Void visit(Block symbol) {
+	public T visit(Block symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
-	public abstract Void visit(RegularExpression symbol);
+	public abstract T visit(RegularExpression symbol);
 
 	@Override
-	public Void visit(Character symbol) {
+	public T visit(Character symbol) {
 		return visit((RegularExpression) symbol);
 	}
 
 	@Override
-	public Void visit(CharacterRange symbol) {
+	public T visit(CharacterRange symbol) {
 		return visit((RegularExpression) symbol);
 	}
 	
 		@Override
-	public Void visit(EOF symbol) {
+	public T visit(EOF symbol) {
 		return visit((RegularExpression) symbol);
 	}
 
 	@Override
-	public Void visit(Epsilon symbol) {
+	public T visit(Epsilon symbol) {
 		return visit((RegularExpression) symbol);
 	}
 	
 	@Override
-	public Void visit(IfThen symbol) {
+	public T visit(IfThen symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
-	public Void visit(IfThenElse symbol) {
+	public T visit(IfThenElse symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
-	public Void visit(Terminal symbol) {
+	public T visit(Terminal symbol) {
 		return visit((RegularExpression) symbol);
 	}
 	
 	@Override
-	public Void visit(Ignore symbol) {
+	public T visit(Ignore symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
-	public Void visit(Offside symbol) {
+	public T visit(Offside symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
-	public Void visit(While symbol) {
+	public T visit(While symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Alt<E> symbol) {
+	public <E extends Symbol> T visit(Alt<E> symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
-	public Void visit(Opt symbol) {
+	public T visit(Opt symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
-	public Void visit(Plus symbol) {
+	public T visit(Plus symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Sequence<E> symbol) {
+	public <E extends Symbol> T visit(Sequence<E> symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
-	public Void visit(Star symbol) {
+	public T visit(Star symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 

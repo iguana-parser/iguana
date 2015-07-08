@@ -241,7 +241,7 @@ public class GrammarGraph implements Serializable {
 			rule2graph.nextSymbol();
 	}
 	
-	private class GrammarGraphSymbolVisitor extends  AbstractGrammarGraphSymbolVisitor {
+	private class GrammarGraphSymbolVisitor extends  AbstractGrammarGraphSymbolVisitor<Void> {
 		
 		private final NonterminalGrammarSlot head;
 		private final Rule rule;

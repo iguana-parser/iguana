@@ -33,14 +33,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
 import org.iguana.grammar.symbol.EOF;
 import org.iguana.grammar.symbol.Epsilon;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
+import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
 
 /**
@@ -60,6 +65,12 @@ public class FirstFollowSets {
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
+	private final ISymbolVisitor<Set<CharacterRange>> firstSetVisitor;
+	
+	private final ISymbolVisitor<Boolean> nullableVisitor;
+	
+	private final ISymbolVisitor<Boolean> isNonterminalVisitor;
+	
 	public FirstFollowSets(Grammar grammar) {
 		this.definitions = grammar.getDefinitions();
 		this.firstSets = new HashMap<>();
@@ -67,8 +78,13 @@ public class FirstFollowSets {
 		this.followSets = new HashMap<>();
 		this.predictionSets = new HashMap<>();
 		
+		this.firstSetVisitor = new FirstFollowSymbolVisitor(firstSets);
+		this.isNonterminalVisitor = new IsNonterminalVisitor();
+		this.nullableVisitor = new NullableSymbolVisitor(nullableNonterminals);
+		
 		definitions.keySet().forEach(k -> { firstSets.put(k, new HashSet<>()); followSets.put(k, new HashSet<>()); });
 
+		calculateNullables();
 		calculateFirstSets();
 		calculateFollowSets();
 		calcualtePredictionSets();
@@ -99,7 +115,26 @@ public class FirstFollowSets {
 			for (Nonterminal head : nonterminals) {
 				Set<CharacterRange> firstSet = firstSets.get(head);
 				for (Rule alternate : definitions.get(head)) {
-					changed |= addFirstSet(head, firstSet, alternate.getBody(), 0);
+					changed |= addFirstSet(firstSet, alternate.getBody(), 0);
+				}
+			}
+		}
+	}
+	
+	private void calculateNullables() {
+		Set<Nonterminal> nonterminals = definitions.keySet();
+		
+		boolean changed = true;
+
+		while (changed) {
+			changed = false;
+			
+			for (Nonterminal head : nonterminals) {
+				for (Rule rule : definitions.get(head)) {
+					if (rule.size() == 0 || rule.getBody().stream().allMatch(s -> isNullable(s))) {
+						changed |= nullableNonterminals.add(head);
+						break;
+					}
 				}
 			}
 		}
@@ -114,54 +149,23 @@ public class FirstFollowSets {
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
-	private boolean addFirstSet(Nonterminal head, Set<CharacterRange> firstSet, List<Symbol> alternate, int index) {
+	private boolean addFirstSet(Set<CharacterRange> firstSet, List<Symbol> alternative, int index) {
 
 		boolean changed = false;
 		
-		if(alternate == null) {
-			return false;
+		if(alternative == null) return false;
+		 		
+		for(int i = index; i < alternative.size(); i++) {
+			Symbol symbol = alternative.get(i);
+			changed |= firstSet.addAll(symbol.accept(firstSetVisitor));
+			if (!isNullable(symbol)) break;
 		}
-		 
-		//TODO: check if it is allowed or is it a good idea to enforce the instantiation of Epsilon.
-		if (alternate.size() == 0) {
-			nullableNonterminals.add(head);
-			return firstSet.addAll(Epsilon.getInstance().getFirstSet());
-		}
-		
-		for(int i = index; i < alternate.size(); i++) {
-			Symbol symbol = alternate.get(i);
-
-			if (symbol instanceof RegularExpression) {
-				RegularExpression regularExpression = (RegularExpression) symbol;
-				changed |= firstSet.addAll(regularExpression.getFirstSet());
-				if (!regularExpression.isNullable()) {
-					break;
-				}
-			}
-			
-			// Nonterminal
-			else if (symbol instanceof Nonterminal) {
-				Nonterminal nonterminal = (Nonterminal) symbol;
 				
-				Set<CharacterRange> set = new HashSet<>(firstSets.get(nonterminal));
-				set.remove(Epsilon.getInstance());
-				changed |= firstSet.addAll(set);
-				if (!isNullable(nonterminal)) {
-					break;
-				}
-			}
-		}
-		
-		if (isChainNullable(alternate, 0)) {
-			nullableNonterminals.add(head);
-			changed |= firstSet.addAll(Epsilon.getInstance().getFirstSet());
-		}
-		
 		return changed;
 	}
 	
-	public boolean isNullable(Nonterminal nt) {
-		return nullableNonterminals.contains(nt);
+	public boolean isNullable(Symbol symbol) {
+		return symbol.accept(nullableVisitor);
 	}
 	
 	/**
@@ -217,20 +221,17 @@ public class FirstFollowSets {
 					
 						Symbol symbol = alternative.get(i);
 						
-						if(symbol instanceof Nonterminal) {
-							Nonterminal nonterminal = (Nonterminal) symbol;
-
+						if (symbol.accept(isNonterminalVisitor)) {
 							// For rules of the form X ::= alpha B beta, add the
-							// first set of beta to
-							// the follow set of B.
-							Set<CharacterRange> followSet =  followSets.get(nonterminal);
-							changed |= addFirstSet(nonterminal, followSet, alternative, i + 1);
-
+							// first set of beta to the follow set of B.
+							Set<CharacterRange> followSet = followSets.get(symbol);
+							changed |= addFirstSet(followSet, alternative, i + 1);
+							
 							// If beta is nullable, then add the follow set of X
 							// to the follow set of B.
 							if (isChainNullable(alternative, i + 1)) {
 								changed |= followSet.addAll(followSets.get(head));
-							}
+							}							
 						}
 					}
 				}
@@ -271,24 +272,10 @@ public class FirstFollowSets {
 		
 		int i;
 		for (i = index; i < alternate.size(); i++) {
-			
 			Symbol symbol = alternate.get(i);
-			
-			if (symbol instanceof Nonterminal) {
-				Nonterminal nonterminal = (Nonterminal) symbol;
-				predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(firstSets.get(nonterminal));
-				
-				if (!firstSets.get(nonterminal).containsAll(Epsilon.getInstance().getFirstSet())) {
-					break;
-				}
-			} 
-			else if (symbol instanceof RegularExpression) {
-				RegularExpression regex = (RegularExpression) symbol;
-				predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(regex.getFirstSet());
-				if(!regex.isNullable()) {
-					break;
-				}
-			}
+			Set<CharacterRange> firstSet = symbol.accept(firstSetVisitor);			
+			predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(firstSet);
+			if (!isNullable(symbol)) break;			
 		}
 
 		// if reaching the end of the alternative
@@ -382,5 +369,99 @@ public class FirstFollowSets {
 
         return true;
     }
-    		
+    
+    private static class FirstFollowSymbolVisitor extends AbstractGrammarGraphSymbolVisitor<Set<CharacterRange>> {
+
+    	private final Map<Nonterminal, Set<CharacterRange>> firstSets;
+    	
+    	public FirstFollowSymbolVisitor(Map<Nonterminal, Set<CharacterRange>> firstSets) {
+    		this.firstSets = firstSets;
+    	}
+    	
+		@Override
+		public Set<CharacterRange> visit(Code symbol) { return null; }
+
+		@Override
+		public Set<CharacterRange> visit(Conditional symbol) { return null; }
+
+		@Override
+		public Set<CharacterRange> visit(Nonterminal symbol) { return firstSets.get(symbol); }
+
+		@Override
+		public Set<CharacterRange> visit(Return symbol) { return null; }
+
+		@Override
+		public Set<CharacterRange> visit(RegularExpression symbol) {
+			Set<CharacterRange> set = new HashSet<>(symbol.getFirstSet());
+			set.remove(Epsilon.getInstance());
+			return set;
+		}
+    }
+    
+    private static class IsNonterminalVisitor extends AbstractGrammarGraphSymbolVisitor<Boolean> {
+		@Override
+		public Boolean visit(Code symbol) { return null; }
+
+		@Override
+		public Boolean visit(Conditional symbol) { return null; }
+
+		@Override
+		public Boolean visit(Nonterminal symbol) { return true; }
+
+		@Override
+		public Boolean visit(Return symbol) { return null; }
+
+		@Override
+		public Boolean visit(RegularExpression symbol) { return false; }
+    	
+    }
+
+    
+    private static class PredictionSetSetVisitor extends AbstractGrammarGraphSymbolVisitor<Set<CharacterRange>> {
+
+    	private final Map<Nonterminal, Set<CharacterRange>> predictionSets;
+    	
+    	public PredictionSetSetVisitor(Map<Nonterminal, Set<CharacterRange>> followSets) {
+    		this.predictionSets = followSets;
+		}
+    	
+		@Override
+		public Set<CharacterRange> visit(Code symbol) { return null; }
+
+		@Override
+		public Set<CharacterRange> visit(Conditional symbol) { return null; }
+
+		@Override
+		public Set<CharacterRange> visit(Nonterminal symbol) { return predictionSets.get(symbol); }
+
+		@Override
+		public Set<CharacterRange> visit(Return symbol) { return null; }
+
+		@Override
+		public Set<CharacterRange> visit(RegularExpression symbol) { return new HashSet<>(); }
+    }
+    
+    private static class NullableSymbolVisitor extends AbstractGrammarGraphSymbolVisitor<Boolean> {
+
+    	private final Set<Nonterminal> nullableNonterminals;
+    	
+    	public NullableSymbolVisitor(Set<Nonterminal> nullableNonterminals) {
+    		this.nullableNonterminals = nullableNonterminals;
+		}
+    	
+		@Override
+		public Boolean visit(Code symbol) { return null; }
+
+		@Override
+		public Boolean visit(Conditional symbol) { return null; }
+
+		@Override
+		public Boolean visit(Nonterminal symbol) { return nullableNonterminals.contains(symbol); }
+
+		@Override
+		public Boolean visit(Return symbol) { return null; }
+
+		@Override
+		public Boolean visit(RegularExpression symbol) { return symbol.isNullable(); }
+    }
 }
