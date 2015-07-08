@@ -8,7 +8,7 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 public interface LookAheadTest {
 	
 	default boolean test(int v) {
-		return get(v) != null && !get(v).isEmpty();
+		return get(v) != null;
 	}
 	
 	/**
@@ -17,12 +17,4 @@ public interface LookAheadTest {
 	 */
 	public List<BodyGrammarSlot> get(int v);
 	
-	public static final LookAheadTest DEFAULT = new LookAheadTest() {
-		
-		@Override
-		public boolean test(int v) { return true; };
-		
-		@Override
-		public List<BodyGrammarSlot> get(int v) { return null; }
-	};
 }

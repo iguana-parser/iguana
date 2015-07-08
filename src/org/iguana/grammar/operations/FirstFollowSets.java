@@ -88,9 +88,22 @@ public class FirstFollowSets {
 		calculateFirstSets();
 		calculateFollowSets();
 		calcualtePredictionSets();
-		
-        followSets.forEach((k, v) -> System.out.println(k + "=" + v));
-
+	}
+	
+	public Map<Nonterminal, Set<CharacterRange>> getFirstSets() {
+		return firstSets;
+	}
+	
+	public Map<Nonterminal, Set<CharacterRange>> getFollowSets() {
+		return followSets;
+	}
+	
+	public Map<Tuple<Rule, Integer>, Set<CharacterRange>> getPredictionSets() {
+		return predictionSets;
+	}
+	
+	public Set<Nonterminal> getNullableNonterminals() {
+		return nullableNonterminals;
 	}
 	
 	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
@@ -274,8 +287,6 @@ public class FirstFollowSets {
 //		if (isChainNullable(alternate, 0)) {
 		if (i == alternate.size())
 			predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(followSets.get(rule.getHead()));
-		
-		predictionSets.remove(position, Epsilon.getInstance());
 	}
 	
 //	public Set<Nonterminal> calculateLLNonterminals() {
@@ -378,16 +389,14 @@ public class FirstFollowSets {
 		public Set<CharacterRange> visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
-		public Set<CharacterRange> visit(Nonterminal symbol) { return firstSets.get(symbol); }
+		public Set<CharacterRange> visit(Nonterminal symbol) { return new HashSet<>(firstSets.get(symbol)); }
 
 		@Override
 		public Set<CharacterRange> visit(Return symbol) { return new HashSet<>(); }
 
 		@Override
 		public Set<CharacterRange> visit(RegularExpression symbol) {
-			Set<CharacterRange> set = new HashSet<>(symbol.getFirstSet());
-			set.remove(Epsilon.getInstance());
-			return set;
+			return new HashSet<>(symbol.getFirstSet());
 		}
     }
     

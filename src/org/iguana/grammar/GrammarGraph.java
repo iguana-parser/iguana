@@ -182,7 +182,7 @@ public class GrammarGraph implements Serializable {
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
 		
 		if (config.getLookAheadCount() == 0)
-			return LookAheadTest.DEFAULT;
+			return i -> nonterminalSlot.getFirstSlots();
 		
 		RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
 		

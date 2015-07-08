@@ -81,8 +81,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public List<BodyGrammarSlot> getFirstSlots(int v) {
-		List<BodyGrammarSlot> lookaheadSlots = lookAheadTest.get(v);
-		return lookaheadSlots == null ? firstSlots : lookaheadSlots;
+		return lookAheadTest.get(v);
 	}
 	
 	public void setLookAheadTest(LookAheadTest lookAheadTest) {

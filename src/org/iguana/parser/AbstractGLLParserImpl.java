@@ -28,6 +28,7 @@
 package org.iguana.parser;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -236,10 +237,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			
 			final GSSNode __gssNode = gssNode;
 			
-			for (BodyGrammarSlot s : nonterminal.getFirstSlots(input.charAt(i))) {
-				if (!s.getConditions().execute(getInput(), __gssNode, i))
-					scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
-			}
+			List<BodyGrammarSlot> firstSlots = nonterminal.getFirstSlots(input.charAt(i));
+			if (firstSlots != null)
+				for (BodyGrammarSlot s : firstSlots) {
+					if (!s.getConditions().execute(getInput(), __gssNode, i))
+						scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
+				}
 			
 			// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 		} else {
@@ -485,10 +488,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 				
 				final GSSNode __gssNode = gssNode;
 				
-				for (BodyGrammarSlot s : nonterminal.getFirstSlots()) {
-					if (!s.getConditions().execute(getInput(), __gssNode, i))
-						scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
-				}
+				List<BodyGrammarSlot> firstSlots = nonterminal.getFirstSlots(input.charAt(i));
+				if (firstSlots != null)
+					for (BodyGrammarSlot s : firstSlots) {
+						if (!s.getConditions().execute(getInput(), __gssNode, i))
+							scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance()));
+					}
 				
 				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 				
