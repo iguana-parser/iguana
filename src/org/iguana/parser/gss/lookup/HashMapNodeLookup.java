@@ -28,24 +28,34 @@
 package org.iguana.parser.gss.lookup;
 
 import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.Map;
 
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Input;
+//import org.iguana.util.collections.IntHashMap;
 
 public class HashMapNodeLookup extends AbstractNodeLookup {
 
 	private Map<Integer, GSSNode> map;
 	
+//	private IntHashMap<GSSNode> map;
+	
 	@Override
-	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
-		GSSNode v;
-		if ((v = map.get(i)) == null) {
-			v = new GSSNode(slot, i);
-			map.put(i, v);
-		}
+	public GSSNode create(GrammarSlot slot, int i) {
+		GSSNode v = new GSSNode(slot, i);
+		map.put(i, v);
 		return v;
+		
+//		return map.computeIfAbsent(i, k -> new GSSNode(slot, i));
+//		
+//		GSSNode v;
+//		if ((v = map.get(i)) == null) {
+//			v = new GSSNode(slot, i);
+//			map.put(i, v);
+//		}
+//		return v;
 	}
 
 	@Override

@@ -39,7 +39,7 @@ import org.iguana.util.Input;
  */
 public interface GSSNodeLookup {
 	
-	public GSSNode getOrElseCreate(GrammarSlot slot, int i);
+	public GSSNode create(GrammarSlot slot, int i);
 	
 	public GSSNode get(int i);
 	

@@ -62,6 +62,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	private Map<Key, NonterminalNode> nonterminalNodes;
 
 	private LookAheadTest lookAheadTest;
+	
 	private FollowTest followTest;
 
 	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup) {
@@ -123,7 +124,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode getGSSNode(int inputIndex) {
-		return nodeLookup.getOrElseCreate(this, inputIndex);
+		return nodeLookup.create(this, inputIndex);
 	}
 	
 	@Override

@@ -140,7 +140,7 @@ public class Configuration {
 	public static class Builder {
 		
 		private GSSType gssType = GSSType.NEW;
-		private LookupImpl gssLookupImpl = LookupImpl.ARRAY;
+		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
 		private LookupImpl sppfLookupImpl = LookupImpl.HASH_MAP;
 		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
 		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;

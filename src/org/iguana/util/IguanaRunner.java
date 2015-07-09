@@ -151,22 +151,25 @@ public class IguanaRunner {
 	}
 	
 	private ParseResult run(GLLParser parser, GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<ParseResult> future = executor.submit(() -> {
-			return parser.parse(input, grammarGraph, start);
-        });
-        
-        ParseResult result;
-        if (timeout > 0)
-        	result = future.get(timeout, TimeUnit.SECONDS);
-        else 
-        	result = future.get();
-        
-        executor.shutdownNow();
-
-        if (runGCInBetween)
-        	GcFinalization.awaitFullGc();
-        return result;
+		ParseResult result = parser.parse(input, grammarGraph, start);
+		if (runGCInBetween)
+			GcFinalization.awaitFullGc();
+		
+		return result;
+//		ExecutorService executor = Executors.newSingleThreadExecutor();
+//        Future<ParseResult> future = executor.submit(() -> {
+//			return parser.parse(input, grammarGraph, start);
+//        });
+//        
+//        ParseResult result;
+//        if (timeout > 0)
+//        	result = future.get(timeout, TimeUnit.SECONDS);
+//        else 
+//        	result = future.get();
+//        
+//        executor.shutdownNow();
+//
+//        return result;
 	}
 	
 	public static Builder builder(Grammar grammar, Nonterminal start) {

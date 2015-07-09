@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,8 +19,8 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 16;
-	private static final float DEFAULT_LOAD_FACTOR = 0.6f;
+	private static final int DEFAULT_INITIAL_CAPACITY = 8;
+	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
 	
 	private int initialCapacity;
 	
@@ -44,6 +45,12 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 	private int[] keys;
 	
 	private T[] values;
+	
+	private HashFunction linearProbing = (k, j) -> (k + j) & bitMask;
+
+	private HashFunction doubleHashing = (k, j) -> (k + j + 1 + (k % 7)) & bitMask;
+	
+	private HashFunction hash = doubleHashing;
 	
 	public IntHashMap() {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -78,27 +85,20 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 		return get(key) != null;
 	}
 	
-	public T putIfAbsent(int key, T value) {
-		T val = get(key);
-		if (val == null)
-			return put(key, value);
-		
-		return val;
-	}
-	
-	public T put(int key, T value) {
-		
-		int index = hash(key);
+	public T computeIfAbsent(int key, IntFunction<T> f) {
+		int j = 0;
+		int index = hash.apply(key, j);
 
 		do {
-			if(keys[index] == -1) {
-			   keys[index] = key;
-			   values[index] = value;
-			   size++;
-			   if (size >= threshold) {
-				  rehash();
-			   }
-			   return null;
+			if (keys[index] == -1) {
+			    keys[index] = key;
+			    T val = f.apply(key);
+			    values[index] = val;
+			    size++;
+			    if (size >= threshold) {
+			    	rehash();
+			    }
+			    return val;
 			}
 			
 			else if(keys[index] == key) {
@@ -107,13 +107,45 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 			
 			collisionsCount++;
 			
-			index = (index + 1) & bitMask;
+			index = hash.apply(key, ++j);
+			
+		} while(true);
+	}
+	
+	public T put(int key, T value) {
+		
+		int j = 0;
+		int index = hash.apply(key, j);
+
+		do {
+			if (keys[index] == -1) {
+				keys[index] = key;
+				values[index] = value;
+				size++;
+				if (size >= threshold) {
+					rehash();
+				}
+				return null;
+			}
+			else if (keys[index] == key) {
+				return values[index];
+			}
+			
+			collisionsCount++;
+			
+			index = hash.apply(key, ++j);
 			
 		} while(true);
 	}
 	
 	public T remove(int key) {
-		int index = hash(key);
+		int j = 0;
+		int index = hash.apply(key, j);
+		
+		while (keys[index] != -1 && keys[index] != key) {
+			index = hash.apply(key, ++j);
+		}
+		
 		T v = values[index];
 		values[index] = null;
 		keys[index] = -1;
@@ -128,17 +160,20 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 		
 		int[] newKeys = new int[capacity];
 		Arrays.fill(newKeys, -1);
+		
 		@SuppressWarnings("unchecked")
 		T[] newValues = (T[]) new Object[capacity];
 		
 		label:
 	    for(int i = 0; i < keys.length; i++) {
+	    	int j = 0;
 	    	int key = keys[i];
+	    	
 	    	T value = values[i];
 	    	
 			if(key != -1) {
 				
-				int index = hash(key);
+				int index = hash.apply(key, j);
 
 				do {
 					if(newKeys[index] == -1) {
@@ -147,7 +182,7 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 						continue label;
 					}
 					
-					index = (index + 1) & bitMask;
+					index = hash.apply(key, ++j);
 					
 				} while(true);
 			}
@@ -159,13 +194,14 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 		threshold = (int) (loadFactor * capacity);
 		rehashCount++;
 	}
-	
-	private int hash(int key) {
-		return key & bitMask;
-	}
-
+		
 	public T get(int key) {
-		return values[hash(key)];
+		int j = 0;
+		int index = hash.apply(key, j);
+		while (keys[index] != -1 && keys[index] != key) {
+			index = hash.apply(key, ++j);
+		}
+		return values[index];
 	}
 
 	public int size() {
@@ -290,5 +326,10 @@ public class IntHashMap<T> implements Serializable, Map<Integer, T> {
 
 		@Override
 		public V setValue(V value) { return v; }
+	}
+	
+	@FunctionalInterface
+	static interface HashFunction {
+		int apply(int k, int j);
 	}
 }
