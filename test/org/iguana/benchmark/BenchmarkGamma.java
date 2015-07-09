@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.iguana.datadependent.util.IguanaRunner;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.util.IguanaRunner;
 import org.iguana.util.generator.GeneratorUtil;
 
 public class BenchmarkGamma {

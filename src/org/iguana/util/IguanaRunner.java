@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.datadependent.util;
+package org.iguana.util;
 
 import static java.util.stream.Stream.*;
 import static org.iguana.util.BenchmarkUtil.*;
@@ -47,8 +47,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 
 import com.google.common.testing.GcFinalization;
 
@@ -74,11 +72,11 @@ public class IguanaRunner {
 		this.timeout = builder.timeout;
 	}
 	
-	public List<ParseResult> run() {
+	public List<RunResult> run() {
 
 		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
 		
-		List<ParseResult> results = new ArrayList<>();
+		List<RunResult> results = new ArrayList<>();
 
 		Iterator<Input> it = inputs.iterator();
 		
@@ -109,7 +107,11 @@ public class IguanaRunner {
 			for (int i = 0; i < runCount; i++) {			
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
-					results.add(result);
+					if (result.isParseSuccess())
+						results.add(SuccessResult.from(result.asParseSuccess().getStatistics()));
+					else
+						results.add(FailureResult.from(result.asParseError().toString()));
+					
 					System.out.print((i + 1) + " ");
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {

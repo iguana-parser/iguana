@@ -30,13 +30,13 @@ package org.iguana.benchmark;
 import java.io.File;
 import java.io.IOException;
 
-import org.iguana.datadependent.util.IguanaRunner;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.util.IguanaRunner;
 
 public class BenchmarkOCaml {
 	

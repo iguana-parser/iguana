@@ -32,19 +32,39 @@ import org.iguana.parser.HashFunctions;
 
 public class ParseStatistics {
 
-	private final long nanoTime;
-	private final long systemTime;
-	private final long userTime;
-	private final int memoryUsed;
+	long nanoTime;
+	long systemTime;
+	long userTime;
+	int memoryUsed;
 	
-	private final int descriptorsCount;
-	private final int gssNodesCount;
-	private final int gssEdgesCount;
-	private final int nonterminalNodesCount;
-	private final int terminalNodesCount;
-	private final int intermediateNodesCount;
-	private final int packedNodesCount;
-	private final int ambiguousNodesCount;
+	int descriptorsCount;
+	int gssNodesCount;
+	int gssEdgesCount;
+	int nonterminalNodesCount;
+	int terminalNodesCount;
+	int intermediateNodesCount;
+	int packedNodesCount;
+	int ambiguousNodesCount;
+	
+    public ParseStatistics(long nanoTime, long systemTime, long userTime, int memoryUsed,
+            int descriptorsCount, int gssNodesCount, int gssEdgesCount, 
+            int nonterminalNodesCount, int terminalNodesCount, int intermediateNodesCount, 
+            int packedNodesCount, int ambiguousNodesCount) {
+        this.nanoTime = nanoTime;
+        this.systemTime = systemTime;
+        this.userTime = userTime;
+        this.memoryUsed = memoryUsed;
+        this.descriptorsCount = descriptorsCount;
+        this.gssNodesCount = gssNodesCount;
+        this.gssEdgesCount = gssEdgesCount;
+        this.nonterminalNodesCount = nonterminalNodesCount;
+        this.terminalNodesCount = terminalNodesCount;
+        this.intermediateNodesCount = intermediateNodesCount;
+        this.packedNodesCount = packedNodesCount;
+        this.ambiguousNodesCount = ambiguousNodesCount;
+    }
+    
+    public ParseStatistics() {}
 	
 	public ParseStatistics(Builder builder) {
 		this.nanoTime = builder.nanoTime;
