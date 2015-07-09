@@ -58,7 +58,6 @@ public interface SPPFLookup {
 	default NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child) {
 		return hasNonterminalNode(slot, child);
 	}
-	
 	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		if (slot.isFirst())
 			return rightChild;

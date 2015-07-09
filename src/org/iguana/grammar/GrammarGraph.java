@@ -48,7 +48,7 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.grammar.exception.IncorrectNumberOfArgumentsException;
 import org.iguana.grammar.operations.FirstFollowSets;
-import org.iguana.grammar.slot.AbstractTerminalTransition;
+import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.CodeTransition;
 import org.iguana.grammar.slot.ConditionalTransition;
@@ -399,7 +399,7 @@ public class GrammarGraph implements Serializable {
 		
 	}
 	
-	private AbstractTerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
+	private TerminalTransition getTerminalTransition(Rule rule, int i, TerminalGrammarSlot slot, 
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
 															 Set<Condition> preConditions, Set<Condition> postConditions) {
 		
