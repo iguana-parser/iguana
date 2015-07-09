@@ -66,6 +66,7 @@ import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.util.generator.GeneratorUtil;
 
 /**
  * 
@@ -102,6 +103,8 @@ public class DesugarState implements GrammarTransformation {
 			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);			
 			for (Rule rule : grammar.getAlternatives(head))
 				visitor.compute(rule);
+			if (!current_updates.isEmpty())
+				System.out.println("Updates: " + head + "    " + GeneratorUtil.listToString(current_updates, " , ") );
 		}
 		
 		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();		
@@ -152,6 +155,16 @@ public class DesugarState implements GrammarTransformation {
 				}
 			}
 		}
+		
+		for (Map.Entry<Nonterminal, Set<String>> entry : uses.entrySet())
+			if (!entry.getValue().isEmpty()) {
+				System.out.println("Uses: " + entry.getKey() + "    " + GeneratorUtil.listToString(entry.getValue(), ";"));
+			}
+		
+		for (Map.Entry<Nonterminal, Set<String>> entry : returns.entrySet())
+			if (!entry.getValue().isEmpty()) {
+				System.out.println("Returns: " + entry.getKey() + "    " + GeneratorUtil.listToString(entry.getValue(), ";"));
+			}
 		
 		Set<Rule> newRules = new LinkedHashSet<>();
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {

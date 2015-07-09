@@ -121,7 +121,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		java.lang.String[] parameters = rule.getHead().getParameters();
 		if (parameters != null) {
 			for (java.lang.String parameter : parameters)
-				env.__insert(parameter);
+				env = env.__insert(parameter);
 		}
 		
 		ImmutableSet<java.lang.String> _env = env;
@@ -679,8 +679,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 			env = env.__insert(symbol.getVariable());
 		
 		if (symbol.getArguments() != null) {
-			for (org.iguana.datadependent.ast.Expression argument : symbol.getArguments())
+			for (org.iguana.datadependent.ast.Expression argument : symbol.getArguments()) {
+				argument.setEnv(env);
 				argument.accept(this);
+				env = argument.getEnv();
+			}
 		}
 		
 		if (nonterminal_uses != null && nonterminal_uses.containsKey(symbol)) {
