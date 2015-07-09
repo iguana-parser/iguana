@@ -28,13 +28,20 @@
 package org.iguana.parser.gss;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.HashFunctions;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.PackedNodeSet;
+import org.iguana.util.Holder;
 import org.iguana.util.collections.Key;
 
 /**
@@ -48,21 +55,8 @@ public class GSSNode {
 
 	private final int inputIndex;
 	
-	private List<GSSNode> children;
+	private Map<Integer, NonterminalNode> poppedElements;
 	
-	private List<NonPackedNode> poppedElements;
-	
-	/**
-	 * Added popped elements are of the form (N, i, j) where N and i are the label and
-	 * input input index of the current GSS node and thus are the same for this GSS node.
-	 * Therefore, in order to eliminate the duplicates of popped SPPF nodes, we need
-	 * to compare their right extent. This bit set is used for this purpose. 
-	 * Maybe Hashset implementations are faster. We should figure it out.
-	 */
-	private Set<Integer> poppedElementsSet;
-	
-	// TODO: for recursive descent ordering, we need to traverse the GSS edges
-	// the way they are added, so we need a hashset with ordering.
 	private final List<GSSEdge> gssEdges;
 
 	private Set<Key> descriptors;
@@ -70,39 +64,41 @@ public class GSSNode {
 	public GSSNode(GrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		
-		this.children = new ArrayList<>();
-		this.poppedElements = new ArrayList<>();
+		this.poppedElements = new HashMap<>();
 		this.gssEdges = new ArrayList<>();
-		
-		this.poppedElementsSet = new HashSet<>();
 		this.descriptors = null;
 	}
-	
-	public boolean addToPoppedElements(NonPackedNode node) {
-		if (poppedElementsSet.add(node.getRightExtent())) {
-			poppedElements.add(node);			
-			return true;
-		}
-		return false;
-	}
-	
-	public Iterable<NonPackedNode> getPoppedElements() {
-		return poppedElements;
-	}
-		
-	public Iterable<GSSNode> getChildren() {
-		return children;
-	}
 
-	public void addChild(GSSNode node) {
-		children.add(node);
+	public NonterminalNode addToPoppedElements(int j, EndGrammarSlot slot, NonPackedNode child, Object value) {
+		throw new RuntimeException("Unimplemented yet!!!");
 	}
 	
-	public int sizeChildren() {
-		return children.size();
-	}
+	public NonterminalNode addToPoppedElements(int j, EndGrammarSlot slot, NonPackedNode child) {
+		Holder<NonterminalNode> holder = new Holder<>();
+		poppedElements.compute(j, (k, v) -> { 
+			if (v == null) {
+				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, j, PackedNodeSet.DEFAULT);
+				node.addPackedNode(new PackedNode(slot, j, node), child);
+				holder.set(node);
+				return node;
+			}
+			else {
+				v.addPackedNode(new PackedNode(slot, j, v), child);
+				return v;
+			}
+		});
 		
+ 		return holder.get();
+	}
+	
+	public NonterminalNode getNonterminalNode(int j) {
+		return poppedElements.get(j);
+	}
+	
+	public Iterable<NonterminalNode> getPoppedElements() {
+		return poppedElements.values();
+	}
+	
 	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
@@ -112,7 +108,6 @@ public class GSSNode {
 	}
 	
 	public boolean getGSSEdge(GSSEdge edge) {
-		addChild(edge.getDestination());
 		return gssEdges.add(edge);
 	}
 	
@@ -164,12 +159,9 @@ public class GSSNode {
 	}
 
 	public void clearDescriptors() {
-		children.clear();
 		poppedElements.clear();
-		poppedElementsSet.clear();
 		gssEdges.clear();
 		if (descriptors != null) descriptors.clear();
 	}
-	
 	
 }

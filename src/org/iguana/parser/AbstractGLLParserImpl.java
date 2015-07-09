@@ -111,7 +111,11 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	 */
 	protected GSSNode errorGSSNode;
 	
+	protected GSSNode startGSSNode;
+	
 	protected int descriptorsCount;
+	
+	protected int nonterminalNodesCount;
 
 	private final Configuration config;
 
@@ -141,6 +145,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
 		}
 		
+		startGSSNode = new GSSNode(startSymbol, 0);
+		
 		grammarGraph.reset(input);
 		resetParser(startSymbol);
 	
@@ -166,7 +172,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		parse(startSymbol, env);
 		
-		root = sppfLookup.getStartSymbol(startSymbol, input.length());
+		root = startGSSNode.getNonterminalNode(input.length() - 1);
 
 		ParseResult parseResult;
 		
@@ -184,9 +190,9 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					.setSystemTime(endSystemTime - startSystemTime) 
 					.setMemoryUsed(BenchmarkUtil.getMemoryUsed())
 					.setDescriptorsCount(descriptorsCount) 
-					.setGSSNodesCount(gssLookup.getGSSNodesCount()) 
+					.setGSSNodesCount(gssLookup.getGSSNodesCount() + 1) // + start gss node 
 					.setGSSEdgesCount(gssLookup.getGSSEdgesCount()) 
-					.setNonterminalNodesCount(sppfLookup.getNonterminalNodesCount())
+					.setNonterminalNodesCount(nonterminalNodesCount)
 					.setTerminalNodesCount(sppfLookup.getTerminalNodesCount())
 					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
 					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
@@ -302,6 +308,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	private void resetParser(NonterminalGrammarSlot startSymbol) {
 		descriptorsCount = 0;
+		nonterminalNodesCount = 0;
 		gssLookup.reset();
 		sppfLookup.reset();
 		initParserState(startSymbol);

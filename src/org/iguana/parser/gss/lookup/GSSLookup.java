@@ -31,7 +31,6 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.sppf.NonPackedNode;
 /**
  * 
  * @author Ali Afroozeh
@@ -53,8 +52,6 @@ public interface GSSLookup {
 	
 	public boolean getGSSEdge(GSSNode gssNode, GSSEdge edge);
 
-	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode);
-	
 	public int getGSSNodesCount();
 	
 	public int getGSSEdgesCount();

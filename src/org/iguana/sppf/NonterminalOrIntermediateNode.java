@@ -45,8 +45,14 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 
 	public void addChild(PackedNode node) {
-		//TODO: change it! PackedNodes cannot be added via this method at parse time.
-		rest.add(node);
+		if (first == null) {
+			first = node;
+		} else if (rest == null) {
+			rest = new ArrayList<>();
+			rest.add(node);
+		} else {
+			rest.add(node);
+		}
 	}
 	
 	public void removeChild(SPPFNode node) {

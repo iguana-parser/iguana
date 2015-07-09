@@ -30,7 +30,6 @@ package org.iguana.parser;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.DummySlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
@@ -42,6 +41,7 @@ import org.iguana.parser.gss.lookup.GSSLookup;
 import org.iguana.parser.lookup.DescriptorLookup;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.Configuration;
 
@@ -59,12 +59,7 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	@Override
 	protected void initParserState(NonterminalGrammarSlot startSymbol) {
 		ci = 0;
-		
-		GSSNode gssNode = hasGSSNode(DummySlot.getInstance(), startSymbol, ci);
-		if (gssNode == null) {
-			cu = createGSSNode(DummySlot.getInstance(), startSymbol, ci);			
-		}
-		
+		cu = startGSSNode;			
 		cn = DummyNode.getInstance();
 		errorSlot = null;
 		errorIndex = 0;
@@ -72,19 +67,16 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
-		
-		if (!gssLookup.addToPoppedElements(gssNode, node))
-			return;
-		
+	public final void pop(GSSNode gssNode, int inputIndex, NonterminalNode node) {
 		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
+		nonterminalNodesCount++;
 		
 		for(GSSEdge edge : gssNode.getGSSEdges()) {			
 			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
 			if (descriptor != null) {
 				scheduleDescriptor(descriptor);
 			}
-		}
+		}			
 	}
 	
 	@Override

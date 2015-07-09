@@ -58,8 +58,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, parser.getNonterminalNode(this, node));
+		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
+			NonterminalNode ntNode = u.addToPoppedElements(i, this, node);
+			if (ntNode != null)
+				parser.pop(u, i, ntNode);
+		}
 	}
 	
 	@Override
@@ -98,27 +101,17 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
-			NonterminalNode nt;
-			if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
-				org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
-				nt = parser.getNonterminalNode(this, node, gssNode.getData(), null);
-			} else {
-			    nt = parser.getNonterminalNode(this, node);	
-			}
-			parser.pop(u, i, nt);
+			NonterminalNode nt = u.addToPoppedElements(i, this, node);
+			if (nt != null)
+				parser.pop(u, i, nt);
 		}
 	}
 	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
-			NonterminalNode nt;
-			if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
-				org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
-				nt = parser.getNonterminalNode(this, node, gssNode.getData(), value);
-			} else {
-			    nt = parser.getNonterminalNode(this, node, null, value);	
-			}
-			parser.pop(u, i, nt);
+			NonterminalNode nt = u.addToPoppedElements(i, this, node, value);
+			if (nt != null)
+				parser.pop(u, i, nt);
 		}
 	}
 

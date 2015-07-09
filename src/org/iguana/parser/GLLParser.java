@@ -75,7 +75,7 @@ public interface GLLParser {
 		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol, map, true);
 	}
 	
-	public void pop(GSSNode gssNode, int inputIndex, NonPackedNode node);
+	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node);
 	

@@ -42,6 +42,7 @@ import org.iguana.parser.gss.lookup.GSSLookup;
 import org.iguana.parser.lookup.DescriptorLookup;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.Configuration;
 
@@ -71,12 +72,9 @@ public class OriginalGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final void pop(GSSNode gssNode, int inputIndex, NonPackedNode node) {
+	public final void pop(GSSNode gssNode, int inputIndex, NonterminalNode node) {
 		
 		if (gssNode != u0) {
-
-			if (!gssLookup.addToPoppedElements(gssNode, node))
-				return;
 			
 			log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 

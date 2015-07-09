@@ -31,7 +31,6 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.sppf.NonPackedNode;
 
 public class DistributedGSSLookupImpl extends AbstractGSSLookup {
 	
@@ -45,11 +44,6 @@ public class DistributedGSSLookupImpl extends AbstractGSSLookup {
 	@Override
 	public GSSNode hasGSSNode(GrammarSlot slot, int inputIndex) {
 		return slot.hasGSSNode(inputIndex);
-	}
-
-	@Override
-	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		return gssNode.addToPoppedElements(sppfNode);
 	}
 
 	@Override
