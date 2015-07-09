@@ -89,11 +89,12 @@ public class BenchmarkUtil {
 	}
 
 	public static String header() {
-	   return String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
+	   return String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
 	    		   				"size", 
 	    		   				"user_time", 
 	    		   				"system_time", 
 	    		   				"nano_time", 
+	    		   				"memory",
 	    		   				"descriptors",
 	    		   				"gss_nodes",
 	    		   				"gss_edges",
@@ -104,20 +105,21 @@ public class BenchmarkUtil {
 	    		   				"ambiguous_nodes");
 		}
 		
-	public static String format(Input input, ParseStatistics statistics) {
-    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
-    			input.length() - 1, 
-    			statistics.getUserTime() / 1000_000,
-    			statistics.getSystemTime() / 1000_000, 
-    			statistics.getNanoTime() / 1000_000,
-    			statistics.getDescriptorsCount(),
-    			statistics.getGssNodesCount(),
-    			statistics.getGssEdgesCount(),
-    			statistics.getNonterminalNodesCount(),
-    			statistics.getIntermediateNodesCount(),
-    			statistics.getTerminalNodesCount(), 
-    			statistics.getPackedNodesCount(), 
-    			statistics.getCountAmbiguousNodes());
+	public static String format(SuccessResult result) {
+    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
+    			result.inputSize - 1, 
+    			result.statistics.getUserTime() / 1000_000,
+    			result.statistics.getSystemTime() / 1000_000, 
+    			result.statistics.getNanoTime() / 1000_000,
+    			result.statistics.getMemoryUsed(),
+    			result.statistics.getDescriptorsCount(),
+    			result.statistics.getGssNodesCount(),
+    			result.statistics.getGssEdgesCount(),
+    			result.statistics.getNonterminalNodesCount(),
+    			result.statistics.getIntermediateNodesCount(),
+    			result.statistics.getTerminalNodesCount(), 
+    			result.statistics.getPackedNodesCount(), 
+    			result.statistics.getCountAmbiguousNodes());
 	}
 
 }

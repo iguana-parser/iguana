@@ -108,9 +108,9 @@ public class IguanaRunner {
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
 					if (result.isParseSuccess())
-						results.add(SuccessResult.from(result.asParseSuccess().getStatistics()));
+						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
 					else
-						results.add(FailureResult.from(result.asParseError().toString()));
+						results.add(new FailureResult(input.getURI(), result.asParseError().toString()));
 					
 					System.out.print((i + 1) + " ");
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);

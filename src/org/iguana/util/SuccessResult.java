@@ -4,27 +4,34 @@ import java.net.URI;
 
 public class SuccessResult implements RunResult {
 	
-	int count;
+	int runCount;
 	
-	ParseStatistics statistics;
+	int inputSize = -1;
 	
-	URI input;
+	ParseStatistics statistics = new ParseStatistics();;
+	
+	URI inputURI;
 
 	public SuccessResult() {}
 	
-	public SuccessResult(int count, ParseStatistics statistics, URI input) {
-		this.count = count;
+	public SuccessResult(int inputSize, URI input, ParseStatistics statistics) {
+		this(0, inputSize, input, statistics);
+	}
+	
+	public SuccessResult(int count, int inputSize, URI input, ParseStatistics statistics) {
+		this.runCount = count;
 		this.statistics = statistics;
-		this.input = input;
+		this.inputURI = input;
+		this.inputSize = inputSize;
 	}
 	
-	public static SuccessResult from(ParseStatistics statistics) {
-		SuccessResult successResult = new SuccessResult();
-		successResult.statistics = statistics;
-		return successResult;
-	}
-	
+	@Override
 	public URI getInput() {
-		return input;
+		return inputURI;
+	}
+
+	@Override
+	public boolean isSuccess() {
+		return true;
 	}
 }

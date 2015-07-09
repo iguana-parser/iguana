@@ -37,14 +37,14 @@ public class ParseStatistics {
 	long userTime;
 	int memoryUsed;
 	
-	int descriptorsCount;
-	int gssNodesCount;
-	int gssEdgesCount;
-	int nonterminalNodesCount;
-	int terminalNodesCount;
-	int intermediateNodesCount;
-	int packedNodesCount;
-	int ambiguousNodesCount;
+	int descriptorsCount = -1;
+	int gssNodesCount = -1;
+	int gssEdgesCount = -1;
+	int nonterminalNodesCount = -1;
+	int terminalNodesCount = -1;
+	int intermediateNodesCount = -1;
+	int packedNodesCount = -1;
+	int ambiguousNodesCount = -1;
 	
     public ParseStatistics(long nanoTime, long systemTime, long userTime, int memoryUsed,
             int descriptorsCount, int gssNodesCount, int gssEdgesCount, 
