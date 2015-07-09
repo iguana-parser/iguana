@@ -68,6 +68,9 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	
 	@Override
 	public final void pop(GSSNode gssNode, int inputIndex, NonterminalNode node) {
+		
+		if (node == null) return;
+		
 		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
 		nonterminalNodesCount++;
 		

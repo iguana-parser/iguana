@@ -37,7 +37,6 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.SemanticAction;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
@@ -58,11 +57,8 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
-			NonterminalNode ntNode = u.addToPoppedElements(i, this, node);
-			if (ntNode != null)
-				parser.pop(u, i, ntNode);
-		}
+		if (nonterminal.testFollow(parser.getInput().charAt(i)))
+			parser.pop(u, i, u.addToPoppedElements(i, this, node));
 	}
 	
 	@Override
@@ -100,19 +96,13 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	 */
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
-			NonterminalNode nt = u.addToPoppedElements(i, this, node);
-			if (nt != null)
-				parser.pop(u, i, nt);
-		}
+		if (nonterminal.testFollow(parser.getInput().charAt(i)))
+			parser.pop(u, i, u.addToPoppedElements(i, this, node));
 	}
 	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i))) {
-			NonterminalNode nt = u.addToPoppedElements(i, this, node, value);
-			if (nt != null)
-				parser.pop(u, i, nt);
-		}
+		if (nonterminal.testFollow(parser.getInput().charAt(i)))
+			parser.pop(u, i, u.addToPoppedElements(i, this, node, value));
 	}
 
 }
