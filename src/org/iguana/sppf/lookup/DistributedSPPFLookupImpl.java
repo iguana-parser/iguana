@@ -56,7 +56,7 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 	
 	@Override
 	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.getTerminalNode(IntKey2.from(leftExtent, rightExtent, f), 
+		return slot.getTerminalNode(leftExtent, 
 				                    () -> new TerminalNode(slot, leftExtent, rightExtent),
 				                    this::terminalNodeAdded);
 	}
