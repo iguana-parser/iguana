@@ -35,7 +35,6 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
@@ -51,8 +50,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private HashMap<Key, IntermediateNode> intermediateNodes;
 	
-	private final GSSNodeLookup nodeLookup;
-	
 	private final Conditions conditions;
 	
 	private final String label;
@@ -65,7 +62,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			String label, String variable, Set<String> state, Conditions conditions) {
 		super(id);
 		this.position = position;
-		this.nodeLookup = nodeLookup;
 		this.conditions = conditions;
 		this.label = label;
 		this.variable = variable;
@@ -98,21 +94,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return intermediateNodes.get(key);
 	}
 	
-	@Override
-	public GSSNode getGSSNode(int inputIndex) {
-		return nodeLookup.create(this, inputIndex);
-	}
-	
-	@Override
-	public GSSNode hasGSSNode(int inputIndex) { 
-		if (nodeLookup.isInitialized()) {
-			return nodeLookup.get(inputIndex);
-		} else {
-			nodeLookup.init();			
-			return null;
-		}
-	}
-	
 	public Conditions getConditions() {
 		return conditions;
 	}
@@ -120,7 +101,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	@Override
 	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
-		nodeLookup.reset(input);
 	}
 	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
@@ -143,17 +123,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
 	}
-	
-	@Override
-	public <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) {
-		return nodeLookup.getOrElseCreate(this, inputIndex, data);
-	}
-	
-	@Override
-	public <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) {
-		return nodeLookup.get(inputIndex, data);
-	}
-	
+		
 	public boolean requiresBinding() {
 		return label != null || variable != null || state != null; 
 	}
