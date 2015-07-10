@@ -1178,8 +1178,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public <T> T accept(IAbstractASTVisitor<T> visitor) {
-			// return visitor.visit(this);
-			return null;
+			return visitor.visit(this);
 		}
 	}
 	
