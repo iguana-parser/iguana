@@ -43,6 +43,7 @@ import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.Visualization;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -90,15 +91,17 @@ public class Test3 {
 		Input input = Input.fromString("abbb");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
-//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
-		
 		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 		
-		if (result.isParseSuccess()) {
-//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-//					result.asParseSuccess().getRoot(), input);
-		}
+		Assert.assertTrue(result.isParseSuccess());
+		
+		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
+		
+		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+		// 		result.asParseSuccess().getRoot(), input);
+		
+		Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
 		
 	}
 
