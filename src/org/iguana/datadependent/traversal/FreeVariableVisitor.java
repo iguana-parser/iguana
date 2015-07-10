@@ -469,10 +469,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public Void visit(Yield expression) {
 		
 		java.lang.String label = expression.getLabel();
-		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Yield.format, label);
 		
-		if (!expression.getEnv().contains(label) && !expression.getEnv().contains(name))
-			use(name);
+		if (!expression.getEnv().contains(label))
+			use(label);
 		
 		return null;
 	}
@@ -481,10 +480,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public Void visit(Val expression) {
 		
 		java.lang.String label = expression.getLabel();
-		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Val.format, expression.getLabel());
 		
-		if (!expression.getEnv().contains(label) && !expression.getEnv().contains(name))
-			use(name);
+		if (!expression.getEnv().contains(label))
+			use(label);
 		
 		return null;
 	}

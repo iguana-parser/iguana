@@ -1163,6 +1163,7 @@ public abstract class Expression extends AbstractAST {
 			}
 			
 			NonterminalNode node = (NonterminalNode) value;
+			
 			return node.getValue();
 		}
 		

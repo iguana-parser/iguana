@@ -227,6 +227,9 @@ public class DesugarState implements GrammarTransformation {
 				exps[i++] = AST.var(ret);
 			
 			symbols.add(Return.ret(AST.tuple(exps)));
+		} else {
+			if (rsym != null)
+				symbols.add(rsym);
 		}
 		
 		return builder.build();
