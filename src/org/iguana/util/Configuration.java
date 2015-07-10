@@ -96,12 +96,7 @@ public class Configuration {
 		DFA,
 		JAVA_REGEX
 	}
-	
-	public static enum GSSType {
-		NEW,
-		ORIGINAL
-	}
-	
+		
 	public static enum LookupImpl {
 		ARRAY,
 		HASH_MAP
