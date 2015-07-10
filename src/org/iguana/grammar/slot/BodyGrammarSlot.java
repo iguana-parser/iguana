@@ -35,7 +35,6 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
@@ -58,8 +57,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Set<String> state;
 	
-	public BodyGrammarSlot(int id, Position position, GSSNodeLookup nodeLookup, 
-			String label, String variable, Set<String> state, Conditions conditions) {
+	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions) {
 		super(id);
 		this.position = position;
 		this.conditions = conditions;

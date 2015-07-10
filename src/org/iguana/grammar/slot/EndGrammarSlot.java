@@ -36,7 +36,6 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.SemanticAction;
 
@@ -45,9 +44,9 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	private final NonterminalGrammarSlot nonterminal;
 	private final SemanticAction action;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, GSSNodeLookup nodeLookup, 
-            			  String label, String variable, Set<String> state, Conditions conditions, SemanticAction action) {
-		super(id, position, nodeLookup, label, variable, state, conditions);
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, 
+			              String variable, Set<String> state, Conditions conditions, SemanticAction action) {
+		super(id, position, label, variable, state, conditions);
 		this.nonterminal = nonterminal;
 		this.action = action;
 	}

@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.iguana.grammar.condition.ConditionsFactory;
-import org.iguana.parser.gss.lookup.HashMapNodeLookup;
 import org.iguana.util.Input;
 
 
@@ -44,7 +43,7 @@ public class DummySlot extends BodyGrammarSlot {
 	}
 	
 	private DummySlot() {
-		super(0, null, new HashMapNodeLookup().init(), null, null, null, ConditionsFactory.DEFAULT);
+		super(0, null, null, null, null, ConditionsFactory.DEFAULT);
 	}
 
 	@Override

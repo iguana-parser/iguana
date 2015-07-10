@@ -74,7 +74,6 @@ import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
-import org.iguana.parser.gss.lookup.DummyNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.HashMapNodeLookup;
 import org.iguana.regex.RegularExpression;
@@ -424,14 +423,14 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		
 		if (rule.size() == 0) {
-			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, DummyNodeLookup.getInstance(), ConditionsFactory.DEFAULT, rule.getAction());
+			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction());
 		} else {
 			// TODO: This is not a final solution; in particular, 
 			//       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.  
 			Set<Condition> preConditions = new HashSet<>();
 			preConditions.addAll(rule.symbolAt(0).getPreConditions());
 			 
-			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), DummyNodeLookup.getInstance(), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions));
+			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions));
 		}
 		add(slot);
 		return slot;
@@ -439,14 +438,14 @@ public class GrammarGraph implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
 		assert i < rule.size();
-		BodyGrammarSlot slot = new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
+		BodyGrammarSlot slot = new BodyGrammarSlot(id++, position, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
 		add(slot);
 		return slot;
 	}
 	
 	private BodyGrammarSlot getEndGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
 		assert i == rule.size();
-		BodyGrammarSlot slot = new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());				
+		BodyGrammarSlot slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());				
 		add(slot);
 		return slot;
 	}
