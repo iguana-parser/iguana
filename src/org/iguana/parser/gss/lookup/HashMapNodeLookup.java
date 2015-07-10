@@ -46,16 +46,7 @@ public class HashMapNodeLookup extends AbstractNodeLookup {
 	public GSSNode create(GrammarSlot slot, int i) {
 		GSSNode v = new GSSNode(slot, i);
 		map.put(i, v);
-		return v;
-		
-//		return map.computeIfAbsent(i, k -> new GSSNode(slot, i));
-//		
-//		GSSNode v;
-//		if ((v = map.get(i)) == null) {
-//			v = new GSSNode(slot, i);
-//			map.put(i, v);
-//		}
-//		return v;
+		return v;		
 	}
 
 	@Override
@@ -76,7 +67,6 @@ public class HashMapNodeLookup extends AbstractNodeLookup {
 
 	@Override
 	public GSSNodeLookup init() {
-		super.init();
 		map = new HashMap<>();
 		return this;
 	}
