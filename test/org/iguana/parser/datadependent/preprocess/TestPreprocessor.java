@@ -38,7 +38,6 @@ import java.util.Set;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
@@ -55,7 +54,7 @@ public class TestPreprocessor {
 
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Preprocessor.grammar));
 	
-	private static Nonterminal start = Start.from(Nonterminal.withName("A"));
+	private static Nonterminal start = grammar.getStartSymbol(Nonterminal.withName("A"));
 	
 	@Test
 	public void test1() throws Exception {

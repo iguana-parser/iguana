@@ -27,6 +27,7 @@
 
 package org.iguana.parser.datadependent.preprocess;
 
+import static org.iguana.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
@@ -35,7 +36,6 @@ import java.util.Set;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
@@ -47,13 +47,11 @@ import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.junit.Test;
 
-import static org.iguana.util.CollectionsUtil.*;
-
 public class TestPreprocessor2 {
 
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(Preprocessor.grammar));
 	
-	private static Nonterminal start = Start.from(Nonterminal.withName("A"));
+	private static Nonterminal start = grammar.getStartSymbol(Nonterminal.withName("A"));
 	
 	@Test
 	public void test1() throws Exception {
