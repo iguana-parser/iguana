@@ -61,7 +61,6 @@ import org.iguana.sppf.TerminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
-import org.iguana.util.Configuration.LookupStrategy;
 import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.logging.LoggerWrapper;
@@ -234,8 +233,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
-
-		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+		GSSNode gssNode = nonterminal.hasGSSNode(i);
+		
 		if (gssNode == null) {
 			
 			gssNode = createGSSNode(returnSlot, nonterminal, i);
@@ -261,10 +260,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
 	
 	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
-	
-	public abstract GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
-
-	
+		
 	/**
 	 * Replaces the previously reported parse error with the new one if the
 	 * inputIndex of the new parse error is greater than the previous one. In
@@ -473,7 +469,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		if (arguments == null) {
 			
-			GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+			GSSNode gssNode = nonterminal.hasGSSNode(i);
 			if (gssNode == null) {
 				
 				gssNode = createGSSNode(returnSlot, nonterminal, i);
@@ -501,7 +497,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		GSSNodeData<Object> data = new GSSNodeData<>(evaluate(arguments, env));
 		
-		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i, data);
+		GSSNode gssNode = nonterminal.hasGSSNode(i, data);
 		if (gssNode == null) {
 			
 			gssNode = createGSSNode(returnSlot, nonterminal, i, data);
@@ -538,8 +534,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
 	
 	public abstract <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
-	
-	public abstract <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
 	
 	@Override
 	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {

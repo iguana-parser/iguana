@@ -88,11 +88,6 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	}
 	
 	@Override
-	public final GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i) {
-		return gssLookup.hasGSSNode(nonterminal, i);
-	}
-	
-	@Override
 	public void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
@@ -132,10 +127,5 @@ public class NewGLLParserImpl extends AbstractGLLParserImpl {
 	@Override
 	public <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
 		return gssLookup.getGSSNode(nonterminal, i, data);
-	}
-
-	@Override
-	public <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data) {
-		return gssLookup.hasGSSNode(nonterminal, i, data);
 	}
 }
