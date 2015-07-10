@@ -36,6 +36,7 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
@@ -44,6 +45,7 @@ import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.Visualization;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,21 +96,22 @@ public class Test5 {
 	public void test() {
 		System.out.println(grammar);
 		
-// 		FIXME: Graph builder for Code symbol + EBNF translation
+		grammar = new EBNFToBNF().transform(grammar);
 		
-//		Input input = Input.fromString("abcbcbc");
-//		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-//		
-//		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-//		
-//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-//		
-//		if (result.isParseSuccess()) {
-//			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-//					result.asParseSuccess().getRoot(), input);
-//		}
+		Input input = Input.fromString("abcbcbc");
+		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
+		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
+		
+		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+		
+		Assert.assertTrue(result.isParseSuccess());
+		
+		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
+		// 		result.asParseSuccess().getRoot(), input);
+		
+		Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
 	}
 
 }
