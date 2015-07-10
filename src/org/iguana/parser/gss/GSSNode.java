@@ -46,6 +46,7 @@ import org.iguana.util.collections.Key;
 /**
  *
  * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
  * 
  */
 public class GSSNode {
@@ -56,6 +57,8 @@ public class GSSNode {
 	
 	private Map<Integer, NonterminalNode> poppedElements;
 	
+	private Map<Key, NonterminalNode> poppedElementsWithValues;
+	
 	private final List<GSSEdge> gssEdges;
 
 	private Set<Key> descriptors;
@@ -64,12 +67,9 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new HashMap<>();
+		this.poppedElementsWithValues = new HashMap<>();
 		this.gssEdges = new ArrayList<>();
 		this.descriptors = null;
-	}
-
-	public NonterminalNode addToPoppedElements(int j, EndGrammarSlot slot, NonPackedNode child, Object value) {
-		throw new RuntimeException("Unimplemented yet!!!");
 	}
 	
 	public NonterminalNode addToPoppedElements(int j, EndGrammarSlot slot, NonPackedNode child) {
@@ -161,6 +161,30 @@ public class GSSNode {
 		poppedElements.clear();
 		gssEdges.clear();
 		if (descriptors != null) descriptors.clear();
+	}
+	
+	/**
+	 * 
+	 * Data-dependent GLL parsing
+	 * 
+	 */
+	
+	public NonterminalNode addToPoppedElements(Key key, EndGrammarSlot slot, NonPackedNode child, Object value) {	
+		Holder<NonterminalNode> holder = new Holder<>();
+		poppedElementsWithValues.compute(key, (k, v) -> { 
+			if (v == null) {
+				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, child.getRightExtent(), value);
+				node.addPackedNode(new PackedNode(slot, child.getRightExtent(), node), child);
+				holder.set(node);
+				return node;
+			}
+			else {
+				v.addPackedNode(new PackedNode(slot, child.getRightExtent(), v), child);
+				return v;
+			}
+		});
+		
+ 		return holder.get();
 	}
 	
 }

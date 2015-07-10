@@ -280,7 +280,7 @@ public interface SPPFLookup {
 	}
 	
 	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, Object value) {
-		return new NonterminalNode(slot, leftExtent, rightExtent);
+		return new NonterminalNode(slot, leftExtent, rightExtent, value);
 	}
 	
 	@FunctionalInterface

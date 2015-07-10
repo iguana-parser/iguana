@@ -25,46 +25,49 @@
  *
  */
 
-package org.iguana.datadependent.gss;
+package org.iguana.datadependent.util.collections;
 
-import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.parser.HashFunctions;
-import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.util.collections.Key;
 
-public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
+public class IntKey1PlusObject implements Key {
 	
-	private final GSSNodeData<T> data;
+	private final int k;
+	private final Object obj;
+	
+	private final int hash;
+	
+	public IntKey1PlusObject(int k, Object obj, int size) {
+		this.k = k;
+		this.obj = obj;
+		this.hash = k * size + obj.hashCode();
+	}
 
-	public GSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
-		super(slot, inputIndex);
-		this.data = data;
+	public static IntKey1PlusObject from(int k, Object obj, int size) {
+		return new IntKey1PlusObject(k, obj.hashCode(), size);
 	}
 	
 	@Override
 	public boolean equals(Object other) {
 		if (this == other) return true;
 		
-		if (!(other instanceof GSSNode<?>)) return false;
+		if (!(other instanceof IntKey1PlusObject)) return false;
 		
-		GSSNode<?> that = (GSSNode<?>) other;
-		
-		return getGrammarSlot() == that.getGrammarSlot() 
-				&& getInputIndex() == that.getInputIndex()
-				&& data.equals(that.data);
-	}
-	
-	public GSSNodeData<T> getData() {
-		return data;
+		IntKey1PlusObject that = (IntKey1PlusObject) other;
+		return hash == that.hash && k == that.k && obj.equals(that.obj);
 	}
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(getGrammarSlot().getId(), getInputIndex(), data.hashCode());
+		return hash;
+	}
+	
+	@Override
+	public int[] components() {
+		return new int[] { k };
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + String.format("(%s)", data);
+		return String.format("(%d, %s)", k, obj);
 	}
-	
 }
