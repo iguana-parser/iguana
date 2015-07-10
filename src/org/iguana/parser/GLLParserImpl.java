@@ -50,9 +50,10 @@ import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.parser.gss.lookup.GSSLookup;
+import org.iguana.parser.gss.NewGSSEdgeImpl;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
@@ -61,7 +62,6 @@ import org.iguana.sppf.TerminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
-import org.iguana.util.Configuration.LookupStrategy;
 import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.logging.LoggerWrapper;
@@ -73,11 +73,9 @@ import org.iguana.util.logging.LoggerWrapper;
  * @author Anastasia Izmaylova
  * 
  */
-public abstract class AbstractGLLParserImpl implements GLLParser {
+public class GLLParserImpl implements GLLParser {
 		
-	protected static final LoggerWrapper log = LoggerWrapper.getLogger(AbstractGLLParserImpl.class);
-	
-	protected final GSSLookup gssLookup;
+	protected static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
 	protected final SPPFLookup sppfLookup;
 	
@@ -114,14 +112,17 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected int descriptorsCount;
 	
 	protected int nonterminalNodesCount;
+	
+	protected int countGSSNodes;
+	
+	protected int countGSSEdges;
 
 	private final Configuration config;
 	
 	private Deque<Descriptor> descriptorsStack;
 
-	public AbstractGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup) {
+	public GLLParserImpl(Configuration config, SPPFLookup sppfLookup) {
 		this.config = config;
-		this.gssLookup = gssLookup;
 		this.sppfLookup = sppfLookup;
 		this.descriptorsStack = new ArrayDeque<>();
 	}
@@ -190,8 +191,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 					.setSystemTime(endSystemTime - startSystemTime) 
 					.setMemoryUsed(BenchmarkUtil.getMemoryUsed())
 					.setDescriptorsCount(descriptorsCount) 
-					.setGSSNodesCount(gssLookup.getGSSNodesCount() + 1) // + start gss node 
-					.setGSSEdgesCount(gssLookup.getGSSEdgesCount()) 
+					.setGSSNodesCount(countGSSNodes + 1) // + start gss node 
+					.setGSSEdgesCount(countGSSEdges) 
 					.setNonterminalNodesCount(nonterminalNodesCount)
 					.setTerminalNodesCount(sppfLookup.getTerminalNodesCount())
 					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
@@ -233,12 +234,31 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	@Override
+	public final void pop(GSSNode gssNode, int inputIndex, NonterminalNode node) {
+		
+		if (node == null) return;
+		
+		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
+		nonterminalNodesCount++;
+		
+		for(GSSEdge edge : gssNode.getGSSEdges()) {			
+			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
+			if (descriptor != null) {
+				scheduleDescriptor(descriptor);
+			}
+		}			
+	}
+	
+	@Override
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode u, int i, NonPackedNode node) {
-
-		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+		GSSNode gssNode = nonterminal.hasGSSNode(i);
+		
 		if (gssNode == null) {
+			gssNode = nonterminal.getGSSNode(i);
+
+			log.trace("GSSNode created: (%s, %d)",  nonterminal, i);
+			countGSSNodes++;
 			
-			gssNode = createGSSNode(returnSlot, nonterminal, i);
 			createGSSEdge(returnSlot, u, node, gssNode);
 			
 			final GSSNode __gssNode = gssNode;
@@ -258,12 +278,21 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return gssNode;
 	}
 		
-	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source);
-	
-	public abstract GSSNode createGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
-	
-	public abstract GSSNode hasGSSNode(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i);
+	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source) {
+		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
+		
+		if(source.getGSSEdge(edge)) {
+			countGSSEdges++;
+			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 
+			for (NonPackedNode z : source.getPoppedElements()) {			
+				Descriptor descriptor = edge.addDescriptor(this, source, z.getRightExtent(), z);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Replaces the previously reported parse error with the new one if the
@@ -298,15 +327,20 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	private void resetParser(NonterminalGrammarSlot startSymbol) {
+		descriptorsStack.clear();
+		sppfLookup.reset();
+		ci = 0;
+		cu = startGSSNode;			
+		cn = DummyNode.getInstance();
+		errorSlot = null;
+		errorIndex = 0;
+		errorGSSNode = null;
+		
 		descriptorsCount = 0;
 		nonterminalNodesCount = 0;
-		descriptorsStack.clear();
-		gssLookup.reset();
-		sppfLookup.reset();
-		initParserState(startSymbol);
+		countGSSNodes = 0;
+		countGSSEdges = 0;
 	}
-	
-	protected abstract void initParserState(NonterminalGrammarSlot startSymbol);
 	
 	@Override
 	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
@@ -473,10 +507,12 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		if (arguments == null) {
 			
-			GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i);
+			GSSNode gssNode = nonterminal.hasGSSNode(i);
 			if (gssNode == null) {
 				
-				gssNode = createGSSNode(returnSlot, nonterminal, i);
+				gssNode = nonterminal.getGSSNode(i);
+				
+				countGSSNodes++;
 				log.trace("GSSNode created: %s", gssNode);
 				
 				createGSSEdge(returnSlot, u, node, gssNode, env); // Record environment on the edge
@@ -501,10 +537,10 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		
 		GSSNodeData<Object> data = new GSSNodeData<>(evaluate(arguments, env));
 		
-		GSSNode gssNode = hasGSSNode(returnSlot, nonterminal, i, data);
+		GSSNode gssNode = nonterminal.hasGSSNode(i, data);
 		if (gssNode == null) {
 			
-			gssNode = createGSSNode(returnSlot, nonterminal, i, data);
+			gssNode = nonterminal.getGSSNode(i, data);
 			log.trace("GSSNode created: %s(%s)",  gssNode, data);
 			
 			if (env.isEmpty()) createGSSEdge(returnSlot, u, node, gssNode);
@@ -535,11 +571,21 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		return gssNode;
 	}
 	
-	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
-	
-	public abstract <T> GSSNode createGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
-	
-	public abstract <T> GSSNode hasGSSNode(GrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, int i, GSSNodeData<T> data);
+	private void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env) {
+		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
+		
+		if (source.getGSSEdge(edge)) {
+			countGSSEdges++;
+			log.trace("GSS Edge created: %s from %s to %s with %s", returnSlot, source, destination, env);
+
+			for (NonPackedNode z : source.getPoppedElements()) {
+				Descriptor descriptor = edge.addDescriptor(this, source, z.getRightExtent(), z);
+				if (descriptor != null) {
+					scheduleDescriptor(descriptor);
+				}				
+			}
+		}
+	}
 	
 	@Override
 	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
