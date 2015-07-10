@@ -28,8 +28,6 @@
 package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.parser.gss.lookup.DistributedGSSLookupImpl;
-import org.iguana.parser.gss.lookup.GSSLookup;
 import org.iguana.sppf.lookup.DistributedSPPFLookupImpl;
 import org.iguana.sppf.lookup.GlobalSPPFLookupImpl;
 import org.iguana.sppf.lookup.SPPFLookup;
@@ -45,15 +43,9 @@ import org.iguana.util.Input;
 public class ParserFactory {
 	
 	public static GLLParser getParser(Configuration config, Input input, Grammar grammar) {
-		return new NewGLLParserImpl(config,
-				getGSSLookup(config, input, grammar), 
-			    getSPPFLookup(config, input, grammar));		
+		return new GLLParserImpl(config, getSPPFLookup(config, input, grammar));		
 	}
-	
-	private static GSSLookup getGSSLookup(Configuration config, Input input, Grammar grammar) {
-		return new DistributedGSSLookupImpl();
-	}
-	
+		
 	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
 		if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
 			return new DistributedSPPFLookupImpl(input);
