@@ -468,9 +468,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Yield expression) {
 		
-		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Yield.format, expression.getLabel());
+		java.lang.String label = expression.getLabel();
+		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Yield.format, label);
 		
-		if (!expression.getEnv().contains(name))
+		if (!expression.getEnv().contains(label) && !expression.getEnv().contains(name))
 			use(name);
 		
 		return null;
@@ -479,9 +480,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	@Override
 	public Void visit(Val expression) {
 		
+		java.lang.String label = expression.getLabel();
 		java.lang.String name = java.lang.String.format(org.iguana.datadependent.ast.Expression.Val.format, expression.getLabel());
 		
-		if (!expression.getEnv().contains(name))
+		if (!expression.getEnv().contains(label) && !expression.getEnv().contains(name))
 			use(name);
 		
 		return null;
@@ -814,9 +816,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		
-		if (symbol.getLabel() != null) {
+		if (symbol.getLabel() != null)
 			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
-		}
 		
 		for (Condition condition : symbol.getPreConditions()) {
 			condition.setEnv(env);
@@ -828,9 +829,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		env = symbol.getEnv();
 		
-		if (symbol.getLabel() != null) {
+		if (symbol.getLabel() != null)
 			env = env.__insert(symbol.getLabel());
-		}
 		
 		for (Condition condition : symbol.getPostConditions()) {
 			condition.setEnv(env);
