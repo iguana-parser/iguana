@@ -73,7 +73,7 @@ public class NonterminalTransition extends AbstractTransition {
 			if (preConditions.execute(parser.getInput(), u, i))
 				return;
 			
-			parser.create(dest, nonterminal, u, i, node);
+			nonterminal.create(parser, dest, u, i, node);
 			
 		} else {
 			
@@ -88,8 +88,7 @@ public class NonterminalTransition extends AbstractTransition {
 			if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
 				return;
 			
-			parser.create(dest, nonterminal, u, i, node, arguments, parser.getEnvironment());
-			
+			nonterminal.create(parser, dest, u, i, node, arguments, parser.getEnvironment());
 		}
 		
 	}
@@ -137,9 +136,8 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
 			return;
-						
-		parser.create(dest, nonterminal, u, i, node, arguments, parser.getEnvironment());
-		
+				
+		nonterminal.create(parser, dest, u, i, node, arguments, parser.getEnvironment());
 	}
 
 }

@@ -28,6 +28,7 @@
 package org.iguana.parser.gss.lookup;
 
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.util.Input;
@@ -39,6 +40,8 @@ import org.iguana.util.Input;
  */
 public interface GSSNodeLookup {
 	
+	public void get(NonterminalGrammarSlot slot, int i, GSSNodeCreator creator);
+	
 	public GSSNode create(GrammarSlot slot, int i);
 	
 	public GSSNode get(int i);
@@ -47,10 +50,6 @@ public interface GSSNodeLookup {
 	
 	public Iterable<GSSNode> getNodes();
 	
-	public GSSNodeLookup init();
-	
-	public boolean isInitialized();
-
 	/**
 	 * 
 	 * Data-dependent GLL parsing
@@ -60,4 +59,8 @@ public interface GSSNodeLookup {
 	
 	public <T> GSSNode get(int i, GSSNodeData<T> data);
 
+	@FunctionalInterface
+	public static interface GSSNodeCreator {
+		public GSSNode create(NonterminalGrammarSlot slot, int i, GSSNode node);
+	}
 }

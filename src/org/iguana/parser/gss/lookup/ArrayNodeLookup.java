@@ -31,16 +31,16 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Input;
 
 public class ArrayNodeLookup extends AbstractNodeLookup {
 
 	private GSSNode[] gssNodes;
-	private int length;
 	
 	public ArrayNodeLookup(Input input) {
-		length = input.length();
+		gssNodes = new GSSNode[input.length()];
 	}
 	
 	@Override
@@ -56,8 +56,7 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 	@Override
 	public void reset(Input input) {
 		super.reset(input);
-		length = input.length();
-		gssNodes = null;		
+		gssNodes = new GSSNode[input.length()];		
 	}
 	
 	@Override
@@ -66,14 +65,8 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 	}
 
 	@Override
-	public ArrayNodeLookup init() {
-		gssNodes = new GSSNode[length];
-		return this;
-	}
-
-	@Override
-	public boolean isInitialized() {
-		return gssNodes != null;
+	public void get(NonterminalGrammarSlot slot, int i, GSSNodeCreator creator) {
+		gssNodes[i] = creator.create(slot, i, gssNodes[i]);
 	}
 
 }

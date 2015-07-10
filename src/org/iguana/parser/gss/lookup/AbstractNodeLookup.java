@@ -72,6 +72,4 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 		map = null;
 	}
 	
-	public abstract GSSNodeLookup init();
-
 }

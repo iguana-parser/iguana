@@ -40,8 +40,8 @@ import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
@@ -75,8 +75,6 @@ public interface GLLParser {
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
-	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node);
-		
 	public NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
 	
 	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
@@ -132,8 +130,6 @@ public interface GLLParser {
 	
 	public Environment getEmptyEnvironment();
 	
-	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
-	
 	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value);
 	
 	public <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value);
@@ -149,5 +145,7 @@ public interface GLLParser {
 	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 
 	public GrammarGraph getGrammarGraph();
+
+	void scheduleDescriptor(Descriptor descriptor);
 	
 }

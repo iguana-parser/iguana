@@ -31,8 +31,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.util.Input;
 import org.iguana.util.generator.ConstructorCode;
 
@@ -55,7 +53,7 @@ public interface GrammarSlot extends ConstructorCode {
 	}
 	
 	/**
-	 * Corresponds to a grammar position A ::=  . \alpha 
+	 * Corresponds to a grammar position A ::= B . \alpha 
 	 */
 	default boolean isFirst() { return false; }
 	
@@ -66,10 +64,6 @@ public interface GrammarSlot extends ConstructorCode {
 	
 	default boolean isEnd() { return false; }
 
-	default GSSNode getGSSNode(int inputIndex) { return null; }
-	
-	default GSSNode hasGSSNode(int inputIndex) { return null; }
-	
 	public void reset(Input input);
 	
 	public boolean addTransition(Transition transition);
@@ -79,14 +73,5 @@ public interface GrammarSlot extends ConstructorCode {
 	default GrammarSlot withId(int id) { return this; }
 	
 	public int getId();
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	default <T> GSSNode getGSSNode(int inputIndex, GSSNodeData<T> data) { return null; }
-	
-	default <T> GSSNode hasGSSNode(int inputIndex, GSSNodeData<T> data) { return null; }
 	
 }

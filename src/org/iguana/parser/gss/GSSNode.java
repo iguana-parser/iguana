@@ -34,9 +34,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.GLLParser;
 import org.iguana.parser.HashFunctions;
+import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.PackedNode;
@@ -90,6 +94,21 @@ public class GSSNode {
  		return holder.get();
 	}
 	
+	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
+		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
+		
+		gssEdges.add(edge);
+//			countGSSEdges++;
+//			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
+
+		for (NonPackedNode z : getPoppedElements()) {			
+			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
+			if (descriptor != null) {
+				parser.scheduleDescriptor(descriptor);
+			}
+		}
+	}
+	
 	public NonterminalNode getNonterminalNode(int j) {
 		return poppedElements.get(j);
 	}
@@ -104,10 +123,6 @@ public class GSSNode {
 
 	public int getInputIndex() {
 		return inputIndex;
-	}
-	
-	public boolean getGSSEdge(GSSEdge edge) {
-		return gssEdges.add(edge);
 	}
 	
 	public int countGSSEdges() {
@@ -186,5 +201,22 @@ public class GSSNode {
 		
  		return holder.get();
 	}
+	
+	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
+		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
+		
+		gssEdges.add(edge);
+//			countGSSEdges++;
+//			log.trace("GSS Edge created: %s from %s to %s with %s", returnSlot, source, destination, env);
+
+		for (NonPackedNode z : getPoppedElements()) {
+			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
+			if (descriptor != null) {
+				parser.scheduleDescriptor(descriptor);
+			}
+		}
+			
+	}
+	
 	
 }
