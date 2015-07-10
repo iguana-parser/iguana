@@ -27,8 +27,10 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.Configurations.*;
-import static org.junit.Assert.*;
+import static org.iguana.util.CollectionsUtil.set;
+import static org.iguana.util.Configurations.all_configs;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Collection;
 import java.util.List;
@@ -58,8 +60,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static org.iguana.util.CollectionsUtil.*;
-
 /**
  * S ::= 'a' A 'c'
  *     | 'a' A 'b'
@@ -80,20 +80,13 @@ public class Test9 extends AbstractParserTest {
 	
 	@Parameters
     public static Collection<Object[]> data() {
-		List<Object[]> parameters = newConfigs.stream().map(c -> new Object[] {
+		List<Object[]> parameters = all_configs.stream().map(c -> new Object[] {
 	    		getInput(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
 	    		(Function<GrammarGraph, ParseResult>) Test9::getNewParseResult
 	    	}).collect(Collectors.toList());
-		parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
-	    		getInput(), 
-	    		getGrammar(), 
-	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Test9::getOriginalParseResult
-	    	}).collect(Collectors.toList()));
 		return parameters;
     }
     

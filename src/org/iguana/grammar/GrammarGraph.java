@@ -27,7 +27,8 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.CharacterRanges.*;
+import static org.iguana.util.CharacterRanges.toNonOverlapping2;
+import static org.iguana.util.CharacterRanges.toNonOverlappingSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.grammar.exception.IncorrectNumberOfArgumentsException;
 import org.iguana.grammar.operations.FirstFollowSets;
-import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.CodeTransition;
 import org.iguana.grammar.slot.ConditionalTransition;
@@ -82,7 +82,6 @@ import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Configuration.GSSType;
 import org.iguana.util.Configuration.LookupImpl;
 import org.iguana.util.Configuration.MatcherType;
 import org.iguana.util.Input;
@@ -415,11 +414,7 @@ public class GrammarGraph implements Serializable {
 	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
 		return nonterminalsMap.computeIfAbsent(nonterminal, k -> {
 			NonterminalGrammarSlot ntSlot;
-			if (config.getGSSType() == GSSType.NEW) {
-				ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
-			} else {
-				ntSlot = new NonterminalGrammarSlot(id++, nonterminal, DummyNodeLookup.getInstance());
-			}
+			ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
 			add(ntSlot);
 			return ntSlot;
 		});
@@ -444,26 +439,14 @@ public class GrammarGraph implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
 		assert i < rule.size();
-		
-		BodyGrammarSlot slot;
-		if (config.getGSSType() == GSSType.NEW)
-			slot = new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
-		else
-			slot = new BodyGrammarSlot(id++, position, getNodeLookup(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
-		
+		BodyGrammarSlot slot = new BodyGrammarSlot(id++, position, DummyNodeLookup.getInstance(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
 		add(slot);
 		return slot;
 	}
 	
 	private BodyGrammarSlot getEndGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
 		assert i == rule.size();
-		
-		BodyGrammarSlot slot;
-		if (config.getGSSType() == GSSType.NEW)
-			slot = new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());				
-		else
-			slot = new EndGrammarSlot(id++, position, nonterminal, getNodeLookup(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());
-		
+		BodyGrammarSlot slot = new EndGrammarSlot(id++, position, nonterminal, DummyNodeLookup.getInstance(), label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());				
 		add(slot);
 		return slot;
 	}
