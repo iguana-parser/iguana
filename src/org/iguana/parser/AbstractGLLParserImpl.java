@@ -53,7 +53,6 @@ import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSLookup;
-import org.iguana.parser.gss.lookup.GlobalHashGSSLookupImpl;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
@@ -361,11 +360,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	@Override
 	public Iterable<GSSNode> getGSSNodes() {
-		if (config.getGSSLookupStrategy() == LookupStrategy.GLOBAL) {
-			return ((GlobalHashGSSLookupImpl) gssLookup).getGSSNodes();
-		} else {
-			return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
-		}
+		return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
 	}
 	
 	/**
