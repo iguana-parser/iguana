@@ -37,11 +37,9 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 	private PackedNode first;
 	protected List<PackedNode> rest;
-	private PackedNodeSet set;
 	
-	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
+	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
-		this.set = set;
 	}
 
 	public void addChild(PackedNode node) {
@@ -60,13 +58,10 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		if (set.addPackedNode(packedNode.getGrammarSlot(), leftChild.getRightExtent())) {			
-			addPackedNode(packedNode);
-			packedNode.addChild(leftChild);
-			packedNode.addChild(rightChild);
-			return true;
-		}
-		return false;
+		addPackedNode(packedNode);
+		packedNode.addChild(leftChild);
+		packedNode.addChild(rightChild);
+		return true;
 	}
 
 	private void addPackedNode(PackedNode packedNode) {
@@ -79,12 +74,9 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
-		if (set.addPackedNode(packedNode.getGrammarSlot(), child.getRightExtent())) {
-			addPackedNode(packedNode);
-			packedNode.addChild(child);
-			return true;
-		}
-		return false;	
+		addPackedNode(packedNode);
+		packedNode.addChild(child);
+		return true;
 	}
 	
 	@Override

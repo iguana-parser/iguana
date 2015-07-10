@@ -39,7 +39,6 @@ import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.NonterminalOrIntermediateNode;
 import org.iguana.sppf.PackedNode;
-import org.iguana.sppf.PackedNodeSet;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.collections.Key;
 
@@ -273,15 +272,15 @@ public interface SPPFLookup {
 	public void reset();
 
 	default IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(slot, leftExtent, rightExtent, PackedNodeSet.DEFAULT);
+		return new IntermediateNode(slot, leftExtent, rightExtent);
 	}
 	
 	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return new NonterminalNode(slot, leftExtent, rightExtent, PackedNodeSet.DEFAULT);
+		return new NonterminalNode(slot, leftExtent, rightExtent);
 	}
 	
 	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, Object value) {
-		return new NonterminalNode(slot, leftExtent, rightExtent, PackedNodeSet.DEFAULT);
+		return new NonterminalNode(slot, leftExtent, rightExtent);
 	}
 	
 	@FunctionalInterface

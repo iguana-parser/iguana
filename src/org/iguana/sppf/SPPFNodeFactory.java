@@ -33,7 +33,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 public class SPPFNodeFactory {
 
 	private GrammarGraph grammarGraph;
-	private PackedNodeSet set = (x, y) -> true;
 	
 	public SPPFNodeFactory(GrammarGraph grammarGraph) {
 		this.grammarGraph = grammarGraph;
@@ -41,7 +40,7 @@ public class SPPFNodeFactory {
 	
 	public NonterminalNode createNonterminalNode(String s, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = Nonterminal.withName(s);
-		return new NonterminalNode(grammarGraph.getHead(nonterminal), leftExtent, rightExtent, set);
+		return new NonterminalNode(grammarGraph.getHead(nonterminal), leftExtent, rightExtent);
 	}
 	
 	public TerminalNode createEpsilonNode(int inputIndex) {
@@ -50,11 +49,11 @@ public class SPPFNodeFactory {
 	
 	public NonterminalNode createNonterminalNode(String s, int index, int leftExtent, int rightExtent) {
 		Nonterminal nonterminal = new Nonterminal.Builder(s).setIndex(index).build();
-		return new NonterminalNode(grammarGraph.getHead(nonterminal), leftExtent, rightExtent, set);
+		return new NonterminalNode(grammarGraph.getHead(nonterminal), leftExtent, rightExtent);
 	}
 
 	public IntermediateNode createIntermediateNode(String s, int leftExtent, int rightExtent) {
-		return new IntermediateNode(grammarGraph.getGrammarSlot(s), leftExtent, rightExtent, set);
+		return new IntermediateNode(grammarGraph.getGrammarSlot(s), leftExtent, rightExtent);
 	}
 	
 	public TerminalNode createTerminalNode(String s, int leftExtent, int rightExtent) {

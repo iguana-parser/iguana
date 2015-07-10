@@ -34,7 +34,6 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.PackedNodeSet;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Input;
 
@@ -78,7 +77,7 @@ public class TerminalTransition extends AbstractTransition {
 			
 		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
 			
-		NonPackedNode n = dest.isFirst() ? cr : new IntermediateNode(dest, node.getLeftExtent(), cr.getRightExtent(), PackedNodeSet.DEFAULT);
+		NonPackedNode n = dest.isFirst() ? cr : new IntermediateNode(dest, node.getLeftExtent(), cr.getRightExtent());
 		dest.execute(parser, u, i + length, n);
 	}
 	
@@ -134,7 +133,7 @@ public class TerminalTransition extends AbstractTransition {
 		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
 			return;
 		
-		NonPackedNode n = dest.isFirst() ? cr : new org.iguana.datadependent.sppf.IntermediateNode(dest, node.getLeftExtent(), cr.getRightExtent(), PackedNodeSet.DEFAULT, env);
+		NonPackedNode n = dest.isFirst() ? cr : new org.iguana.datadependent.sppf.IntermediateNode(dest, node.getLeftExtent(), cr.getRightExtent(), env);
 		dest.execute(parser, u, i + length, n, env);
 	}
 	

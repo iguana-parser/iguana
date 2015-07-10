@@ -37,8 +37,8 @@ import org.iguana.traversal.SPPFVisitor;
  */
 public class IntermediateNode extends NonterminalOrIntermediateNode {
 	
-	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
-		super(slot, leftExtent, rightExtent, set);
+	public IntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		super(slot, leftExtent, rightExtent);
 	}
 
 	@Override

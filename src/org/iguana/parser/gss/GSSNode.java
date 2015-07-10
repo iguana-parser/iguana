@@ -40,7 +40,6 @@ import org.iguana.parser.HashFunctions;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.PackedNode;
-import org.iguana.sppf.PackedNodeSet;
 import org.iguana.util.Holder;
 import org.iguana.util.collections.Key;
 
@@ -77,7 +76,7 @@ public class GSSNode {
 		Holder<NonterminalNode> holder = new Holder<>();
 		poppedElements.compute(j, (k, v) -> { 
 			if (v == null) {
-				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, j, PackedNodeSet.DEFAULT);
+				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, j);
 				node.addPackedNode(new PackedNode(slot, j, node), child);
 				holder.set(node);
 				return node;
