@@ -35,11 +35,9 @@ import org.iguana.datadependent.util.collections.IntKey3PlusObject;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Input;
 import org.iguana.util.Tuple;
 import org.iguana.util.collections.IntKey3;
@@ -48,8 +46,6 @@ import org.iguana.util.hashing.hashfunction.IntHash3;
 import org.iguana.util.hashing.hashfunction.IntHash4;
 
 public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
-	
-	private Map<Key, TerminalNode> terminalNodes;
 	
 	private Map<Key, NonterminalNode> nonterminalNodes;
 
@@ -65,22 +61,12 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		int grammarSize = grammar.size() + 1;
 		this.nonterminalNodes = new HashMap<>();
 		this.intermediateNodes = new HashMap<>();
-		this.terminalNodes = new HashMap<>();
 		
 		this.f = (x, y, z) -> x * inputSize * inputSize + y * inputSize + z;
 		this.f4 = (x, y, z, w) -> x * grammarSize * inputSize * inputSize +
 				                  y * inputSize * inputSize +
 				                  z * inputSize +
 				                  w;
-	}
-	
-	@Override
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return terminalNodes.computeIfAbsent(IntKey3.from(slot.getId(), leftExtent, rightExtent, f), k -> {
-			TerminalNode val = new TerminalNode(slot, leftExtent, rightExtent);
-			terminalNodeAdded(val);
-			return val;
-		});
 	}
 	
 	@Override
@@ -117,7 +103,6 @@ public class GlobalSPPFLookupImpl extends AbstractSPPFLookup {
 		super.reset();
 		nonterminalNodes = new HashMap<>();
 		intermediateNodes = new HashMap<>();
-		terminalNodes = new HashMap<>();
 	}
 	
 	@Override

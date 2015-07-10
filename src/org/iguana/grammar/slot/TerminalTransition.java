@@ -65,20 +65,20 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, u, i))
 			return;
 			
-		int length = slot.match(input, i);
-			
-		if (length < 0) {
+		TerminalNode cr = slot.getTerminalNode(input, i);
+		
+		if (cr == null) {
 			parser.recordParseError(origin);
-			return;
+			return;			
 		}
+
+		int rightExtent = cr.getRightExtent();
 			
-		if (postConditions.execute(input, u, i + length))
+		if (postConditions.execute(input, u, rightExtent))
 			return;
 			
-		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
-			
-		NonPackedNode n = dest.isFirst() ? cr : new IntermediateNode(dest, node.getLeftExtent(), cr.getRightExtent());
-		dest.execute(parser, u, i + length, n);
+		NonPackedNode n = dest.isFirst() ? cr : new IntermediateNode(dest, node.getLeftExtent(), rightExtent);
+		dest.execute(parser, u, rightExtent, n);
 	}
 	
 	public TerminalGrammarSlot getSlot() {
@@ -118,23 +118,23 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 			return;
 		
-		int length = slot.match(input, i);
+		TerminalNode cr = slot.getTerminalNode(input, i);
 		
-		if (length < 0) {
+		if (cr == null) {
 			parser.recordParseError(origin);
 			return;
 		}
-		
-		TerminalNode cr = parser.getTerminalNode(slot, i, i + length);
-		
+
+		int rightExtent = cr.getRightExtent();
+				
 		if (dest.getLabel() != null)
 			parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, i + length, parser.getEvaluatorContext()))
+		if (postConditions.execute(input, u, rightExtent, parser.getEvaluatorContext()))
 			return;
 		
-		NonPackedNode n = dest.isFirst() ? cr : new org.iguana.datadependent.sppf.IntermediateNode(dest, node.getLeftExtent(), cr.getRightExtent(), env);
-		dest.execute(parser, u, i + length, n, env);
+		NonPackedNode n = dest.isFirst() ? cr : new org.iguana.datadependent.sppf.IntermediateNode(dest, node.getLeftExtent(), rightExtent, env);
+		dest.execute(parser, u, rightExtent, n, env);
 	}
 	
 }

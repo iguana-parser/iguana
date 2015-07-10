@@ -47,7 +47,6 @@ import org.iguana.grammar.slot.DummySlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
@@ -58,7 +57,6 @@ import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
@@ -343,11 +341,6 @@ public class GLLParserImpl implements GLLParser {
 	}
 	
 	@Override
-	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
-		return sppfLookup.getEpsilonNode(slot, inputIndex);
-	}
-		
-	@Override
 	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
 		return sppfLookup.getNonterminalNode(slot, child);
 	}
@@ -371,12 +364,7 @@ public class GLLParserImpl implements GLLParser {
 	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
 	}
-	
-	@Override
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return sppfLookup.getTerminalNode(slot, leftExtent, rightExtent);
-	}
-	
+		
 	@Override 
 	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getNode(slot, leftChild, rightChild);

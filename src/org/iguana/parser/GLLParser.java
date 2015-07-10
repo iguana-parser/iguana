@@ -41,14 +41,12 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 
@@ -78,11 +76,7 @@ public interface GLLParser {
 	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node);
-	
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
-
-	public TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex);
-	
+		
 	public NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
 	
 	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child);

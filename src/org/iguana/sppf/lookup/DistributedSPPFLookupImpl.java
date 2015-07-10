@@ -31,11 +31,9 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.util.collections.IntKey2PlusObject;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Input;
 import org.iguana.util.Tuple;
 import org.iguana.util.collections.IntKey2;
@@ -53,14 +51,7 @@ public class DistributedSPPFLookupImpl extends AbstractSPPFLookup {
 		this.f = (x, y) -> x * inputSize + y;
 		this.f3 = (x, y, z) -> x * inputSize * inputSize + y * inputSize + z;
 	}
-	
-	@Override
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return slot.getTerminalNode(leftExtent, 
-				                    () -> new TerminalNode(slot, leftExtent, rightExtent),
-				                    this::terminalNodeAdded);
-	}
-	
+		
 	@Override
 	public NonterminalNode hasNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
 		return slot.findNonterminalNode(IntKey2.from(leftExtent, rightExtent, f));

@@ -32,7 +32,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
@@ -43,12 +42,6 @@ import org.iguana.sppf.TerminalNode;
 import org.iguana.util.collections.Key;
 
 public interface SPPFLookup {
-
-	public TerminalNode getTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent);
-	
-	default TerminalNode getEpsilonNode(TerminalGrammarSlot slot, int inputIndex) {
-		return getTerminalNode(slot, inputIndex, inputIndex);
-	}
 	
 	default NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child) {
 		return getNonterminalNode(slot, child);
