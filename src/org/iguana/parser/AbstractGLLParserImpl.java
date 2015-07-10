@@ -28,6 +28,8 @@
 package org.iguana.parser;
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,7 +54,6 @@ import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSLookup;
 import org.iguana.parser.gss.lookup.GlobalHashGSSLookupImpl;
-import org.iguana.parser.lookup.DescriptorLookup;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
@@ -61,9 +62,9 @@ import org.iguana.sppf.TerminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
+import org.iguana.util.Configuration.LookupStrategy;
 import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.Configuration.LookupStrategy;
 import org.iguana.util.logging.LoggerWrapper;
 
 /**
@@ -81,8 +82,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	
 	protected final SPPFLookup sppfLookup;
 	
-	protected final DescriptorLookup descriptorLookup;
-
 	protected GSSNode cu;
 	
 	protected NonPackedNode cn = DummyNode.getInstance();
@@ -118,12 +117,14 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	protected int nonterminalNodesCount;
 
 	private final Configuration config;
+	
+	private Deque<Descriptor> descriptorsStack;
 
-	public AbstractGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptorLookup) {
+	public AbstractGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup) {
 		this.config = config;
 		this.gssLookup = gssLookup;
 		this.sppfLookup = sppfLookup;
-		this.descriptorLookup = descriptorLookup;
+		this.descriptorsStack = new ArrayDeque<>();
 	}
 	
 	@Override
@@ -222,8 +223,8 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		else 
 			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, cu, ci, DummyNode.getInstance(), env)));
 		
-		while(descriptorLookup.hasNextDescriptor()) {
-			Descriptor descriptor = descriptorLookup.nextDescriptor();
+		while(!descriptorsStack.isEmpty()) {
+			Descriptor descriptor = descriptorsStack.pop();
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
 			cn = descriptor.getSPPFNode();
@@ -283,24 +284,15 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	}
 	
 	public final void scheduleDescriptor(Descriptor descriptor) {
-		descriptorLookup.scheduleDescriptor(descriptor);
+		descriptorsStack.push(descriptor);
 		log.trace("Descriptor created: %s", descriptor);
 		descriptorsCount++;
 	}
-	
-	@Override
-	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
-		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode);
-    }
-	
+		
 	public SPPFLookup getSPPFLookup() {
 		return sppfLookup;
 	}
 	
-	public DescriptorLookup getDescriptorLookup() {
-		return descriptorLookup;
-	}
-
 	@Override
 	public Input getInput() {
 		return input;
@@ -309,6 +301,7 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 	private void resetParser(NonterminalGrammarSlot startSymbol) {
 		descriptorsCount = 0;
 		nonterminalNodesCount = 0;
+		descriptorsStack.clear();
 		gssLookup.reset();
 		sppfLookup.reset();
 		initParserState(startSymbol);
@@ -546,11 +539,6 @@ public abstract class AbstractGLLParserImpl implements GLLParser {
 		}
 		return gssNode;
 	}
-	
-	@Override
-	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
-		return descriptorLookup.addDescriptor(slot, gssNode, inputIndex, sppfNode, env);
-    }
 	
 	public abstract void createGSSEdge(BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, GSSNode source, Environment env);
 	

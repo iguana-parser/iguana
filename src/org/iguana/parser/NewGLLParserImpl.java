@@ -38,7 +38,6 @@ import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.NewGSSEdgeImpl;
 import org.iguana.parser.gss.lookup.GSSLookup;
-import org.iguana.parser.lookup.DescriptorLookup;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
@@ -52,8 +51,8 @@ import org.iguana.util.Configuration;
  */
 public class NewGLLParserImpl extends AbstractGLLParserImpl {
 		
-	public NewGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup, DescriptorLookup descriptor) {
-		super(config, gssLookup, sppfLookup, descriptor);
+	public NewGLLParserImpl(Configuration config, GSSLookup gssLookup, SPPFLookup sppfLookup) {
+		super(config, gssLookup, sppfLookup);
 	}
 	
 	@Override

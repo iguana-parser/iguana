@@ -46,8 +46,6 @@ public class Configuration {
 	
 	private final LookupStrategy sppfLookupStrategy;
 	
-	private final LookupStrategy descriptorLookupStrategy;
-	
 	private final MatcherType matcherType;
 	
 	private final int lookAheadCount;
@@ -58,7 +56,6 @@ public class Configuration {
 		this.descriptorLookupImpl = builder.descriptorLookupImpl;
 		this.gssLookupStrategy = builder.gssLookupStrategy;
 		this.sppfLookupStrategy = builder.sppfLookupStrategy;
-		this.descriptorLookupStrategy = builder.descriptorLookupStrategy;
 		this.lookAheadCount = builder.lookaheadCount;
 		this.matcherType = builder.matcherType;
 	}
@@ -81,10 +78,6 @@ public class Configuration {
 	
 	public LookupStrategy getSPPFLookupStrategy() {
 		return sppfLookupStrategy;
-	}
-	
-	public LookupStrategy getDescriptorLookupStrategy() {
-		return descriptorLookupStrategy;
 	}
 	
 	public int getLookAheadCount() {
@@ -123,7 +116,6 @@ public class Configuration {
 	public String toString() {
 		return "GSS Lookup Strategy: " + gssLookupStrategy + "\n" +
 			   "GSS Lookup Impl: " + gssLookupImpl + "\n" +
-			   "Descriptor Lookup Strategy: " + descriptorLookupStrategy + "\n" +
 			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" +
 			   "SPPF Lookup Strategy: " + sppfLookupStrategy + "\n" +
 			   "SPPF Lookup Impl: " + sppfLookupImpl;
@@ -136,7 +128,6 @@ public class Configuration {
 		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
 		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;
 		private LookupStrategy sppfLookupStrategy = LookupStrategy.DISTRIBUTED;
-		private LookupStrategy descriptorLookupStrategy = LookupStrategy.DISTRIBUTED;;
 		private final MatcherType matcherType = MatcherType.JAVA_REGEX;
 		private int lookaheadCount = 1;
 				
@@ -166,11 +157,6 @@ public class Configuration {
 		
 		public Builder setSPPFLookupStrategy(LookupStrategy sppfLookupStrategy) {
 			this.sppfLookupStrategy = sppfLookupStrategy;
-			return this;
-		}
-		
-		public Builder setDescriptorLookupStrategy(LookupStrategy descriptorLookupStrategy) {
-			this.descriptorLookupStrategy = descriptorLookupStrategy;
 			return this;
 		}
 		

@@ -97,8 +97,6 @@ public interface GLLParser {
 	
 	public NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
-	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode);
-	
 	public void recordParseError(GrammarSlot slot);
 	
 	public Input getInput();
@@ -141,8 +139,6 @@ public interface GLLParser {
 	public Environment getEmptyEnvironment();
 	
 	public GSSNode create(BodyGrammarSlot returnSlot, NonterminalGrammarSlot nonterminal, GSSNode gssNode, int i, NonPackedNode node, Expression[] arguments, Environment env);
-	
-	public boolean hasDescriptor(GrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env);
 	
 	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value);
 	

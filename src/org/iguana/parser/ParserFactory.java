@@ -31,9 +31,6 @@ import org.iguana.grammar.Grammar;
 import org.iguana.parser.gss.lookup.DistributedGSSLookupImpl;
 import org.iguana.parser.gss.lookup.GSSLookup;
 import org.iguana.parser.gss.lookup.GlobalHashGSSLookupImpl;
-import org.iguana.parser.lookup.DescriptorLookup;
-import org.iguana.parser.lookup.DistributedDescriptorLookupImpl;
-import org.iguana.parser.lookup.GlobalDescriptorLookupImpl;
 import org.iguana.sppf.lookup.DistributedSPPFLookupImpl;
 import org.iguana.sppf.lookup.GlobalSPPFLookupImpl;
 import org.iguana.sppf.lookup.SPPFLookup;
@@ -51,8 +48,7 @@ public class ParserFactory {
 	public static GLLParser getParser(Configuration config, Input input, Grammar grammar) {
 		return new NewGLLParserImpl(config,
 				getGSSLookup(config, input, grammar), 
-			    getSPPFLookup(config, input, grammar), 
-			    getDescriptorLookup(config, input, grammar));		
+			    getSPPFLookup(config, input, grammar));		
 	}
 	
 	private static GSSLookup getGSSLookup(Configuration config, Input input, Grammar grammar) {
@@ -68,15 +64,7 @@ public class ParserFactory {
 			return new DistributedSPPFLookupImpl(input);
 		} else {
 			return new GlobalSPPFLookupImpl(input, grammar);				
-		}		
-	}
-	
-	private static DescriptorLookup getDescriptorLookup(Configuration config, Input input, Grammar grammar) {
-		if (config.getDescriptorLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			return new DistributedDescriptorLookupImpl(input, grammar);			
-		} else {
-			return new GlobalDescriptorLookupImpl(input, grammar);
 		}
 	}
-
+	
 }

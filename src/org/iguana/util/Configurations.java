@@ -38,22 +38,18 @@ public class Configurations {
 	
 	public static final List<Configuration> all_configs = new ArrayList<>();
 	
-	static {
-		
-		for (LookupStrategy descriLookupStrategy : LookupStrategy.values()) {
-			for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
-				for (LookupImpl gssLookupImpl : LookupImpl.values()) {
-					for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
-						for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
-							all_configs.add(Configuration.builder().setDescriptorLookupStrategy(descriLookupStrategy)
-																  .setGSSLookupStrategy(gssLookupStrategy)
-																  .setGSSLookupImpl(gssLookupImpl)
-																  .setSPPFLookupStrategy(sppfLookupStrategy)
-																  .setSPPFLookupImpl(sppfLookupImpl).build());
-						}
+	static {		
+		for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
+			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
+				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
+					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
+						all_configs.add(Configuration.builder().setGSSLookupStrategy(gssLookupStrategy)
+															   .setGSSLookupImpl(gssLookupImpl)
+															   .setSPPFLookupStrategy(sppfLookupStrategy)
+															   .setSPPFLookupImpl(sppfLookupImpl).build());
 					}
 				}
-			}			
-		}
+			}
+		}			
 	}
 }
