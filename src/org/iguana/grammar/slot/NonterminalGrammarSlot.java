@@ -28,9 +28,7 @@
 package org.iguana.grammar.slot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -47,7 +45,6 @@ import org.iguana.util.collections.Key;
 
 /**
  * 
- * 
  * @author Ali Afroozeh
  *
  */
@@ -59,9 +56,8 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final GSSNodeLookup nodeLookup;
 
-	private Map<Key, NonterminalNode> nonterminalNodes;
-
 	private LookAheadTest lookAheadTest;
+	
 	private FollowTest followTest;
 
 	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup) {
@@ -69,7 +65,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
-		this.nonterminalNodes = new HashMap<>();
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {
@@ -123,7 +118,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode getGSSNode(int inputIndex) {
-		return nodeLookup.getOrElseCreate(this, inputIndex);
+		return nodeLookup.create(this, inputIndex);
 	}
 	
 	@Override
@@ -142,14 +137,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public NonterminalNode getNonterminalNode(Key key, Supplier<NonterminalNode> s, Consumer<NonterminalNode> c) {
-		return nonterminalNodes.computeIfAbsent(key, k -> { NonterminalNode val = s.get();
-															c.accept(val);
-															return val; 
-														  });
+		throw new RuntimeException("Will be removed soon!");
 	}
 	
 	public NonterminalNode findNonterminalNode(Key key) {
-		return nonterminalNodes.get(key);
+		throw new RuntimeException("Will be removed soon!");
 	}
 	
 	public Iterable<GSSNode> getGSSNodes() {
@@ -159,7 +151,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	@Override
 	public void reset(Input input) {
 		nodeLookup.reset(input);
-		nonterminalNodes = new HashMap<>();
 	}
 	
 	public void initGSSLookup() {

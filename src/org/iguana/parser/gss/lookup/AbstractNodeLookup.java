@@ -27,7 +27,6 @@
 
 package org.iguana.parser.gss.lookup;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.iguana.grammar.slot.GrammarSlot;
@@ -53,13 +52,14 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	@Override
 	public <T> GSSNode getOrElseCreate(GrammarSlot slot, int i, GSSNodeData<T> data) {
-		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
-		GSSNode v;
-		if ((v = map.get(elem)) == null) {
-			v = new org.iguana.datadependent.gss.GSSNode<T>(slot, i, data);
-			map.put(elem, v);
-		}
-		return v;
+		return map.computeIfAbsent(new Tuple<>(i, data), t -> new org.iguana.datadependent.gss.GSSNode<T>(slot, i, data));		
+//		Tuple<Integer, GSSNodeData<?>> elem = new Tuple<>(i, data);
+//		GSSNode v;
+//		if ((v = map.get(elem)) == null) {
+//			v = new org.iguana.datadependent.gss.GSSNode<T>(slot, i, data);
+//			map.put(elem, v);
+//		}
+//		return v;
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	@Override
 	public GSSNodeLookup init() {
-		map = new HashMap<>();
+//		map = new HashMap<>();
 		return this;
 	}
 

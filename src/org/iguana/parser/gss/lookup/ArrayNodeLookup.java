@@ -44,13 +44,14 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 	}
 	
 	@Override
-	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
-		GSSNode v;
-		if ((v = gssNodes[i]) == null) {
-			v = new GSSNode(slot, i);
-			gssNodes[i] = v;
-		}
-		return v;
+	public GSSNode create(GrammarSlot slot, int i) {
+		return  gssNodes[i] = new GSSNode(slot, i);
+//		GSSNode v;
+//		if ((v = gssNodes[i]) == null) {
+//			v = new GSSNode(slot, i);
+//			gssNodes[i] = v;
+//		}
+//		return v;
 	}
 
 	@Override

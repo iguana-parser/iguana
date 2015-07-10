@@ -57,7 +57,6 @@ public interface SPPFLookup {
 	default NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child) {
 		return hasNonterminalNode(slot, child);
 	}
-	
 	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		if (slot.isFirst())
 			return rightChild;
@@ -273,15 +272,15 @@ public interface SPPFLookup {
 	public void reset();
 
 	default IntermediateNode createIntermediateNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
-		return new IntermediateNode(slot, leftExtent, rightExtent, (x, y) -> true);
+		return new IntermediateNode(slot, leftExtent, rightExtent);
 	}
 	
 	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		return new NonterminalNode(slot, leftExtent, rightExtent, (x, y) -> true);
+		return new NonterminalNode(slot, leftExtent, rightExtent);
 	}
 	
 	default NonterminalNode createNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, Object value) {
-		return new NonterminalNode(slot, leftExtent, rightExtent, (x, y) -> true, value);
+		return new NonterminalNode(slot, leftExtent, rightExtent);
 	}
 	
 	@FunctionalInterface

@@ -27,7 +27,7 @@
 
 package org.iguana.parser.ambiguous;
 
-import static org.iguana.util.Configurations.*;
+import static org.iguana.util.Configurations.all_configs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,7 +58,7 @@ public class Gamma2TestLargeInput extends AbstractParserTest {
 		List<Object> parameters = Stream.iterate(1, n -> ++n)
 				                        .limit(runCount)
 				                        .flatMap(
-             i -> newConfigs.stream().map(c -> new Object[] {
+             i -> all_configs.stream().map(c -> new Object[] {
 	    		getInput(i * 50), 
 	    		getGrammar(), 
 	    		getStartSymbol(),

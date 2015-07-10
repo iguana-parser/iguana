@@ -68,47 +68,26 @@ public class Gamma2Test extends AbstractParserTest {
 
 	@Parameters
     public static Collection<Object[]> data() {
-		 List<Object[]> parameters = newConfigs.stream().map(c -> new Object[] {
+		 List<Object[]> parameters = all_configs.stream().map(c -> new Object[] {
 	    		getInput1(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
 	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getNewParseResult1
 	    	}).collect(Collectors.toList());
-		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
-	    		getInput1(), 
-	    		getGrammar(), 
-	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getOriginalParseResult1
-	    	}).collect(Collectors.toList()));
-		 parameters.addAll(newConfigs.stream().map(c -> new Object[] {
+		 parameters.addAll(all_configs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
 	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getNewParseResult2
 	    	}).collect(Collectors.toList()));
-		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
-	    		getInput2(), 
-	    		getGrammar(), 
-	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getOriginalParseResult2
-	    	}).collect(Collectors.toList()));
-		 parameters.addAll(newConfigs.stream().map(c -> new Object[] {
+		 parameters.addAll(all_configs.stream().map(c -> new Object[] {
 		    		getInput3(), 
 		    		getGrammar(), 
 		    		getStartSymbol(),
 		    		ParserFactory.getParser(c, getInput3(), getGrammar()),
 		    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getNewParseResult3
-		    	}).collect(Collectors.toList()));
-			 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
-		    		getInput3(), 
-		    		getGrammar(), 
-		    		getStartSymbol(),
-		    		ParserFactory.getParser(c, getInput3(), getGrammar()),
-		    		(Function<GrammarGraph, ParseResult>) Gamma2Test::getOriginalParseResult3
 		    	}).collect(Collectors.toList()));
 		 return parameters;
     }
@@ -151,19 +130,6 @@ public class Gamma2Test extends AbstractParserTest {
 		return new ParseSuccess(expectedSPPF1(graph), statistics, getInput1());
 	}
 	
-	private static ParseSuccess getOriginalParseResult1(GrammarGraph graph) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(118)
-				.setGSSNodesCount(17)
-				.setGSSEdgesCount(88)
-				.setNonterminalNodesCount(6)
-				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(3)
-				.setPackedNodesCount(12)
-				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(expectedSPPF1(graph), statistics, getInput1());
-	}
-	
 	private static ParseSuccess getNewParseResult2(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(50)
@@ -177,37 +143,11 @@ public class Gamma2Test extends AbstractParserTest {
 		return new ParseSuccess(expectedSPPF2(graph), statistics, getInput2());
 	}
 	
-	private static ParseSuccess getOriginalParseResult2(GrammarGraph graph) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(198)
-				.setGSSNodesCount(22)
-				.setGSSEdgesCount(144)
-				.setNonterminalNodesCount(10)
-				.setTerminalNodesCount(4)
-				.setIntermediateNodesCount(6)
-				.setPackedNodesCount(28)
-				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(expectedSPPF2(graph), statistics, getInput2());
-	}
-	
 	private static ParseSuccess getNewParseResult3(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(74)
 				.setGSSNodesCount(6)
 				.setGSSEdgesCount(52)
-				.setNonterminalNodesCount(15)
-				.setTerminalNodesCount(5)
-				.setIntermediateNodesCount(10)
-				.setPackedNodesCount(55)
-				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(expectedSPPF3(graph), statistics, getInput3());
-	}
-	
-	private static ParseSuccess getOriginalParseResult3(GrammarGraph graph) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(303)
-				.setGSSNodesCount(27)
-				.setGSSEdgesCount(215)
 				.setNonterminalNodesCount(15)
 				.setTerminalNodesCount(5)
 				.setIntermediateNodesCount(10)

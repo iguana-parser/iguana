@@ -36,8 +36,6 @@ public class Configuration {
 	
 	public static final Configuration DEFAULT = builder().build();
 	
-	private final GSSType gssType;
-	
 	private final LookupImpl gssLookupImpl;
 	
 	private final LookupImpl sppfLookupImpl;
@@ -55,7 +53,6 @@ public class Configuration {
 	private final int lookAheadCount;
 	
 	private Configuration(Builder builder) {
-		this.gssType = builder.gssType;
 		this.gssLookupImpl = builder.gssLookupImpl;
 		this.sppfLookupImpl = builder.sppfLookupImpl;
 		this.descriptorLookupImpl = builder.descriptorLookupImpl;
@@ -65,11 +62,7 @@ public class Configuration {
 		this.lookAheadCount = builder.lookaheadCount;
 		this.matcherType = builder.matcherType;
 	}
-	
-	public GSSType getGSSType() {
-		return gssType;
-	}
-	
+		
 	public LookupImpl getGSSLookupImpl() {
 		return gssLookupImpl;
 	}
@@ -128,8 +121,7 @@ public class Configuration {
 	
 	@Override
 	public String toString() {
-		return "GSS Type: " + gssType + "\n" +
-			   "GSS Lookup Strategy: " + gssLookupStrategy + "\n" +
+		return "GSS Lookup Strategy: " + gssLookupStrategy + "\n" +
 			   "GSS Lookup Impl: " + gssLookupImpl + "\n" +
 			   "Descriptor Lookup Strategy: " + descriptorLookupStrategy + "\n" +
 			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" +
@@ -139,8 +131,7 @@ public class Configuration {
 	
 	public static class Builder {
 		
-		private GSSType gssType = GSSType.NEW;
-		private LookupImpl gssLookupImpl = LookupImpl.ARRAY;
+		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
 		private LookupImpl sppfLookupImpl = LookupImpl.HASH_MAP;
 		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
 		private LookupStrategy gssLookupStrategy = LookupStrategy.DISTRIBUTED;
@@ -151,11 +142,6 @@ public class Configuration {
 				
 		public Configuration build() {
 			return new Configuration(this);
-		}
-		
-		public Builder setGSSType(GSSType gssType) {
-			this.gssType = gssType;
-			return this;
 		}
 		
 		public Builder setGSSLookupImpl(LookupImpl gssLookupImpl) {

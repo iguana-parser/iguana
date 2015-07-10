@@ -35,63 +35,72 @@ import org.iguana.grammar.slot.GrammarSlot;
 
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
-	protected List<PackedNode> children;
-	private PackedNodeSet set;
+	private PackedNode first;
+	protected List<PackedNode> rest;
 	
-	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
+	public NonterminalOrIntermediateNode(GrammarSlot slot, int leftExtent, int rightExtent) {
 		super(slot, leftExtent, rightExtent);
-		this.set = set;
-		children = new ArrayList<>();
 	}
 
 	public void addChild(PackedNode node) {
-		//TODO: change it! PackedNodes cannot be added via this method at parse time.
-		children.add(node);
+		if (first == null) {
+			first = node;
+		} else if (rest == null) {
+			rest = new ArrayList<>();
+			rest.add(node);
+		} else {
+			rest.add(node);
+		}
 	}
 	
 	public void removeChild(SPPFNode node) {
-		children.remove(node);
+		rest.remove(node);
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
-		if (set.addPackedNode(packedNode.getGrammarSlot(), leftChild.getRightExtent())) {
-			children.add(packedNode);
-			packedNode.addChild(leftChild);
-			packedNode.addChild(rightChild);
-			return true;
+		addPackedNode(packedNode);
+		packedNode.addChild(leftChild);
+		packedNode.addChild(rightChild);
+		return true;
+	}
+
+	private void addPackedNode(PackedNode packedNode) {
+		if (first == null) {
+			first = packedNode;				
+		} else {
+			rest = new ArrayList<>();
+			rest.add(packedNode);			
 		}
-		return false;
 	}
 	
 	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
-		if (set.addPackedNode(packedNode.getGrammarSlot(), child.getRightExtent())) {
-			children.add(packedNode);
-			packedNode.addChild(child);
-			return true;
-		}
-		return false;	
+		addPackedNode(packedNode);
+		packedNode.addChild(child);
+		return true;
 	}
 	
 	@Override
 	public PackedNode getChildAt(int index) {
-		return index < children.size() ? children.get(index) : null;
+		if (index ==  0)
+			return first;
+		return index < rest.size() ? rest.get(index) : null;
 	}
 	
 	@Override
 	public List<PackedNode> getChildren() {
+		List<PackedNode> children = new ArrayList<>();
+		if (first != null) children.add(first);
+		if (rest != null) children.addAll(rest);
 		return children;
 	}
 	
 	@Override
 	public int childrenCount() {
-		return children.size();
+		return (first == null ? 0 : 1) + (rest == null ? 0 : rest.size());
 	}
 	
 	public boolean isAmbiguous() {
-		return children.size() > 1;
+		return rest != null;
 	}
 	
-	public int getCountPackedNodes() {
-		return children.size();
-	}
 }

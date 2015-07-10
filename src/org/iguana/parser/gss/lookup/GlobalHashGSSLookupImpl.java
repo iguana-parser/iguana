@@ -34,7 +34,6 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.sppf.NonPackedNode;
 
 /**
  * 
@@ -65,11 +64,6 @@ public class GlobalHashGSSLookupImpl extends AbstractGSSLookup {
 
 	public Iterable<GSSNode> getGSSNodes() {
 		return gssNodes.values();
-	}
-
-	@Override
-	public boolean addToPoppedElements(GSSNode gssNode, NonPackedNode sppfNode) {
-		return gssNode.addToPoppedElements(sppfNode);
 	}
 
 	@Override

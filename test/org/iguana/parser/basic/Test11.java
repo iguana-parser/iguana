@@ -77,20 +77,13 @@ public class Test11 extends AbstractParserTest {
 	
 	@Parameters
     public static Collection<Object[]> data() {
-		 List<Object[]> parameters = newConfigs.stream().map(c -> new Object[] {
+		 List<Object[]> parameters = all_configs.stream().map(c -> new Object[] {
 	    		getInput(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput(), getGrammar()),
 	    		(Function<GrammarGraph, ParseResult>) Test11::getNewParseResult
 	    	}).collect(Collectors.toList());
-		 parameters.addAll(originalConfigs.stream().map(c -> new Object[] {
-		    		getInput(), 
-		    		getGrammar(), 
-		    		getStartSymbol(),
-		    		ParserFactory.getParser(c, getInput(), getGrammar()),
-		    		(Function<GrammarGraph, ParseResult>) Test11::getOriginalParseResult
-		    	}).collect(Collectors.toList()));
 		 return parameters;
     }
     
@@ -127,19 +120,6 @@ public class Test11 extends AbstractParserTest {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(9)
 				.setGSSNodesCount(3)
-				.setGSSEdgesCount(3)
-				.setNonterminalNodesCount(4)
-				.setTerminalNodesCount(4)
-				.setIntermediateNodesCount(3)
-				.setPackedNodesCount(8)
-				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF(registry), statistics, getInput());
-	}
-	
-	private static ParseSuccess getOriginalParseResult(GrammarGraph registry) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(11)
-				.setGSSNodesCount(4)
 				.setGSSEdgesCount(3)
 				.setNonterminalNodesCount(4)
 				.setTerminalNodesCount(4)

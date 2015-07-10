@@ -45,7 +45,7 @@ public class DummyNodeLookup implements GSSNodeLookup {
 	private DummyNodeLookup() {}
 
 	@Override
-	public GSSNode getOrElseCreate(GrammarSlot slot, int i) {
+	public GSSNode create(GrammarSlot slot, int i) {
 		return null;
 	}
 

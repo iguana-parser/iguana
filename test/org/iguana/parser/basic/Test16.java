@@ -73,7 +73,7 @@ public class Test16 extends AbstractParserTest {
 
 	@Parameters
     public static Collection<Object[]> data() {
-		return originalConfigs.stream().map(c -> new Object[] {
+		return all_configs.stream().map(c -> new Object[] {
 	    		getInput(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),

@@ -34,7 +34,6 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.SemanticAction;
 
@@ -52,7 +51,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
-			parser.pop(u, i, parser.getNonterminalNode(this, epsilonNode));
+			parser.pop(u, i, u.addToPoppedElements(i, this, epsilonNode));
 		}
 	}
 	
@@ -70,16 +69,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = parser.getEpsilonNode(epsilonSlot, i);
-			
-			NonterminalNode nonterminalNode;
-			if (u instanceof org.iguana.datadependent.gss.GSSNode<?>) {
-				org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) u;
-				// TODO: support for return values
-				nonterminalNode = parser.getNonterminalNode(this, epsilonNode, gssNode.getData(), null);
-			} else 
-				nonterminalNode = parser.getNonterminalNode(this, epsilonNode);
-			
-			parser.pop(u, i, nonterminalNode);
+			parser.pop(u, i, u.addToPoppedElements(i, this, epsilonNode));
 		}
 		
 	}

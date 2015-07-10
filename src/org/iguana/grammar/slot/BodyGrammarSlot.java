@@ -100,7 +100,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	@Override
 	public GSSNode getGSSNode(int inputIndex) {
-		return nodeLookup.getOrElseCreate(this, inputIndex);
+		return nodeLookup.create(this, inputIndex);
 	}
 	
 	@Override

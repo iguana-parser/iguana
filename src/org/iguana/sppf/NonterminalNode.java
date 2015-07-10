@@ -41,12 +41,12 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
 	private final Object value;
 	
-	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set) {
-		this(slot, leftExtent, rightExtent, set, null);
+	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent) {
+		this(slot, leftExtent, rightExtent, null);
 	}
 	
-	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent, PackedNodeSet set, Object value) {
-		super(slot, leftExtent, rightExtent, set);
+	public NonterminalNode(GrammarSlot slot, int leftExtent, int rightExtent, Object value) {
+		super(slot, leftExtent, rightExtent);
 		this.value = value;
 	}
 	

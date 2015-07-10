@@ -46,7 +46,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private RegularExpression regex;
 	private Matcher matcher;
-	private Map<Key, TerminalNode> terminalNodes;
+	private Map<Integer, TerminalNode> terminalNodes;
 
 	public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory) {
 		super(id, Collections.emptyList());
@@ -82,9 +82,9 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	public String toString() {
 		return regex.toString();
 	}
-	
-	public TerminalNode getTerminalNode(Key key, Supplier<TerminalNode> s, Consumer<TerminalNode> c) {
-		return terminalNodes.computeIfAbsent(key, k -> { TerminalNode val = s.get();
+
+	public TerminalNode getTerminalNode(int leftExtent, Supplier<TerminalNode> s, Consumer<TerminalNode> c) {
+		return terminalNodes.computeIfAbsent(leftExtent, k -> { TerminalNode val = s.get();
 														 c.accept(val);
 														 return val; 
 													   });

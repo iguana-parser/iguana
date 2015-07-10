@@ -75,7 +75,7 @@ public class Test12 extends AbstractParserTest {
 	@Parameters
     public static Collection<Object[]> data() {
     	List<Object[]> parameters = 
-    		newConfigs.stream().map(c -> new Object[] {
+    		all_configs.stream().map(c -> new Object[] {
 	    		getInput1(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
@@ -83,28 +83,12 @@ public class Test12 extends AbstractParserTest {
 	    		(Function<GrammarGraph, ParseResult>) Test12::getParseResult1
 	    	}).collect(Collectors.toList());
     	parameters.addAll(    		
-    		newConfigs.stream().map(c -> new Object[] {
+    		all_configs.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
 	    		(Function<GrammarGraph, ParseResult>) Test12::getParseResult2
-	    	}).collect(Collectors.toList()));
-    	parameters.addAll(    		
-        	originalConfigs.stream().map(c -> new Object[] {
-    	    	getInput1(), 
-    	    	getGrammar(), 
-    	    	getStartSymbol(),
-    	    	ParserFactory.getParser(c, getInput2(), getGrammar()),
-    	    	(Function<GrammarGraph, ParseResult>) Test12::getParseResult3
-    	    	}).collect(Collectors.toList()));
-    	parameters.addAll(    		
-    		originalConfigs.stream().map(c -> new Object[] {
-	    		getInput2(), 
-	    		getGrammar(), 
-	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Test12::getParseResult4
 	    	}).collect(Collectors.toList()));
     	return parameters;
     }
@@ -165,33 +149,7 @@ public class Test12 extends AbstractParserTest {
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF2(registry), statistics, getInput2());
 	}
-	
-	private static ParseSuccess getParseResult3(GrammarGraph registry) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(31)
-				.setGSSNodesCount(5)
-				.setGSSEdgesCount(13)
-				.setNonterminalNodesCount(3)
-				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(3)
-				.setPackedNodesCount(10)
-				.setAmbiguousNodesCount(4).build();
-		return new ParseSuccess(expectedSPPF1(registry), statistics, getInput2());
-	}
-	
-	private static ParseSuccess getParseResult4(GrammarGraph registry) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(15)
-				.setGSSNodesCount(3)
-				.setGSSEdgesCount(6)
-				.setNonterminalNodesCount(1)
-				.setTerminalNodesCount(1)
-				.setIntermediateNodesCount(1)
-				.setPackedNodesCount(3)
-				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF2(registry), statistics, getInput2());
-	}
-	
+		
 	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
 		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
 		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 1);
