@@ -174,7 +174,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public <E extends Symbol> Symbol visit(Alt<E> symbol) {	
-			List<? extends Symbol> symbols = symbol.getSymbols();
+			List<? extends Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
@@ -187,8 +187,6 @@ public class EBNFToBNF implements GrammarTransformation {
 				parameters = freeVars.stream().toArray(String[]::new);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
-			
-			symbols = symbols.stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName()) 
 					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
@@ -207,7 +205,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public Symbol visit(Opt symbol) {
-			Symbol in = symbol.getSymbol();
+			Symbol in = symbol.getSymbol().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -225,7 +223,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
 									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(in.accept(this)).setLayout(layout).setLayoutStrategy(strategy)
+			addedRules.add(Rule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			addedRules.add(Rule.withHead(newNt)
@@ -248,7 +246,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public Symbol visit(Plus symbol) {
-			Symbol S = symbol.getSymbol();
+			Symbol S = symbol.getSymbol().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -267,8 +265,6 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Nonterminal newNt = parameters == null? Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "+")
 									: Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).build();
-			
-			S = S.accept(this);
 			
 			addedRules.add(Rule.withHead(newNt)
 									.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
@@ -289,7 +285,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
-			List<? extends Symbol> symbols = symbol.getSymbols();
+			List<Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
@@ -303,12 +299,10 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			List<Symbol> syms = symbols.stream().map(x -> x.accept(this)).collect(Collectors.toList());
-			
 			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
 									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(syms).setLayout(layout).setLayoutStrategy(strategy)
+			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)
 								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
@@ -323,7 +317,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public Symbol visit(Star symbol) {
-			Symbol S = symbol.getSymbol();
+			Symbol S = Plus.builder(symbol.getSymbol()).addSeparators(symbol.getSeparators()).build().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -341,7 +335,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Nonterminal newNt = parameters != null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "*").addParameters(parameters).build()
 						              : Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "*");
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(Plus.builder(S).addSeparators(symbol.getSeparators()).build().accept(this))
+			addedRules.add(Rule.withHead(newNt).addSymbols(S)
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
@@ -361,7 +355,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		public Symbol visit(IfThen symbol) {
 			
 			Expression cond = symbol.getExpression();
-			Symbol thenPart = symbol.getThenPart();
+			Symbol thenPart = symbol.getThenPart().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -395,7 +389,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Nonterminal newNt = Nonterminal.builder(thenPart.getName() + "_IF").addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
@@ -416,8 +410,8 @@ public class EBNFToBNF implements GrammarTransformation {
 		public Symbol visit(IfThenElse symbol) {
 			
 			Expression cond = symbol.getExpression();
-			Symbol thenPart = symbol.getThenPart();
-			Symbol elsePart = symbol.getElsePart();
+			Symbol thenPart = symbol.getThenPart().accept(this);
+			Symbol elsePart = symbol.getElsePart().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -453,12 +447,12 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Nonterminal newNt = Nonterminal.builder("_" + thenPart.getName() + elsePart.getName() + "_IF_THEN_ELSE").addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(elsePart.accept(this).copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
+			addedRules.add(Rule.withHead(newNt).addSymbol(elsePart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());

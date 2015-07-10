@@ -40,7 +40,7 @@ Grammar.builder()
 .build();
 
          grammar = new EBNFToBNF().transform(grammar);
-//         System.out.println(grammar);
+         System.out.println(grammar);
 
          Input input = Input.fromString("ca");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);

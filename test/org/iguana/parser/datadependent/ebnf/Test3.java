@@ -87,6 +87,7 @@ public class Test3 {
 		System.out.println(grammar);
 		
 		grammar = new EBNFToBNF().transform(grammar);
+		System.out.println(grammar);
 		
 		Input input = Input.fromString("abbb");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);

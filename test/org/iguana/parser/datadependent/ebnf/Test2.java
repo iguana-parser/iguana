@@ -99,6 +99,7 @@ public class Test2 {
 		System.out.println(grammar);
 		
 		grammar = new EBNFToBNF().transform(grammar);
+		System.out.println(grammar);
 		
 		Input input = Input.fromString("acdbcd");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
