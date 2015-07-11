@@ -30,7 +30,6 @@ package org.iguana.parser.gss.lookup;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.util.Input;
@@ -54,12 +53,10 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	@Override
 	public <T> void get(int i, GSSNodeData<T> data, GSSNodeCreator creator) {
+		if (map.containsKey(new Tuple<>(i, data))) {
+			System.out.println();
+		}
 		map.compute(new Tuple<>(i, data), (k, v) -> creator.create(v));
-	}
-	
-	@Override
-	public <T> GSSNode get(NonterminalGrammarSlot slot, int i, GSSNodeData<T> data) {
-		return map.computeIfAbsent(new Tuple<>(i, data), k -> new org.iguana.datadependent.gss.GSSNode<>(slot, i, data));
 	}
 	
 	@Override
