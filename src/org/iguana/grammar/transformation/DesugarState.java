@@ -345,8 +345,10 @@ public class DesugarState implements GrammarTransformation {
 					else state.add("_");
 				}
 				
-				builder.setState(state);
-				changed = true;
+				if (!state.isEmpty()) {
+					builder.setState(state);
+					changed = true;
+				}
 			}
 			
 			return changed? builder.build() : symbol;
