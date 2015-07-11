@@ -1,5 +1,6 @@
 package org.iguana.traversal;
 
+import org.iguana.grammar.exception.UnexpectedSymbol;
 import org.iguana.grammar.symbol.Align;
 import org.iguana.grammar.symbol.Block;
 import org.iguana.grammar.symbol.Character;
@@ -45,26 +46,26 @@ public interface RegularExpressionVisitor<T> extends ISymbolVisitor<T> {
 	
 	public <E extends Symbol> T visit(Sequence<E> symbol);
 
-	default T visit(Align symbol) { throw new RuntimeException(); }
+	default T visit(Align symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Block symbol) { throw new RuntimeException(); }
+	default T visit(Block symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Code symbol) { throw new RuntimeException(); }
+	default T visit(Code symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Conditional symbol) { throw new RuntimeException(); }
+	default T visit(Conditional symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(IfThen symbol) { throw new RuntimeException(); }
+	default T visit(IfThen symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(IfThenElse symbol) { throw new RuntimeException(); }
+	default T visit(IfThenElse symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Ignore symbol) { throw new RuntimeException(); }
+	default T visit(Ignore symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Nonterminal symbol) { throw new RuntimeException(); }
+	default T visit(Nonterminal symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Offside symbol) { throw new RuntimeException(); }
+	default T visit(Offside symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(While symbol) { throw new RuntimeException(); }
+	default T visit(While symbol) { throw new UnexpectedSymbol(symbol); }
 	
-	default T visit(Return symbol) { throw new RuntimeException(); }
+	default T visit(Return symbol) { throw new UnexpectedSymbol(symbol); }
 	
 }

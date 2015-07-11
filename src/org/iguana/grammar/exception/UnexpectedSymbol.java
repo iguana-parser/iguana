@@ -33,6 +33,11 @@ public class UnexpectedSymbol extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
+	
+	public UnexpectedSymbol(Symbol symbol) {
+		super("Unexpected symbol " + symbol);
+	}
+	
 	public UnexpectedSymbol(Symbol symbol, String phase) {
 		super(String.format("Unexpected symbol %s has been encountered in %s. This symbol must be desugared prior to this phase.", symbol, phase));
 	}
