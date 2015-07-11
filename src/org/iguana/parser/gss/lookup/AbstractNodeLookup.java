@@ -53,9 +53,6 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	
 	@Override
 	public <T> void get(int i, GSSNodeData<T> data, GSSNodeCreator creator) {
-		if (map.containsKey(new Tuple<>(i, data))) {
-			System.out.println();
-		}
 		map.compute(new Tuple<>(i, data), (k, v) -> creator.create(v));
 	}
 	
