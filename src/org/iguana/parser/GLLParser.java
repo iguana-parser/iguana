@@ -29,6 +29,7 @@ package org.iguana.parser;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -42,11 +43,15 @@ import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalOrIntermediateNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 
@@ -146,6 +151,21 @@ public interface GLLParser {
 
 	public GrammarGraph getGrammarGraph();
 
-	void scheduleDescriptor(Descriptor descriptor);
+	public void log(Supplier<String> messageSupplier);
 	
+	public void scheduleDescriptor(Descriptor descriptor);
+	
+	public void terminalNodeAdded(TerminalNode node);
+	
+	public void nonterminalNodeAdded(NonterminalNode node);
+	
+	public void intermedaiteNodeAdded(IntermediateNode node);
+	
+	public void packedNodeAdded(PackedNode node);
+	
+	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
+	
+	public void gssNodeAdded(GSSNode node);
+	
+	public void gssEdgeAdded(GSSEdge edge);
 }

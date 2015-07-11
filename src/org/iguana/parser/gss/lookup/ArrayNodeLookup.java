@@ -30,6 +30,7 @@ package org.iguana.parser.gss.lookup;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Input;
 
@@ -55,6 +56,17 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 	@Override
 	public void get(int i, GSSNodeCreator creator) {
 		gssNodes[i] = creator.create(gssNodes[i]);
+	}
+
+	@Override
+	public GSSNode get(NonterminalGrammarSlot slot, int i) {
+		GSSNode node = gssNodes[i];
+		if (node == null) {
+			node = new GSSNode(slot, i);
+			gssNodes[i] = node;
+			return node;
+		} 
+		return node;
 	}
 
 }

@@ -167,6 +167,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		throw new RuntimeException("Will be removed soon!");
 	}
 	
+	public GSSNode getGSSNode(int i) {
+		return nodeLookup.get(this, i);
+	}
+	
 	public Iterable<GSSNode> getGSSNodes() {
 		return nodeLookup.getNodes();
 	}

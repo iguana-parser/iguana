@@ -31,6 +31,7 @@ import java.util.HashMap;
 //import java.util.HashMap;
 import java.util.Map;
 
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Input;
 //import org.iguana.util.collections.IntHashMap;
@@ -55,6 +56,11 @@ public class HashMapNodeLookup extends AbstractNodeLookup {
 	@Override
 	public Iterable<GSSNode> getNodes() {
 		return map.values();
+	}
+
+	@Override
+	public GSSNode get(NonterminalGrammarSlot slot, int i) {
+		return map.computeIfAbsent(i, k -> new GSSNode(slot, i));
 	}
 
 }

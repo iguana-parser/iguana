@@ -29,10 +29,8 @@ package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.sppf.lookup.DistributedSPPFLookupImpl;
-import org.iguana.sppf.lookup.GlobalSPPFLookupImpl;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.Configuration;
-import org.iguana.util.Configuration.LookupStrategy;
 import org.iguana.util.Input;
 
 /**
@@ -47,11 +45,7 @@ public class ParserFactory {
 	}
 		
 	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
-		if (config.getSPPFLookupStrategy() == LookupStrategy.DISTRIBUTED) {
-			return new DistributedSPPFLookupImpl(input);
-		} else {
-			return new GlobalSPPFLookupImpl(input, grammar);				
-		}
+		return new DistributedSPPFLookupImpl(input);
 	}
 	
 }

@@ -31,25 +31,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iguana.util.Configuration.LookupImpl;
-import org.iguana.util.Configuration.LookupStrategy;
-
 
 public class Configurations {
-	
+
 	public static final List<Configuration> all_configs = new ArrayList<>();
-	
-	static {		
-		for (LookupStrategy gssLookupStrategy : LookupStrategy.values()) {
-			for (LookupImpl gssLookupImpl : LookupImpl.values()) {
-				for (LookupStrategy sppfLookupStrategy : LookupStrategy.values()) {
-					for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
-						all_configs.add(Configuration.builder().setGSSLookupStrategy(gssLookupStrategy)
-															   .setGSSLookupImpl(gssLookupImpl)
-															   .setSPPFLookupStrategy(sppfLookupStrategy)
-															   .setSPPFLookupImpl(sppfLookupImpl).build());
-					}
-				}
+
+	static {
+		for (LookupImpl gssLookupImpl : LookupImpl.values()) {
+			for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
+				all_configs.add(Configuration.builder().setGSSLookupImpl(gssLookupImpl)
+						.setSPPFLookupImpl(sppfLookupImpl).build());
 			}
-		}			
+		}
 	}
 }

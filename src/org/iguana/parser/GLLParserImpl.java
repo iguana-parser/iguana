@@ -31,6 +31,7 @@ package org.iguana.parser;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -55,6 +56,9 @@ import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalOrIntermediateNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
@@ -142,7 +146,7 @@ public class GLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
 		}
 		
-		startGSSNode = new GSSNode(startSymbol, 0);
+		startGSSNode = startSymbol.getGSSNode(0);
 		
 		grammarGraph.reset(input);
 		resetParser(startSymbol);
@@ -479,5 +483,52 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public GrammarGraph getGrammarGraph() {
 		return grammarGraph;
+	}
+
+	@Override
+	public void log(Supplier<String> messageSupplier) {
+		
+	}
+
+	@Override
+	public void terminalNodeAdded(TerminalNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void nonterminalNodeAdded(NonterminalNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void intermedaiteNodeAdded(IntermediateNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void packedNodeAdded(PackedNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gssNodeAdded(GSSNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gssEdgeAdded(GSSEdge edge) {
+		// TODO Auto-generated method stub
+		
 	}
 }
