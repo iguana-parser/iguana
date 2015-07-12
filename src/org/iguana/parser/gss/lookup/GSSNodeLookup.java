@@ -54,6 +54,8 @@ public interface GSSNodeLookup {
 	 */
 	public <T> void get(int i, GSSNodeData<T> data, GSSNodeCreator creator);
 	
+	public <T> GSSNode get(NonterminalGrammarSlot slot, int i, GSSNodeData<T> data);
+	
 	@FunctionalInterface
 	public static interface GSSNodeCreator {
 		public GSSNode create(GSSNode node);

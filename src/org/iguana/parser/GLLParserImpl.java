@@ -146,35 +146,36 @@ public class GLLParserImpl implements GLLParser {
 			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
 		}
 		
-		startGSSNode = startSymbol.getGSSNode(0);
+		NonterminalNode root;
+		
+		Environment env = null;
+		
+		if (!global && !map.isEmpty()) {
+			Object[] arguments = new Object[map.size()];
+			
+			int i = 0;
+			for (String parameter : nonterminal.getParameters())
+				arguments[i++] = map.get(parameter);
+			
+			startGSSNode = startSymbol.getGSSNode(0, new GSSNodeData<>(arguments));
+			env = getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
+		} else {
+			startGSSNode = startSymbol.getGSSNode(0);
+		}
 		
 		grammarGraph.reset(input);
 		resetParser(startSymbol);
-	
+		
 		log.info("Parsing %s:", input.getURI());
 
 		long start = System.nanoTime();
 		long startUserTime = BenchmarkUtil.getUserTime();
 		long startSystemTime = BenchmarkUtil.getSystemTime();
 		
-		NonterminalNode root;
-		
-		Environment env = null;
-		
-		if (!global && !map.isEmpty()) {
-			Object[] values = new Object[map.size()];
-			
-			int i = 0;
-			for (String parameter : nonterminal.getParameters())
-				values[i++] = map.get(parameter);
-			
-			env = getEmptyEnvironment().declare(nonterminal.getParameters(), values);
-		}
-		
 		parse(startSymbol, env);
 		
 		root = startGSSNode.getNonterminalNode(input.length() - 1);
-
+		
 		ParseResult parseResult;
 		
 		long end = System.nanoTime();

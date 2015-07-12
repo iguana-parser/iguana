@@ -59,9 +59,7 @@ public class GSSNode {
 
 	private final int inputIndex;
 	
-	private Map<Integer, NonterminalNode> poppedElements;
-	
-	private Map<Key, NonterminalNode> poppedElementsWithValues;
+	private Map<Object, NonterminalNode> poppedElements;
 	
 	private final List<GSSEdge> gssEdges;
 
@@ -71,7 +69,6 @@ public class GSSNode {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new HashMap<>();
-		this.poppedElementsWithValues = new HashMap<>();
 		this.gssEdges = new ArrayList<>();
 		this.descriptors = null;
 	}
@@ -174,7 +171,6 @@ public class GSSNode {
 
 	public void clearDescriptors() {
 		poppedElements.clear();
-		poppedElementsWithValues.clear();
 		gssEdges.clear();
 		if (descriptors != null) descriptors.clear();
 	}
@@ -187,7 +183,7 @@ public class GSSNode {
 	
 	public NonterminalNode addToPoppedElements(Key key, EndGrammarSlot slot, NonPackedNode child, Object value) {	
 		Holder<NonterminalNode> holder = new Holder<>();
-		poppedElementsWithValues.compute(key, (k, v) -> { 
+		poppedElements.compute(key, (k, v) -> { 
 			if (v == null) {
 				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, child.getRightExtent(), value);
 				node.addPackedNode(new PackedNode(slot, child.getRightExtent(), node), child);
@@ -218,6 +214,5 @@ public class GSSNode {
 		}
 			
 	}
-	
 	
 }

@@ -68,5 +68,4 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 		} 
 		return node;
 	}
-
 }
