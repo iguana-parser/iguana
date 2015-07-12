@@ -31,7 +31,6 @@ package org.iguana.parser;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -64,7 +63,8 @@ import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.logging.LoggerWrapper;
+import org.iguana.util.logging.JavaUtilParserLogger;
+import org.iguana.util.logging.ParserLogger;
 
 /**
  * 
@@ -74,8 +74,6 @@ import org.iguana.util.logging.LoggerWrapper;
  * 
  */
 public class GLLParserImpl implements GLLParser {
-		
-	protected static final LoggerWrapper log = LoggerWrapper.getLogger(GLLParserImpl.class);
 	
 	protected final SPPFLookup sppfLookup;
 	
@@ -112,11 +110,14 @@ public class GLLParserImpl implements GLLParser {
 	private final Configuration config;
 	
 	private Deque<Descriptor> descriptorsStack;
+	
+	private ParserLogger logger;
 
 	public GLLParserImpl(Configuration config, SPPFLookup sppfLookup) {
 		this.config = config;
 		this.sppfLookup = sppfLookup;
 		this.descriptorsStack = new ArrayDeque<>();
+		this.logger = new JavaUtilParserLogger();
 	}
 	
 	@Override
@@ -158,7 +159,7 @@ public class GLLParserImpl implements GLLParser {
 		grammarGraph.reset(input);
 		resetParser(startSymbol);
 		
-		log.info("Parsing %s:", input.getURI());
+		logger.log("Parsing %s:", input.getURI());
 
 		long start = System.nanoTime();
 		long startUserTime = BenchmarkUtil.getUserTime();
@@ -176,7 +177,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		if (root == null) {
 			parseResult = new ParseError(errorSlot, input, errorIndex, errorGSSNode);
-			log.info("Parse error:\n %s", parseResult);
+			logger.log("Parse error:\n %s", parseResult);
 		} else {
 			ParseStatistics parseStatistics = ParseStatistics.builder()
 					.setNanoTime(end - start)
@@ -187,14 +188,14 @@ public class GLLParserImpl implements GLLParser {
 					.setGSSNodesCount(countGSSNodes + 1) // + start gss node 
 					.setGSSEdgesCount(countGSSEdges) 
 					.setNonterminalNodesCount(countNonterminalNodes)
-					.setTerminalNodesCount(sppfLookup.getTerminalNodesCount())
-					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
-					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
-					.setAmbiguousNodesCount(sppfLookup.getAmbiguousNodesCount()).build();
+					.setTerminalNodesCount(countTerminalNodes)
+					.setIntermediateNodesCount(countIntemediateNodes) 
+					.setPackedNodesCount(countPackedNodes) 
+					.setAmbiguousNodesCount(countAmbiguousNodes).build();
 
 			parseResult = new ParseSuccess(root, parseStatistics, input);
-			log.info("Parsing finished successfully.");			
-			log.info(parseStatistics.toString());
+			logger.log("Parsing finished successfully.");			
+			logger.log(parseStatistics.toString());
 		}
 		
 		return parseResult;
@@ -221,7 +222,7 @@ public class GLLParserImpl implements GLLParser {
 			ci = descriptor.getInputIndex();
 			cu = descriptor.getGSSNode();
 			cn = descriptor.getSPPFNode();
-			log.trace("Processing %s", descriptor);
+			logger.log("Processing %s", descriptor);
 			descriptor.execute(this);
 		}
 	}
@@ -231,7 +232,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		if (node == null) return;
 		
-		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
+		logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
 		countNonterminalNodes++;
 		
 		for(GSSEdge edge : gssNode.getGSSEdges()) {			
@@ -252,7 +253,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public void recordParseError(GrammarSlot slot) {
 		if (ci >= this.errorIndex) {
-			log.debug("Error recorded at %s %d", slot, ci);
+			logger.log("Error recorded at %s %d", slot, ci);
 			this.errorIndex = ci;
 			this.errorSlot = slot;
 			this.errorGSSNode = cu;
@@ -262,7 +263,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final void scheduleDescriptor(Descriptor descriptor) {
 		descriptorsStack.push(descriptor);
-		log.trace("Descriptor created: %s", descriptor);
+		logger.log("Descriptor created: %s", descriptor);
 		descriptorsCount++;
 	}
 		
@@ -479,48 +480,45 @@ public class GLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public void log(Supplier<String> messageSupplier) {
-		
-	}
-
-	@Override
 	public void terminalNodeAdded(TerminalNode node) {
 		countTerminalNodes++;
-		if (log.isEnabled()) log.trace("Terminal node added %s", node);
+		logger.log("Terminal node added %s", node);
 	}
 
 	@Override
 	public void nonterminalNodeAdded(NonterminalNode node) {
 		countNonterminalNodes++;
-		if (log.isEnabled()) log.trace("Nonterminal node added %s", node);
+		logger.log("Nonterminal node added %s", node);
 	}
 
 	@Override
 	public void intermedaiteNodeAdded(IntermediateNode node) {
 		countIntemediateNodes++;
-		if (log.isEnabled()) log.trace("Intermediate node added %s", node);
+		logger.log("Intermediate node added %s", node);
 	}
 
 	@Override
 	public void packedNodeAdded(PackedNode node) {
 		countPackedNodes++;
-		if (log.isEnabled()) log.trace("Packed node added %s", node);
+		logger.log("Packed node added %s", node);
 	}
 
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
 		countAmbiguousNodes++;
-		if (log.isEnabled()) log.trace("Ambiguous node added %s", node);
+		logger.log("Ambiguous node added %s", node);
 	}
 
 	@Override
 	public void gssNodeAdded(GSSNode node) {
-		// TODO Auto-generated method stub
+		countGSSNodes++;
+		logger.log("GSS node added %s", node);
 	}
 
 	@Override
 	public void gssEdgeAdded(GSSEdge edge) {
-		// TODO Auto-generated method stub
+		countGSSEdges++;
+		logger.log("GSS Edge added %s", edge);
 	}
 	
 	private int descriptorsCount;

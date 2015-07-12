@@ -29,7 +29,6 @@ package org.iguana.parser;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -150,11 +149,9 @@ public interface GLLParser {
 	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 
 	public GrammarGraph getGrammarGraph();
-
-	public void log(Supplier<String> messageSupplier);
 	
 	public void scheduleDescriptor(Descriptor descriptor);
-	
+
 	public void terminalNodeAdded(TerminalNode node);
 	
 	public void nonterminalNodeAdded(NonterminalNode node);
@@ -168,4 +165,5 @@ public interface GLLParser {
 	public void gssNodeAdded(GSSNode node);
 	
 	public void gssEdgeAdded(GSSEdge edge);
+
 }
