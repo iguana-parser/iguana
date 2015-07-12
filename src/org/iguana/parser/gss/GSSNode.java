@@ -95,8 +95,6 @@ public class GSSNode {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		
 		gssEdges.add(edge);
-//			countGSSEdges++;
-//			log.trace("GSS Edge created: %s from %s to %s", returnSlot, source, destination);
 
 		for (NonPackedNode z : getPoppedElements()) {			
 			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
@@ -203,8 +201,7 @@ public class GSSNode {
 		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
 		
 		gssEdges.add(edge);
-//			countGSSEdges++;
-//			log.trace("GSS Edge created: %s from %s to %s with %s", returnSlot, source, destination, env);
+		parser.gssEdgeAdded(edge);
 
 		for (NonPackedNode z : getPoppedElements()) {
 			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);

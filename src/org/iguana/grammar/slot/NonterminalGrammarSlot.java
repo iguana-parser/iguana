@@ -193,8 +193,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 			GSSNodeCreator creator = gssNode -> {
 				// No GSS node labelled (slot, k) exits
 				if (gssNode == null) {
-//					log.trace("GSSNode created: (%s, %d)",  nonterminal, i);
-//					countGSSNodes++;
+					parser.gssNodeAdded(gssNode);
 					gssNode = new GSSNode(this, i);
 					gssNode.createGSSEdge(parser, returnSlot, u, node, env); // Record environment on the edge;
 					
@@ -227,6 +226,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 				
 				gssNode = new org.iguana.datadependent.gss.GSSNode<>(this, i, data);
 				 
+				parser.gssNodeAdded(gssNode);
 //				log.trace("GSSNode created: %s(%s)",  gssNode, data);
 				
 				if (env.isEmpty()) gssNode.createGSSEdge(parser, returnSlot, u, node);
