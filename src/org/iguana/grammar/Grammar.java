@@ -52,7 +52,10 @@ import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.symbol.Associativity;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Recursion;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
@@ -112,11 +115,16 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		Rule startRule;
 		if (layout != null)
-			startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout).build();
+			startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout)
+								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
 		else 
-			startRule = Rule.withHead(start).addSymbol(nt).build();
+			startRule = Rule.withHead(start).addSymbol(nt)
+								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
 		
 		definitions.put(start, CollectionsUtil.list(startRule));
+		rules.add(startRule);
 		
 		return start;
 	}
