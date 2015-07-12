@@ -28,6 +28,8 @@
 package org.iguana.grammar.slot;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.iguana.datadependent.env.Environment;
@@ -135,26 +137,31 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());
 		
 		if (variable == null && state != null) {
-			Object[] values = (Object[]) ((NonterminalNode) sppfNode).getValue();
-			
-			int i = 0;
-			for (String v : state) {
-				if (!v.equals("_"))
-					env = env.declare(v, values[i]);
-				i++;
+			if (state.size() == 1) {
+				String v = state.iterator().next();
+				if (!v.equals("_")) {
+					Object value = ((NonterminalNode) sppfNode).getValue();
+					env = env.declare(v, value);
+				}
+			} else {
+				List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
+				Iterator<?> it = values.iterator();
+				for (String v : state) {
+					if (!v.equals("_"))
+						env = env.declare(v, it.next());
+				}
 			}
 		}
 		
 		if (variable != null && state != null) {
-			Object[] values = (Object[]) ((NonterminalNode) sppfNode).getValue();
+			List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
+			Iterator<?> it = values.iterator();
 			
-			env = env.declare(variable, values[0]);
+			env = env.declare(variable, it.next());
 			
-			int i = 1;
 			for (String v : state) {
 				if (!v.equals("_"))
-					env = env.declare(v, values[i]);
-				i++;
+					env = env.declare(v, it.next());
 			}
 		}
 		

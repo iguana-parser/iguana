@@ -30,6 +30,7 @@ package org.iguana.util.visualization;
 import static org.iguana.util.visualization.GraphVizUtil.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.iguana.sppf.IntermediateNode;
@@ -41,6 +42,7 @@ import org.iguana.sppf.TerminalNode;
 import org.iguana.traversal.SPPFVisitor;
 import org.iguana.traversal.SPPFVisitorUtil;
 import org.iguana.util.Input;
+import org.iguana.util.generator.GeneratorUtil;
 
 /**
  * Creates a Graphviz's dot format representation of an SPPF node.
@@ -87,7 +89,17 @@ public class SPPFToDot extends ToDot implements SPPFVisitor  {
 		if(!visited.contains(node)) {
 			visited.add(node);
 			
-			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
+			String label;
+			if (node.getValue() == null) 
+				label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
+			else {
+				if (node.getValue() instanceof List<?>)
+					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), 
+												"(" + GeneratorUtil.listToString((List<?>) node.getValue(), ",") + ")");
+				else
+					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), node.getValue());
+			}
+			
 			if (node.isAmbiguous()) {
 				sb.append("\"" + getId(node) + "\"" + String.format(AMBIGUOUS_SYMBOL_NODE, replaceWhiteSpace(label)) + "\n");
 			} else {

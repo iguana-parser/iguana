@@ -27,10 +27,13 @@
 
 package org.iguana.sppf;
 
+import java.util.List;
+
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.SPPFToJavaCode;
+import org.iguana.util.generator.GeneratorUtil;
 
 /**
  * 
@@ -74,8 +77,12 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 	
 	@Override
 	public String toString() {
-		if (value != null)
-			return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, value);
+		if (value != null) {
+			if (value instanceof List<?>)
+				return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, "(" + GeneratorUtil.listToString((Object[]) value, ",") + ")");
+			else 
+				return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, value);
+		}
 		return String.format("(%s, %d, %d)", slot, leftExtent, rightExtent);
 	}
 	

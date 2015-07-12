@@ -27,7 +27,9 @@
 
 package org.iguana.datadependent.ast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.iguana.datadependent.env.IEvaluatorContext;
@@ -232,9 +234,11 @@ public abstract class Expression extends AbstractAST {
 		private static final long serialVersionUID = 1L;
 		
 		private final Expression[] elements;
+		private final int length;
 		
 		Tuple(Expression... elements) {
 			this.elements = elements;
+			this.length = elements.length;
 		}
 		
 		public Expression[] getElements() {
@@ -243,11 +247,12 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			Object[] values = new Object[elements.length];
+			if (length == 1)
+				return elements[0].interpret(ctx);
 			
-			int i = 0;
+			List<Object> values = new ArrayList<Object>();		
 			for (Expression element : elements)
-				values[i++] = element.interpret(ctx);
+				values.add(element.interpret(ctx));
 			
 			return values;
 		}

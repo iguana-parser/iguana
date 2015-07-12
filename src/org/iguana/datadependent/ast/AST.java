@@ -28,6 +28,7 @@
 package org.iguana.datadependent.ast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -352,7 +353,10 @@ public class AST {
 						Set<Object> s = (Set<Object>) value;
 						
 						value = arg2.interpret(ctx);
-						s.add(value);
+						if (!s.contains(value)) {
+							s = new HashSet<Object>(s);
+							s.add(value);
+						}
 						
 						return s;
 					}
