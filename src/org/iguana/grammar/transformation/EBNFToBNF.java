@@ -76,7 +76,6 @@ import org.iguana.traversal.ISymbolVisitor;
  */
 public class EBNFToBNF implements GrammarTransformation {
 	
-
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
@@ -148,6 +147,8 @@ public class EBNFToBNF implements GrammarTransformation {
 		private final Set<Rule> addedRules;
 		private final Nonterminal layout;
 		private final LayoutStrategy strategy;
+		
+		private static int counter = 0;
 		
 		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
 			this.state = state;
@@ -387,7 +388,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = new Expression[] { cond };
 			}
 			
-			Nonterminal newNt = Nonterminal.builder(thenPart.getName() + "_IF").addParameters(parameters).build();
+			Nonterminal newNt = Nonterminal.builder("IF_" + counter++).addParameters(parameters).build();
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
@@ -445,7 +446,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = new Expression[] { cond };
 			}
 			
-			Nonterminal newNt = Nonterminal.builder("_" + thenPart.getName() + elsePart.getName() + "_IF_THEN_ELSE").addParameters(parameters).build();
+			Nonterminal newNt = Nonterminal.builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
