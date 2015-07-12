@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.iguana.parser.GLLParser;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
@@ -61,10 +62,16 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		return regex;
 	}
 		
-	public TerminalNode getTerminalNode(Input input, int i) {
+	public TerminalNode getTerminalNode(GLLParser parser, Input input, int i) {
 		return terminalNodes.computeIfAbsent(i, k -> {
 			int length = matcher.match(input, i);
-			return length < 0 ? null : new TerminalNode(this, i, i + length);
+			if (length < 0) {
+				return null;
+			} else {
+				TerminalNode t = new TerminalNode(this, i, i + length);
+				parser.terminalNodeAdded(t);
+				return t;
+			}
 		});
 	}
 	

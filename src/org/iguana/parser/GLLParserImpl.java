@@ -109,14 +109,6 @@ public class GLLParserImpl implements GLLParser {
 	
 	protected GSSNode startGSSNode;
 	
-	protected int descriptorsCount;
-	
-	protected int nonterminalNodesCount;
-	
-	protected int countGSSNodes;
-	
-	protected int countGSSEdges;
-
 	private final Configuration config;
 	
 	private Deque<Descriptor> descriptorsStack;
@@ -194,7 +186,7 @@ public class GLLParserImpl implements GLLParser {
 					.setDescriptorsCount(descriptorsCount) 
 					.setGSSNodesCount(countGSSNodes + 1) // + start gss node 
 					.setGSSEdgesCount(countGSSEdges) 
-					.setNonterminalNodesCount(nonterminalNodesCount)
+					.setNonterminalNodesCount(countNonterminalNodes)
 					.setTerminalNodesCount(sppfLookup.getTerminalNodesCount())
 					.setIntermediateNodesCount(sppfLookup.getIntermediateNodesCount()) 
 					.setPackedNodesCount(sppfLookup.getPackedNodesCount()) 
@@ -240,7 +232,7 @@ public class GLLParserImpl implements GLLParser {
 		if (node == null) return;
 		
 		log.debug("Pop %s, %d, %s", gssNode, inputIndex, node);
-		nonterminalNodesCount++;
+		countNonterminalNodes++;
 		
 		for(GSSEdge edge : gssNode.getGSSEdges()) {			
 			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
@@ -294,7 +286,7 @@ public class GLLParserImpl implements GLLParser {
 		errorGSSNode = null;
 		
 		descriptorsCount = 0;
-		nonterminalNodesCount = 0;
+		countNonterminalNodes = 0;
 		countGSSNodes = 0;
 		countGSSEdges = 0;
 	}
@@ -493,43 +485,58 @@ public class GLLParserImpl implements GLLParser {
 
 	@Override
 	public void terminalNodeAdded(TerminalNode node) {
-		// TODO Auto-generated method stub
-		
+		countTerminalNodes++;
+		if (log.isEnabled()) log.trace("Terminal node added %s", node);
 	}
 
 	@Override
 	public void nonterminalNodeAdded(NonterminalNode node) {
-		// TODO Auto-generated method stub
-		
+		countNonterminalNodes++;
+		if (log.isEnabled()) log.trace("Nonterminal node added %s", node);
 	}
 
 	@Override
 	public void intermedaiteNodeAdded(IntermediateNode node) {
-		// TODO Auto-generated method stub
-		
+		countIntemediateNodes++;
+		if (log.isEnabled()) log.trace("Intermediate node added %s", node);
 	}
 
 	@Override
 	public void packedNodeAdded(PackedNode node) {
-		// TODO Auto-generated method stub
-		
+		countPackedNodes++;
+		if (log.isEnabled()) log.trace("Packed node added %s", node);
 	}
 
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
-		// TODO Auto-generated method stub
-		
+		countAmbiguousNodes++;
+		if (log.isEnabled()) log.trace("Ambiguous node added %s", node);
 	}
 
 	@Override
 	public void gssNodeAdded(GSSNode node) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void gssEdgeAdded(GSSEdge edge) {
 		// TODO Auto-generated method stub
-		
 	}
+	
+	private int descriptorsCount;
+	
+	private int countNonterminalNodes;
+	
+	private int countIntemediateNodes;
+	
+	private int countTerminalNodes;
+
+	private int countPackedNodes;
+	
+	private int countAmbiguousNodes;
+	
+	private int countGSSNodes;
+	
+	private int countGSSEdges;
+
 }
