@@ -42,6 +42,8 @@ public class LoggerWrapper {
 	
 	private Logger logger;
 	
+	private boolean enabled;
+	
 	private LoggerWrapper(Logger logger) {
 		this.logger = logger;
 		logger.setUseParentHandlers(false);
@@ -54,6 +56,10 @@ public class LoggerWrapper {
 
 	public static <T> LoggerWrapper getLogger(Class<T> clazz) {
 		return new LoggerWrapper(Logger.getLogger(clazz.getName()));
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 	
 	public void info(String s) {

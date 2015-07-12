@@ -66,7 +66,7 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, u, i))
 			return;
 			
-		TerminalNode cr = slot.getTerminalNode(input, i);
+		TerminalNode cr = slot.getTerminalNode(parser, input, i);
 		
 		if (cr == null) {
 			parser.recordParseError(origin);
@@ -128,7 +128,7 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 			return;
 		
-		TerminalNode cr = slot.getTerminalNode(input, i);
+		TerminalNode cr = slot.getTerminalNode(parser, input, i);
 		
 		if (cr == null) {
 			parser.recordParseError(origin);

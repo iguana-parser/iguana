@@ -21,4 +21,9 @@ public class FailureResult implements RunResult {
 	public URI getInput() {
 		return uri;
 	}
+	
+	@Override
+	public String toString() {
+		return errorMessage;
+	}
 }
