@@ -259,4 +259,8 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		};
 		nodeLookup.get(i, data, creator);
 	}
+	
+	public <T> GSSNode getGSSNode(int i, GSSNodeData<T> data) {
+		return nodeLookup.get(this, i, data);
+	}
 }

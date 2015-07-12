@@ -100,9 +100,11 @@ public class DesugarState implements GrammarTransformation {
 			uses.put(head, current_uses);
 			updates.put(head, current_updates);
 			
-			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);			
+			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);
+			
 			for (Rule rule : grammar.getAlternatives(head))
 				visitor.compute(rule);
+			
 			if (!current_updates.isEmpty())
 				System.out.println("Updates: " + head + "    " + GeneratorUtil.listToString(current_updates, " , ") );
 		}
