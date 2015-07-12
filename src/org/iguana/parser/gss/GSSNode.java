@@ -37,7 +37,7 @@ import java.util.Set;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.HashFunctions;
 import org.iguana.parser.descriptor.Descriptor;
@@ -55,7 +55,7 @@ import org.iguana.util.collections.Key;
  */
 public class GSSNode {
 	
-	private final GrammarSlot slot;
+	private final NonterminalGrammarSlot slot;
 
 	private final int inputIndex;
 	
@@ -67,7 +67,7 @@ public class GSSNode {
 
 	private Set<Key> descriptors;
 	
-	public GSSNode(GrammarSlot slot, int inputIndex) {
+	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new HashMap<>();
@@ -117,7 +117,7 @@ public class GSSNode {
 		return poppedElements.values();
 	}
 	
-	public GrammarSlot getGrammarSlot() {
+	public NonterminalGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -174,6 +174,7 @@ public class GSSNode {
 
 	public void clearDescriptors() {
 		poppedElements.clear();
+		poppedElementsWithValues.clear();
 		gssEdges.clear();
 		if (descriptors != null) descriptors.clear();
 	}

@@ -27,7 +27,7 @@
 
 package org.iguana.datadependent.gss;
 
-import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.HashFunctions;
 import org.iguana.parser.gss.GSSNodeData;
 
@@ -35,7 +35,7 @@ public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
 	
 	private final GSSNodeData<T> data;
 
-	public GSSNode(GrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
+	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
 		super(slot, inputIndex);
 		this.data = data;
 	}
