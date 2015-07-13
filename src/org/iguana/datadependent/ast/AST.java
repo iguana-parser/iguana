@@ -28,13 +28,15 @@
 package org.iguana.datadependent.ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.values.Stack;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.generator.GeneratorUtil;
@@ -339,6 +341,28 @@ public class AST {
 		};
 	}
 	
+	static public Expression map() {
+		return new Expression.Call("map") {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						return new HashMap<Object, Object>();
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.map()";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return "map()";
+					}
+		};
+	}
+	
 	static public Expression put(Expression arg1, Expression arg2) {
 		return new Expression.Call("put", arg1, arg2) {
 			
@@ -370,6 +394,38 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("put(%s,%s)", arg1, arg2);
+					}
+		};
+	}
+	
+	static public Expression put(Expression arg1, Expression arg2, Expression arg3) {
+		return new Expression.Call("put", arg1, arg2, arg3) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg1.interpret(ctx);
+						if (!(value instanceof Map<?,?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						@SuppressWarnings("unchecked")
+						Map<Object, Object> m = (Map<Object, Object>) value;
+						
+						m = new HashMap<Object, Object>(m);
+						m.put(arg2.interpret(ctx), arg3.interpret(ctx));
+						
+						return m;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.put(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," + arg3.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("put(%s,%s,%s)", arg1, arg2, arg3);
 					}
 		};
 	}
@@ -416,7 +472,10 @@ public class AST {
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
-						return null;
+						@SuppressWarnings("unchecked")
+						Stack<Object> s = (Stack<Object>) value;
+						
+						return s.push(arg2.interpret(ctx));
 					}
 					
 					@Override
@@ -442,7 +501,10 @@ public class AST {
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
-						return null;
+						@SuppressWarnings("unchecked")
+						Stack<Object> s = (Stack<Object>) value;
+						
+						return s.pop();
 					}
 					
 					@Override
@@ -453,6 +515,74 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("pop(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression top(Expression arg) {
+		return new Expression.Call("top", arg) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof Stack<?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						@SuppressWarnings("unchecked")
+						Stack<Object> s = (Stack<Object>) value;
+						
+						return s.top();
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.top(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("top(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression find(Expression arg1, Expression arg2, Expression arg3) {
+		return new Expression.Call("find", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg1.interpret(ctx);
+						if (!(value instanceof Stack<?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						@SuppressWarnings("unchecked")
+						Stack<Map<java.lang.String, java.lang.Boolean>> s = (Stack<Map<java.lang.String, java.lang.Boolean>>) value;
+						
+						java.lang.String key = (java.lang.String) arg2.interpret(ctx);
+						
+						java.lang.Boolean hit;
+						while (s != null) {
+							hit = s.top().get(key);
+							if (hit != null)
+								return hit;
+							s = s.pop();
+						}
+						
+						return false;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.find(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," + arg3.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("find(%s,%s,%s)", arg1, arg2, arg3);
 					}
 		};
 	}
