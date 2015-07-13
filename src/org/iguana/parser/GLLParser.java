@@ -38,13 +38,11 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
@@ -79,20 +77,12 @@ public interface GLLParser {
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
-	public NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
-	
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child);
-	
 	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 	
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
-	
-	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
-	
-	public NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
-	
+		
 	public void recordParseError(GrammarSlot slot);
 	
 	public Input getInput();
@@ -133,21 +123,13 @@ public interface GLLParser {
 	public void setEnvironment(Environment env);
 	
 	public Environment getEmptyEnvironment();
-	
-	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value);
-	
-	public <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value);
-	
+		
 	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 	
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 	
 	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 	
-	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
-	
-	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
-
 	public GrammarGraph getGrammarGraph();
 	
 	public void scheduleDescriptor(Descriptor descriptor);
