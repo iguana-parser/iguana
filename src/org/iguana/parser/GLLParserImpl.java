@@ -202,10 +202,10 @@ public class GLLParserImpl implements GLLParser {
 	
 	protected void parse(NonterminalGrammarSlot startSymbol, Environment env) {
 		
-		if(!startSymbol.testPredict(input.charAt(ci))) {
-			recordParseError(startSymbol);
-			return;
-		}
+//		if(!startSymbol.testPredict(input.charAt(ci))) {
+//			recordParseError(startSymbol);
+//			return;
+//		}
 		
 		if (env == null)
 			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));

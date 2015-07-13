@@ -94,9 +94,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		this.followTest = followTest;
 	}
 	
-	public boolean testPredict(int v)  {
-		return lookAheadTest.test(v);
-	}
+//	public boolean testPredict(int v)  {
+//		return lookAheadTest.test(v);
+//	}
 	
 	public boolean testFollow(int v) {
 		return followTest.test(v);

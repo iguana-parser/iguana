@@ -123,10 +123,10 @@ public class NonterminalTransition extends AbstractTransition {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
-		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
-			parser.recordParseError(origin);
-			return;
-		}
+//		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
+//			parser.recordParseError(origin);
+//			return;
+//		}
 		
 		if (dest.getLabel() != null) {
 			env = env.declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);

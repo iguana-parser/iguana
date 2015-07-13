@@ -44,6 +44,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Holder;
 import org.iguana.util.Input;
 import org.iguana.util.collections.Key;
+import org.iguana.util.hashing.hashfunction.MurmurHash3;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
@@ -263,7 +264,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		}
 	}
 	
+	
 	static class IntKey2PlusObject implements Key {
+		
+		private static MurmurHash3 f = new MurmurHash3();
 		
 		private final int k1;
 		private final int k2;
@@ -275,7 +279,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			this.k1 = k1;
 			this.k2 = k2;
 			this.obj = obj;
-			this.hash = obj.hashCode() * size * size + k1 * size + k2;
+			this.hash =  f.hash(obj.hashCode(), k1, k2);
 		}
 		
 		public static Key from(Object obj, int k1, int k2, int size) {

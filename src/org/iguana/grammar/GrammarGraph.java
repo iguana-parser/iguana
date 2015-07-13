@@ -33,6 +33,7 @@ import static org.iguana.util.CharacterRanges.toNonOverlappingSet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -64,6 +65,7 @@ import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
+import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Conditional;
@@ -206,9 +208,9 @@ public class GrammarGraph implements Serializable {
 		
 		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(f.apply(r))); 
 		
-		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue()));
+		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue().isEmpty() ? Collections.emptyList() : e.getValue()));
 		
-		return i -> rangeTree.get(i);
+		return new RangeTreeLookaheadTest(nonOverlappingMap);
 	}
 	
 	private FollowTest getFollowTest(Nonterminal nonterminal) {
