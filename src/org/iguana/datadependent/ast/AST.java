@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.IEvaluatorContext;
@@ -400,6 +401,58 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("contains(%s,%s)", arg1, arg2);
+					}
+		};
+	}
+	
+	static public Expression push(Expression arg1, Expression arg2) {
+		return new Expression.Call("push", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg1.interpret(ctx);
+						if (!(value instanceof Stack<?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						return null;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.push(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("push(%s,%s)", arg1, arg2);
+					}
+		};
+	}
+	
+	static public Expression pop(Expression arg) {
+		return new Expression.Call("pop", arg) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof Stack<?>))
+							throw new UnexpectedTypeOfArgumentException(this);
+						
+						return null;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.pop(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("pop(%s)", arg);
 					}
 		};
 	}
