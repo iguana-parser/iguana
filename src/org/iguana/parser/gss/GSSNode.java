@@ -73,17 +73,20 @@ public class GSSNode {
 		this.descriptors = null;
 	}
 	
-	public NonterminalNode addToPoppedElements(int j, EndGrammarSlot slot, NonPackedNode child) {
+	public NonterminalNode addToPoppedElements(GLLParser parser, int j, EndGrammarSlot slot, NonPackedNode child) {
 		Holder<NonterminalNode> holder = new Holder<>();
 		poppedElements.compute(j, (k, v) -> { 
 			if (v == null) {
 				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, j);
-				node.addPackedNode(new PackedNode(slot, j, node), child);
+				node.addPackedNode(parser, new PackedNode(slot, j, node), child);
+				
+				parser.nonterminalNodeAdded(node);
+				
 				holder.set(node);
 				return node;
 			}
 			else {
-				v.addPackedNode(new PackedNode(slot, j, v), child);
+				v.addPackedNode(parser, new PackedNode(slot, j, v), child);
 				return v;
 			}
 		});
@@ -180,17 +183,17 @@ public class GSSNode {
 	 * 
 	 */
 	
-	public NonterminalNode addToPoppedElements(Key key, EndGrammarSlot slot, NonPackedNode child, Object value) {	
+	public NonterminalNode addToPoppedElements(GLLParser parser, Key key, EndGrammarSlot slot, NonPackedNode child, Object value) {	
 		Holder<NonterminalNode> holder = new Holder<>();
 		poppedElements.compute(key, (k, v) -> { 
 			if (v == null) {
 				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, child.getRightExtent(), value);
-				node.addPackedNode(new PackedNode(slot, child.getRightExtent(), node), child);
+				node.addPackedNode(parser, new PackedNode(slot, child.getRightExtent(), node), child);
 				holder.set(node);
 				return node;
 			}
 			else {
-				v.addPackedNode(new PackedNode(slot, child.getRightExtent(), v), child);
+				v.addPackedNode(parser, new PackedNode(slot, child.getRightExtent(), v), child);
 				return v;
 			}
 		});

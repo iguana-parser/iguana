@@ -50,7 +50,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, parser.getInput(), i);
-			parser.pop(u, i, u.addToPoppedElements(i, this, epsilonNode));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode));
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, parser.getInput(), i);
-			parser.pop(u, i, u.addToPoppedElements(i, this, epsilonNode));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode));
 		}
 		
 	}

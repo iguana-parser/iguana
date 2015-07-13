@@ -30,16 +30,12 @@ package org.iguana.util.visualization;
 import java.io.FileWriter;
 import java.io.Writer;
 
-import org.iguana.util.logging.LoggerWrapper;
-
 /**
  * 
  * @author Ali Afroozeh
  *
  */
 public class GraphVizUtil {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(GraphVizUtil.class);
 	
 	public static final String SYMBOL_NODE = "[shape=box, style=rounded, height=0.1, width=0.1, color=black, fontcolor=black, label=\"%s\", fontsize=10];";
 	public static final String AMBIGUOUS_SYMBOL_NODE = "[shape=box, style=rounded, height=0.1, width=0.1, color=red, fontcolor=black, label=\"%s\", fontsize=10];";
@@ -110,7 +106,7 @@ public class GraphVizUtil {
 
 	private static void generateImage(String fileName) {
 		String cmd = "/usr/local/bin/dot" + " -Tpdf " + "-o " + fileName + ".pdf" + " " + fileName + ".txt";
-		log.info("Running " + cmd);
+		System.out.println("Running " + cmd);
 
 		try {
 			Runtime run = Runtime.getRuntime();

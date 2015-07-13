@@ -118,12 +118,15 @@ Grammar.builder()
                                         + "       a             \n"
                                         + "      +              \n"
                                         + "     a               \n");
+
+         Start startSymbol = grammar.getStartSymbol(Nonterminal.withName("S"));
+         
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-         ParseResult result = parser.parse(input, graph, Start.from(Nonterminal.withName("S")));
+         ParseResult result = parser.parse(input, graph, startSymbol);
 
          Assert.assertTrue(result.isParseSuccess());
 

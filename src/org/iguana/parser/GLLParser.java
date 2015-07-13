@@ -44,7 +44,6 @@ import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.NonterminalOrIntermediateNode;
 import org.iguana.sppf.PackedNode;
@@ -77,8 +76,6 @@ public interface GLLParser {
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
-	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
-		
 	public void recordParseError(GrammarSlot slot);
 	
 	public Input getInput();
@@ -120,8 +117,6 @@ public interface GLLParser {
 	
 	public Environment getEmptyEnvironment();
 		
-	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
-	
 	public GrammarGraph getGrammarGraph();
 	
 	public void scheduleDescriptor(Descriptor descriptor);
@@ -130,7 +125,7 @@ public interface GLLParser {
 	
 	public void nonterminalNodeAdded(NonterminalNode node);
 	
-	public void intermedaiteNodeAdded(IntermediateNode node);
+	public void intermediateNodeAdded(IntermediateNode node);
 	
 	public void packedNodeAdded(PackedNode node);
 	

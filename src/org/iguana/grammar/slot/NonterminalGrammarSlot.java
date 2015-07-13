@@ -128,8 +128,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		GSSNodeCreator creator = gssNode -> {
 			// No GSS node labelled (slot, k) exits
 			if (gssNode == null) {
-				parser.gssNodeAdded(gssNode);
+				
 				gssNode = new GSSNode(this, i);
+				parser.gssNodeAdded(gssNode);
+
 				gssNode.createGSSEdge(parser, returnSlot, u, node);
 				
 				final GSSNode __gssNode = gssNode;
@@ -192,8 +194,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 			GSSNodeCreator creator = gssNode -> {
 				// No GSS node labelled (slot, k) exits
 				if (gssNode == null) {
-					parser.gssNodeAdded(gssNode);
+					
 					gssNode = new GSSNode(this, i);
+					parser.gssNodeAdded(gssNode);
+					
 					gssNode.createGSSEdge(parser, returnSlot, u, node, env); // Record environment on the edge;
 					
 					final GSSNode __gssNode = gssNode;

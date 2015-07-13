@@ -8,15 +8,15 @@ public class JavaUtilParserLogger implements ParserLogger {
 	
 	private boolean enabled = false;
 	
-	private Logger log = Logger.getLogger(JavaUtilParserLogger.class.getName());
+	private static Logger log = Logger.getLogger(JavaUtilParserLogger.class.getName());
 	
-	public JavaUtilParserLogger() {
+	static {
 		log.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
 		log.setLevel(Level.INFO);
 		handler.setLevel(Level.INFO);
 		handler.setFormatter(new ParserLogFormatter());
-		log.addHandler(handler);
+		log.addHandler(handler);		
 	}
 	
 	@Override
@@ -31,33 +31,27 @@ public class JavaUtilParserLogger implements ParserLogger {
 
 	@Override
 	public void log(String s, Object... args) {
-		// TODO Auto-generated method stub
-		
+		if (enabled) log.info(String.format(s, args));
 	}
 
 	@Override
 	public void log(String s, Object arg) {
-		// TODO Auto-generated method stub
-		
+		if (enabled) log.info(String.format(s, arg));
 	}
 
 	@Override
 	public void log(String s, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-		
+		if (enabled) log.info(String.format(s, arg1, arg2));		
 	}
 
 	@Override
 	public void log(String s, Object arg1, Object arg2, Object arg3) {
-		// TODO Auto-generated method stub
-		
+		if (enabled) log.info(String.format(s, arg1, arg2, arg3));		
 	}
 
 	@Override
 	public void log(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
-		// TODO Auto-generated method stub
-		
+		if (enabled) log.info(String.format(s, arg1, arg2, arg3, arg4));
 	}
-
 
 }

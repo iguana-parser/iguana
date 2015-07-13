@@ -48,11 +48,8 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.util.logging.LoggerWrapper;
 
 public class OperatorPrecedence {
-	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(OperatorPrecedence.class);
 	
 	private Map<Nonterminal, List<List<Symbol>>> definitions;
 	
@@ -208,7 +205,7 @@ public class OperatorPrecedence {
 	
 	private void rewritePrecedencePatterns() {
 		for (Entry<Nonterminal, List<PrecedencePattern>> entry : precednecePatterns.entrySet()) {
-			log.debug("Applying the pattern %s with %d.", entry.getKey(), entry.getValue().size());
+//			log.debug("Applying the pattern %s with %d.", entry.getKey(), entry.getValue().size());
 
 			Nonterminal nonterminal = entry.getKey();
 			Map<PrecedencePattern, List<List<Symbol>>> patterns = groupPatterns(entry.getValue());
@@ -424,7 +421,7 @@ public class OperatorPrecedence {
 					continue;
 				}
 				
-				log.trace("Applying the pattern %s on %s.", pattern, alt);
+//				log.trace("Applying the pattern %s on %s.", pattern, alt);
 				
 				if (!pattern.isDirect()) {
 					

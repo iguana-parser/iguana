@@ -30,7 +30,9 @@ package org.iguana.sppf;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.parser.GLLParser;
 
 
 public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
@@ -57,13 +59,41 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 		rest.remove(node);
 	}
 	
-	public boolean addPackedNode(PackedNode packedNode, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public boolean addPackedNode(GLLParser parser, BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+		PackedNode packedNode = new PackedNode(slot, leftChild.getRightExtent(), this);
+		boolean ambiguousBefore = isAmbiguous();
+		
 		addPackedNode(packedNode);
 		packedNode.addChild(leftChild);
 		packedNode.addChild(rightChild);
+
+		parser.packedNodeAdded(packedNode);
+		
+		boolean ambiguousAfter = isAmbiguous();
+		
+		if (ambiguousAfter && !ambiguousBefore)
+			parser.ambiguousNodeAdded(this);
+		
 		return true;
 	}
 
+	public boolean addPackedNode(GLLParser parser, PackedNode packedNode, NonPackedNode child) {
+		
+		boolean ambiguousBefore = isAmbiguous();
+		
+		addPackedNode(packedNode);
+		packedNode.addChild(child);
+
+		parser.packedNodeAdded(packedNode);
+		
+		boolean ambiguousAfter = isAmbiguous();
+		
+		if (ambiguousAfter && !ambiguousBefore)
+			parser.ambiguousNodeAdded(this);
+		
+		return true;
+	}
+	
 	private void addPackedNode(PackedNode packedNode) {
 		if (first == null) {
 			first = packedNode;				
@@ -71,12 +101,6 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 			rest = new ArrayList<>();
 			rest.add(packedNode);			
 		}
-	}
-	
-	public boolean addPackedNode(PackedNode packedNode, NonPackedNode child) {
-		addPackedNode(packedNode);
-		packedNode.addChild(child);
-		return true;
 	}
 	
 	@Override

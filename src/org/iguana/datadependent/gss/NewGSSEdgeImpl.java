@@ -63,7 +63,7 @@ public class NewGSSEdgeImpl extends org.iguana.parser.gss.NewGSSEdgeImpl {
 		
 		env = parser.getEnvironment();
 		
-		NonPackedNode y = parser.getIntermediateNode2(returnSlot, getNode(), sppfNode, env);
+		NonPackedNode y = returnSlot.getIntermediateNode2(parser, getNode(), sppfNode, env);
 		
 //		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode, env);
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
