@@ -110,7 +110,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 			
 			env = parser.getEnvironment();	
 			
-			y = parser.getIntermediateNode2(returnSlot, node, sppfNode, env);
+			y = returnSlot.getIntermediateNode2(parser, node, sppfNode, env);
 			
 //			y = parser.getNode(returnSlot, node, sppfNode, env);
 //			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
@@ -126,7 +126,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 //			return new Descriptor(returnSlot, destination, inputIndex, y);
 		
-		y = parser.getIntermediateNode2(returnSlot, node, sppfNode);
+		y = returnSlot.getIntermediateNode2(parser, node, sppfNode);
 		
 		return y != null ? new Descriptor(returnSlot, destination, inputIndex, y) : null;
 	}

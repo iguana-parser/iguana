@@ -30,18 +30,16 @@ package org.iguana.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iguana.util.Configuration.LookupImpl;
-
 public class Configurations {
 
+	public static final List<Configuration> lookahead0 = new ArrayList<>();
+	public static final List<Configuration> lookahead1 = new ArrayList<>();
 	public static final List<Configuration> all_configs = new ArrayList<>();
-
+	
 	static {
-		for (LookupImpl gssLookupImpl : LookupImpl.values()) {
-			for (LookupImpl sppfLookupImpl : LookupImpl.values()) {
-				all_configs.add(Configuration.builder().setGSSLookupImpl(gssLookupImpl)
-						.setSPPFLookupImpl(sppfLookupImpl).build());
-			}
-		}
+		lookahead0.add(Configuration.builder().setLookaheadCount(0).build());
+		lookahead1.add(Configuration.builder().setLookaheadCount(1).build());
+		all_configs.addAll(lookahead0);
+		all_configs.addAll(lookahead1);
 	}
 }

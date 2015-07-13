@@ -76,7 +76,7 @@ Grammar.builder()
          Map<String, Object> inits = new HashMap<>();
          inits.put("x", 0);
          inits.put("y", 0);
-         inits.put("z", 0);
+         // inits.put("z", 0);
          
          Nonterminal start = null;
          for (Nonterminal nonterminal : grammar.getNonterminals()) {

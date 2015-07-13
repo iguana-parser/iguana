@@ -57,7 +57,6 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.NonterminalOrIntermediateNode;
 import org.iguana.sppf.PackedNode;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
@@ -73,8 +72,6 @@ import org.iguana.util.logging.ParserLogger;
  * 
  */
 public class GLLParserImpl implements GLLParser {
-	
-	protected final SPPFLookup sppfLookup;
 	
 	protected GSSNode cu;
 	
@@ -112,9 +109,8 @@ public class GLLParserImpl implements GLLParser {
 	
 	private ParserLogger logger;
 
-	public GLLParserImpl(Configuration config, SPPFLookup sppfLookup) {
+	public GLLParserImpl(Configuration config) {
 		this.config = config;
-		this.sppfLookup = sppfLookup;
 		this.descriptorsStack = new ArrayDeque<>();
 		this.logger = new JavaUtilParserLogger();
 	}
@@ -123,6 +119,9 @@ public class GLLParserImpl implements GLLParser {
 	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ? extends Object> map, boolean global) {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
+
+		grammarGraph.reset(input);
+		resetParser();
 		
 		/**
 		 * Data-dependent GLL parsing
@@ -155,8 +154,7 @@ public class GLLParserImpl implements GLLParser {
 			startGSSNode = startSymbol.getGSSNode(0);
 		}
 		
-		grammarGraph.reset(input);
-		resetParser(startSymbol);
+		cu = startGSSNode;
 		
 		logger.log("Parsing %s:", input.getURI());
 
@@ -206,10 +204,10 @@ public class GLLParserImpl implements GLLParser {
 	
 	protected void parse(NonterminalGrammarSlot startSymbol, Environment env) {
 		
-		if(!startSymbol.testPredict(input.charAt(ci))) {
-			recordParseError(startSymbol);
-			return;
-		}
+//		if(!startSymbol.testPredict(input.charAt(ci))) {
+//			recordParseError(startSymbol);
+//			return;
+//		}
 		
 		if (env == null)
 			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
@@ -232,7 +230,6 @@ public class GLLParserImpl implements GLLParser {
 		if (node == null) return;
 		
 		logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
-		countNonterminalNodes++;
 		
 		for(GSSEdge edge : gssNode.getGSSEdges()) {			
 			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
@@ -266,36 +263,30 @@ public class GLLParserImpl implements GLLParser {
 		descriptorsCount++;
 	}
 		
-	public SPPFLookup getSPPFLookup() {
-		return sppfLookup;
-	}
-	
 	@Override
 	public Input getInput() {
 		return input;
 	}
 	
-	private void resetParser(NonterminalGrammarSlot startSymbol) {
+	private void resetParser() {
 		descriptorsStack.clear();
-		sppfLookup.reset();
 		ci = 0;
-		cu = startGSSNode;			
+		cu = null;			
 		cn = DummyNode.getInstance();
 		errorSlot = null;
 		errorIndex = 0;
 		errorGSSNode = null;
 		
 		descriptorsCount = 0;
-		countNonterminalNodes = 0;
 		countGSSNodes = 0;
 		countGSSEdges = 0;
+		countNonterminalNodes = 0;
+		countIntemediateNodes = 0;
+		countTerminalNodes = 0;
+		countPackedNodes = 0;
+		countAmbiguousNodes = 0;
 	}
-		
-	@Override
-	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild);
-	}
-	
+			
 	@Override
 	public Configuration getConfiguration() {
 		return config;
@@ -411,11 +402,6 @@ public class GLLParserImpl implements GLLParser {
 	}
 		
 	@Override
-	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild, env);
-	}
-	
-	@Override
 	public GrammarGraph getGrammarGraph() {
 		return grammarGraph;
 	}
@@ -433,7 +419,7 @@ public class GLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public void intermedaiteNodeAdded(IntermediateNode node) {
+	public void intermediateNodeAdded(IntermediateNode node) {
 		countIntemediateNodes++;
 		logger.log("Intermediate node added %s", node);
 	}
@@ -447,7 +433,15 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
 		countAmbiguousNodes++;
-		logger.log("Ambiguous node added %s", node);
+		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
+//		org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", node, input);
+//		for (PackedNode packedNode : node.getChildren()) {
+//			log.warning("   Packed node: " + packedNode.toString());
+//			for (org.iguana.sppf.NonPackedNode child : packedNode.getChildren()) {
+//				log.warning("       %s %s", child, input.getNodeInfo(child));
+//			}
+//		}
+//		System.exit(0);
 	}
 
 	@Override

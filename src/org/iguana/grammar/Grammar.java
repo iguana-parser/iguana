@@ -41,6 +41,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -269,8 +270,18 @@ public class Grammar implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder addPrecedencePatterns(Collection<PrecedencePattern> patterns) {
+			precedencePatterns.addAll(patterns);
+			return this;
+		}		
+		
 		public Builder addExceptPattern(ExceptPattern pattern) {
 			exceptPatterns.add(pattern);
+			return this;
+		}
+		
+		public Builder addExceptPatterns(Collection<ExceptPattern> patterns) {
+			exceptPatterns.addAll(patterns);
 			return this;
 		}
 	}

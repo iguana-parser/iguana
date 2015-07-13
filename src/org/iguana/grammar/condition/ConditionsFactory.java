@@ -39,12 +39,9 @@ import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
 import org.iguana.util.Input;
 import org.iguana.util.generator.GeneratorUtil;
-import org.iguana.util.logging.LoggerWrapper;
 
 public class ConditionsFactory {
 	
-	private static final LoggerWrapper log = LoggerWrapper.getLogger(ConditionsFactory.class);
-
 	public static Conditions DEFAULT = new Conditions() {
 		
 		@Override
@@ -85,7 +82,7 @@ public class ConditionsFactory {
 				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
 					for (SlotAction c : actions) {
 					    if (c.execute(input, u, i, ctx)) {
-			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
+//			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
 			                return true;
 			            }
 			        }
@@ -106,7 +103,7 @@ public class ConditionsFactory {
 			public boolean execute(Input input, GSSNode u, int i) {
 		        for (SlotAction c : actions) {
 		            if (c.execute(input, u, i)) {
-		                log.trace("Condition %s executed", c);
+//		                log.trace("Condition %s executed", c);
 		                return true;
 		            }
 		        }

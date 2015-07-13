@@ -128,6 +128,11 @@ public class PersistentEnvironment implements Environment {
 	}
 	
 	@Override
+	public int hashCode() {
+		return (parent == null ? 0 : parent.hashCode()) + bindings.hashCode();   
+	}
+	
+	@Override
 	public boolean equals(Object other) {
 		if (this == other) return true;
 		

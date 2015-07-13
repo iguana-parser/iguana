@@ -50,6 +50,7 @@ import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
+import org.iguana.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -120,6 +121,7 @@ public class PrecedenceTest0 {
 		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
+		org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode(parser.getGrammarGraph())));
 	}

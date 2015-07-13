@@ -7,10 +7,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 @FunctionalInterface
 public interface LookAheadTest {
 	
-	default boolean test(int v) {
-		return get(v) != null;
-	}
-	
 	/**
 	 * Returns a list of first slots that can be parsed
 	 * at the given input character. 

@@ -27,6 +27,7 @@
 
 package org.iguana.parser.basic;
 
+import static org.iguana.util.CollectionsUtil.*;
 import static org.iguana.util.Configurations.*;
 import static org.junit.Assert.*;
 
@@ -58,8 +59,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static org.iguana.util.CollectionsUtil.*;
-
 /**
  * A ::= 'a' B 'c'
  *     | C
@@ -85,19 +84,33 @@ public class Test8 extends AbstractParserTest {
 	@Parameters
     public static Collection<Object[]> data() {
 		List<Object[]> parameters = 
-			all_configs.stream().map(c -> new Object[] {
+			lookahead0.stream().map(c -> new Object[] {
 	    		getInput1(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult1
+	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult1_Lookahead0
 	    	}).collect(Collectors.toList());
-		parameters.addAll(all_configs.stream().map(c -> new Object[] {
+		parameters.addAll(lookahead0.stream().map(c -> new Object[] {
 	    		getInput2(), 
 	    		getGrammar(), 
 	    		getStartSymbol(),
 	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult2
+	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult2_Lookahead0
+	    	}).collect(Collectors.toList()));
+		parameters.addAll(lookahead1.stream().map(c -> new Object[] {
+	    		getInput1(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput1(), getGrammar()),
+	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult1_Lookahead1
+	    	}).collect(Collectors.toList()));
+		parameters.addAll(lookahead1.stream().map(c -> new Object[] {
+	    		getInput2(), 
+	    		getGrammar(), 
+	    		getStartSymbol(),
+	    		ParserFactory.getParser(c, getInput2(), getGrammar()),
+	    		(Function<GrammarGraph, ParseResult>) Test8::getParseResult2_Lookahead1
 	    	}).collect(Collectors.toList()));
 		return parameters;
     }
@@ -145,8 +158,8 @@ public class Test8 extends AbstractParserTest {
 //		assertTrue(grammarGraph.isLL1SubGrammar(B));
 //		assertTrue(grammarGraph.isLL1SubGrammar(C));
 	}
-	
-	private static ParseSuccess getParseResult1(GrammarGraph registry) {
+
+	private static ParseSuccess getParseResult1_Lookahead0(GrammarGraph registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(8)
 				.setGSSNodesCount(4)
@@ -159,9 +172,35 @@ public class Test8 extends AbstractParserTest {
 		return new ParseSuccess(expectedSPPF1(registry), statistics, getInput1());
 	}
 	
-	private static ParseSuccess getParseResult2(GrammarGraph registry) {
+	private static ParseSuccess getParseResult1_Lookahead1(GrammarGraph registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(5)
+				.setGSSNodesCount(4)
+				.setGSSEdgesCount(3)
+				.setNonterminalNodesCount(2)
+				.setTerminalNodesCount(3)
+				.setIntermediateNodesCount(2)
+				.setPackedNodesCount(4)
+				.setAmbiguousNodesCount(0).build();
+		return new ParseSuccess(expectedSPPF1(registry), statistics, getInput1());
+	}
+	
+	private static ParseSuccess getParseResult2_Lookahead0(GrammarGraph registry) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(18)
+				.setGSSNodesCount(7)
+				.setGSSEdgesCount(6)
+				.setNonterminalNodesCount(6)
+				.setTerminalNodesCount(5)
+				.setIntermediateNodesCount(4)
+				.setPackedNodesCount(10)
+				.setAmbiguousNodesCount(0).build();
+		return new ParseSuccess(expectedSPPF2(registry), statistics, getInput2());
+	}
+	
+	private static ParseSuccess getParseResult2_Lookahead1(GrammarGraph registry) {
+		ParseStatistics statistics = ParseStatistics.builder()
+				.setDescriptorsCount(12)
 				.setGSSNodesCount(7)
 				.setGSSEdgesCount(6)
 				.setNonterminalNodesCount(6)

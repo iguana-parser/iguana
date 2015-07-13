@@ -28,8 +28,6 @@
 package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.sppf.lookup.DistributedSPPFLookupImpl;
-import org.iguana.sppf.lookup.SPPFLookup;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 
@@ -41,11 +39,6 @@ import org.iguana.util.Input;
 public class ParserFactory {
 	
 	public static GLLParser getParser(Configuration config, Input input, Grammar grammar) {
-		return new GLLParserImpl(config, getSPPFLookup(config, input, grammar));		
+		return new GLLParserImpl(config);		
 	}
-		
-	private static SPPFLookup getSPPFLookup(Configuration config, Input input, Grammar grammar) {
-		return new DistributedSPPFLookupImpl(input);
-	}
-	
 }

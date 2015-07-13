@@ -32,9 +32,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.PackedNode;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Input;
 
@@ -78,18 +76,8 @@ public class TerminalTransition extends AbstractTransition {
 		if (postConditions.execute(input, u, rightExtent))
 			return;
 			
-		NonPackedNode n;
-		if (dest.isFirst()) {
-			n = cr;
-		} else {
-			IntermediateNode inode = new IntermediateNode(dest, node.getLeftExtent(), rightExtent);
-			PackedNode pnode = new PackedNode(dest, node.getRightExtent(), inode);
-			inode.addPackedNode(pnode, node, cr);
-			n = inode;
-			parser.intermedaiteNodeAdded(inode);
-			parser.packedNodeAdded(pnode);
-		}
-		
+		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(parser, node, cr);
+				
 		dest.execute(parser, u, rightExtent, n);
 	}
 	
@@ -145,18 +133,8 @@ public class TerminalTransition extends AbstractTransition {
 		if (postConditions.execute(input, u, rightExtent, parser.getEvaluatorContext()))
 			return;
 		
-		NonPackedNode n;
-		if (dest.isFirst()) {
-			n = cr;
-		} else {
-			IntermediateNode inode = new org.iguana.datadependent.sppf.IntermediateNode(dest, node.getLeftExtent(), rightExtent, env);
-			PackedNode pnode = new PackedNode(dest, node.getRightExtent(), inode);
-			inode.addPackedNode(pnode, node, cr);
-			n = inode;
-			parser.intermedaiteNodeAdded(inode);
-			parser.packedNodeAdded(pnode);
-		}
-		
+		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(parser, node, cr);
+				
 		dest.execute(parser, u, rightExtent, n, env);
 	}
 	

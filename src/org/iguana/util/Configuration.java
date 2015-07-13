@@ -38,8 +38,6 @@ public class Configuration {
 	
 	private final LookupImpl gssLookupImpl;
 	
-	private final LookupImpl sppfLookupImpl;
-	
 	private final LookupImpl descriptorLookupImpl;
 	
 	private final MatcherType matcherType;
@@ -48,7 +46,6 @@ public class Configuration {
 	
 	private Configuration(Builder builder) {
 		this.gssLookupImpl = builder.gssLookupImpl;
-		this.sppfLookupImpl = builder.sppfLookupImpl;
 		this.descriptorLookupImpl = builder.descriptorLookupImpl;
 		this.lookAheadCount = builder.lookaheadCount;
 		this.matcherType = builder.matcherType;
@@ -58,10 +55,6 @@ public class Configuration {
 		return gssLookupImpl;
 	}
 	
-	public LookupImpl getSPPFLookupImpl() {
-		return sppfLookupImpl;
-	}
-
 	public LookupImpl getDescriptorLookupImpl() {
 		return descriptorLookupImpl;
 	}
@@ -91,14 +84,12 @@ public class Configuration {
 	@Override
 	public String toString() {
 		return "GSS Lookup Impl: " + gssLookupImpl + "\n" +
-			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" +
-			   "SPPF Lookup Impl: " + sppfLookupImpl;
+			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" + "SPPF Lookup Impl: ";
 	}
 	
 	public static class Builder {
 		
 		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
-		private LookupImpl sppfLookupImpl = LookupImpl.HASH_MAP;
 		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
 		private final MatcherType matcherType = MatcherType.JAVA_REGEX;
 		private int lookaheadCount = 1;
@@ -111,12 +102,7 @@ public class Configuration {
 			this.gssLookupImpl = gssLookupImpl;
 			return this;
 		}
-		
-		public Builder setSPPFLookupImpl(LookupImpl sppfLookupImpl) {
-			this.sppfLookupImpl = sppfLookupImpl;
-			return this;
-		}
-		
+				
 		public Builder setDescriptorLookupImpl(LookupImpl descriptorLookupImpl) {
 			this.descriptorLookupImpl = descriptorLookupImpl;
 			return this;
