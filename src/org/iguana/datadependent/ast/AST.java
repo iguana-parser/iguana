@@ -548,7 +548,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression find(Expression arg1, Expression arg2, Expression arg3) {
+	static public Expression find(Expression arg1, Expression arg2) {
 		return new Expression.Call("find", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -577,12 +577,12 @@ public class AST {
 					
 					@Override
 					public java.lang.String getConstructorCode() {
-						return "AST.find(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," + arg3.getConstructorCode() + ")";
+						return "AST.find(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
 					}
 					
 					@Override
 					public java.lang.String toString() {
-						return java.lang.String.format("find(%s,%s,%s)", arg1, arg2, arg3);
+						return java.lang.String.format("find(%s,%s)", arg1, arg2);
 					}
 		};
 	}
