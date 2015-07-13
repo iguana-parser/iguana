@@ -86,6 +86,8 @@ public class TerminalTransition extends AbstractTransition {
 			PackedNode pnode = new PackedNode(dest, node.getRightExtent(), inode);
 			inode.addPackedNode(pnode, node, cr);
 			n = inode;
+			parser.intermedaiteNodeAdded(inode);
+			parser.packedNodeAdded(pnode);
 		}
 		
 		dest.execute(parser, u, rightExtent, n);
@@ -151,6 +153,8 @@ public class TerminalTransition extends AbstractTransition {
 			PackedNode pnode = new PackedNode(dest, node.getRightExtent(), inode);
 			inode.addPackedNode(pnode, node, cr);
 			n = inode;
+			parser.intermedaiteNodeAdded(inode);
+			parser.packedNodeAdded(pnode);
 		}
 		
 		dest.execute(parser, u, rightExtent, n, env);
