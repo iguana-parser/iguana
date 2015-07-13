@@ -93,6 +93,7 @@ public class GSSNode {
 	
 	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
+		parser.gssEdgeAdded(edge);
 		
 		gssEdges.add(edge);
 

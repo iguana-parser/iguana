@@ -29,7 +29,6 @@ package org.iguana.sppf.lookup;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNodeData;
@@ -42,82 +41,7 @@ import org.iguana.sppf.TerminalNode;
 import org.iguana.util.collections.Key;
 
 public interface SPPFLookup {
-	
-	default NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child) {
-		return getNonterminalNode(slot, child);
-	}
-	
-	default NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child) {
-		return hasNonterminalNode(slot, child);
-	}
-	default NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		if (slot.isFirst())
-			return rightChild;
-		
-		return getIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild);
-	}
-	
-	default NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		if (slot.isFirst())
-			return rightChild;
-		
-		return hasIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild);
-	}
-	
-	default <T> NonPackedNode getNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
-		return getNonterminalNode(slot, child, data, value);
-	}
-	
-	default <T> NonPackedNode hasNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
-		return hasNonterminalNode(slot, child, data, value);
-	}
-	
-	default <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		if (slot.isFirst())
-			return rightChild;
-		
-		return getIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild, env);
-	}
-	
-	default <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		if (slot.isFirst())
-			return rightChild;
-		
-		return hasIntermediateNode((BodyGrammarSlot) slot, leftChild, rightChild, env);
-	}
-	
-	default <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
-		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent());
-		addPackedNode(newNode, slot, child.getRightExtent(), child);
-		return newNode;
-	}
-	
-	default <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
-		return hasNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent());
-	}
-	
-	default <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
-		NonterminalNode newNode = getNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent(), data, value);
-		addPackedNode(newNode, slot, child.getRightExtent(), child);
-		return newNode;
-	}
-	
-	default <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
-		return hasNonterminalNode(slot.getNonterminal(), child.getLeftExtent(), child.getRightExtent(), data, value);
-	}
-	
-	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		NodeCreator<IntermediateNode> creator = (key, val) -> {
-			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
-			intermediateNodeAdded(newNode);
-			return newNode;
-		};
-		
-		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), creator);
-		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-		return newNode;
-	}
-	
+				
 	default NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		if (slot.isFirst())
@@ -170,26 +94,6 @@ public interface SPPFLookup {
 		getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env, creator);
 		
 		return holder.has() ? holder.val : null;
-	}	
-	
-	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
-	}
-	
-	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		NodeCreator<IntermediateNode> creator = (key, val) -> {
-			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
-			intermediateNodeAdded(newNode);
-			return newNode;
-		};
-		
-		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env, creator);
-		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-		return newNode;
-	}
-	
-	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
 	}
 		
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent);

@@ -43,7 +43,6 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.DummySlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -291,42 +290,12 @@ public class GLLParserImpl implements GLLParser {
 		countGSSNodes = 0;
 		countGSSEdges = 0;
 	}
-	
-	@Override
-	public NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
-		return sppfLookup.getNonterminalNode(slot, child);
-	}
-	
-	@Override
-	public NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child) {
-		return sppfLookup.hasNonterminalNode(slot, child);
-	}
-	
-	@Override
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
-	}
-	
+		
 	@Override
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild);
 	}
 	
-	@Override
-	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
-	}
-		
-	@Override 
-	public NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getNode(slot, leftChild, rightChild);
-	}
-	
-	@Override
-	public NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.hasNode(slot, leftChild, rightChild);
-	}
-
 	@Override
 	public Configuration getConfiguration() {
 		return config;
@@ -440,40 +409,12 @@ public class GLLParserImpl implements GLLParser {
 		
 		return values;
 	}
-	
-	@Override
-	public <T> NonterminalNode getNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
-		return sppfLookup.getNonterminalNode(slot, child, data, value);
-	}
-	
-	@Override
-	public <T> NonterminalNode hasNonterminalNode(EndGrammarSlot slot, NonPackedNode child, GSSNodeData<T> data, Object value) {
-		return sppfLookup.hasNonterminalNode(slot, child, data, value);
-	}
-	
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild, env);
-	}
-	
+		
 	@Override
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild, env);
 	}
 	
-	@Override
-	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.hasIntermediateNode(slot, leftChild, rightChild, env);
-	}
-	
-	public <T> NonPackedNode getNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.getNode(slot, leftChild, rightChild, env);
-	}
-	
-	@Override
-	public <T> NonPackedNode hasNode(GrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.hasNode(slot, leftChild, rightChild, env);
-	}
-
 	@Override
 	public GrammarGraph getGrammarGraph() {
 		return grammarGraph;
