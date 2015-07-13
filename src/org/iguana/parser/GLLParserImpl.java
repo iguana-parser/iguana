@@ -119,6 +119,9 @@ public class GLLParserImpl implements GLLParser {
 	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ? extends Object> map, boolean global) {
 		this.grammarGraph = grammarGraph;
 		this.input = input;
+
+		grammarGraph.reset(input);
+		resetParser();
 		
 		/**
 		 * Data-dependent GLL parsing
@@ -151,8 +154,7 @@ public class GLLParserImpl implements GLLParser {
 			startGSSNode = startSymbol.getGSSNode(0);
 		}
 		
-		grammarGraph.reset(input);
-		resetParser(startSymbol);
+		cu = startGSSNode;
 		
 		logger.log("Parsing %s:", input.getURI());
 
@@ -266,10 +268,10 @@ public class GLLParserImpl implements GLLParser {
 		return input;
 	}
 	
-	private void resetParser(NonterminalGrammarSlot startSymbol) {
+	private void resetParser() {
 		descriptorsStack.clear();
 		ci = 0;
-		cu = startGSSNode;			
+		cu = null;			
 		cn = DummyNode.getInstance();
 		errorSlot = null;
 		errorIndex = 0;

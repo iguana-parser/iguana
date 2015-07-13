@@ -60,13 +60,14 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	}
 	
 	public boolean addPackedNode(GLLParser parser, BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		PackedNode packedNode = new PackedNode(slot, leftChild.getRightExtent(), this);
+
 		boolean ambiguousBefore = isAmbiguous();
-		
-		addPackedNode(packedNode);
+
+		PackedNode packedNode = new PackedNode(slot, leftChild.getRightExtent(), this);
 		packedNode.addChild(leftChild);
 		packedNode.addChild(rightChild);
-
+		
+		addPackedNode(packedNode);
 		parser.packedNodeAdded(packedNode);
 		
 		boolean ambiguousAfter = isAmbiguous();
