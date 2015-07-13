@@ -42,18 +42,6 @@ import org.iguana.util.collections.Key;
 
 public interface SPPFLookup {
 				
-	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		NodeCreator<IntermediateNode> creator = (key, val) -> {
-			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
-			intermediateNodeAdded(newNode);
-			return newNode;
-		};
-		
-		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), creator);
-		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-		return newNode;
-	}
-	
 	default NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		if (slot.isFirst())
@@ -106,26 +94,6 @@ public interface SPPFLookup {
 		getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env, creator);
 		
 		return holder.has() ? holder.val : null;
-	}	
-	
-	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
-	}
-	
-	default IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		NodeCreator<IntermediateNode> creator = (key, val) -> {
-			IntermediateNode newNode = createIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent());
-			intermediateNodeAdded(newNode);
-			return newNode;
-		};
-		
-		IntermediateNode newNode = getIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env, creator);
-		addPackedNode(newNode, slot, rightChild.getLeftExtent(), leftChild, rightChild);
-		return newNode;
-	}
-	
-	default IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return hasIntermediateNode(slot, leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
 	}
 		
 	public NonterminalNode getNonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent);

@@ -77,10 +77,6 @@ public interface GLLParser {
 	
 	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
-	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
-	
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
-	
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild);
 		
 	public void recordParseError(GrammarSlot slot);
@@ -124,11 +120,7 @@ public interface GLLParser {
 	
 	public Environment getEmptyEnvironment();
 		
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
-	
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
-	
-	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env);
 	
 	public GrammarGraph getGrammarGraph();
 	

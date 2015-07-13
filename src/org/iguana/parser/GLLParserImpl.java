@@ -292,20 +292,10 @@ public class GLLParserImpl implements GLLParser {
 	}
 		
 	@Override
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
-	}
-	
-	@Override
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
 		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild);
 	}
 	
-	@Override
-	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild);
-	}
-		
 	@Override
 	public Configuration getConfiguration() {
 		return config;
@@ -420,18 +410,9 @@ public class GLLParserImpl implements GLLParser {
 		return values;
 	}
 		
-	public IntermediateNode getIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.getIntermediateNode(slot, leftChild, rightChild, env);
-	}
-	
 	@Override
 	public NonPackedNode getIntermediateNode2(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		return sppfLookup.getIntermediateNode2(slot, leftChild, rightChild, env);
-	}
-	
-	@Override
-	public IntermediateNode hasIntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		return sppfLookup.hasIntermediateNode(slot, leftChild, rightChild, env);
 	}
 	
 	@Override
