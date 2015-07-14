@@ -42,6 +42,9 @@ public class PrecedenceLevel implements Serializable {
 	private boolean hasPostfixUnary = false;
 	private boolean hasPostfixUnaryBelow = false;
 	
+	public int prefixUnaryBelow = -1;
+	public int postfixUnaryBelow = -1;
+	
 	private int undefined = -1;
 	
 	private int index;
@@ -56,7 +59,7 @@ public class PrecedenceLevel implements Serializable {
 	}
 	
 	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 
-										boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
+			   						   boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
 		PrecedenceLevel level = new PrecedenceLevel(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;
@@ -64,6 +67,20 @@ public class PrecedenceLevel implements Serializable {
 		level.hasPostfixUnary = hasPostfixUnary;
 		level.hasPrefixUnaryBelow = hasPrefixUnaryBelow;
 		level.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
+		return level;
+	}
+	
+	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 
+									   boolean hasPrefixUnaryBelow, int prefixUnaryBelow, boolean hasPostfixUnaryBelow, int postfixUnaryBelow) {
+		PrecedenceLevel level = new PrecedenceLevel(lhs);
+		level.rhs = rhs;
+		level.undefined = undefined;
+		level.hasPrefixUnary = hasPrefixUnary;
+		level.hasPostfixUnary = hasPostfixUnary;
+		level.hasPrefixUnaryBelow = hasPrefixUnaryBelow;
+		level.prefixUnaryBelow = prefixUnaryBelow;
+		level.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
+		level.postfixUnaryBelow = postfixUnaryBelow;
 		return level;
 	}
 	
@@ -78,6 +95,7 @@ public class PrecedenceLevel implements Serializable {
 	}
 	
 	public PrecedenceLevel getNext() {
+		
 		this.done();
 		
 		PrecedenceLevel next = new PrecedenceLevel(index);
@@ -85,8 +103,18 @@ public class PrecedenceLevel implements Serializable {
 		if (hasPrefixUnary || hasPrefixUnaryBelow)
 			next.hasPrefixUnaryBelow = true;
 		
+		if (hasPrefixUnary)
+			next.prefixUnaryBelow = rhs;
+		else if (hasPrefixUnaryBelow)
+			next.prefixUnaryBelow = prefixUnaryBelow;
+		
 		if (hasPostfixUnary || hasPostfixUnaryBelow)
 			next.hasPostfixUnaryBelow = true;
+		
+		if (hasPostfixUnary)
+			next.postfixUnaryBelow = rhs;
+		else if (hasPostfixUnaryBelow)
+			next.postfixUnaryBelow = postfixUnaryBelow;
 		
 		return next;
 	}
@@ -180,7 +208,7 @@ public class PrecedenceLevel implements Serializable {
 		
 	public String getConstructorCode() {
 		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnary + "," + hasPostfixUnary + "," 
-														+ hasPrefixUnaryBelow + "," + hasPostfixUnaryBelow + ")";
+												     + hasPrefixUnaryBelow + "," + prefixUnaryBelow + "," + hasPostfixUnaryBelow + "," + postfixUnaryBelow + ")";
 	}
 	
 	@Override
