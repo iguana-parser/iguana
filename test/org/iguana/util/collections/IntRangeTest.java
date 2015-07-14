@@ -132,5 +132,43 @@ public class IntRangeTest {
 
 		assertEquals(1, tree.get(' '));
 	}
+	
+	@Test
+	public void test9() {
+		IntRangeTree tree = new IntRangeTree();
+		tree.insert(CharacterRange.in('A', 'Z'), 1);
+		tree.insert(CharacterRange.in('d', 'd'), 1);
+		tree.insert(CharacterRange.in(',', ','), 1);
+		tree.insert(CharacterRange.in('0', '0'), 1);
+		tree.insert(CharacterRange.in('\\', '\\'), 1);
+		tree.insert(CharacterRange.in('f', 'f'), 1);
+		tree.insert(CharacterRange.in('l', 'l'), 1);
+		tree.insert(CharacterRange.in('~', '~'), 1);
+		tree.insert(CharacterRange.in('p', 'p'), 1);
+		tree.insert(CharacterRange.in('\u0020', '\u0020'), 1);
+		tree.insert(CharacterRange.in('"', '"'), 1);
+		tree.insert(CharacterRange.in('$', '$'), 1);
+		tree.insert(CharacterRange.in('(', '('), 1);
+		tree.insert(CharacterRange.in('j','k'), 1);
+		tree.insert(CharacterRange.in('c', 'c'), 1);
+		tree.insert(CharacterRange.in('i', 'i'), 1);
+		tree.insert(CharacterRange.in('e', 'e'), 1);
+		tree.insert(CharacterRange.in('{', '{'), 1);
+		tree.insert(CharacterRange.in('#', '#'), 1);
+		tree.insert(CharacterRange.in(-1, -1), 1);
+		tree.insert(CharacterRange.in(13, 13), 1);
+		tree.insert(CharacterRange.in('!', '!'), 1);
+		tree.insert(CharacterRange.in('\'', '\''), 1);
+		tree.insert(CharacterRange.in(')', ')'), 1);
+		tree.insert(CharacterRange.in('-', '-'), 1);
+		tree.insert(CharacterRange.in('[', '['), 1);
+		tree.insert(CharacterRange.in('_', '_'), 1);
+		tree.insert(CharacterRange.in('a', 'b'), 1);
+		tree.insert(CharacterRange.in('g', 'h'), 1);
+		tree.insert(CharacterRange.in('m', 'o'), 1);
+		tree.insert(CharacterRange.in('\u0009', '\u000B'), 1);
+		tree.insert(CharacterRange.in('1', '9'), 1);
+		tree.insert(CharacterRange.in('q', 'z'), 1);
+	}
 
 }

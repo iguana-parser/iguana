@@ -180,11 +180,9 @@ public class GrammarGraph implements Serializable {
 	}
 
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
-		
+		System.out.println(nonterminal);
 		if (config.getLookAheadCount() == 0)
 			return i -> nonterminalSlot.getFirstSlots();
-		
-		RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
 		
 		Map<CharacterRange, List<BodyGrammarSlot>> map = new HashMap<>();
 		
@@ -207,8 +205,6 @@ public class GrammarGraph implements Serializable {
 		Function<CharacterRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toSet());
 		
 		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(f.apply(r))); 
-		
-		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue().isEmpty() ? Collections.emptyList() : e.getValue()));
 		
 		return new RangeTreeLookaheadTest(nonOverlappingMap);
 	}
