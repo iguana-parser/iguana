@@ -196,8 +196,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			root = y;
 		}
 		
-		x.updateHeight();
-		y.updateHeight();
+		updateHeight(x);
 	}
 	
 	/**
@@ -226,9 +225,8 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		} else {
 			root = y;
 		}
-		
-		x.updateHeight();
-		y.updateHeight();
+
+		updateHeight(x);
 	}
 	
 	public boolean isBalanced() {
