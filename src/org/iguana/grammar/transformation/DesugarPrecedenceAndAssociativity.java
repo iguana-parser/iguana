@@ -28,6 +28,8 @@
 package org.iguana.grammar.transformation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -228,16 +230,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					// Rule for propagation of a precedence level
 					if (precedenceLevel.hasPostfixUnaryBelow())
-						r1 = nUseMin? var("r")
-						            : precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"));
+						r1 = nUseMin? var("r") : pr(precedence, precedenceLevel.postfixUnaryBelow, false);
 					else if (precedenceLevel.hasPostfixUnary())
 						r1 = integer(first? 0 : precedence);
 					else 
 						r1 = l1;
 					
 					if (precedenceLevel.hasPrefixUnaryBelow())
-						l2 = nUseMin? var("l")
-						            : precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"));
+						l2 = nUseMin? var("l") : pr(precedence, precedenceLevel.prefixUnaryBelow, true);
 					else if (precedenceLevel.hasPrefixUnary())
 						l2 = integer(first? 0 : precedence);
 					else 
@@ -248,10 +248,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					r2 = integer(precedence);
 					
 					// Rule for propagation of a precedence level
-					l2 = nUseMin? var("l")
-					            : precedenceLevel.hasPrefixUnaryBelow()? (precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"))) : integer(0);
-					r1 = nUseMin? var("r")
-					            : precedenceLevel.hasPostfixUnaryBelow()? (precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"))) : integer(0);
+					l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(0);
+					r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(0);
 				}
 				
 			} else if (associativityGroup == null && precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can use precedence climbing
@@ -278,16 +276,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 				// Rule for propagation of a precedence level
 				if (precedenceLevel.hasPostfixUnaryBelow())
-					r1 = nUseMin? var("r")
-					            : precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"));
+					r1 = nUseMin? var("r") : pr(precedence, precedenceLevel.postfixUnaryBelow, false);
 				else if (precedenceLevel.hasPostfixUnary())
 					r1 = integer(first? 0 : precedence);
 				else 
 					r1 = l1;
 				
 				if (precedenceLevel.hasPrefixUnaryBelow())
-					l2 = nUseMin? var("l")
-					            : precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"));
+					l2 = nUseMin? var("l") : pr(precedence, precedenceLevel.prefixUnaryBelow, true);
 				else if (precedenceLevel.hasPrefixUnary())
 					l2 = integer(first? 0 : precedence);
 				else 
@@ -304,37 +300,29 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						l1 = integer(useUndefined? undefined : precedence);
 						r2 = integer(precedence);
 						// Rule for propagation of a precedence level
-						l2 = nUseMin? var("l")
-						            : precedenceLevel.hasPrefixUnaryBelow()? (precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"))) : integer(0);
-						r1 = nUseMin? var("r")
-						            : precedenceLevel.hasPostfixUnaryBelow()? (precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"))) : integer(useUndefined? undefined : 0);
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(0);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(useUndefined? undefined : 0);
 						break;
 					case RIGHT:
 						l1 = integer(precedence);
 						r2 = integer(useUndefined? undefined : precedence);
 						// Rule for propagation of a precedence level
-						l2 = nUseMin? var("l")
-						            : precedenceLevel.hasPrefixUnaryBelow()? (precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"))) : integer(useUndefined? undefined : 0);
-						r1 = nUseMin? var("r")
-						            : precedenceLevel.hasPostfixUnaryBelow()? (precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"))) : integer(0);
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(useUndefined? undefined : 0);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(0);
 						break;
 					case NON_ASSOC:
 						l1 = integer(precedence);
 						r2 = integer(precedence);
 						// Rule for propagation of a precedence level
-						l2 = nUseMin? var("l")
-						            : precedenceLevel.hasPrefixUnaryBelow()? (precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"))) : integer(0);
-						r1 = nUseMin? var("r")
-						            : precedenceLevel.hasPostfixUnaryBelow()? (precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"))) : integer(0);
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(0);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(0);
 						break;
 					case UNDEFINED: // Not in the associativity group
 						l1 = integer(undefined);
 						r2 = integer(undefined);
 						// Rule for propagation of a precedence level
-						l2 = nUseMin? var("l")
-						            : precedenceLevel.hasPrefixUnaryBelow()? (precedenceLevel.prefixUnaryBelow == -1? var("l") : min(integer(precedenceLevel.prefixUnaryBelow + 1), var("l"))) : integer(undefined);
-						r1 = nUseMin? var("r")
-						            : precedenceLevel.hasPostfixUnaryBelow()? (precedenceLevel.postfixUnaryBelow == -1? var("r") : min(integer(precedenceLevel.postfixUnaryBelow + 1), var("r"))) : integer(undefined);
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(undefined);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(undefined);
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
@@ -438,6 +426,33 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 			}
 			
+		}
+		
+		private static Expression pr(int current, Integer[] indices, boolean prefix) {
+			if (prefix) {
+				if (indices.length == 0)
+					return var("l");
+				
+				if (indices.length == 1)
+					return pr1(var("l"), integer(current), integer(indices[0] + 1));
+				
+				List<Integer> list = Arrays.asList(indices);
+				Collections.reverse(list);
+				
+				return pr2(var("l"), integer(current), list.stream().map(i -> integer(i + 1)).toArray(Expression[]::new));
+				
+			} else {
+				if (indices.length == 0)
+					return var("r");
+				
+				if (indices.length == 1)
+					return pr1(var("r"), integer(current), integer(indices[0] + 1));
+				
+				List<Integer> list = Arrays.asList(indices);
+				Collections.reverse(list);
+				
+				return pr2(var("r"), integer(current), list.stream().map(i -> integer(i + 1)).toArray(Expression[]::new));
+			}
 		}
 		
 		public Rule transform() {

@@ -28,11 +28,13 @@
 package org.iguana.datadependent.ast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.IEvaluatorContext;
@@ -341,27 +343,84 @@ public class AST {
 		};
 	}
 	
-	static public Expression min(Expression arg1, Expression arg2) {
-		return new Expression.Call("min", arg1, arg2) {
+	static public Expression pr1(Expression arg1, Expression arg2, Expression arg3) {
+		return new Expression.Call("pr1", arg1, arg2, arg3) {
 			
 			private static final long serialVersionUID = 1L;
 
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
-						int v1 = (java.lang.Integer) arg1.interpret(ctx);
-						int v2 = (java.lang.Integer) arg2.interpret(ctx);
+						int v = (java.lang.Integer) arg1.interpret(ctx);
+						int curr = (java.lang.Integer) arg2.interpret(ctx);
 						
-						return java.lang.Integer.min(v1, v2);
+						if (v >= curr)
+							return v;
+						
+						int prev = (java.lang.Integer) arg3.interpret(ctx); // prev is actually previous plus one
+						
+						if (v >= prev)
+							return curr;
+						
+						return 0;
 					}
 					
 					@Override
 					public java.lang.String getConstructorCode() {
-						return "AST.min(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+						return "AST.pr1(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," + arg3.getConstructorCode() + ")";
 					}
 					
 					@Override
 					public java.lang.String toString() {
-						return java.lang.String.format("min(%s,%s)", arg1, arg2);
+						return java.lang.String.format("pr1(%s,%s,%s)", arg1, arg2, arg3);
+					}
+		};
+	}
+	
+	static public Expression pr2(Expression arg1, Expression arg2, Expression[] arg3) {
+		Expression[] args = new Expression[arg3.length + 2];
+		args[0] = arg1; args[1] = arg2;
+		int i = 2;
+		for (Expression arg : arg3)
+			args[i++] = arg;
+		
+		return new Expression.Call("pr2", args) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						
+						int v = (java.lang.Integer) arg1.interpret(ctx);
+						int curr = (java.lang.Integer) arg2.interpret(ctx);
+						
+						if (v >= curr)
+							return v;
+						
+						int prev = (java.lang.Integer) arg3[0].interpret(ctx);
+						
+						if (v >= prev)
+							return curr;
+						
+						for (int i = 1; i < arg3.length; i++) {
+							prev = (java.lang.Integer) arg3[i].interpret(ctx);
+							
+							if (v >= prev)
+								return prev;
+						}
+						
+						return 0;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						GeneratorUtil.listToString(Arrays.stream(arg3).map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",");
+						return "AST.pr1(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," 
+										  + "new Expression[] {" + GeneratorUtil.listToString(Arrays.stream(arg3).map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",") + "}" + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("pr1(%s,%s,%s)", arg1, arg2, GeneratorUtil.listToString(arg3, ","));
 					}
 		};
 	}

@@ -28,6 +28,9 @@
 package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
+import java.util.Arrays;
+
+import org.iguana.util.generator.GeneratorUtil;
 
 public class PrecedenceLevel implements Serializable {
 	
@@ -42,8 +45,8 @@ public class PrecedenceLevel implements Serializable {
 	private boolean hasPostfixUnary = false;
 	private boolean hasPostfixUnaryBelow = false;
 	
-	public int prefixUnaryBelow = -1;
-	public int postfixUnaryBelow = -1;
+	public Integer[] prefixUnaryBelow = new Integer[0];
+	public Integer[] postfixUnaryBelow = new Integer[0];
 	
 	private int undefined = -1;
 	
@@ -71,7 +74,7 @@ public class PrecedenceLevel implements Serializable {
 	}
 	
 	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 
-									   boolean hasPrefixUnaryBelow, int prefixUnaryBelow, boolean hasPostfixUnaryBelow, int postfixUnaryBelow) {
+									   boolean hasPrefixUnaryBelow, Integer[] prefixUnaryBelow, boolean hasPostfixUnaryBelow, Integer[] postfixUnaryBelow) {
 		PrecedenceLevel level = new PrecedenceLevel(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;
@@ -100,21 +103,17 @@ public class PrecedenceLevel implements Serializable {
 		
 		PrecedenceLevel next = new PrecedenceLevel(index);
 		
-		if (hasPrefixUnary || hasPrefixUnaryBelow)
-			next.hasPrefixUnaryBelow = true;
+		next.hasPrefixUnaryBelow = hasPrefixUnary || hasPrefixUnaryBelow;
+		next.hasPostfixUnaryBelow = hasPostfixUnary || hasPostfixUnaryBelow;
+		
+		next.prefixUnaryBelow = Arrays.copyOf(prefixUnaryBelow, (hasPrefixUnary? 1 : 0) + prefixUnaryBelow.length);
+		next.postfixUnaryBelow = Arrays.copyOf(postfixUnaryBelow, (hasPostfixUnary? 1 : 0) + postfixUnaryBelow.length);
 		
 		if (hasPrefixUnary)
-			next.prefixUnaryBelow = rhs;
-		else if (hasPrefixUnaryBelow)
-			next.prefixUnaryBelow = prefixUnaryBelow;
-		
-		if (hasPostfixUnary || hasPostfixUnaryBelow)
-			next.hasPostfixUnaryBelow = true;
+			next.prefixUnaryBelow[next.prefixUnaryBelow.length - 1] = rhs;
 		
 		if (hasPostfixUnary)
-			next.postfixUnaryBelow = rhs;
-		else if (hasPostfixUnaryBelow)
-			next.postfixUnaryBelow = postfixUnaryBelow;
+			next.postfixUnaryBelow[next.postfixUnaryBelow.length - 1] = rhs;
 		
 		return next;
 	}
@@ -208,7 +207,8 @@ public class PrecedenceLevel implements Serializable {
 		
 	public String getConstructorCode() {
 		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnary + "," + hasPostfixUnary + "," 
-												     + hasPrefixUnaryBelow + "," + prefixUnaryBelow + "," + hasPostfixUnaryBelow + "," + postfixUnaryBelow + ")";
+												     + hasPrefixUnaryBelow + "," + "new Integer[]{" + GeneratorUtil.listToString(prefixUnaryBelow, ",") + "}" + "," 
+												     + hasPostfixUnaryBelow + "," + "new Integer[]{" + GeneratorUtil.listToString(postfixUnaryBelow, ",") + "}" + ")";
 	}
 	
 	@Override
