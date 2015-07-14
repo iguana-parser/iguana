@@ -319,8 +319,12 @@ public class GrammarGraph implements Serializable {
 			BodyGrammarSlot done;
 			if (i != rule.size() - 1)
 				throw new RuntimeException("Return symbol can only be used at the end of a grammar rule!");
-			else
-				done = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
+			else {
+				if (rule.size() == 1)
+					done = new EpsilonGrammarSlot(id++, rule.getPosition(i + 1), head, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction());
+				else
+					done = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
+			}
 			
 			currentSlot.addTransition(new ReturnTransition(symbol.getExpression(), currentSlot, done));
 			currentSlot = done;

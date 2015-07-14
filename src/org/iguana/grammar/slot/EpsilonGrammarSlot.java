@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
@@ -71,6 +72,14 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode));
 		}
 		
+	}
+	
+	@Override
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
+		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
+			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, parser.getInput(), i);
+			parser.pop(u, i, u.addToPoppedElements(parser, IntKey1PlusObject.from(i, value, parser.getInput().length()), this, epsilonNode, value));
+		}
 	}
 
 }
