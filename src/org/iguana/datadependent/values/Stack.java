@@ -76,4 +76,12 @@ public class Stack<T> {
 	public int hashCode() {
 		return hash;
 	}
+	
+	@Override
+	public String toString() {
+		if (parent == null)
+			return top.toString();
+		
+		return top.toString() + "," + parent.toString();
+	}
 }

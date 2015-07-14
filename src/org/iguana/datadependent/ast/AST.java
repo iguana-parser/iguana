@@ -469,6 +469,10 @@ public class AST {
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						Object value = arg1.interpret(ctx);
+						
+						if (value == null)
+							return Stack.from(arg2.interpret(ctx));
+						
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
