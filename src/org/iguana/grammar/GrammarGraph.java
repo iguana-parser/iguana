@@ -180,7 +180,6 @@ public class GrammarGraph implements Serializable {
 	}
 
 	private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
-		System.out.println(nonterminal);
 		if (config.getLookAheadCount() == 0)
 			return i -> nonterminalSlot.getFirstSlots();
 		

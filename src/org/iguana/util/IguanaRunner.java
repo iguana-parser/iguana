@@ -32,8 +32,10 @@ import static org.iguana.util.BenchmarkUtil.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -84,26 +86,26 @@ public class IguanaRunner {
 		while (it.hasNext()) {
 			
 			Input input = it.next();
-			System.out.println(input.getURI());
+//			System.out.println(input.getURI());
 			
 			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 
-			System.out.print("Warming up: ");
+//			System.out.print("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
 					if (result.isParseError()) {
-						System.out.println(result.asParseError());
+//						System.out.println(result.asParseError());
 						continue nextFile;
 					}
-					System.out.print((i + 1) + " ");
+//					System.out.print((i + 1) + " ");
 				} catch (Exception e) {
 					continue;
 				}
 			}
-			System.out.println();
+//			System.out.println();
 						
-			System.out.print("Running: ");
+//			System.out.print("Running: ");
 			for (int i = 0; i < runCount; i++) {			
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
@@ -112,15 +114,16 @@ public class IguanaRunner {
 					else
 						results.add(new FailureResult(input.getURI(), result.asParseError().toString()));
 					
-					System.out.print((i + 1) + " ");
+//					System.out.print((i + 1) + " ");
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
-					e.printStackTrace();
-					System.out.println("Time out");
+//					e.printStackTrace();
+					results.add(new FailureResult(input.getURI(), "Time out"));
+//					System.out.println("Time out");
 					continue;
 				}
 			}
-			System.out.println();
+//			System.out.println();
 		}
 		
 		return results;
@@ -156,6 +159,7 @@ public class IguanaRunner {
 			GcFinalization.awaitFullGc();
 		
 		return result;
+		
 //		ExecutorService executor = Executors.newSingleThreadExecutor();
 //        Future<ParseResult> future = executor.submit(() -> {
 //			return parser.parse(input, grammarGraph, start);
@@ -169,7 +173,11 @@ public class IguanaRunner {
 //        
 //        executor.shutdownNow();
 //
-//        return result;
+//		if (runGCInBetween)
+//			GcFinalization.awaitFullGc();
+//		
+//		return result;
+
 	}
 	
 	public static Builder builder(Grammar grammar, Nonterminal start) {
@@ -185,8 +193,10 @@ public class IguanaRunner {
 		private int warmupCount = 0;
 		private int runCount = 1;
 		private boolean runGCInBetween = false;
-		private int timeout = 0;
+		private int timeout = 360;
 		private int limit = Integer.MAX_VALUE;
+		
+		private Set<String> ignoreSet = new HashSet<>();
 		
 		public Builder(Grammar grammar, Nonterminal start) {
 			this.grammar = grammar;
@@ -194,12 +204,17 @@ public class IguanaRunner {
 		}
 		
 		public Builder addDirectory(String dir, String ext, boolean recursive) {
-			inputs = concat(inputs, find(dir, ext, recursive).stream().map(Input::fromFile));
+			inputs = concat(inputs, find(dir, ext, recursive, ignoreSet).stream().map(Input::fromFile));
 			return this;
 		}
 		
 		public Builder addFile(String f) {
 			inputs = concat(inputs, Stream.of(Input.fromFile(new File(f))));
+			return this;
+		}
+		
+		public Builder ignore(String f) {
+			ignoreSet.add(f);
 			return this;
 		}
 		

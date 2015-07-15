@@ -61,7 +61,6 @@ import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.logging.JavaUtilParserLogger;
 import org.iguana.util.logging.ParserLogger;
 
 /**
@@ -112,7 +111,8 @@ public class GLLParserImpl implements GLLParser {
 	public GLLParserImpl(Configuration config) {
 		this.config = config;
 		this.descriptorsStack = new ArrayDeque<>();
-		this.logger = new JavaUtilParserLogger();
+//		this.logger = new JavaUtilParserLogger();
+		logger = ParserLogger.DEFAULT;
 	}
 	
 	@Override
@@ -434,6 +434,7 @@ public class GLLParserImpl implements GLLParser {
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
 		countAmbiguousNodes++;
 		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
+//		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
 //		org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {
 //			log.warning("   Packed node: " + packedNode.toString());

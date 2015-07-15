@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
@@ -64,6 +65,18 @@ public class BenchmarkUtil {
 		Iterator<?> it = files.iterator();
 		while(it.hasNext()) {
 			inputs.add((File) it.next());							
+		}
+		return inputs;
+	}
+	
+	public static List<File> find(String dir, String ext, boolean recursive, Set<String> ignoreSet) {
+		List<File> inputs = new ArrayList<>();
+		Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, recursive);
+		Iterator<?> it = files.iterator();
+		while(it.hasNext()) {
+			File f = (File) it.next();
+			if (!ignoreSet.contains(f.getAbsolutePath()))
+				inputs.add(f);							
 		}
 		return inputs;
 	}

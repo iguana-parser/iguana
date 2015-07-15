@@ -27,7 +27,7 @@ public class RunResults {
 			if (r.isSuccess())
 				sb.append(BenchmarkUtil.format(r.asSuccess())).append(NewLine);
 			else
-				sb.append("Parse error " + r.asFailure());
+				sb.append(r.asFailure()).append(NewLine);
 		}
 		return sb.toString();
 	}
