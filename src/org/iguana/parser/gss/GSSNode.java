@@ -99,8 +99,11 @@ public class GSSNode {
 		parser.gssEdgeAdded(edge);
 		
 		gssEdges.add(edge);
-
-		for (NonPackedNode z : getPoppedElements()) {			
+		
+		for (NonPackedNode z : getPoppedElements()) {	
+			
+			if (!edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) continue;
+			
 			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
 			if (descriptor != null) {
 				parser.scheduleDescriptor(descriptor);
@@ -208,6 +211,9 @@ public class GSSNode {
 		parser.gssEdgeAdded(edge);
 
 		for (NonPackedNode z : getPoppedElements()) {
+			
+			if (!edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) continue;
+			
 			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
 			if (descriptor != null) {
 				parser.scheduleDescriptor(descriptor);

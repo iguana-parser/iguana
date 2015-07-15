@@ -27,13 +27,11 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.CharacterRanges.toNonOverlapping2;
-import static org.iguana.util.CharacterRanges.toNonOverlappingSet;
+import static org.iguana.util.CharacterRanges.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -65,6 +63,7 @@ import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalTransition;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
+import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Code;
@@ -86,8 +85,6 @@ import org.iguana.util.Configuration;
 import org.iguana.util.Configuration.LookupImpl;
 import org.iguana.util.Configuration.MatcherType;
 import org.iguana.util.Input;
-import org.iguana.util.collections.IntRangeTree;
-import org.iguana.util.collections.RangeTree;
 
 public class GrammarGraph implements Serializable {
 
@@ -215,10 +212,17 @@ public class GrammarGraph implements Serializable {
 		
 		// TODO: move toNonOverlapping to first follow itself
 		Set<CharacterRange> followSet = toNonOverlappingSet(firstFollow.getFollowSet(nonterminal));
-		IntRangeTree rangeTree = new IntRangeTree();
-		followSet.forEach(cr -> rangeTree.insert(cr, 1));
 		
-		return i -> rangeTree.get(i) == 1;
+		return new RangeTreeFollowTest(followSet);
+	}
+	
+	private FollowTest getFollowTest(Rule rule, int i) {
+		if (config.getLookAheadCount() == 0)
+			return FollowTest.DEFAULT;
+
+		Set<CharacterRange> set = toNonOverlappingSet(firstFollow.getPredictionSet(rule, i));
+		
+		return new RangeTreeFollowTest(set);
 	}
 	
 	private void addRule(NonterminalGrammarSlot head, Rule rule) {
@@ -441,6 +445,7 @@ public class GrammarGraph implements Serializable {
 		assert i < rule.size();
 		BodyGrammarSlot slot = new BodyGrammarSlot(id++, position, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
 		add(slot);
+		slot.setFollowTest(getFollowTest(rule, i));
 		return slot;
 	}
 	
@@ -448,6 +453,7 @@ public class GrammarGraph implements Serializable {
 		assert i == rule.size();
 		BodyGrammarSlot slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());				
 		add(slot);
+		slot.setFollowTest(getFollowTest(rule, i));
 		return slot;
 	}
 

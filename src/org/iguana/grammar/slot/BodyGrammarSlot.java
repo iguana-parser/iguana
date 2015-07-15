@@ -35,6 +35,7 @@ import java.util.function.BiFunction;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
+import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -61,6 +62,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Set<String> state;
 	
+	private FollowTest followTest;
+	
 	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions) {
 		super(id);
 		this.position = position;
@@ -86,6 +89,14 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	@Override
 	public boolean isFirst() {
 		return position.isFirst();
+	}
+	
+	public void setFollowTest(FollowTest followTest) {
+		this.followTest = followTest;
+	}
+	
+	public boolean testFollow(int v) {
+		return followTest.test(v);
 	}
 	
 	public IntermediateNode createIntermediateNode(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild) {

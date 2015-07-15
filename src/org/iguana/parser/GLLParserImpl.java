@@ -231,7 +231,10 @@ public class GLLParserImpl implements GLLParser {
 		
 		logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
 		
-		for(GSSEdge edge : gssNode.getGSSEdges()) {			
+		for(GSSEdge edge : gssNode.getGSSEdges()) {
+			
+			if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
+			
 			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
 			if (descriptor != null) {
 				scheduleDescriptor(descriptor);
