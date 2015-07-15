@@ -254,36 +254,45 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 			} else if (associativityGroup == null && precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can use precedence climbing
 				boolean first = precedenceLevel.getUndefined() == 0;
+				int il1 = -1; int ir2 = -1;
 				switch(associativity) {
 					case LEFT:
-						l1 = integer(first? 0 : precedence);
-						r2 = integer(precedence + 1);
+						il1 = first? 0 : precedence;
+						l1 = integer(il1);
+						ir2 = precedence + 1;
+						r2 = integer(ir2);
 						break;
 					case RIGHT:
-						l1 = integer(precedence + 1);
-						r2 = integer(first? 0 : precedence);
+						il1 = precedence + 1;
+						l1 = integer(il1);
+						ir2 = first? 0 : precedence;
+						r2 = integer(ir2);
 						break;
 					case NON_ASSOC:
-						l1 = integer(precedence + 1);
-						r2 = integer(precedence + 1);
+						il1 = precedence + 1;
+						l1 = integer(il1);
+						ir2 = precedence + 1;
+						r2 = integer(ir2);
 						break;
 					case UNDEFINED:
-						l1 = integer(first? 0 : precedence);
-						r2 = integer(first? 0 : precedence);
+						il1 = first? 0 : precedence;
+						l1 = integer(il1);
+						ir2 = first? 0 : precedence;
+						r2 = integer(ir2);
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 				
 				// Rule for propagation of a precedence level
 				if (precedenceLevel.hasPostfixUnaryBelow())
-					r1 = nUseMin? var("r") : pr(precedence, precedenceLevel.postfixUnaryBelow, false);
+					r1 = nUseMin? var("r") : pr(precedenceLevel.hasPostfixUnary()? precedence : il1, precedenceLevel.postfixUnaryBelow, false);
 				else if (precedenceLevel.hasPostfixUnary())
 					r1 = integer(first? 0 : precedence);
 				else 
 					r1 = l1;
 				
 				if (precedenceLevel.hasPrefixUnaryBelow())
-					l2 = nUseMin? var("l") : pr(precedence, precedenceLevel.prefixUnaryBelow, true);
+					l2 = nUseMin? var("l") : pr(precedenceLevel.hasPrefixUnary()? precedence : ir2, precedenceLevel.prefixUnaryBelow, true);
 				else if (precedenceLevel.hasPrefixUnary())
 					l2 = integer(first? 0 : precedence);
 				else 
