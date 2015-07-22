@@ -111,7 +111,7 @@ public class GLLParserImpl implements GLLParser {
 	public GLLParserImpl(Configuration config) {
 		this.config = config;
 		this.descriptorsStack = new ArrayDeque<>();
-//		this.logger = new JavaUtilParserLogger();
+//		this.logger = new org.iguana.util.logging.JavaUtilParserLogger();
 		logger = ParserLogger.DEFAULT;
 	}
 	

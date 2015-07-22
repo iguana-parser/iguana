@@ -45,11 +45,15 @@ import org.iguana.util.visualization.TrieToDot;
 
 
 public class Visualization {
-		
+
 	public static void generateSPPFGraph(String outputDir, SPPFNode sppf, Input input) {
+		generateSPPFGraph(outputDir, "graph", sppf, input);
+	}
+	
+	public static void generateSPPFGraph(String outputDir, String file, SPPFNode sppf, Input input) {
 		SPPFToDot toDot = new SPPFToDot(input);
 		sppf.accept(toDot);
-		GraphVizUtil.generateGraph(toDot.getString(), outputDir, "graph");
+		GraphVizUtil.generateGraph(toDot.getString(), outputDir, file);
 	}
 		
 	public static void generateGSSGraph(String outputDir, Iterable<GSSNode> gssNodes) {
