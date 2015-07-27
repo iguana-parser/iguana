@@ -40,27 +40,23 @@ public class Configuration {
 	
 	private final LookupImpl gssLookupImpl;
 	
-	private final LookupImpl descriptorLookupImpl;
-	
 	private final MatcherType matcherType;
 	
 	private final int lookAheadCount;
 	
+	private final HashMapImpl hashmapImpl;
+	
 	private Configuration(Builder builder) {
 		this.gssLookupImpl = builder.gssLookupImpl;
-		this.descriptorLookupImpl = builder.descriptorLookupImpl;
 		this.lookAheadCount = builder.lookaheadCount;
 		this.matcherType = builder.matcherType;
+		this.hashmapImpl = builder.hashmapImpl;
 	}
 		
 	public LookupImpl getGSSLookupImpl() {
 		return gssLookupImpl;
 	}
-	
-	public LookupImpl getDescriptorLookupImpl() {
-		return descriptorLookupImpl;
-	}
-		
+			
 	public int getLookAheadCount() {
 		return lookAheadCount;
 	}
@@ -82,18 +78,29 @@ public class Configuration {
 		ARRAY,
 		HASH_MAP
 	}
+	
+	public static enum HashMapImpl {
+		JAVA,
+		KOLOBOKE
+	}
 		
 	@Override
 	public String toString() {
-		return "GSS Lookup Impl: " + gssLookupImpl + "\n" +
-			   "Descriptor Lookup Impl: " + descriptorLookupImpl + "\n" + "SPPF Lookup Impl: ";
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(MatcherType.class.getName()).append(": ").append(matcherType)
+		  .append(LookupImpl.class.getName()).append(": ").append(gssLookupImpl)
+		  .append(HashMapImpl.class.getName()).append(": ").append(hashmapImpl)
+		  .append("LookaheadCount").append(": ").append(lookAheadCount);
+		
+		return sb.toString();
 	}
 	
 	public static class Builder {
 		
 		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
-		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
-		private final MatcherType matcherType = MatcherType.JAVA_REGEX;
+		private MatcherType matcherType = MatcherType.JAVA_REGEX;
+		private HashMapImpl hashmapImpl = HashMapImpl.JAVA;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
 				
 		public Configuration build() {
@@ -104,9 +111,14 @@ public class Configuration {
 			this.gssLookupImpl = gssLookupImpl;
 			return this;
 		}
-				
-		public Builder setDescriptorLookupImpl(LookupImpl descriptorLookupImpl) {
-			this.descriptorLookupImpl = descriptorLookupImpl;
+		
+		public Builder setMatcherType(MatcherType matcherType) {
+			this.matcherType = matcherType;
+			return this;
+		}
+		
+		public Builder setHashmapImpl(HashMapImpl hashmapImpl) {
+			this.hashmapImpl = hashmapImpl;
 			return this;
 		}
 		
