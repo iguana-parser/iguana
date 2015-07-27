@@ -17,7 +17,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class RunResults {
+public class RunResultUtil {
 	
 	public static String format(Iterable<RunResult> results) {
 		return format(results, TimeUnit.NANOSECONDS);
