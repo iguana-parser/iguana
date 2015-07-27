@@ -28,21 +28,18 @@
 package org.iguana.util;
 
 import static java.util.stream.Stream.*;
-import static org.iguana.util.BenchmarkUtil.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -260,6 +257,19 @@ public class IguanaRunner {
 			inputs = inputs.limit(limit);
 			return new IguanaRunner(this);
 		}
+		
+		public static List<File> find(String dir, String ext, boolean recursive, Set<String> ignoreSet) {
+			List<File> inputs = new ArrayList<>();
+			Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, recursive);
+			Iterator<?> it = files.iterator();
+			while(it.hasNext()) {
+				File f = (File) it.next();
+				if (!ignoreSet.contains(f.getAbsolutePath()))
+					inputs.add(f);							
+			}
+			return inputs;
+		}	
+
 	}
 	
 }

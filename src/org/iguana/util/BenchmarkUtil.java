@@ -27,16 +27,8 @@
 
 package org.iguana.util;
 
-import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.io.FileUtils;
 
 public class BenchmarkUtil {
 	
@@ -57,26 +49,4 @@ public class BenchmarkUtil {
 		return bean.isCurrentThreadCpuTimeSupported() ? 
 				(bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
 	}
-	
-	public static List<File> find(String dir, String ext, boolean recursive) {
-		List<File> inputs = new ArrayList<>();
-		Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, recursive);
-		Iterator<?> it = files.iterator();
-		while(it.hasNext()) {
-			inputs.add((File) it.next());							
-		}
-		return inputs;
-	}
-	
-	public static List<File> find(String dir, String ext, boolean recursive, Set<String> ignoreSet) {
-		List<File> inputs = new ArrayList<>();
-		Collection<?> files = FileUtils.listFiles(new File(dir), new String[] {ext}, recursive);
-		Iterator<?> it = files.iterator();
-		while(it.hasNext()) {
-			File f = (File) it.next();
-			if (!ignoreSet.contains(f.getAbsolutePath()))
-				inputs.add(f);							
-		}
-		return inputs;
-	}	
 }
