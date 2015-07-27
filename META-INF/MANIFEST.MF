@@ -48,13 +48,6 @@ Export-Package:
    org.jgll.parser",
  org.iguana.parser.descriptor;uses:="org.jgll.sppf,org.jgll.grammar.slot,org.jgll.parser.gss",
  org.iguana.parser.gss;uses:="org.jgll.sppf,org.jgll.util.collections,org.jgll.grammar.slot",
- org.iguana.parser.lookup;
-  uses:="org.jgll.parser.descriptor,
-   org.jgll.sppf,
-   org.jgll.grammar,
-   org.jgll.util,
-   org.jgll.grammar.slot,
-   org.jgll.parser.gss",
  org.iguana.regex;uses:="org.jgll.grammar.symbol",
  org.iguana.regex.automaton;uses:="org.jgll.grammar.symbol",
  org.iguana.sppf;uses:="org.jgll.traversal,org.jgll.grammar,org.jgll.grammar.slot",

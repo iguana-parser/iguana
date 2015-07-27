@@ -29,10 +29,8 @@ package org.iguana.parser.gss;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -63,14 +61,11 @@ public class GSSNode {
 	
 	private final List<GSSEdge> gssEdges;
 
-	private Set<Key> descriptors;
-	
 	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new HashMap<>();
 		this.gssEdges = new ArrayList<>();
-		this.descriptors = null;
 	}
 	
 	public NonterminalNode addToPoppedElements(GLLParser parser, int j, EndGrammarSlot slot, NonPackedNode child) {
@@ -134,11 +129,7 @@ public class GSSNode {
 	public int countPoppedElements() {
 		return poppedElements.size();
 	}
-	
-	public int countDescriptors() {
-		return descriptors == null ? 0 : descriptors.size();
-	}
-	
+		
 	public Iterable<GSSEdge> getGSSEdges() {
 		return gssEdges;
 	}
@@ -167,17 +158,6 @@ public class GSSNode {
 
 	public int getCountGSSEdges() {
 		return gssEdges.size();
-	}
-
-	public boolean hasDescriptor(Key key) {
-		if (descriptors == null) descriptors = new HashSet<>();
-		return !descriptors.add(key);
-	}
-
-	public void clearDescriptors() {
-		poppedElements.clear();
-		gssEdges.clear();
-		if (descriptors != null) descriptors.clear();
 	}
 	
 	/**
