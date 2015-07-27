@@ -50,11 +50,11 @@ import org.iguana.util.unicode.UnicodeUtil;
 public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 
 	public String visit(Character c) {
-		return getChar(c.getValue()) + getConditions(c);
+		return getPreConditions(c) + getChar(c.getValue()) + getPostConditions(c);
 	}
 	
 	public String visit(CharacterRange r) {
-		return "[" + getRange(r) + "]" + getConditions(r);
+		return getPreConditions(r) + "[" + getRange(r) + "]" + getPostConditions(r);
 	}
 	
 	public String visit(EOF eof) {
@@ -66,23 +66,23 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	}
 	
 	public String visit(Terminal t) {
-		return t.getRegularExpression().accept(this) + getConditions(t);
+		return getPreConditions(t) + t.getRegularExpression().accept(this) + getPostConditions(t);
 	}
 	
 	public String visit(Star s) {
-		return s.getSymbol().accept(this) + "*" + getConditions(s);
+		return getPreConditions(s) + s.getSymbol().accept(this) + "*" + getPostConditions(s);
 	}
 	
 	public String visit(Plus p) {
-		return p.getSymbol().accept(this) + "+" + getConditions(p);
+		return getPreConditions(p) + p.getSymbol().accept(this) + "+" + getPostConditions(p);
 	}
 
 	public String visit(Opt o) {
-		return o.getSymbol().accept(this) + "?" + getConditions(o);
+		return getPreConditions(o) + o.getSymbol().accept(this) + "?" + getPostConditions(o);
 	}
 	
 	public <E extends Symbol> String visit(Sequence<E> seq) {
-		return "(?:" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getConditions(seq);
+		return getPreConditions(seq) + "(?:" + seq.getSymbols().stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")" + getPostConditions(seq);
 	}
 	
 	public <E extends Symbol> String visit(Alt<E> alt) {
@@ -115,7 +115,7 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 			sb.append("(?:" + other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")");
 	    }
 		
-		return sb.toString() + getConditions(alt);
+		return getPreConditions(alt) + sb.toString() + getPostConditions(alt);
 	}
 	
 	private boolean isCharClass(Symbol s) {
@@ -126,24 +126,32 @@ public class ToJavaRegexVisitor implements RegularExpressionVisitor<String> {
 	private String asCharClass(Symbol s) {
 		if (s instanceof Character) {
 			Character c = (Character) s;
-			return getChar(c.getValue()) + getConditions(c);
+			return getChar(c.getValue()) + getPostConditions(c);
 		} 
 		else if (s instanceof CharacterRange) {
 			CharacterRange r = (CharacterRange) s;
-			return getRange(r) + getConditions(r);
+			return getRange(r) + getPostConditions(r);
 		}
 		
 		throw new RuntimeException(s + " is not a character or character class.");
 	}
 	
-	private String getConditions(RegularExpression regex) {
+	private String getPostConditions(RegularExpression regex) {
 		return regex.getPostConditions().stream().map(c -> getCondition(c)).collect(Collectors.joining());
 	}
+	
+	private String getPreConditions(RegularExpression regex) {
+		return regex.getPreConditions().stream().map(c -> getCondition(c)).collect(Collectors.joining());
+	}
+
 	
 	private String getCondition(Condition condition) {
 		switch (condition.getType()) {
 			case NOT_FOLLOW: 
 				return "(?!" + getRegularExpression(condition).accept(this) + ")";
+				
+			case NOT_PRECEDE:
+				return "(?<!" + getRegularExpression(condition).accept(this) + ")";
 				
 			default: return "";
 		}

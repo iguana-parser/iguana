@@ -1,6 +1,6 @@
 package org.iguana.util;
 
-import static org.iguana.util.generator.GeneratorUtil.NewLine;
+import static org.iguana.util.generator.GeneratorUtil.*;
 
 import java.net.URI;
 import java.util.EnumSet;
@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -17,15 +18,19 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class RunResults {
-
+	
 	public static String format(Iterable<RunResult> results) {
+		return format(results, TimeUnit.NANOSECONDS);
+	}
+	
+	public static String format(Iterable<RunResult> results, TimeUnit unit) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(BenchmarkUtil.header()).append(NewLine);
+		sb.append(header).append(NewLine);
 		
 		for (RunResult r : results) {
 			sb.append(r.getInput()).append(NewLine);
 			if (r.isSuccess())
-				sb.append(BenchmarkUtil.format(r.asSuccess())).append(NewLine);
+				sb.append(format(r.asSuccess(), unit)).append(NewLine);
 			else
 				sb.append(r.asFailure()).append(NewLine);
 		}
@@ -33,27 +38,17 @@ public class RunResults {
 	}
 
 	public static String format(Map<URI, SuccessResult> results) {
+		return format(results, TimeUnit.NANOSECONDS);
+	}
+	
+	public static String format(Map<URI, SuccessResult> results, TimeUnit unit) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(BenchmarkUtil.header()).append(NewLine);
-		
+		sb.append(header).append(NewLine);
 		for (Entry<URI, SuccessResult> e : results.entrySet()) {
 			URI input = e.getKey();
 			SuccessResult result = e.getValue();
 			sb.append(input).append(NewLine);
-			sb.append(String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
-	    			result.inputSize - 1, 
-	    			result.statistics.userTime / 1000_000,
-	    			result.statistics.systemTime / 1000_000, 
-	    			result.statistics.nanoTime / 1000_000,
-	    			result.statistics.memoryUsed,
-	    			result.statistics.descriptorsCount,
-	    			result.statistics.gssNodesCount,
-	    			result.statistics.gssEdgesCount,
-	    			result.statistics.nonterminalNodesCount,
-	    			result.statistics.intermediateNodesCount,
-	    			result.statistics.terminalNodesCount, 
-	    			result.statistics.packedNodesCount, 
-	    			result.statistics.ambiguousNodesCount)).append(NewLine);
+			sb.append(format(result, unit)).append(NewLine);
 		}
 		return sb.toString();
 	}	
@@ -63,6 +58,12 @@ public class RunResults {
 		                    .filter(RunResult::isSuccess)
 		                    .map(RunResult::asSuccess)
 		                    .collect(Collectors.groupingBy(s -> s.getInput(), LinkedHashMap::new, new AverageResults()));
+	}
+	
+	public static String summary(Map<URI, SuccessResult> results) {
+		int inputSum = results.values().stream().mapToInt(r -> r.inputSize).sum();
+		long systemTimeSum = results.values().stream().mapToLong(r -> r.statistics.userTime).sum();
+		return inputSum + ", " + systemTimeSum;
 	}
 	
 	private static class AverageResults implements Collector<SuccessResult, SuccessResult, SuccessResult> {
@@ -133,4 +134,36 @@ public class RunResults {
 			return EnumSet.of(Characteristics.UNORDERED);
 		}
 	}
+	
+	public static String format(SuccessResult result, TimeUnit unit) {
+    	return String.format("%-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-20d %-15d %-15d", 
+    			result.inputSize - 1, 
+    			unit.convert(result.statistics.getUserTime(), TimeUnit.NANOSECONDS),
+    			unit.convert(result.statistics.getSystemTime(), TimeUnit.NANOSECONDS),
+    			unit.convert(result.statistics.getNanoTime(), TimeUnit.NANOSECONDS),
+    			result.statistics.getMemoryUsed(),
+    			result.statistics.getDescriptorsCount(),
+    			result.statistics.getGssNodesCount(),
+    			result.statistics.getGssEdgesCount(),
+    			result.statistics.getNonterminalNodesCount(),
+    			result.statistics.getIntermediateNodesCount(),
+    			result.statistics.getTerminalNodesCount(), 
+    			result.statistics.getPackedNodesCount(), 
+    			result.statistics.getCountAmbiguousNodes());
+	}
+	
+	private static String header = String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-15s %-15s",
+					    		   				 "size", 
+					    		   				 "user_time", 
+					    		   				 "system_time", 
+					    		   				 "nano_time", 
+					    		   				 "memory",
+					    		   				 "descriptors",
+					    		   				 "gss_nodes",
+					    		   				 "gss_edges",
+					    		   				 "nonterminal_nodes", 
+					    		   				 "intermediate_nodes", 
+					    		   				 "terminal_nodes",
+					    		   				 "packed_nodes", 
+					    		   				 "ambiguous_nodes");
 }

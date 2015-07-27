@@ -92,7 +92,7 @@ public class Configuration {
 		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
 		private LookupImpl descriptorLookupImpl = LookupImpl.HASH_MAP;
 		private final MatcherType matcherType = MatcherType.JAVA_REGEX;
-		private int lookaheadCount = 1;
+		private int lookaheadCount = 0;
 				
 		public Configuration build() {
 			return new Configuration(this);

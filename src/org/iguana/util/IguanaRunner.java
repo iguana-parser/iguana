@@ -82,7 +82,6 @@ public class IguanaRunner {
 
 		Iterator<Input> it = inputs.iterator();
 		
-		nextFile:
 		while (it.hasNext()) {
 			
 			Input input = it.next();
@@ -93,11 +92,10 @@ public class IguanaRunner {
 //			System.out.print("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
-					ParseResult result = run(parser, grammarGraph, input, start);
-					if (result.isParseError()) {
+					run(parser, grammarGraph, input, start);
+//					if (result.isParseError()) {
 //						System.out.println(result.asParseError());
-						continue nextFile;
-					}
+//					}
 //					System.out.print((i + 1) + " ");
 				} catch (Exception e) {
 					continue;
@@ -193,7 +191,7 @@ public class IguanaRunner {
 		private int warmupCount = 0;
 		private int runCount = 1;
 		private boolean runGCInBetween = false;
-		private int timeout = 360;
+		private int timeout = 30;
 		private int limit = Integer.MAX_VALUE;
 		
 		private Set<String> ignoreSet = new HashSet<>();
