@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
@@ -102,7 +101,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, IntKey1PlusObject.from(i, value, parser.getInput().length()), this, node, value));
+			parser.pop(u, i, u.addToPoppedElements(parser, this, node, value));
 	}
 
 }

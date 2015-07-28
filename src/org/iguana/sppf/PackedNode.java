@@ -50,7 +50,7 @@ public class PackedNode implements SPPFNode {
 	
 	private NonPackedNode rightChild;
 	
-	public PackedNode(GrammarSlot slot, int pivot, NonPackedNode parent) {
+	public PackedNode(GrammarSlot slot, NonPackedNode parent) {
 		this.slot = slot;
 		this.parent = parent;
 	}

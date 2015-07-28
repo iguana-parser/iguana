@@ -28,11 +28,10 @@
 package org.iguana.parser.gss;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
@@ -41,9 +40,6 @@ import org.iguana.parser.HashFunctions;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.PackedNode;
-import org.iguana.util.Holder;
-import org.iguana.util.collections.Key;
 
 /**
  *
@@ -57,36 +53,19 @@ public class GSSNode {
 
 	private final int inputIndex;
 	
-	private Map<Object, NonterminalNode> poppedElements;
+	private final PoppedElements poppedElements;
 	
 	private final List<GSSEdge> gssEdges;
 
 	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.poppedElements = new HashMap<>();
+		this.poppedElements = new PoppedElements();
 		this.gssEdges = new ArrayList<>();
 	}
 	
 	public NonterminalNode addToPoppedElements(GLLParser parser, int j, EndGrammarSlot slot, NonPackedNode child) {
-		Holder<NonterminalNode> holder = new Holder<>();
-		poppedElements.compute(j, (k, v) -> { 
-			if (v == null) {
-				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, j);
-				node.addPackedNode(parser, new PackedNode(slot, j, node), child);
-				
-				parser.nonterminalNodeAdded(node);
-				
-				holder.set(node);
-				return node;
-			}
-			else {
-				v.addPackedNode(parser, new PackedNode(slot, j, v), child);
-				return v;
-			}
-		});
-		
- 		return holder.get();
+		return poppedElements.add(parser, inputIndex, j, slot, child);
 	}
 	
 	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
@@ -95,23 +74,19 @@ public class GSSNode {
 		
 		gssEdges.add(edge);
 		
-		for (NonPackedNode z : getPoppedElements()) {	
-			
-			if (!edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) continue;
-			
-			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
-			if (descriptor != null) {
-				parser.scheduleDescriptor(descriptor);
+		poppedElements.forEach(z -> {
+			if (edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) {
+				Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
+				if (descriptor != null) {
+					parser.scheduleDescriptor(descriptor);
+				}
 			}
-		}
+		});
+		
 	}
 	
 	public NonterminalNode getNonterminalNode(int j) {
-		return poppedElements.get(j);
-	}
-	
-	public Iterable<NonterminalNode> getPoppedElements() {
-		return poppedElements.values();
+		return poppedElements.getNonterminalNode(j);
 	}
 	
 	public NonterminalGrammarSlot getGrammarSlot() {
@@ -166,22 +141,8 @@ public class GSSNode {
 	 * 
 	 */
 	
-	public NonterminalNode addToPoppedElements(GLLParser parser, Key key, EndGrammarSlot slot, NonPackedNode child, Object value) {	
-		Holder<NonterminalNode> holder = new Holder<>();
-		poppedElements.compute(key, (k, v) -> { 
-			if (v == null) {
-				NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, child.getRightExtent(), value);
-				node.addPackedNode(parser, new PackedNode(slot, child.getRightExtent(), node), child);
-				holder.set(node);
-				return node;
-			}
-			else {
-				v.addPackedNode(parser, new PackedNode(slot, child.getRightExtent(), v), child);
-				return v;
-			}
-		});
-		
- 		return holder.get();
+	public NonterminalNode addToPoppedElements(GLLParser parser, EndGrammarSlot slot, NonPackedNode node, Object value) {	
+ 		return poppedElements.add(parser, inputIndex, IntKey1PlusObject.from(node.getRightExtent(), value, parser.getInput().length()), slot, node, value);
 	}
 	
 	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
@@ -190,16 +151,14 @@ public class GSSNode {
 		gssEdges.add(edge);
 		parser.gssEdgeAdded(edge);
 
-		for (NonPackedNode z : getPoppedElements()) {
-			
-			if (!edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) continue;
-			
-			Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
-			if (descriptor != null) {
-				parser.scheduleDescriptor(descriptor);
+		poppedElements.forEach(z -> {
+			if (edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) {
+				Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
+				if (descriptor != null) {
+					parser.scheduleDescriptor(descriptor);
+				}
 			}
-		}
-			
+		});
 	}
 	
 }

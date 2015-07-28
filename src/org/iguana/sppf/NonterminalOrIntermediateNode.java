@@ -63,7 +63,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 		boolean ambiguousBefore = isAmbiguous();
 
-		PackedNode packedNode = new PackedNode(slot, leftChild.getRightExtent(), this);
+		PackedNode packedNode = new PackedNode(slot, this);
 		packedNode.addChild(leftChild);
 		packedNode.addChild(rightChild);
 		
@@ -99,7 +99,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 		if (first == null) {
 			first = packedNode;				
 		} else {
-			rest = new ArrayList<>();
+			if (rest == null) rest = new ArrayList<>();
 			rest.add(packedNode);			
 		}
 	}

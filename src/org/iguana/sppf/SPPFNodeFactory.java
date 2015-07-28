@@ -61,7 +61,7 @@ public class SPPFNodeFactory {
 	}
 
 	public PackedNode createPackedNode(String s, int pivot, NonPackedNode parent) {
-		return new PackedNode(grammarGraph.getGrammarSlot(s), pivot, parent);
+		return new PackedNode(grammarGraph.getGrammarSlot(s), parent);
 	}
 	
 }
