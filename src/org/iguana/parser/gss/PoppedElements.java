@@ -89,6 +89,7 @@ public class PoppedElements {
 		if (first == null) {
 			first = new NonterminalNode(slot.getNonterminal(), inputIndex, child.getRightExtent(), value);
 			first.addPackedNode(parser, new PackedNode(slot, first), child);
+			parser.nonterminalNodeAdded(first);
 			return first;
 		// Only one node is added and there is an ambiguity
 		} else if (poppedElements == null && IntKey1PlusObject.from(first.getRightExtent(), first.getValue(), parser.getInput().length()).equals(key)) {
@@ -106,6 +107,7 @@ public class PoppedElements {
 				if (v == null) {
 					NonterminalNode node = new NonterminalNode(slot.getNonterminal(), inputIndex, child.getRightExtent(), value);
 					node.addPackedNode(parser, new PackedNode(slot, node), child);
+					parser.nonterminalNodeAdded(node);
 					holder.set(node);
 					return node;
 				}
