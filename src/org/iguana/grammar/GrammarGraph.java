@@ -82,6 +82,7 @@ import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Configuration;
+import org.iguana.util.Configuration.HashMapImpl;
 import org.iguana.util.Configuration.LookupImpl;
 import org.iguana.util.Configuration.MatcherType;
 import org.iguana.util.Input;
@@ -464,7 +465,10 @@ public class GrammarGraph implements Serializable {
 	
 	private GSSNodeLookup getNodeLookup() {
 		if (config.getGSSLookupImpl() == LookupImpl.HASH_MAP) {
-			return new HashMapNodeLookup();
+			if (config.getHashmapImpl() == HashMapImpl.JAVA)
+				return new HashMapNodeLookup(new HashMap<>());
+			else 
+				throw new RuntimeException();
 		} else {
 			return new ArrayNodeLookup(input);
 		}

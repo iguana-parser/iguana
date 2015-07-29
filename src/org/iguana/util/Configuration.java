@@ -65,6 +65,10 @@ public class Configuration {
 		return matcherType;
 	}
 	
+	public HashMapImpl getHashmapImpl() {
+		return hashmapImpl;
+	}
+	
 	public static Builder builder() {
 		return new Builder();
 	}
