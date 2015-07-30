@@ -425,6 +425,38 @@ public class AST {
 		};
 	}
 	
+	static public Expression pr3(Expression arg1, Expression arg2) {
+		return new Expression.Call("pr3", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						
+						int v1 = (java.lang.Integer) arg1.interpret(ctx);
+						int v2 = (java.lang.Integer) arg2.interpret(ctx);
+						
+						if (v1 == 0)
+							return v2;
+						
+						if (v2 == 0)
+							return v1;
+						
+						return java.lang.Integer.min(v1, v2);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.pr3(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("pr3(%s,%s)", arg1, arg2);
+					}
+		};
+	}
+	
 	static public Expression map() {
 		return new Expression.Call("map") {
 			
