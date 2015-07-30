@@ -179,19 +179,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
 			this.headsWithLabeledRules = headsWithLabeledRules;
 			
-			// 1. Excepts
+			excepts();
+			precedence();
+		}
+		
+		private void excepts() {
 			if (rule.getLabel() != null) {
 				preconditions = new HashSet<>();
 				
 				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
 				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
 			}
-			
-			// 2. Precedence and associativity
-			if (this.rule.getPrecedence() == -1) return; // Precedence does not apply
-			
-			if (!this.leftOrRightRecursiveNonterminals
-					.contains(this.rule.getHead().getName())) return; // Precedence does not apply
+		}
+		
+		private void precedence() { // Precedence and associativity
+			if (rule.getPrecedence() == -1)
+				return; // Precedence does not apply
+						
+			if (!leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
+				return; // Precedence does not apply
 			
 			if (preconditions == null)
 				preconditions = new HashSet<>();
@@ -204,12 +210,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			boolean nUseMin = false;
 			
-			// Expressions for the left and/or right recursive uses
+			// 1. Expressions for the left and/or right recursive uses
 			
 			if (associativityGroup != null 
 					&& precedenceLevel.getLhs() == associativityGroup.getLhs() 
-						&& precedenceLevel.getRhs() == associativityGroup.getRhs()) {
-				
+					&& precedenceLevel.getRhs() == associativityGroup.getRhs()) {
+							
 				if (precedence == associativityGroup.getPrecedence()) { // Can use precedence climbing
 					boolean first = precedenceLevel.getUndefined() == 0;
 					switch(associativityGroup.getAssociativity()) {
@@ -242,7 +248,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						l2 = integer(first? 0 : precedence);
 					else 
 						l2 = r2;
-					
 				} else {
 					l1 = integer(precedence);
 					r2 = integer(precedence);
@@ -282,7 +287,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
-				
+							
 				// Rule for propagation of a precedence level
 				if (precedenceLevel.hasPostfixUnaryBelow())
 					r1 = nUseMin? var("r") : pr(precedenceLevel.hasPostfixUnary()? precedence : il1, precedenceLevel.postfixUnaryBelow, false);
@@ -290,19 +295,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					r1 = integer(first? 0 : precedence);
 				else 
 					r1 = l1;
-				
+							
 				if (precedenceLevel.hasPrefixUnaryBelow())
 					l2 = nUseMin? var("l") : pr(precedenceLevel.hasPrefixUnary()? precedence : ir2, precedenceLevel.prefixUnaryBelow, true);
 				else if (precedenceLevel.hasPrefixUnary())
 					l2 = integer(first? 0 : precedence);
 				else 
-					l2 = r2;
-				
+					l2 = r2;	
 			} else { // No precedence climbing
 				int undefined = precedenceLevel.getUndefined();
 				boolean useUndefined = (associativityGroup == null || (associativityGroup != null && associativityGroup.getPrecedence() == precedence)) 
 											&& undefined != -1;
-				
+							
 				switch((associativityGroup != null && associativity == Associativity.UNDEFINED)?
 							associativityGroup.getAssociativity() : associativity) {
 					case LEFT:
@@ -336,8 +340,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 			}
-						
-			// Constraints (preconditions) for the grammar rule
+			
+			// 2. Constraints (preconditions) for the grammar rule
 			
 			if (rule.isLeftRecursive())
 				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("r"))));
@@ -350,7 +354,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (associativityGroup != null) {
 					
 					boolean climbing = associativityGroup.getLhs() == precedenceLevel.getLhs() 
-								&& associativityGroup.getRhs() == precedenceLevel.getRhs();
+											&& associativityGroup.getRhs() == precedenceLevel.getRhs();
 					
 					switch(associativityGroup.getAssociativity()) {
 						case LEFT:
@@ -395,24 +399,23 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					if (precedence != associativityGroup.getPrecedence()) {
 						switch(associativity) {
-						case LEFT:
-							if (rule.isLeftRecursive())
-								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
-							break;						
-						case RIGHT:
-							if (rule.isRightRecursive())
+							case LEFT:
+								if (rule.isLeftRecursive())
+									preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+								break;						
+							case RIGHT:
+								if (rule.isRightRecursive())
+									preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+								break;
+							case NON_ASSOC:
 								preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
-							break;
-						case NON_ASSOC:
-							preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
-							preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
-							break;
-						case UNDEFINED:
-							break;
-						default: throw new RuntimeException("Unexpected associativity: " + associativity);
+								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+								break;
+							case UNDEFINED:
+								break;
+							default: throw new RuntimeException("Unexpected associativity: " + associativity);
 						}
-					}
-					
+					}				
 				} else {	
 					switch(associativity) {
 						case LEFT:
@@ -431,10 +434,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							break;
 						default: throw new RuntimeException("Unexpected associativity: " + associativity);
 					}
-				}
-				
+				}	
 			}
-			
 		}
 		
 		private static Expression pr(int current, Integer[] indices, boolean prefix) {
