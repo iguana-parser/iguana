@@ -1,9 +1,12 @@
-package org.iguana.util.collections;
+package org.iguana.util.collections.rangemap;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.IntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.IntRangeTree.IntNode;
 
-public class ArrayIntRangeMap implements RangeIntMap {
+public class ArrayIntRangeMap implements IntRangeMap {
 
 	private int[] starts;
 	private int[] ends;
@@ -17,7 +20,7 @@ public class ArrayIntRangeMap implements RangeIntMap {
 	
 	@Override
 	public IntNode getRoot() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -27,7 +30,7 @@ public class ArrayIntRangeMap implements RangeIntMap {
 
 	@Override
 	public boolean contains(CharacterRange range) {
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -54,7 +57,12 @@ public class ArrayIntRangeMap implements RangeIntMap {
 
 	@Override
 	public boolean isBalanced() {
-		return false;
+		return true;
+	}
+
+	@Override
+	public <T> void inOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc) {
+		throw new UnsupportedOperationException();		
 	}
 	
 }

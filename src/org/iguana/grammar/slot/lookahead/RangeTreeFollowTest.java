@@ -3,7 +3,7 @@ package org.iguana.grammar.slot.lookahead;
 import java.util.Set;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.IntRangeTree;
+import org.iguana.util.collections.rangemap.IntRangeTree;
 
 public class RangeTreeFollowTest implements FollowTest {
 

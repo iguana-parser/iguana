@@ -25,12 +25,15 @@
  *
  */
 
-package org.iguana.util.collections;
+package org.iguana.util.collections.rangemap;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.IntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.IntRangeTree.IntNode;
 
-public interface RangeIntMap {
+public interface IntRangeMap {
 	
 	public IntNode getRoot();
 	
@@ -51,4 +54,10 @@ public interface RangeIntMap {
 	public void insert(CharacterRange range, int val);
 	
 	public boolean isBalanced();
+	
+	public <T> void inOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	default void inOrder(Consumer<IntNode> action) {
+		inOrder(n -> { action.accept(n); return null; }, n -> {});
+	}
 }

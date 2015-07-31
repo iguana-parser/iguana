@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
-import org.iguana.util.collections.IntRangeTree;
+import org.iguana.util.collections.rangemap.IntRangeTree;
 import org.junit.Test;
 
 import static org.iguana.util.CollectionsUtil.*;

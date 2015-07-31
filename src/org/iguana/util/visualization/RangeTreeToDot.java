@@ -30,10 +30,10 @@ package org.iguana.util.visualization;
 import static org.iguana.util.generator.GeneratorUtil.*;
 import static org.iguana.util.visualization.GraphVizUtil.*;
 
-import org.iguana.util.collections.IntRangeTree;
-import org.iguana.util.collections.RangeTree;
-import org.iguana.util.collections.IntRangeTree.IntNode;
-import org.iguana.util.collections.RangeTree.Node;
+import org.iguana.util.collections.rangemap.IntRangeTree;
+import org.iguana.util.collections.rangemap.RangeTree;
+import org.iguana.util.collections.rangemap.IntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.RangeTree.Node;
 
 public class RangeTreeToDot {
 		

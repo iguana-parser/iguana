@@ -33,7 +33,7 @@ import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.Transition;
 import org.iguana.util.Input;
-import org.iguana.util.collections.IntRangeTree;
+import org.iguana.util.collections.rangemap.IntRangeTree;
 
 public class DFAMatcher implements Matcher {
 
