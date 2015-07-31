@@ -57,7 +57,17 @@ public interface IntRangeMap {
 	
 	public <T> void inOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
 	
+	public <T> void preOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
 	default void inOrder(Consumer<IntNode> action) {
 		inOrder(n -> { action.accept(n); return null; }, n -> {});
+	}
+	
+	default void preOrder(Consumer<IntNode> action) {
+		preOrder(n -> { action.accept(n); return null; }, n -> {});
+	}
+
+	default int height() {
+		return getRoot().height;
 	}
 }

@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.collections.rangemap.IntRangeTree.IntNode;
 
@@ -252,7 +251,7 @@ public class IntRangeTree implements IntRangeMap, Iterable<IntNode> {
 		return getAllNodes().stream().allMatch(n -> n.isBalanced());
 	}
 
-	private List<IntNode> getAllNodes() {
+	public List<IntNode> getAllNodes() {
 		List<IntNode> list = new ArrayList<>();
 		inOrder(root, n -> n, n -> list.add(n));
 		return list;
@@ -267,6 +266,17 @@ public class IntRangeTree implements IntRangeMap, Iterable<IntNode> {
 		if (node.left != null) inOrder(node.left, f, acc);
 		acc.accept(f.apply(node));
 		if(node.right != null) inOrder(node.right, f, acc);
+	}
+	
+	@Override
+	public <T> void preOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		preOrder(root, f, acc);
+	}
+
+	private <T> void preOrder(IntNode node, Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		acc.accept(f.apply(node));
+		if (node.left != null) preOrder(node.left, f, acc);
+		if(node.right != null) preOrder(node.right, f, acc);
 	}
 	
 	@Override
@@ -352,7 +362,7 @@ public class IntRangeTree implements IntRangeMap, Iterable<IntNode> {
 		
 		@Override
 		public String toString() {
-			return String.format("%s-%s", Character.getName(start), Character.getName(end));
+			return String.format("%s-%s", start, end);
 		}
 	}
 

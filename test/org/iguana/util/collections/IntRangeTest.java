@@ -27,23 +27,26 @@
 
 package org.iguana.util.collections;
 
+import static org.iguana.grammar.symbol.CharacterRange.*;
+import static org.iguana.util.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
+import org.iguana.util.Visualization;
+import org.iguana.util.collections.rangemap.ArrayIntRangeMap;
+import org.iguana.util.collections.rangemap.IntRangeMap;
 import org.iguana.util.collections.rangemap.IntRangeTree;
-import org.junit.Test;
-
-import static org.iguana.util.CollectionsUtil.*;
-import static org.iguana.grammar.symbol.CharacterRange.*; 
+import org.iguana.util.collections.rangemap.RangeTree;
+import org.junit.Test; 
 
 public class IntRangeTest {
 	
 	@Test
 	public void test() {
-		IntRangeTree tree = new IntRangeTree();
+		IntRangeMap tree = new IntRangeTree();
 		tree.insert('.', '.', 1);
 		tree.insert('$', '$', 2);
 		tree.insert('&', '&', 3);
@@ -64,8 +67,53 @@ public class IntRangeTest {
 		tree.insert('/', '/', 18);
 		tree.insert('=', '=', 19);
 		tree.insert('?', '?', 20);
+		
+		Visualization.generateRangeTree("/Users/aliafroozeh/output", (IntRangeTree) tree);
+		
 		assertEquals(20, tree.size());
 		assertEquals(4, tree.getRoot().getHeight());
+		assertEquals(1, tree.get('.'));
+		assertEquals(2, tree.get('$'));
+		assertEquals(3, tree.get('&'));
+		assertEquals(4, tree.get('*'));
+		assertEquals(5, tree.get(':'));
+		assertEquals(6, tree.get('<'));
+		assertEquals(7, tree.get('>'));
+		assertEquals(8, tree.get('@'));
+		assertEquals(9, tree.get('\\'));
+		assertEquals(10, tree.get('^'));
+		assertEquals(11, tree.get('|'));
+		assertEquals(12, tree.get('~'));
+		assertEquals(13, tree.get('!'));
+		assertEquals(14, tree.get('#'));
+		assertEquals(15, tree.get('%'));
+		assertEquals(16, tree.get('+'));
+		assertEquals(17, tree.get('-'));
+		assertEquals(18, tree.get('/'));
+		assertEquals(19, tree.get('='));
+		assertEquals(20, tree.get('?'));
+		
+		tree = new ArrayIntRangeMap(tree);
+//		assertEquals(1, tree.get('.'));
+		assertEquals(2, tree.get('$'));
+//		assertEquals(3, tree.get('&'));
+//		assertEquals(4, tree.get('*'));
+//		assertEquals(5, tree.get(':'));
+//		assertEquals(6, tree.get('<'));
+//		assertEquals(7, tree.get('>'));
+//		assertEquals(8, tree.get('@'));
+//		assertEquals(9, tree.get('\\'));
+//		assertEquals(10, tree.get('^'));
+//		assertEquals(11, tree.get('|'));
+//		assertEquals(12, tree.get('~'));
+//		assertEquals(13, tree.get('!'));
+//		assertEquals(14, tree.get('#'));
+//		assertEquals(15, tree.get('%'));
+//		assertEquals(16, tree.get('+'));
+//		assertEquals(17, tree.get('-'));
+//		assertEquals(18, tree.get('/'));
+//		assertEquals(19, tree.get('='));
+//		assertEquals(20, tree.get('?'));
 	}
 	
 	@Test

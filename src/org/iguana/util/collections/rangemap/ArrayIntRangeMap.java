@@ -1,5 +1,8 @@
 package org.iguana.util.collections.rangemap;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,10 +15,23 @@ public class ArrayIntRangeMap implements IntRangeMap {
 	private int[] ends;
 	private int[] vals;
 
-	public ArrayIntRangeMap(int[] starts, int[] ends, int[] vals) {
-		this.starts = starts;
-		this.ends = ends;
-		this.vals = vals;
+	public ArrayIntRangeMap(IntRangeMap map) {
+		int size = (int) Math.pow(2, map.height() + 1);
+		starts = new int[size];
+		ends   = new int[size];
+		vals   = new int[size];
+		
+		Arrays.fill(starts, -1);
+		Arrays.fill(ends, -1);
+		Arrays.fill(vals, -1);
+		
+		List<IntNode> nodes = new ArrayList<>();
+		map.preOrder(n -> nodes.add(n));
+		for (int i = 0; i < nodes.size(); i++) {
+			starts[i] = nodes.get(i).start;
+			ends[i]   = nodes.get(i).end;
+			vals[i]   = nodes.get(i).val;
+		}
 	}
 	
 	@Override
@@ -63,6 +79,11 @@ public class ArrayIntRangeMap implements IntRangeMap {
 	@Override
 	public <T> void inOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc) {
 		throw new UnsupportedOperationException();		
+	}
+
+	@Override
+	public <T> void preOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc) {
+		throw new UnsupportedOperationException();
 	}
 	
 }
