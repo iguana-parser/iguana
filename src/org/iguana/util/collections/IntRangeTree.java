@@ -38,30 +38,29 @@ import org.iguana.util.collections.IntRangeTree.IntNode;
 
 /**
  * 
- * An implementaion of AVL trees for fast range search
+ * An implementation of AVL trees for fast range search
  * that used integer keys.
  * 
  * @author Ali Afroozeh
  *
  */
-public class IntRangeTree implements Iterable<IntNode> {	
+public class IntRangeTree implements RangeIntMap, Iterable<IntNode> {	
 
 	private IntNode root;
 	
 	private int countNodes;
 	
+	@Override
 	public IntNode getRoot() {
 		return root;
 	}
 	
+	@Override
 	public int size() {
 		return countNodes;
 	}
 	
-	public boolean contains(int key) {
-		return get(key) != -1;
-	}
-	
+	@Override
 	public boolean contains(CharacterRange range) {
 		return getNode(range, root) != null;
 	}
@@ -86,7 +85,7 @@ public class IntRangeTree implements Iterable<IntNode> {
 		return get(key, root);
 	}
 	
-	public int get(int key, IntNode node) {
+	private int get(int key, IntNode node) {
 		if (node == null)
 			return -1;
 		
@@ -99,10 +98,7 @@ public class IntRangeTree implements Iterable<IntNode> {
 		return node.val;
 	}
 	
-	public void insert(int key, int val) {
-		insert(CharacterRange.in(key, key), val);
-	}
-	
+	@Override
 	public void insert(CharacterRange range, int val) {
 		insert(range, root, new IntNode(range.getStart(), range.getEnd(), val));
 	}
@@ -250,6 +246,7 @@ public class IntRangeTree implements Iterable<IntNode> {
 		updateHeight(x);
 	}
 	
+	@Override
 	public boolean isBalanced() {
 		return inOrder(root).stream().allMatch(n -> n.isBalanced());
 	}
