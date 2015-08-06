@@ -7,16 +7,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.rangemap.IntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
-public class ArrayIntRangeMap implements IntRangeMap {
+public class ArrayIntRangeMap implements IntRangeTree {
 
 	private int[] starts;
 	private int[] ends;
 	private int[] vals;
 
-	public ArrayIntRangeMap(IntRangeMap map) {
-		int size = (int) Math.pow(2, map.height() + 1);
+	public ArrayIntRangeMap(IntRangeTree t) {
+		int size = (int) Math.pow(2, t.height() + 1);
 		starts = new int[size];
 		ends   = new int[size];
 		vals   = new int[size];
@@ -25,8 +25,10 @@ public class ArrayIntRangeMap implements IntRangeMap {
 		Arrays.fill(ends, -1);
 		Arrays.fill(vals, -1);
 		
+//		t = RangeTrees.makeComplete(t);
+		
 		List<IntNode> nodes = new ArrayList<>();
-		map.preOrder(n -> nodes.add(n));
+		t.levelOrder(n -> nodes.add(n));
 		for (int i = 0; i < nodes.size(); i++) {
 			starts[i] = nodes.get(i).start;
 			ends[i]   = nodes.get(i).end;
@@ -84,6 +86,11 @@ public class ArrayIntRangeMap implements IntRangeMap {
 	@Override
 	public <T> void preOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> void levelOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc) {
+		throw new UnsupportedOperationException();		
 	}
 	
 }

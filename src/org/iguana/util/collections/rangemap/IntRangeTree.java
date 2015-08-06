@@ -27,343 +27,54 @@
 
 package org.iguana.util.collections.rangemap;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.rangemap.IntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
-/**
- * 
- * An implementation of AVL trees for fast range search
- * that used integer keys.
- * 
- * @author Ali Afroozeh
- *
- */
-public class IntRangeTree implements IntRangeMap, Iterable<IntNode> {	
-
-	private IntNode root;
+public interface IntRangeTree {
 	
-	private int countNodes;
+	public IntNode getRoot();
 	
-	@Override
-	public IntNode getRoot() {
-		return root;
-	}
+	public int size();
 	
-	@Override
-	public int size() {
-		return countNodes;
-	}
-	
-	@Override
-	public boolean contains(CharacterRange range) {
-		return getNode(range, root) != null;
-	}
-	
-	private IntNode getNode(CharacterRange range, IntNode node) {
-		if (node == null)
-			return null;
-		
-		if (range.getStart() == node.start && range.getEnd() == node.end)
-			return node;
-		
-		if (range.getStart() < node.start)
-			return getNode(range, node.left);
-		
-		if (range.getEnd() > node.end)
-			return getNode(range, node.right);
-		
-		throw new RuntimeException("Should not reach here!");
-	}
-	
-	public int get(int key) {
-		return get(key, root);
-	}
-	
-	private int get(int key, IntNode node) {
-		if (node == null)
-			return -1;
-		
-		if (key < node.start) 
-			return get(key, node.left);
-		
-		if (key > node.end)
-			return get(key, node.right);
-		
-		return node.val;
-	}
-	
-	@Override
-	public void insert(CharacterRange range, int val) {
-		insert(range, root, new IntNode(range.getStart(), range.getEnd(), val));
-	}
-	
-	private void insert(CharacterRange range, IntNode parent, IntNode newNode) {		
-		
-		if (root == null) {
-			root = newNode;
-			countNodes++;
-			return;
-		}
-		
-		if (range.getStart() < parent.start) {
-			if (parent.left == null) {
-				addToLeft(parent, newNode);
-				updateHeight(newNode);
-				if (parent.parent != null) 
-					balance(parent.parent, parent);
-			} else {
-				insert(range, parent.left, newNode);
-			}
-		} 
-		else if (range.getEnd() > parent.end) {
-			if (parent.right == null) {
-				addToRight(parent, newNode);
-				updateHeight(newNode);
-				if (parent.parent != null)
-					balance(parent.parent, parent);
-			} else {
-				insert(range, parent.right, newNode);					
-			}
-		}
-	}
-	
-	private void addToLeft(IntNode parent, IntNode newNode) {
-		countNodes++;
-		parent.left = newNode;
-		newNode.parent = parent;
-	}
-	
-	private void addToRight(IntNode parent, IntNode newNode) {
-		countNodes++;
-		parent.right = newNode;
-		newNode.parent = parent;
-	}
-	
-	private void updateHeight(IntNode node) {
-		while (node != null) {
-			node.updateHeight();
-			node = node.parent;
-		}
+	default boolean contains(int key) {
+		return get(key) != -1;
 	}
 
-	/**
-	 * x         x           x      x
-	 *  \         \         /      /
-	 *   y         y       y      y
-	 *    \       /       /        \
-	 *     z     z       z          z
-	 * 
-	 */
-	private void balance(IntNode x, IntNode y) {
-		
-		if (!x.isBalanced()) {
-			if (x.right != null && x.right == y) {
-				if (y.isRightHeavy()) {
-					leftRotate(x);
-				} 
-				else if (y.isLeftHeavy()) {
-					rightRotate(y);
-					leftRotate(x);				
-				}
-			} 
-			
-			if (x.left != null & x.left == y) {
-				if (y.isLeftHeavy()) {
-					rightRotate(x);
-				} 
-				else if (y.isRightHeavy()){
-					leftRotate(y);
-					rightRotate(x);
-				}
-			}
-		}
-		
-		if (x.parent != null)
-			balance(x.parent, x);
+	public boolean contains(CharacterRange range);
+	
+	public int get(int key);
+	
+	default void insert(int start, int end, int val) {
+		insert(CharacterRange.in(start, end), val);
 	}
 	
+	public void insert(CharacterRange range, int val);
 	
-	/**
-	 *      x                y
-	 *     / \              / \
-	 *    A   y     =>     x   C 
-	 *       / \          / \
-	 *      B   C        A   B
-	 */
-	private void leftRotate(IntNode x) {
-		IntNode parent = x.parent;
-		
-		IntNode y = x.right;
-		IntNode B = y.left;
-		y.left = x;
-		x.parent = y;
-		x.right = B;
-		if (B != null)
-			B.parent = x;
-		
-		y.parent = parent;
-		
-		if (parent != null)
-			parent.replaceChild(x, y);
-		else
-			root = y;
-		
-		updateHeight(x);
+	public boolean isBalanced();
+	
+	public <T> void inOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	public <T> void preOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	public <T> void levelOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	default void inOrder(Consumer<IntNode> action) {
+		inOrder(n -> { action.accept(n); return null; }, n -> {});
 	}
 	
-	/**
-	 *      x                y
-	 *     / \              / \
-	 *    y   C     =>     A   x 
-	 *   / \                  / \
-	 *  A   B                B   C
-	 *      
-	 */
-	private void rightRotate(IntNode x) {
-		IntNode parent = x.parent;
-		
-		IntNode y = x.left;
-		IntNode B = y.right;
-		y.right = x;
-		x.parent = y;
-		x.left = B;
-		
-		if (B != null)
-			B.parent = x;
-
-		y.parent = parent;
-		if (parent != null) 
-			parent.replaceChild(x, y);
-		else 
-			root = y;
-		
-		updateHeight(x);
+	default void preOrder(Consumer<IntNode> action) {
+		preOrder(n -> { action.accept(n); return null; }, n -> {});
 	}
 	
-	@Override
-	public boolean isBalanced() {
-		return getAllNodes().stream().allMatch(n -> n.isBalanced());
+	default void levelOrder(Consumer<IntNode> action) {
+		levelOrder(n -> { action.accept(n); return null; }, n -> {});
 	}
 
-	public List<IntNode> getAllNodes() {
-		List<IntNode> list = new ArrayList<>();
-		inOrder(root, n -> n, n -> list.add(n));
-		return list;
-	}
-		
-	@Override
-	public <T> void inOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
-		inOrder(root, f, acc);
-	}
-
-	private <T> void inOrder(IntNode node, Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
-		if (node.left != null) inOrder(node.left, f, acc);
-		acc.accept(f.apply(node));
-		if(node.right != null) inOrder(node.right, f, acc);
-	}
-	
-	@Override
-	public <T> void preOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
-		preOrder(root, f, acc);
-	}
-
-	private <T> void preOrder(IntNode node, Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
-		acc.accept(f.apply(node));
-		if (node.left != null) preOrder(node.left, f, acc);
-		if(node.right != null) preOrder(node.right, f, acc);
-	}
-	
-	@Override
-	public Iterator<IntNode> iterator() {
-		return getAllNodes().iterator();
-	}
-	
-	public static ArrayIntRangeMap toArrayIntRangeMap() {
-		return null;
-	}
-	
-	public static class IntNode {
-		final int start;
-		final int end;
-		final int val;
-		IntNode left;
-		IntNode right;
-		int height;
-		
-		IntNode parent;
-		
-		public IntNode(int start, int end, int val) {
-			this.start = start;
-			this.end = end;
-			this.val = val;
-			updateHeight();
-		}
-		
-		public void replaceChild(IntNode child, IntNode replacement) {
-			// Fixes the pointers of the parents
-			if (left == child) {
-				left = replacement;
-			} else {
-				right = replacement;
-			}		
-		}
-		
-		public void updateHeight() {
-			this.height = height();
-		}
-		
-		public boolean isBalanced() {
-			return Math.abs(heightLeft() - heightRight()) <= 1;
-		}
-		
-		public boolean isRightHeavy() {
-			return heightRight() > heightLeft();
-		}
-		
-		public boolean isLeftHeavy() {
-			return heightLeft() > heightRight();
-		}
-		
-		public int getHeight() {
-			return height;
-		}
-		
-		private int height() {
-			int max;
-			if (heightLeft() > heightRight())
-				max = heightLeft();
-			else
-				max = heightRight();
-			
-			return max + 1;
-		}
-		
-		private int heightLeft() {
-			return left == null ? -1 : left.height;
-		}
-		
-		private int heightRight() {
-			return right == null ? -1 : right.height;
-		}
-		
-		public IntNode getLeft() {
-			return left;
-		}
-		
-		public IntNode getRight() {
-			return right;
-		}
-		
-		@Override
-		public String toString() {
-			return String.format("%s-%s", start, end);
-		}
+	default int height() {
+		return getRoot().height;
 	}
 
 }

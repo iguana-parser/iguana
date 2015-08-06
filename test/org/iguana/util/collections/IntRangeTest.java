@@ -37,8 +37,8 @@ import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
 import org.iguana.util.Visualization;
 import org.iguana.util.collections.rangemap.ArrayIntRangeMap;
-import org.iguana.util.collections.rangemap.IntRangeMap;
 import org.iguana.util.collections.rangemap.IntRangeTree;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree;
 import org.iguana.util.collections.rangemap.RangeTree;
 import org.junit.Test; 
 
@@ -46,7 +46,7 @@ public class IntRangeTest {
 	
 	@Test
 	public void test() {
-		IntRangeMap tree = new IntRangeTree();
+		IntRangeTree tree = new AVLIntRangeTree();
 		tree.insert('.', '.', 1);
 		tree.insert('$', '$', 2);
 		tree.insert('&', '&', 3);
@@ -68,7 +68,7 @@ public class IntRangeTest {
 		tree.insert('=', '=', 19);
 		tree.insert('?', '?', 20);
 		
-		Visualization.generateRangeTree("/Users/aliafroozeh/output", (IntRangeTree) tree);
+		Visualization.generateRangeTree("/Users/aliafroozeh/output", (AVLIntRangeTree) tree);
 		
 		assertEquals(20, tree.size());
 		assertEquals(4, tree.getRoot().getHeight());
@@ -118,7 +118,7 @@ public class IntRangeTest {
 	
 	@Test
 	public void test5() {
-		IntRangeTree tree = new IntRangeTree();
+		AVLIntRangeTree tree = new AVLIntRangeTree();
 		tree.insert(44, 44, 1);
 		tree.insert(17, 17, 2);
 		tree.insert(32, 32, 3);
@@ -134,7 +134,7 @@ public class IntRangeTest {
 	
 	@Test
 	public void test6() {
-		IntRangeTree tree = new IntRangeTree();
+		AVLIntRangeTree tree = new AVLIntRangeTree();
 		tree.insert(14, 14, 1);
 		tree.insert(17, 17, 2);
 		tree.insert(11, 11, 3);
@@ -148,7 +148,7 @@ public class IntRangeTest {
 	
 	@Test
 	public void test7() {
-		IntRangeTree tree = new IntRangeTree();
+		AVLIntRangeTree tree = new AVLIntRangeTree();
 		tree.insert(3, 3, 1);
 		tree.insert(2, 2, 2);
 		tree.insert(1, 1, 3);
@@ -165,7 +165,7 @@ public class IntRangeTest {
 	
 	@Test
 	public void test8() {
-		IntRangeTree tree = new IntRangeTree();
+		AVLIntRangeTree tree = new AVLIntRangeTree();
 		// [*, \u0000, \, \\u000A, \\u000D, \uFFFFFFFF, ]-\u10FFFF, \u0001-[]
 		List<CharacterRange> list = list(in('*', '*'), 
 				                         in('\u0000', '\u0000'), 
@@ -183,7 +183,7 @@ public class IntRangeTest {
 	
 	@Test
 	public void test9() {
-		IntRangeTree tree = new IntRangeTree();
+		AVLIntRangeTree tree = new AVLIntRangeTree();
 		tree.insert(CharacterRange.in('A', 'Z'), 1);
 		tree.insert(CharacterRange.in('d', 'd'), 1);
 		tree.insert(CharacterRange.in(',', ','), 1);

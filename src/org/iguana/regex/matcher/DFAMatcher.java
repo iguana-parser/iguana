@@ -33,11 +33,11 @@ import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.Transition;
 import org.iguana.util.Input;
-import org.iguana.util.collections.rangemap.IntRangeTree;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree;
 
 public class DFAMatcher implements Matcher {
 
-	protected final IntRangeTree[] table;
+	protected final AVLIntRangeTree[] table;
 
 	protected final boolean[] finalStates;
 	
@@ -50,9 +50,9 @@ public class DFAMatcher implements Matcher {
 	public DFAMatcher(Automaton automaton) {
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 
-		table = new IntRangeTree[automaton.getCountStates()];
+		table = new AVLIntRangeTree[automaton.getCountStates()];
 		for (int i = 0; i < table.length; i++) {
-			table[i] = new IntRangeTree();
+			table[i] = new AVLIntRangeTree();
 		}
 
 		finalStates = new boolean[automaton.getStates().length];
