@@ -289,18 +289,14 @@ public class AVLIntRangeTree implements IntRangeTree, Iterable<IntNode> {
 		while (!queue.isEmpty()) {
 			IntNode node = queue.poll();
 			acc.accept(f.apply(node));
-			queue.add(node.left);
-			queue.add(node.right);
+			if (node.left != null)  queue.add(node.left);
+			if (node.right != null) queue.add(node.right);
 		}
 	}
 	
 	@Override
 	public Iterator<IntNode> iterator() {
 		return getAllNodes().iterator();
-	}
-	
-	public static ArrayIntRangeMap toArrayIntRangeMap() {
-		return null;
 	}
 	
 	public static class IntNode {

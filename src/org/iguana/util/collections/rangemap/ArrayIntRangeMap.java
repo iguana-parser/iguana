@@ -11,21 +11,27 @@ import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
 public class ArrayIntRangeMap implements IntRangeTree {
 
+	public static final int ABSENT_VALUE = -2;
+	
 	private int[] starts;
 	private int[] ends;
 	private int[] vals;
-
+	
 	public ArrayIntRangeMap(IntRangeTree t) {
+		this(t, ABSENT_VALUE);
+	}
+
+	public ArrayIntRangeMap(IntRangeTree t, int absentValue) {
 		int size = (int) Math.pow(2, t.height() + 1);
 		starts = new int[size];
 		ends   = new int[size];
 		vals   = new int[size];
 		
-		Arrays.fill(starts, -1);
-		Arrays.fill(ends, -1);
-		Arrays.fill(vals, -1);
+		Arrays.fill(starts, absentValue);
+		Arrays.fill(ends, absentValue);
+		Arrays.fill(vals, absentValue);
 		
-//		t = RangeTrees.makeComplete(t);
+		t = RangeTrees.makeComplete(t, absentValue);
 		
 		List<IntNode> nodes = new ArrayList<>();
 		t.levelOrder(n -> nodes.add(n));
