@@ -9,7 +9,7 @@ import java.util.function.Function;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
-public class ArrayIntRangeMap implements IntRangeTree {
+public class ArrayIntRangeTree implements IntRangeTree {
 
 	public static final int ABSENT_VALUE = -2;
 	
@@ -17,11 +17,11 @@ public class ArrayIntRangeMap implements IntRangeTree {
 	private int[] ends;
 	private int[] vals;
 	
-	public ArrayIntRangeMap(IntRangeTree t) {
+	public ArrayIntRangeTree(IntRangeTree t) {
 		this(t, ABSENT_VALUE);
 	}
 
-	public ArrayIntRangeMap(IntRangeTree t, int absentValue) {
+	public ArrayIntRangeTree(IntRangeTree t, int absentValue) {
 		int size = (int) Math.pow(2, t.height() + 1);
 		starts = new int[size];
 		ends   = new int[size];

@@ -35,7 +35,7 @@ import java.util.List;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
-import org.iguana.util.collections.rangemap.ArrayIntRangeMap;
+import org.iguana.util.collections.rangemap.ArrayIntRangeTree;
 import org.iguana.util.collections.rangemap.IntRangeTree;
 import org.iguana.util.collections.rangemap.AVLIntRangeTree;
 import org.junit.Test; 
@@ -90,7 +90,7 @@ public class IntRangeTest {
 		assertEquals(19, tree.get('='));
 		assertEquals(20, tree.get('?'));
 		
-		tree = new ArrayIntRangeMap(tree);
+		tree = new ArrayIntRangeTree(tree);
 		assertEquals(1, tree.get('.'));
 		assertEquals(2, tree.get('$'));
 		assertEquals(3, tree.get('&'));
@@ -139,7 +139,7 @@ public class IntRangeTest {
 		assertEquals(8, tree.get(54));
 		assertEquals(9, tree.get(88));
 		
-		tree = new ArrayIntRangeMap(tree);
+		tree = new ArrayIntRangeTree(tree);
 		
 		assertEquals(1, tree.get(44));
 		assertEquals(2, tree.get(17));
@@ -174,7 +174,7 @@ public class IntRangeTest {
 		assertEquals(6, tree.get(4));
 		assertEquals(7, tree.get(13));
 		
-		tree = new ArrayIntRangeMap(tree);
+		tree = new ArrayIntRangeTree(tree);
 		
 		assertEquals(1, tree.get(14));
 		assertEquals(2, tree.get(17));
@@ -213,7 +213,7 @@ public class IntRangeTest {
 		assertEquals(9, tree.get(15));
 		assertEquals(10, tree.get(14));
 		
-		tree = new ArrayIntRangeMap(tree);
+		tree = new ArrayIntRangeTree(tree);
 
 		assertEquals(1, tree.get(3));
 		assertEquals(2, tree.get(2));
@@ -288,7 +288,7 @@ public class IntRangeTest {
 		assertEquals(1, tree.get('d'));
 		assertEquals(1, tree.get('x'));
 		
-		tree = new ArrayIntRangeMap(tree);
+		tree = new ArrayIntRangeTree(tree);
 		
 		assertEquals(1, tree.get('A'));
 		assertEquals(1, tree.get('D'));

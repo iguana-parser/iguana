@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Epsilon;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.HasConditionsVisitor;
@@ -43,6 +44,9 @@ public class JavaRegexMatcherFactory implements MatcherFactory {
 	
 	@Override
 	public Matcher getMatcher(RegularExpression regex) {
+		if (regex == Epsilon.getInstance())
+			return (input, i) -> 0;
+		
 		Boolean hasConditions = regex.accept(new HasConditionsVisitor());
 		
  		if (hasConditions) 
