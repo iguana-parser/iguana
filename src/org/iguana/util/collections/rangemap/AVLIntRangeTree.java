@@ -89,7 +89,7 @@ public class AVLIntRangeTree implements IntRangeTree, Iterable<IntNode> {
 	
 	private int get(int key, IntNode node) {
 		if (node == null)
-			return -1;
+			return ABSENT_VALUE;
 		
 		if (key < node.start) 
 			return get(key, node.left);
@@ -283,6 +283,9 @@ public class AVLIntRangeTree implements IntRangeTree, Iterable<IntNode> {
 	
 	@Override
 	public <T> void levelOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		
+		if (root == null) return;
+		
 		Queue<IntNode> queue = new ArrayDeque<>();
 		queue.add(root);
 		

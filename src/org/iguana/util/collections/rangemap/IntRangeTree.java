@@ -35,6 +35,8 @@ import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
 public interface IntRangeTree {
 	
+	public static final int ABSENT_VALUE = -2;
+	
 	public IntNode getRoot();
 	
 	public int size();
@@ -74,7 +76,7 @@ public interface IntRangeTree {
 	}
 
 	default int height() {
-		return getRoot().height;
+		return getRoot() == null ? 0 : getRoot().height;
 	}
 
 }

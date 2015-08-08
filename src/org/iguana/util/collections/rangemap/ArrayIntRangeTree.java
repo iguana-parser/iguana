@@ -11,8 +11,6 @@ import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
 public class ArrayIntRangeTree implements IntRangeTree {
 
-	public static final int ABSENT_VALUE = -2;
-	
 	private int[] starts;
 	private int[] ends;
 	private int[] vals;
@@ -63,15 +61,21 @@ public class ArrayIntRangeTree implements IntRangeTree {
 	}
 	
 	private int get(int i, int key) {
-		if (key < starts[i]) {
-			return get(i * 2 + 1, key);
+		int val = ABSENT_VALUE;
+		while (i < starts.length) {
+			if (key < starts[i]) {
+				i = i * 2 + 1;
+			}
+			else if (key > ends[i]) {
+				i = i * 2 + 2;
+			} 
+			else {
+				val = vals[i];
+				break;				
+			}
 		}
 		
-		if (key > ends[i]) {
-			return get(i * 2 + 2, key);
-		}
-		
-		return vals[i];
+		return val;
 	}
 
 	@Override

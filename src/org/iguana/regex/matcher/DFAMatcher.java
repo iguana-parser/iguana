@@ -38,6 +38,8 @@ import org.iguana.util.collections.rangemap.ArrayIntRangeTree;
 import org.iguana.util.collections.rangemap.IntRangeTree;
 
 public class DFAMatcher implements Matcher {
+	
+	public static final int ERROR_STATE = -2;
 
 	protected final IntRangeTree[] table;
 
@@ -88,7 +90,7 @@ public class DFAMatcher implements Matcher {
 		for (int i = inputIndex; i < input.length(); i++) {
 			state = table[state].get(input.charAt(i));
 
-			if (state == -1)
+			if (state == ERROR_STATE)
 				break;
 
 			length++;

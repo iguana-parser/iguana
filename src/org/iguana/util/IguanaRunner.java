@@ -112,8 +112,8 @@ public class IguanaRunner {
 //					System.out.print((i + 1) + " ");
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
-//					e.printStackTrace();
-					results.add(new FailureResult(input.getURI(), "Time out"));
+					e.printStackTrace();
+//					results.add(new FailureResult(input.getURI(), "Time out"));
 //					System.out.println("Time out");
 					continue;
 				}

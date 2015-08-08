@@ -6,6 +6,8 @@ public interface RangeTrees {
 
 	public static IntRangeTree makeComplete(IntRangeTree t, int absentValue) {
 		
+		if (t.getRoot() == null) return t;
+		
 		int height = t.height();
 		t.preOrder(n -> { n.height = n.parent == null ? 0 : n.parent.height + 1; });
 		

@@ -53,7 +53,7 @@ public class DFABackwardsMatcher extends DFAMatcher {
 		for (int i = inputIndex - 1; i >= 0; i--) {
 			state = table[state].get(input.charAt(i));
 
-			if (state == -1)
+			if (state == ERROR_STATE)
 				break;
 			
 			length++;
