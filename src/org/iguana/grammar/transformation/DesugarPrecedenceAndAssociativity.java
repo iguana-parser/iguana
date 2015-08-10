@@ -459,9 +459,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			// 1. Expressions for the left and/or right recursive uses
 			
-			Expression l = var("p");
-			Expression r = integer(0);
+			Expression larg = var("p");
+			Expression rarg = integer(0);
 			Expression lcond = null;
+			Expression rcond = null;
+			Expression ret = null;
 			
 			if (associativityGroup != null 
 					&& precedenceLevel.getLhs() == associativityGroup.getLhs() 
@@ -471,34 +473,34 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					switch(associativityGroup.getAssociativity()) {
 						case LEFT:
 							lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-							r = integer(precedenceLevel.getRhs() + 1); break;
+							rarg = integer(precedenceLevel.getRhs() + 1); break;
 						case RIGHT:
 							lcond = greaterEq(var("l"), integer(precedenceLevel.getRhs() + 1));
-							r = integer(first? 0 : precedence); break;
+							rarg = integer(first? 0 : precedence); break;
 						case NON_ASSOC:
 							lcond = greaterEq(var("l"), integer(precedenceLevel.getRhs() + 1));
-							r = integer(precedenceLevel.getRhs() + 1); break;
+							rarg = integer(precedenceLevel.getRhs() + 1); break;
 						default: throw new RuntimeException("Unexpected associativity: " + associativityGroup.getAssociativity());
 					}	
 				} else {
 					lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-					r = integer(precedence);
+					rarg = integer(precedence);
 				}
 			} else if (associativityGroup == null 
 							&& precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can climb
 				switch(associativity) {
 					case LEFT:
 						lcond = greaterEq(var("l"), integer(precedence));
-						r = integer(precedence + 1); break;
+						rarg = integer(precedence + 1); break;
 					case RIGHT:
 						lcond = greaterEq(var("l"), integer(precedence + 1));
-						r = integer(first? 0 : precedence); break;
+						rarg = integer(first? 0 : precedence); break;
 					case NON_ASSOC:
 						lcond = greaterEq(var("l"), integer(precedence + 1));
-						r = integer(precedence + 1); break;
+						rarg = integer(precedence + 1); break;
 					case UNDEFINED:
 						lcond = greaterEq(var("l"), integer(precedence));
-						r = integer(first? 0 : precedence); break;
+						rarg = integer(first? 0 : precedence); break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 			} else { // Cannot climb
@@ -508,13 +510,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				switch((associativityGroup != null && associativity == Associativity.UNDEFINED)?
 							associativityGroup.getAssociativity() : associativity) {
 					case LEFT:
-						r = integer(precedence); break;
+						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
+						rarg = integer(precedence); break;
 					case RIGHT:
-						r = integer(useUndefined? undefined : precedence); break;
+						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
+						rarg = integer(useUndefined? undefined : precedence); break;
 					case NON_ASSOC:
-						r = integer(precedence); break;
+						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
+						rarg = integer(precedence); break;
 					case UNDEFINED: // Not in the associativity group
-						r = integer(undefined); break;
+						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
+						rarg = integer(undefined); break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 			}
@@ -523,9 +529,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			if (rule.isLeftRecursive())
 				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("r"))));
-			
-			if (rule.isRightRecursive())
-				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("l"))));
 			
 			if (precedenceLevel.getLhs() != precedenceLevel.getRhs()) {
 				
