@@ -177,10 +177,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
-			this.headsWithLabeledRules = headsWithLabeledRules;
-			
+			this.headsWithLabeledRules = headsWithLabeledRules;		
 			excepts();
-			precedence();
+			precedence1();
 		}
 		
 		private void excepts() {
@@ -192,7 +191,253 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
-		private void precedence() { // Precedence and associativity
+		private void precedence1() { // Precedence and associativity
+			if (rule.getPrecedence() == -1)
+				return; // Precedence does not apply
+						
+			if (!leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
+				return; // Precedence does not apply
+			
+			if (preconditions == null)
+				preconditions = new HashSet<>();
+			
+			AssociativityGroup associativityGroup = rule.getAssociativityGroup();
+			PrecedenceLevel precedenceLevel = rule.getPrecedenceLevel();
+			
+			int precedence = rule.getPrecedence();
+			Associativity associativity = rule.getAssociativity();
+			
+			boolean nUseMin = false;
+			
+			// 1. Expressions for the left and/or right recursive uses
+			
+			if (associativityGroup != null 
+					&& precedenceLevel.getLhs() == associativityGroup.getLhs() 
+					&& precedenceLevel.getRhs() == associativityGroup.getRhs()) {
+							
+				if (precedence == associativityGroup.getPrecedence()) { // Can use precedence climbing
+					boolean first = precedenceLevel.getUndefined() == 0;
+					switch(associativityGroup.getAssociativity()) {
+						case LEFT:
+							l1 = integer(first? 0 : precedence);
+							r2 = integer(precedenceLevel.getRhs() + 1);
+							break;
+						case RIGHT:
+							l1 = integer(precedenceLevel.getRhs() + 1);
+							r2 = integer(first? 0 : precedence);
+							break;
+						case NON_ASSOC:
+							l1 = integer(precedenceLevel.getRhs() + 1);
+							r2 = integer(precedenceLevel.getRhs() + 1);
+							break;
+						default: throw new RuntimeException("Unexpected associativity: " + associativityGroup.getAssociativity());
+					}
+					
+					// Rule for propagation of a precedence level
+					if (precedenceLevel.hasPostfixUnaryBelow())
+						r1 = nUseMin? var("r") : pr(precedence, precedenceLevel.postfixUnaryBelow, false);
+					else if (precedenceLevel.hasPostfixUnary())
+						r1 = integer(first? 0 : precedence);
+					else 
+						r1 = l1;
+					
+					if (precedenceLevel.hasPrefixUnaryBelow())
+						l2 = nUseMin? var("l") : pr(precedence, precedenceLevel.prefixUnaryBelow, true);
+					else if (precedenceLevel.hasPrefixUnary())
+						l2 = integer(first? 0 : precedence);
+					else 
+						l2 = r2;
+				} else {
+					l1 = integer(precedence);
+					r2 = integer(precedence);
+					
+					// Rule for propagation of a precedence level
+					l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(0);
+					r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(0);
+				}
+				
+			} else if (associativityGroup == null && precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can use precedence climbing
+				boolean first = precedenceLevel.getUndefined() == 0;
+				int il1 = -1; int ir2 = -1;
+				switch(associativity) {
+					case LEFT:
+						il1 = first? 0 : precedence;
+						l1 = integer(il1);
+						ir2 = precedence + 1;
+						r2 = integer(ir2);
+						break;
+					case RIGHT:
+						il1 = precedence + 1;
+						l1 = integer(il1);
+						ir2 = first? 0 : precedence;
+						r2 = integer(ir2);
+						break;
+					case NON_ASSOC:
+						il1 = precedence + 1;
+						l1 = integer(il1);
+						ir2 = precedence + 1;
+						r2 = integer(ir2);
+						break;
+					case UNDEFINED:
+						il1 = first? 0 : precedence;
+						l1 = integer(il1);
+						ir2 = first? 0 : precedence;
+						r2 = integer(ir2);
+						break;
+					default: throw new RuntimeException("Unexpected associativity: " + associativity);
+				}
+							
+				// Rule for propagation of a precedence level
+				if (precedenceLevel.hasPostfixUnaryBelow())
+					r1 = nUseMin? var("r") : pr(precedenceLevel.hasPostfixUnary()? precedence : il1, precedenceLevel.postfixUnaryBelow, false);
+				else if (precedenceLevel.hasPostfixUnary())
+					r1 = integer(first? 0 : precedence);
+				else 
+					r1 = l1;
+							
+				if (precedenceLevel.hasPrefixUnaryBelow())
+					l2 = nUseMin? var("l") : pr(precedenceLevel.hasPrefixUnary()? precedence : ir2, precedenceLevel.prefixUnaryBelow, true);
+				else if (precedenceLevel.hasPrefixUnary())
+					l2 = integer(first? 0 : precedence);
+				else 
+					l2 = r2;	
+			} else { // No precedence climbing
+				int undefined = precedenceLevel.getUndefined();
+				boolean useUndefined = (associativityGroup == null || (associativityGroup != null && associativityGroup.getPrecedence() == precedence)) 
+											&& undefined != -1;
+							
+				switch((associativityGroup != null && associativity == Associativity.UNDEFINED)?
+							associativityGroup.getAssociativity() : associativity) {
+					case LEFT:
+						l1 = integer(useUndefined? undefined : precedence);
+						r2 = integer(precedence);
+						// Rule for propagation of a precedence level
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(0);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(useUndefined? undefined : 0);
+						break;
+					case RIGHT:
+						l1 = integer(precedence);
+						r2 = integer(useUndefined? undefined : precedence);
+						// Rule for propagation of a precedence level
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(useUndefined? undefined : 0);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(0);
+						break;
+					case NON_ASSOC:
+						l1 = integer(precedence);
+						r2 = integer(precedence);
+						// Rule for propagation of a precedence level
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(0);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(0);
+						break;
+					case UNDEFINED: // Not in the associativity group
+						l1 = integer(undefined);
+						r2 = integer(undefined);
+						// Rule for propagation of a precedence level
+						l2 = nUseMin? var("l") : precedenceLevel.hasPrefixUnaryBelow()? pr(precedence, precedenceLevel.prefixUnaryBelow, true) : integer(undefined);
+						r1 = nUseMin? var("r") : precedenceLevel.hasPostfixUnaryBelow()? pr(precedence, precedenceLevel.postfixUnaryBelow, false) : integer(undefined);
+						break;
+					default: throw new RuntimeException("Unexpected associativity: " + associativity);
+				}
+			}
+			
+			// 2. Constraints (preconditions) for the grammar rule
+			
+			if (rule.isLeftRecursive())
+				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("r"))));
+			
+			if (rule.isRightRecursive())
+				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("l"))));
+			
+			if (precedenceLevel.getLhs() != precedenceLevel.getRhs()) {
+				
+				if (associativityGroup != null) {
+					
+					boolean climbing = associativityGroup.getLhs() == precedenceLevel.getLhs() 
+											&& associativityGroup.getRhs() == precedenceLevel.getRhs();
+					
+					switch(associativityGroup.getAssociativity()) {
+						case LEFT:
+							if (rule.isLeftRecursive()) {
+								if (!climbing)
+									preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("r"))));
+								
+								if (!associativityGroup.getAssocMap().isEmpty())
+									for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet())
+										if (precedence != entry.getKey())
+											preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
+							}
+							break;						
+						case RIGHT:
+							if (rule.isRightRecursive()) {
+								if (!climbing)
+									preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("l"))));
+								
+								if (!associativityGroup.getAssocMap().isEmpty())
+									for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet())
+										if (precedence != entry.getKey() && !(climbing && entry.getKey() == associativityGroup.getPrecedence()))
+											preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+							}
+							break;
+						case NON_ASSOC:
+							if (!climbing)
+								preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("r"))));
+							if (!climbing)
+								preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("l"))));
+							
+							if (!associativityGroup.getAssocMap().isEmpty()) {
+								for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet()) {
+									if (precedence != entry.getKey() && !(climbing && entry.getKey() == associativityGroup.getPrecedence())) {
+										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
+										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+									}
+								}
+							}
+							break;
+						default: throw new RuntimeException("Unexpected associativity: " + associativityGroup.getAssociativity());
+					}
+					
+					if (precedence != associativityGroup.getPrecedence()) {
+						switch(associativity) {
+							case LEFT:
+								if (rule.isLeftRecursive())
+									preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+								break;						
+							case RIGHT:
+								if (rule.isRightRecursive())
+									preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+								break;
+							case NON_ASSOC:
+								preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+								break;
+							case UNDEFINED:
+								break;
+							default: throw new RuntimeException("Unexpected associativity: " + associativity);
+						}
+					}				
+				} else {	
+					switch(associativity) {
+						case LEFT:
+							if (rule.isLeftRecursive())
+								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+							break;						
+						case RIGHT:
+							if (rule.isRightRecursive())
+								preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+							break;
+						case NON_ASSOC:
+							preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+							preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+							break;
+						case UNDEFINED:
+							break;
+						default: throw new RuntimeException("Unexpected associativity: " + associativity);
+					}
+				}	
+			}
+		}
+		
+		private void precedence2() { // Precedence and associativity
 			if (rule.getPrecedence() == -1)
 				return; // Precedence does not apply
 						
