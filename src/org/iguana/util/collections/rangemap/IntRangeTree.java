@@ -25,44 +25,58 @@
  *
  */
 
-package org.iguana.regex.matcher;
+package org.iguana.util.collections.rangemap;
 
-import org.iguana.regex.RegularExpression;
-import org.iguana.regex.automaton.AutomatonOperations;
-import org.iguana.util.Input;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class DFABackwardsMatcher extends DFAMatcher {
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
-	public DFABackwardsMatcher(RegularExpression regex) {
-		super(AutomatonOperations.reverse(regex.getAutomaton()));
+public interface IntRangeTree {
+	
+	public static final int ABSENT_VALUE = -2;
+	
+	public IntNode getRoot();
+	
+	public int size();
+	
+	default boolean contains(int key) {
+		return get(key) != -1;
 	}
 
-	@Override
-	public int match(Input input, int inputIndex) {
-		
-		if (inputIndex == 0)
-			return -1;
-		
-		int length = 0;
-		int maximumMatched = -1;
-		int state = start;
-		
-		if (finalStates[state])
-			maximumMatched = 0;
-		
-		for (int i = inputIndex - 1; i >= 0; i--) {
-			state = table[state].get(input.charAt(i));
+	public boolean contains(CharacterRange range);
+	
+	public int get(int key);
+	
+	default void insert(int start, int end, int val) {
+		insert(CharacterRange.in(start, end), val);
+	}
+	
+	public void insert(CharacterRange range, int val);
+	
+	public boolean isBalanced();
+	
+	public <T> void inOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	public <T> void preOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	public <T> void levelOrder(Function<IntNode, ? extends T> action, Consumer<? super T> acc);
+	
+	default void inOrder(Consumer<IntNode> action) {
+		inOrder(n -> { action.accept(n); return null; }, n -> {});
+	}
+	
+	default void preOrder(Consumer<IntNode> action) {
+		preOrder(n -> { action.accept(n); return null; }, n -> {});
+	}
+	
+	default void levelOrder(Consumer<IntNode> action) {
+		levelOrder(n -> { action.accept(n); return null; }, n -> {});
+	}
 
-			if (state == ERROR_STATE)
-				break;
-			
-			length++;
-
-			if (finalStates[state])
-				maximumMatched = length;
-		}
-
-		return maximumMatched;
+	default int height() {
+		return getRoot() == null ? 0 : getRoot().height;
 	}
 
 }

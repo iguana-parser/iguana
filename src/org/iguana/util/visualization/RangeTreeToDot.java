@@ -30,10 +30,10 @@ package org.iguana.util.visualization;
 import static org.iguana.util.generator.GeneratorUtil.*;
 import static org.iguana.util.visualization.GraphVizUtil.*;
 
-import org.iguana.util.collections.IntRangeTree;
-import org.iguana.util.collections.RangeTree;
-import org.iguana.util.collections.IntRangeTree.IntNode;
-import org.iguana.util.collections.RangeTree.Node;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree;
+import org.iguana.util.collections.rangemap.RangeTree;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.RangeTree.Node;
 
 public class RangeTreeToDot {
 		
@@ -58,7 +58,7 @@ public class RangeTreeToDot {
 	}
 	
 	
-	public static <T> String toDot(IntRangeTree g) {
+	public static <T> String toDot(AVLIntRangeTree g) {
 		StringBuilder sb = new StringBuilder();
 		toDot(sb, g.getRoot());
 		return sb.toString();

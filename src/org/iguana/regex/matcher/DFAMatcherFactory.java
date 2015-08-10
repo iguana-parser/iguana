@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Epsilon;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
 
@@ -41,6 +42,9 @@ public class DFAMatcherFactory implements MatcherFactory {
 
     public Matcher getMatcher(RegularExpression regex) {
         
+    	if (regex == Epsilon.getInstance())
+    		return epsilonMatcher();
+    		
         if (regex instanceof Terminal)
             return getMatcher(((Terminal) regex).getRegularExpression());
         
@@ -81,6 +85,10 @@ public class DFAMatcherFactory implements MatcherFactory {
     
     public static Matcher characterRangeBackwardsMatcher(CharacterRange range) {
         return (input, i) -> i == 0 ? -1 : ( input.charAt(i - 1) >= range.getStart() && input.charAt(i - 1) <= range.getEnd() ? 1 : -1 );
-    }        
+    }
+    
+    public static Matcher epsilonMatcher() {
+    	return (input, i) -> 0;
+    }
 	
 }

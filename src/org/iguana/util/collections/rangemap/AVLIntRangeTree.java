@@ -25,48 +25,71 @@
  *
  */
 
-package org.iguana.util.collections;
+package org.iguana.util.collections.rangemap;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.RangeTree.Node;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree.IntNode;
 
 /**
  * 
- * An implementaion of AVL trees for fast range search
+ * An implementation of AVL trees for fast range search
+ * that used integer keys.
  * 
  * @author Ali Afroozeh
  *
  */
-public class RangeTree<T> implements Iterable<Node<T>>{	
+public class AVLIntRangeTree implements IntRangeTree, Iterable<IntNode> {	
 
-	private Node<T> root;
+	private IntNode root;
 	
 	private int countNodes;
 	
-	public Node<T> getRoot() {
+	@Override
+	public IntNode getRoot() {
 		return root;
 	}
 	
+	@Override
 	public int size() {
 		return countNodes;
 	}
 	
-	public boolean contains(int key) {
-		return get(key) != null;
+	@Override
+	public boolean contains(CharacterRange range) {
+		return getNode(range, root) != null;
 	}
 	
-	public T get(int key) {
+	private IntNode getNode(CharacterRange range, IntNode node) {
+		if (node == null)
+			return null;
+		
+		if (range.getStart() == node.start && range.getEnd() == node.end)
+			return node;
+		
+		if (range.getStart() < node.start)
+			return getNode(range, node.left);
+		
+		if (range.getEnd() > node.end)
+			return getNode(range, node.right);
+		
+		throw new RuntimeException("Should not reach here!");
+	}
+	
+	public int get(int key) {
 		return get(key, root);
 	}
 	
-	public T get(int key, Node<T> node) {
+	private int get(int key, IntNode node) {
 		if (node == null)
-			return null;
+			return ABSENT_VALUE;
 		
 		if (key < node.start) 
 			return get(key, node.left);
@@ -77,15 +100,12 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		return node.val;
 	}
 	
-	public void insert(int key, T val) {
-		insert(CharacterRange.in(key, key), val);
+	@Override
+	public void insert(CharacterRange range, int val) {
+		insert(range, root, new IntNode(range.getStart(), range.getEnd(), val));
 	}
 	
-	public void insert(CharacterRange range, T val) {
-		insert(range, root, new Node<T>(range.getStart(), range.getEnd(), val));
-	}
-	
-	private void insert(CharacterRange range, Node<T> parent, Node<T> newNode) {		
+	private void insert(CharacterRange range, IntNode parent, IntNode newNode) {		
 		
 		if (root == null) {
 			root = newNode;
@@ -115,19 +135,19 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 		}
 	}
 	
-	private void addToLeft(Node<T> parent, Node<T> newNode) {
+	private void addToLeft(IntNode parent, IntNode newNode) {
 		countNodes++;
 		parent.left = newNode;
 		newNode.parent = parent;
 	}
 	
-	private void addToRight(Node<T> parent, Node<T> newNode) {
+	private void addToRight(IntNode parent, IntNode newNode) {
 		countNodes++;
 		parent.right = newNode;
 		newNode.parent = parent;
 	}
-	 
-	private void updateHeight(Node<T> node) {
+	
+	private void updateHeight(IntNode node) {
 		while (node != null) {
 			node.updateHeight();
 			node = node.parent;
@@ -142,7 +162,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *     z     z       z          z
 	 * 
 	 */
-	private void balance(Node<T> x, Node<T> y) {
+	private void balance(IntNode x, IntNode y) {
 		
 		if (!x.isBalanced()) {
 			if (x.right != null && x.right == y) {
@@ -170,7 +190,7 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			balance(x.parent, x);
 	}
 	
-
+	
 	/**
 	 *      x                y
 	 *     / \              / \
@@ -178,11 +198,11 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *       / \          / \
 	 *      B   C        A   B
 	 */
-	private void leftRotate(Node<T> x) {
-		Node<T> parent = x.parent;
+	private void leftRotate(IntNode x) {
+		IntNode parent = x.parent;
 		
-		Node<T> y = x.right;
-		Node<T> B = y.left;
+		IntNode y = x.right;
+		IntNode B = y.left;
 		y.left = x;
 		x.parent = y;
 		x.right = B;
@@ -190,11 +210,11 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			B.parent = x;
 		
 		y.parent = parent;
-		if (parent != null) {
+		
+		if (parent != null)
 			parent.replaceChild(x, y);
-		} else {
+		else
 			root = y;
-		}
 		
 		updateHeight(x);
 	}
@@ -207,11 +227,11 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 	 *  A   B                B   C
 	 *      
 	 */
-	private void rightRotate(Node<T> x) {
-		Node<T> parent = x.parent;
+	private void rightRotate(IntNode x) {
+		IntNode parent = x.parent;
 		
-		Node<T> y = x.left;
-		Node<T> B = y.right;
+		IntNode y = x.left;
+		IntNode B = y.right;
 		y.right = x;
 		x.parent = y;
 		x.left = B;
@@ -220,59 +240,87 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			B.parent = x;
 
 		y.parent = parent;
-		if (parent != null) {
+		if (parent != null) 
 			parent.replaceChild(x, y);
-		} else {
+		else 
 			root = y;
-		}
-
+		
 		updateHeight(x);
 	}
 	
+	@Override
 	public boolean isBalanced() {
-		return inOrder(root).stream().allMatch(n -> n.isBalanced());
+		return getAllNodes().stream().allMatch(n -> n.isBalanced());
 	}
 
-	private List<Node<T>> inOrder(Node<T> node) {
-		List<Node<T>> list = new ArrayList<>();
-		inOrder(node, (n) -> list.add(n));
+	public List<IntNode> getAllNodes() {
+		List<IntNode> list = new ArrayList<>();
+		inOrder(root, n -> n, n -> list.add(n));
 		return list;
 	}
-	
-	private void inOrder(Node<T> node, Consumer<Node<T>> consumer) {
-		if (node.left != null)
-			inOrder(node.left, consumer);
 		
-		consumer.accept(node);
-		
-		if(node.right != null) 
-			inOrder(node.right, consumer);
+	@Override
+	public <T> void inOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		inOrder(root, f, acc);
+	}
+
+	private <T> void inOrder(IntNode node, Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		if (node.left != null)  inOrder(node.left, f, acc);
+		acc.accept(f.apply(node));
+		if (node.right != null) inOrder(node.right, f, acc);
 	}
 	
 	@Override
-	public Iterator<Node<T>> iterator() {
-		return inOrder(root).iterator();
+	public <T> void preOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		preOrder(root, f, acc);
+	}
+
+	private <T> void preOrder(IntNode node, Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		acc.accept(f.apply(node));
+		if (node.left != null)  preOrder(node.left, f, acc);
+		if (node.right != null) preOrder(node.right, f, acc);
 	}
 	
-	public static class Node<T> {
+	@Override
+	public <T> void levelOrder(Function<IntNode, ? extends T> f, Consumer<? super T> acc) {
+		
+		if (root == null) return;
+		
+		Queue<IntNode> queue = new ArrayDeque<>();
+		queue.add(root);
+		
+		while (!queue.isEmpty()) {
+			IntNode node = queue.poll();
+			acc.accept(f.apply(node));
+			if (node.left != null)  queue.add(node.left);
+			if (node.right != null) queue.add(node.right);
+		}
+	}
+	
+	@Override
+	public Iterator<IntNode> iterator() {
+		return getAllNodes().iterator();
+	}
+	
+	public static class IntNode {
 		final int start;
 		final int end;
-		final T val;
-		Node<T> left;
-		Node<T> right;
+		final int val;
+		IntNode left;
+		IntNode right;
 		int height;
 		
-		Node<T> parent;
+		IntNode parent;
 		
-		public Node(int start, int end, T val) {
+		public IntNode(int start, int end, int val) {
 			this.start = start;
 			this.end = end;
 			this.val = val;
 			updateHeight();
 		}
 		
-		public void replaceChild(Node<T> child, Node<T> replacement) {
-			// Fix the pointers of the parents
+		public void replaceChild(IntNode child, IntNode replacement) {
+			// Fixes the pointers of the parents
 			if (left == child) {
 				left = replacement;
 			} else {
@@ -318,17 +366,17 @@ public class RangeTree<T> implements Iterable<Node<T>>{
 			return right == null ? -1 : right.height;
 		}
 		
-		public Node<T> getLeft() {
+		public IntNode getLeft() {
 			return left;
 		}
 		
-		public Node<T> getRight() {
+		public IntNode getRight() {
 			return right;
 		}
 		
 		@Override
 		public String toString() {
-			return String.format("[%d-%d]", start, end);
+			return String.format("%s-%s", start, end);
 		}
 	}
 

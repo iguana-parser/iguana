@@ -32,8 +32,8 @@ import org.iguana.parser.gss.GSSNode;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.State;
 import org.iguana.sppf.SPPFNode;
-import org.iguana.util.collections.IntRangeTree;
-import org.iguana.util.collections.RangeTree;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree;
+import org.iguana.util.collections.rangemap.RangeTree;
 import org.iguana.util.trie.Trie;
 import org.iguana.util.visualization.AutomatonToDot;
 import org.iguana.util.visualization.GSSToDot;
@@ -75,7 +75,7 @@ public class Visualization {
 		GraphVizUtil.generateGraph(RangeTreeToDot.toDot(t), outputDir, "rangeTree");
 	}
 	
-	public static <T> void generateRangeTree(String outputDir, IntRangeTree t) {
+	public static <T> void generateRangeTree(String outputDir, AVLIntRangeTree t) {
 		GraphVizUtil.generateGraph(RangeTreeToDot.toDot(t), outputDir, "rangeTree");
 	}
 	

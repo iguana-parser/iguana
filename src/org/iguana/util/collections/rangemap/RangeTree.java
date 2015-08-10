@@ -25,32 +25,30 @@
  *
  */
 
-package org.iguana.util.collections;
+package org.iguana.util.collections.rangemap;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.IntRangeTree.IntNode;
+import org.iguana.util.collections.rangemap.RangeTree.Node;
 
 /**
  * 
  * An implementaion of AVL trees for fast range search
- * that used integer keys.
  * 
  * @author Ali Afroozeh
  *
  */
-public class IntRangeTree implements Iterable<IntNode> {	
+public class RangeTree<T> implements Iterable<Node<T>>{	
 
-	private IntNode root;
+	private Node<T> root;
 	
 	private int countNodes;
 	
-	public IntNode getRoot() {
+	public Node<T> getRoot() {
 		return root;
 	}
 	
@@ -59,36 +57,16 @@ public class IntRangeTree implements Iterable<IntNode> {
 	}
 	
 	public boolean contains(int key) {
-		return get(key) != -1;
+		return get(key) != null;
 	}
 	
-	public boolean contains(CharacterRange range) {
-		return getNode(range, root) != null;
-	}
-	
-	private IntNode getNode(CharacterRange range, IntNode node) {
-		if (node == null)
-			return null;
-		
-		if (range.getStart() == node.start && range.getEnd() == node.end)
-			return node;
-		
-		if (range.getStart() < node.start)
-			return getNode(range, node.left);
-		
-		if (range.getEnd() > node.end)
-			return getNode(range, node.right);
-		
-		throw new RuntimeException("Should not reach here!");
-	}
-	
-	public int get(int key) {
+	public T get(int key) {
 		return get(key, root);
 	}
 	
-	public int get(int key, IntNode node) {
+	public T get(int key, Node<T> node) {
 		if (node == null)
-			return -1;
+			return null;
 		
 		if (key < node.start) 
 			return get(key, node.left);
@@ -99,15 +77,15 @@ public class IntRangeTree implements Iterable<IntNode> {
 		return node.val;
 	}
 	
-	public void insert(int key, int val) {
+	public void insert(int key, T val) {
 		insert(CharacterRange.in(key, key), val);
 	}
 	
-	public void insert(CharacterRange range, int val) {
-		insert(range, root, new IntNode(range.getStart(), range.getEnd(), val));
+	public void insert(CharacterRange range, T val) {
+		insert(range, root, new Node<T>(range.getStart(), range.getEnd(), val));
 	}
 	
-	private void insert(CharacterRange range, IntNode parent, IntNode newNode) {		
+	private void insert(CharacterRange range, Node<T> parent, Node<T> newNode) {		
 		
 		if (root == null) {
 			root = newNode;
@@ -137,19 +115,19 @@ public class IntRangeTree implements Iterable<IntNode> {
 		}
 	}
 	
-	private void addToLeft(IntNode parent, IntNode newNode) {
+	private void addToLeft(Node<T> parent, Node<T> newNode) {
 		countNodes++;
 		parent.left = newNode;
 		newNode.parent = parent;
 	}
 	
-	private void addToRight(IntNode parent, IntNode newNode) {
+	private void addToRight(Node<T> parent, Node<T> newNode) {
 		countNodes++;
 		parent.right = newNode;
 		newNode.parent = parent;
 	}
-	
-	private void updateHeight(IntNode node) {
+	 
+	private void updateHeight(Node<T> node) {
 		while (node != null) {
 			node.updateHeight();
 			node = node.parent;
@@ -164,7 +142,7 @@ public class IntRangeTree implements Iterable<IntNode> {
 	 *     z     z       z          z
 	 * 
 	 */
-	private void balance(IntNode x, IntNode y) {
+	private void balance(Node<T> x, Node<T> y) {
 		
 		if (!x.isBalanced()) {
 			if (x.right != null && x.right == y) {
@@ -192,7 +170,7 @@ public class IntRangeTree implements Iterable<IntNode> {
 			balance(x.parent, x);
 	}
 	
-	
+
 	/**
 	 *      x                y
 	 *     / \              / \
@@ -200,11 +178,11 @@ public class IntRangeTree implements Iterable<IntNode> {
 	 *       / \          / \
 	 *      B   C        A   B
 	 */
-	private void leftRotate(IntNode x) {
-		IntNode parent = x.parent;
+	private void leftRotate(Node<T> x) {
+		Node<T> parent = x.parent;
 		
-		IntNode y = x.right;
-		IntNode B = y.left;
+		Node<T> y = x.right;
+		Node<T> B = y.left;
 		y.left = x;
 		x.parent = y;
 		x.right = B;
@@ -212,11 +190,11 @@ public class IntRangeTree implements Iterable<IntNode> {
 			B.parent = x;
 		
 		y.parent = parent;
-		
-		if (parent != null)
+		if (parent != null) {
 			parent.replaceChild(x, y);
-		else
+		} else {
 			root = y;
+		}
 		
 		updateHeight(x);
 	}
@@ -229,11 +207,11 @@ public class IntRangeTree implements Iterable<IntNode> {
 	 *  A   B                B   C
 	 *      
 	 */
-	private void rightRotate(IntNode x) {
-		IntNode parent = x.parent;
+	private void rightRotate(Node<T> x) {
+		Node<T> parent = x.parent;
 		
-		IntNode y = x.left;
-		IntNode B = y.right;
+		Node<T> y = x.left;
+		Node<T> B = y.right;
 		y.right = x;
 		x.parent = y;
 		x.left = B;
@@ -242,11 +220,12 @@ public class IntRangeTree implements Iterable<IntNode> {
 			B.parent = x;
 
 		y.parent = parent;
-		if (parent != null) 
+		if (parent != null) {
 			parent.replaceChild(x, y);
-		else 
+		} else {
 			root = y;
-		
+		}
+
 		updateHeight(x);
 	}
 	
@@ -254,13 +233,13 @@ public class IntRangeTree implements Iterable<IntNode> {
 		return inOrder(root).stream().allMatch(n -> n.isBalanced());
 	}
 
-	private List<IntNode> inOrder(IntNode node) {
-		List<IntNode> list = new ArrayList<>();
+	private List<Node<T>> inOrder(Node<T> node) {
+		List<Node<T>> list = new ArrayList<>();
 		inOrder(node, (n) -> list.add(n));
 		return list;
 	}
 	
-	private void inOrder(IntNode node, Consumer<IntNode> consumer) {
+	private void inOrder(Node<T> node, Consumer<Node<T>> consumer) {
 		if (node.left != null)
 			inOrder(node.left, consumer);
 		
@@ -271,29 +250,29 @@ public class IntRangeTree implements Iterable<IntNode> {
 	}
 	
 	@Override
-	public Iterator<IntNode> iterator() {
+	public Iterator<Node<T>> iterator() {
 		return inOrder(root).iterator();
 	}
 	
-	public static class IntNode {
+	public static class Node<T> {
 		final int start;
 		final int end;
-		final int val;
-		IntNode left;
-		IntNode right;
+		final T val;
+		Node<T> left;
+		Node<T> right;
 		int height;
 		
-		IntNode parent;
+		Node<T> parent;
 		
-		public IntNode(int start, int end, int val) {
+		public Node(int start, int end, T val) {
 			this.start = start;
 			this.end = end;
 			this.val = val;
 			updateHeight();
 		}
 		
-		public void replaceChild(IntNode child, IntNode replacement) {
-			// Fixes the pointers of the parents
+		public void replaceChild(Node<T> child, Node<T> replacement) {
+			// Fix the pointers of the parents
 			if (left == child) {
 				left = replacement;
 			} else {
@@ -339,17 +318,17 @@ public class IntRangeTree implements Iterable<IntNode> {
 			return right == null ? -1 : right.height;
 		}
 		
-		public IntNode getLeft() {
+		public Node<T> getLeft() {
 			return left;
 		}
 		
-		public IntNode getRight() {
+		public Node<T> getRight() {
 			return right;
 		}
 		
 		@Override
 		public String toString() {
-			return String.format("%s-%s", Character.getName(start), Character.getName(end));
+			return String.format("[%d-%d]", start, end);
 		}
 	}
 

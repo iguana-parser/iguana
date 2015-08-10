@@ -30,7 +30,7 @@ package org.iguana.util.collections;
 import static org.junit.Assert.*;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.RangeTree;
+import org.iguana.util.collections.rangemap.RangeTree;
 import org.junit.Test;
 
 public class RangeTreeTest {

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.RangeTree;
+import org.iguana.util.collections.rangemap.RangeTree;
 
 public class RangeTreeLookaheadTest implements LookAheadTest {
 	
