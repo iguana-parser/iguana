@@ -528,10 +528,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			// 2. Constraints (preconditions) for the grammar rule
 			
 			if (rule.isLeftRecursive())
-				preconditions.add(predicate(greaterEq(integer(precedenceLevel.getRhs()), var("r"))));
+				rcond = greaterEq(integer(precedenceLevel.getRhs()), var("p"));
 			
-			if (precedenceLevel.getLhs() != precedenceLevel.getRhs()) {
-				
+			if (precedenceLevel.getLhs() != precedenceLevel.getRhs()) {	
 				if (associativityGroup != null) {
 					
 					boolean climbing = associativityGroup.getLhs() == precedenceLevel.getLhs() 
@@ -541,36 +540,36 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						case LEFT:
 							if (rule.isLeftRecursive()) {
 								if (!climbing)
-									preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("r"))));
+									rcond = and(rcond, notEqual(integer(associativityGroup.getPrecedence()), var("p")));
 								
 								if (!associativityGroup.getAssocMap().isEmpty())
 									for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet())
 										if (precedence != entry.getKey())
-											preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
+											rcond = and(rcond, notEqual(integer(entry.getKey()), var("p")));
 							}
 							break;						
 						case RIGHT:
 							if (rule.isRightRecursive()) {
 								if (!climbing)
-									preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("l"))));
+									lcond = and(lcond, notEqual(integer(associativityGroup.getPrecedence()), var("l")));
 								
 								if (!associativityGroup.getAssocMap().isEmpty())
 									for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet())
 										if (precedence != entry.getKey() && !(climbing && entry.getKey() == associativityGroup.getPrecedence()))
-											preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+											lcond = and(lcond, notEqual(integer(entry.getKey()), var("l")));
 							}
 							break;
 						case NON_ASSOC:
 							if (!climbing)
-								preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("r"))));
+								rcond = and(rcond, notEqual(integer(associativityGroup.getPrecedence()), var("p")));
 							if (!climbing)
-								preconditions.add(predicate(notEqual(integer(associativityGroup.getPrecedence()), var("l"))));
+								lcond = and(lcond, notEqual(integer(associativityGroup.getPrecedence()), var("l")));
 							
 							if (!associativityGroup.getAssocMap().isEmpty()) {
 								for (Map.Entry<Integer, Associativity> entry : associativityGroup.getAssocMap().entrySet()) {
 									if (precedence != entry.getKey() && !(climbing && entry.getKey() == associativityGroup.getPrecedence())) {
-										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("r"))));
-										preconditions.add(predicate(notEqual(integer(entry.getKey()), var("l"))));
+										rcond = and(rcond, notEqual(integer(entry.getKey()), var("p")));
+										lcond = and(lcond, notEqual(integer(entry.getKey()), var("l")));
 									}
 								}
 							}
@@ -582,15 +581,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						switch(associativity) {
 							case LEFT:
 								if (rule.isLeftRecursive())
-									preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+									rcond = and(rcond, notEqual(integer(precedence), var("p")));
 								break;						
 							case RIGHT:
 								if (rule.isRightRecursive())
-									preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+									lcond = and(lcond, notEqual(integer(precedence), var("l")));
 								break;
 							case NON_ASSOC:
-								preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
-								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+								rcond = and(rcond, notEqual(integer(precedence), var("p")));
+								lcond = and(lcond, notEqual(integer(precedence), var("l")));
 								break;
 							case UNDEFINED:
 								break;
@@ -601,15 +600,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					switch(associativity) {
 						case LEFT:
 							if (rule.isLeftRecursive())
-								preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+								rcond = and(rcond, notEqual(integer(precedence), var("p")));
 							break;						
 						case RIGHT:
 							if (rule.isRightRecursive())
-								preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
+								lcond = and(lcond, notEqual(integer(precedence), var("l")));
 							break;
 						case NON_ASSOC:
-							preconditions.add(predicate(notEqual(integer(precedence), var("l"))));
-							preconditions.add(predicate(notEqual(integer(precedence), var("r"))));
+							rcond = and(rcond, notEqual(integer(precedence), var("p")));
+							lcond = and(lcond, notEqual(integer(precedence), var("l")));
 							break;
 						case UNDEFINED:
 							break;
