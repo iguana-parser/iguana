@@ -465,62 +465,84 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Expression rcond = null;
 			Expression ret = null;
 			
-			if (associativityGroup != null 
-					&& precedenceLevel.getLhs() == associativityGroup.getLhs() 
-					&& precedenceLevel.getRhs() == associativityGroup.getRhs()) {
+			if (associativityGroup != null && precedenceLevel.getLhs() == associativityGroup.getLhs() 
+										   && precedenceLevel.getRhs() == associativityGroup.getRhs()) {
 							
 				if (precedence == associativityGroup.getPrecedence()) { // Can climb
 					switch(associativityGroup.getAssociativity()) {
 						case LEFT:
 							lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-							rarg = integer(precedenceLevel.getRhs() + 1); break;
+							rarg = integer(precedenceLevel.getRhs() + 1); 
+							break;
 						case RIGHT:
 							lcond = greaterEq(var("l"), integer(precedenceLevel.getRhs() + 1));
-							rarg = integer(first? 0 : precedence); break;
+							rarg = integer(first? 0 : precedence); 
+							break;
 						case NON_ASSOC:
 							lcond = greaterEq(var("l"), integer(precedenceLevel.getRhs() + 1));
-							rarg = integer(precedenceLevel.getRhs() + 1); break;
+							rarg = integer(precedenceLevel.getRhs() + 1); 
+							break;
 						default: throw new RuntimeException("Unexpected associativity: " + associativityGroup.getAssociativity());
 					}	
 				} else {
 					lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 					rarg = integer(precedence);
 				}
-			} else if (associativityGroup == null 
-							&& precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can climb
+				if (associativityGroup.getLhs() != associativityGroup.getRhs())
+//					ret = ifThenElse(or(equal(var("r"), integer(0)), and(lessEq(integer(precedenceLevel.getLhs()), var("r")),greaterEq(var("r"), integer(precedenceLevel.getRhs())))), 
+//								     integer(precedence), 
+//								     min(var("r"),integer(precedence)));
+					;
+				else 
+					ret = integer(precedence);
+			
+			} else if (associativityGroup == null && precedenceLevel.getLhs() == precedenceLevel.getRhs()) { // Can climb
 				switch(associativity) {
 					case LEFT:
 						lcond = greaterEq(var("l"), integer(precedence));
-						rarg = integer(precedence + 1); break;
+						rarg = integer(precedence + 1); 
+						break;
 					case RIGHT:
 						lcond = greaterEq(var("l"), integer(precedence + 1));
-						rarg = integer(first? 0 : precedence); break;
+						rarg = integer(first? 0 : precedence); 
+						break;
 					case NON_ASSOC:
 						lcond = greaterEq(var("l"), integer(precedence + 1));
-						rarg = integer(precedence + 1); break;
+						rarg = integer(precedence + 1); 
+						break;
 					case UNDEFINED:
 						lcond = greaterEq(var("l"), integer(precedence));
-						rarg = integer(first? 0 : precedence); break;
+						rarg = integer(first? 0 : precedence); 
+						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
+				ret = integer(precedence);
+				
 			} else { // Cannot climb
-				boolean useUndefined = (associativityGroup == null || (associativityGroup != null && associativityGroup.getPrecedence() == precedence)) 
-											&& undefined != -1;
+				boolean useUndefined = undefined != -1 && (associativityGroup == null || (associativityGroup != null && associativityGroup.getPrecedence() == precedence));
 							
 				switch((associativityGroup != null && associativity == Associativity.UNDEFINED)?
 							associativityGroup.getAssociativity() : associativity) {
 					case LEFT:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-						rarg = integer(precedence); break;
+						rarg = integer(precedence);
+						ret = integer(useUndefined? undefined : precedence);
+						break;
 					case RIGHT:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-						rarg = integer(useUndefined? undefined : precedence); break;
+						rarg = integer(useUndefined? undefined : precedence); 
+						ret = integer(precedence);
+						break;
 					case NON_ASSOC:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-						rarg = integer(precedence); break;
+						rarg = integer(precedence); 
+						ret = integer(precedence);
+						break;
 					case UNDEFINED: // Not in the associativity group
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-						rarg = integer(undefined); break;
+						rarg = integer(undefined); 
+						ret = integer(undefined);
+						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
 			}
