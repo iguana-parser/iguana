@@ -1226,4 +1226,50 @@ public abstract class Expression extends AbstractAST {
 		
 	}
 	
+	static public class IfThenElse extends Expression {
+		
+		private static final long serialVersionUID = 1L;
+		
+		private final Expression condition;
+		private final Expression thenPart;
+		private final Expression elsePart;
+		
+		IfThenElse(Expression condition, Expression thenPart, Expression elsePart) {
+			this.condition = condition;
+			this.thenPart = thenPart;
+			this.elsePart = elsePart;
+		}
+		
+		public Expression getCondition() {
+			return condition;
+		}
+		
+		public Expression getThenPart() {
+			return thenPart;
+		}
+		
+		public Expression getElsePart() {
+			return elsePart;
+		}
+
+		@Override
+		public Object interpret(IEvaluatorContext ctx) {
+			boolean cond = (java.lang.Boolean) condition.interpret(ctx);
+			if (cond)
+				return thenPart.interpret(ctx);
+			else 
+				return elsePart.interpret(ctx);
+		}
+
+		@Override
+		public java.lang.String getConstructorCode() {
+			return java.lang.String.format("AST.ifThenElse(%s,%s,%s)", condition.getConstructorCode(), thenPart.getConstructorCode(), elsePart.getConstructorCode());
+		}
+
+		@Override
+		public <T> T accept(IAbstractASTVisitor<T> visitor) {
+			return visitor.visit(this);
+		}
+	}
+	
 }

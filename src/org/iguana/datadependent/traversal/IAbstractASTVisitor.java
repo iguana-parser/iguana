@@ -28,6 +28,7 @@
 package org.iguana.datadependent.traversal;
 
 import org.iguana.datadependent.ast.Expression.And;
+import org.iguana.datadependent.ast.Expression.IfThenElse;
 import org.iguana.datadependent.ast.Expression.Tuple;
 import org.iguana.datadependent.ast.Expression.Val;
 import org.iguana.datadependent.ast.Expression.Yield;
@@ -103,6 +104,8 @@ public interface IAbstractASTVisitor<T> {
 	public T visit(Val expression);
 	
 	public T visit(EndOfFile expression);
+	
+	public T visit(IfThenElse expression);
 	
 	public T visit(VariableDeclaration declaration);
 	

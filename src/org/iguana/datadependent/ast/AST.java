@@ -775,6 +775,10 @@ public class AST {
 		return new Expression.EndOfFile(index);
 	}
 	
+	static public Expression ifThenElse(Expression condition, Expression thenPart, Expression elsePart) {
+		return new Expression.IfThenElse(condition, thenPart, elsePart);
+	}
+	
 	/**
 	 * 
 	 * 		Statements

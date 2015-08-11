@@ -354,6 +354,14 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	}
 	
 	@Override
+	public Void visit(org.iguana.datadependent.ast.Expression.IfThenElse expression) {
+		expression.getCondition().accept(this);
+		expression.getThenPart().accept(this);
+		expression.getElsePart().accept(this);
+		return null;
+	}
+	
+	@Override
 	public Void visit(Yield expression) {
 		return null;
 	}
