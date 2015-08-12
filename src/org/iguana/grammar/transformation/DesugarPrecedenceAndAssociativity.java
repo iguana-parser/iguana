@@ -175,6 +175,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private boolean isFirst;
 		private boolean isLast;
 		
+		// Variables of the alternative scheme
+		
+		private Expression larg = var("p");
+		private Expression rarg = integer(0);
+		private Expression lcond = null;
+		private Expression rcond = null;
+		private Expression ret = null;
+		
 		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
@@ -459,12 +467,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			// 1. Expressions for the left and/or right recursive uses
 			
-			Expression larg = var("p");
-			Expression rarg = integer(0);
-			Expression lcond = null;
-			Expression rcond = null;
-			Expression ret = null;
-			
 			if (associativityGroup != null && precedenceLevel.getLhs() == associativityGroup.getLhs() 
 										   && precedenceLevel.getRhs() == associativityGroup.getRhs()) {
 							
@@ -488,8 +490,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 					rarg = integer(precedence);
 				}
-				if (associativityGroup.getLhs() != associativityGroup.getRhs())
-					ret = condition(precedence, precedenceLevel.getLhs(), precedenceLevel.getRhs());
+				
+				if (precedenceLevel.hasPrefixUnaryBelow() && rule.isRightRecursive())
+					if (associativityGroup.getLhs() != associativityGroup.getRhs())
+						ret = condition(precedence, precedenceLevel.getLhs(), precedenceLevel.getRhs());
+					else 
+						ret = minimum(precedence);
 				else 
 					ret = integer(precedence);
 			
@@ -513,7 +519,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
-				ret = integer(precedence);
+				if (precedenceLevel.hasPrefixUnaryBelow() && rule.isRightRecursive())
+					ret = minimum(precedence);
+				else
+					ret = integer(precedence);
 				
 			} else { // Cannot climb
 				boolean useUndefined = undefined != -1 && (associativityGroup == null || (associativityGroup != null && associativityGroup.getPrecedence() == precedence));
@@ -526,22 +535,34 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					case LEFT:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 						rarg = integer(precedence);
-						ret = useCondition? condition(useUndefined? undefined : precedence, lhs, rhs) : integer(useUndefined? undefined : precedence);
+						if (precedenceLevel.hasPrefixUnaryBelow() && rule.isRightRecursive())
+							ret = useCondition? condition(useUndefined? undefined : precedence, lhs, rhs) : minimum(useUndefined? undefined : precedence);
+						else
+							ret = integer(useUndefined? undefined : precedence); 
 						break;
 					case RIGHT:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 						rarg = integer(useUndefined? undefined : precedence); 
-						ret = useCondition? condition(precedence, lhs, rhs) : integer(precedence);
+						if (precedenceLevel.hasPrefixUnaryBelow() && rule.isRightRecursive())
+							ret = useCondition? condition(precedence, lhs, rhs) : minimum(precedence);
+						else
+							ret = integer(precedence);	
 						break;
 					case NON_ASSOC:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
-						rarg = integer(precedence); 
-						ret = useCondition? condition(precedence, lhs, rhs) : integer(precedence);
+						rarg = integer(precedence);
+						if (precedenceLevel.hasPrefixUnaryBelow() && rule.isRightRecursive())
+							ret = useCondition? condition(precedence, lhs, rhs) : minimum(precedence);
+						else
+							ret = integer(precedence);
 						break;
 					case UNDEFINED: // Not in the associativity group
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 						rarg = integer(undefined); 
-						ret = integer(undefined);
+						if (precedenceLevel.hasPrefixUnaryBelow() && rule.isRightRecursive())
+							ret = useCondition? condition(undefined, lhs, rhs) : minimum(undefined);
+						else
+							ret = integer(undefined);
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + associativity);
 				}
