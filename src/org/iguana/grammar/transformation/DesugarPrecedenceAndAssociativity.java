@@ -489,10 +489,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					rarg = integer(precedence);
 				}
 				if (associativityGroup.getLhs() != associativityGroup.getRhs())
-//					ret = ifThenElse(or(equal(var("r"), integer(0)), and(lessEq(integer(precedenceLevel.getLhs()), var("r")),greaterEq(var("r"), integer(precedenceLevel.getRhs())))), 
-//								     integer(precedence), 
-//								     min(var("r"),integer(precedence)));
-					;
+					ret = condition(precedence, precedenceLevel.getLhs(), precedenceLevel.getRhs());
 				else 
 					ret = integer(precedence);
 			
@@ -520,23 +517,26 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 			} else { // Cannot climb
 				boolean useUndefined = undefined != -1 && (associativityGroup == null || (associativityGroup != null && associativityGroup.getPrecedence() == precedence));
+				int lhs = precedenceLevel.getLhs();
+				int rhs = precedenceLevel.getRhs();
+				boolean useCondition = lhs != rhs;
 							
 				switch((associativityGroup != null && associativity == Associativity.UNDEFINED)?
 							associativityGroup.getAssociativity() : associativity) {
 					case LEFT:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 						rarg = integer(precedence);
-						ret = integer(useUndefined? undefined : precedence);
+						ret = useCondition? condition(useUndefined? undefined : precedence, lhs, rhs) : integer(useUndefined? undefined : precedence);
 						break;
 					case RIGHT:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 						rarg = integer(useUndefined? undefined : precedence); 
-						ret = integer(precedence);
+						ret = useCondition? condition(precedence, lhs, rhs) : integer(precedence);
 						break;
 					case NON_ASSOC:
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
 						rarg = integer(precedence); 
-						ret = integer(precedence);
+						ret = useCondition? condition(precedence, lhs, rhs) : integer(precedence);
 						break;
 					case UNDEFINED: // Not in the associativity group
 						lcond = greaterEq(var("l"), integer(precedenceLevel.getLhs()));
@@ -665,6 +665,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 				return pr2(var("r"), integer(current), list.stream().map(i -> integer(i + 1)).toArray(Expression[]::new));
 			}
+		}
+		
+		private static Expression condition(int precedence, int lhs, int rhs) {
+			return ifThenElse(or(equal(var("r"), integer(0)), and(lessEq(integer(lhs), var("r")),greaterEq(var("r"), integer(rhs)))), 
+				     		  integer(precedence), 
+				     		  min(var("r"),integer(precedence)));
+		}
+		
+		private static Expression minimum(int precedence) {
+			return ifThenElse(equal(var("r"), integer(0)), 
+		     		  		  integer(precedence), 
+		     		  		  min(var("r"),integer(precedence)));
 		}
 		
 		public Rule transform() {
