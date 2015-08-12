@@ -101,6 +101,35 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 	}
 	
 	@Override
+	public T compute(int key, IntKeyMapper<T> f) {
+		int index = hash(key);
+		
+		Entry<T> entry = table[index];
+		
+		if (entry == null) {
+			entry = new Entry<>(key, f.apply(key, null));
+			table[index] = entry;
+			size++;
+			if (size >= threshold) rehash();
+			return null;
+		} 
+		else if (entry.key == key) {
+			T oldVal = entry.val;
+			entry.val = f.apply(key, oldVal);
+			return oldVal;
+		} 
+		else {
+			
+			while (entry.next != null) entry = entry.next;
+			
+			Entry<T> newEntry = new Entry<>(key, f.apply(key, null));
+			entry.next = newEntry;
+			size++;
+			return null;
+		}
+	}
+	
+	@Override
 	public T put(int key, T value) {
 		int index = hash(key);
 		

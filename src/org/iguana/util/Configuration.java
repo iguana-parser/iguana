@@ -85,7 +85,7 @@ public class Configuration {
 	
 	public static enum HashMapImpl {
 		JAVA,
-		KOLOBOKE
+		INT_OPEN_ADDRESSING
 	}
 		
 	@Override
@@ -104,7 +104,7 @@ public class Configuration {
 		
 		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
 		private MatcherType matcherType = MatcherType.JAVA_REGEX;
-		private HashMapImpl hashmapImpl = HashMapImpl.JAVA;
+		private HashMapImpl hashmapImpl = HashMapImpl.INT_OPEN_ADDRESSING;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
 				
 		public Configuration build() {

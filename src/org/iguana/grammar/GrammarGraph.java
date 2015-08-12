@@ -76,7 +76,8 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
-import org.iguana.parser.gss.lookup.HashMapNodeLookup;
+import org.iguana.parser.gss.lookup.IntOpenAddressingMap;
+import org.iguana.parser.gss.lookup.JavaHashMapNodeLookup;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.JavaRegexMatcherFactory;
@@ -466,8 +467,10 @@ public class GrammarGraph implements Serializable {
 	private GSSNodeLookup getNodeLookup() {
 		if (config.getGSSLookupImpl() == LookupImpl.HASH_MAP) {
 			if (config.getHashmapImpl() == HashMapImpl.JAVA)
-				return new HashMapNodeLookup(new HashMap<>());
-			else 
+				return new JavaHashMapNodeLookup();
+			else if (config.getHashmapImpl() == HashMapImpl.INT_OPEN_ADDRESSING)
+				return new IntOpenAddressingMap(); 
+			else
 				throw new RuntimeException();
 		} else {
 			return new ArrayNodeLookup(input);

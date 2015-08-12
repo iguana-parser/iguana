@@ -35,14 +35,10 @@ import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Input;
 
-public class HashMapNodeLookup extends AbstractNodeLookup {
+public class JavaHashMapNodeLookup extends AbstractNodeLookup {
 
-	private Map<Integer, GSSNode> map;
+	private Map<Integer, GSSNode> map = new HashMap<>();
 	
-	public HashMapNodeLookup(Map<Integer, GSSNode> map) {
-		this.map = map;
-	}
-
 	@Override
 	public void get(int i, GSSNodeCreator creator) {
 		map.compute(i, (k, v) -> creator.create(v)); 

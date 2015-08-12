@@ -14,6 +14,8 @@ public interface IntHashMap<T> extends Iterable<Entry<T>> {
 	
 	public T computeIfAbsent(int key, IntFunction<T> f);
 	
+	public T compute(int key, IntKeyMapper<T> mapper);
+	
 	public T put(int key, T value);
 	
 	public T remove(int key);
@@ -35,3 +37,4 @@ public interface IntHashMap<T> extends Iterable<Entry<T>> {
 	public Iterable<T> values();
 	
 }
+
