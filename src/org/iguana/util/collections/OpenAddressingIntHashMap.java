@@ -9,18 +9,17 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final int DEFAULT_INITIAL_CAPACITY = 8;
-	private static final float DEFAULT_LOAD_FACTOR = 0.4f;
+	private static final int DEFAULT_INITIAL_CAPACITY = 16;
+	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 	
-	private int initialCapacity;
+	private final int initialCapacity;
+	private final float loadFactor;
 	
 	private int capacity;
 	
 	private int size;
 	
 	private int threshold;
-	
-	private float loadFactor;
 	
 	private int rehashCount;
 	
@@ -35,13 +34,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	private int[] keys;
 	
 	private T[] values;
-	
-	private HashFunction linearProbing = (k, j) -> (k + j) & bitMask;
-
-	private HashFunction doubleHashing = (k, j) -> (k + j + 1 + (k % 7)) & bitMask;
-	
-	private HashFunction hash = doubleHashing;
-	
+		
 	public OpenAddressingIntHashMap() {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
@@ -50,25 +43,28 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public OpenAddressingIntHashMap(int initialCapacity, float loadFactor) {
-		
-		this.initialCapacity = initialCapacity;
-		
-		this.loadFactor = loadFactor;
-
+		this.initialCapacity = initialCapacity < 0 ? DEFAULT_INITIAL_CAPACITY : initialCapacity;
+		this.loadFactor = (loadFactor < 0 || loadFactor > 1) ? DEFAULT_LOAD_FACTOR : loadFactor;
+		init();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void init() {
 		capacity = 1;
-        while (capacity < initialCapacity) {
-            capacity <<= 1;
-        }
+        while (capacity < initialCapacity) capacity <<= 1;
         
 		bitMask = capacity - 1;
 		
 		threshold = (int) (loadFactor * capacity);
 		keys = new int[capacity];
+		Arrays.fill(keys, -1);
+		
 		values = (T[]) new Object[capacity];
 		
-		Arrays.fill(keys, -1);
+		size = 0;
+		rehashCount = 0;
+		collisionsCount = 0;
 	}
 	
 	@Override
@@ -79,7 +75,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	@Override
 	public T computeIfAbsent(int key, IntFunction<T> f) {
 		int j = 0;
-		int index = hash.apply(key, j);
+		int index = hash(key, j);
 
 		do {
 			if (keys[index] == -1) {
@@ -99,7 +95,38 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 			
 			collisionsCount++;
 			
-			index = hash.apply(key, ++j);
+			index = hash(key, ++j);
+			
+		} while(true);
+	}
+	
+	@Override
+	public T compute(int key, IntKeyMapper<T> f) {
+		int j = 0;
+		int index = hash(key, j);
+
+		do {
+			if (keys[index] == -1) {
+			    keys[index] = key;
+			    T val = f.apply(key, null);
+			    values[index] = val;
+			    size++;
+			    if (size >= threshold) {
+			    	rehash();
+			    }
+			    return val;
+			}
+			
+			else if (keys[index] == key) {
+				T val = values[index];
+				val = f.apply(key, val);
+				values[index] = val;
+				return val;
+			}
+			
+			collisionsCount++;
+			
+			index = hash(key, ++j);
 			
 		} while(true);
 	}
@@ -108,7 +135,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	public T put(int key, T value) {
 		
 		int j = 0;
-		int index = hash.apply(key, j);
+		int index = hash(key, j);
 
 		do {
 			if (keys[index] == -1) {
@@ -126,7 +153,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 			
 			collisionsCount++;
 			
-			index = hash.apply(key, ++j);
+			index = hash(key, ++j);
 			
 		} while(true);
 	}
@@ -134,10 +161,10 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	@Override
 	public T remove(int key) {
 		int j = 0;
-		int index = hash.apply(key, j);
+		int index = hash(key, j);
 		
 		while (keys[index] != -1 && keys[index] != key) {
-			index = hash.apply(key, ++j);
+			index = hash(key, ++j);
 		}
 		
 		T v = values[index];
@@ -167,7 +194,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	    	
 			if(key != -1) {
 				
-				int index = hash.apply(key, j);
+				int index = hash(key, j);
 
 				do {
 					if(newKeys[index] == -1) {
@@ -176,7 +203,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 						continue label;
 					}
 					
-					index = hash.apply(key, ++j);
+					index = hash(key, ++j);
 					
 				} while(true);
 			}
@@ -192,9 +219,9 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	@Override
 	public T get(int key) {
 		int j = 0;
-		int index = hash.apply(key, j);
+		int index = hash(key, j);
 		while (keys[index] != -1 && keys[index] != key) {
-			index = hash.apply(key, ++j);
+			index = hash(key, ++j);
 		}
 		return values[index];
 	}
@@ -221,9 +248,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 
 	@Override
 	public void clear() {
-		Arrays.fill(values, -1);
-		Arrays.fill(values, null);
-		size = 0;
+		init();
 	}
 
 	public int getCollisionCount() {
@@ -247,6 +272,16 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 		
 		sb.append("}");
 		return sb.toString();
+	}
+	
+	private int hash(int h, int j) {
+		h ^= 1;
+		h ^= h >>> 16;
+		h *= 0x85ebca6b;
+		h ^= h >>> 13;
+		h *= 0xc2b2ae35;
+		h ^= h >>> 16;
+		return (h + j) & bitMask; 
 	}
 	
 	@FunctionalInterface
