@@ -1265,6 +1265,11 @@ public abstract class Expression extends AbstractAST {
 		public java.lang.String getConstructorCode() {
 			return java.lang.String.format("AST.ifThenElse(%s,%s,%s)", condition.getConstructorCode(), thenPart.getConstructorCode(), elsePart.getConstructorCode());
 		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format("(%s)? %s : %s", condition, thenPart, elsePart);
+		}
 
 		@Override
 		public <T> T accept(IAbstractASTVisitor<T> visitor) {
