@@ -115,6 +115,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	
 	private Map<String, Map<String, Integer>> headsWithLabeledRules; // excepts
 	
+	private OP config_op = OP._2;
+	
+	public void setOP1() {
+		config_op = OP._1;
+	}
+	
+	public void setOP2() {
+		config_op = OP._2;
+	}
+	
 	@Override
 	public Grammar transform(Grammar grammar) {
 		
@@ -153,7 +163,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	}
 	
 	public Rule transform(Rule rule) {
-		return new Visitor(rule, leftOrRightRecursiveNonterminals, headsWithLabeledRules).transform();
+		return new Visitor(rule, leftOrRightRecursiveNonterminals, headsWithLabeledRules, config_op).transform();
 	}
 	
 	private enum OP {
@@ -179,7 +189,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private boolean isFirst;
 		private boolean isLast;
 		
-		private OP config_op = OP._2;
+		private final OP config_op;
 		
 		// Variables of the alternative scheme
 		private Expression larg = var("p");
@@ -188,10 +198,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression rcond = null;
 		private Expression ret = null;
 		
-		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules) {
+		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, OP config_op) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
-			this.headsWithLabeledRules = headsWithLabeledRules;		
+			this.headsWithLabeledRules = headsWithLabeledRules;
+			this.config_op = config_op;
 			
 			excepts();
 			switch(config_op) {
