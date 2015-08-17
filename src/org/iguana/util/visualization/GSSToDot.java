@@ -50,6 +50,10 @@ public class GSSToDot extends ToDot {
 	}
 
 	private String getId(GSSNode node) {
+		if (node instanceof org.iguana.datadependent.gss.GSSNode<?>) {
+			org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) node;
+			return node.getGrammarSlot() + "" + node.getInputIndex() + gssNode.getData();
+		}
 		return node.getGrammarSlot() + "" + node.getInputIndex();
 	}
 	
