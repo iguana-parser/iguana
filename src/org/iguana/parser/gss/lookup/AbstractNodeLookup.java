@@ -49,7 +49,7 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	private Map<Tuple<Integer, GSSNodeData<?>>, GSSNode> map = new HashMap<>();
+	protected Map<Tuple<Integer, GSSNodeData<?>>, GSSNode> map = new HashMap<>();
 	
 	
 	@Override

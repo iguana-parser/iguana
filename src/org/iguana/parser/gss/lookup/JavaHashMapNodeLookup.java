@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.CollectionsUtil;
 import org.iguana.util.Input;
 
 public class JavaHashMapNodeLookup extends AbstractNodeLookup {
@@ -52,7 +53,7 @@ public class JavaHashMapNodeLookup extends AbstractNodeLookup {
 
 	@Override
 	public Iterable<GSSNode> getNodes() {
-		return map.values();
+		return CollectionsUtil.concat(map.values(), super.map.values());
 	}
 
 	@Override

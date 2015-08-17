@@ -56,7 +56,7 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
 
-         Grammar grammar2 = Grammar.load(new File("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/Test3_1_c"));
+         Grammar grammar2 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test3_1_c"));
 
          DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          
@@ -90,7 +90,7 @@ Grammar.builder()
          ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("S"));
          ParseResult result3 = parser3.parse(input, graph3, Nonterminal.withName("S"));
          
-         Visualization.generateGSSGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/", parser1.getGSSNodes());
+         Visualization.generateGSSGraph("/Users/aliafroozeh/output", parser1.getGSSNodes());
 
          Assert.assertTrue(result1.isParseSuccess());
          Assert.assertTrue(result2.isParseSuccess());

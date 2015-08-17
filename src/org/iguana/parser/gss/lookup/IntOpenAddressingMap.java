@@ -2,6 +2,7 @@ package org.iguana.parser.gss.lookup;
 
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.CollectionsUtil;
 import org.iguana.util.Input;
 import org.iguana.util.collections.IntHashMap;
 import org.iguana.util.collections.OpenAddressingIntHashMap;
@@ -23,7 +24,7 @@ public class IntOpenAddressingMap extends AbstractNodeLookup {
 
 	@Override
 	public Iterable<GSSNode> getNodes() {
-		return map.values();
+		return CollectionsUtil.concat(map.values(), super.map.values());
 	}
 
 	@Override

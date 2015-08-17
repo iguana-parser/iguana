@@ -96,7 +96,6 @@ public class CollectionsUtil {
 		return builder.build();
 	}
 
-	
 	public static <T> Set<T> union(Set<T> set1, Set<T> set2) {
 		Set<T> set = new HashSet<>();
 		set.addAll(set1);
@@ -104,6 +103,42 @@ public class CollectionsUtil {
 		return set;
 	}
 	
+	public static <T> Iterable<T> concat(Iterable<T> first, Iterable<T> second) {
+		
+		return new Iterable<T>() {
+			
+			final Iterator<T> it1 = first.iterator();
+			final Iterator<T> it2 = second.iterator();
+
+			@Override
+			public Iterator<T> iterator() {
+				
+				return new Iterator<T>() {
+
+					T next;
+
+					@Override
+					public boolean hasNext() {
+						if (it1.hasNext()) {
+							next = it1.next();
+							return true;
+						} else if (it2.hasNext()) {
+							next = it2.next();
+							return true;
+						} else {
+							return false;
+						}
+					}
+
+					@Override
+					public T next() {
+						return next;
+					}
+				};
+			}
+		};
+	}
+ 	
 	public static <T> List<List<T>> split(List<T> list, int size) {
 		List<List<T>> result = new ArrayList<>();
 		

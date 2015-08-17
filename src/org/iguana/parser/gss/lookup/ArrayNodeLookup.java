@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.CollectionsUtil;
 import org.iguana.util.Input;
 
 public class ArrayNodeLookup extends AbstractNodeLookup {
@@ -50,7 +51,7 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 	
 	@Override
 	public Iterable<GSSNode> getNodes() {
-		return Arrays.stream(gssNodes).filter(n -> n != null).collect(Collectors.toList());
+		return CollectionsUtil.concat(Arrays.stream(gssNodes).filter(n -> n != null).collect(Collectors.toList()), super.map.values());
 	}
 
 	@Override

@@ -291,24 +291,29 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 
 	@Override
 	public Iterable<T> values() {
-//		return new Iterator<T>() {
-//			
-//			int i = 0;
-//			int j = 0;
-//
-//			@Override
-//			public boolean hasNext() {
-//				return i < size;
-//			}
-//
-//			@Override
-//			public T next() {
-//				while (values[j] != null) j++;
-//				i++;
-//				return values[j];
-//			}
-//		};
-		return null;
+		return new Iterable<T>() {
+
+			@Override
+			public Iterator<T> iterator() {
+				return new Iterator<T>() {
+					int i, j = 0;
+		
+					@Override
+					public boolean hasNext() {
+						return i < size;
+					}
+		
+					@Override
+					public T next() {
+						do j++; while (values[j] == null);
+						i++;
+						if (values[j] == null) 
+							System.out.println("WTF?");
+						return values[j];
+					}
+				};
+			}
+		};
 	}
 
 	@Override
