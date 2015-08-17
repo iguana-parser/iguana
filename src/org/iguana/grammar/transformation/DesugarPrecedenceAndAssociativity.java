@@ -519,7 +519,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						ret = condition(prec, prec_level.getLhs(), prec_level.getRhs());
 					else 
 						ret = minimum(prec);
-				else ret = integer(prec);
+				else if (rule.isRightRecursive())
+					ret = integer(prec);
+				else ret = integer(0);
 			
 			} else if (assoc_group == null && prec_level.getLhs() == prec_level.getRhs()) { // Can climb
 				switch(assoc) {
@@ -547,8 +549,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 				if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 					ret = minimum(prec);
-				else
+				else if (rule.isRightRecursive())
 					ret = integer(prec);
+				else ret = integer(0);
+					
 				
 			} else { // Cannot climb
 				boolean useUndefined = undefined != -1 && (assoc_group == null || (assoc_group != null && assoc_group.getPrecedence() == prec));
@@ -564,8 +568,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						rarg = integer(prec);
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(useUndefined? undefined : prec, lhs, rhs) : minimum(useUndefined? undefined : prec);
-						else
-							ret = integer(useUndefined? undefined : prec); 
+						else if (rule.isRightRecursive())
+							ret = integer(useUndefined? undefined : prec);
+						else ret = integer(0);
 						break;
 					case RIGHT:
 						if (rule.isLeftRecursive())
@@ -573,8 +578,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						rarg = integer(useUndefined? undefined : prec); 
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(prec, lhs, rhs) : minimum(prec);
-						else
-							ret = integer(prec);	
+						else if (rule.isRightRecursive())
+							ret = integer(prec);
+						else ret = integer(0);
 						break;
 					case NON_ASSOC:
 						if (rule.isLeftRecursive())
@@ -582,8 +588,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						rarg = integer(prec);
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(prec, lhs, rhs) : minimum(prec);
-						else
+						else if (rule.isRightRecursive())
 							ret = integer(prec);
+						else ret = integer(0);
 						break;
 					case UNDEFINED: // Not in the associativity group
 						if (rule.isLeftRecursive())
@@ -591,8 +598,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						rarg = integer(undefined); 
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(undefined, lhs, rhs) : minimum(undefined);
-						else
+						else if (rule.isRightRecursive())
 							ret = integer(undefined);
+						else ret = integer(0);
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + assoc);
 				}
