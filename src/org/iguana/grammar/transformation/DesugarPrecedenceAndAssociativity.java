@@ -111,7 +111,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class DesugarPrecedenceAndAssociativity implements GrammarTransformation {
 	
-	private Set<String> leftOrRightRecursiveNonterminals; // operator precedence and associativity
+	private Set<String> leftOrRightRecursiveNonterminals; // operator precedence and associativity applies
 	
 	private Map<String, Map<String, Integer>> headsWithLabeledRules; // excepts
 	
@@ -198,25 +198,59 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression rcond = null;
 		private Expression ret = null;
 		
+		private Expression xlcond = null;
+		private Expression xrcond = null;
+		private Expression xret = null;
+		
 		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, OP config_op) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
 			this.headsWithLabeledRules = headsWithLabeledRules;
 			this.config_op = config_op;
-			
-			excepts();
 			switch(config_op) {
-				case _1: precedence1(); break;
-				case _2: precedence2(); break;
+				case _1: excepts1(); precedence1(); break;
+				case _2: excepts2(); precedence2(); break;
 			}
 		}
 		
-		private void excepts() {
+		private void excepts1() {
 			if (rule.getLabel() != null) {
 				preconditions = new HashSet<>();
 				
 				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
 				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
+			}
+		}
+		
+		private void excepts2() {
+			Map<String, Integer> labels = headsWithLabeledRules.get(rule.getHead().getName());
+			
+			if (labels == null) return;
+			
+			if (rule.getLabel() != null) {
+				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
+				xrcond = lShiftANDEqZero(var("_not"), integer(l));
+				xret = integer(l);
+			} else 
+				xret = integer(-1);
+			
+			if (rule.isLeftRecursive()) {
+				Nonterminal nonterminal = (Nonterminal) rule.getBody().get(0);
+				if (nonterminal.getExcepts() != null) {
+					int n = 0;
+					for (String except : nonterminal.getExcepts()) {
+						Integer i = labels.get(except);
+							
+						if (i == null)
+							throw new RuntimeException("Undeclared label: " + except);
+							
+						n += 1 << i;
+					}
+					
+					if (!leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
+						xlcond = or(equal(var("l"), integer(-1)), lShiftANDEqZero(integer(n), var("l")));
+					else xlcond = or(equal(get(var("l"),integer(1)), integer(-1)), lShiftANDEqZero(integer(n), get(var("l"),integer(1))));
+				}
 			}
 		}
 		
@@ -485,6 +519,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			int undefined = prec_level.getUndefined();
 			boolean first = undefined == 0;
 			
+			boolean labeled = headsWithLabeledRules.containsKey(rule.getHead().getName());
+			Expression lprec = labeled? get(var("l"), integer(0)) : var("l");
+			
 			// 1. Expressions for the left and/or right recursive uses
 			if (assoc_group != null && prec_level.getLhs() == assoc_group.getLhs() 
 									&& prec_level.getRhs() == assoc_group.getRhs()) {
@@ -493,24 +530,24 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					switch(assoc_group.getAssociativity()) {
 						case LEFT:
 							if (rule.isLeftRecursive())
-								lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
+								lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getLhs())));
 							rarg = integer(prec_level.getRhs() + 1); 
 							break;
 						case RIGHT:
 							if (rule.isLeftRecursive())
-								lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getRhs() + 1)));
+								lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getRhs() + 1)));
 							rarg = integer(first? 0 : prec); 
 							break;
 						case NON_ASSOC:
 							if (rule.isLeftRecursive())
-								lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getRhs() + 1)));
+								lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getRhs() + 1)));
 							rarg = integer(prec_level.getRhs() + 1); 
 							break;
 						default: throw new RuntimeException("Unexpected associativity: " + assoc_group.getAssociativity());
 					}	
 				} else {
 					if (rule.isLeftRecursive())
-						lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
+						lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getLhs())));
 					rarg = integer(prec);
 				}
 				
@@ -527,22 +564,22 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				switch(assoc) {
 					case LEFT:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec)));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec)));
 						rarg = integer(prec + 1); 
 						break;
 					case RIGHT:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec + 1)));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec + 1)));
 						rarg = integer(first? 0 : prec); 
 						break;
 					case NON_ASSOC:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec + 1)));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec + 1)));
 						rarg = integer(prec + 1); 
 						break;
 					case UNDEFINED:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec)));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec)));
 						rarg = integer(first? 0 : prec); 
 						break;
 					default: throw new RuntimeException("Unexpected associativity: " + assoc);
@@ -564,7 +601,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							assoc_group.getAssociativity() : assoc) {
 					case LEFT:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getLhs())));
 						rarg = integer(prec);
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(useUndefined? undefined : prec, lhs, rhs) : minimum(useUndefined? undefined : prec);
@@ -574,7 +611,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					case RIGHT:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getLhs())));
 						rarg = integer(useUndefined? undefined : prec); 
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(prec, lhs, rhs) : minimum(prec);
@@ -584,7 +621,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					case NON_ASSOC:
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getLhs())));
 						rarg = integer(prec);
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(prec, lhs, rhs) : minimum(prec);
@@ -594,7 +631,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					case UNDEFINED: // Not in the associativity group
 						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
+							lcond = or(equal(lprec, integer(0)), greaterEq(lprec, integer(prec_level.getLhs())));
 						rarg = integer(undefined); 
 						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
 							ret = useCondition? condition(undefined, lhs, rhs) : minimum(undefined);
@@ -630,25 +667,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						case RIGHT:
 							if (rule.isRightRecursive()) {
 								if (!climbing)
-									lcond = and(lcond, notEqual(integer(assoc_group.getPrecedence()), var("l")));
+									lcond = and(lcond, notEqual(integer(assoc_group.getPrecedence()), lprec));
 								
 								if (!assoc_group.getAssocMap().isEmpty())
 									for (Map.Entry<Integer, Associativity> entry : assoc_group.getAssocMap().entrySet())
 										if (prec != entry.getKey() && !(climbing && entry.getKey() == assoc_group.getPrecedence()))
-											lcond = and(lcond, notEqual(integer(entry.getKey()), var("l")));
+											lcond = and(lcond, notEqual(integer(entry.getKey()), lprec));
 							}
 							break;
 						case NON_ASSOC:
 							if (!climbing)
 								rcond = and(rcond, notEqual(integer(assoc_group.getPrecedence()), var("p")));
 							if (!climbing)
-								lcond = and(lcond, notEqual(integer(assoc_group.getPrecedence()), var("l")));
+								lcond = and(lcond, notEqual(integer(assoc_group.getPrecedence()), lprec));
 							
 							if (!assoc_group.getAssocMap().isEmpty()) {
 								for (Map.Entry<Integer, Associativity> entry : assoc_group.getAssocMap().entrySet()) {
 									if (prec != entry.getKey() && !(climbing && entry.getKey() == assoc_group.getPrecedence())) {
 										rcond = and(rcond, notEqual(integer(entry.getKey()), var("p")));
-										lcond = and(lcond, notEqual(integer(entry.getKey()), var("l")));
+										lcond = and(lcond, notEqual(integer(entry.getKey()), lprec));
 									}
 								}
 							}
@@ -664,11 +701,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								break;						
 							case RIGHT:
 								if (rule.isRightRecursive())
-									lcond = and(lcond, notEqual(integer(prec), var("l")));
+									lcond = and(lcond, notEqual(integer(prec), lprec));
 								break;
 							case NON_ASSOC:
 								rcond = and(rcond, notEqual(integer(prec), var("p")));
-								lcond = and(lcond, notEqual(integer(prec), var("l")));
+								lcond = and(lcond, notEqual(integer(prec), lprec));
 								break;
 							case UNDEFINED:
 								break;
@@ -683,11 +720,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							break;						
 						case RIGHT:
 							if (rule.isRightRecursive())
-								lcond = and(lcond, notEqual(integer(prec), var("l")));
+								lcond = and(lcond, notEqual(integer(prec), lprec));
 							break;
 						case NON_ASSOC:
 							rcond = and(rcond, notEqual(integer(prec), var("p")));
-							lcond = and(lcond, notEqual(integer(prec), var("l")));
+							lcond = and(lcond, notEqual(integer(prec), lprec));
 							break;
 						case UNDEFINED:
 							break;
@@ -801,21 +838,39 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 						Symbol sym = symbol.accept(this);
 						
-						if (lcond != null && rcond != null && i == 0)
-							symbols.add(sym.copyBuilder().addPreCondition(DataDependentCondition.predicate(rcond)).
-									addPostCondition(DataDependentCondition.predicate(lcond)).build());
-						else if (lcond != null && i == 0)
-							symbols.add(sym.copyBuilder().addPostCondition(DataDependentCondition.predicate(lcond)).build());
-						else if (rcond != null && i == 0)
-							symbols.add(sym.copyBuilder().addPreCondition(DataDependentCondition.predicate(rcond)).build());
+						Set<Condition> preconditions = new HashSet<>();
+						Set<Condition> postconditions = new HashSet<>();
+						
+						if (rcond != null && i == 0)
+							preconditions.add(DataDependentCondition.predicate(rcond));
+						
+						if (xrcond != null && i == 0)
+							preconditions.add(DataDependentCondition.predicate(xrcond));
+						
+						if (lcond != null && i == 0)
+							postconditions.add(DataDependentCondition.predicate(lcond));
+						
+						if (xlcond != null && i == 0)
+							postconditions.add(DataDependentCondition.predicate(xlcond));
+						
+						if (!preconditions.isEmpty() && !postconditions.isEmpty())
+							symbols.add(sym.copyBuilder().addPreConditions(preconditions).addPostConditions(postconditions).build());
+						else if (!postconditions.isEmpty())
+							symbols.add(sym.copyBuilder().addPostConditions(postconditions).build());
+						else if (!preconditions.isEmpty())
+							symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
 						else 
 							symbols.add(sym);
 						
 						i++;
 					}
 					
-					if (ret != null)
+					if (ret != null && xret != null)
+						symbols.add(Return.ret(tuple(ret,xret)));
+					else if (ret != null)
 						symbols.add(Return.ret(ret));
+					else if (xret != null)
+						symbols.add(Return.ret(xret));
 				    
 					break;
 			}
@@ -938,27 +993,26 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
 			
 			Expression _not = null;
-			
-			if (labels != null) {
-				int n = 0;
-				Set<String> excepts = symbol.getExcepts();
-				if (excepts != null)
-					for (String except : excepts) {
-						Integer i = labels.get(except);
-						
-						if (i == null)
-							throw new RuntimeException("Undeclared label: " + except);
-						
-						n += 1 << i;
-					}
-				
-				_not = integer(n);
-			}
-			
 			Expression[] arguments = null;
 			
 			switch(config_op) {
 				case _1:
+					if (labels != null) {
+						int n = 0;
+						Set<String> excepts = symbol.getExcepts();
+						if (excepts != null)
+							for (String except : excepts) {
+								Integer i = labels.get(except);
+								
+								if (i == null)
+									throw new RuntimeException("Undeclared label: " + except);
+								
+								n += 1 << i;
+							}
+						
+						_not = integer(n);
+					}
+					
 					if (isUseOfLeftOrRight)
 						arguments = new Expression[] { integer(0), integer(0) };
 					
@@ -975,6 +1029,26 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						return symbol.copyBuilder().apply(_not).build();
 					
 				case _2:
+					if (labels != null) {
+						if (rule.isLeftRecursive() && isFirst) {
+							_not = integer(0);
+						} else {
+							int n = 0;
+							Set<String> excepts = symbol.getExcepts();
+							if (excepts != null)
+								for (String except : excepts) {
+									Integer i = labels.get(except);
+									
+									if (i == null)
+										throw new RuntimeException("Undeclared label: " + except);
+									
+									n += 1 << i;
+								}
+							
+							_not = integer(n);
+						}
+					}
+					
 					if (isUseOfLeftOrRight)
 						arguments = new Expression[] { integer(0) };
 					
@@ -988,6 +1062,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						arguments = new Expression[] { rarg };
 					}
 					
+					// Case of a left-recursive nonterminal that does not specify precedence
+					if (labels != null && symbol.getExcepts() != null && rule.isLeftRecursive() && isFirst) 
+						variable = "l";
+					
 					if (arguments != null && _not != null)
 						return variable.isEmpty()? symbol.copyBuilder().apply(arguments).apply(_not).build()
 												 : symbol.copyBuilder().apply(arguments).apply(_not).setVariable(variable).build();
@@ -995,7 +1073,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						return variable.isEmpty()? symbol.copyBuilder().apply(arguments).build()
 												 : symbol.copyBuilder().apply(arguments).setVariable(variable).build();
 					else 
-						return symbol.copyBuilder().apply(_not).build();
+						return variable.isEmpty()? symbol.copyBuilder().apply(_not).build()
+								                 : symbol.copyBuilder().apply(_not).setVariable(variable).build();
 			}
 			
 			return symbol;
