@@ -22,6 +22,7 @@ import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
+import org.iguana.parser.gss.GSSNode;
 import org.iguana.regex.*;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
@@ -55,6 +56,30 @@ Grammar.builder()
 // S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
+         
+         Grammar grammar4 =
+
+Grammar.builder()
+
+// $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
+// E3 ::= E2  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E3").build()).addSymbol(Nonterminal.builder("E2").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,true,false,new Integer[]{},false,new Integer[]{})).build())
+// E3 ::= E3 (*) E2  {UNDEFINED,1,LEFT_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E3").build()).addSymbol(Nonterminal.builder("E3").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(42).build()).build()).build()).addSymbol(Nonterminal.builder("E2").build()).setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,true,false,new Integer[]{},false,new Integer[]{})).build())
+// E1 ::= (a)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E1").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
+// E2 ::= E1 (^) E2  {UNDEFINED,1,RIGHT_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E2").build()).addSymbol(Nonterminal.builder("E1").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(94).build()).build()).build()).addSymbol(Nonterminal.builder("E2").build()).setRecursion(Recursion.RIGHT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,true,false,false,new Integer[]{},false,new Integer[]{})).build())
+// E2 ::= (a)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E2").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,true,false,false,new Integer[]{},false,new Integer[]{})).build())
+// E ::= E3  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E3").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,true,false,new Integer[]{},false,new Integer[]{})).build())
+// E ::= E (+) E3  {UNDEFINED,1,LEFT_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E3").build()).setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,true,false,new Integer[]{},false,new Integer[]{})).build())
+// S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
+.build();
 
          Grammar grammar2 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test3_1_c"));
 
@@ -74,38 +99,46 @@ Grammar.builder()
          Grammar grammar3 = desugarPrecedenceAndAssociativity.transform(grammar);
          System.out.println(grammar3.toStringWithOrderByPrecedence());
          
-         // Input input = Input.fromString("a+a^a^a*a");
-         Input input = Input.fromString("a+a*a*a");
+         Input input = Input.fromString("a+a^a^a*a");
+         // Input input = Input.fromString("a^a^a*a+a");
+         // Input input = Input.fromString("a+a*a*a");
          GrammarGraph graph1 = grammar1.toGrammarGraph(input, Configuration.DEFAULT);
          GrammarGraph graph2 = grammar2.toGrammarGraph(input, Configuration.DEFAULT);
          GrammarGraph graph3 = grammar3.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph4 = grammar4.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/", graph);
+         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
          GLLParser parser1 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar1);
          GLLParser parser2 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar2);
          GLLParser parser3 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar3);
+         GLLParser parser4 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar4);
          
          ParseResult result1 = parser1.parse(input, graph1, Nonterminal.withName("S"));
          ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("S"));
          ParseResult result3 = parser3.parse(input, graph3, Nonterminal.withName("S"));
+         ParseResult result4 = parser4.parse(input, graph4, Nonterminal.withName("S"));
          
-         Visualization.generateGSSGraph("/Users/aliafroozeh/output", parser1.getGSSNodes());
-
          Assert.assertTrue(result1.isParseSuccess());
          Assert.assertTrue(result2.isParseSuccess());
          Assert.assertTrue(result3.isParseSuccess());
+         Assert.assertTrue(result4.isParseSuccess());
          
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/",
+         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
          //                   result1.asParseSuccess().getRoot(), input);
 
-         Assert.assertTrue(result1.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result4.asParseSuccess().getStatistics().getCountAmbiguousNodes());
          
          System.out.println("OP scheme 1:");
          System.out.println(result1.asParseSuccess().getStatistics());
-         System.out.println("Rewriting:");
+         System.out.println("Shape-preserving wewriting:");
          System.out.println(result2.asParseSuccess().getStatistics());
          System.out.println("OP scheme 2:");
          System.out.println(result3.asParseSuccess().getStatistics());
+         System.out.println("Standard rewriting:");
+         System.out.println(result4.asParseSuccess().getStatistics());
     }
 }

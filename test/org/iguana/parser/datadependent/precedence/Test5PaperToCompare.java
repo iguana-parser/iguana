@@ -65,7 +65,7 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
          
-         Grammar grammar2 = Grammar.load(new File("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/Test5PaperToCompare"));
+         Grammar grammar2 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test5PaperToCompare"));
 
          DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          
@@ -89,7 +89,7 @@ Grammar.builder()
          
          GrammarGraph graph3 = grammar3.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/", graph);
+         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
          GLLParser parser1 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar1);
          GLLParser parser2 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar2);
@@ -103,15 +103,15 @@ Grammar.builder()
          Assert.assertTrue(result2.isParseSuccess());
          Assert.assertTrue(result3.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/", result3.asParseSuccess().getRoot(), input);
+         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/", result3.asParseSuccess().getRoot(), input);
 
-         Assert.assertTrue(result1.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
-         Assert.assertTrue(result2.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
-         Assert.assertTrue(result3.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getCountAmbiguousNodes());
          
          System.out.println("OP scheme 1:");
          System.out.println(result1.asParseSuccess().getStatistics());
-         System.out.println("Rewriting:");
+         System.out.println("Shape-preserving rewriting:");
          System.out.println(result2.asParseSuccess().getStatistics());
          System.out.println("OP scheme 2:");
          System.out.println(result3.asParseSuccess().getStatistics());
