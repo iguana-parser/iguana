@@ -751,28 +751,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				rprec = var("r");
 			}
 			
-			if (labeled && parity == 2) { 
-				pprec = get(get(var("p"), integer(0)), integer(0));  // p.0.0
-				passoc = get(get(var("p"), integer(0)), integer(1)); // p.0.1
-			} else if (labeled && parity != 2) {
-				pprec = get(var("p"), integer(0));  // p.0
-				passoc = get(var("p"), integer(0)); // p.0
-			} else if (!labeled && parity == 2) {
+			if (parity == 2) { 
 				pprec = get(var("p"), integer(0));  // p.0
 				passoc = get(var("p"), integer(1)); // p.1
 			} else {
-				pprec = var("p");
-				passoc = var("p");
+				pprec = var("p");  // p
+				passoc = var("p"); // p
 			}
 			
-			if (labeled && parity == 2)
-				larg = tuple(tuple(pprec, integer(0)), integer(0));
-			else if (labeled && parity == 1)
+			if (parity == 2)
 				larg = tuple(pprec, integer(0));
-			else if (!labeled && parity == 2)
-				larg = tuple(pprec, integer(0));
-			else
-				larg = tuple(pprec);
+			else 
+				larg = pprec;
 			
 			// 1. Expressions for the left and/or right recursive uses
 			if (assoc_group != null) {
