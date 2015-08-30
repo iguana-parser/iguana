@@ -314,6 +314,33 @@ public class AST {
 		};
 	}
 	
+	static public Expression neg(Expression arg) {
+		return new Expression.Call("neg", arg) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						int v = (java.lang.Integer) value;
+						return -v;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.neg(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("-(%s)", arg);
+					}
+		};
+	}
+	
 	static public Expression len(Expression arg) {
 		return new Expression.Call("len", arg) {
 			

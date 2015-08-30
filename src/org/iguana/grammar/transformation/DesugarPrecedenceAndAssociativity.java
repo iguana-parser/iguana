@@ -857,9 +857,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										
 										if (larity == 2)
 											lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))), 
-													    not(equal(lassoc, integer(prec))));
+													    notEqual(lassoc, integer(prec)));
 										else
-											lcond = or(negative, and(not(equal(lprec, integer(prec))), 
+											lcond = or(negative, and(notEqual(lprec, integer(prec)), 
 																	 greaterEq(lprec, integer(prec_level.getLhs()))));
 										if (parity == 2)
 											rarg = tuple(integer(prec_level.getRhs()), 
@@ -889,17 +889,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										
 										if (larity == 2) {
 											lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))),
-                                                        //				  neg(...)
-													    not(equal(lassoc, integer(prec))));
-											ret = tuple(integer(0), integer(prec)); // neg(...)
+                                                        notEqual(lassoc, neg(integer(prec))));
+											ret = tuple(integer(0), neg(integer(prec)));
 										} else {
-											//	                                      neg(...)
-											lcond = or(and(negative, not(equal(lprec, integer(prec)))),
+											lcond = or(and(negative, notEqual(lprec, neg(integer(prec)))),
 													   greaterEq(lprec, integer(prec_level.getLhs())));
 											if (this.larity == 2)
-												ret = tuple(integer(prec), integer(0)); // neg(...)
+												ret = tuple(neg(integer(prec)), integer(0));
 											else
-												ret = integer(prec); // neg(...)
+												ret = neg(integer(prec));
 										}
 										
 									} else {
@@ -910,14 +908,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 												rarg = integer(prec);
 										}
 										
-										rcond = not(equal(parity == 2? passoc : pprec, integer(prec)));
+										rcond = notEqual(parity == 2? passoc : pprec, integer(prec));
 									}
 									break;
 								case RIGHT: // larity == 2
 									if (rule.isLeftRecursive() && rule.isRightRecursive()) {
 										
 										lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))), 
-													not(equal(lassoc, integer(prec))));
+													notEqual(lassoc, integer(prec)));
 										
 										if (prec_level.hasPrefixUnaryBelow()) {
 											if (larity == 2)
@@ -1051,20 +1049,19 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										
 										if (larity == 2) {
 											lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))),
-									                    or(and(lessEq(lassoc, integer(0)), not(equal(lassoc, integer(prec)))), 
+									                    or(and(lessEq(lassoc, integer(0)), notEqual(lassoc, neg(integer(prec)))), 
 											               and(greater(lassoc, integer(0)),
 											            	   not(and(greaterEq(integer(assoc_group.getRhs()), lassoc),
 													                   greaterEq(lassoc, integer(assoc_group.getLhs())))))));
 											
-											ret = tuple(integer(0), integer(prec)); // neg(...)
+											ret = tuple(integer(0), neg(integer(prec)));
 										} else {
-											//	                                      neg(...)
-											lcond = or(and(negative, not(equal(lprec, integer(prec)))),
+											lcond = or(and(negative, notEqual(lprec, neg(integer(prec)))),
 													   greaterEq(lprec, integer(prec_level.getRhs() + 1)));
 											if (this.larity == 2)
-												ret = tuple(integer(prec), integer(0)); // neg(...)
+												ret = tuple(neg(integer(prec)), integer(0));
 											else
-												ret = integer(prec); // neg(...)
+												ret = neg(integer(prec));
 										}
 										
 									} else {
@@ -1145,22 +1142,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							
 							if (rule.isLeftRecursive()) {
 								if (rule.getAssociativity() == Associativity.LEFT) // larity == 2
-									//                                   neg(...)
 									lcond = and(or(and(lessEq(lassoc, integer(0)), 
-											           not(and(greaterEq(integer(assoc_group.getLhs()), lassoc),
-								    //                                           neg(...)
-											                   greaterEq(lassoc, integer(assoc_group.getRhs()))))),
+											           not(and(greaterEq(neg(integer(assoc_group.getLhs())), lassoc),
+								    		                   greaterEq(lassoc, neg(integer(assoc_group.getRhs())))))),
 											       and(greater(lassoc, integer(0)),
 											    	   or(equal(lassoc, integer(prec)), 
 											    	      not(and(greaterEq(integer(assoc_group.getRhs()), lassoc),
 													              greaterEq(lassoc, integer(assoc_group.getLhs()))))))), 
 											    or(negative, greaterEq(lprec, integer(prec_level.getLhs()))));
 								else
-		                            //                                   neg(...)
-									lcond = and(or(and(lessEq(larity == 2? lassoc : lprec, integer(0)), 
-											           not(and(greaterEq(integer(assoc_group.getLhs()), larity == 2? lassoc : lprec),
-								     //                                                               neg(...)
-											                   greaterEq(larity == 2? lassoc : lprec, integer(assoc_group.getRhs()))))),
+		                            lcond = and(or(and(lessEq(larity == 2? lassoc : lprec, integer(0)), 
+											           not(and(greaterEq(neg(integer(assoc_group.getLhs())), larity == 2? lassoc : lprec),
+								     		                   greaterEq(larity == 2? lassoc : lprec, neg(integer(assoc_group.getRhs())))))),
 											       and(greater(larity == 2? lassoc : lprec, integer(0)),
 											    	   not(and(greaterEq(integer(assoc_group.getRhs()), larity == 2? lassoc : lprec),
 													           greaterEq(larity == 2? lassoc : lprec, integer(assoc_group.getLhs())))))), 
@@ -1222,12 +1215,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 						if (rule.isLeftRecursive() && !rule.isRightRecursive()) {
 							if (larity == 2)
-								ret = tuple(integer(0), integer(prec)); // neg(...)
+								ret = tuple(integer(0), neg(integer(prec)));
 							else {
 								if (this.larity == 2)
-									ret = tuple(integer(prec), integer(0)); // neg(...)
+									ret = tuple(neg(integer(prec)), integer(0));
 								else
-									ret = integer(prec); // neg(...)
+									ret = neg(integer(prec));
 							}
 						}
 						 
@@ -1327,20 +1320,19 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 							
 						} else if (rule.isLeftRecursive()) {
-							//                              neg(...)     
 							lcond = or(and(lessEq(lprec, integer(0)), 
-									       not(equal(lprec, integer(prec)))), 
+									       notEqual(lprec, neg(integer(prec)))), 
 									   greaterEq(lprec, integer(prec)));
 							rcond = greaterEq(integer(prec), pprec);
 							
 							if (this.larity == 2)
-								ret = tuple(integer(prec), integer(0)); // neg(...)
+								ret = tuple(neg(integer(prec)), integer(0));
 							else
-								ret = integer(prec); // neg(...)
+								ret = neg(integer(prec));
 							
 						} else {
 							
-							rcond = not(equal(pprec, integer(prec)));
+							rcond = notEqual(pprec, integer(prec));
 							
 							if (this.parity == 2)
 								rarg = tuple(integer(first? 0 : prec), integer(0));
@@ -1460,7 +1452,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 							
 							rcond = and(greaterEq(integer(prec), pprec),
-									    not(equal(parity == 2? passoc : pprec, integer(prec))));
+									    notEqual(parity == 2? passoc : pprec, integer(prec)));
 							
 							break;
 						case RIGHT:
@@ -1486,7 +1478,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 							
 							lcond = or(lessEq(lprec, integer(0)), 
-									   and(not(equal(larity == 2? lassoc : lprec, integer(prec))), 
+									   and(notEqual(larity == 2? lassoc : lprec, integer(prec)), 
 										   greaterEq(lprec, integer(prec))));
 							
 							break;
@@ -1524,27 +1516,27 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								}
 								
 								lcond = or(lessEq(lprec, integer(0)), 
-										   and(not(equal(larity == 2? lassoc : lprec, integer(prec))), 
+										   and(notEqual(larity == 2? lassoc : lprec, integer(prec)), 
 											   greaterEq(lprec, integer(prec))));
 								
 								rcond = and(greaterEq(integer(prec), pprec),
-									        not(equal(parity == 2? passoc : pprec, integer(prec))));
+									        notEqual(parity == 2? passoc : pprec, integer(prec)));
 								
 							} else if (rule.isLeftRecursive()) {
 								
 								if (larity == 2) {
-									ret = tuple(integer(0), integer(prec)); // neg(...)
+									ret = tuple(integer(0), neg(integer(prec)));
 									
 									lcond = and(or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec))),
-											    not(equal(lassoc, integer(prec)))); // neg(...)
+											    notEqual(lassoc, neg(integer(prec))));
 								} else {
 									if (this.larity == 2)
-										ret = tuple(integer(prec), integer(0)); // neg(...)
+										ret = tuple(neg(integer(prec)), integer(0));
 									else
-										ret = integer(prec); // neg(...)
+										ret = neg(integer(prec));
 									
 									lcond = or(and(lessEq(lprec, integer(0)), 
-											       not(equal(lprec, integer(prec)))), 
+											       notEqual(lprec, neg(integer(prec)))), 
 											   greaterEq(lprec, integer(prec)));
 								}
 								
@@ -1558,7 +1550,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										rarg = integer(prec);
 								}
 								
-								rcond = not(equal(parity == 2? passoc : pprec, integer(prec)));
+								rcond = notEqual(parity == 2? passoc : pprec, integer(prec));
 							}
 							
 							break;
