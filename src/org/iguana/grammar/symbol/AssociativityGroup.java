@@ -93,7 +93,8 @@ public class AssociativityGroup implements Serializable {
 	}
 		
 	public int getPrecedence(Rule rule) {
-		if (!rule.isLeftOrRightRecursive())
+		if (!(rule.isLeftOrRightRecursive() 
+				|| rule.isiLeftOrRightRecursive()))
 			return -1;
 		
 		if (rule.getAssociativity() == associativity) {
