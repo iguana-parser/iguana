@@ -67,6 +67,9 @@ public class Rule implements ConstructorCode, Serializable {
 	private final Recursion recursion;
 	private final Recursion irecursion;
 	
+	private final String leftEnd;
+	private final String rightEnd;
+	
 	private final Set<String> leftEnds;
 	private final Set<String> rightEnds;
 	
@@ -88,6 +91,8 @@ public class Rule implements ConstructorCode, Serializable {
 		this.layoutStrategy = builder.layoutStrategy;
 		this.recursion = builder.recursion;
 		this.irecursion = builder.irecursion;
+		this.leftEnd = builder.leftEnd;
+		this.rightEnd = builder.rightEnd;
 		this.leftEnds = builder.leftEnds;
 		this.rightEnds = builder.rightEnds;
 		this.associativity = builder.associativity;
@@ -140,7 +145,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC;
 	}
 	
-	public boolean isiLeftRecursive() {
+	public boolean isILeftRecursive() {
 		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC;
 	}
 	
@@ -148,7 +153,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
-	public boolean isiRightRecursive() {
+	public boolean isIRightRecursive() {
 		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iRIGHT_REC;
 	}
 	
@@ -156,12 +161,28 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
-	public boolean isiLeftOrRightRecursive() {
+	public boolean isILeftOrRightRecursive() {
 		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC || irecursion == Recursion.iRIGHT_REC;
 	}
 	
 	public Recursion getRecursion() {
 		return recursion;
+	}
+	
+	public String getLeftEnd() {
+		return leftEnd;
+	}
+	
+	public String getRightEnd() {
+		return rightEnd;
+	}
+	
+	public Set<String> getLeftEnds() {
+		return leftEnds;
+	}
+	
+	public Set<String> getRightEnds() {
+		return rightEnds;
 	}
 	
 	public Associativity getAssociativity() {
@@ -274,6 +295,8 @@ public class Rule implements ConstructorCode, Serializable {
 		private Recursion recursion = Recursion.UNDEFINED;
 		private Recursion irecursion = Recursion.UNDEFINED;
 		
+		private String leftEnd = "";
+		private String rightEnd = "";
 		private Set<String> leftEnds = new HashSet<>();
 		private Set<String> rightEnds = new HashSet<>();
 		
@@ -362,6 +385,16 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setLeftEnd(String end) {
+			this.leftEnd = end;
+			return this;
+		}
+		
+		public Builder setRightEnd(String end) {
+			this.rightEnd = end;
+			return this;
+		}
+		
 		public Builder setLeftEnds(Set<String> leftEnds) {
 			this.leftEnds = leftEnds;
 			return this;
@@ -417,6 +450,8 @@ public class Rule implements ConstructorCode, Serializable {
 			".setRecursion(" + recursion.getConstructorCode() + ")" +
 			
 			".setiRecursion(" + irecursion.getConstructorCode() + ")" +
+			".setLeftEnd(\"" + leftEnd + "\")" +
+			".setRightEnd(\"" + rightEnd + "\")" +
 			".setLeftEnds(new HashSet<String>(" + GeneratorUtil.listToString(leftEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + "))" +
 			".setRightEnds(new HashSet<String>(" + GeneratorUtil.listToString(rightEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + "))" +
 			

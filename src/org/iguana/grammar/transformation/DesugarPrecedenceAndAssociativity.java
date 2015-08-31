@@ -86,7 +86,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	
 	private enum OP { _1, _2 }
 	
-	private OP config_op = OP._2;
+	private OP config_op = OP._1;
 	
 	private class Configuration {
 		
@@ -99,6 +99,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Map<Integer, Set<Integer>> binary_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> prefix_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> postfix_rules = new HashMap<>();
+		
+		public Map<Integer, Set<Integer>> ibinary_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> iprefix_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
+		
+		public Map<String, Set<String>> leftEnds = new HashMap<>();
+		public Map<String, Set<String>> rightEnds = new HashMap<>();
 		
 		// Encoding: 2 is 2 & 1; 3 is 1 & 2; 4 is 2 & 2 (l-value & p-arg)
 		public Map<Integer, Integer> groups = new HashMap<>();
@@ -122,7 +129,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		config = new Configuration();
 		
-		for (Rule rule: grammar.getRules()) {
+		for (Rule rule : grammar.getRules()) {
+			config.leftEnds.put(rule.getHead().getName(), rule.getLeftEnds());
+			config.rightEnds.put(rule.getHead().getName(), rule.getRightEnds());
+		}
+		
+		for (Rule rule : grammar.getRules()) {
 			Nonterminal head = rule.getHead();
 			// 1. Precedence
 			if (rule.getPrecedenceLevel().getRhs() != 1 || 
@@ -136,8 +148,37 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			PrecedenceLevel prec_level = rule.getPrecedenceLevel();
 			
 			boolean isBinary = rule.isLeftRecursive() && rule.isRightRecursive();
-			boolean isPrefix = !rule.isLeftRecursive() && rule.isRightRecursive();
-			boolean isPostfix = rule.isLeftRecursive() && !rule.isRightRecursive();
+			boolean isPrefix = !(rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isRightRecursive();
+			boolean isPostfix = rule.isLeftRecursive() && !(rule.isRightRecursive() || rule.isIRightRecursive());
+			
+			boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
+									|| (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
+			
+			boolean canBePrefix = false;
+			boolean canBePostfix = false;
+			
+			if (rule.isLeftRecursive() && rule.isIRightRecursive()) {
+				if (config.rightEnds.get(rule.getRightEnd()).contains("$"))
+					canBePostfix = true;
+			}
+			
+			if (rule.isILeftRecursive() && rule.isRightRecursive()) {
+				if (config.leftEnds.get(rule.getRightEnd()).contains("$"))
+					canBePrefix = true;
+			}
+			
+			if (rule.isILeftRecursive() && !rule.isRightRecursive() && !rule.isIRightRecursive())
+				canBePostfix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isILeftRecursive() && rule.isIRightRecursive())
+				canBePrefix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isLeftRecursive() && rule.isILeftRecursive() && rule.isIRightRecursive()) {
+				if (config.leftEnds.get(rule.getRightEnd()).contains("$"))
+					canBePrefix = true;
+				if (config.rightEnds.get(rule.getRightEnd()).contains("$"))
+					canBePostfix = true;
+			}
 			
 			if (isBinary) {
 				Set<Integer> rules = config.binary_rules.get(prec_level.getLhs());
@@ -159,6 +200,33 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			if (isPostfix) {
 				Set<Integer> rules = config.postfix_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.postfix_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (canBeBinary) {
+				Set<Integer> rules = config.ibinary_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.ibinary_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (canBePrefix) {
+				Set<Integer> rules = config.iprefix_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.prefix_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (canBePostfix) {
+				Set<Integer> rules = config.ipostfix_rules.get(prec_level.getLhs());
 				if (rules == null) {
 					rules = new HashSet<>();
 					config.postfix_rules.put(prec_level.getLhs(), rules);
@@ -209,7 +277,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (climbing) {				
 					if (isBinary && rule.getPrecedence() != assoc_group.getPrecedence())
 						config.groups.put(assoc_group.getLhs(), 4);
+					if (canBeBinary && rule.getPrecedence() != assoc_group.getPrecedence())
+						config.groups.put(assoc_group.getLhs(), 4);
 				} else
+					config.groups.put(prec_level.getLhs(), 4);
+			} 
+			
+			if (assoc_group == null) {
+				if (prec_level.getLhs() != prec_level.getRhs() && (canBeBinary || canBePrefix || canBePostfix)
+						&& rule.getAssociativity() != Associativity.UNDEFINED)
 					config.groups.put(prec_level.getLhs(), 4);
 			}
 			
@@ -248,10 +324,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						boolean hasPrefix = config.prefix_rules.get(prec_level.getLhs()) != null;
 						boolean hasPostfix = config.postfix_rules.get(prec_level.getLhs()) != null;
 						
-						if ((hasBinary && (hasPrefix || hasPostfix)) || (hasPrefix && hasPostfix)) {
+						boolean canHaveBinary = config.ibinary_rules.get(prec_level.getLhs()) != null;
+						boolean canHavePrefix = config.iprefix_rules.get(prec_level.getLhs()) != null;
+						boolean canHavePostfix = config.ipostfix_rules.get(prec_level.getLhs()) != null;
+						
+						if (((hasBinary || canHaveBinary) && (hasPrefix || hasPostfix || canHavePrefix || canHavePostfix)) 
+								|| ((hasPrefix || canHavePrefix) && (hasPostfix || canHavePostfix))) {
 							Associativity assoc = assoc_group.getAssociativity();
 							
-							if ((assoc == Associativity.LEFT || assoc == Associativity.NON_ASSOC) && hasPostfix) {
+							if ((assoc == Associativity.LEFT || assoc == Associativity.NON_ASSOC) && (hasPostfix || canHavePostfix)) {
 								for (int group : config.binary_rules.keySet()) {
 									if (group > rule.getPrecedence()) {
 										if (arity == null || arity == 3)
@@ -268,8 +349,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 											config.groups.put(prec_level.getLhs(), 4);
 									}
 								}
+								
+								for (int group : config.ibinary_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 3)
+											config.groups.put(prec_level.getLhs(), 3);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								for (int group : config.ipostfix_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 3)
+											config.groups.put(prec_level.getLhs(), 3);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
 							}
-							if ((assoc == Associativity.RIGHT || assoc == Associativity.NON_ASSOC) && hasPrefix) {
+							if ((assoc == Associativity.RIGHT || assoc == Associativity.NON_ASSOC) && (hasPrefix || canHavePostfix)) {
 								for (int group : config.binary_rules.keySet()) {
 									if (group > rule.getPrecedence()) {
 										if (arity == null || arity == 2)
@@ -279,6 +377,23 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									}
 								}
 								for (int group : config.postfix_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 2)
+											config.groups.put(prec_level.getLhs(), 2);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								
+								for (int group : config.ibinary_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 2)
+											config.groups.put(prec_level.getLhs(), 2);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								for (int group : config.ipostfix_rules.keySet()) {
 									if (group > rule.getPrecedence()) {
 										if (arity == null || arity == 2)
 											config.groups.put(prec_level.getLhs(), 2);
@@ -295,10 +410,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (arity == null || arity != 4) {
 					
 					boolean isBinary = rule.isLeftRecursive() && rule.isRightRecursive();
+					boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
+											|| (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
 					
 					Set<Integer> binary_rules = config.binary_rules.get(prec_level.getLhs());
 					Set<Integer> prefix_rules = config.prefix_rules.get(prec_level.getLhs());
 					Set<Integer> postfix_rules = config.postfix_rules.get(prec_level.getLhs());
+					
+					Set<Integer> ibinary_rules = config.ibinary_rules.get(prec_level.getLhs());
+					Set<Integer> iprefix_rules = config.iprefix_rules.get(prec_level.getLhs());
+					Set<Integer> ipostfix_rules = config.ipostfix_rules.get(prec_level.getLhs());
 					
 					int left_rec =   (binary_rules  == null ? 0 : binary_rules.size())
 								   + (postfix_rules == null ? 0 : postfix_rules.size());
@@ -306,9 +427,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					int right_rec =   (binary_rules == null ? 0 : binary_rules.size())
 									+ (prefix_rules == null ? 0 : prefix_rules.size());
 					
+					int ileft_rec =   (ibinary_rules  == null ? 0 : ibinary_rules.size())
+									+ (ipostfix_rules == null ? 0 : ipostfix_rules.size());
+			
+					int iright_rec =  (ibinary_rules == null ? 0 : ibinary_rules.size())
+							 		+ (iprefix_rules == null ? 0 : iprefix_rules.size());
+					
 					if (rule.getAssociativity() != Associativity.UNDEFINED) {
+						
 						if(isBinary && (rule.getAssociativity() == Associativity.LEFT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
-							if (left_rec >= 2) {
+							if (left_rec + ileft_rec >= 2) {
 								Integer n = config.groups.get(prec_level.getLhs());
 								if (n == null)
 									config.groups.put(prec_level.getLhs(), 3);
@@ -318,7 +446,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						}
 						
 						if(isBinary && (rule.getAssociativity() == Associativity.RIGHT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
-							if (right_rec >= 2) {
+							if (right_rec + iright_rec >= 2) {
 								Integer n = config.groups.get(prec_level.getLhs());
 								if (n == null)
 									config.groups.put(prec_level.getLhs(), 2);
@@ -328,8 +456,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								
 						}
 						
-						if (!isBinary && rule.isRightRecursive() && rule.getAssociativity() == Associativity.NON_ASSOC) {
-							if (left_rec >= 1) {
+						if (!(isBinary || canBeBinary) && rule.isRightRecursive() && rule.getAssociativity() == Associativity.NON_ASSOC) {
+							if (left_rec + ileft_rec >= 1) {
 								Integer n = config.groups.get(prec_level.getLhs());
 								if (n == null)
 									config.groups.put(prec_level.getLhs(), 3);
