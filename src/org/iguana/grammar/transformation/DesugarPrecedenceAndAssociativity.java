@@ -892,8 +892,39 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			else 
 				larg = pprec;
 			
+			boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
+									|| (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
+			boolean canBePrefix = false;
+			boolean canBePostfix = false;
+			
+			if (rule.isLeftRecursive() && rule.isIRightRecursive()) {
+			if (config.rightEnds.get(rule.getRightEnd()).contains("$"))
+				canBePostfix = true;
+			}
+			
+			if (rule.isILeftRecursive() && rule.isRightRecursive()) {
+			if (config.leftEnds.get(rule.getRightEnd()).contains("$"))
+				canBePrefix = true;
+			}
+			
+			if (rule.isILeftRecursive() && !rule.isRightRecursive() && !rule.isIRightRecursive())
+			canBePostfix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isILeftRecursive() && rule.isIRightRecursive())
+			canBePrefix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isLeftRecursive() && rule.isILeftRecursive() && rule.isIRightRecursive()) {
+			if (config.leftEnds.get(rule.getRightEnd()).contains("$"))
+				canBePrefix = true;
+			if (config.rightEnds.get(rule.getRightEnd()).contains("$"))
+				canBePostfix = true;
+			}
+			
 			// 1. Expressions for the left and/or right recursive uses
 			if (assoc_group != null) {
+				
+				if (rule.isILeftRecursive() || rule.isIRightRecursive())
+					throw new RuntimeException("Not yet implemented: indirect recursion inside an associativity group");
 				
 				// Local to an associativity group
 				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
@@ -1362,22 +1393,40 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				switch(assoc) {
 					case LEFT:
 						
-						if (rule.isLeftRecursive()) {
+						if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
+							
 							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec)));
 							rcond = greaterEq(integer(prec), pprec);
+							
+							if (rule.isILeftRecursive() && canBePrefix) {
+								// UNDEF
+								lcond = or(equal(var("l"), null), lcond);
+								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
+							}
 						}
 						
-						if (rule.isRightRecursive()) {
+						if (rule.isRightRecursive() || rule.isIRightRecursive()) {
 							if (this.parity == 2)
 								rarg = tuple(integer(prec + 1), integer(0));
 							else
 								rarg = integer(prec + 1);
 							
 							if (prec_level.hasPrefixUnaryBelow()) {
-								if (this.larity == 2)
+								if (this.larity == 2) {
+									
 									ret = tuple(minimum(prec, rprec), integer(0));
-								else
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										// UNDEF
+										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+									
+								} else {
 									ret = minimum(prec, rprec);
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										// UNDEF
+										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+								}
 							} else {
 								if (this.larity == 2)
 									ret = tuple(integer(prec), integer(0));
@@ -1394,22 +1443,38 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					case RIGHT:
 						
-						if (rule.isLeftRecursive()) {
+						if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
 							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec + 1)));
 							rcond = greaterEq(integer(prec), pprec);
+							
+							if (rule.isILeftRecursive() && canBePrefix) {
+								// UNDEF
+								lcond = or(equal(var("l"), null), lcond);
+								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
+							}
 						}
 						
-						if (rule.isRightRecursive()) {
+						if (rule.isRightRecursive() || rule.isIRightRecursive()) {
 							if (this.parity == 2)
 								rarg = tuple(integer(first? 0 : prec), integer(0));
 							else
 								rarg = integer(first? 0 : prec);
 							
 							if (prec_level.hasPrefixUnaryBelow()) {
-								if (this.larity == 2)
+								if (this.larity == 2) {
+									
 									ret = tuple(minimum(prec, rprec), integer(0));
-								else
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										// UNDEF
+										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+								} else {
 									ret = minimum(prec, rprec);
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										// UNDEF
+										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+								}
 							} else {
 								if (this.larity == 2)
 									ret = tuple(integer(prec), integer(0));
@@ -1518,6 +1583,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			} 
 			
 			if (assoc_group == null && prec_level.getLhs() != prec_level.getRhs()) {
+				
+				if (rule.isILeftRecursive() || rule.isIRightRecursive())
+					throw new RuntimeException("Not yet implemented: indirect recursion inside a group of the same precedence with multiple rules");
 				
 				// Local to an associativity group
 				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
