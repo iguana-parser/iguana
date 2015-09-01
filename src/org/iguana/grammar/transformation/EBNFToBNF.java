@@ -130,7 +130,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 
 	
-	private static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
+	public static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
 		} else {
