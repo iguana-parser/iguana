@@ -614,9 +614,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			rret = new Expression[n];
 			
 			for (int i = 0; i < n; i++) {
-				// UNDEF
-				lret[i] = null;
-				rret[i] = null;
+				lret[i] = undef();
+				rret[i] = undef();
 			}
 				
 			this.config_op = config_op;
@@ -1504,8 +1503,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							rcond = greaterEq(integer(prec), pprec);
 							
 							if (rule.isILeftRecursive() && canBePrefix) {
-								// UNDEF
-								lcond = or(equal(var("l"), null), lcond);
+								lcond = or(equal(var("l"), undef()), lcond);
 								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
 							}
 						}
@@ -1522,15 +1520,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									ret = tuple(minimum(prec, rprec), integer(0));
 									
 									if (rule.isIRightRecursive() && canBePostfix)
-										// UNDEF
-										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
 									
 								} else {
 									ret = minimum(prec, rprec);
 									
 									if (rule.isIRightRecursive() && canBePostfix)
-										// UNDEF
-										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
 								}
 							} else {
 								if (this.larity == 2)
@@ -1553,9 +1549,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							rcond = greaterEq(integer(prec), pprec);
 							
 							if (rule.isILeftRecursive() && canBePrefix) {
-								// UNDEF
-								lcond = or(equal(var("l"), null), lcond);
-								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
+								lcond = or(equal(var("l"), undef()), lcond);
+								rcond = ifThenElse(equal(var("l"), undef()), TRUE, rcond); // TODO: should become post-condition
 							}
 						}
 						
@@ -1571,14 +1566,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									ret = tuple(minimum(prec, rprec), integer(0));
 									
 									if (rule.isIRightRecursive() && canBePostfix)
-										// UNDEF
-										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
 								} else {
 									ret = minimum(prec, rprec);
 									
 									if (rule.isIRightRecursive() && canBePostfix)
-										// UNDEF
-										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
 								}
 							} else {
 								if (this.larity == 2)
@@ -1658,9 +1651,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							rcond = greaterEq(integer(prec), pprec);
 							
 							if (rule.isILeftRecursive() && canBePrefix) {
-								// UNDEF
-								lcond = or(equal(var("l"), null), lcond);
-								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
+								lcond = or(equal(var("l"), undef()), lcond);
+								rcond = ifThenElse(equal(var("l"), undef()), TRUE, rcond); // TODO: should become post-condition
 							}
 						}
 						
@@ -1676,14 +1668,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									ret = tuple(minimum(prec, rprec), integer(0));
 									
 									if (rule.isIRightRecursive() && canBePostfix)
-										// UNDEF
-										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
 								} else {
 									ret = minimum(prec, rprec);
 									
 									if (rule.isIRightRecursive() && canBePostfix)
-										// UNDEF
-										ret = ifThenElse(equal(var("r"), null), tuple(integer(0), integer(0)), ret);
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
 								}
 							} else {
 								if (this.larity == 2)

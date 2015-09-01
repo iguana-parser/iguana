@@ -51,7 +51,7 @@ public class AST {
 	
 	static public final Expression TRUE = Expression.Boolean.TRUE;
 	static public final Expression FALSE = Expression.Boolean.FALSE;
-	
+		
 	static public Expression integer(java.lang.Integer value) {
 		return new Expression.Integer(value);
 	}
@@ -778,6 +778,34 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("%s[%s]", arg1, arg2);
+					}
+		};
+	}
+	
+	static public final Object UNDEF = new Object() { 
+		public String toString() {
+			return "UNDEF";
+		}
+	};
+	
+	static public Expression undef() {
+		return new Expression.Call("undef") {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						return UNDEF;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.undef()";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return UNDEF.toString();
 					}
 		};
 	}
