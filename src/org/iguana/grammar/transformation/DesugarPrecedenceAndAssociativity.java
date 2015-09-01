@@ -350,6 +350,36 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
+		if (config_op == OP._2) {
+			Set<String> nonterminals = new HashSet<>();
+			nonterminals.addAll(leftOrRightRecursiveNonterminals);
+			
+			boolean changed = true;
+			while(changed) {
+				changed = false;
+				int size = nonterminals.size();
+				Set<String> delta = new HashSet<>();
+				for (String nt : nonterminals) {
+					Configuration config = configs.get(nt);
+					if (config != null) {
+						delta.addAll(config.leftEnds);
+						delta.addAll(config.rightEnds);
+					}
+				}
+				nonterminals.addAll(delta);
+				if (nonterminals.size() != size)
+					changed = true;
+			}
+			
+			for (String head : configs.keySet()) {
+				if (!nonterminals.contains(head)) {
+					Configuration config = configs.get(head);
+					config.leftEnds = new HashSet<>();
+					config.rightEnds = new HashSet<>();
+				}
+			}
+		}
+		
 		for (Rule rule: grammar.getRules()) {
 			
 			if (config_op == OP._1) break;
