@@ -777,7 +777,7 @@ public class AST {
 					
 					@Override
 					public java.lang.String toString() {
-						return java.lang.String.format("%s[%s]", arg1, arg2);
+						return java.lang.String.format("%s.%s", arg1, arg2);
 					}
 		};
 	}

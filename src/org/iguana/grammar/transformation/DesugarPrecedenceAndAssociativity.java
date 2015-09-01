@@ -1646,7 +1646,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					case UNDEFINED:
 						
-						if (rule.isLeftRecursive()) {
+						if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
 							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec)));
 							rcond = greaterEq(integer(prec), pprec);
 							
@@ -1656,7 +1656,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 						}
 						
-						if (rule.isRightRecursive()) {
+						if (rule.isRightRecursive() || rule.isIRightRecursive()) {
 							if (this.parity == 2)
 								rarg = tuple(integer(first? 0 : prec), integer(0));
 							else
@@ -1956,27 +1956,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					boolean isIndirectEnd = !config.precEnds.isEmpty();
 					
-					Expression iret = null;
-					
 					if (isIndirectEnd) {
 						String[] parameters = new String[config.precEnds.size()];
 						for (int j = 0; j < config.precEnds.size(); j++)
 							parameters[j] = "p" + j;
 						
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
-						
-						if (config.precEnds.size() == 1)
-							iret = tuple(lret[0], rret[0]);
-						else {
-							int j = 0;
-							Expression[] rets = new Expression[lret.length]; 
-							for (Expression l : lret) {
-								rets[j] = tuple(l, rret[j]);
-								j++;
-							}
-							iret = tuple(rets);
-						}
-							
+						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());	
 					}
 					
 					builder = builder.setSymbols(symbols);
@@ -2025,6 +2010,22 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						symbols.add(Return.ret(ret));
 					else if (xret != null)
 						symbols.add(Return.ret(xret));
+					
+					Expression iret = null;
+					
+					if (isIndirectEnd) {
+						if (config.precEnds.size() == 1)
+							iret = tuple(lret[0], rret[0]);
+						else {
+							int j = 0;
+							Expression[] rets = new Expression[lret.length]; 
+							for (Expression l : lret) {
+								rets[j] = tuple(l, rret[j]);
+								j++;
+							}
+							iret = tuple(rets);
+						}	
+					}
 					
 					if (iret != null)
 						symbols.add(Return.ret(iret));
@@ -2217,16 +2218,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					if (isUseOfLeftOrRight) {
 						int parity = config.parity;
 						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+						
 						if (ends.contains(symbol.getName())) {
 							
 							int i = ends.indexOf(symbol.getName());
+							
 							if (isFirst) {
 								variable = "l";
-								arguments = new Expression[] { get(var("p" + i), integer(1)) };
+								arguments = new Expression[] { get(var("p" + i), integer(0)) };
 								lret[i] = var("l");
 							} else if (isLast) {
 								variable = "r";
-								arguments = new Expression[] { get(var("p" + i), integer(0)) };
+								arguments = new Expression[] { get(var("p" + i), integer(1)) };
 								rret[i] = var("r");
 							} else
 								arguments = new Expression[] { parity == 2? tuple(integer(0), integer(0)) : integer(0) };
