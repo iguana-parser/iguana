@@ -323,6 +323,8 @@ public class Rule implements ConstructorCode, Serializable {
 			this.layout = rule.layout;
 			this.recursion = rule.recursion;
 			this.irecursion = rule.irecursion;
+			this.leftEnd = rule.leftEnd;
+			this.rightEnd = rule.rightEnd;
 			this.leftEnds = rule.leftEnds;
 			this.rightEnds = rule.rightEnds;
 			this.associativity = rule.associativity;
@@ -396,12 +398,14 @@ public class Rule implements ConstructorCode, Serializable {
 		}
 		
 		public Builder setLeftEnds(Set<String> leftEnds) {
-			this.leftEnds = leftEnds;
+			if (leftEnds != null)
+				this.leftEnds = leftEnds;
 			return this;
 		}
 		
 		public Builder setRightEnds(Set<String> rightEnds) {
-			this.rightEnds = rightEnds;
+			if (rightEnds != null)
+				this.rightEnds = rightEnds;
 			return this;
 		}
 		
@@ -452,8 +456,8 @@ public class Rule implements ConstructorCode, Serializable {
 			".setiRecursion(" + irecursion.getConstructorCode() + ")" +
 			".setLeftEnd(\"" + leftEnd + "\")" +
 			".setRightEnd(\"" + rightEnd + "\")" +
-			".setLeftEnds(new HashSet<String>(" + GeneratorUtil.listToString(leftEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + "))" +
-			".setRightEnds(new HashSet<String>(" + GeneratorUtil.listToString(rightEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + "))" +
+			".setLeftEnds(new HashSet<String>(Arrays.asList(" + GeneratorUtil.listToString(leftEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + ")))" +
+			".setRightEnds(new HashSet<String>(Arrays.asList(" + GeneratorUtil.listToString(rightEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + ")))" +
 			
 			".setAssociativity(" + associativity.getConstructorCode() + ")" +
 			".setPrecedence(" + precedence + ")" +
