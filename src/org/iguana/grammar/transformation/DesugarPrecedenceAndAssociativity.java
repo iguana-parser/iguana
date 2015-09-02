@@ -42,6 +42,7 @@ import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -2253,7 +2254,26 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							
 							int i = ends.indexOf(symbol.getName());
 							
-							if (isFirst) {
+							if (isFirst && isLast) {
+								
+								boolean canBeFromLeft = configs.get(symbol.getName()).leftEnds.contains(rule.getHead().getName());
+								boolean canBeFromRight = configs.get(symbol.getName()).rightEnds.contains(rule.getHead().getName());
+								
+								if (canBeFromLeft && canBeFromRight) {
+									throw new RuntimeException("Unsupported yet!");
+								} else if (canBeFromLeft) {
+									variable = "l";
+									arguments = new Expression[] { get(var("p" + i), integer(0)) };
+									lret[i] = var("l");
+								} else if (canBeFromRight) {
+									variable = "r";
+									arguments = new Expression[] { get(var("p" + i), integer(1)) };
+									rret[i] = var("r");
+								} else {
+									throw new RuntimeException("Shouldn't have happened!");
+								}
+								
+							} else if (isFirst) {
 								variable = "l";
 								arguments = new Expression[] { get(var("p" + i), integer(0)) };
 								lret[i] = var("l");
@@ -2283,6 +2303,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						}
 					}
 					
+					if (isRecursiveUseOfLeftOrRight && isFirst && isLast)
+						throw new RuntimeException("Cyclic use where precedence applies.");
+					
 					if (isRecursiveUseOfLeftOrRight && isFirst) {
 						variable = "l";
 						arguments = new Expression[] { larg };
@@ -2291,27 +2314,55 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						arguments = new Expression[] { rarg };
 					}
 					
-					Expression binding = null;
+					Statement binding = null;
+					Statement lbinding = null;
+					Statement rbinding = null;
 					
-					if (isIndirectRecursiveUseOfLeftOrRight && isFirst) {
+					if (isIndirectRecursiveUseOfLeftOrRight && isFirst && isLast) {
 						if (config.precEnds.size() == 1) {
-							variable = "l";
+							variable = symbol.getName().toLowerCase();
+							lbinding = varDeclStat("l", get(var(variable), integer(0)));
+							rbinding = varDeclStat("r", get(var(variable), integer(1)));
+							arguments = new Expression[] { tuple(larg, rarg) };
+						} else {
+							int i = config.precEnds.indexOf(rule.getHead().getName());
+							variable = symbol.getName().toLowerCase();
+							binding  = varDeclStat("l", get(get(var(variable), integer(i)), integer(0))); // l = x.i.0
+							rbinding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1))); // r = x.i.1
+							arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
+						}
+					} else if (isIndirectRecursiveUseOfLeftOrRight && isFirst) {
+						if (config.precEnds.size() == 1) {
+							variable = "l" + symbol.getName().toLowerCase();
+							binding = varDeclStat("l", get(var(variable), integer(0)));
 							arguments = new Expression[] { tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0)) };
 						} else {
 							int i = config.precEnds.indexOf(rule.getHead().getName());
-							variable = "l" + symbol.getName();
-							binding = assign("l", get(var(variable), integer(i)));
+							variable = "l" + symbol.getName().toLowerCase();
+							binding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0)));
 							arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
 						}
 					} else if (isIndirectRecursiveUseOfLeftOrRight && isLast) {
 						if (config.precEnds.size() == 1) {
-							variable = "r";
+							variable = "r" + symbol.getName().toLowerCase();
+							binding = varDeclStat("r", get(var(variable), integer(1)));
 							arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
 						} else {
 							int i = config.precEnds.indexOf(rule.getHead().getName());
 							variable = "r" + symbol.getName();
-							binding = assign("r", get(var(variable), integer(i)));
+							binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
 							arguments[i] = tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg);
+						}
+					} else if (isUseOfLeftOrRightEnd && isFirst && isLast) {
+						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+						for (String end : config.precEnds) {
+							int i = ends.indexOf(end);
+							if (i != -1) {
+								variable = symbol.getName().toLowerCase();
+								arguments[i] = var("p" + i);
+								lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+								rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+							}
 						}
 					} else if (isUseOfLeftOrRightEnd && isFirst) {
 						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
@@ -2321,7 +2372,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							if (i != -1) {
 								variable = "l";
 								arguments[i] = tuple(get(var("p" + i), integer(0)), parity == 2? tuple(integer(0), integer(0)) : integer(0));
-								lret[config.precEnds.indexOf(end)] = ends.size() == 1? var("l") : get(var("l"), integer(i));
+								lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
 							}
 						}
 					} else if (isUseOfLeftOrRightEnd && isLast) {
@@ -2332,7 +2383,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							if (i != -1) {
 								variable = "r";
 								arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), get(var("p" + i), integer(1)));
-								rret[config.precEnds.indexOf(end)] = ends.size() == 1? var("r") : get(var("r"), integer(i));
+								rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
 							}
 						}
 					}
@@ -2353,8 +2404,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						newone =  variable.isEmpty()? symbol.copyBuilder().apply(_not).build()
 								                    : symbol.copyBuilder().apply(_not).setVariable(variable).build();
 					if (binding != null)
-						return Code.code(newone, stat(binding));
-					else
+						return Code.code(newone, binding);
+					else if (lbinding != null && rbinding != null) {
+						return Code.code(newone, lbinding, rbinding);
+					} else
 						return newone;
 			}
 			

@@ -72,7 +72,7 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final Set<String> leftEnds;
 	private final Set<String> rightEnds;
-	
+		
 	private final Associativity associativity;
 	private final AssociativityGroup associativityGroup;
 	
@@ -167,6 +167,10 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	public Recursion getRecursion() {
 		return recursion;
+	}
+	
+	public Recursion getIRecursion() {
+		return irecursion;
 	}
 	
 	public String getLeftEnd() {

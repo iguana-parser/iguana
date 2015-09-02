@@ -238,6 +238,9 @@ public abstract class Expression extends AbstractAST {
 		
 		Tuple(Expression... elements) {
 			this.elements = elements;
+			for (Expression element : elements) 
+				if (element == null)
+					throw new RuntimeException("Expressions of a tuple should not be null.");
 			this.length = elements.length;
 		}
 		
