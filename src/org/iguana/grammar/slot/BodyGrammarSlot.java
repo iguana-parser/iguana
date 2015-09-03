@@ -192,7 +192,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		
 		if (variable != null && state == null)
 			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());
-		
+
 		if (variable == null && state != null) {
 			if (state.size() == 1) {
 				String v = state.iterator().next();
