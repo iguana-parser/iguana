@@ -85,6 +85,9 @@ public class Grammar implements ConstructorCode, Serializable {
 	private final Symbol layout;
 	
 	private final List<Rule> rules;
+	
+	private final Map<String, Set<String>> ebnfLefts;
+	private final Map<String, Set<String>> ebnfRights;
 		
 	public Grammar(Builder builder) {
 		this.definitions = builder.definitions;
@@ -92,6 +95,8 @@ public class Grammar implements ConstructorCode, Serializable {
 		this.exceptPatterns = builder.exceptPatterns;
 		this.layout = builder.layout;
 		this.rules = builder.rules;
+		this.ebnfLefts = builder.ebnfLefts;
+		this.ebnfRights = builder.ebnfRights;
 	}
 	
 	public Map<Nonterminal, List<Rule>> getDefinitions() {
@@ -108,6 +113,14 @@ public class Grammar implements ConstructorCode, Serializable {
 	
 	public List<Rule> getRules() {
 		return rules;
+	}
+	
+	public Map<String, Set<String>> getEBNFLefts() {
+		return this.ebnfLefts;
+	}
+	
+	public Map<String, Set<String>> getEBNFRights() {
+		return this.ebnfRights;
 	}
 	
 	public Start getStartSymbol(Nonterminal nt) {
@@ -228,6 +241,9 @@ public class Grammar implements ConstructorCode, Serializable {
 		private List<Rule> rules;
 		private Symbol layout;
 		
+		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
+		private Map<String, Set<String>> ebnfRights = new HashMap<>();
+		
 		public Grammar build() {
 			rules = definitions.values().stream().flatMap(l -> l.stream()).collect(Collectors.toList());
 			
@@ -282,6 +298,26 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		public Builder addExceptPatterns(Collection<ExceptPattern> patterns) {
 			exceptPatterns.addAll(patterns);
+			return this;
+		}
+		
+		public Builder addEBNFl(Map<String, Set<String>> ebnfLefts) {
+			this.ebnfLefts.putAll(ebnfLefts);
+			return this;
+		}
+		
+		public Builder addEBNFl(String ebnf, Set<String> lefts) {
+			this.ebnfLefts.put(ebnf, lefts);
+			return this;
+		}
+		
+		public Builder addEBNFr(Map<String, Set<String>> ebnfRights) {
+			this.ebnfRights.putAll(ebnfRights);
+			return this;
+		}
+		
+		public Builder addEBNFr(String ebnf, Set<String> rights) {
+			this.ebnfRights.put(ebnf, rights);
 			return this;
 		}
 	}
@@ -352,6 +388,8 @@ public class Grammar implements ConstructorCode, Serializable {
 	@Override
 	public String getConstructorCode() {
 		return "Grammar.builder()\n" +
+			   (ebnfLefts.isEmpty()? ""  : leftsToString(ebnfLefts)) +
+			   (ebnfRights.isEmpty()? "" : rightsToString(ebnfRights)) +
 			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
 			   definitions.values().stream().map(l -> rulesToString(l)).collect(Collectors.joining()) + "\n.build()";
 	}
@@ -359,6 +397,24 @@ public class Grammar implements ConstructorCode, Serializable {
 	private static String rulesToString(Iterable<Rule> rules) {
 		return StreamSupport.stream(rules.spliterator(), false)
 				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
+				.collect(Collectors.joining());
+	}
+	
+	private static String leftsToString(Map<String, Set<String>> lefts) {
+		return lefts.entrySet().stream()
+				.map(entry -> ".addEBNFl(" + "\"" + entry.getKey() + "\"," 
+							  + "new HashSet<String>(Arrays.asList(" 
+							  		+ listToString(entry.getValue().stream().map(elem -> "\"" + elem + "\"").collect(Collectors.toList()), ",") 
+							  + ")))")
+				.collect(Collectors.joining());
+	}
+	
+	private static String rightsToString(Map<String, Set<String>> rights) {
+		return rights.entrySet().stream()
+				.map(entry -> ".addEBNFr(" + "\"" + entry.getKey() + "\"," 
+							  + "new HashSet<String>(Arrays.asList(" 
+							  		+ listToString(entry.getValue().stream().map(elem -> "\"" + elem + "\"").collect(Collectors.toList()), ",") 
+							  + ")))")
 				.collect(Collectors.joining());
 	}
 	

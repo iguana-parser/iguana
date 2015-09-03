@@ -30,12 +30,15 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.iguana.parser.HashFunctions;
 import org.iguana.util.SemanticAction;
 import org.iguana.util.generator.ConstructorCode;
+import org.iguana.util.generator.GeneratorUtil;
 
 /**
  * 
@@ -62,7 +65,14 @@ public class Rule implements ConstructorCode, Serializable {
 	private final LayoutStrategy layoutStrategy;
 	
 	private final Recursion recursion;
+	private final Recursion irecursion;
 	
+	private final String leftEnd;
+	private final String rightEnd;
+	
+	private final Set<String> leftEnds;
+	private final Set<String> rightEnds;
+		
 	private final Associativity associativity;
 	private final AssociativityGroup associativityGroup;
 	
@@ -80,6 +90,11 @@ public class Rule implements ConstructorCode, Serializable {
 		this.layout = builder.layout;
 		this.layoutStrategy = builder.layoutStrategy;
 		this.recursion = builder.recursion;
+		this.irecursion = builder.irecursion;
+		this.leftEnd = builder.leftEnd;
+		this.rightEnd = builder.rightEnd;
+		this.leftEnds = builder.leftEnds;
+		this.rightEnds = builder.rightEnds;
 		this.associativity = builder.associativity;
 		
 		this.associativityGroup = builder.associativityGroup;
@@ -130,16 +145,48 @@ public class Rule implements ConstructorCode, Serializable {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC;
 	}
 	
+	public boolean isILeftRecursive() {
+		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC;
+	}
+	
 	public boolean isRightRecursive() {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.RIGHT_REC;
+	}
+	
+	public boolean isIRightRecursive() {
+		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iRIGHT_REC;
 	}
 	
 	public boolean isLeftOrRightRecursive() {
 		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
 	}
 	
+	public boolean isILeftOrRightRecursive() {
+		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC || irecursion == Recursion.iRIGHT_REC;
+	}
+	
 	public Recursion getRecursion() {
 		return recursion;
+	}
+	
+	public Recursion getIRecursion() {
+		return irecursion;
+	}
+	
+	public String getLeftEnd() {
+		return leftEnd;
+	}
+	
+	public String getRightEnd() {
+		return rightEnd;
+	}
+	
+	public Set<String> getLeftEnds() {
+		return leftEnds;
+	}
+	
+	public Set<String> getRightEnds() {
+		return rightEnds;
 	}
 	
 	public Associativity getAssociativity() {
@@ -250,6 +297,12 @@ public class Rule implements ConstructorCode, Serializable {
 		private Nonterminal layout;
 		
 		private Recursion recursion = Recursion.UNDEFINED;
+		private Recursion irecursion = Recursion.UNDEFINED;
+		
+		private String leftEnd = "";
+		private String rightEnd = "";
+		private Set<String> leftEnds = new HashSet<>();
+		private Set<String> rightEnds = new HashSet<>();
 		
 		private Associativity associativity = Associativity.UNDEFINED;
 		private AssociativityGroup associativityGroup;
@@ -273,6 +326,11 @@ public class Rule implements ConstructorCode, Serializable {
 			this.layoutStrategy = rule.layoutStrategy;
 			this.layout = rule.layout;
 			this.recursion = rule.recursion;
+			this.irecursion = rule.irecursion;
+			this.leftEnd = rule.leftEnd;
+			this.rightEnd = rule.rightEnd;
+			this.leftEnds = rule.leftEnds;
+			this.rightEnds = rule.rightEnds;
 			this.associativity = rule.associativity;
 			
 			this.associativityGroup = rule.associativityGroup;
@@ -328,6 +386,33 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
+		public Builder setiRecursion(Recursion irecursion) {
+			this.irecursion = irecursion;
+			return this;
+		}
+		
+		public Builder setLeftEnd(String end) {
+			this.leftEnd = end;
+			return this;
+		}
+		
+		public Builder setRightEnd(String end) {
+			this.rightEnd = end;
+			return this;
+		}
+		
+		public Builder setLeftEnds(Set<String> leftEnds) {
+			if (leftEnds != null)
+				this.leftEnds = leftEnds;
+			return this;
+		}
+		
+		public Builder setRightEnds(Set<String> rightEnds) {
+			if (rightEnds != null)
+				this.rightEnds = rightEnds;
+			return this;
+		}
+		
 		public Builder setAssociativity(Associativity associativity) {
 			this.associativity = associativity;
 			return this;
@@ -371,6 +456,12 @@ public class Rule implements ConstructorCode, Serializable {
 			(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
 			
 			".setRecursion(" + recursion.getConstructorCode() + ")" +
+			
+			".setiRecursion(" + irecursion.getConstructorCode() + ")" +
+			".setLeftEnd(\"" + leftEnd + "\")" +
+			".setRightEnd(\"" + rightEnd + "\")" +
+			".setLeftEnds(new HashSet<String>(Arrays.asList(" + GeneratorUtil.listToString(leftEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + ")))" +
+			".setRightEnds(new HashSet<String>(Arrays.asList(" + GeneratorUtil.listToString(rightEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + ")))" +
 			
 			".setAssociativity(" + associativity.getConstructorCode() + ")" +
 			".setPrecedence(" + precedence + ")" +

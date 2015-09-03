@@ -74,16 +74,16 @@ Grammar.builder()
          Input input = Input.fromString("a+a+a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/", graph);
+         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
+         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
          //                   result.asParseSuccess().getRoot(), input);
 
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
     }
 }

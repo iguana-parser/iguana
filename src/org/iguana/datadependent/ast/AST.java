@@ -51,7 +51,7 @@ public class AST {
 	
 	static public final Expression TRUE = Expression.Boolean.TRUE;
 	static public final Expression FALSE = Expression.Boolean.FALSE;
-	
+		
 	static public Expression integer(java.lang.Integer value) {
 		return new Expression.Integer(value);
 	}
@@ -310,6 +310,33 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("not(%s)", arg);
+					}
+		};
+	}
+	
+	static public Expression neg(Expression arg) {
+		return new Expression.Call("neg", arg) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						Object value = arg.interpret(ctx);
+						if (!(value instanceof java.lang.Integer)) {
+							throw new UnexpectedTypeOfArgumentException(this);
+						}
+						int v = (java.lang.Integer) value;
+						return -v;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.neg(" + arg.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("-(%s)", arg);
 					}
 		};
 	}
@@ -727,6 +754,58 @@ public class AST {
 					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("find(%s,%s)", arg1, arg2);
+					}
+		};
+	}
+	
+	static public Expression get(Expression arg1, Expression arg2) {
+		return new Expression.Call("get", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						List<?> value = (List<?>) arg1.interpret(ctx);
+						int i = (java.lang.Integer) arg2.interpret(ctx);
+						return value.get(i);
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.get(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("%s.%s", arg1, arg2);
+					}
+		};
+	}
+	
+	static public final Object UNDEF = new Object() { 
+		public String toString() {
+			return "UNDEF";
+		}
+	};
+	
+	static public Expression undef() {
+		return new Expression.Call("undef") {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						return UNDEF;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.undef()";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return UNDEF.toString();
 					}
 		};
 	}

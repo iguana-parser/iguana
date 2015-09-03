@@ -27,9 +27,11 @@
 
 package org.iguana.grammar.transformation;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,11 +78,19 @@ import org.iguana.traversal.ISymbolVisitor;
  */
 public class EBNFToBNF implements GrammarTransformation {
 	
+	private Map<String, Set<String>> ebnfLefts;
+	private Map<String, Set<String>> ebnfRights;
+	
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
+		ebnfLefts = grammar.getEBNFLefts();
+		ebnfRights = grammar.getEBNFRights();
 		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
-		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
+		return Grammar.builder().addRules(newRules)
+				.addEBNFl(grammar.getEBNFLefts())
+				.addEBNFr(grammar.getEBNFRights())
+				.setLayout(grammar.getLayout()).build();
 	}
 	
 	private Set<Rule> transform(Rule rule) {
@@ -108,7 +118,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		Set<String> state = new HashSet<>();
 		new FreeVariableVisitor(state).compute(rule);
 		
-		EBNFVisitor ebnf_visitor = new EBNFVisitor(state, newRules, rule.getLayout(), rule.getLayoutStrategy());
+		EBNFVisitor ebnf_visitor = new EBNFVisitor(state, newRules, rule.getLayout(), rule.getLayoutStrategy(), ebnfLefts, ebnfRights);
 		
 		for(Symbol s : rule.getBody())
 			builder.addSymbol(s.accept(ebnf_visitor));
@@ -120,17 +130,22 @@ public class EBNFToBNF implements GrammarTransformation {
 				.setAssociativityGroup(rule.getAssociativityGroup())
 				.setPrecedence(rule.getPrecedence())
 				.setPrecedenceLevel(rule.getPrecedenceLevel())
+				.setiRecursion(rule.getIRecursion())
+				.setLeftEnd(rule.getLeftEnd())
+				.setRightEnd(rule.getRightEnd())
+				.setLeftEnds(rule.getLeftEnds())
+				.setRightEnds(rule.getRightEnds())
 				.setLabel(rule.getLabel())
 				.build();
 	}
 	
 	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
-		EBNFVisitor visitor = new EBNFVisitor(new HashSet<>(), new HashSet<>(), layout, LayoutStrategy.INHERITED);
+		EBNFVisitor visitor = new EBNFVisitor(new HashSet<>(), new HashSet<>(), layout, LayoutStrategy.INHERITED, new HashMap<>(), new HashMap<>());
 		return list.stream().map(s -> s.accept(visitor)).collect(Collectors.toList());
 	}
 
 	
-	private static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
+	public static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
 		} else {
@@ -148,13 +163,19 @@ public class EBNFToBNF implements GrammarTransformation {
 		private final Nonterminal layout;
 		private final LayoutStrategy strategy;
 		
+		private final Map<String, Set<String>> ebnfLefts;
+		private final Map<String, Set<String>> ebnfRights;
+		
 		private static int counter = 0;
 		
-		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy) {
+		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy,
+						   Map<String, Set<String>> ebnfLefts, Map<String, Set<String>> ebnfRights) {
 			this.state = state;
 			this.addedRules = addedRules;
 			this.layout = layout;
 			this.strategy = strategy;
+			this.ebnfLefts = ebnfLefts;
+			this.ebnfRights = ebnfRights;
 		}
 		
 		/**
@@ -272,10 +293,20 @@ public class EBNFToBNF implements GrammarTransformation {
 									.addSymbols(seperators)
 									.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setLeftEnd(newNt.getName())
+									.setRightEnd(S.getName())
+									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()) : new HashSet<>())
+									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
+									.build());
 			addedRules.add(Rule.withHead(newNt).addSymbol(S)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setLeftEnd(S.getName())
+									.setRightEnd(S.getName())
+									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()) : new HashSet<>())
+									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
+									.build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -333,13 +364,19 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters != null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "*").addParameters(parameters).build()
-						              : Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "*");
+			String base = getName(S, symbol.getSeparators(), layout);
+			Nonterminal newNt = parameters != null? Nonterminal.builder(base + "*").addParameters(parameters).build()
+						              : Nonterminal.withName(base + "*");
 			
 			addedRules.add(Rule.withHead(newNt).addSymbols(S)
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setLeftEnd(S.getName())
+									.setRightEnd(S.getName())
+									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()): new HashSet<>())
+									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()): new HashSet<>())
+									.build());
 			addedRules.add(Rule.withHead(newNt)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());

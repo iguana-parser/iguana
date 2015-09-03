@@ -147,7 +147,8 @@ public class PrecedenceLevel implements Serializable {
 		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
-		if (!rule.isLeftOrRightRecursive()) return -1;
+		if (!(rule.isLeftOrRightRecursive() 
+				|| rule.isILeftOrRightRecursive())) return -1;
 		else if (rule.getAssociativity() == Associativity.UNDEFINED) {
 			if (undefined == -1)
 				undefined = index++;
@@ -160,7 +161,8 @@ public class PrecedenceLevel implements Serializable {
 		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
-		if (!rule.isLeftOrRightRecursive()) return -1;
+		if (!(rule.isLeftOrRightRecursive() 
+				|| rule.isILeftOrRightRecursive())) return -1;
 		else return index++;
 	}
 	

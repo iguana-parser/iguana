@@ -34,7 +34,7 @@ package org.iguana.util;
  */
 public class Configuration {
 
-	public static final int DEFAULT_LOOKAHEAD = 1;
+	public static final int DEFAULT_LOOKAHEAD = 0;
 	
 	public static final Configuration DEFAULT = builder().build();
 	
@@ -104,7 +104,7 @@ public class Configuration {
 		
 		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
 		private MatcherType matcherType = MatcherType.JAVA_REGEX;
-		private HashMapImpl hashmapImpl = HashMapImpl.INT_OPEN_ADDRESSING;
+		private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
 				
 		public Configuration build() {

@@ -29,6 +29,7 @@ package org.iguana.grammar.transformation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -76,46 +78,58 @@ import org.iguana.traversal.ISymbolVisitor;
  * 
  * @author Anastasia Izmaylova
  * 
- * Description:
- * 
- * 		- Two parameters, l and r, are introduced to pass a precedence level,
- *        and each rule gets a precedence level. 
- * 		  We need two parameters to account for left (l) and right (r) recursion.
- *      		- for left recursive rules, symbols on the left should pass as the 1st argument either 
- *              (a) the precedence level of the rule if the rule is left-associative; or 
- *              (b) the precedence level plus one if it is right-associative or non-associative, or
- *                  the first rule in the current group starting from the top.
- *          - for right recursive rules, symbols on the right should pass as the 2nd argument either
- *              (a) the precedence level of the rule if the rule is left-associative; or
- *              (b) the precedence level of the rule if it is right-associative, or
- *                  the first rule in the current group starting from the top.
- *          - The 2nd argument to left recursive symbols or the 1st argument to right recursive symbols
- *            is defined as follows:
- *            (a) the precedence level is propagated if there are rules with lower precedence that
- *                can be affected (this is to account for deep cases), i.e.,
- *                l if right, or left and right associative rules are below, otherwise 0
- *                r if left, or left and right associative rules are below, otherwise 0
- *      - Conditions are added to the rules as follows:
- *          (a) if left recursive, the precedence level (or the highest in the current group of rules) >= r
- *          (b) if right recursive, the precedence level (or the highest in the current group of rules) >= l
- *          (c) if the rule is part of a group but not the 1st in the group:
- *                - if left associative, the precedence level != r
- *                - if right associative, the precedence level != l
- *          (d) if the rule is part of a group which is a left associative with respect to each other,
- *                - if left associative, { the precedence level of a rule in the group != r}
- *                  (the lowest precedence level minus 1???)
- *                - if right associative, { the precedence level of a rule in the group != l}
- *                  (the lowest precedence level minus 1???)
- *        
  */
 
 public class DesugarPrecedenceAndAssociativity implements GrammarTransformation {
 	
-	private Set<String> leftOrRightRecursiveNonterminals; // operator precedence and associativity
+	private Set<String> leftOrRightRecursiveNonterminals; // when operator precedence and associativity applies
 	
 	private Map<String, Map<String, Integer>> headsWithLabeledRules; // excepts
 	
-	private OP config_op = OP._2;
+	private enum OP { _1, _2 }
+	
+	private OP config_op = OP._1;
+	
+	private class Configuration {
+		
+		// Of associativity groups, rules that specify an associativity different from the group 
+		public Map<Integer, Set<Integer>> left_assoc_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> right_assoc_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> non_assoc_rules = new HashMap<>();
+		
+		// Does not include associativity groups inside groups of rules with the same precedence level
+		public Map<Integer, Set<Integer>> binary_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> prefix_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> postfix_rules = new HashMap<>();
+		
+		public Map<Integer, Set<Integer>> ibinary_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> iprefix_rules = new HashMap<>();
+		public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
+		
+		public Set<String> leftEnds = new HashSet<>();
+		public Set<String> rightEnds = new HashSet<>();
+		
+		public Set<String> precLeftEnds = new HashSet<>();
+		public Set<String> precRightEnds = new HashSet<>();
+		
+		public List<String> precEnds = new ArrayList<>();
+		
+		// Encoding: 2 is 2 & 1; 3 is 1 & 2; 4 is 2 & 2 (l-value & p-arg)
+		public Map<Integer, Integer> groups = new HashMap<>();
+		
+		int larity = 1;
+		int parity = 1;
+		
+		public void arity() {
+			Collection<Integer> values = groups.values();
+			if (values.contains(2) || values.contains(4))
+				larity = 2;
+			if (values.contains(3) || values.contains(4)) 
+				parity = 2;
+		}
+	}
+	
+	private Map<String, Configuration> configs;
 	
 	public void setOP1() {
 		config_op = OP._1;
@@ -131,17 +145,199 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		leftOrRightRecursiveNonterminals = new HashSet<>();
 		headsWithLabeledRules = new HashMap<>();
 		
+		configs = new HashMap<>();
 		
-		for (Rule rule: grammar.getRules()) {
+		for (Rule rule : grammar.getRules()) {
+			
+			Configuration config = configs.get(rule.getHead().getName());
+			
+			if (config == null) {
+				config = new Configuration();
+				configs.put(rule.getHead().getName(), config);
+			}
+			
+			config.leftEnds = rule.getLeftEnds();
+			config.rightEnds = rule.getRightEnds();
+		}
+		
+		for (Rule rule : grammar.getRules()) {
 			Nonterminal head = rule.getHead();
-			// 1.
+			// 1. Precedence
 			if (rule.getPrecedenceLevel().getRhs() != 1 || 
 					(rule.getPrecedence() == 1 && rule.getAssociativity() != Associativity.UNDEFINED))
 				leftOrRightRecursiveNonterminals.add(head.getName());
-			// else: all the rules have a precedence -1 (non-recursive) or 1, and
+			// else: all the rules have a precedence -1 (non-recursive), or 1 and
 			// undefined associativity; therefore, precedence does not apply
 			
-			// 2.
+			// Decision of the arity of a p-argument and l-value (only for the alternative scheme)
+			Configuration config = configs.get(head.getName());
+			AssociativityGroup assoc_group = rule.getAssociativityGroup();
+			PrecedenceLevel prec_level = rule.getPrecedenceLevel();
+			
+			boolean isBinary = rule.isLeftRecursive() && rule.isRightRecursive();
+			boolean isPrefix = !(rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isRightRecursive();
+			boolean isPostfix = rule.isLeftRecursive() && !(rule.isRightRecursive() || rule.isIRightRecursive());
+			
+			boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
+									|| (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
+			
+			boolean canBePrefix = false;
+			boolean canBePostfix = false;
+			
+			if (rule.isLeftRecursive() && rule.isIRightRecursive()) {
+				Set<String> ends = configs.get(rule.getRightEnd()).rightEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePostfix = true;
+						break;
+					}
+				}
+			}
+			
+			if (rule.isILeftRecursive() && rule.isRightRecursive()) {
+				Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePrefix = true;
+						break;
+					}
+				}
+			}
+			
+			if (rule.isILeftRecursive() && !rule.isRightRecursive() && !rule.isIRightRecursive())
+				canBePostfix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isILeftRecursive() && rule.isIRightRecursive())
+				canBePrefix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isLeftRecursive() && rule.isILeftRecursive() && rule.isIRightRecursive()) {
+				Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePrefix = true;
+						break;
+					}
+				}
+				
+				ends = configs.get(rule.getRightEnd()).rightEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePostfix = true;
+						break;
+					}
+				}
+			}
+			
+			if (isBinary) {
+				Set<Integer> rules = config.binary_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.binary_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (isPrefix) {
+				Set<Integer> rules = config.prefix_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.prefix_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (isPostfix) {
+				Set<Integer> rules = config.postfix_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.postfix_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (canBeBinary) {
+				Set<Integer> rules = config.ibinary_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.ibinary_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (canBePrefix) {
+				Set<Integer> rules = config.iprefix_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.prefix_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (canBePostfix) {
+				Set<Integer> rules = config.ipostfix_rules.get(prec_level.getLhs());
+				if (rules == null) {
+					rules = new HashSet<>();
+					config.postfix_rules.put(prec_level.getLhs(), rules);
+				}
+				rules.add(rule.getPrecedence());
+			}
+			
+			if (assoc_group != null) {
+				// Inside an associativity group
+				
+				Associativity assoc = rule.getAssociativity();
+				
+				if (assoc != assoc_group.getAssociativity() || assoc != Associativity.UNDEFINED) {
+					// Rules in an associativity group that override the associativity
+					Set<Integer> rules = null;
+					
+					switch(assoc) {
+						case LEFT: 
+							rules = config.left_assoc_rules.get(assoc_group.getLhs());
+							if (rules == null) {
+								rules = new HashSet<>();
+								config.left_assoc_rules.put(assoc_group.getLhs(), rules);
+							}
+							rules.add(rule.getPrecedence());
+							break;
+						case RIGHT:
+							rules = config.right_assoc_rules.get(assoc_group.getLhs());
+							if (rules == null) {
+								rules = new HashSet<>();
+								config.right_assoc_rules.put(assoc_group.getLhs(), rules);
+							}
+							rules.add(rule.getPrecedence());
+							break;
+						case NON_ASSOC:
+							rules = config.non_assoc_rules.get(assoc_group.getLhs());
+							if (rules == null) {
+								rules = new HashSet<>();
+								config.non_assoc_rules.put(assoc_group.getLhs(), rules);
+							}
+							rules.add(rule.getPrecedence());
+							break;
+						default:
+					}
+				}
+				
+				boolean climbing = prec_level.getLhs() == assoc_group.getLhs() && prec_level.getRhs() == assoc_group.getRhs();
+				
+				if (climbing) {				
+					if (isBinary && rule.getPrecedence() != assoc_group.getPrecedence())
+						config.groups.put(assoc_group.getLhs(), 4);
+					if (canBeBinary && rule.getPrecedence() != assoc_group.getPrecedence())
+						config.groups.put(assoc_group.getLhs(), 4);
+				} else
+					config.groups.put(prec_level.getLhs(), 4);
+			} 
+			
+			if (assoc_group == null) {
+				if (prec_level.getLhs() != prec_level.getRhs() && (canBeBinary || canBePrefix || canBePostfix)
+						&& rule.getAssociativity() != Associativity.UNDEFINED)
+					config.groups.put(prec_level.getLhs(), 4);
+			}
+			
+			// 2. Excepts
 			if (rule.getLabel() != null) {
 				Map<String, Integer> labels = headsWithLabeledRules.get(head.getName());
 				if (labels != null) {
@@ -155,6 +351,228 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
+		if (config_op == OP._2) {
+			Set<String> nonterminals = new HashSet<>();
+			nonterminals.addAll(leftOrRightRecursiveNonterminals);
+			
+			boolean changed = true;
+			while(changed) {
+				changed = false;
+				int size = nonterminals.size();
+				Set<String> delta = new HashSet<>();
+				for (String nt : nonterminals) {
+					Configuration config = configs.get(nt);
+					if (config != null) {
+						delta.addAll(config.leftEnds);
+						delta.addAll(config.rightEnds);
+					}
+				}
+				nonterminals.addAll(delta);
+				if (nonterminals.size() != size)
+					changed = true;
+			}
+			
+			for (String head : configs.keySet()) {
+				if (!nonterminals.contains(head)) {
+					Configuration config = configs.get(head);
+					config.leftEnds = new HashSet<>();
+					config.rightEnds = new HashSet<>();
+				}
+			}
+		}
+		
+		for (Rule rule: grammar.getRules()) {
+			
+			if (config_op == OP._1) break;
+			
+			Configuration config = configs.get(rule.getHead().getName());
+			AssociativityGroup assoc_group = rule.getAssociativityGroup();
+			PrecedenceLevel prec_level = rule.getPrecedenceLevel();
+			
+			Integer arity = config.groups.get(prec_level.getLhs());
+			
+			if (assoc_group != null) {
+				
+				boolean climbing = prec_level.getLhs() == assoc_group.getLhs() && prec_level.getRhs() == assoc_group.getRhs();
+				
+				if (climbing) {
+					
+					if (arity == null || arity != 4) {
+						
+						boolean hasBinary = config.binary_rules.get(prec_level.getLhs()) != null;
+						boolean hasPrefix = config.prefix_rules.get(prec_level.getLhs()) != null;
+						boolean hasPostfix = config.postfix_rules.get(prec_level.getLhs()) != null;
+						
+						boolean canHaveBinary = config.ibinary_rules.get(prec_level.getLhs()) != null;
+						boolean canHavePrefix = config.iprefix_rules.get(prec_level.getLhs()) != null;
+						boolean canHavePostfix = config.ipostfix_rules.get(prec_level.getLhs()) != null;
+						
+						if (((hasBinary || canHaveBinary) && (hasPrefix || hasPostfix || canHavePrefix || canHavePostfix)) 
+								|| ((hasPrefix || canHavePrefix) && (hasPostfix || canHavePostfix))) {
+							Associativity assoc = assoc_group.getAssociativity();
+							
+							if ((assoc == Associativity.LEFT || assoc == Associativity.NON_ASSOC) && (hasPostfix || canHavePostfix)) {
+								for (int group : config.binary_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 3)
+											config.groups.put(prec_level.getLhs(), 3);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								for (int group : config.postfix_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 3)
+											config.groups.put(prec_level.getLhs(), 3);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								
+								for (int group : config.ibinary_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 3)
+											config.groups.put(prec_level.getLhs(), 3);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								for (int group : config.ipostfix_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 3)
+											config.groups.put(prec_level.getLhs(), 3);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+							}
+							if ((assoc == Associativity.RIGHT || assoc == Associativity.NON_ASSOC) && (hasPrefix || canHavePostfix)) {
+								for (int group : config.binary_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 2)
+											config.groups.put(prec_level.getLhs(), 2);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								for (int group : config.postfix_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 2)
+											config.groups.put(prec_level.getLhs(), 2);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								
+								for (int group : config.ibinary_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 2)
+											config.groups.put(prec_level.getLhs(), 2);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+								for (int group : config.ipostfix_rules.keySet()) {
+									if (group > rule.getPrecedence()) {
+										if (arity == null || arity == 2)
+											config.groups.put(prec_level.getLhs(), 2);
+										else
+											config.groups.put(prec_level.getLhs(), 4);
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				
+				if (arity == null || arity != 4) {
+					
+					boolean isBinary = rule.isLeftRecursive() && rule.isRightRecursive();
+					boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
+											|| (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
+					
+					Set<Integer> binary_rules = config.binary_rules.get(prec_level.getLhs());
+					Set<Integer> prefix_rules = config.prefix_rules.get(prec_level.getLhs());
+					Set<Integer> postfix_rules = config.postfix_rules.get(prec_level.getLhs());
+					
+					Set<Integer> ibinary_rules = config.ibinary_rules.get(prec_level.getLhs());
+					Set<Integer> iprefix_rules = config.iprefix_rules.get(prec_level.getLhs());
+					Set<Integer> ipostfix_rules = config.ipostfix_rules.get(prec_level.getLhs());
+					
+					int left_rec =   (binary_rules  == null ? 0 : binary_rules.size())
+								   + (postfix_rules == null ? 0 : postfix_rules.size());
+					
+					int right_rec =   (binary_rules == null ? 0 : binary_rules.size())
+									+ (prefix_rules == null ? 0 : prefix_rules.size());
+					
+					int ileft_rec =   (ibinary_rules  == null ? 0 : ibinary_rules.size())
+									+ (ipostfix_rules == null ? 0 : ipostfix_rules.size());
+			
+					int iright_rec =  (ibinary_rules == null ? 0 : ibinary_rules.size())
+							 		+ (iprefix_rules == null ? 0 : iprefix_rules.size());
+					
+					if (rule.getAssociativity() != Associativity.UNDEFINED) {
+						
+						if(isBinary && (rule.getAssociativity() == Associativity.LEFT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
+							if (left_rec + ileft_rec >= 2) {
+								Integer n = config.groups.get(prec_level.getLhs());
+								if (n == null)
+									config.groups.put(prec_level.getLhs(), 3);
+								else if (n != 3)
+									config.groups.put(prec_level.getLhs(), 4);
+							}	
+						}
+						
+						if(isBinary && (rule.getAssociativity() == Associativity.RIGHT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
+							if (right_rec + iright_rec >= 2) {
+								Integer n = config.groups.get(prec_level.getLhs());
+								if (n == null)
+									config.groups.put(prec_level.getLhs(), 2);
+								else if (n != 2)
+									config.groups.put(prec_level.getLhs(), 4);
+							}
+								
+						}
+						
+						if (!(isBinary || canBeBinary) && rule.isRightRecursive() && rule.getAssociativity() == Associativity.NON_ASSOC) {
+							if (left_rec + ileft_rec >= 1) {
+								Integer n = config.groups.get(prec_level.getLhs());
+								if (n == null)
+									config.groups.put(prec_level.getLhs(), 3);
+								else if (n != 3)
+									config.groups.put(prec_level.getLhs(), 4);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (config_op == OP._2) {
+			for (String head : configs.keySet()) {
+				
+				Configuration config = configs.get(head);
+				
+				config.arity();
+				
+				for (String end : config.leftEnds) {
+					if (leftOrRightRecursiveNonterminals.contains(end)) {
+						config.precLeftEnds.add(end);
+						config.precEnds.add(end);
+					}
+				}
+				for (String end : config.rightEnds) {
+					if (leftOrRightRecursiveNonterminals.contains(end)) {
+						config.precRightEnds.add(end);
+						if (!config.precEnds.contains(end))
+							config.precEnds.add(end);
+					}
+				}
+			}
+			
+		}
+		
 		Set<Rule> rules = new LinkedHashSet<>();
 		for (Rule rule :grammar.getRules())
 			rules.add(transform(rule));
@@ -163,11 +581,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	}
 	
 	public Rule transform(Rule rule) {
-		return new Visitor(rule, leftOrRightRecursiveNonterminals, headsWithLabeledRules, config_op).transform();
-	}
-	
-	private enum OP {
-		_1, _2
+		return new Visitor(rule, leftOrRightRecursiveNonterminals, headsWithLabeledRules, configs, config_op).transform();
 	}
 
 	private static class Visitor implements ISymbolVisitor<Symbol> {
@@ -191,36 +605,98 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		private final OP config_op;
 		
-		// Variables of the alternative scheme
-		private Expression larg = var("p");
-		private Expression rarg = integer(0);
+		/*
+		 *  Variables of the alternative scheme
+		 */
+		
+		// Priority and associativity related:
+		private final Map<String, Configuration> configs;
+		private final Configuration config;
+		private int larity = 1;
+		private int parity = 1;
+		
+		private Expression larg = null;
+		private Expression rarg = null;
+		
 		private Expression lcond = null;
 		private Expression rcond = null;
 		private Expression ret = null;
 		
-		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, OP config_op) {
+		// ! related:
+		private Expression xlcond = null;
+		private Expression xrcond = null;
+		private Expression xret = null;
+		
+		private Expression[] lret;
+		private Expression[] rret;
+		
+		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, 
+					   Map<String, Configuration> configs, OP config_op) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
 			this.headsWithLabeledRules = headsWithLabeledRules;
-			this.config_op = config_op;
+			this.configs = configs;
+			this.config = configs.get(rule.getHead().getName());
+			this.larity = config.larity;
+			this.parity = config.parity;
 			
-			excepts();
+			int n = config.precEnds.size();
+			lret = new Expression[n];
+			rret = new Expression[n];
+			
+			for (int i = 0; i < n; i++) {
+				lret[i] = undef();
+				rret[i] = undef();
+			}
+				
+			this.config_op = config_op;
 			switch(config_op) {
-				case _1: precedence1(); break;
-				case _2: precedence2(); break;
+				case _1: excepts1(); precedence1(); break;
+				case _2: excepts2(); precedence2(); break;
 			}
 		}
 		
-		private void excepts() {
+		private void excepts1() {
 			if (rule.getLabel() != null) {
-				preconditions = new HashSet<>();
-				
+				preconditions = new HashSet<>();	
 				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
 				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
 			}
 		}
 		
-		private void precedence1() { // Precedence and associativity
+		private void excepts2() {
+			Map<String, Integer> labels = headsWithLabeledRules.get(rule.getHead().getName());
+			
+			if (labels == null) return;
+			
+			if (rule.getLabel() != null) {
+				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
+				xrcond = lShiftANDEqZero(var("_not"), integer(l));
+				xret = integer(l);
+			} else 
+				xret = integer(-1);
+			
+			if (rule.isLeftRecursive()) {
+				Nonterminal nonterminal = (Nonterminal) rule.getBody().get(0);
+				if (nonterminal.getExcepts() != null) {
+					int n = 0;
+					for (String except : nonterminal.getExcepts()) {
+						Integer i = labels.get(except);
+							
+						if (i == null)
+							throw new RuntimeException("Undeclared label: " + except);
+							
+						n += 1 << i;
+					}
+					
+					if (!leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
+						xlcond = or(equal(var("l"), integer(-1)), lShiftANDEqZero(integer(n), var("l")));
+					else xlcond = or(equal(get(var("l"),integer(1)), integer(-1)), lShiftANDEqZero(integer(n), get(var("l"),integer(1))));
+				}
+			}
+		}
+		
+		private void precedence1() { // Priority and associativity
 			if (rule.getPrecedence() == -1)
 				return; // Precedence does not apply
 						
@@ -466,13 +942,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
-		private void precedence2() { // Precedence and associativity
+		private void precedence2() { // Priority and associativity
 						
 			if (!leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
 				return; // Precedence does not apply
 			
 			if (rule.getPrecedence() == -1) {
-				ret = integer(0);
+				if (this.larity == 1) 
+					ret = integer(0);
+				else
+					ret = tuple(integer(0), integer(0));		
 				return; // Precedence does not apply
 			}
 				
@@ -485,213 +964,936 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			int undefined = prec_level.getUndefined();
 			boolean first = undefined == 0;
 			
-			// 1. Expressions for the left and/or right recursive uses
-			if (assoc_group != null && prec_level.getLhs() == assoc_group.getLhs() 
-									&& prec_level.getRhs() == assoc_group.getRhs()) {
-							
-				if (prec == assoc_group.getPrecedence()) { // Can climb
-					switch(assoc_group.getAssociativity()) {
-						case LEFT:
-							if (rule.isLeftRecursive())
-								lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
-							rarg = integer(prec_level.getRhs() + 1); 
-							break;
-						case RIGHT:
-							if (rule.isLeftRecursive())
-								lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getRhs() + 1)));
-							rarg = integer(first? 0 : prec); 
-							break;
-						case NON_ASSOC:
-							if (rule.isLeftRecursive())
-								lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getRhs() + 1)));
-							rarg = integer(prec_level.getRhs() + 1); 
-							break;
-						default: throw new RuntimeException("Unexpected associativity: " + assoc_group.getAssociativity());
-					}	
-				} else {
-					if (rule.isLeftRecursive())
-						lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
-					rarg = integer(prec);
-				}
-				
-				if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
-					if (assoc_group.getLhs() != assoc_group.getRhs())
-						ret = condition(prec, prec_level.getLhs(), prec_level.getRhs());
-					else 
-						ret = minimum(prec);
-				else if (rule.isRightRecursive())
-					ret = integer(prec);
-				else ret = integer(0);
+			boolean labeled = headsWithLabeledRules.containsKey(rule.getHead().getName());
 			
-			} else if (assoc_group == null && prec_level.getLhs() == prec_level.getRhs()) { // Can climb
-				switch(assoc) {
-					case LEFT:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec)));
-						rarg = integer(prec + 1); 
+			// Either prec or (prec,assoc)
+			Expression lprec = null;
+			Expression lassoc = null;
+			Expression rprec = null;
+			Expression pprec = null;
+			Expression passoc = null;
+			
+			if (labeled && larity == 2) { 
+				lprec = get(get(var("l"), integer(0)), integer(0));  // l.0.0
+				lassoc = get(get(var("l"), integer(0)), integer(1)); // l.0.1
+				rprec = get(get(var("r"), integer(0)), integer(0));  // r.0.0
+			} else if (labeled && larity != 2) {
+				lprec = get(var("l"), integer(0));  // l.0
+				lassoc = get(var("l"), integer(0)); // l.0
+				rprec = get(var("r"), integer(0));  // l.0
+			} else if (!labeled && larity == 2) {
+				lprec = get(var("l"), integer(0));  // l.0
+				lassoc = get(var("l"), integer(1)); // l.1
+				rprec = get(var("r"), integer(0));  // l.0
+			} else {
+				lprec = var("l");
+				lassoc = var("l");
+				rprec = var("r");
+			}
+			
+			if (parity == 2) { 
+				pprec = get(var("p"), integer(0));  // p.0
+				passoc = get(var("p"), integer(1)); // p.1
+			} else {
+				pprec = var("p");  // p
+				passoc = var("p"); // p
+			}
+			
+			if (parity == 2)
+				larg = tuple(pprec, integer(0));
+			else 
+				larg = pprec;
+			
+			@SuppressWarnings("unused")
+			boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
+									|| (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
+
+			boolean canBePrefix = false;
+			boolean canBePostfix = false;
+
+			if (rule.isLeftRecursive() && rule.isIRightRecursive()) {
+				Set<String> ends = configs.get(rule.getRightEnd()).rightEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePostfix = true;
 						break;
-					case RIGHT:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec + 1)));
-						rarg = integer(first? 0 : prec); 
-						break;
-					case NON_ASSOC:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec + 1)));
-						rarg = integer(prec + 1); 
-						break;
-					case UNDEFINED:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec)));
-						rarg = integer(first? 0 : prec); 
-						break;
-					default: throw new RuntimeException("Unexpected associativity: " + assoc);
-				}
-				if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
-					ret = minimum(prec);
-				else if (rule.isRightRecursive())
-					ret = integer(prec);
-				else ret = integer(0);
-					
-				
-			} else { // Cannot climb
-				boolean useUndefined = undefined != -1 && (assoc_group == null || (assoc_group != null && assoc_group.getPrecedence() == prec));
-				int lhs = prec_level.getLhs();
-				int rhs = prec_level.getRhs();
-				boolean useCondition = lhs != rhs;
-							
-				switch((assoc_group != null && assoc == Associativity.UNDEFINED)?
-							assoc_group.getAssociativity() : assoc) {
-					case LEFT:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
-						rarg = integer(prec);
-						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
-							ret = useCondition? condition(useUndefined? undefined : prec, lhs, rhs) : minimum(useUndefined? undefined : prec);
-						else if (rule.isRightRecursive())
-							ret = integer(useUndefined? undefined : prec);
-						else ret = integer(0);
-						break;
-					case RIGHT:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
-						rarg = integer(useUndefined? undefined : prec); 
-						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
-							ret = useCondition? condition(prec, lhs, rhs) : minimum(prec);
-						else if (rule.isRightRecursive())
-							ret = integer(prec);
-						else ret = integer(0);
-						break;
-					case NON_ASSOC:
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
-						rarg = integer(prec);
-						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
-							ret = useCondition? condition(prec, lhs, rhs) : minimum(prec);
-						else if (rule.isRightRecursive())
-							ret = integer(prec);
-						else ret = integer(0);
-						break;
-					case UNDEFINED: // Not in the associativity group
-						if (rule.isLeftRecursive())
-							lcond = or(equal(var("l"), integer(0)), greaterEq(var("l"), integer(prec_level.getLhs())));
-						rarg = integer(undefined); 
-						if (prec_level.hasPrefixUnaryBelow() && rule.isRightRecursive())
-							ret = useCondition? condition(undefined, lhs, rhs) : minimum(undefined);
-						else if (rule.isRightRecursive())
-							ret = integer(undefined);
-						else ret = integer(0);
-						break;
-					default: throw new RuntimeException("Unexpected associativity: " + assoc);
+					}
 				}
 			}
 			
-			// 2. Constraints (preconditions) for the grammar rule			
-			if (rule.isLeftRecursive())
-				rcond = greaterEq(integer(prec_level.getRhs()), var("p"));
+			if (rule.isILeftRecursive() && rule.isRightRecursive()) {
+			Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePrefix = true;
+						break;
+					}
+				}
+			}
 			
-			if (prec_level.getLhs() != prec_level.getRhs()) {	
-				if (assoc_group != null) {
+			if (rule.isILeftRecursive() && !rule.isRightRecursive() && !rule.isIRightRecursive())
+				canBePostfix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isILeftRecursive() && rule.isIRightRecursive())
+				canBePrefix = true;
+			
+			if (!rule.isLeftRecursive() && !rule.isLeftRecursive() && rule.isILeftRecursive() && rule.isIRightRecursive()) {
+				Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePrefix = true;
+						break;
+					}
+				}
+			
+				ends = configs.get(rule.getRightEnd()).rightEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePostfix = true;
+						break;
+					}
+				}
+			}
+			
+			// 1. Expressions for the left and/or right recursive uses
+			if (assoc_group != null) {
+				
+				if (rule.isILeftRecursive() || rule.isIRightRecursive())
+					throw new RuntimeException("Not yet implemented: indirect recursion inside an associativity group");
+				
+				// Local to an associativity group
+				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
+				int larity = (arity == 2 || arity == 4)? 2 : 1;
+				int parity = (arity == 3 || arity == 4)? 2 : 1;
+				
+				if (assoc_group.getLhs() == prec_level.getLhs() && assoc_group.getRhs() == prec_level.getRhs())
+					undefined = assoc_group.getPrecedence();
+				
+				// ***Climbing condition now: larity == 1 || parity == 1
+				
+				Expression negative = lessEq(lprec, integer(0));
 					
-					boolean climbing = assoc_group.getLhs() == prec_level.getLhs() && assoc_group.getRhs() == prec_level.getRhs();
-					
-					switch(assoc_group.getAssociativity()) {
-						case LEFT:
-							if (rule.isLeftRecursive()) {
-								if (!climbing)
-									rcond = and(rcond, notEqual(integer(assoc_group.getPrecedence()), var("p")));
-								
-								if (!assoc_group.getAssocMap().isEmpty())
-									for (Map.Entry<Integer, Associativity> entry : assoc_group.getAssocMap().entrySet())
-										if (prec != entry.getKey())
-											rcond = and(rcond, notEqual(integer(entry.getKey()), var("p")));
-							}
-							break;						
-						case RIGHT:
-							if (rule.isRightRecursive()) {
-								if (!climbing)
-									lcond = and(lcond, notEqual(integer(assoc_group.getPrecedence()), var("l")));
-								
-								if (!assoc_group.getAssocMap().isEmpty())
-									for (Map.Entry<Integer, Associativity> entry : assoc_group.getAssocMap().entrySet())
-										if (prec != entry.getKey() && !(climbing && entry.getKey() == assoc_group.getPrecedence()))
-											lcond = and(lcond, notEqual(integer(entry.getKey()), var("l")));
-							}
-							break;
-						case NON_ASSOC:
-							if (!climbing)
-								rcond = and(rcond, notEqual(integer(assoc_group.getPrecedence()), var("p")));
-							if (!climbing)
-								lcond = and(lcond, notEqual(integer(assoc_group.getPrecedence()), var("l")));
+				switch(assoc_group.getAssociativity()) {
+				
+					case LEFT: // restricts right end
+						
+						if (rule.isLeftRecursive())
+							lcond = or(negative, greaterEq(lprec, integer(prec_level.getLhs())));
+						
+						if (rule.isLeftRecursive()) {
 							
-							if (!assoc_group.getAssocMap().isEmpty()) {
-								for (Map.Entry<Integer, Associativity> entry : assoc_group.getAssocMap().entrySet()) {
-									if (prec != entry.getKey() && !(climbing && entry.getKey() == assoc_group.getPrecedence())) {
-										rcond = and(rcond, notEqual(integer(entry.getKey()), var("p")));
-										lcond = and(lcond, notEqual(integer(entry.getKey()), var("l")));
-									}
+							rcond = greaterEq(integer(prec_level.getRhs()), pprec);
+							
+							if (parity == 1) {	
+								Set<Integer> prefix_rules = config.prefix_rules.get(prec_level.getLhs());
+								Set<Integer> non_assoc_rules = config.non_assoc_rules.get(prec_level.getLhs());
+								
+								if (prefix_rules != null && non_assoc_rules != null) {
+									for (int p : prefix_rules)
+										if (non_assoc_rules.contains(p))
+											rcond = and(rcond, not(equal(pprec, integer(p))));
+								}
+							} 
+							
+							if (parity == 2) {
+								if (rule.getAssociativity() == Associativity.RIGHT)
+									rcond = and(rcond, or(equal(passoc, integer(prec)), 
+												          not(and(greaterEq(integer(assoc_group.getRhs()), passoc),
+														          greaterEq(passoc, integer(assoc_group.getLhs()))))));
+								else
+									rcond = and(rcond, not(and(greaterEq(integer(assoc_group.getRhs()), passoc),
+														       greaterEq(passoc, integer(assoc_group.getLhs())))));
+							}
+						}
+						
+						if (parity == 2) {
+							rarg = tuple(integer(prec_level.getRhs()), integer(prec)); // as constrained right end
+						} else {
+							if (this.parity == 2)
+								rarg = tuple(integer(prec_level.getRhs() + 1), integer(0));
+							else
+								rarg = integer(prec_level.getRhs() + 1);
+						}
+						
+						if (rule.isRightRecursive()) {
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (larity == 2)
+									ret = tuple(minimum(prec_level.getLhs(), rprec), integer(0)); // as unconstrained left end
+								else {
+									if (this.larity == 2)
+										ret = tuple(minimum(undefined != -1? undefined : prec, rprec), integer(0)); // as unconstrained left end
+									else
+										ret = minimum(undefined != -1? undefined : prec, rprec); // as unconstrained left end
+								}
+							} else {
+								if (larity == 2)
+									ret = tuple(integer(prec_level.getLhs()), integer(0));
+								else {
+									if (this.larity == 2)
+										ret = tuple(integer(undefined != -1? undefined : prec), integer(0));
+									else
+										ret = integer(undefined != -1? undefined : prec);
 								}
 							}
-							break;
-						default: throw new RuntimeException("Unexpected associativity: " + assoc_group.getAssociativity());
+						} else { 
+							if (this.larity == 2)
+								ret = tuple(integer(0), integer(0));
+							else
+								ret = integer(0);
+						}
+							
+						if (prec != assoc_group.getPrecedence()) {
+							
+							switch(rule.getAssociativity()) {
+							
+								case NON_ASSOC:
+									if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+										
+										if (larity == 2)
+											lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))), 
+													    notEqual(lassoc, integer(prec)));
+										else
+											lcond = or(negative, and(notEqual(lprec, integer(prec)), 
+																	 greaterEq(lprec, integer(prec_level.getLhs()))));
+										if (parity == 2)
+											rarg = tuple(integer(prec_level.getRhs()), 
+													     integer(assoc_group.getPrecedence() != -1? assoc_group.getPrecedence() : prec)); // as constrained right end
+										
+										if (prec_level.hasPrefixUnaryBelow()) {
+											if (larity == 2)
+												ret = tuple(minimum(prec_level.getLhs(), rprec), integer(prec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(minimum(prec, rprec), integer(0));
+												else
+													ret = minimum(prec, rprec);
+											}
+										} else {
+											if (larity == 2)
+												ret = tuple(integer(prec_level.getLhs()), integer(prec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(integer(prec), integer(0));
+												else
+													ret = integer(prec);
+											}
+										}
+										
+									} else if (rule.isLeftRecursive()) {
+										
+										if (larity == 2) {
+											lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))),
+                                                        notEqual(lassoc, neg(integer(prec))));
+											ret = tuple(integer(0), neg(integer(prec)));
+										} else {
+											lcond = or(and(negative, notEqual(lprec, neg(integer(prec)))),
+													   greaterEq(lprec, integer(prec_level.getLhs())));
+											if (this.larity == 2)
+												ret = tuple(neg(integer(prec)), integer(0));
+											else
+												ret = neg(integer(prec));
+										}
+										
+									} else {
+										if (parity == 1) {
+											if (this.parity == 2)
+												rarg = tuple(integer(prec), integer(0));
+											else
+												rarg = integer(prec);
+										}
+										
+										rcond = notEqual(parity == 2? passoc : pprec, integer(prec));
+									}
+									break;
+								case RIGHT: // larity == 2
+									if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+										
+										lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))), 
+													notEqual(lassoc, integer(prec)));
+										
+										if (prec_level.hasPrefixUnaryBelow()) {
+											if (larity == 2)
+												ret = tuple(minimum(prec_level.getLhs(), rprec), integer(prec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(minimum(prec, rprec), integer(0));
+												else
+													ret = minimum(prec, rprec);
+											}
+										} else {
+											if (larity == 2)
+												ret = tuple(integer(prec_level.getLhs()), integer(prec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(integer(prec), integer(0));
+												else
+													ret = integer(prec);
+											}
+										}
+									}
+									break;
+								default: break;
+							}
+						}
+						
+						break;
+						
+					case RIGHT: // restricts left end
+						
+						if (rule.isLeftRecursive()) {
+							
+							if (larity == 2) {
+								if (rule.getAssociativity() == Associativity.LEFT) {
+									lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))),
+											    or(lessEq(lassoc, integer(0)), 
+											       or(equal(lassoc, integer(prec)), 
+													  not(and(greaterEq(integer(assoc_group.getRhs()), lassoc),
+															  greaterEq(lassoc, integer(assoc_group.getLhs())))))));
+								} else
+									lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))),
+										        or(lessEq(lassoc, integer(0)), 
+												   not(and(greaterEq(integer(assoc_group.getRhs()), lassoc),
+														   greaterEq(lassoc, integer(assoc_group.getLhs()))))));
+							} else
+								lcond = or(negative, greaterEq(lprec, integer(prec_level.getRhs() + 1)));
+						}
+						
+						if (rule.isLeftRecursive())
+							rcond = greaterEq(integer(prec_level.getRhs()), pprec);
+						
+						if (parity == 2)
+							rarg = tuple(integer(prec_level.getRhs()), integer(0)); // as right end is unconstrained
+						else {
+							if (this.parity == 2)
+								rarg = tuple(integer(undefined != -1? undefined : prec), integer(0)); // as right end is unconstrained
+							else
+								rarg = integer(undefined != -1? undefined : prec); // as right end is unconstrained
+						}
+						
+						if (rule.isRightRecursive()) {
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (larity == 2)
+									ret = tuple(minimum(prec_level.getLhs(), rprec), integer(prec)); // as constrained left end
+								else {
+									if (this.larity == 2)
+										ret = tuple(minimum(prec, rprec), integer(0)); // as constrained left end
+									else
+										ret = minimum(prec, rprec); // as constrained left end
+								}
+							} else {
+								if (larity == 2)
+									ret = tuple(integer(prec_level.getLhs()), integer(prec));
+								else {
+									if (this.larity == 2)
+										ret = tuple(integer(prec), integer(0));
+									else
+										integer(prec);
+								}
+							}
+							
+						} else {
+							if (parity == 2)
+								ret = tuple(integer(0), integer(0));
+							else
+								ret = integer(0);
+						}
+						
+						if (prec != assoc_group.getPrecedence()) {
+							
+							switch(rule.getAssociativity()) {
+							
+								case NON_ASSOC:
+									if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+										
+										if (parity == 2) {
+											rarg = tuple(integer(prec_level.getRhs()), integer(prec));
+										} else {
+											if (this.parity == 2)
+												rarg = tuple(integer(prec), integer(0));
+											else
+												rarg = integer(prec);
+										}
+										
+										rcond = and(greaterEq(integer(prec_level.getRhs()), pprec), 
+													not(equal(parity == 2? passoc : pprec, integer(prec))));
+										
+										int newprec = assoc_group.getPrecedence() != -1? assoc_group.getPrecedence() : prec;
+										if (prec_level.hasPrefixUnaryBelow()) {
+											if (larity == 2)
+												ret = tuple(minimum(prec_level.getLhs(), rprec), integer(newprec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(minimum(newprec, rprec), integer(0));
+												else
+													ret = minimum(newprec, rprec);
+											}
+										} else {
+											if (larity == 2)
+												ret = tuple(integer(prec_level.getLhs()), integer(newprec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(integer(newprec), integer(0));
+												else
+													integer(newprec);
+											}
+										}
+										
+									} else if (rule.isLeftRecursive()) {
+										
+										if (larity == 2) {
+											lcond = and(or(negative, greaterEq(lprec, integer(prec_level.getLhs()))),
+									                    or(and(lessEq(lassoc, integer(0)), notEqual(lassoc, neg(integer(prec)))), 
+											               and(greater(lassoc, integer(0)),
+											            	   not(and(greaterEq(integer(assoc_group.getRhs()), lassoc),
+													                   greaterEq(lassoc, integer(assoc_group.getLhs())))))));
+											
+											ret = tuple(integer(0), neg(integer(prec)));
+										} else {
+											lcond = or(and(negative, notEqual(lprec, neg(integer(prec)))),
+													   greaterEq(lprec, integer(prec_level.getRhs() + 1)));
+											if (this.larity == 2)
+												ret = tuple(neg(integer(prec)), integer(0));
+											else
+												ret = neg(integer(prec));
+										}
+										
+									} else {
+										
+										if (parity == 2)
+											rarg = tuple(integer(prec_level.getRhs()), integer(prec));
+										else {
+											if (this.parity == 2)
+												rarg = tuple(integer(prec), integer(0));
+											else
+												rarg = integer(prec);
+										}
+										
+										rcond = not(equal(parity == 2? passoc : pprec, integer(prec)));
+										
+										int newprec = assoc_group.getPrecedence() != -1? assoc_group.getPrecedence() : prec;
+										if (prec_level.hasPrefixUnaryBelow()) {
+											if (larity == 2)
+												ret = tuple(minimum(prec_level.getLhs(), rprec), integer(newprec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(minimum(newprec, rprec), integer(0));
+												else
+													ret = minimum(newprec, rprec);
+											}
+										} else {
+											if (larity == 2)
+												ret = tuple(integer(prec_level.getLhs()), integer(newprec));
+											else {
+												if (this.larity == 2)
+													ret = tuple(integer(newprec), integer(0));
+												else
+													integer(newprec);
+											}
+										}
+									}
+									break;
+								case LEFT: // parity == 2
+									if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+										rarg = tuple(integer(prec_level.getRhs()), integer(prec));
+										
+										rcond = and(greaterEq(integer(prec_level.getRhs()), pprec), 
+													not(equal(passoc, integer(prec))));
+									}
+									break;
+								default: break;
+							}
+						}
+						
+						break;
+					case NON_ASSOC: // restricts both ends (in contrast to other associativity groups applies regardless ends)
+						
+						if (larity == 1 && parity == 1 && !prec_level.hasPrefixUnary() 
+													   && !prec_level.hasPostfixUnary()) {
+							
+							lcond = or(negative, greaterEq(lprec, integer(prec_level.getRhs() + 1)));
+							
+							rcond = greaterEq(integer(prec_level.getRhs()), pprec);
+							
+							if (this.parity == 2)
+								rarg = tuple(integer(prec_level.getRhs() + 1), integer(0));
+							else
+								rarg = integer(prec_level.getRhs() + 1);
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (this.larity == 2)
+									ret = tuple(minimum(prec, rprec), integer(0));
+								else
+									ret = minimum(prec, rprec);
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else
+									ret = integer(prec);
+							}
+							
+						} else {
+							
+							if (rule.isLeftRecursive()) {
+								if (rule.getAssociativity() == Associativity.LEFT) // larity == 2
+									lcond = and(or(and(lessEq(lassoc, integer(0)), 
+											           not(and(greaterEq(neg(integer(assoc_group.getLhs())), lassoc),
+								    		                   greaterEq(lassoc, neg(integer(assoc_group.getRhs())))))),
+											       and(greater(lassoc, integer(0)),
+											    	   or(equal(lassoc, integer(prec)), 
+											    	      not(and(greaterEq(integer(assoc_group.getRhs()), lassoc),
+													              greaterEq(lassoc, integer(assoc_group.getLhs()))))))), 
+											    or(negative, greaterEq(lprec, integer(prec_level.getLhs()))));
+								else
+		                            lcond = and(or(and(lessEq(larity == 2? lassoc : lprec, integer(0)), 
+											           not(and(greaterEq(neg(integer(assoc_group.getLhs())), larity == 2? lassoc : lprec),
+								     		                   greaterEq(larity == 2? lassoc : lprec, neg(integer(assoc_group.getRhs())))))),
+											       and(greater(larity == 2? lassoc : lprec, integer(0)),
+											    	   not(and(greaterEq(integer(assoc_group.getRhs()), larity == 2? lassoc : lprec),
+													           greaterEq(larity == 2? lassoc : lprec, integer(assoc_group.getLhs())))))), 
+											    or(negative, greaterEq(lprec, integer(prec_level.getLhs()))));
+							}
+							
+							if (rule.isLeftRecursive()) {
+								if (rule.getAssociativity() == Associativity.RIGHT) // parity == 2
+									rcond = and(or(equal(passoc, integer(prec)),
+											       not(and(greaterEq(integer(assoc_group.getRhs()), passoc), 
+													   	   greaterEq(passoc, integer(assoc_group.getLhs()))))),
+											    greaterEq(integer(prec_level.getRhs()), pprec));
+								else
+									rcond = and(not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec), 
+											            greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs())))),
+								                greaterEq(integer(prec_level.getRhs()), pprec));
+							}
+							
+							if (parity == 2) 
+								rarg = tuple(integer(prec_level.getRhs()), integer(prec));
+							else {
+								if (this.parity == 2)
+									rarg = tuple(integer(prec), integer(0));
+								else
+									rarg = integer(prec);
+							}
+							
+							if (rule.isRightRecursive()) {
+								if (prec_level.hasPrefixUnaryBelow()) {
+									if (larity == 2)
+										ret = tuple(minimum(prec_level.getLhs(), rprec), integer(prec));
+									else {
+										if (this.larity == 2)
+											ret = tuple(minimum(prec, rprec), integer(0));
+										else
+											ret = minimum(prec, rprec);
+									}
+								} else {
+									if (larity == 2)
+										ret = tuple(integer(prec_level.getLhs()), integer(prec));
+									else {
+										if (this.larity == 2)
+											ret = tuple(integer(prec), integer(0));
+										else
+											ret = integer(prec);
+									}
+								}
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(0), integer(0));
+								else
+									ret = integer(prec);
+							}
+						}
+						
+						if (!rule.isLeftRecursive() && rule.isRightRecursive())
+							rcond = not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec),
+									        greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs()))));
+						
+						if (rule.isLeftRecursive() && !rule.isRightRecursive()) {
+							if (larity == 2)
+								ret = tuple(integer(0), neg(integer(prec)));
+							else {
+								if (this.larity == 2)
+									ret = tuple(neg(integer(prec)), integer(0));
+								else
+									ret = neg(integer(prec));
+							}
+						}
+						 
+						break;
+					default: throw new RuntimeException("Unexpected associativity: " + assoc_group.getAssociativity());
+				}
+			
+			} 
+			
+			if (assoc_group == null && prec_level.getLhs() == prec_level.getRhs()) { // larity == 1 && parity == 1 
+				switch(assoc) {
+					case LEFT:
+						
+						if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
+							
+							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec)));
+							rcond = greaterEq(integer(prec), pprec);
+							
+							if (rule.isILeftRecursive() && canBePrefix) {
+								lcond = or(equal(var("l"), undef()), lcond);
+								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
+							}
+						}
+						
+						if (rule.isRightRecursive() || rule.isIRightRecursive()) {
+							if (this.parity == 2)
+								rarg = tuple(integer(prec + 1), integer(0));
+							else
+								rarg = integer(prec + 1);
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (this.larity == 2) {
+									
+									ret = tuple(minimum(prec, rprec), integer(0));
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
+									
+								} else {
+									ret = minimum(prec, rprec);
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
+								}
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else
+									ret = integer(prec);
+							}
+						} else {
+							if (this.larity == 2)
+								ret = tuple(integer(0), integer(0));
+							else
+								ret = integer(0);
+						}
+						 
+						break;
+					case RIGHT:
+						
+						if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
+							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec + 1)));
+							rcond = greaterEq(integer(prec), pprec);
+							
+							if (rule.isILeftRecursive() && canBePrefix) {
+								lcond = or(equal(var("l"), undef()), lcond);
+								rcond = ifThenElse(equal(var("l"), undef()), TRUE, rcond); // TODO: should become post-condition
+							}
+						}
+						
+						if (rule.isRightRecursive() || rule.isIRightRecursive()) {
+							if (this.parity == 2)
+								rarg = tuple(integer(first? 0 : prec), integer(0));
+							else
+								rarg = integer(first? 0 : prec);
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (this.larity == 2) {
+									
+									ret = tuple(minimum(prec, rprec), integer(0));
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
+								} else {
+									ret = minimum(prec, rprec);
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
+								}
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else
+									ret = integer(prec);
+							}
+						} else {
+							if (this.larity == 2)
+								ret = tuple(integer(0), integer(0));
+							else
+								ret = integer(0);
+						}
+						
+						break;
+					case NON_ASSOC:
+						if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+							
+							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec + 1)));
+							rcond = greaterEq(integer(prec), pprec);
+							
+							if (this.parity == 2)
+								rarg = tuple(integer(prec + 1), integer(0));
+							else
+								rarg = integer(prec + 1);
+								
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (this.larity == 2)
+									ret = tuple(minimum(prec, rprec), integer(0));
+								else
+									ret = minimum(prec, rprec);
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else
+									ret = integer(prec);
+							}
+							
+						} else if (rule.isLeftRecursive()) {
+							lcond = or(and(lessEq(lprec, integer(0)), 
+									       notEqual(lprec, neg(integer(prec)))), 
+									   greaterEq(lprec, integer(prec)));
+							rcond = greaterEq(integer(prec), pprec);
+							
+							if (this.larity == 2)
+								ret = tuple(neg(integer(prec)), integer(0));
+							else
+								ret = neg(integer(prec));
+							
+						} else {
+							
+							rcond = notEqual(pprec, integer(prec));
+							
+							if (this.parity == 2)
+								rarg = tuple(integer(first? 0 : prec), integer(0));
+							else
+								rarg = integer(first? 0 : prec);
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (this.larity == 2)
+									ret = tuple(minimum(prec, rprec), integer(0));
+								else
+									ret = minimum(prec, rprec);
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else
+									ret = integer(prec);
+							}
+						}
+						
+						break;
+					case UNDEFINED:
+						
+						if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
+							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec)));
+							rcond = greaterEq(integer(prec), pprec);
+							
+							if (rule.isILeftRecursive() && canBePrefix) {
+								lcond = or(equal(var("l"), undef()), lcond);
+								rcond = ifThenElse(equal(var("l"), undef()), TRUE, rcond); // TODO: should become post-condition
+							}
+						}
+						
+						if (rule.isRightRecursive() || rule.isIRightRecursive()) {
+							if (this.parity == 2)
+								rarg = tuple(integer(first? 0 : prec), integer(0));
+							else
+								rarg = integer(first? 0 : prec);
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (this.larity == 2) {
+									
+									ret = tuple(minimum(prec, rprec), integer(0));
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
+								} else {
+									ret = minimum(prec, rprec);
+									
+									if (rule.isIRightRecursive() && canBePostfix)
+										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
+								}
+							} else {
+								if (this.larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else
+									ret = integer(prec);
+							}
+						} else {
+							if (this.larity == 2)
+								ret = tuple(integer(0), integer(0));
+							else
+								ret = integer(0);
+						} 
+						break;
+					default: throw new RuntimeException("Unexpected associativity: " + assoc);
+				}	
+				
+			} 
+			
+			if (assoc_group == null && prec_level.getLhs() != prec_level.getRhs()) {
+				
+				if (rule.isILeftRecursive() || rule.isIRightRecursive())
+					throw new RuntimeException("Not yet implemented: indirect recursion inside a group of the same precedence with multiple rules");
+				
+				// Local to an associativity group
+				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
+				int larity = (arity == 2 || arity == 4)? 2 : 1;
+				int parity = (arity == 3 || arity == 4)? 2 : 1;
+				
+				if (rule.isLeftRecursive()) {
+					lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec)));
+					rcond = greaterEq(integer(prec), pprec);
+				}
+				
+				if (rule.isRightRecursive()) {
+					if (parity == 2) 
+						rarg = tuple(integer(first? 0 : undefined), integer(0));
+					else {
+						if (this.parity == 2)
+							rarg = tuple(integer(first? 0 : undefined), integer(0));
+						else
+							rarg = integer(first? 0 : undefined);
 					}
 					
-					if (prec != assoc_group.getPrecedence()) {
-						switch(assoc) {
-							case LEFT:
-								if (rule.isLeftRecursive())
-									rcond = and(rcond, notEqual(integer(prec), var("p")));
-								break;						
-							case RIGHT:
-								if (rule.isRightRecursive())
-									lcond = and(lcond, notEqual(integer(prec), var("l")));
-								break;
-							case NON_ASSOC:
-								rcond = and(rcond, notEqual(integer(prec), var("p")));
-								lcond = and(lcond, notEqual(integer(prec), var("l")));
-								break;
-							case UNDEFINED:
-								break;
-							default: throw new RuntimeException("Unexpected associativity: " + assoc);
+					if (prec_level.hasPrefixUnaryBelow()) {
+						if (larity == 2)
+							ret = tuple(minimum(undefined, rprec), integer(0));
+						else {
+							if (this.larity == 2)
+								ret = tuple(minimum(undefined, rprec), integer(0));
+							else
+								ret = minimum(undefined, rprec);
 						}
-					}				
-				} else {	
-					switch(assoc) {
+					} else {
+						if (larity == 2)
+							ret = tuple(integer(undefined), integer(0));
+						else {
+							if (this.larity == 2)
+								ret = tuple(integer(undefined), integer(0));
+							else
+								ret = integer(undefined);
+						}
+					}
+				} else {
+					if (this.larity == 2)
+						ret = tuple(integer(0), integer(0));
+					else
+						ret = integer(0);
+				}
+				
+				if (rule.getAssociativity() != Associativity.UNDEFINED) {
+					
+					switch(rule.getAssociativity()) {
+					
 						case LEFT:
-							if (rule.isLeftRecursive())
-								rcond = and(rcond, notEqual(integer(prec), var("p")));
-							break;						
+							if (parity == 2) 
+								rarg = tuple(integer(first? 0 : undefined), integer(prec));
+							else {
+								if (this.parity == 2)
+									rarg = tuple(integer(prec), integer(0));
+								else
+									rarg = integer(prec);
+							}
+							
+							rcond = and(greaterEq(integer(prec), pprec),
+									    notEqual(parity == 2? passoc : pprec, integer(prec)));
+							
+							break;
 						case RIGHT:
-							if (rule.isRightRecursive())
-								lcond = and(lcond, notEqual(integer(prec), var("l")));
+							
+							if (prec_level.hasPrefixUnaryBelow()) {
+								if (larity == 2)
+									ret = tuple(minimum(prec, rprec), integer(0));
+								else {
+									if (this.larity == 2)
+										ret = tuple(minimum(prec, rprec), integer(0));
+									else
+										ret = minimum(prec, rprec);
+								}
+							} else {
+								if (larity == 2)
+									ret = tuple(integer(prec), integer(0));
+								else {
+									if (this.larity == 2)
+										ret = tuple(integer(prec), integer(0));
+									else
+										ret = integer(prec);
+								}
+							}
+							
+							lcond = or(lessEq(lprec, integer(0)), 
+									   and(notEqual(larity == 2? lassoc : lprec, integer(prec)), 
+										   greaterEq(lprec, integer(prec))));
+							
 							break;
 						case NON_ASSOC:
-							rcond = and(rcond, notEqual(integer(prec), var("p")));
-							lcond = and(lcond, notEqual(integer(prec), var("l")));
+							
+							if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+								
+								if (parity == 2) 
+									rarg = tuple(integer(first? 0 : undefined), integer(prec));
+								else {
+									if (this.parity == 2)
+										rarg = tuple(integer(prec), integer(0));
+									else
+										rarg = integer(prec);
+								}
+								
+								if (prec_level.hasPrefixUnaryBelow()) {
+									if (larity == 2)
+										ret = tuple(minimum(prec, rprec), integer(0));
+									else {
+										if (this.larity == 2)
+											ret = tuple(minimum(prec, rprec), integer(0));
+										else
+											ret = minimum(prec, rprec);
+									}
+								} else {
+									if (larity == 2)
+										ret = tuple(integer(prec), integer(0));
+									else {
+										if (this.larity == 2)
+											ret = tuple(integer(prec), integer(0));
+										else
+											ret = integer(prec);
+									}
+								}
+								
+								lcond = or(lessEq(lprec, integer(0)), 
+										   and(notEqual(larity == 2? lassoc : lprec, integer(prec)), 
+											   greaterEq(lprec, integer(prec))));
+								
+								rcond = and(greaterEq(integer(prec), pprec),
+									        notEqual(parity == 2? passoc : pprec, integer(prec)));
+								
+							} else if (rule.isLeftRecursive()) {
+								
+								if (larity == 2) {
+									ret = tuple(integer(0), neg(integer(prec)));
+									
+									lcond = and(or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec))),
+											    notEqual(lassoc, neg(integer(prec))));
+								} else {
+									if (this.larity == 2)
+										ret = tuple(neg(integer(prec)), integer(0));
+									else
+										ret = neg(integer(prec));
+									
+									lcond = or(and(lessEq(lprec, integer(0)), 
+											       notEqual(lprec, neg(integer(prec)))), 
+											   greaterEq(lprec, integer(prec)));
+								}
+								
+							} else {
+								if (parity == 2) 
+									rarg = tuple(integer(first? 0 : undefined), integer(prec));
+								else {
+									if (this.parity == 2)
+										rarg = tuple(integer(prec), integer(0));
+									else
+										rarg = integer(prec);
+								}
+								
+								rcond = notEqual(parity == 2? passoc : pprec, integer(prec));
+							}
+							
 							break;
-						case UNDEFINED:
-							break;
-						default: throw new RuntimeException("Unexpected associativity: " + assoc);
+						
+						default: break;
 					}
 				}	
 			}
@@ -724,16 +1926,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
-		private static Expression condition(int precedence, int lhs, int rhs) {
-			return ifThenElse(or(equal(var("r"), integer(0)), and(lessEq(integer(lhs), var("r")),greaterEq(var("r"), integer(rhs)))), 
-				     		  integer(precedence), 
-				     		  min(var("r"),integer(precedence)));
-		}
-		
-		private static Expression minimum(int precedence) {
-			return ifThenElse(equal(var("r"), integer(0)), 
+		private static Expression minimum(int precedence, Expression rprec) {
+			return ifThenElse(lessEq(rprec, integer(0)), 
 		     		  		  integer(precedence), 
-		     		  		  min(var("r"),integer(precedence)));
+		     		  		  min(rprec,integer(precedence)));
 		}
 		
 		public Rule transform() {
@@ -779,7 +1975,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					}
 					
 					break;
-				case _2:
+				case _2: 
+					
 					if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
 						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("p", "_not").build());
 					else if (isLeftOrRightRecursiveNonterminal)
@@ -787,6 +1984,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					else if (isHeadWithLabeledRules)
 						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
 					else builder = rule.copyBuilder();
+					
+					boolean isIndirectEnd = !config.precEnds.isEmpty();
+					
+					if (isIndirectEnd) {
+						String[] parameters = new String[config.precEnds.size()];
+						for (int j = 0; j < config.precEnds.size(); j++)
+							parameters[j] = "p" + j;
+						
+						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());	
+					}
 					
 					builder = builder.setSymbols(symbols);
 					
@@ -801,21 +2008,58 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 						Symbol sym = symbol.accept(this);
 						
-						if (lcond != null && rcond != null && i == 0)
-							symbols.add(sym.copyBuilder().addPreCondition(DataDependentCondition.predicate(rcond)).
-									addPostCondition(DataDependentCondition.predicate(lcond)).build());
-						else if (lcond != null && i == 0)
-							symbols.add(sym.copyBuilder().addPostCondition(DataDependentCondition.predicate(lcond)).build());
-						else if (rcond != null && i == 0)
-							symbols.add(sym.copyBuilder().addPreCondition(DataDependentCondition.predicate(rcond)).build());
+						Set<Condition> preconditions = new HashSet<>();
+						Set<Condition> postconditions = new HashSet<>();
+						
+						if (rcond != null && i == 0)
+							preconditions.add(DataDependentCondition.predicate(rcond));
+						
+						if (xrcond != null && i == 0)
+							preconditions.add(DataDependentCondition.predicate(xrcond));
+						
+						if (lcond != null && i == 0)
+							postconditions.add(DataDependentCondition.predicate(lcond));
+						
+						if (xlcond != null && i == 0)
+							postconditions.add(DataDependentCondition.predicate(xlcond));
+						
+						if (!preconditions.isEmpty() && !postconditions.isEmpty())
+							symbols.add(sym.copyBuilder().addPreConditions(preconditions).addPostConditions(postconditions).build());
+						else if (!postconditions.isEmpty())
+							symbols.add(sym.copyBuilder().addPostConditions(postconditions).build());
+						else if (!preconditions.isEmpty())
+							symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
 						else 
 							symbols.add(sym);
 						
 						i++;
 					}
 					
-					if (ret != null)
+					if (ret != null && xret != null)
+						symbols.add(Return.ret(tuple(ret,xret)));
+					else if (ret != null)
 						symbols.add(Return.ret(ret));
+					else if (xret != null)
+						symbols.add(Return.ret(xret));
+					
+					Expression iret = null;
+					
+					if (isIndirectEnd) {
+						if (config.precEnds.size() == 1)
+							iret = tuple(lret[0], rret[0]);
+						else {
+							int j = 0;
+							Expression[] rets = new Expression[lret.length]; 
+							for (Expression l : lret) {
+								rets[j] = tuple(l, rret[j]);
+								j++;
+							}
+							iret = tuple(rets);
+						}	
+					}
+					
+					if (iret != null)
+						symbols.add(Return.ret(iret));
 				    
 					break;
 			}
@@ -930,35 +2174,40 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
 			
-			boolean isUseOfLeftOrRight = leftOrRightRecursiveNonterminals.contains(symbol.getName());
+			boolean isUseOfLeftOrRight = leftOrRightRecursiveNonterminals.contains(symbol.getName()); // recursive symbol with precedence, i.e., it has parameters and needs arguments 
+			
+			Configuration config = configs.get(symbol.getName());
+			boolean isUseOfLeftOrRightEnd = !config.precEnds.isEmpty(); // symbol that introduces indirection, i.e., it has parameters and needs arguments
+			
 			Map<String, Integer> labels = headsWithLabeledRules.get(symbol.getName());
 			
-			if (!isUseOfLeftOrRight && labels == null) return symbol;
+			if (!isUseOfLeftOrRight && labels == null && !isUseOfLeftOrRightEnd) return symbol;
 			
 			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
 			
+			boolean isIndirectRecursiveUseOfLeftOrRight = isUseOfLeftOrRightEnd && config.precEnds.contains(rule.getHead().getName());
+			
 			Expression _not = null;
-			
-			if (labels != null) {
-				int n = 0;
-				Set<String> excepts = symbol.getExcepts();
-				if (excepts != null)
-					for (String except : excepts) {
-						Integer i = labels.get(except);
-						
-						if (i == null)
-							throw new RuntimeException("Undeclared label: " + except);
-						
-						n += 1 << i;
-					}
-				
-				_not = integer(n);
-			}
-			
 			Expression[] arguments = null;
 			
 			switch(config_op) {
 				case _1:
+					if (labels != null) {
+						int n = 0;
+						Set<String> excepts = symbol.getExcepts();
+						if (excepts != null)
+							for (String except : excepts) {
+								Integer i = labels.get(except);
+								
+								if (i == null)
+									throw new RuntimeException("Undeclared label: " + except);
+								
+								n += 1 << i;
+							}
+						
+						_not = integer(n);
+					}
+					
 					if (isUseOfLeftOrRight)
 						arguments = new Expression[] { integer(0), integer(0) };
 					
@@ -975,10 +2224,87 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						return symbol.copyBuilder().apply(_not).build();
 					
 				case _2:
-					if (isUseOfLeftOrRight)
-						arguments = new Expression[] { integer(0) };
+					if (labels != null) {
+						if (rule.isLeftRecursive() && isFirst) {
+							_not = integer(0);
+						} else {
+							int n = 0;
+							Set<String> excepts = symbol.getExcepts();
+							if (excepts != null)
+								for (String except : excepts) {
+									Integer i = labels.get(except);
+									
+									if (i == null)
+										throw new RuntimeException("Undeclared label: " + except);
+									
+									n += 1 << i;
+								}
+							
+							_not = integer(n);
+						}
+					}
 					
 					String variable = "";
+					
+					if (isUseOfLeftOrRight) {
+						int parity = config.parity;
+						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+						
+						if (ends.contains(symbol.getName())) {
+							
+							int i = ends.indexOf(symbol.getName());
+							
+							if (isFirst && isLast) {
+								
+								boolean canBeFromLeft = configs.get(symbol.getName()).leftEnds.contains(rule.getHead().getName());
+								boolean canBeFromRight = configs.get(symbol.getName()).rightEnds.contains(rule.getHead().getName());
+								
+								if (canBeFromLeft && canBeFromRight) {
+									throw new RuntimeException("Unsupported yet!");
+								} else if (canBeFromLeft) {
+									variable = "l";
+									arguments = new Expression[] { get(var("p" + i), integer(0)) };
+									lret[i] = var("l");
+								} else if (canBeFromRight) {
+									variable = "r";
+									arguments = new Expression[] { get(var("p" + i), integer(1)) };
+									rret[i] = var("r");
+								} else {
+									throw new RuntimeException("Shouldn't have happened!");
+								}
+								
+							} else if (isFirst) {
+								variable = "l";
+								arguments = new Expression[] { get(var("p" + i), integer(0)) };
+								lret[i] = var("l");
+							} else if (isLast) {
+								variable = "r";
+								arguments = new Expression[] { get(var("p" + i), integer(1)) };
+								rret[i] = var("r");
+							} else
+								arguments = new Expression[] { parity == 2? tuple(integer(0), integer(0)) : integer(0) };
+							
+						} else
+							arguments = new Expression[] { parity == 2? tuple(integer(0), integer(0)) : integer(0) };
+					}
+					
+					if (isUseOfLeftOrRightEnd) {
+						
+						arguments = new Expression[config.precEnds.size()];
+						int i = 0;
+						for (String end : config.precEnds) {
+							int parity = configs.get(end).parity;
+							if (config.precLeftEnds.contains(end) && config.precRightEnds.contains(end))
+								arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), 
+													 parity == 2? tuple(integer(0), integer(0)) : integer(0));
+							else
+								arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
+							i++;
+						}
+					}
+					
+					if (isRecursiveUseOfLeftOrRight && isFirst && isLast)
+						throw new RuntimeException("Cyclic use where precedence applies.");
 					
 					if (isRecursiveUseOfLeftOrRight && isFirst) {
 						variable = "l";
@@ -988,14 +2314,101 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						arguments = new Expression[] { rarg };
 					}
 					
+					Statement binding = null;
+					Statement lbinding = null;
+					Statement rbinding = null;
+					
+					if (isIndirectRecursiveUseOfLeftOrRight && isFirst && isLast) {
+						if (config.precEnds.size() == 1) {
+							variable = symbol.getName().toLowerCase();
+							lbinding = varDeclStat("l", get(var(variable), integer(0)));
+							rbinding = varDeclStat("r", get(var(variable), integer(1)));
+							arguments = new Expression[] { tuple(larg, rarg) };
+						} else {
+							int i = config.precEnds.indexOf(rule.getHead().getName());
+							variable = symbol.getName().toLowerCase();
+							binding  = varDeclStat("l", get(get(var(variable), integer(i)), integer(0))); // l = x.i.0
+							rbinding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1))); // r = x.i.1
+							arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
+						}
+					} else if (isIndirectRecursiveUseOfLeftOrRight && isFirst) {
+						if (config.precEnds.size() == 1) {
+							variable = "l" + symbol.getName().toLowerCase();
+							binding = varDeclStat("l", get(var(variable), integer(0)));
+							arguments = new Expression[] { tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0)) };
+						} else {
+							int i = config.precEnds.indexOf(rule.getHead().getName());
+							variable = "l" + symbol.getName().toLowerCase();
+							binding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0)));
+							arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
+						}
+					} else if (isIndirectRecursiveUseOfLeftOrRight && isLast) {
+						if (config.precEnds.size() == 1) {
+							variable = "r" + symbol.getName().toLowerCase();
+							binding = varDeclStat("r", get(var(variable), integer(1)));
+							arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
+						} else {
+							int i = config.precEnds.indexOf(rule.getHead().getName());
+							variable = "r" + symbol.getName();
+							binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
+							arguments[i] = tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg);
+						}
+					} else if (isUseOfLeftOrRightEnd && isFirst && isLast) {
+						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+						for (String end : config.precEnds) {
+							int i = ends.indexOf(end);
+							if (i != -1) {
+								variable = symbol.getName().toLowerCase();
+								arguments[i] = var("p" + i);
+								lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+								rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+							}
+						}
+					} else if (isUseOfLeftOrRightEnd && isFirst) {
+						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+						for (String end : config.precEnds) {
+							int parity = configs.get(end).parity;
+							int i = ends.indexOf(end);
+							if (i != -1) {
+								variable = "l";
+								arguments[i] = tuple(get(var("p" + i), integer(0)), parity == 2? tuple(integer(0), integer(0)) : integer(0));
+								lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+							}
+						}
+					} else if (isUseOfLeftOrRightEnd && isLast) {
+						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+						for (String end : config.precEnds) {
+							int parity = configs.get(end).parity;
+							int i = ends.indexOf(end);
+							if (i != -1) {
+								variable = "r";
+								arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), get(var("p" + i), integer(1)));
+								rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+							}
+						}
+					}
+					
+					// Case of a left-recursive nonterminal that does not specify precedence
+					if (labels != null && symbol.getExcepts() != null && rule.isLeftRecursive() && isFirst) 
+						variable = "l";
+					
+					Symbol newone = null;
+					
 					if (arguments != null && _not != null)
-						return variable.isEmpty()? symbol.copyBuilder().apply(arguments).apply(_not).build()
-												 : symbol.copyBuilder().apply(arguments).apply(_not).setVariable(variable).build();
+						newone = variable.isEmpty()? symbol.copyBuilder().apply(arguments).apply(_not).build()
+												   : symbol.copyBuilder().apply(arguments).apply(_not).setVariable(variable).build();
 					else if (arguments != null)
-						return variable.isEmpty()? symbol.copyBuilder().apply(arguments).build()
-												 : symbol.copyBuilder().apply(arguments).setVariable(variable).build();
+						newone =  variable.isEmpty()? symbol.copyBuilder().apply(arguments).build()
+												    : symbol.copyBuilder().apply(arguments).setVariable(variable).build();
 					else 
-						return symbol.copyBuilder().apply(_not).build();
+						newone =  variable.isEmpty()? symbol.copyBuilder().apply(_not).build()
+								                    : symbol.copyBuilder().apply(_not).setVariable(variable).build();
+					if (binding != null)
+						return Code.code(newone, binding);
+					else if (lbinding != null && rbinding != null) {
+						return Code.code(newone, lbinding, rbinding);
+					} else
+						return newone;
 			}
 			
 			return symbol;

@@ -79,7 +79,7 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 	public String toString() {
 		if (value != null) {
 			if (value instanceof List<?>)
-				return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, "(" + GeneratorUtil.listToString((Object[]) value, ",") + ")");
+				return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, "(" + GeneratorUtil.listToString((List<?>) value, ",") + ")");
 			else 
 				return String.format("(%s, %d, %d, %s)", slot, leftExtent, rightExtent, value);
 		}
