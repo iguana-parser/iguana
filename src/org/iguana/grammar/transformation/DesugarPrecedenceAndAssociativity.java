@@ -113,12 +113,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Set<String> leftEnds = new HashSet<>();
 		public Set<String> rightEnds = new HashSet<>();
 		
-		public Set<String> rightEndsPrefixBelow = new HashSet<>();
-		
 		public Set<String> precLeftEnds = new HashSet<>(); // the ones from leftEnds but where precedence applies
 		public Set<String> precRightEnds = new HashSet<>(); // the ones from rightEnds but where precedence applies
 		
 		public List<String> precEnds = new ArrayList<>();
+		
+		public Set<String> rightEndsPrefixBelow = new HashSet<>();
+		
+		public Set<String> rightEndsNonassoc = new HashSet<>();
 		
 		// Encoding: 2 is 2 & 1; 3 is 1 & 2; 4 is 2 & 2 (l-value & p-arg)
 		public Map<Integer, Integer> groups = new HashMap<>();
@@ -132,6 +134,28 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				larity = 2;
 			if (values.contains(3) || values.contains(4)) 
 				parity = 2;
+		}
+		
+		boolean hasPrefix(int lhs) {
+			
+			if (prefix_rules.containsKey(lhs) && !prefix_rules.get(lhs).isEmpty())
+				return true;
+			
+			if (iprefix_rules.containsKey(lhs) && !iprefix_rules.get(lhs).isEmpty())
+				return true;
+			
+			return false;
+		}
+		
+		boolean hasPostfix(int lhs) {
+			
+			if (postfix_rules.containsKey(lhs) && !postfix_rules.get(lhs).isEmpty())
+				return true;
+			
+			if (ipostfix_rules.containsKey(lhs) && !ipostfix_rules.get(lhs).isEmpty())
+				return true;
+			
+			return false;
 		}
 		
 		boolean hasPrefixBelow(int lhs) {
@@ -168,6 +192,24 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				return true;
 			if (lhs <= postfixBelow)
 				return false;
+			
+			return false;
+		}
+		
+		static final String left = "left";
+		static final String right = "right";
+		
+		@SuppressWarnings("unused")
+		boolean can_be_reached_via(String nt, String via, String from) {
+			
+			if (from != left || from != right)
+				throw new RuntimeException("Unexpected argument!");
+			
+			if (from == left && this.leftEnds.contains(via) && configs.get(via).precLeftEnds.contains(nt))
+				return true;
+			
+			if (from == right && this.rightEnds.contains(via) && configs.get(via).precRightEnds.contains(nt))
+				return true;
 			
 			return false;
 		}
@@ -661,7 +703,50 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 			}
 				
-			
+			for (Rule rule : grammar.getRules()) {
+				
+				if (!((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())) 
+					continue;
+				
+				if (rule.getAssociativity() != Associativity.NON_ASSOC 
+						&& (rule.getAssociativityGroup() == null || rule.getAssociativityGroup().getAssociativity() != Associativity.NON_ASSOC))
+					continue;
+				
+				Configuration config = configs.get(rule.getHead().getName());
+				
+				boolean canBePostfix = false;
+				Set<String> ends = configs.get(rule.getRightEnd()).rightEnds;
+				for (String end : ends) {
+					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
+						canBePostfix = true;
+						break;
+					}
+				}
+				
+				if (canBePostfix) {
+					config.rightEndsNonassoc.add(rule.getRightEnd());
+					boolean changed = true;
+					while (changed) {
+						changed = false;
+						int size = config.rightEndsNonassoc.size();
+						
+						Set<String> delta = new HashSet<>();
+						for (String end : config.rightEndsNonassoc) {
+							if (configs.get(end) != null) {
+								for (String right : configs.get(end).rightEnds) {
+									if (configs.get(right) != null && 
+											configs.get(right).precRightEnds.contains(rule.getHead().getName()))
+										delta.add(right);
+								}
+							}
+						}
+						
+						config.rightEndsNonassoc.addAll(delta);
+						if (size != config.rightEndsNonassoc.size())
+							changed = true;
+					}
+				}
+			}
 		}
 		
 		Set<Rule> rules = new LinkedHashSet<>();
@@ -1172,8 +1257,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			// 1. Expressions for the left and/or right recursive uses
 			if (assoc_group != null) {
 				
-				if (rule.isILeftRecursive() || rule.isIRightRecursive())
-					throw new RuntimeException("Not yet implemented: indirect recursion inside an associativity group");
+				if ((rule.isILeftRecursive() || rule.isIRightRecursive() && assoc_group.getAssociativity() != Associativity.NON_ASSOC))
+					throw new RuntimeException("Not yet implemented: indirect recursion inside an left or right associativity group");
 				
 				// Local to an associativity group
 				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
@@ -1522,8 +1607,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						break;
 					case NON_ASSOC: // restricts both ends (in contrast to other associativity groups applies regardless ends)
 						
-						if (larity == 1 && parity == 1 && !prec_level.hasPrefixUnary() 
-													   && !prec_level.hasPostfixUnary()) {
+						if (larity == 1 && parity == 1 && !config.hasPrefix(prec_level.getLhs()) 
+													   && !config.hasPostfix(prec_level.getLhs())) {
 							
 							lcond = or(negative, greaterEq(lprec, integer(prec_level.getRhs() + 1)));
 							
@@ -1548,7 +1633,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							
 						} else {
 							
-							if (rule.isLeftRecursive()) {
+							if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
+								
 								if (rule.getAssociativity() == Associativity.LEFT) // larity == 2
 									lcond = and(or(and(lessEq(lassoc, integer(0)), 
 											           not(and(greaterEq(neg(integer(assoc_group.getLhs())), lassoc),
@@ -1560,37 +1646,57 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 											    or(negative, greaterEq(lprec, integer(prec_level.getLhs()))));
 								else
 		                            lcond = and(or(and(lessEq(larity == 2? lassoc : lprec, integer(0)), 
-											           not(and(greaterEq(neg(integer(assoc_group.getLhs())), larity == 2? lassoc : lprec),
-								     		                   greaterEq(larity == 2? lassoc : lprec, neg(integer(assoc_group.getRhs())))))),
+		                            				   assoc_group.getLhs() == assoc_group.getRhs()?
+		                            				         notEqual(larity == 2? lassoc : lprec, neg(integer(assoc_group.getLhs())))
+											               : not(and(greaterEq(neg(integer(assoc_group.getLhs())), larity == 2? lassoc : lprec),
+								     		                       greaterEq(larity == 2? lassoc : lprec, neg(integer(assoc_group.getRhs())))))),
 											       and(greater(larity == 2? lassoc : lprec, integer(0)),
-											    	   not(and(greaterEq(integer(assoc_group.getRhs()), larity == 2? lassoc : lprec),
-													           greaterEq(larity == 2? lassoc : lprec, integer(assoc_group.getLhs())))))), 
+											    	   assoc_group.getLhs() == assoc_group.getRhs()?
+											    	         notEqual(larity == 2? lassoc : lprec, integer(assoc_group.getLhs()))
+											    	       : not(and(greaterEq(integer(assoc_group.getRhs()), larity == 2? lassoc : lprec),
+													               greaterEq(larity == 2? lassoc : lprec, integer(assoc_group.getLhs())))))), 
 											    or(negative, greaterEq(lprec, integer(prec_level.getLhs()))));
+		                            
+		                        if (rule.isILeftRecursive() && canBePrefix)
+		                        	lcond = or(equal(var("l"), undef()), lcond);
 							}
 							
-							if (rule.isLeftRecursive()) {
+							if (rule.isLeftRecursive() || rule.isILeftRecursive()) {
 								if (rule.getAssociativity() == Associativity.RIGHT) // parity == 2
 									rcond = and(or(equal(passoc, integer(prec)),
 											       not(and(greaterEq(integer(assoc_group.getRhs()), passoc), 
 													   	   greaterEq(passoc, integer(assoc_group.getLhs()))))),
 											    greaterEq(integer(prec_level.getRhs()), pprec));
 								else
-									rcond = and(not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec), 
-											            greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs())))),
+									rcond = and(assoc_group.getLhs() == assoc_group.getRhs()?
+											          notEqual(parity == 2? passoc : pprec, integer(assoc_group.getLhs()))
+											        : not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec), 
+											                  greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs())))),
 								                greaterEq(integer(prec_level.getRhs()), pprec));
 							}
 							
-							if (parity == 2) 
-								rarg = tuple(integer(prec_level.getRhs()), integer(prec));
-							else {
-								if (this.parity == 2)
-									rarg = tuple(integer(prec), integer(0));
-								else
-									rarg = integer(prec);
+							if (rule.isILeftRecursive() && canBePrefix) {
+								rcond = ifThenElse(equal(var("l"), undef()),
+										           assoc_group.getLhs() == assoc_group.getRhs()?
+										                 notEqual(parity == 2? passoc : pprec, integer(assoc_group.getLhs()))
+												       : not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec),
+														         greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs())))), 
+												   rcond); // TODO: should become post-condition
 							}
 							
-							if (rule.isRightRecursive()) {
-								if (prec_level.hasPrefixUnaryBelow()) {
+							if (rule.isRightRecursive() || rule.isIRightRecursive()) {
+								if (parity == 2) 
+									rarg = tuple(integer(prec_level.getRhs()), integer(prec));
+								else {
+									if (this.parity == 2)
+										rarg = tuple(integer(prec), integer(0));
+									else
+										rarg = integer(prec);
+								}
+							}
+							
+							if (rule.isRightRecursive() || rule.isIRightRecursive()) {
+								if (config.hasPrefixBelow(prec_level.getLhs())) {
 									if (larity == 2)
 										ret = tuple(minimum(prec_level.getLhs(), rprec), integer(prec));
 									else {
@@ -1609,6 +1715,24 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 											ret = integer(prec);
 									}
 								}
+								
+								if (rule.isIRightRecursive() && canBePostfix) {
+									if (rule.isLeftRecursive())
+										ret = ifThenElse(equal(var("r"), undef()), 
+												 larity == 2? tuple(integer(0), neg(integer(prec))) 
+														    : (this.larity == 2? tuple(neg(integer(prec)), integer(0)) : neg(integer(prec))), 
+												 ret);
+									else if (rule.isILeftRecursive())
+										ret = ifThenElse(equal(var("r"), undef()), 
+														 ifThenElse(equal(var("l"), undef()), 
+																    larity == 2? tuple(integer(0), integer(0)) : integer(0),
+																    larity == 2? tuple(integer(0), neg(integer(prec))) 
+																			   : (this.larity == 2? tuple(neg(integer(prec)), integer(0)) : neg(integer(prec)))), 
+												 ret);
+									else
+										throw new RuntimeException("Shouldn't have happened!");
+								}
+								
 							} else {
 								if (this.larity == 2)
 									ret = tuple(integer(0), integer(0));
@@ -1617,11 +1741,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 						}
 						
-						if (!rule.isLeftRecursive() && rule.isRightRecursive())
-							rcond = not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec),
-									        greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs()))));
+						// Normal prefix
+						if (!(rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isRightRecursive())
+							rcond = assoc_group.getLhs() == assoc_group.getRhs()?
+									      notEqual(parity == 2? passoc : pprec, integer(assoc_group.getLhs()))
+									    : not(and(greaterEq(integer(assoc_group.getRhs()), parity == 2? passoc : pprec),
+									              greaterEq(parity == 2? passoc : pprec, integer(assoc_group.getLhs()))));
 						
-						if (rule.isLeftRecursive() && !rule.isRightRecursive()) {
+						// Normal postfix
+						if (rule.isLeftRecursive() && !(rule.isRightRecursive() || rule.isIRightRecursive())) {
 							if (larity == 2)
 								ret = tuple(integer(0), neg(integer(prec)));
 							else {
@@ -1649,7 +1777,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							
 							if (rule.isILeftRecursive() && canBePrefix) {
 								lcond = or(equal(var("l"), undef()), lcond);
-								rcond = ifThenElse(equal(var("l"), null), TRUE, rcond); // TODO: should become post-condition
+								rcond = ifThenElse(equal(var("l"), undef()), TRUE, rcond); // TODO: should become post-condition
 							}
 						}
 						
@@ -1659,21 +1787,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							else
 								rarg = integer(prec + 1);
 							
-							if (prec_level.hasPrefixUnaryBelow()) {
-								if (this.larity == 2) {
-									
+							// larity == 1
+							if (config.hasPrefixBelow(prec_level.getLhs())) {
+								if (this.larity == 2)
 									ret = tuple(minimum(prec, rprec), integer(0));
-									
-									if (rule.isIRightRecursive() && canBePostfix)
-										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
-									
-								} else {
+								else
 									ret = minimum(prec, rprec);
-									
-									if (rule.isIRightRecursive() && canBePostfix)
-										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
-								}
-							} else {
+								
+								if (rule.isIRightRecursive() && canBePostfix)
+									ret = ifThenElse(equal(var("r"), undef()), this.larity == 2? tuple(integer(0), integer(0)) : integer(0), ret);
+								
+							} else { // In this case, r-variable is not used
 								if (this.larity == 2)
 									ret = tuple(integer(prec), integer(0));
 								else
@@ -1685,7 +1809,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							else
 								ret = integer(0);
 						}
-						 
+						
 						break;
 					case RIGHT:
 						
@@ -1705,19 +1829,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							else
 								rarg = integer(first? 0 : prec);
 							
-							if (prec_level.hasPrefixUnaryBelow()) {
-								if (this.larity == 2) {
-									
+							// larity == 1
+							if (config.hasPrefixBelow(prec_level.getLhs())) {
+								if (this.larity == 2)
 									ret = tuple(minimum(prec, rprec), integer(0));
-									
-									if (rule.isIRightRecursive() && canBePostfix)
-										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
-								} else {
+								else
 									ret = minimum(prec, rprec);
-									
-									if (rule.isIRightRecursive() && canBePostfix)
-										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
-								}
+								
+								if (rule.isIRightRecursive() && canBePostfix)
+									ret = ifThenElse(equal(var("r"), undef()), this.larity == 2? tuple(integer(0), integer(0)) : integer(0), ret);
 							} else {
 								if (this.larity == 2)
 									ret = tuple(integer(prec), integer(0));
@@ -1745,7 +1865,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							else
 								rarg = integer(prec + 1);
 								
-							if (prec_level.hasPrefixUnaryBelow()) {
+							if (config.hasPrefixBelow(prec_level.getLhs())) {
 								if (this.larity == 2)
 									ret = tuple(minimum(prec, rprec), integer(0));
 								else
@@ -1777,7 +1897,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							else
 								rarg = integer(first? 0 : prec);
 							
-							if (prec_level.hasPrefixUnaryBelow()) {
+							// larity == 1
+							if (config.hasPrefixBelow(prec_level.getLhs())) {
 								if (this.larity == 2)
 									ret = tuple(minimum(prec, rprec), integer(0));
 								else
@@ -1809,19 +1930,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							else
 								rarg = integer(first? 0 : prec);
 							
-							if (prec_level.hasPrefixUnaryBelow()) {
-								if (this.larity == 2) {
-									
+							// larity == 1
+							if (config.hasPrefixBelow(prec_level.getLhs())) {
+								if (this.larity == 2)
 									ret = tuple(minimum(prec, rprec), integer(0));
-									
-									if (rule.isIRightRecursive() && canBePostfix)
-										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
-								} else {
+								else
 									ret = minimum(prec, rprec);
-									
-									if (rule.isIRightRecursive() && canBePostfix)
-										ret = ifThenElse(equal(var("r"), undef()), tuple(integer(0), integer(0)), ret);
-								}
+								
+								if (rule.isIRightRecursive() && canBePostfix)
+									ret = ifThenElse(equal(var("r"), undef()), this.larity == 2? tuple(integer(0), integer(0)) : integer(0), ret);
+								
 							} else {
 								if (this.larity == 2)
 									ret = tuple(integer(prec), integer(0));
