@@ -642,10 +642,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					while (changed) {
 						changed = false;
 						int size = config.rightEndsPrefixBelow.size();
+						
 						Set<String> delta = new HashSet<>();
 						for (String end : config.rightEndsPrefixBelow) {
-							delta.addAll(configs.get(end).precRightEnds);
+							if (configs.get(end) != null) {
+								for (String right : configs.get(end).rightEnds) {
+									if (configs.get(right) != null && 
+											configs.get(right).precEnds.contains(rule.getHead().getName()))
+										delta.add(right);
+								}
+							}
 						}
+						
 						config.rightEndsPrefixBelow.addAll(delta);
 						if (size != config.rightEndsPrefixBelow.size())
 							changed = true;
