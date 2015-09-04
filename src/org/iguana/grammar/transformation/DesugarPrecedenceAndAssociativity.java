@@ -629,7 +629,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			for (Rule rule : grammar.getRules()) {
 				
-				if (rule.getPrecedence() == -1 || !rule.isRightRecursive()) 
+				// TODO: currently, rule.getRightEnd() returns non-empty string only for indirectly recursive ends,
+				//       or non-recursive ends; !rule.isIRightRecursive ensures non-empty string
+				if (rule.getPrecedence() == -1 || !rule.isIRightRecursive()) 
 					continue;
 				
 				Configuration config = configs.get(rule.getHead().getName());
@@ -2569,12 +2571,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 						} else if (isLast) { // E ::= alpha X
 							if (precEnds.size() == 1) {
+								
 								variable = "r" + symbol.getName().toLowerCase();
+								boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+								
 								if (canReachLeft && canReachRight) {
-									binding = varDeclStat("r", get(var(variable), integer(1)));
+									if (prefixBelow)
+										binding = varDeclStat("r", get(var(variable), integer(1)));
+									else
+										variable = "";
 									arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
 								} else {
-									boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+									
 									if (prefixBelow)
 										variable = "r";
 									else
@@ -2584,11 +2592,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							} else {
 								int i = config.precEnds.indexOf(rule.getHead().getName());
 								variable = "r" + symbol.getName();
+								boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+								
 								if (canReachLeft && canReachRight) {
-									binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
+									if (prefixBelow)
+										binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
+									else
+										variable = "";
 									arguments[i] = tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg);
 								} else {
-									boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
 									if (prefixBelow)
 										binding = varDeclStat("r", get(var(variable), integer(i)));
 									else
