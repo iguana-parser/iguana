@@ -57,25 +57,25 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList("$E","E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","E","X","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
 
-         DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-         desugarPrecedenceAndAssociativity.setOP2();
+         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
+         precedenceAndAssociativity.setOP2();
          
-		 grammar = desugarPrecedenceAndAssociativity.transform(grammar);
+		 grammar = precedenceAndAssociativity.transform(grammar);
          System.out.println(grammar.toString());
 
          Input input = Input.fromString("a+a**a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/", graph);
+         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
          GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/precedence/",
+         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
          //                   result.asParseSuccess().getRoot(), input);
 
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
     }
 }

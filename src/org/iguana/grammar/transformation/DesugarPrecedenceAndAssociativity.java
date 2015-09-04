@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -106,11 +107,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Map<Integer, Set<Integer>> iprefix_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
 		
+		int prefixBelow = -1;
+		int postfixBelow = -1;
+		
 		public Set<String> leftEnds = new HashSet<>();
 		public Set<String> rightEnds = new HashSet<>();
 		
-		public Set<String> precLeftEnds = new HashSet<>();
-		public Set<String> precRightEnds = new HashSet<>();
+		public Set<String> rightEndsPrefixBelow = new HashSet<>();
+		
+		public Set<String> precLeftEnds = new HashSet<>(); // the ones from leftEnds but where precedence applies
+		public Set<String> precRightEnds = new HashSet<>(); // the ones from rightEnds but where precedence applies
 		
 		public List<String> precEnds = new ArrayList<>();
 		
@@ -126,6 +132,44 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				larity = 2;
 			if (values.contains(3) || values.contains(4)) 
 				parity = 2;
+		}
+		
+		boolean hasPrefixBelow(int lhs) {
+			if (prefixBelow == -1) {
+				prefixBelow = prefix_rules.isEmpty()? 0 : prefix_rules.keySet().stream().min(Comparator.naturalOrder()).get();
+				if (!iprefix_rules.isEmpty()) {
+					int other = iprefix_rules.keySet().stream().min(Comparator.naturalOrder()).get();
+					prefixBelow = Integer.min(prefixBelow, other);
+				}
+			}
+			
+			if (prefixBelow == 0)
+				return false;
+			
+			if (lhs > prefixBelow)
+				return true;	
+			if (lhs <= prefixBelow)
+				return false;
+			
+			return false;
+		}
+		
+		@SuppressWarnings("unused")
+		boolean hasPostfixBelow(int lhs) {
+			if (postfixBelow == -1) {
+				postfixBelow = postfix_rules.isEmpty()? 0 : postfix_rules.keySet().stream().min(Comparator.naturalOrder()).get();
+				if (!ipostfix_rules.isEmpty()) {
+					int other = ipostfix_rules.keySet().stream().min(Comparator.naturalOrder()).get();
+					postfixBelow = Integer.max(postfixBelow, other);
+				}
+			}
+			
+			if (lhs > postfixBelow)
+				return true;
+			if (lhs <= postfixBelow)
+				return false;
+			
+			return false;
 		}
 	}
 	
@@ -161,13 +205,31 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		}
 		
 		for (Rule rule : grammar.getRules()) {
+			
 			Nonterminal head = rule.getHead();
-			// 1. Precedence
+			
+			// 1. Excepts
+			if (rule.getLabel() != null) {
+				Map<String, Integer> labels = headsWithLabeledRules.get(head.getName());
+				if (labels != null) {
+					if(!labels.containsKey(rule.getLabel()))
+						labels.put(rule.getLabel(), labels.size());
+				} else {
+					labels = new HashMap<>();
+					labels.put(rule.getLabel(), labels.size());
+					headsWithLabeledRules.put(head.getName(), labels);
+				}
+			}
+			
+			// 2. Precedence
 			if (rule.getPrecedenceLevel().getRhs() != 1 || 
 					(rule.getPrecedence() == 1 && rule.getAssociativity() != Associativity.UNDEFINED))
 				leftOrRightRecursiveNonterminals.add(head.getName());
 			// else: all the rules have a precedence -1 (non-recursive), or 1 and
 			// undefined associativity; therefore, precedence does not apply
+			
+			if (rule.getPrecedence() == -1)
+				continue;
 			
 			// Decision of the arity of a p-argument and l-value (only for the alternative scheme)
 			Configuration config = configs.get(head.getName());
@@ -337,18 +399,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					config.groups.put(prec_level.getLhs(), 4);
 			}
 			
-			// 2. Excepts
-			if (rule.getLabel() != null) {
-				Map<String, Integer> labels = headsWithLabeledRules.get(head.getName());
-				if (labels != null) {
-					if(!labels.containsKey(rule.getLabel()))
-						labels.put(rule.getLabel(), labels.size());
-				} else {
-					labels = new HashMap<>();
-					labels.put(rule.getLabel(), labels.size());
-					headsWithLabeledRules.put(head.getName(), labels);
-				}
-			}
 		}
 		
 		if (config_op == OP._2) {
@@ -384,6 +434,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		for (Rule rule: grammar.getRules()) {
 			
 			if (config_op == OP._1) break;
+			
+			if (rule.getPrecedence() == -1)
+				continue;
 			
 			Configuration config = configs.get(rule.getHead().getName());
 			AssociativityGroup assoc_group = rule.getAssociativityGroup();
@@ -515,6 +568,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					if (rule.getAssociativity() != Associativity.UNDEFINED) {
 						
 						if(isBinary && (rule.getAssociativity() == Associativity.LEFT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
+							// As associatvity is defined, rule.getPrecedence() is unique;
+							// therefore, maintaining <_>_rules as precedence sets, for each precedence level
+							// should sufficient
 							if (left_rec + ileft_rec >= 2) {
 								Integer n = config.groups.get(prec_level.getLhs());
 								if (n == null)
@@ -570,6 +626,41 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					}
 				}
 			}
+			
+			for (Rule rule : grammar.getRules()) {
+				
+				// TODO: currently, rule.getRightEnd() returns non-empty string only for indirectly recursive ends,
+				//       or non-recursive ends; !rule.isIRightRecursive ensures non-empty string
+				if (rule.getPrecedence() == -1 || !rule.isIRightRecursive()) 
+					continue;
+				
+				Configuration config = configs.get(rule.getHead().getName());
+				boolean has = config.hasPrefixBelow(rule.getPrecedenceLevel().getLhs());
+				if (has && !rule.getRightEnd().startsWith("$")) {
+					config.rightEndsPrefixBelow.add(rule.getRightEnd());
+					boolean changed = true;
+					while (changed) {
+						changed = false;
+						int size = config.rightEndsPrefixBelow.size();
+						
+						Set<String> delta = new HashSet<>();
+						for (String end : config.rightEndsPrefixBelow) {
+							if (configs.get(end) != null) {
+								for (String right : configs.get(end).rightEnds) {
+									if (configs.get(right) != null && 
+											configs.get(right).precEnds.contains(rule.getHead().getName()))
+										delta.add(right);
+								}
+							}
+						}
+						
+						config.rightEndsPrefixBelow.addAll(delta);
+						if (size != config.rightEndsPrefixBelow.size())
+							changed = true;
+					}
+				}
+			}
+				
 			
 		}
 		
@@ -645,8 +736,31 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			rret = new Expression[n];
 			
 			for (int i = 0; i < n; i++) {
-				lret[i] = undef();
-				rret[i] = undef();
+				
+				String end = config.precEnds.get(i);
+				
+				Configuration config = configs.get(end);
+				
+				boolean canBeFromLeft = config.leftEnds.contains(rule.getHead().getName());
+				boolean canBeFromRight = config.rightEnds.contains(rule.getHead().getName());
+				boolean hasPrefixBelow = config.rightEndsPrefixBelow.contains(rule.getHead().getName());
+				
+				if (canBeFromLeft && canBeFromRight) {
+					lret[i] = undef();
+					if (hasPrefixBelow)
+						rret[i] = undef();
+					else
+						rret[i] = null;
+				} else if (canBeFromLeft) {
+					lret[i] = undef();
+					rret[i] = null;
+				} else if (canBeFromRight) {
+					lret[i] = null;
+					if (hasPrefixBelow)
+						rret[i] = undef();
+					else
+						rret[i] = null;
+				}
 			}
 				
 			this.config_op = config_op;
@@ -1618,8 +1732,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						}
 						
 						break;
-					case NON_ASSOC:
-						if (rule.isLeftRecursive() && rule.isRightRecursive()) {
+					case NON_ASSOC: // TODO: non all the cases have been yet supported 
+						if ((rule.isLeftRecursive() && rule.isRightRecursive())
+								|| (rule.isILeftRecursive() && rule.isRightRecursive() && !canBePrefix)
+								|| (rule.isLeftRecursive() && rule.isIRightRecursive() && !canBePostfix)) {
 							
 							lcond = or(lessEq(lprec, integer(0)), greaterEq(lprec, integer(prec + 1)));
 							rcond = greaterEq(integer(prec), pprec);
@@ -1989,10 +2105,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					if (isIndirectEnd) {
 						String[] parameters = new String[config.precEnds.size()];
-						for (int j = 0; j < config.precEnds.size(); j++)
-							parameters[j] = "p" + j;
+						int n = 0;
+						for (int j = 0; j < config.precEnds.size(); j++) {
+							Configuration configOfEnd = configs.get(config.precEnds.get(j));
+							if (configOfEnd.leftEnds.contains(rule.getHead().getName())
+									|| configOfEnd.rightEnds.contains(rule.getHead().getName())) {
+								parameters[j] = "p" + j;
+								n++;
+							}
+						}
 						
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());	
+						String[] params = new String[n];
+						int j = 0;
+						for (String parameter : parameters) {
+							if (parameter != null)
+								params[j++] = parameter;
+						}
+						
+						
+						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).build());	
 					}
 					
 					builder = builder.setSymbols(symbols);
@@ -2045,16 +2176,37 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					Expression iret = null;
 					
 					if (isIndirectEnd) {
-						if (config.precEnds.size() == 1)
-							iret = tuple(lret[0], rret[0]);
-						else {
+						if (config.precEnds.size() == 1) {
+							if (lret[0] != null && rret[0] != null)
+								iret = tuple(lret[0], rret[0]);
+							else if (lret[0] != null)
+								iret = lret[0];
+							else if (rret[0] != null)
+								iret = rret[0];
+						} else {
 							int j = 0;
-							Expression[] rets = new Expression[lret.length]; 
+							int size = 0;
+							
 							for (Expression l : lret) {
-								rets[j] = tuple(l, rret[j]);
+								if (l != null || rret[j] != null)
+									size++;
 								j++;
 							}
-							iret = tuple(rets);
+							
+							j = 0;
+							int k = 0;
+							Expression[] rets = new Expression[size];
+							for (Expression l : lret) {
+								if (l != null && rret[j] != null) {
+									rets[k++] = tuple(l, rret[j]);
+								} else if (l!= null)
+									rets[k++] = l;
+								else if (rret[j] != null)
+									rets[k++] = rret[j];
+								j++;
+							}
+							if (rets.length != 0)
+								iret = tuple(rets);
 						}	
 					}
 					
@@ -2177,7 +2329,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			boolean isUseOfLeftOrRight = leftOrRightRecursiveNonterminals.contains(symbol.getName()); // recursive symbol with precedence, i.e., it has parameters and needs arguments 
 			
 			Configuration config = configs.get(symbol.getName());
-			boolean isUseOfLeftOrRightEnd = !config.precEnds.isEmpty(); // symbol that introduces indirection, i.e., it has parameters and needs arguments
+			boolean isUseOfLeftOrRightEnd = false; // // symbol that introduces indirection, i.e., it has parameters and needs arguments
+			
+			List<String> precEnds = new ArrayList<>();
+			
+			if (!config.precEnds.isEmpty()) {
+				for (String end : config.precEnds)
+					if (configs.get(end).leftEnds.contains(symbol.getName())
+							|| configs.get(end).rightEnds.contains(symbol.getName())) {
+						isUseOfLeftOrRightEnd = true;
+						precEnds.add(end);
+					}
+			}
 			
 			Map<String, Integer> labels = headsWithLabeledRules.get(symbol.getName());
 			
@@ -2185,7 +2348,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
 			
-			boolean isIndirectRecursiveUseOfLeftOrRight = isUseOfLeftOrRightEnd && config.precEnds.contains(rule.getHead().getName());
+			boolean isIndirectRecursiveUseOfLeftOrRight = isUseOfLeftOrRightEnd && precEnds.contains(rule.getHead().getName());
 			
 			Expression _not = null;
 			Expression[] arguments = null;
@@ -2248,39 +2411,62 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					if (isUseOfLeftOrRight) {
 						int parity = config.parity;
-						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
 						
-						if (ends.contains(symbol.getName())) {
+						if (config.leftEnds.contains(rule.getHead().getName())
+								|| config.rightEnds.contains(rule.getHead().getName())) { // TODO: if precedence also applies to X, use larg and rarg
+							
+							List<String> ends = configs.get(rule.getHead().getName()).precEnds;
 							
 							int i = ends.indexOf(symbol.getName());
 							
-							if (isFirst && isLast) {
-								
-								boolean canBeFromLeft = configs.get(symbol.getName()).leftEnds.contains(rule.getHead().getName());
-								boolean canBeFromRight = configs.get(symbol.getName()).rightEnds.contains(rule.getHead().getName());
+							boolean canBeFromLeft = config.leftEnds.contains(rule.getHead().getName());
+							boolean canBeFromRight = config.rightEnds.contains(rule.getHead().getName());
+							
+							if (isFirst && isLast) { // X ::= E
 								
 								if (canBeFromLeft && canBeFromRight) {
+									variable = "l";
+									arguments = new Expression[] { var("p" + i) };
+									
+									// TODO: if-then-else is needed for the return value
 									throw new RuntimeException("Unsupported yet!");
+									
 								} else if (canBeFromLeft) {
 									variable = "l";
-									arguments = new Expression[] { get(var("p" + i), integer(0)) };
+									arguments = new Expression[] { var("p" + i) };
 									lret[i] = var("l");
 								} else if (canBeFromRight) {
 									variable = "r";
-									arguments = new Expression[] { get(var("p" + i), integer(1)) };
-									rret[i] = var("r");
+									arguments = new Expression[] { var("p" + i) };
+									boolean hasPrefixBelow = configs.get(symbol.getName()).rightEndsPrefixBelow.contains(rule.getHead().getName());
+									if (hasPrefixBelow)
+										rret[i] = var("r");
+									else
+										variable = "";
 								} else {
 									throw new RuntimeException("Shouldn't have happened!");
 								}
 								
-							} else if (isFirst) {
+							} else if (isFirst) { // X ::= E alpha
 								variable = "l";
-								arguments = new Expression[] { get(var("p" + i), integer(0)) };
+								if (canBeFromLeft && canBeFromRight)
+									arguments = new Expression[] { get(var("p" + i), integer(0)) };
+								else if (canBeFromLeft)
+									arguments = new Expression[] { var("p" + i) };
 								lret[i] = var("l");
-							} else if (isLast) {
+							} else if (isLast) { // X ::= alpha E
 								variable = "r";
-								arguments = new Expression[] { get(var("p" + i), integer(1)) };
-								rret[i] = var("r");
+								if (canBeFromLeft && canBeFromRight)
+									arguments = new Expression[] { get(var("p" + i), integer(1)) };
+								else if (canBeFromRight) {
+									arguments = new Expression[] { var("p" + i) };
+									
+									boolean hasPrefixBelow = configs.get(symbol.getName()).rightEndsPrefixBelow.contains(rule.getHead().getName());
+									if (hasPrefixBelow)
+										rret[i] = var("r");
+									else
+										variable = "";
+								}
 							} else
 								arguments = new Expression[] { parity == 2? tuple(integer(0), integer(0)) : integer(0) };
 							
@@ -2288,102 +2474,255 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							arguments = new Expression[] { parity == 2? tuple(integer(0), integer(0)) : integer(0) };
 					}
 					
-					if (isUseOfLeftOrRightEnd) {
-						
+					if (isUseOfLeftOrRightEnd) { // . ::= alpha X alpha
 						arguments = new Expression[config.precEnds.size()];
 						int i = 0;
 						for (String end : config.precEnds) {
-							int parity = configs.get(end).parity;
-							if (config.precLeftEnds.contains(end) && config.precRightEnds.contains(end))
-								arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), 
-													 parity == 2? tuple(integer(0), integer(0)) : integer(0));
-							else
-								arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
-							i++;
+							
+							if (configs.get(end).leftEnds.contains(symbol.getName())
+									|| configs.get(end).rightEnds.contains(symbol.getName())) {
+							
+								boolean canReachFromLeft = configs.get(end).leftEnds.contains(symbol.getName());
+								boolean canReachFromRight = configs.get(end).rightEnds.contains(symbol.getName());
+								
+								int parity = configs.get(end).parity;
+								
+								if (canReachFromLeft && canReachFromRight)
+									arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), 
+														 parity == 2? tuple(integer(0), integer(0)) : integer(0));
+								else
+									arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
+								i++;
+							}
 						}
 					}
 					
-					if (isRecursiveUseOfLeftOrRight && isFirst && isLast)
+					if (isRecursiveUseOfLeftOrRight && isFirst && isLast) // E ::= E
 						throw new RuntimeException("Cyclic use where precedence applies.");
 					
-					if (isRecursiveUseOfLeftOrRight && isFirst) {
+					if (isRecursiveUseOfLeftOrRight && isFirst) { // E ::= E alpha
 						variable = "l";
 						arguments = new Expression[] { larg };
-					} else if (isRecursiveUseOfLeftOrRight && isLast) {
+					} else if (isRecursiveUseOfLeftOrRight && isLast) { // E ::= alpha E
 						variable = "r";
 						arguments = new Expression[] { rarg };
+						if (!config.hasPrefixBelow(rule.getPrecedenceLevel().getLhs()))
+							variable = "";
 					}
 					
 					Statement binding = null;
 					Statement lbinding = null;
 					Statement rbinding = null;
 					
-					if (isIndirectRecursiveUseOfLeftOrRight && isFirst && isLast) {
-						if (config.precEnds.size() == 1) {
-							variable = symbol.getName().toLowerCase();
-							lbinding = varDeclStat("l", get(var(variable), integer(0)));
-							rbinding = varDeclStat("r", get(var(variable), integer(1)));
-							arguments = new Expression[] { tuple(larg, rarg) };
-						} else {
-							int i = config.precEnds.indexOf(rule.getHead().getName());
-							variable = symbol.getName().toLowerCase();
-							binding  = varDeclStat("l", get(get(var(variable), integer(i)), integer(0))); // l = x.i.0
-							rbinding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1))); // r = x.i.1
-							arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
-						}
-					} else if (isIndirectRecursiveUseOfLeftOrRight && isFirst) {
-						if (config.precEnds.size() == 1) {
-							variable = "l" + symbol.getName().toLowerCase();
-							binding = varDeclStat("l", get(var(variable), integer(0)));
-							arguments = new Expression[] { tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0)) };
-						} else {
-							int i = config.precEnds.indexOf(rule.getHead().getName());
-							variable = "l" + symbol.getName().toLowerCase();
-							binding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0)));
-							arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
-						}
-					} else if (isIndirectRecursiveUseOfLeftOrRight && isLast) {
-						if (config.precEnds.size() == 1) {
-							variable = "r" + symbol.getName().toLowerCase();
-							binding = varDeclStat("r", get(var(variable), integer(1)));
-							arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
-						} else {
-							int i = config.precEnds.indexOf(rule.getHead().getName());
-							variable = "r" + symbol.getName();
-							binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
-							arguments[i] = tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg);
-						}
-					} else if (isUseOfLeftOrRightEnd && isFirst && isLast) {
-						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
-						for (String end : config.precEnds) {
-							int i = ends.indexOf(end);
-							if (i != -1) {
+					if (isIndirectRecursiveUseOfLeftOrRight) { // TODO: if precedence also applies to X, propagate argument from E
+						
+						boolean canReachLeft = configs.get(rule.getHead().getName()).leftEnds.contains(symbol.getName());
+						boolean canReachRight = configs.get(rule.getHead().getName()).rightEnds.contains(symbol.getName());
+						
+						if (isFirst && isLast) { // E ::= X
+							if (precEnds.size() == 1) {
+								variable = symbol.getName().toLowerCase(); // x
+								if (canReachLeft && canReachRight) {
+									lbinding = varDeclStat("l", get(var(variable), integer(0)));
+									rbinding = varDeclStat("r", get(var(variable), integer(1)));
+									arguments = new Expression[] { tuple(larg, rarg) };
+								} else if (canReachLeft) {
+									variable = "l";
+									arguments = new Expression[] { larg };
+								} else {
+									boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+									if (prefixBelow)
+										variable = "r";
+									else
+										variable = "";
+									arguments = new Expression[] { rarg };
+								}
+							} else {
+								int i = config.precEnds.indexOf(rule.getHead().getName());
 								variable = symbol.getName().toLowerCase();
-								arguments[i] = var("p" + i);
-								lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
-								rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+								if (canReachLeft && canReachRight) {
+									lbinding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0))); // l = x.i.0
+									rbinding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1))); // r = x.i.1
+									arguments[i] = tuple(larg, rarg);
+								} else if (canReachLeft) {
+									binding = varDeclStat("l", get(var(variable), integer(i)));
+									arguments[i] = larg;
+								} else {
+									boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+									if (prefixBelow)
+										binding = varDeclStat("r", get(var(variable), integer(i)));
+									else
+										variable = "";
+									arguments[i] = rarg;
+								}
+							}
+						} else if (isFirst) { // E ::= X aplha
+							if (precEnds.size() == 1) {
+								variable = "l" + symbol.getName().toLowerCase();
+								if (canReachLeft && canReachRight) {
+									binding = varDeclStat("l", get(var(variable), integer(0)));
+									arguments = new Expression[] { tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0)) };
+								} else {
+									variable = "l";
+									arguments = new Expression[] { larg };
+								}
+							} else {
+								int i = config.precEnds.indexOf(rule.getHead().getName());
+								variable = "l" + symbol.getName().toLowerCase();
+								if (canReachLeft && canReachRight) {
+									binding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0)));
+									arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
+								} else {
+									binding = varDeclStat("l", get(var(variable), integer(i)));
+									arguments[i] = larg;
+								}
+							}
+						} else if (isLast) { // E ::= alpha X
+							if (precEnds.size() == 1) {
+								
+								variable = "r" + symbol.getName().toLowerCase();
+								boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+								
+								if (canReachLeft && canReachRight) {
+									if (prefixBelow)
+										binding = varDeclStat("r", get(var(variable), integer(1)));
+									else
+										variable = "";
+									arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
+								} else {
+									
+									if (prefixBelow)
+										variable = "r";
+									else
+										variable = "";
+									arguments = new Expression[] { rarg };
+								}
+							} else {
+								int i = config.precEnds.indexOf(rule.getHead().getName());
+								variable = "r" + symbol.getName();
+								boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
+								
+								if (canReachLeft && canReachRight) {
+									if (prefixBelow)
+										binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
+									else
+										variable = "";
+									arguments[i] = tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg);
+								} else {
+									if (prefixBelow)
+										binding = varDeclStat("r", get(var(variable), integer(i)));
+									else
+										variable = "";
+									arguments[i] = rarg;
+								}
 							}
 						}
-					} else if (isUseOfLeftOrRightEnd && isFirst) {
-						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
-						for (String end : config.precEnds) {
-							int parity = configs.get(end).parity;
-							int i = ends.indexOf(end);
-							if (i != -1) {
-								variable = "l";
-								arguments[i] = tuple(get(var("p" + i), integer(0)), parity == 2? tuple(integer(0), integer(0)) : integer(0));
-								lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+						
+					} else if (isUseOfLeftOrRightEnd) { // TODO: if precedence also applies to X, use larg and rarg to propagate down
+						if (isFirst && isLast) { // X ::= Y
+							List<String> ends = config.precEnds;
+							for (String end : ends) {
+								
+								if (configs.get(end).leftEnds.contains(symbol.getName())
+										|| configs.get(end).rightEnds.contains(symbol.getName())) {
+									
+									int i = ends.indexOf(end);
+									
+									// Note: shouldn't look up the left and right ends of the head
+									boolean canBeFromLeft = configs.get(end).leftEnds.contains(symbol.getName());
+									boolean canBeFromRight = configs.get(end).rightEnds.contains(symbol.getName());
+									
+									variable = symbol.getName().toLowerCase();
+									arguments[i] = var("p" + i);
+									
+									if (canBeFromLeft && canBeFromRight) {
+										lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var(variable), integer(0)) : get(get(var(variable), integer(i)), integer(0));
+										
+										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
+										
+										if (hasPrefixBelow)
+											rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var(variable), integer(1)) : get(get(var(variable), integer(i)), integer(1));
+											
+									} else if (canBeFromLeft)
+										lret[config.precEnds.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
+									else {
+										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
+										
+										if (hasPrefixBelow)
+											rret[config.precEnds.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
+										else
+											variable = "";
+									}
+								}
 							}
-						}
-					} else if (isUseOfLeftOrRightEnd && isLast) {
-						List<String> ends = configs.get(rule.getHead().getName()).precEnds;
-						for (String end : config.precEnds) {
-							int parity = configs.get(end).parity;
-							int i = ends.indexOf(end);
-							if (i != -1) {
-								variable = "r";
-								arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), get(var("p" + i), integer(1)));
-								rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+						} else if (isFirst) { // X ::= Y alpha (includes X ::= X alpha)
+							List<String> ends = config.precEnds;
+							for (String end : ends) {
+								
+								if (configs.get(end).leftEnds.contains(symbol.getName())
+										|| configs.get(end).rightEnds.contains(symbol.getName())) {
+									
+									int parity = configs.get(end).parity;
+									int i = ends.indexOf(end);
+									
+									// Note: shouldn't look up the left and right ends of the head
+									boolean canBeFromLeft = configs.get(end).leftEnds.contains(rule.getHead().getName());
+									boolean canBeFromRight = configs.get(end).rightEnds.contains(rule.getHead().getName());
+									
+									variable = "l";
+									
+									if (canBeFromLeft && canBeFromRight) {
+										arguments[i] = tuple(get(var("p" + i), integer(0)), parity == 2? tuple(integer(0), integer(0)) : integer(0));
+										lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+									} else if (canBeFromLeft) {
+										arguments[i] = var("p" + i);
+										lret[config.precEnds.indexOf(end)] = ends.size() == 1? var("l") : get(var("l"), integer(i));
+									} else if (canBeFromRight) {
+										arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
+										variable = "";
+									}
+								}
+							}
+						} else if (isLast) { // X ::= alpha Y (includes X ::= alpha X) 
+							List<String> ends = config.precEnds;
+							for (String end : ends) {
+								
+								if (configs.get(end).leftEnds.contains(symbol.getName())
+										|| configs.get(end).rightEnds.contains(symbol.getName())) {
+									
+									int parity = configs.get(end).parity;
+									int i = ends.indexOf(end);
+									
+									// Note: shouldn't look up the left and right ends of the head
+									boolean canBeFromLeft = configs.get(end).leftEnds.contains(rule.getHead().getName());
+									boolean canBeFromRight = configs.get(end).rightEnds.contains(rule.getHead().getName());
+									
+									variable = "r";
+									
+									if (canBeFromLeft && canBeFromRight) {
+										arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), get(var("p" + i), integer(1)));
+										
+										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
+										
+										if (hasPrefixBelow)
+											rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+										else
+											variable = "";
+									} else if (canBeFromRight) {
+										
+										arguments[i] = var("p" + i);
+										
+										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
+										
+										if (hasPrefixBelow)
+											rret[config.precEnds.indexOf(end)] = ends.size() == 1? var("r") : get(var("r"), integer(i));
+										else
+											variable = "";
+									} else if (canBeFromLeft) {
+										arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
+										variable = "";
+									}
+								}
 							}
 						}
 					}
@@ -2394,13 +2733,32 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					Symbol newone = null;
 					
+					if (arguments != null) {
+						
+						int n = 0;
+						for (Expression argument : arguments)
+							if (argument != null)
+								n++;
+						
+						Expression[] args = new Expression[n];
+						
+						n = 0;
+						for (Expression argument : arguments)
+							if (argument != null) {
+								args[n] = argument;
+								n++;
+							}
+						
+						arguments = args;
+					}
+					
 					if (arguments != null && _not != null)
 						newone = variable.isEmpty()? symbol.copyBuilder().apply(arguments).apply(_not).build()
 												   : symbol.copyBuilder().apply(arguments).apply(_not).setVariable(variable).build();
-					else if (arguments != null)
+					else if (arguments != null) {
 						newone =  variable.isEmpty()? symbol.copyBuilder().apply(arguments).build()
 												    : symbol.copyBuilder().apply(arguments).setVariable(variable).build();
-					else 
+					} else 
 						newone =  variable.isEmpty()? symbol.copyBuilder().apply(_not).build()
 								                    : symbol.copyBuilder().apply(_not).setVariable(variable).build();
 					if (binding != null)
