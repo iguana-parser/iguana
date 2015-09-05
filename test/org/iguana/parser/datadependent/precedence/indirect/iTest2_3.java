@@ -1,4 +1,4 @@
-package org.iguana.parser.datadependent.precedence;
+package org.iguana.parser.datadependent.precedence.indirect;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ import com.google.common.collect.Sets;
 import static org.iguana.util.CollectionsUtil.*;
 
 @SuppressWarnings("unused")
-public class iTest1_1 {
+public class iTest2_3 {
 
     @Test
     public void test() {
@@ -47,23 +47,23 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("Y").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(42).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.iRIGHT_REC).setLeftEnd("").setRightEnd("E").setLeftEnds(new HashSet<String>(Arrays.asList("$Y"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","E","X"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 // X ::= (*) Y  {UNDEFINED,1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("X").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(42).build()).build()).build()).addSymbol(Nonterminal.builder("Y").build()).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.iRIGHT_REC).setLeftEnd("").setRightEnd("Y").setLeftEnds(new HashSet<String>(Arrays.asList("$X"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","E","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
-// E ::= E (+) E  {UNDEFINED,1,LEFT_RIGHT_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList("$E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","X","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
+// E ::= E (+) E  {LEFT,1,LEFT_RIGHT_REC} PREC(1,1) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList("$E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","X","Y"))).setAssociativity(Associativity.LEFT).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 // E ::= (a)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList("$E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","X","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
-// E ::= E X  {UNDEFINED,2,LEFT_REC} PREC(2,2) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("X").build()).setRecursion(Recursion.LEFT_REC).setiRecursion(Recursion.iRIGHT_REC).setLeftEnd("").setRightEnd("X").setLeftEnds(new HashSet<String>(Arrays.asList("$E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","X","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(2).setPrecedenceLevel(PrecedenceLevel.from(2,2,2,false,true,false,new Integer[]{},false,new Integer[]{})).build())
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList("$E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","X","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
+// E ::= E X  {LEFT,2,LEFT_REC} PREC(2,2) 
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("X").build()).setRecursion(Recursion.LEFT_REC).setiRecursion(Recursion.iRIGHT_REC).setLeftEnd("").setRightEnd("X").setLeftEnds(new HashSet<String>(Arrays.asList("$E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","X","Y"))).setAssociativity(Associativity.LEFT).setPrecedence(2).setPrecedenceLevel(PrecedenceLevel.from(2,2,-1,false,true,false,new Integer[]{},false,new Integer[]{})).build())
 // S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList("$E","E"))).setRightEnds(new HashSet<String>(Arrays.asList("$E","E","X","Y"))).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
 
-         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-         precedenceAndAssociativity.setOP2();
+         DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
+         desugarPrecedenceAndAssociativity.setOP2();
          
-		 grammar = precedenceAndAssociativity.transform(grammar);
+		 grammar = desugarPrecedenceAndAssociativity.transform(grammar);
          System.out.println(grammar.toString());
 
-         Input input = Input.fromString("a**a");
+         Input input = Input.fromString("a+a**a**a+a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
@@ -73,9 +73,9 @@ Grammar.builder()
 
          Assert.assertTrue(result.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-         //                   result.asParseSuccess().getRoot(), input);
+         Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
+                           result.asParseSuccess().getRoot(), input);
 
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
 }

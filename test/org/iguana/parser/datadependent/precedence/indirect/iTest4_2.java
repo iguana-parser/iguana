@@ -1,4 +1,4 @@
-package org.iguana.parser.datadependent.precedence;
+package org.iguana.parser.datadependent.precedence.indirect;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ import com.google.common.collect.Sets;
 import static org.iguana.util.CollectionsUtil.*;
 
 @SuppressWarnings("unused")
-public class iTest4_1 {
+public class iTest4_2 {
 
     @Test
     public void test() {
@@ -62,7 +62,7 @@ Grammar.builder()
 		 grammar = precedenceAndAssociativity.transform(grammar);
          System.out.println(grammar.toString());
 
-         Input input = Input.fromString("a*a*a*a");
+         Input input = Input.fromString("a*a->a->a*a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);

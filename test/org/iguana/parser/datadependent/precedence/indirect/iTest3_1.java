@@ -1,4 +1,4 @@
-package org.iguana.parser.datadependent.precedence;
+package org.iguana.parser.datadependent.precedence.indirect;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ import com.google.common.collect.Sets;
 import static org.iguana.util.CollectionsUtil.*;
 
 @SuppressWarnings("unused")
-public class iTest3_2 {
+public class iTest3_1 {
 
     @Test
     public void test() {
@@ -64,7 +64,7 @@ Grammar.builder()
 		 grammar = precedenceAndAssociativity.transform(grammar);
          System.out.println(grammar.toString());
 
-         Input input = Input.fromString("a+fa");
+         Input input = Input.fromString("fa+a");
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
@@ -75,8 +75,8 @@ Grammar.builder()
          Assert.assertTrue(result.isParseSuccess());
 
          Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-                           result.asParseSuccess().getRoot(), input);
+                          result.asParseSuccess().getRoot(), input);
 
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }
 }

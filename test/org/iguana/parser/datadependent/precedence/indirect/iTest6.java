@@ -1,4 +1,4 @@
-package org.iguana.parser.datadependent.precedence;
+package org.iguana.parser.datadependent.precedence.indirect;
 
 import java.util.Arrays;
 import java.util.HashSet;
