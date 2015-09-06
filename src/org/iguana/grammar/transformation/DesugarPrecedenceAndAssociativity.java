@@ -2316,7 +2316,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						symbols.add(Return.ret(tuple(ret,xret)));
 					else if (ret != null)
 						symbols.add(Return.ret(ret));
-					else if (xret != null)
+					else if (xret != null && iret == null)
 						symbols.add(Return.ret(xret));
 					
 					if (iret != null && xret != null)
