@@ -336,7 +336,12 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)
 								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+								.setLeftEnd(symbols.get(0).getName())
+								.setRightEnd(symbols.get(symbols.size() - 1).getName())
+								.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()) : new HashSet<>())
+								.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
+								.build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();

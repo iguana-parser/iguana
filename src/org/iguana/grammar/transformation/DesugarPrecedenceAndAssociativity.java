@@ -314,6 +314,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		leftOrRightRecursiveNonterminals = new HashSet<>();
 		headsWithLabeledRules = new HashMap<>();
 		
+		FindLabelsUsedInExcepts usedLabels = new FindLabelsUsedInExcepts();
+		usedLabels.compute(grammar);
+		
 		configs = new HashMap<>();
 		
 		for (Rule rule : grammar.getRules()) {
@@ -340,7 +343,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Nonterminal head = rule.getHead();
 			
 			// 1. Excepts
-			if (rule.getLabel() != null) {
+			if (rule.getLabel() != null && usedLabels.getLables().containsKey(rule.getHead().getName())
+					&& usedLabels.getLables().get(rule.getHead().getName()).contains(rule.getLabel())) {
+				
 				Map<String, Integer> labels = headsWithLabeledRules.get(head.getName());
 				if (labels != null) {
 					if(!labels.containsKey(rule.getLabel()))
@@ -353,8 +358,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 			
 			// 2. Precedence
-			if (rule.getPrecedenceLevel().getRhs() != 1 || 
-					(rule.getPrecedence() == 1 && rule.getAssociativity() != Associativity.UNDEFINED))
+			if (rule.getPrecedenceLevel().getRhs() != 1 || (rule.getPrecedence() == 1 && rule.getAssociativity() != Associativity.UNDEFINED))
 				leftOrRightRecursiveNonterminals.add(head.getName());
 			// else: all the rules have a precedence -1 (non-recursive), or 1 and
 			// undefined associativity; therefore, precedence does not apply
@@ -873,9 +877,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		private void excepts1() {
 			if (rule.getLabel() != null) {
-				preconditions = new HashSet<>();	
-				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
-				preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
+				Map<String, Integer> labels = headsWithLabeledRules.get(rule.getHead().getName());
+				if (labels != null && labels.containsKey(rule.getLabel())) {
+					preconditions = new HashSet<>();
+					int l = labels.get(rule.getLabel());
+					preconditions.add(predicate(lShiftANDEqZero(var("_not"), integer(l))));
+				}
 			}
 		}
 		
@@ -884,8 +891,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			if (labels == null) return;
 			
-			if (rule.getLabel() != null) {
-				int l = headsWithLabeledRules.get(rule.getHead().getName()).get(rule.getLabel());
+			if (rule.getLabel() != null && labels.containsKey(rule.getLabel())) {
+				int l = labels.get(rule.getLabel());
 				xrcond = lShiftANDEqZero(var("_not"), integer(l));
 				xret = integer(l);
 			} else 
@@ -2208,7 +2215,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
 					else builder = rule.copyBuilder();
 					
-					boolean isIndirectEnd = !config.pends.isEmpty();
+					boolean isIndirectEnd = false;
+					
+					for (String pend : config.pends) {
+						Configuration c = configs.get(pend);
+						if (c.leftEnds.contains(rule.getHead().getName())
+								|| c.rightEnds.contains(rule.getHead().getName())) {
+							isIndirectEnd = true;
+							break;
+						}
+					}
 					
 					if (isIndirectEnd) {
 						String[] parameters = new String[config.pends.size()];
