@@ -30,7 +30,7 @@ import com.google.common.collect.Sets;
 import static org.iguana.util.CollectionsUtil.*;
 
 @SuppressWarnings("unused")
-public class iTest7_1 {
+public class iTest7_4 {
 
     @Test
     public void test() {
@@ -69,7 +69,8 @@ Grammar.builder()
 		 grammar = precedenceAndAssociativity.transform(grammar);
          System.out.println(grammar.toString());
 
-         Input input = Input.fromString("a^a*a&aa+a"); // ((a^a)((*a)&a)a)+a
+         Input input = Input.fromString("a^*aa");
+         // Input input = Input.fromString("a*a"); // should be parse error
          GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/indirect/", graph);
