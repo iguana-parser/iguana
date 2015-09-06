@@ -110,16 +110,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		int prefixBelow = -1;
 		int postfixBelow = -1;
 		
-		public Set<String> leftEnds = new HashSet<>();
-		public Set<String> rightEnds = new HashSet<>();
+		public Set<String> leftEnds = new HashSet<>(); // left ends (transitive)
+		public Set<String> rightEnds = new HashSet<>(); // right ends (transitive)
 		
-		public Set<String> precLeftEnds = new HashSet<>(); // the ones from leftEnds but where precedence applies
-		public Set<String> precRightEnds = new HashSet<>(); // the ones from rightEnds but where precedence applies
+		public Set<String> pleftEnds = new HashSet<>(); // from the left ends but where precedence applies
+		public Set<String> prightEnds = new HashSet<>(); // from the right ends but where precedence applies
 		
-		public List<String> precEnds = new ArrayList<>();
+		public List<String> pends = new ArrayList<>();
 		
 		public Set<String> rightEndsPrefixBelow = new HashSet<>();
 		
+		public Set<String> directLeftEnds = new HashSet<>(); // not transitive
+		public Set<String> directRightEnds = new HashSet<>(); // not transitive
 		public Set<String> rightEndsThatCanLeadToPostfix = new HashSet<>();
 		
 		// Encoding: 2 is 2 & 1; 3 is 1 & 2; 4 is 2 & 2 (l-value & p-arg)
@@ -188,6 +190,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 			}
 			
+			if (postfixBelow == 0)
+				return false;
+			
 			if (lhs > postfixBelow)
 				return true;
 			if (lhs <= postfixBelow)
@@ -205,14 +210,15 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (from != left || from != right)
 				throw new RuntimeException("Unexpected argument!");
 			
-			if (from == left && this.leftEnds.contains(via) && configs.get(via).precLeftEnds.contains(nt))
+			if (from == left && this.leftEnds.contains(via) && configs.get(via).pleftEnds.contains(nt))
 				return true;
 			
-			if (from == right && this.rightEnds.contains(via) && configs.get(via).precRightEnds.contains(nt))
+			if (from == right && this.rightEnds.contains(via) && configs.get(via).prightEnds.contains(nt))
 				return true;
 			
 			return false;
 		}
+		
 	}
 	
 	private Map<String, Configuration> configs;
@@ -225,6 +231,83 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		config_op = OP._2;
 	}
 	
+	private static boolean canBePrefix(String nt, String leftEnd, Map<String, Configuration> configs) {
+		
+		if (leftEnd.startsWith("$")) 
+			return true;
+		
+		Set<String> ends = new HashSet<>(Arrays.asList(leftEnd));
+		Set<String> jobs = ends;
+		boolean changed = true;
+		while (changed) {
+			changed = false;
+			Set<String> delta = new HashSet<>();
+			for (String end : jobs) {
+				int size = ends.size();
+				Set<String> lefts = configs.get(end).directLeftEnds;
+				if (lefts != null) {
+					for (String left : lefts) {
+						if (!left.equals(nt)) {
+							if (left.startsWith("$") || !configs.get(left).leftEnds.contains(nt))
+								return true;
+							else
+								delta.add(left);
+						}
+					}
+				}
+				ends.addAll(delta);
+				jobs = delta;
+				if (size != ends.size())
+					changed = true;
+			}
+		}
+		return false;
+	}
+		
+	private static boolean canBePostfix(String nt, String rightEnd, Map<String, Configuration> configs, boolean compute) {
+		
+		Configuration config = configs.get(nt);
+		
+		boolean can = false;
+		
+		if (rightEnd.startsWith("$")) // nothing to compute
+			return true;
+		
+		Set<String> ends = new HashSet<>(Arrays.asList(rightEnd));
+		Set<String> jobs = ends;
+		boolean changed = true;
+		while (changed) {
+			changed = false;
+			Set<String> delta = new HashSet<>();
+			for (String end : jobs) {
+				int size = ends.size();
+				Set<String> rights = configs.get(end).directRightEnds;
+				if (rights != null) {
+					for (String right : rights) {
+						if (!right.equals(nt)) {
+							if (right.startsWith("$") || !configs.get(right).rightEnds.contains(nt)) {
+								if (!compute)
+									return true;
+								else
+									can = true;
+							} else
+								delta.add(right);
+						}
+					}
+				}
+				ends.addAll(delta);
+				jobs = delta;
+				if (size != ends.size())
+					changed = true;
+			}
+		}
+		
+		if (compute && can)
+			config.rightEndsThatCanLeadToPostfix.addAll(ends);
+		
+		return can;
+	}
+		
 	@Override
 	public Grammar transform(Grammar grammar) {
 		
@@ -241,6 +324,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				config = new Configuration();
 				configs.put(rule.getHead().getName(), config);
 			}
+			
+			if (!rule.getLeftEnd().isEmpty())
+				config.directRightEnds.add(rule.getRightEnd());
+			
+			if (!rule.getRightEnd().isEmpty())
+				config.directRightEnds.add(rule.getRightEnd());
 			
 			config.leftEnds = rule.getLeftEnds();
 			config.rightEnds = rule.getRightEnds();
@@ -288,25 +377,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			boolean canBePrefix = false;
 			boolean canBePostfix = false;
 			
-			if (rule.isLeftRecursive() && rule.isIRightRecursive()) {
-				Set<String> ends = configs.get(rule.getRightEnd()).rightEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePostfix = true;
-						break;
-					}
-				}
-			}
+			if (rule.isLeftRecursive() && rule.isIRightRecursive())
+				canBePostfix = canBePostfix(rule.getHead().getName(), rule.getRightEnd(), configs, true);
 			
-			if (rule.isILeftRecursive() && rule.isRightRecursive()) {
-				Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePrefix = true;
-						break;
-					}
-				}
-			}
+			if (rule.isILeftRecursive() && rule.isRightRecursive())
+				canBePrefix = canBePrefix(rule.getHead().getName(), rule.getLeftEnd(), configs);
 			
 			if (rule.isILeftRecursive() && !rule.isRightRecursive() && !rule.isIRightRecursive())
 				canBePostfix = true;
@@ -314,22 +389,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (!rule.isLeftRecursive() && !rule.isILeftRecursive() && rule.isIRightRecursive())
 				canBePrefix = true;
 			
-			if (!rule.isLeftRecursive() && !rule.isLeftRecursive() && rule.isILeftRecursive() && rule.isIRightRecursive()) {
-				Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePrefix = true;
-						break;
-					}
-				}
-				
-				ends = configs.get(rule.getRightEnd()).rightEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePostfix = true;
-						break;
-					}
-				}
+			if (rule.isILeftRecursive() && rule.isIRightRecursive()) {
+				canBePrefix = canBePrefix(rule.getHead().getName(), rule.getLeftEnd(), configs);
+				canBePostfix = canBePostfix(rule.getHead().getName(), rule.getRightEnd(), configs, true);
 			}
 			
 			if (isBinary) {
@@ -656,23 +718,21 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				
 				for (String end : config.leftEnds) {
 					if (leftOrRightRecursiveNonterminals.contains(end)) {
-						config.precLeftEnds.add(end);
-						config.precEnds.add(end);
+						config.pleftEnds.add(end);
+						config.pends.add(end);
 					}
 				}
 				for (String end : config.rightEnds) {
 					if (leftOrRightRecursiveNonterminals.contains(end)) {
-						config.precRightEnds.add(end);
-						if (!config.precEnds.contains(end))
-							config.precEnds.add(end);
+						config.prightEnds.add(end);
+						if (!config.pends.contains(end))
+							config.pends.add(end);
 					}
 				}
 			}
 			
 			for (Rule rule : grammar.getRules()) {
 				
-				// TODO: currently, rule.getRightEnd() returns non-empty string only for indirectly recursive ends,
-				//       or non-recursive ends; !rule.isIRightRecursive ensures non-empty string
 				if (rule.getPrecedence() == -1 || !rule.isIRightRecursive()) 
 					continue;
 				
@@ -688,9 +748,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						Set<String> delta = new HashSet<>();
 						for (String end : config.rightEndsPrefixBelow) {
 							if (configs.get(end) != null) {
-								for (String right : configs.get(end).rightEnds) {
+								for (String right : configs.get(end).directRightEnds) {
 									if (configs.get(right) != null && 
-											configs.get(right).precEnds.contains(rule.getHead().getName()))
+											configs.get(right).prightEnds.contains(rule.getHead().getName()))
 										delta.add(right);
 								}
 							}
@@ -701,48 +761,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							changed = true;
 					}
 				}
-			}
-				
-			for (Rule rule : grammar.getRules()) {
-				
-				if (!((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())) 
-					continue;
-				
-				Configuration config = configs.get(rule.getHead().getName());
-				
-				boolean canBePostfix = false;
-				Set<String> ends = configs.get(rule.getRightEnd()).rightEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePostfix = true;
-						break;
-					}
-				}
-				
-				if (canBePostfix) {
-					config.rightEndsThatCanLeadToPostfix.add(rule.getRightEnd());
-					boolean changed = true;
-					while (changed) {
-						changed = false;
-						int size = config.rightEndsThatCanLeadToPostfix.size();
-						
-						Set<String> delta = new HashSet<>();
-						for (String end : config.rightEndsThatCanLeadToPostfix) {
-							if (configs.get(end) != null) {
-								for (String right : configs.get(end).rightEnds) {
-									if (configs.get(right) != null && 
-											configs.get(right).precRightEnds.contains(rule.getHead().getName()))
-										delta.add(right);
-								}
-							}
-						}
-						
-						config.rightEndsThatCanLeadToPostfix.addAll(delta);
-						if (size != config.rightEndsThatCanLeadToPostfix.size())
-							changed = true;
-					}
-				}
-			}
+			}	
 		}
 		
 		Set<Rule> rules = new LinkedHashSet<>();
@@ -812,13 +831,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			this.larity = config.larity;
 			this.parity = config.parity;
 			
-			int n = config.precEnds.size();
+			int n = config.pends.size();
 			lret = new Expression[n];
 			rret = new Expression[n];
 			
 			for (int i = 0; i < n; i++) {
 				
-				String end = config.precEnds.get(i);
+				String end = config.pends.get(i);
 				
 				Configuration config = configs.get(end);
 				
@@ -1207,25 +1226,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			boolean canBePrefix = false;
 			boolean canBePostfix = false;
 
-			if (rule.isLeftRecursive() && rule.isIRightRecursive()) {
-				Set<String> ends = configs.get(rule.getRightEnd()).rightEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePostfix = true;
-						break;
-					}
-				}
-			}
+			if (rule.isLeftRecursive() && rule.isIRightRecursive())
+				canBePostfix = canBePostfix(rule.getHead().getName(), rule.getRightEnd(), configs, false);
 			
-			if (rule.isILeftRecursive() && rule.isRightRecursive()) {
-			Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePrefix = true;
-						break;
-					}
-				}
-			}
+			if (rule.isILeftRecursive() && rule.isRightRecursive())
+				canBePrefix = canBePrefix(rule.getHead().getName(), rule.getLeftEnd(), configs);
 			
 			if (rule.isILeftRecursive() && !rule.isRightRecursive() && !rule.isIRightRecursive())
 				canBePostfix = true;
@@ -1233,22 +1238,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (!rule.isLeftRecursive() && !rule.isILeftRecursive() && rule.isIRightRecursive())
 				canBePrefix = true;
 			
-			if (!rule.isLeftRecursive() && !rule.isLeftRecursive() && rule.isILeftRecursive() && rule.isIRightRecursive()) {
-				Set<String> ends = configs.get(rule.getLeftEnd()).leftEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePrefix = true;
-						break;
-					}
-				}
-			
-				ends = configs.get(rule.getRightEnd()).rightEnds;
-				for (String end : ends) {
-					if (end.startsWith("$") && !end.equals("$" + rule.getHead().getName())) {
-						canBePostfix = true;
-						break;
-					}
-				}
+			if (rule.isILeftRecursive() && rule.isIRightRecursive()) {
+				canBePrefix = canBePrefix(rule.getHead().getName(), rule.getLeftEnd(), configs);
+				canBePostfix = canBePostfix(rule.getHead().getName(), rule.getRightEnd(), configs, false);
 			}
 			
 			// 1. Expressions for the left and/or right recursive uses
@@ -2216,13 +2208,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
 					else builder = rule.copyBuilder();
 					
-					boolean isIndirectEnd = !config.precEnds.isEmpty();
+					boolean isIndirectEnd = !config.pends.isEmpty();
 					
 					if (isIndirectEnd) {
-						String[] parameters = new String[config.precEnds.size()];
+						String[] parameters = new String[config.pends.size()];
 						int n = 0;
-						for (int j = 0; j < config.precEnds.size(); j++) {
-							Configuration configOfEnd = configs.get(config.precEnds.get(j));
+						for (int j = 0; j < config.pends.size(); j++) {
+							Configuration configOfEnd = configs.get(config.pends.get(j));
 							if (configOfEnd.leftEnds.contains(rule.getHead().getName())
 									|| configOfEnd.rightEnds.contains(rule.getHead().getName())) {
 								parameters[j] = "p" + j;
@@ -2237,8 +2229,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								params[j++] = parameter;
 						}
 						
-						
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).build());	
+						if (isHeadWithLabeledRules)
+							builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).addParameters("_not").build());
+						else
+							builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).build());
 					}
 					
 					builder = builder.setSymbols(symbols);
@@ -2281,17 +2275,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						i++;
 					}
 					
-					if (ret != null && xret != null)
-						symbols.add(Return.ret(tuple(ret,xret)));
-					else if (ret != null)
-						symbols.add(Return.ret(ret));
-					else if (xret != null)
-						symbols.add(Return.ret(xret));
-					
 					Expression iret = null;
 					
 					if (isIndirectEnd) {
-						if (config.precEnds.size() == 1) {
+						if (config.pends.size() == 1) {
 							if (lret[0] != null && rret[0] != null)
 								iret = tuple(lret[0], rret[0]);
 							else if (lret[0] != null)
@@ -2325,9 +2312,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						}	
 					}
 					
-					if (iret != null)
+					if (ret != null && xret != null)
+						symbols.add(Return.ret(tuple(ret,xret)));
+					else if (ret != null)
+						symbols.add(Return.ret(ret));
+					else if (xret != null)
+						symbols.add(Return.ret(xret));
+					
+					if (iret != null && xret != null)
+						symbols.add(Return.ret(tuple(iret,xret)));
+					else if (iret != null)
 						symbols.add(Return.ret(iret));
-				    
+					
 					break;
 			}
 			return builder.build();
@@ -2446,14 +2442,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Configuration config = configs.get(symbol.getName());
 			boolean isUseOfLeftOrRightEnd = false; // // symbol that introduces indirection, i.e., it has parameters and needs arguments
 			
-			List<String> precEnds = new ArrayList<>();
+			List<String> pends = new ArrayList<>();
 			
-			if (!config.precEnds.isEmpty()) {
-				for (String end : config.precEnds)
+			if (!config.pends.isEmpty()) {
+				for (String end : config.pends)
 					if (configs.get(end).leftEnds.contains(symbol.getName())
 							|| configs.get(end).rightEnds.contains(symbol.getName())) {
 						isUseOfLeftOrRightEnd = true;
-						precEnds.add(end);
+						pends.add(end);
 					}
 			}
 			
@@ -2463,7 +2459,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			boolean isRecursiveUseOfLeftOrRight = isUseOfLeftOrRight && symbol.getName().equals(rule.getHead().getName());
 			
-			boolean isIndirectRecursiveUseOfLeftOrRight = isUseOfLeftOrRightEnd && precEnds.contains(rule.getHead().getName());
+			boolean isIndirectRecursiveUseOfLeftOrRight = isUseOfLeftOrRightEnd && pends.contains(rule.getHead().getName());
 			
 			Expression _not = null;
 			Expression[] arguments = null;
@@ -2530,7 +2526,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						if (config.leftEnds.contains(rule.getHead().getName())
 								|| config.rightEnds.contains(rule.getHead().getName())) { // TODO: if precedence also applies to X, use larg and rarg
 							
-							List<String> ends = configs.get(rule.getHead().getName()).precEnds;
+							List<String> ends = configs.get(rule.getHead().getName()).pends;
 							
 							int i = ends.indexOf(symbol.getName());
 							
@@ -2593,9 +2589,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					}
 					
 					if (isUseOfLeftOrRightEnd) { // . ::= alpha X alpha
-						arguments = new Expression[config.precEnds.size()];
+						arguments = new Expression[config.pends.size()];
 						int i = 0;
-						for (String end : config.precEnds) {
+						for (String end : config.pends) {
 							
 							if (configs.get(end).leftEnds.contains(symbol.getName())
 									|| configs.get(end).rightEnds.contains(symbol.getName())) {
@@ -2638,7 +2634,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						boolean canReachRight = configs.get(rule.getHead().getName()).rightEnds.contains(symbol.getName());
 						
 						if (isFirst && isLast) { // E ::= X
-							if (precEnds.size() == 1) {
+							if (pends.size() == 1) {
 								variable = symbol.getName().toLowerCase(); // x
 								if (canReachLeft && canReachRight) {
 									lbinding = varDeclStat("l", get(var(variable), integer(0)));
@@ -2657,7 +2653,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									arguments = new Expression[] { rarg };
 								}
 							} else {
-								int i = config.precEnds.indexOf(rule.getHead().getName());
+								int i = config.pends.indexOf(rule.getHead().getName());
 								variable = symbol.getName().toLowerCase();
 								if (canReachLeft && canReachRight) {
 									lbinding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0))); // l = x.i.0
@@ -2677,7 +2673,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								}
 							}
 						} else if (isFirst) { // E ::= X aplha
-							if (precEnds.size() == 1) {
+							if (pends.size() == 1) {
 								variable = "l" + symbol.getName().toLowerCase();
 								if (canReachLeft && canReachRight) {
 									binding = varDeclStat("l", get(var(variable), integer(0)));
@@ -2687,7 +2683,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									arguments = new Expression[] { larg };
 								}
 							} else {
-								int i = config.precEnds.indexOf(rule.getHead().getName());
+								int i = config.pends.indexOf(rule.getHead().getName());
 								variable = "l" + symbol.getName().toLowerCase();
 								if (canReachLeft && canReachRight) {
 									binding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0)));
@@ -2698,7 +2694,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								}
 							}
 						} else if (isLast) { // E ::= alpha X
-							if (precEnds.size() == 1) {
+							if (pends.size() == 1) {
 								
 								variable = "r" + symbol.getName().toLowerCase();
 								boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
@@ -2711,7 +2707,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										variable = "";
 									arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
 								} else {
-									
 									if (prefixBelow || canBecomePostfix)
 										variable = "r";
 									else
@@ -2719,7 +2714,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									arguments = new Expression[] { rarg };
 								}
 							} else {
-								int i = config.precEnds.indexOf(rule.getHead().getName());
+								int i = config.pends.indexOf(rule.getHead().getName());
 								variable = "r" + symbol.getName();
 								boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
 								boolean canBecomePostfix = configs.get(rule.getHead().getName()).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
@@ -2742,7 +2737,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 					} else if (isUseOfLeftOrRightEnd) { // TODO: if precedence also applies to X, use larg and rarg to propagate down
 						if (isFirst && isLast) { // X ::= Y
-							List<String> ends = config.precEnds;
+							List<String> ends = config.pends;
 							for (String end : ends) {
 								
 								if (configs.get(end).leftEnds.contains(symbol.getName())
@@ -2758,31 +2753,31 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									arguments[i] = var("p" + i);
 									
 									if (canBeFromLeft && canBeFromRight) {
-										lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var(variable), integer(0)) : get(get(var(variable), integer(i)), integer(0));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? get(var(variable), integer(0)) : get(get(var(variable), integer(i)), integer(0));
 										
 										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var(variable), integer(1)) : get(get(var(variable), integer(i)), integer(1));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? get(var(variable), integer(1)) : get(get(var(variable), integer(i)), integer(1));
 											
 									} else if (canBeFromLeft) {
 										variable = "l";
-										lret[config.precEnds.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
 									} else {
 										variable = "r";
 										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.precEnds.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
 										else
 											variable = "";
 									}
 								}
 							}
 						} else if (isFirst) { // X ::= Y alpha (includes X ::= X alpha)
-							List<String> ends = config.precEnds;
+							List<String> ends = config.pends;
 							for (String end : ends) {
 								
 								if (configs.get(end).leftEnds.contains(symbol.getName())
@@ -2799,10 +2794,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									
 									if (canBeFromLeft && canBeFromRight) {
 										arguments[i] = tuple(get(var("p" + i), integer(0)), parity == 2? tuple(integer(0), integer(0)) : integer(0));
-										lret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
 									} else if (canBeFromLeft) {
 										arguments[i] = var("p" + i);
-										lret[config.precEnds.indexOf(end)] = ends.size() == 1? var("l") : get(var("l"), integer(i));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? var("l") : get(var("l"), integer(i));
 									} else if (canBeFromRight) {
 										arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
 										variable = "";
@@ -2810,7 +2805,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								}
 							}
 						} else if (isLast) { // X ::= alpha Y (includes X ::= alpha X) 
-							List<String> ends = config.precEnds;
+							List<String> ends = config.pends;
 							for (String end : ends) {
 								
 								if (configs.get(end).leftEnds.contains(symbol.getName())
@@ -2832,7 +2827,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.precEnds.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
 										else
 											variable = "";
 									} else if (canBeFromRight) {
@@ -2843,7 +2838,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.precEnds.indexOf(end)] = ends.size() == 1? var("r") : get(var("r"), integer(i));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? var("r") : get(var("r"), integer(i));
 										else
 											variable = "";
 									} else if (canBeFromLeft) {
