@@ -61,6 +61,8 @@ public class ArrayIntRangeTree implements IntRangeTree {
 	}
 	
 	private int get(int i, int key) {
+		if (key < 0) return ABSENT_VALUE; // TODO: choose a better scheme for missing values and EOF.
+		
 		int val = ABSENT_VALUE;
 		while (i < starts.length) {
 			if (key < starts[i]) {
