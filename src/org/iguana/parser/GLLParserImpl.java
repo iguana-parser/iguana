@@ -438,7 +438,7 @@ public class GLLParserImpl implements GLLParser {
 		countAmbiguousNodes++;
 		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
 //		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
-//		org.iguana.util.Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/", node, input);
+//		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {
 //			System.out.println("   Packed node: " + packedNode.toString());
 //			for (org.iguana.sppf.NonPackedNode child : packedNode.getChildren()) {
