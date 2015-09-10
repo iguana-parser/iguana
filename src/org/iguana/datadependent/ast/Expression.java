@@ -923,6 +923,12 @@ public abstract class Expression extends AbstractAST {
 			Object lhs = this.lhs.interpret(ctx);
 			Object rhs = this.rhs.interpret(ctx);
 			
+			if (lhs == AST.UNDEF || rhs == AST.UNDEF) {
+				if (lhs == rhs)
+					return true;
+				return false;
+			}
+			
 			if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
 				return ((java.lang.Integer) lhs).equals((java.lang.Integer) rhs);
 			}
