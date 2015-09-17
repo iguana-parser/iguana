@@ -89,7 +89,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	
 	private enum OP { _1, _2 }
 	
-	private OP config_op = OP._1;
+	private OP config_op = OP._2;
 	
 	private class Configuration {
 		
