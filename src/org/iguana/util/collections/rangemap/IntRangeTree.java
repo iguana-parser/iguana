@@ -42,7 +42,7 @@ public interface IntRangeTree {
 	public int size();
 	
 	default boolean contains(int key) {
-		return get(key) != -1;
+		return get(key) != ABSENT_VALUE;
 	}
 
 	public boolean contains(CharacterRange range);

@@ -82,7 +82,7 @@ public class IguanaRunner {
 		while (it.hasNext()) {
 			
 			Input input = it.next();
-//			System.out.println(input.getURI());
+//			System.out.print(input.getURI());
 			
 			GLLParser parser = ParserFactory.getParser(config, input, grammar);
 
@@ -104,14 +104,18 @@ public class IguanaRunner {
 			for (int i = 0; i < runCount; i++) {			
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
-					if (result.isParseSuccess())
+					if (result.isParseSuccess()) {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
-					else
+//						System.out.println("  : Success");
+					} else {
 						results.add(new FailureResult(input.getURI(), result.asParseError().toString()));
+//						System.out.println("  : Error");
+					}
 					
 //					System.out.print((i + 1) + " ");
 //					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 				} catch (Exception e) {
+					System.out.println("Hi");
 					e.printStackTrace();
 //					results.add(new FailureResult(input.getURI(), "Time out"));
 //					System.out.println("Time out");
