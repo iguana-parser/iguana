@@ -63,7 +63,7 @@ public class PersistentEnvironment implements Environment {
 	}
 	
 	@Override
-	public Environment declare(String name, Object value) {
+	public Environment _declare(String name, Object value) {
 		return new PersistentEnvironment(parent, bindings.__put(name, value));
 	}
 

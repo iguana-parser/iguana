@@ -72,7 +72,7 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 
 	@Override
 	public void declareVariable(String name, Object value) {
-		env = env.declare(name, value);
+		env = env._declare(name, value);
 	}
 
 	@Override

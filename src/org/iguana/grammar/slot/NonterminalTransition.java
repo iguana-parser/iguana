@@ -80,7 +80,7 @@ public class NonterminalTransition extends AbstractTransition {
 			Environment env = parser.getEmptyEnvironment();
 			
 			if (dest.getLabel() != null) {
-				env = env.declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+				env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 			}
 			
 			parser.setEnvironment(env);
@@ -129,7 +129,7 @@ public class NonterminalTransition extends AbstractTransition {
 //		}
 		
 		if (dest.getLabel() != null) {
-			env = env.declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 		}
 		
 		parser.setEnvironment(env);

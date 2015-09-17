@@ -69,7 +69,7 @@ public class SimpleImmutableEnvironment implements Environment {
 	}
 
 	@Override
-	public Environment declare(String name, Object value) {
+	public Environment _declare(String name, Object value) {
 		Map<String, Object> bindings = new HashMap<>(this.bindings);
 		bindings.put(name, value);
 		return new SimpleImmutableEnvironment(parent, bindings, this.hashCode + (name.hashCode() ^ value.hashCode()));

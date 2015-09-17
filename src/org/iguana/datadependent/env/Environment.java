@@ -36,7 +36,7 @@ public interface Environment {
 	
 	public Environment push();
 	
-	public Environment declare(String name, Object value);
+	public Environment _declare(String name, Object value);
 	
 	public Environment declare(String[] names, Object[] values);
 	

@@ -188,24 +188,24 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
 		
 		if (label != null)
-			env = env.declare(label, sppfNode);
+			env = env._declare(label, sppfNode);
 		
 		if (variable != null && state == null)
-			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());
+			env = env._declare(variable, ((NonterminalNode) sppfNode).getValue());
 
 		if (variable == null && state != null) {
 			if (state.size() == 1) {
 				String v = state.iterator().next();
 				if (!v.equals("_")) {
 					Object value = ((NonterminalNode) sppfNode).getValue();
-					env = env.declare(v, value);
+					env = env._declare(v, value);
 				}
 			} else {
 				List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
 				Iterator<?> it = values.iterator();
 				for (String v : state) {
 					if (!v.equals("_"))
-						env = env.declare(v, it.next());
+						env = env._declare(v, it.next());
 				}
 			}
 		}
@@ -214,11 +214,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
 			Iterator<?> it = values.iterator();
 			
-			env = env.declare(variable, it.next());
+			env = env._declare(variable, it.next());
 			
 			for (String v : state) {
 				if (!v.equals("_"))
-					env = env.declare(v, it.next());
+					env = env._declare(v, it.next());
 			}
 		}
 		
