@@ -27,15 +27,15 @@
 
 package org.iguana.datadependent.env;
 
-import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
-// import org.iguana.datadependent.env.simple.SimpleEvaluatorContext;
+// import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
+import org.iguana.datadependent.env.simple.SimpleEvaluatorContext;
 import org.iguana.util.Input;
 
 public class GLLEvaluator {
 	
 	public static IEvaluatorContext getEvaluatorContext(Input input) {
-		return new PersistentEvaluatorContext(input);
-		// return new SimpleEvaluatorContext(input);
+		// return new PersistentEvaluatorContext(input);
+		return new SimpleEvaluatorContext(input);
 	}
 
 }

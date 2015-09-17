@@ -43,11 +43,14 @@ public class SimpleImmutableEnvironment implements Environment {
 	
 	final private Map<String, Object> bindings;
 	
-	static public final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>());
+	final private int hashCode;
 	
-	private SimpleImmutableEnvironment(SimpleImmutableEnvironment parent, Map<String, Object> bindings) {
+	static public final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>(), 0);
+	
+	private SimpleImmutableEnvironment(SimpleImmutableEnvironment parent, Map<String, Object> bindings, int hashCode) {
 		this.parent = parent;
 		this.bindings = bindings;
+		this.hashCode = hashCode;
 	}
 
 	@Override
@@ -62,23 +65,27 @@ public class SimpleImmutableEnvironment implements Environment {
 
 	@Override
 	public Environment push() {
-		return new SimpleImmutableEnvironment(this, new HashMap<>());
+		return new SimpleImmutableEnvironment(this, new HashMap<>(), this.hashCode());
 	}
 
 	@Override
 	public Environment declare(String name, Object value) {
 		Map<String, Object> bindings = new HashMap<>(this.bindings);
 		bindings.put(name, value);
-		return new SimpleImmutableEnvironment(parent, bindings);
+		return new SimpleImmutableEnvironment(parent, bindings, this.hashCode + (name.hashCode() ^ value.hashCode()));
 	}
 
 	@Override
 	public Environment declare(String[] names, Object[] values) {
 		Map<String, Object> bindings = new HashMap<>(this.bindings);
 		int i = 0;
-		while (i < names.length)
-			bindings.put(names[i], values[i++]);
-		return new SimpleImmutableEnvironment(parent, bindings);
+		int hashCode = this.hashCode;
+		while (i < names.length) {
+			bindings.put(names[i], values[i]);
+			hashCode = hashCode + (names[i].hashCode() ^ values[i].hashCode());
+			i++;
+		}
+		return new SimpleImmutableEnvironment(parent, bindings, hashCode);
 	}
 
 	@Override
@@ -96,13 +103,17 @@ public class SimpleImmutableEnvironment implements Environment {
 			if (parent == this.parent)
 				return this;
 			
-			return new SimpleImmutableEnvironment((SimpleImmutableEnvironment) parent, bindings);
+			int hashCode = parent.hashCode();
+			for (Map.Entry<String, Object> entry : this.bindings.entrySet())
+				hashCode = hashCode + (entry.getKey().hashCode() ^ entry.getValue().hashCode());
+			
+			return new SimpleImmutableEnvironment((SimpleImmutableEnvironment) parent, bindings, hashCode);
 		}
 		
 		Map<String, Object> bindings = new HashMap<>(this.bindings);
 		bindings.put(name, value);
 		
-		return new SimpleImmutableEnvironment(parent, bindings);
+		return new SimpleImmutableEnvironment(parent, bindings, hashCode + (name.hashCode() ^ value.hashCode()));
 	}
 
 	@Override
@@ -129,6 +140,9 @@ public class SimpleImmutableEnvironment implements Environment {
 		if (this == other) 
 			return true;
 		
+		if (this.hashCode() != other.hashCode())
+			return false;
+		
 		if (!(other instanceof SimpleImmutableEnvironment))
 			return false;
 		
@@ -144,6 +158,11 @@ public class SimpleImmutableEnvironment implements Environment {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return hashCode;
 	}
 	
 	@Override
