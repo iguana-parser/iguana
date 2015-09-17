@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
@@ -75,7 +75,7 @@ public class ConditionsFactory {
 				
 				@Override
 				public boolean execute(Input input, GSSNode u, int i) {
-					return execute(input, u, i, new PersistentEvaluatorContext(input));
+					return execute(input, u, i, GLLEvaluator.getEvaluatorContext(input));
 				}
 				
 				@Override

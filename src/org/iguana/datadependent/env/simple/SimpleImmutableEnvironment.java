@@ -25,24 +25,27 @@
  *
  */
 
-package org.iguana.datadependent.env.persistent;
+package org.iguana.datadependent.env.simple;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableMap;
-import org.eclipse.imp.pdb.facts.util.TrieMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UndefinedRuntimeValueException;
+import org.iguana.util.generator.GeneratorUtil;
 
-public class PersistentEnvironment implements Environment {
+public class SimpleImmutableEnvironment implements Environment {
 	
-	private final PersistentEnvironment parent;
+	final private SimpleImmutableEnvironment parent;
 	
-	final private ImmutableMap<String, Object> bindings;
+	final private Map<String, Object> bindings;
 	
-	static public final Environment EMPTY = new PersistentEnvironment(null, (TrieMap<String, Object>) TrieMap.<String, Object>of());
+	static public final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>());
 	
-	private PersistentEnvironment(PersistentEnvironment parent, ImmutableMap<String, Object> bindings) {
+	private SimpleImmutableEnvironment(SimpleImmutableEnvironment parent, Map<String, Object> bindings) {
 		this.parent = parent;
 		this.bindings = bindings;
 	}
@@ -51,7 +54,7 @@ public class PersistentEnvironment implements Environment {
 	public boolean isEmpty() {
 		return bindings.isEmpty() && (parent == null || parent.isEmpty());
 	}
-	
+
 	@Override
 	public Environment pop() {
 		return parent;
@@ -59,23 +62,23 @@ public class PersistentEnvironment implements Environment {
 
 	@Override
 	public Environment push() {
-		return new PersistentEnvironment(this, (TrieMap<String, Object>) TrieMap.<String, Object>of());
+		return new SimpleImmutableEnvironment(this, new HashMap<>());
 	}
-	
+
 	@Override
 	public Environment declare(String name, Object value) {
-		return new PersistentEnvironment(parent, bindings.__put(name, value));
+		Map<String, Object> bindings = new HashMap<>(this.bindings);
+		bindings.put(name, value);
+		return new SimpleImmutableEnvironment(parent, bindings);
 	}
 
 	@Override
 	public Environment declare(String[] names, Object[] values) {
-		ImmutableMap<String, Object> bindings = this.bindings;
+		Map<String, Object> bindings = new HashMap<>(this.bindings);
 		int i = 0;
-		while (i < names.length) {
-			bindings = bindings.__put(names[i], values[i]);
-			i++;
-		}
-		return new PersistentEnvironment(parent, bindings);
+		while (i < names.length)
+			bindings.put(names[i], values[i++]);
+		return new SimpleImmutableEnvironment(parent, bindings);
 	}
 
 	@Override
@@ -85,41 +88,35 @@ public class PersistentEnvironment implements Environment {
 		
 		if (result == null) {
 			
-			if (parent == null) {
+			if (parent == null)
 				throw new UndeclaredVariableException(name);
-			}
 			
 			Environment parent = this.parent.store(name, value);
 			
-			if (parent == this.parent) {
+			if (parent == this.parent)
 				return this;
-			}
 			
-			return new PersistentEnvironment((PersistentEnvironment) parent, bindings);
+			return new SimpleImmutableEnvironment((SimpleImmutableEnvironment) parent, bindings);
 		}
 		
-		ImmutableMap<String, Object> bindings = this.bindings.__put(name, value);
-		if (bindings == this.bindings) {
-			return this;
-		}
+		Map<String, Object> bindings = new HashMap<>(this.bindings);
+		bindings.put(name, value);
 		
-		return new PersistentEnvironment(parent, bindings);
+		return new SimpleImmutableEnvironment(parent, bindings);
 	}
-	
+
 	@Override
 	public Object lookup(String name) {
 		
 		Object value = bindings.get(name);
 		
-		if (value == null && parent != null) {
-			value = parent.lookup(name);
-		}
+		if (value != null && parent != null)
+			return parent.lookup(name);
 		
 		if (value != null) {
 			
-			if (value == VariableDeclaration.defaultValue) {
+			if (value == VariableDeclaration.defaultValue)
 				throw UndefinedRuntimeValueException.instance;
-			}
 			
 			return value;
 		}
@@ -128,29 +125,22 @@ public class PersistentEnvironment implements Environment {
 	}
 	
 	@Override
-	public int hashCode() {
-		return (parent == null ? 0 : parent.hashCode()) + bindings.hashCode();   
-	}
-	
-	@Override
 	public boolean equals(Object other) {
-		if (this == other) return true;
+		if (this == other) 
+			return true;
 		
-		if (!(other instanceof PersistentEnvironment)) return false;
-		
-		PersistentEnvironment that = (PersistentEnvironment) other;
-		
-		if (this.bindings == that.bindings || this.bindings.equals(that.bindings)) {
-			
-			if (this.parent == that.parent) {
-				return true;
-			}
-			
-			if (this.parent != null) {
-				return this.parent.equals(that.parent);
-			}
-			
+		if (!(other instanceof SimpleImmutableEnvironment))
 			return false;
+		
+		SimpleImmutableEnvironment that = (SimpleImmutableEnvironment) other;
+		
+		if (bindings == that.bindings || bindings.equals(that.bindings)) {
+			
+			if (parent == that.parent)
+				return true;
+			
+			if (parent != null)
+				return parent.equals(that.parent);
 		}
 		
 		return false;
@@ -159,7 +149,8 @@ public class PersistentEnvironment implements Environment {
 	@Override
 	public String toString() {
 		return (parent != null? parent.toString() + " -> " : "() -> ")
-				+ (bindings != null? bindings.toString(): "()");
+				+ (bindings != null? GeneratorUtil.listToString(bindings.entrySet().stream().map(entry -> entry.getKey() + " : " + entry.getValue()).collect(Collectors.toList()), ";") 
+								   : "()");
 	}
 
 }

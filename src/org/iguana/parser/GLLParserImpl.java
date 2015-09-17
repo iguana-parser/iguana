@@ -37,8 +37,8 @@ import java.util.stream.StreamSupport;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -126,7 +126,7 @@ public class GLLParserImpl implements GLLParser {
 		/**
 		 * Data-dependent GLL parsing
 		 */
-		this.ctx = new PersistentEvaluatorContext(input);
+		this.ctx = GLLEvaluator.getEvaluatorContext(input);
 		
 		if (global)
 			map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));

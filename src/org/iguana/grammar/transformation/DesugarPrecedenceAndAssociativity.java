@@ -1254,7 +1254,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (assoc_group != null) {
 				
 				if ((rule.isILeftRecursive() || rule.isIRightRecursive() && assoc_group.getAssociativity() != Associativity.NON_ASSOC))
-					throw new RuntimeException("Not yet implemented: indirect recursion inside an left or right associativity group");
+					throw new RuntimeException("Not yet implemented: indirect recursion inside a left or right associativity group");
 				
 				// Local to an associativity group
 				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
