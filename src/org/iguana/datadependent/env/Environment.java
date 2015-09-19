@@ -43,5 +43,15 @@ public interface Environment {
 	public Environment store(String name, Object value);
 	
 	public Object lookup(String name);
+	
+	
+	
+	public Environment _declare(Object value);
+	
+	public Environment declare(Object[] values);
+	
+	public Environment store(int i, Object value);
+	
+	public Object lookup(int i);
 
 }

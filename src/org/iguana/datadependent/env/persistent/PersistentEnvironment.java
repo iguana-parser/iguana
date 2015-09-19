@@ -162,4 +162,24 @@ public class PersistentEnvironment implements Environment {
 				+ (bindings != null? bindings.toString(): "()");
 	}
 
+	@Override
+	public Environment _declare(Object value) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
+	@Override
+	public Environment declare(Object[] values) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
+	@Override
+	public Environment store(int i, Object value) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
+	@Override
+	public Object lookup(int i) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
 }
