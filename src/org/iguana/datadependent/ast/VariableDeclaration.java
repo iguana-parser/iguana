@@ -37,11 +37,17 @@ public class VariableDeclaration extends AbstractAST {
 	static public Object defaultValue = new Object() {};
 	
 	private final String name;
+	private final int i;
 	private final Expression expression;
 	
-	VariableDeclaration(String name, Expression expression) {
+	VariableDeclaration(String name, int i, Expression expression) {
 		this.name = name;
+		this.i = i;
 		this.expression = expression;
+	}
+	
+	VariableDeclaration(String name, Expression expression) {
+		this(name, -1, expression);
 	}
 	
 	VariableDeclaration(String name) {
@@ -59,16 +65,23 @@ public class VariableDeclaration extends AbstractAST {
 	@Override
 	public Object interpret(IEvaluatorContext ctx) {
 		Object value = defaultValue;
-		if (expression != null) {
+		
+		if (expression != null)
 			value = expression.interpret(ctx);
-		}
-		ctx.declareVariable(name, value);
+		
+		if (i != -1)
+			ctx.declareVariable(value);
+		else
+			ctx.declareVariable(name, value);
+		
 		return null;
 	}
 	
 	@Override
 	public String getConstructorCode() {
-		return "AST.varDecl(" + "\"" + name + "\"" + (expression != null? "," + expression.getConstructorCode() : "") + ")";
+		return "AST.varDecl(" + "\"" + name + "\""
+							  + (i != -1? "," + i : "")
+							  + (expression != null? "," + expression.getConstructorCode() : "") + ")";
 	}
 	
 	@Override

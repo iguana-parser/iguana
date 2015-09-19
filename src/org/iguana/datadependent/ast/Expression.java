@@ -281,9 +281,15 @@ public abstract class Expression extends AbstractAST {
 		private static final long serialVersionUID = 1L;
 		
 		private final java.lang.String name;
+		private final int i;
 		
 		Name(java.lang.String name) {
+			this(name, -1);
+		}
+		
+		Name(java.lang.String name, int i) {
 			this.name = name;
+			this.i = i;
 		}
 		
 		public java.lang.String getName() {
@@ -292,7 +298,7 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			Object value = ctx.lookupVariable(name);
+			Object value = i != -1? ctx.lookupVariable(i) : ctx.lookupVariable(name);
 			if (value == null) {
 				throw new UndeclaredVariableException(name);
 			}
@@ -301,7 +307,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.var(" + "\"" + name + "\"" + ")";
+			return "AST.var(" + "\"" + (i != -1? i + "," : "") + name + "\"" + ")";
 		}
 		
 		@Override
@@ -357,10 +363,16 @@ public abstract class Expression extends AbstractAST {
 		private static final long serialVersionUID = 1L;
 		
 		private final java.lang.String id;
+		private final int i;
 		private final Expression exp;
 		
 		Assignment(java.lang.String id, Expression exp) {
+			this(id, -1, exp);
+		}
+		
+		Assignment(java.lang.String id, int i, Expression exp) {
 			this.id = id;
+			this.i = i;
 			this.exp = exp;
 		}
 		
@@ -374,13 +386,16 @@ public abstract class Expression extends AbstractAST {
 
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			ctx.storeVariable(id, exp.interpret(ctx));
+			if(i != -1)
+				ctx.storeVariable(i, exp.interpret(ctx));
+			else
+				ctx.storeVariable(id, exp.interpret(ctx));
 			return null;
 		}
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.assign(" + "\"" + id + "\"" + "," + exp.getConstructorCode() + ")";
+			return "AST.assign(" + "\"" + id + (i != -1? "," + i : "") + "\"" + "," + exp.getConstructorCode() + ")";
 		}
 		
 		@Override

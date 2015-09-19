@@ -122,5 +122,25 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 		
 		return global.get(name);
 	}
+
+	@Override
+	public void declareVariable(Object value) {
+		env = env._declare(value);
+	}
+
+	@Override
+	public void declareVariables(Object[] values) {
+		env = env.declare(values);
+	}
+
+	@Override
+	public void storeVariable(int i, Object value) {
+		env = env.store(i, value);
+	}
+
+	@Override
+	public Object lookupVariable(int i) {
+		return env.lookup(i);
+	}
 	
 }

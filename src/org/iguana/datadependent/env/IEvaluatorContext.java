@@ -57,6 +57,14 @@ public interface IEvaluatorContext {
 	
 	public Object lookupVariable(String name);
 	
+	public void declareVariable(Object value);
+	
+	public void declareVariables(Object[] values);
+	
+	public void storeVariable(int i, Object value);
+	
+	public Object lookupVariable(int i);
+	
 	/**
 	 * 
 	 * Global parser environment
