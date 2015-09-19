@@ -461,43 +461,39 @@ public class VarToInt implements IAbstractASTVisitor<AbstractAST>, ISymbolVisito
 
 	@Override
 	public AbstractAST visit(VariableDeclaration declaration) {
-		current.put(declaration.getName(), current.size());
-		return null;
+		int i = current.size();
+		current.put(declaration.getName(), i);
+		return AST.varDecl(declaration.getName(), i, (org.iguana.datadependent.ast.Expression) declaration.getExpression().accept(this));
 	}
 
 	@Override
 	public AbstractAST visit(org.iguana.datadependent.ast.Statement.VariableDeclaration declaration) {
-		declaration.getDeclaration().accept(this);
-		return null;
+		return AST.varDeclStat((VariableDeclaration) declaration.getDeclaration().accept(this));
 	}
 
 	@Override
 	public AbstractAST visit(Expression statement) {
-		return null;
+		return AST.stat((org.iguana.datadependent.ast.Expression) statement.getExpression().accept(this));
 	}
 
 	@Override
 	public Condition visit(ContextFreeCondition condition) {
-		// TODO Auto-generated method stub
-		return null;
+		return condition;
 	}
 
 	@Override
 	public Condition visit(DataDependentCondition condition) {
-		// TODO Auto-generated method stub
-		return null;
+		return DataDependentCondition.predicate((org.iguana.datadependent.ast.Expression) condition.getExpression().accept(this));
 	}
 
 	@Override
 	public Condition visit(PositionalCondition condition) {
-		// TODO Auto-generated method stub
-		return null;
+		return condition;
 	}
 
 	@Override
 	public Condition visit(RegularExpressionCondition condition) {
-		// TODO Auto-generated method stub
-		return null;
+		return condition;
 	}
 
 }
