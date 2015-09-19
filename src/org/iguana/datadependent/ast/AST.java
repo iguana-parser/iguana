@@ -72,6 +72,10 @@ public class AST {
 		return new Expression.Name(name);
 	}
 	
+	static public Expression var(java.lang.String name, int i) {
+		return new Expression.Name(name, i);
+	}
+	
 	static public Expression println(Expression... args) {
 		return new Expression.Call("println", args) {
 					
@@ -882,14 +886,18 @@ public class AST {
 		return new Expression.IfThenElse(condition, thenPart, elsePart);
 	}
 	
+	static public Expression assign(java.lang.String id, Expression exp) {
+		return new Expression.Assignment(id, exp);
+	}
+	
+	static public Expression assign(java.lang.String id, int i, Expression exp) {
+		return new Expression.Assignment(id, i, exp);
+	}
+	
 	/**
 	 * 
 	 * 		Statements
 	 */
-	
-	static public Expression assign(java.lang.String id, Expression exp) {
-		return new Expression.Assignment(id, exp);
-	}
 	
 	static public Statement stat(Expression exp) {
 		return new Statement.Expression(exp);
@@ -903,6 +911,14 @@ public class AST {
 		return new Statement.VariableDeclaration(new VariableDeclaration(name, exp));
 	}
 	
+	static public Statement varDeclStat(String name, int i) {
+		return new Statement.VariableDeclaration(new VariableDeclaration(name, i));
+	}
+	
+	static public Statement varDeclStat(String name, int i, Expression exp) {
+		return new Statement.VariableDeclaration(new VariableDeclaration(name, i, exp));
+	}
+	
 	static public Statement varDeclStat(VariableDeclaration varDecl) {
 		return new Statement.VariableDeclaration(varDecl);
 	}
@@ -913,6 +929,14 @@ public class AST {
 	
 	static public VariableDeclaration varDecl(String name, Expression exp) {
 		return new VariableDeclaration(name, exp);
+	}
+	
+	static public VariableDeclaration varDecl(String name, int i) {
+		return new VariableDeclaration(name, i);
+	}
+	
+	static public VariableDeclaration varDecl(String name, int i, Expression exp) {
+		return new VariableDeclaration(name, i, exp);
 	}
 
 }

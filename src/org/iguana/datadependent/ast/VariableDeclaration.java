@@ -50,6 +50,10 @@ public class VariableDeclaration extends AbstractAST {
 		this(name, -1, expression);
 	}
 	
+	VariableDeclaration(String name, int i) {
+		this(name, i, null);
+	}
+	
 	VariableDeclaration(String name) {
 		this(name, null);
 	}

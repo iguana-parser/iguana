@@ -326,13 +326,16 @@ public abstract class Expression extends AbstractAST {
 		
 		private static final long serialVersionUID = 1L;
 		
-		@SuppressWarnings("unused")
 		private final java.lang.String fun;
 		private final Expression[] arguments;
 		
 		Call(java.lang.String fun, Expression... arguments) {
 			this.fun = fun;
 			this.arguments = arguments;
+		}
+		
+		public java.lang.String getFunName() {
+			return fun;
 		}
 		
 		public Expression[] getArguments() {
