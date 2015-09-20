@@ -1,7 +1,10 @@
-package org.iguana.datadependent.traversal;
+package org.iguana.grammar.transformation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,6 +37,7 @@ import org.iguana.datadependent.ast.Expression.Yield;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
+import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ContextFreeCondition;
@@ -67,24 +71,35 @@ import org.iguana.regex.Star;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 
-public class VarToInt implements IAbstractASTVisitor<AbstractAST>, ISymbolVisitor<Symbol>, IConditionVisitor<Condition> {
+public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<AbstractAST>, ISymbolVisitor<Symbol>, IConditionVisitor<Condition> {
 	
 	private Map<java.lang.Integer, Map<java.lang.String, java.lang.Integer>> mapping;
 	
 	private Map<java.lang.String, java.lang.Integer> current;
 	
-	public Map<java.lang.Integer, Map<java.lang.String, java.lang.Integer>> visit(Grammar grammar) {
-		mapping = new HashMap<>();
-		int i = 0;
-		for (Rule rule : grammar.getRules()) {
-			mapping.put(i, current);
-			visit(rule);
-			i++;
-		}
+	public Map<java.lang.Integer, Map<java.lang.String, java.lang.Integer>> getMapping() {
 		return mapping;
 	}
 	
-	public Map<java.lang.String, java.lang.Integer> visit(Rule rule) {
+	@Override
+	public Grammar transform(Grammar grammar) {
+		mapping = new HashMap<>();
+		Set<Rule> rules = new LinkedHashSet<>();
+		int i = 0;
+		for (Rule rule : grammar.getRules()) {
+			mapping.put(i, current);
+			rules.add(transform(rule));
+			i++;
+		}
+		return Grammar.builder()
+				.addRules(rules)
+				.addEBNFl(grammar.getEBNFLefts())
+				.addEBNFr(grammar.getEBNFRights())
+				.setLayout(grammar.getLayout())
+				.build();
+	}
+	
+	public Rule transform(Rule rule) {
 		current = new HashMap<>();
 		
 		java.lang.String[] parameters = rule.getHead().getParameters();
@@ -92,10 +107,25 @@ public class VarToInt implements IAbstractASTVisitor<AbstractAST>, ISymbolVisito
 		for (java.lang.String parameter : parameters)
 			current.put(parameter, current.size());
 		
-		for (Symbol symbol : rule.getBody())
-			visit(symbol);
+		List<Symbol> body = new ArrayList<>();
 		
-		return current;
+		for (Symbol symbol : rule.getBody())
+			body.add(visit(symbol));
+		
+		return Rule.withHead(rule.getHead())
+				.addSymbols(body)
+				.setRecursion(rule.getRecursion())
+				.setAssociativity(rule.getAssociativity())
+				.setPrecedence(rule.getPrecedence())
+				.setPrecedenceLevel(rule.getPrecedenceLevel())
+				.setiRecursion(rule.getIRecursion())
+				.setLeftEnd(rule.getLeftEnd())
+				.setRightEnd(rule.getRightEnd())
+				.setLeftEnds(rule.getLeftEnds())
+				.setRightEnds(rule.getRightEnds())
+				.setLayout(rule.getLayout())
+				.setLayoutStrategy(rule.getLayoutStrategy())
+				.build();
 	}
 	
 	private Symbol visit(Symbol symbol) {
