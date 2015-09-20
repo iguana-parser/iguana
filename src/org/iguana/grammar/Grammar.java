@@ -238,14 +238,13 @@ public class Grammar implements ConstructorCode, Serializable {
 		private final Map<Nonterminal, List<Rule>> definitions = new HashMap<>();
 		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
-		private List<Rule> rules;
+		private List<Rule> rules = new ArrayList<>();
 		private Symbol layout;
 		
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
 		
 		public Grammar build() {
-			rules = definitions.values().stream().flatMap(l -> l.stream()).collect(Collectors.toList());
 			
 			Set<RuntimeException> exceptions = validate(rules, definitions);
 			
@@ -263,6 +262,7 @@ public class Grammar implements ConstructorCode, Serializable {
 				definitions.put(rule.getHead(), rules);
 			}
 			rules.add(rule);
+			this.rules.add(rule);
 			return this;
 		}
 		

@@ -123,7 +123,7 @@ public class GrammarGraph implements Serializable {
 		if (config.getEnvImpl() == EnvironmentImpl.ARRAY) {
 			VarToInt transformer = new VarToInt();
 			this.grammar = transformer.transform(grammar);
-			System.out.println(this.grammar);
+			// System.out.println(this.grammar);
 			this.mapping = transformer.getMapping();
 		} else {
 			this.grammar = grammar;
