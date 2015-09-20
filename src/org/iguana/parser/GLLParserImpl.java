@@ -126,7 +126,7 @@ public class GLLParserImpl implements GLLParser {
 		/**
 		 * Data-dependent GLL parsing
 		 */
-		this.ctx = GLLEvaluator.getEvaluatorContext(input);
+		this.ctx = GLLEvaluator.getEvaluatorContext(config, input);
 		
 		if (global)
 			map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));

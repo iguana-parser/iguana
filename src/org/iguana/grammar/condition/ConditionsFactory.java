@@ -75,7 +75,7 @@ public class ConditionsFactory {
 				
 				@Override
 				public boolean execute(Input input, GSSNode u, int i) {
-					return execute(input, u, i, GLLEvaluator.getEvaluatorContext(input));
+					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(input));
 				}
 				
 				@Override

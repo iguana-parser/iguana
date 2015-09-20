@@ -7,6 +7,8 @@ public class ArrayEnvironment implements Environment {
 	private final Object[] values;
 	private final int hashCode;
 	
+	static public final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
+	
 	private ArrayEnvironment(Object[] values, int hashCode) {
 		this.values = values;
 		this.hashCode = hashCode;
@@ -49,25 +51,29 @@ public class ArrayEnvironment implements Environment {
 
 	@Override
 	public Environment _declare(Object value) {
-		int length = this.values.length + 1;
-		Object[] values = new Object[length];
+		int length = this.values.length;
+		Object[] values = new Object[length + 1];
 		
-		System.arraycopy(this.values, 0, values, 0, this.values.length);
-		values[this.values.length] = value;
+		if (length != 0)
+			System.arraycopy(this.values, 0, values, 0, length);
+		
+		values[length] = value;
 		
 		return new ArrayEnvironment(values, hashCode + 31 * value.hashCode());
 	}
 
 	@Override
-	public Environment declare(Object[] values) {
-		int length = this.values.length + values.length;
-		Object[] vals = new Object[length];
+	public Environment declare(Object[] values) { // Assuming values.length != 0
+		int length = this.values.length;
+		Object[] vals = new Object[length + values.length];
 		
-		System.arraycopy(this.values, 0, vals, 0, this.values.length);
+		if (length != 0)
+			System.arraycopy(this.values, 0, vals, 0, length);
+		
 		int hashCode = this.hashCode;
 		
 		int j = 0;
-		for (int i = this.values.length; i < values.length; i++) {
+		for (int i = length; i < length + values.length; i++) {
 			vals[i] = values[j];
 			hashCode = hashCode + 31 * values[j].hashCode();
 			j++;
