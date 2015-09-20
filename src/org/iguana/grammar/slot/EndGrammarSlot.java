@@ -45,7 +45,12 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, 
 			              String variable, Set<String> state, Conditions conditions, SemanticAction action) {
-		super(id, position, label, variable, state, conditions);
+		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action);
+	}
+	
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, int i1, 
+            			  String variable, int i2, Set<String> state, Conditions conditions, SemanticAction action) {
+		super(id, position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
 		this.action = action;
 	}

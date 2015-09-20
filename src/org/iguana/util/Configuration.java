@@ -120,7 +120,7 @@ public class Configuration {
 		private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
 		
-		private EnvironmentImpl envImpl = EnvironmentImpl.HASH_MAP;
+		private EnvironmentImpl envImpl = EnvironmentImpl.ARRAY;
 				
 		public Configuration build() {
 			return new Configuration(this);

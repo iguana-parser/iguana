@@ -29,6 +29,7 @@ import org.iguana.regex.*;
 import org.iguana.util.Configuration;
 import org.iguana.util.Input;
 import org.iguana.util.Visualization;
+import org.iguana.util.Configuration.EnvironmentImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -79,12 +80,12 @@ public class JavaNat {
          grammar4 = new LayoutWeaver().transform(grammar4);
 
          Input input = Input.fromFile(new File("src/org/iguana/util/hashing/hashfunction/MurmurHash2.java"));
-         GrammarGraph graph1 = grammar1.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph1 = grammar1.toGrammarGraph(input, Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
          GrammarGraph graph2 = grammar2.toGrammarGraph(input, Configuration.DEFAULT);
          GrammarGraph graph3 = grammar3.toGrammarGraph(input, Configuration.DEFAULT);
          GrammarGraph graph4 = grammar4.toGrammarGraph(input, Configuration.DEFAULT);
 
-         GLLParser parser1 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar1);
+         GLLParser parser1 = ParserFactory.getParser(Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build(), input, grammar1);
          GLLParser parser2 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar2);
          GLLParser parser3 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar3);
          GLLParser parser4 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar4);

@@ -25,6 +25,7 @@ import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.regex.*;
 import org.iguana.util.Configuration;
+import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.Input;
 import org.iguana.util.Visualization;
 import org.junit.Assert;
@@ -84,14 +85,14 @@ Grammar.builder()
 
          Input input = Input.fromString("a*+a*a+a--a/a");
          
-         GrammarGraph graph1 = grammar1.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph1 = grammar1.toGrammarGraph(input, Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
          GrammarGraph graph2 = grammar2.toGrammarGraph(input, Configuration.DEFAULT);
          
          GrammarGraph graph3 = grammar3.toGrammarGraph(input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-         GLLParser parser1 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar1);
+         GLLParser parser1 = ParserFactory.getParser(Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build(), input, grammar1);
          GLLParser parser2 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar2);
          GLLParser parser3 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar3);
          

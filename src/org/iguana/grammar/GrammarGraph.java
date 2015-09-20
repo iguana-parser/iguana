@@ -74,6 +74,7 @@ import org.iguana.grammar.symbol.Position;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.IntOpenAddressingMap;
@@ -83,6 +84,7 @@ import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Configuration;
+import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.Configuration.HashMapImpl;
 import org.iguana.util.Configuration.LookupImpl;
 import org.iguana.util.Configuration.MatcherType;
@@ -110,12 +112,23 @@ public class GrammarGraph implements Serializable {
 	
 	private int id = 1;
 	
+	private final Map<Integer, Map<String, Integer>> mapping;
+	private Map<String, Integer> current;
+	
 	private final MatcherFactory matcherFactory;
 	
 	private final TerminalGrammarSlot epsilonSlot;
 	
 	public GrammarGraph(Grammar grammar, Input input, Configuration config) {
-		this.grammar = grammar;
+		if (config.getEnvImpl() == EnvironmentImpl.ARRAY) {
+			VarToInt transformer = new VarToInt();
+			this.grammar = transformer.transform(grammar);
+			System.out.println(this.grammar);
+			this.mapping = transformer.getMapping();
+		} else {
+			this.grammar = grammar;
+			this.mapping = new HashMap<>();
+		}
 		this.input = input;
 		this.config = config;
 		this.nonterminalsMap = new LinkedHashMap<>();
@@ -137,9 +150,16 @@ public class GrammarGraph implements Serializable {
 
 		add(epsilonSlot);
 
-		Set<Nonterminal> nonterminals = grammar.getNonterminals();
+		Set<Nonterminal> nonterminals = this.grammar.getNonterminals();
 		nonterminals.forEach(n -> getNonterminalGrammarSlot(n));
-		nonterminals.forEach(n -> grammar.getAlternatives(n).forEach(r -> convert(r)));
+		
+		int i = 0;
+		for (Rule r : this.grammar.getRules()) {
+			current = mapping.get(i);
+			convert(r);
+			i++;
+		}
+		
 		nonterminals.forEach(n -> setFirstFollowTests(n));
 	}
 	
@@ -445,7 +465,14 @@ public class GrammarGraph implements Serializable {
 	
 	private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
 		assert i < rule.size();
-		BodyGrammarSlot slot = new BodyGrammarSlot(id++, position, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
+		
+		BodyGrammarSlot slot;
+		if (current != null)
+			slot = new BodyGrammarSlot(id++, position, label, (label != null && !label.isEmpty())? current.get(label) : -1, 
+									   variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
+		else
+			slot = new BodyGrammarSlot(id++, position, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
+		
 		add(slot);
 		slot.setFollowTest(getFollowTest(rule, i));
 		return slot;
@@ -453,7 +480,14 @@ public class GrammarGraph implements Serializable {
 	
 	private BodyGrammarSlot getEndGrammarSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
 		assert i == rule.size();
-		BodyGrammarSlot slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());				
+		
+		BodyGrammarSlot slot;
+		if (current != null)
+			slot = new EndGrammarSlot(id++, position, nonterminal, label, (label != null && !label.isEmpty())? current.get(label) : -1, 
+									  variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());
+		else
+			slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());
+		
 		add(slot);
 		slot.setFollowTest(getFollowTest(rule, i));
 		return slot;

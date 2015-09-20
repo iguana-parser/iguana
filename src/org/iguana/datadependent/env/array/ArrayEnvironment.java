@@ -16,7 +16,7 @@ public class ArrayEnvironment implements Environment {
 
 	@Override
 	public boolean isEmpty() {
-		return hashCode == 0;
+		return values.length == 0;
 	}
 
 	@Override

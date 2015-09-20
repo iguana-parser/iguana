@@ -87,8 +87,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 		Set<Rule> rules = new LinkedHashSet<>();
 		int i = 0;
 		for (Rule rule : grammar.getRules()) {
-			mapping.put(i, current);
 			rules.add(transform(rule));
+			mapping.put(i, current);
 			i++;
 		}
 		return Grammar.builder()
@@ -104,8 +104,10 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 		
 		java.lang.String[] parameters = rule.getHead().getParameters();
 		
-		for (java.lang.String parameter : parameters)
-			current.put(parameter, current.size());
+		if (parameters != null) {
+			for (java.lang.String parameter : parameters)
+				current.put(parameter, current.size());
+		}
 		
 		List<Symbol> body = new ArrayList<>();
 		
@@ -222,7 +224,25 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 		if (variable != null && !variable.isEmpty())
 			current.put(variable, current.size());
 		
-		return symbol;
+		if (symbol.getArguments() == null || symbol.getArguments().length == 0)
+			return Nonterminal.builder(symbol.getName())
+					.setIndex(symbol.getIndex())
+					.setVariable(symbol.getVariable())
+					.addExcepts(symbol.getExcepts())
+					.build();
+		
+		org.iguana.datadependent.ast.Expression[] arguments = new org.iguana.datadependent.ast.Expression[symbol.getArguments().length];
+		
+		int i = 0;
+		for (org.iguana.datadependent.ast.Expression e : symbol.getArguments())
+			arguments[i++] = (org.iguana.datadependent.ast.Expression) e.accept(this);
+		
+		return Nonterminal.builder(symbol.getName())
+				.setIndex(symbol.getIndex())
+				.apply(arguments)
+				.setVariable(symbol.getVariable())
+				.addExcepts(symbol.getExcepts())
+				.build();
 	}
 
 	@Override
@@ -232,7 +252,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
 	@Override
 	public Symbol visit(Terminal symbol) {
-		return symbol;
+		return Terminal.builder(symbol.getRegularExpression()).build();
 	}
 
 	@Override

@@ -46,6 +46,7 @@ import org.iguana.parser.gss.lookup.GSSNodeLookup.GSSNodeCreator;
 import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.Input;
 import org.iguana.util.collections.Key;
 
@@ -235,7 +236,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 				if (env.isEmpty()) gssNode.createGSSEdge(parser, returnSlot, u, node);
 				else gssNode.createGSSEdge(parser, returnSlot, u, node, env);
 				
-				Environment newEnv = parser.getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
+				Environment newEnv;
+				
+				if (parser.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY)
+					newEnv = parser.getEmptyEnvironment().declare(data.getValues());
+				else
+					newEnv = parser.getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
 				
 				final GSSNode __gssNode = gssNode;
 				

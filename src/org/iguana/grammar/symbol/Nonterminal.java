@@ -305,7 +305,7 @@ public class Nonterminal extends AbstractSymbol {
 		}
 		
 		public Builder addExcepts(Set<String> labels) {
-			if (labels.isEmpty()) 
+			if (labels == null || labels.isEmpty()) 
 				return this;
 			
 			if (excepts == null) 

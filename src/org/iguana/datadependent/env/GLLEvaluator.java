@@ -36,7 +36,8 @@ import org.iguana.util.Input;
 public class GLLEvaluator {
 	
 	public static IEvaluatorContext getDefaultEvaluatorContext(Input input) {
-		return new SimpleEvaluatorContext(input);
+		// return new SimpleEvaluatorContext(input);
+		return new ArrayEvaluatorContext(input);
 	}
 	
 	public static IEvaluatorContext getEvaluatorContext(Configuration config, Input input) {

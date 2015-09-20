@@ -312,7 +312,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String toString() {
-			return name;
+			return name + (i != -1? ":" + i : "");
 		}
 
 		@Override
@@ -403,7 +403,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String toString() {
-			return java.lang.String.format("%s = %s", id, exp);
+			return i != -1? java.lang.String.format("%s:%s = %s", id, i, exp) : java.lang.String.format("%s = %s", id, exp);
 		}
 
 		@Override

@@ -58,18 +58,28 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private final String label;
 	
+	private final int i1;
+	
 	private final String variable;
+	
+	private final int i2;
 	
 	private final Set<String> state;
 	
 	private FollowTest followTest;
 	
 	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions) {
+		this(id, position, label, -1, variable, -1, state, conditions);
+	}
+	
+	public BodyGrammarSlot(int id, Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions) {
 		super(id);
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
+		this.i1 = i1;
 		this.variable = variable;
+		this.i2 = i2;
 		this.state = state;
 		this.intermediateNodes = new HashMap<>();
 	}
@@ -187,13 +197,21 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
 		
-		if (label != null)
-			env = env._declare(label, sppfNode);
+		if (label != null) {
+			if (i1 != -1)
+				env = env._declare(sppfNode);
+			else
+				env = env._declare(label, sppfNode);
+		}
 		
-		if (variable != null && state == null)
-			env = env._declare(variable, ((NonterminalNode) sppfNode).getValue());
+		if (variable != null && state == null) {
+			if (i2 != -1)
+				env = env._declare(((NonterminalNode) sppfNode).getValue());
+			else
+				env = env._declare(variable, ((NonterminalNode) sppfNode).getValue());
+		}
 
-		if (variable == null && state != null) {
+		if (variable == null && state != null) { // TODO: support for the array-based environment implementation
 			if (state.size() == 1) {
 				String v = state.iterator().next();
 				if (!v.equals("_")) {
@@ -210,7 +228,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			}
 		}
 		
-		if (variable != null && state != null) {
+		if (variable != null && state != null) { // TODO: support for the array-based environment implementation
 			List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
 			Iterator<?> it = values.iterator();
 			
