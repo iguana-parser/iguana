@@ -1,5 +1,7 @@
 package org.iguana.datadependent.env.array;
 
+import java.util.Arrays;
+
 import org.iguana.datadependent.env.Environment;
 
 public class ArrayEnvironment implements Environment {
@@ -47,6 +49,40 @@ public class ArrayEnvironment implements Environment {
 	@Override
 	public Object lookup(String name) {
 		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+	
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		
+		if (this == other)
+			return true;
+		
+		if (!(other instanceof ArrayEnvironment))
+			return false;
+		
+		if (this.hashCode() != other.hashCode())
+			return false;
+		
+		ArrayEnvironment that = (ArrayEnvironment) other;
+		
+		if (values.length != that.values.length)
+			return false;
+		
+		for (int i = 0; i < values.length; i++)
+			if (!values[i].equals(that.values[i]))
+				return false;
+		
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(values);
 	}
 
 	@Override
