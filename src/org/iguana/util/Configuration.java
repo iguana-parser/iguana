@@ -46,11 +46,14 @@ public class Configuration {
 	
 	private final HashMapImpl hashmapImpl;
 	
+	private final EnvironmentImpl envImpl;
+	
 	private Configuration(Builder builder) {
 		this.gssLookupImpl = builder.gssLookupImpl;
 		this.lookAheadCount = builder.lookaheadCount;
 		this.matcherType = builder.matcherType;
 		this.hashmapImpl = builder.hashmapImpl;
+		this.envImpl = builder.envImpl;
 	}
 		
 	public LookupImpl getGSSLookupImpl() {
@@ -67,6 +70,10 @@ public class Configuration {
 	
 	public HashMapImpl getHashmapImpl() {
 		return hashmapImpl;
+	}
+	
+	public EnvironmentImpl getEnvImpl() {
+		return envImpl;
 	}
 	
 	public static Builder builder() {
@@ -87,6 +94,12 @@ public class Configuration {
 		JAVA,
 		INT_OPEN_ADDRESSING
 	}
+	
+	public static enum EnvironmentImpl {
+		ARRAY,
+		HASH_MAP,
+		TRIE
+	}
 		
 	@Override
 	public String toString() {
@@ -106,6 +119,8 @@ public class Configuration {
 		private MatcherType matcherType = MatcherType.JAVA_REGEX;
 		private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
+		
+		private EnvironmentImpl envImpl = EnvironmentImpl.HASH_MAP;
 				
 		public Configuration build() {
 			return new Configuration(this);
@@ -128,6 +143,11 @@ public class Configuration {
 		
 		public Builder setLookaheadCount(int lookaheadCount) {
 			this.lookaheadCount = lookaheadCount;
+			return this;
+		}
+		
+		public Builder setEnvironmentImpl(EnvironmentImpl impl) {
+			this.envImpl = impl;
 			return this;
 		}
 	}
