@@ -211,7 +211,8 @@ public class OperatorPrecedence {
 			Map<PrecedencePattern, List<List<Symbol>>> patterns = groupPatterns(entry.getValue());
 			
 			rewriteFirstLevel(nonterminal, patterns);
-			rewriteDeeperLevels(nonterminal, patterns);
+			if (nonterminal.getIndex() > 0)
+				rewriteDeeperLevels(nonterminal, patterns);
 		}
 	}
 
