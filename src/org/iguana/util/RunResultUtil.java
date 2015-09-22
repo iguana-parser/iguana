@@ -84,7 +84,7 @@ public class RunResultUtil {
 				
 				r.inputSize                         = assertEquals(r.inputSize, s.inputSize);
 				r.statistics.descriptorsCount       = assertEquals(r.statistics.descriptorsCount, s.statistics.descriptorsCount);
-				r.statistics.gssNodesCount          = assertEquals(r.statistics.gssNodesCount, s.statistics.gssEdgesCount);
+				r.statistics.gssNodesCount          = assertEquals(r.statistics.gssNodesCount, s.statistics.gssNodesCount);
 				r.statistics.gssEdgesCount          = assertEquals(r.statistics.gssEdgesCount, s.statistics.gssEdgesCount);
 				r.statistics.nonterminalNodesCount  = assertEquals(r.statistics.nonterminalNodesCount, s.statistics.nonterminalNodesCount);
 				r.statistics.terminalNodesCount     = assertEquals(r.statistics.terminalNodesCount, s.statistics.terminalNodesCount);
