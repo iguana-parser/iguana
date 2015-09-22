@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 
@@ -59,7 +60,12 @@ public class LayoutWeaver implements GrammarTransformation {
 				continue;
 			}
 			
-			for (int i = 0; i < rule.size() - 1; i++) {
+			int length = rule.size() - 1;
+			
+			if (rule.symbolAt(length) instanceof Return)
+				length = length - 1;
+			
+			for (int i = 0; i < length; i++) {
 				Symbol s = rule.symbolAt(i);
 				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
 				
@@ -70,6 +76,9 @@ public class LayoutWeaver implements GrammarTransformation {
 				
 				addLayout(layout, rule, ruleBuilder, s);
 			}
+			
+			if (rule.symbolAt(rule.size() - 1) instanceof Return)
+				ruleBuilder.addSymbol(rule.symbolAt(length));
 			
 			Symbol last = rule.symbolAt(rule.size() - 1);
 			Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(last);
