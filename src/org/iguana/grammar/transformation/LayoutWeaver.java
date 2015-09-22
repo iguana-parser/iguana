@@ -60,25 +60,23 @@ public class LayoutWeaver implements GrammarTransformation {
 				continue;
 			}
 			
-			int length = rule.size() - 1;
-			
-			if (rule.symbolAt(length) instanceof Return)
-				length = length - 1;
-			
-			for (int i = 0; i < length; i++) {
+			for (int i = 0; i < rule.size() - 1; i++) {
 				Symbol s = rule.symbolAt(i);
 				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
 				
+				if (i == rule.size() - 2 && rule.symbolAt(rule.size() - 1) instanceof Return
+						&& ignoreLayoutConditions.isEmpty()) {
+					ruleBuilder.addSymbol(s);
+					continue;
+				}
+				
 				if (ignoreLayoutConditions.isEmpty())
 					ruleBuilder.addSymbol(s);
-				else 
+				else
 					ruleBuilder.addSymbol(s.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
 				
 				addLayout(layout, rule, ruleBuilder, s);
 			}
-			
-			if (rule.symbolAt(rule.size() - 1) instanceof Return)
-				ruleBuilder.addSymbol(rule.symbolAt(length));
 			
 			Symbol last = rule.symbolAt(rule.size() - 1);
 			Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(last);
