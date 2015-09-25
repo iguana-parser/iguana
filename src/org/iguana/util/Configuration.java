@@ -34,7 +34,7 @@ package org.iguana.util;
  */
 public class Configuration {
 
-	public static final int DEFAULT_LOOKAHEAD = 0;
+	public static final int DEFAULT_LOOKAHEAD = 1;
 	
 	public static final Configuration DEFAULT = builder().build();
 	

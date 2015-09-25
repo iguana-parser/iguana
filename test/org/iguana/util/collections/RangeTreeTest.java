@@ -27,7 +27,8 @@
 
 package org.iguana.util.collections;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.collections.rangemap.RangeTree;

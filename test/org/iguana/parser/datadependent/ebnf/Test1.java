@@ -40,11 +40,11 @@ import org.iguana.regex.Alt;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -100,7 +100,7 @@ public class Test1 {
 		Input input = Input.fromString("acd");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());

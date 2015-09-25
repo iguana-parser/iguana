@@ -27,7 +27,9 @@
 
 package org.iguana.parser.datadependent.ebnf;
 
-import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.datadependent.ast.AST.lExt;
+import static org.iguana.datadependent.ast.AST.println;
+import static org.iguana.datadependent.ast.AST.stat;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -43,11 +45,11 @@ import org.iguana.regex.Alt;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -104,7 +106,7 @@ public class Test2 {
 		Input input = Input.fromString("acdbcd");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());

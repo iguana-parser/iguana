@@ -27,7 +27,7 @@
 
 package org.iguana.disambiguation.conditions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -42,9 +42,10 @@ import org.iguana.regex.Alt;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 
 /**
@@ -77,7 +78,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
@@ -85,7 +86,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
@@ -93,7 +94,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
@@ -101,7 +102,7 @@ public class KeywordExclusionTest {
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}

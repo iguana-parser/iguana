@@ -1,34 +1,36 @@
 package org.iguana.parser.datadependent;
 
-import java.util.Arrays;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.iguana.util.CollectionsUtil.set;
 
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Associativity;
 import org.iguana.grammar.symbol.Character;
-
-import static org.iguana.grammar.symbol.LayoutStrategy.*;
-
-import org.iguana.grammar.transformation.DesugarAlignAndOffside;
-import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
+import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Conditional;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Recursion;
+import org.iguana.grammar.symbol.Return;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.regex.*;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Sequence;
+import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
-
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class XML {
@@ -83,13 +85,10 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
 
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+         GLLParser parser = ParserFactory.getParser();
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("Element"));
 
          Assert.assertTrue(result.isParseSuccess());
-
-         Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/",
-                           result.asParseSuccess().getRoot(), input);
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }

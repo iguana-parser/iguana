@@ -27,18 +27,15 @@
 
 package org.iguana.regex.automaton;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.AutomatonOperations;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
-import org.iguana.regex.automaton.Transition;
 import org.iguana.regex.matcher.DFAMatcher;
-import org.iguana.util.Input;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 public class IntersectionTest {
 

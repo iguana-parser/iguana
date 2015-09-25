@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.iguana.util.Input;
+import iguana.utils.input.Input;
 import org.iguana.util.generator.ConstructorCode;
 
 /**

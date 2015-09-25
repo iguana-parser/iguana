@@ -28,6 +28,7 @@
 package org.iguana.parser.datadependent.offside;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.iguana.util.CollectionsUtil.set;
 
 import java.util.Arrays;
 
@@ -56,11 +57,10 @@ import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class Test1_2 {
@@ -108,7 +108,7 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+         GLLParser parser = ParserFactory.getParser();
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseError());

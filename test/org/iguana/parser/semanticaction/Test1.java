@@ -1,6 +1,6 @@
 package org.iguana.parser.semanticaction;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
@@ -10,9 +10,10 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.iguana.util.SemanticAction;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * A ::= a { println("Hi"); }
@@ -33,7 +34,7 @@ public class Test1 {
 	public void test() {
 		Input input = Input.fromString("a");
 		Grammar grammar = getGrammar();
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 	}

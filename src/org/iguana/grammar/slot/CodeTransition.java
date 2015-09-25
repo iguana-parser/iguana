@@ -27,11 +27,11 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.generator.GeneratorUtil;
 
 public class CodeTransition extends AbstractTransition {

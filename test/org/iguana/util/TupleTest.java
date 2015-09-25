@@ -27,10 +27,9 @@
 
 package org.iguana.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.iguana.util.Tuple;
-import org.iguana.util.UnOrderedTuple;
 import org.junit.Test;
 
 public class TupleTest {

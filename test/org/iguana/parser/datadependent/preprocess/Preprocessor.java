@@ -27,7 +27,8 @@
 
 package org.iguana.parser.datadependent.preprocess;
 
-import static org.iguana.grammar.symbol.LayoutStrategy.*;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.iguana.util.CollectionsUtil.set;
 
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.Grammar;
@@ -47,8 +48,6 @@ import org.iguana.regex.Opt;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
-
-import static org.iguana.util.CollectionsUtil.*;
 
 public class Preprocessor {
 	public static Grammar grammar =

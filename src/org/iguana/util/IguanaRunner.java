@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import iguana.utils.input.Input;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -84,7 +85,7 @@ public class IguanaRunner {
 			Input input = it.next();
 //			System.out.print(input.getURI());
 			
-			GLLParser parser = ParserFactory.getParser(config, input, grammar);
+			GLLParser parser = ParserFactory.getParser(config);
 
 //			System.out.print("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {

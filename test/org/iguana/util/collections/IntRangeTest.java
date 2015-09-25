@@ -27,17 +27,17 @@
 
 package org.iguana.util.collections;
 
-import static org.iguana.grammar.symbol.CharacterRange.*;
-import static org.iguana.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.iguana.grammar.symbol.CharacterRange.in;
+import static org.iguana.util.CollectionsUtil.list;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.util.CharacterRanges;
+import org.iguana.util.collections.rangemap.AVLIntRangeTree;
 import org.iguana.util.collections.rangemap.ArrayIntRangeTree;
 import org.iguana.util.collections.rangemap.IntRangeTree;
-import org.iguana.util.collections.rangemap.AVLIntRangeTree;
 import org.junit.Test; 
 
 public class IntRangeTest {

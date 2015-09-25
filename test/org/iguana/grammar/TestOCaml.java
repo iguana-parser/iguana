@@ -30,8 +30,6 @@ package org.iguana.grammar;
 import java.io.File;
 import java.io.IOException;
 
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.precedence.OperatorPrecedence;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
@@ -41,8 +39,9 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 public class TestOCaml {
 
@@ -57,7 +56,7 @@ public class TestOCaml {
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, config);
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		grammarGraph.reset(input);
 		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
 		System.out.println(result);

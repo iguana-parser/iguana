@@ -27,12 +27,8 @@
 
 package org.iguana.regex.automaton;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.StateType;
-import org.iguana.regex.automaton.Transition;
 import org.junit.Test;
 
 public class MinimizationTest {

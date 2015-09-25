@@ -30,6 +30,8 @@ package org.iguana.parser.gss;
 import java.util.ArrayList;
 import java.util.List;
 
+import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.parsetrees.sppf.NonterminalNode;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -38,8 +40,6 @@ import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.HashFunctions;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
 
 /**
  *

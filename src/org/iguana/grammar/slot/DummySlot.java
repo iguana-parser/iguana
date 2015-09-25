@@ -30,8 +30,8 @@ package org.iguana.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.condition.ConditionsFactory;
-import org.iguana.util.Input;
 
 
 public class DummySlot extends BodyGrammarSlot {

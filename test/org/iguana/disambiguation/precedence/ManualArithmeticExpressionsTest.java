@@ -27,7 +27,7 @@
 
 package org.iguana.disambiguation.precedence;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
@@ -37,9 +37,10 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -87,7 +88,7 @@ public class ManualArithmeticExpressionsTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a*a+a");
-		parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		// TODO: add tree comparison text here.

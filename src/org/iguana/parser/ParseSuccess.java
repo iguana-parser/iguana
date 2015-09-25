@@ -27,8 +27,8 @@
 
 package org.iguana.parser;
 
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.Input;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
 
 public class ParseSuccess extends AbstractParseResult {
@@ -84,7 +84,8 @@ public class ParseSuccess extends AbstractParseResult {
 			return false;
 		
 		ParseSuccess other = (ParseSuccess) obj;
-		return parseStatistics.equals(other.parseStatistics) && sppfNode.deepEquals(other.sppfNode);
+		// TODO: add deep equals for sppf nodes
+		return parseStatistics.equals(other.parseStatistics); // && sppfNode.deepEquals(other.sppfNode);
 	}
 	
 	@Override

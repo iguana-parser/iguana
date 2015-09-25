@@ -27,35 +27,28 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.Configurations.*;
-import static org.junit.Assert.*;
+import static org.iguana.util.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Collection;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.iguana.AbstractParserTest;
+import iguana.parsetrees.sppf.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.parser.ParserFactory;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.PackedNode;
-import org.iguana.sppf.SPPFNodeFactory;
-import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Input;
+import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -65,35 +58,19 @@ import static org.iguana.util.CollectionsUtil.*;
  *
  */
 
-@RunWith(Parameterized.class)
-public class Test1 extends AbstractParserTest {
+public class Test1 {
 	
 	private static Nonterminal A = Nonterminal.withName("A");
 
-	@Parameters
-    public static Collection<Object[]> data() {
-		return all_configs.stream().map(c -> new Object[] {
-	    		getInput(), 
-	    		getGrammar(), 
-	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput(), getGrammar()),
-	    		(Function<GrammarGraph, ParseResult>) Test1::getParseResult
-	    	}).collect(Collectors.toList());
-    }
-    
-    private static Nonterminal getStartSymbol() {
-    	return A;
-    }
-	
-	public static Grammar getGrammar() {
+    private static Nonterminal startSymbol = A;
+	private static Grammar grammar;
+    private static Input input = Input.empty();
+
+    static {
 		Rule r1 = Rule.withHead(A).build();
-		return Grammar.builder().addRule(r1).build();
+		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
-	private static Input getInput() {
-		return Input.empty();
-	}
-		
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -104,6 +81,15 @@ public class Test1 extends AbstractParserTest {
 	public void testReachableNonterminals() {
 		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
 		assertEquals(set(), reachabilityGraph.getReachableNonterminals(A));
+	}
+
+	@Test
+	public void testParser() {
+        GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+        GLLParser parser = ParserFactory.getParser();
+		ParseResult result = parser.parse(input, graph, startSymbol);
+		assertTrue(result.isParseSuccess());
+        assertEquals(getParseResult(graph), result);
 	}
 		
 	public static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -116,16 +102,12 @@ public class Test1 extends AbstractParserTest {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, getInput());
+		return new ParseSuccess(expectedSPPF(graph), statistics, input);
 	}
-	
-	public static NonterminalNode expectedSPPF(GrammarGraph graph) {
-		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
-		NonterminalNode node1 = factory.createNonterminalNode("A", 0, 0, 0);
-		PackedNode node2 = factory.createPackedNode("A ::= .", 0, node1);
-		TerminalNode node3 = factory.createEpsilonNode(0);
-		node2.addChild(node3);
-		node1.addChild(node2);
+
+	public static NonterminalNode expectedSPPF(GrammarGraph registry) {
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
 		return node1;
 	}
 

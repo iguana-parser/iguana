@@ -27,7 +27,7 @@
 
 package org.iguana.parser.layout;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
@@ -38,8 +38,9 @@ import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Plus;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -79,7 +80,7 @@ public class LayoutTest3 {
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
 		Grammar grammar = getGrammar();
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 	}

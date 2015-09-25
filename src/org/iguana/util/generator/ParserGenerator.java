@@ -27,13 +27,12 @@
 
 package org.iguana.util.generator;
 
-import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.parser.GLLParser;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 
 import com.google.common.truth.codegen.CompilingClassLoader;
 import com.google.common.truth.codegen.CompilingClassLoader.CompilerException;

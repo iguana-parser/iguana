@@ -32,12 +32,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
-import org.iguana.util.Input;
 import org.iguana.util.generator.GeneratorUtil;
 
 public class ConditionsFactory {

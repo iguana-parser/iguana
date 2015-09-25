@@ -27,7 +27,8 @@
 
 package org.iguana.parser;
 
-import static org.junit.Assert.*;
+import static org.iguana.util.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.operations.ReachabilityGraph;
@@ -36,15 +37,12 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Plus;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -85,7 +83,7 @@ public class EBNFTest1 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("aaaaaa");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		parser.parse(input, grammar, S);
 	}
 

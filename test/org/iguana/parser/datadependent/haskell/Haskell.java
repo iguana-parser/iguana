@@ -28,6 +28,7 @@
 package org.iguana.parser.datadependent.haskell;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.iguana.util.CollectionsUtil.set;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -63,12 +64,10 @@ import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class Haskell {
@@ -1008,17 +1007,14 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);
 
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+         GLLParser parser = ParserFactory.getParser();
          ParseResult result = parser.parse(input, graph, Start.from(Nonterminal.withName("Module")));
 
          System.out.println(result);
          
          Assert.assertTrue(result.isParseSuccess());
          
-         SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getRoot());
-
-          Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/",
-                            result.asParseSuccess().getRoot(), input);
+//         SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getRoot());
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }

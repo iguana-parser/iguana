@@ -27,13 +27,13 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.generator.GeneratorUtil;
 
 
@@ -62,7 +62,7 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {		
+	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
 //			return;

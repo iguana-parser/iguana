@@ -27,18 +27,17 @@
 
 package org.iguana.regex.automaton;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.Alt;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcher;
-import org.iguana.util.Input;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 public class ReverseAutomatonTest {
 	

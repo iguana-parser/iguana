@@ -27,10 +27,10 @@
 
 package org.iguana.parser.gss.lookup;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.util.Input;
 
 /**
  * 

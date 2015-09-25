@@ -38,13 +38,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.AbstractRegularExpression;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.SymbolBuilder;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.Input;
 import org.iguana.util.generator.GeneratorUtil;
 
 public class Sequence<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {

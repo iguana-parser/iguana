@@ -27,7 +27,7 @@
 
 package org.iguana.util;
 
-import static org.iguana.util.generator.GeneratorUtil.*;
+import static org.iguana.util.generator.GeneratorUtil.listToString;
 
 import java.util.ArrayList;
 import java.util.List;

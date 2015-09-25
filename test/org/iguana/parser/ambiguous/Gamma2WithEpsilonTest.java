@@ -27,7 +27,8 @@
 
 package org.iguana.parser.ambiguous;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
@@ -37,10 +38,11 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -74,7 +76,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
-        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
@@ -88,7 +90,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
-        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
@@ -102,7 +104,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
-        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();

@@ -27,11 +27,14 @@
 
 package org.iguana.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.iguana.util.Input;
-import org.iguana.util.IntArrayCharSequence;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
+import iguana.utils.input.IntArrayCharSequence;
 
 public class InputTest {
 	

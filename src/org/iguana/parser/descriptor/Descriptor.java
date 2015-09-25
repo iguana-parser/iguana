@@ -27,10 +27,10 @@
 
 package org.iguana.parser.descriptor;
 
+import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 /**
  * @author Ali Afroozeh

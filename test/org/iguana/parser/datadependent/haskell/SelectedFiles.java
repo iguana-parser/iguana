@@ -27,12 +27,9 @@
 
 package org.iguana.parser.datadependent.haskell;
 
+import static org.iguana.util.CollectionsUtil.immutableSet;
+
 import java.util.Set;
-
-import org.iguana.traversal.NonterminalNodeVisitor;
-import org.iguana.util.Input;
-
-import static org.iguana.util.CollectionsUtil.*;
 
 public class SelectedFiles {
 	
@@ -85,16 +82,16 @@ public class SelectedFiles {
 	
 	private static final Set<String> target = immutableSet("Decls", "CDecls", "GADTDecls", "Alts", "DAlts", "Stmts");
 	
-	public static NonterminalNodeVisitor getVisitor(Input input) {
-		return NonterminalNodeVisitor.create(n -> {
-						if (target.contains(n.getGrammarSlot().getNonterminal().getName())) {
-							System.out.println(n.getGrammarSlot().getNonterminal().getName() + ": "
-											   + input.getLineNumber(n.getLeftExtent()) + ":"
-											   + input.getColumnNumber(n.getLeftExtent()) + " "
-											   + input.getLineNumber(n.getRightExtent()) + ":"
-											   + input.getColumnNumber(n.getRightExtent()));
-						}
-			   });
-	}
+//	public static NonterminalNodeVisitor getVisitor(Input input) {
+//		return NonterminalNodeVisitor.create(n -> {
+//						if (target.contains(n.getSlot().getNonterminal().getName())) {
+//							System.out.println(n.getSlot().getNonterminal().getName() + ": "
+//											   + input.getLineNumber(n.getLeftExtent()) + ":"
+//											   + input.getColumnNumber(n.getLeftExtent()) + " "
+//											   + input.getLineNumber(n.getRightExtent()) + ":"
+//											   + input.getColumnNumber(n.getRightExtent()));
+//						}
+//			   });
+//	}
 
 }
