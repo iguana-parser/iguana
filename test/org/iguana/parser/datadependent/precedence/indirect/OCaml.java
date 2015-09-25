@@ -12,10 +12,10 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 public class OCaml {
 	
@@ -40,7 +40,7 @@ public class OCaml {
 
         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/indirect/", graph);
 
-        GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+        GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, Nonterminal.withName("CompilationUnit"));
 
         Assert.assertTrue(result.isParseSuccess());

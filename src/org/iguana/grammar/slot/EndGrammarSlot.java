@@ -30,12 +30,12 @@ package org.iguana.grammar.slot;
 import java.util.Collections;
 import java.util.Set;
 
+import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.SemanticAction;
 
 public class EndGrammarSlot extends BodyGrammarSlot {

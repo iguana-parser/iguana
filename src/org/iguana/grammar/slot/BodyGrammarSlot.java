@@ -33,17 +33,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import iguana.parsetrees.sppf.IntermediateNode;
+import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFNodeFactory;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Holder;
-import org.iguana.util.Input;
 import org.iguana.util.collections.Key;
 import org.iguana.util.hashing.hashfunction.MurmurHash3;
 
@@ -110,9 +111,9 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public IntermediateNode createIntermediateNode(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild) {
-		IntermediateNode newNode = new IntermediateNode(this, leftChild.getLeftExtent(), rightChild.getRightExtent());
-		newNode.addPackedNode(parser, this, leftChild, rightChild);
+		IntermediateNode newNode = SPPFNodeFactory.createIntermediateNode(this, leftChild, rightChild);
 		parser.intermediateNodeAdded(newNode);
+        parser.packedNodeAdded(this, leftChild.getRightExtent());
 		return newNode;
 	}
 	
@@ -125,7 +126,9 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		
 		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
 			if (value != null) {
-				value.addPackedNode(parser, this, leftChild, rightChild);
+				boolean ambiguous = value.addPackedNode(this, leftChild, rightChild);
+                parser.packedNodeAdded(this, leftChild.getRightExtent());
+                if (ambiguous) parser.ambiguousNodeAdded(value);
 				return value;
 			} else {
 				IntermediateNode newNode = createIntermediateNode(parser, leftChild, rightChild);
@@ -147,7 +150,9 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		Holder<IntermediateNode> holder = new Holder<>();
 		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
 			if (value != null) {
-				value.addPackedNode(parser, this, leftChild, rightChild);
+                boolean ambiguous = value.addPackedNode(this, leftChild, rightChild);
+                parser.packedNodeAdded(this, leftChild.getRightExtent());
+                if (ambiguous) parser.ambiguousNodeAdded(value);
 				return value;
 			} else {
 				IntermediateNode newNode = createIntermediateNode(parser, leftChild, rightChild);

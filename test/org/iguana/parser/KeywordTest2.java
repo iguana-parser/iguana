@@ -27,21 +27,17 @@
 
 package org.iguana.parser;
 
-import static org.iguana.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
-
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * A ::= "if" B
@@ -76,7 +72,7 @@ public class KeywordTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("ifb");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		parser.parse(input, grammar, Nonterminal.withName("A"));
 	}
 	

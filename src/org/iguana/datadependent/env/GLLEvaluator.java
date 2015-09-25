@@ -27,11 +27,11 @@
 
 package org.iguana.datadependent.env;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.array.ArrayEvaluatorContext;
 import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.iguana.datadependent.env.simple.SimpleEvaluatorContext;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 
 public class GLLEvaluator {
 	

@@ -27,7 +27,7 @@
 
 package org.iguana.parser;
 
-import org.iguana.util.Input;
+import iguana.utils.input.Input;
 
 public abstract class AbstractParseResult implements ParseResult {
 

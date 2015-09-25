@@ -32,12 +32,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import iguana.parsetrees.sppf.TerminalNode;
+import iguana.utils.input.Input;
 import org.iguana.parser.GLLParser;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Input;
+
+import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot {
@@ -68,7 +70,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 			if (length < 0) {
 				return null;
 			} else {
-				TerminalNode t = new TerminalNode(this, i, i + length);
+				TerminalNode t = createTerminalNode(this, i, i + length);
 				parser.terminalNodeAdded(t);
 				return t;
 			}

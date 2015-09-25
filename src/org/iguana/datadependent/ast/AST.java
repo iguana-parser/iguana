@@ -36,11 +36,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.values.Stack;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.generator.GeneratorUtil;
 
 public class AST {

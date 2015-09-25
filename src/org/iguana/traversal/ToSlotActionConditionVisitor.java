@@ -30,6 +30,7 @@ package org.iguana.traversal;
 import java.util.HashMap;
 import java.util.Map;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -39,7 +40,6 @@ import org.iguana.grammar.condition.SlotAction;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.util.Input;
 
 public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotAction> {
 

@@ -1,3 +1,5 @@
 .DS_Store
 bin
 target
+.idea/workspace.xml
+.idea/tasks.xml

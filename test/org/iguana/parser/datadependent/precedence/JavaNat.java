@@ -1,41 +1,26 @@
 package org.iguana.parser.datadependent.precedence;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
-import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.precedence.OperatorPrecedence;
-import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
-
-import static org.iguana.grammar.symbol.LayoutStrategy.*;
-
-import org.iguana.grammar.transformation.DesugarAlignAndOffside;
+import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.regex.*;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
-
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class JavaNat {
@@ -85,10 +70,10 @@ public class JavaNat {
          GrammarGraph graph3 = grammar3.toGrammarGraph(input, Configuration.DEFAULT);
          GrammarGraph graph4 = grammar4.toGrammarGraph(input, Configuration.DEFAULT);
 
-         GLLParser parser1 = ParserFactory.getParser(Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build(), input, grammar1);
-         GLLParser parser2 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar2);
-         GLLParser parser3 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar3);
-         GLLParser parser4 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar4);
+         GLLParser parser1 = ParserFactory.getParser(Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
+         GLLParser parser2 = ParserFactory.getParser();
+         GLLParser parser3 = ParserFactory.getParser();
+         GLLParser parser4 = ParserFactory.getParser();
          
          ParseResult result1 = parser1.parse(input, graph1, Nonterminal.withName("CompilationUnit"));
          ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("CompilationUnit"));

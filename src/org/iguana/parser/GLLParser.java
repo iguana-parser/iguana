@@ -27,9 +27,8 @@
 
 package org.iguana.parser;
 
-import java.util.Collections;
-import java.util.Map;
-
+import iguana.parsetrees.sppf.*;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
@@ -43,13 +42,10 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.NonterminalOrIntermediateNode;
-import org.iguana.sppf.PackedNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * 
@@ -60,7 +56,7 @@ import org.iguana.util.Input;
  */
 public interface GLLParser {
 	
-	public ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Map<String, ? extends Object> map, boolean global);
+	ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Map<String, ? extends Object> map, boolean global);
 	
 	default ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
 		return parse(input, grammarGraph, startSymbol, Collections.emptyMap(), true);
@@ -74,65 +70,65 @@ public interface GLLParser {
 		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol, map, true);
 	}
 	
-	public void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
+	void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
 	
-	public void recordParseError(GrammarSlot slot);
+	void recordParseError(GrammarSlot slot);
 	
-	public Input getInput();
+	Input getInput();
 	
-	public Iterable<GSSNode> getGSSNodes();
+	Iterable<GSSNode> getGSSNodes();
 	
-	public Configuration getConfiguration();
+	Configuration getConfiguration();
 	
 	/**
 	 * 
 	 * Data-dependent GLL parsing
 	 * 
 	 */	
-	public Object evaluate(Statement[] statements, Environment env);
+	Object evaluate(Statement[] statements, Environment env);
 	
-	public Object evaluate(DataDependentCondition condition, Environment env);
+	Object evaluate(DataDependentCondition condition, Environment env);
 	
-	public Object evaluate(Expression expression, Environment env);
+	Object evaluate(Expression expression, Environment env);
 	
-	public Object[] evaluate(Expression[] arguments, Environment env);
+	Object[] evaluate(Expression[] arguments, Environment env);
 	
-	public IEvaluatorContext getEvaluatorContext();
+	IEvaluatorContext getEvaluatorContext();
 	
-	public BodyGrammarSlot getCurrentEndGrammarSlot();
+	BodyGrammarSlot getCurrentEndGrammarSlot();
 	
-	public Object getCurrentValue();
+	Object getCurrentValue();
 	
-	public boolean hasCurrentValue();
+	boolean hasCurrentValue();
 	
-	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot);
+	void setCurrentEndGrammarSlot(BodyGrammarSlot slot);
 	
-	public void setCurrentValue(Object value);
+	void setCurrentValue(Object value);
 	
-	public void resetCurrentValue();
+	void resetCurrentValue();
 	
-	public Environment getEnvironment();
+	Environment getEnvironment();
 	
-	public void setEnvironment(Environment env);
+	void setEnvironment(Environment env);
 	
-	public Environment getEmptyEnvironment();
+	Environment getEmptyEnvironment();
 		
-	public GrammarGraph getGrammarGraph();
+	GrammarGraph getGrammarGraph();
 	
-	public void scheduleDescriptor(Descriptor descriptor);
+	void scheduleDescriptor(Descriptor descriptor);
 
-	public void terminalNodeAdded(TerminalNode node);
+	void terminalNodeAdded(TerminalNode node);
 	
-	public void nonterminalNodeAdded(NonterminalNode node);
+	void nonterminalNodeAdded(NonterminalNode node);
 	
-	public void intermediateNodeAdded(IntermediateNode node);
+	void intermediateNodeAdded(IntermediateNode node);
+
+	void packedNodeAdded(Object slot, int pivot);
+
+	void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
+
+	void gssNodeAdded(GSSNode node);
 	
-	public void packedNodeAdded(PackedNode node);
-	
-	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
-	
-	public void gssNodeAdded(GSSNode node);
-	
-	public void gssEdgeAdded(GSSEdge edge);
+	void gssEdgeAdded(GSSEdge edge);
 
 }

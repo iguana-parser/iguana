@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import iguana.parsetrees.sppf.DummyNode;
+import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
@@ -43,11 +47,7 @@ import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup.GSSNodeCreator;
-import org.iguana.sppf.DummyNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration.EnvironmentImpl;
-import org.iguana.util.Input;
 import org.iguana.util.collections.Key;
 
 

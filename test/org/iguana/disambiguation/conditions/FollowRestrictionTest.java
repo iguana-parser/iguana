@@ -27,7 +27,7 @@
 
 package org.iguana.disambiguation.conditions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -40,9 +40,10 @@ import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -78,7 +79,7 @@ public class FollowRestrictionTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("abc:");
-		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		parser =  ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}

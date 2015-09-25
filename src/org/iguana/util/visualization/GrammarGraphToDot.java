@@ -28,7 +28,7 @@
 package org.iguana.util.visualization;
 
 import static org.iguana.util.generator.GeneratorUtil.*;
-import static org.iguana.util.visualization.GraphVizUtil.*;
+import static iguana.utils.visualization.GraphVizUtil.*;
 
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.BodyGrammarSlot;

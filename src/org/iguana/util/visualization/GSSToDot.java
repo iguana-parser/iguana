@@ -27,12 +27,12 @@
 
 package org.iguana.util.visualization;
 
-import static org.iguana.util.visualization.GraphVizUtil.*;
+import static iguana.utils.visualization.GraphVizUtil.*;
 
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 
-public class GSSToDot extends ToDot {
+public class GSSToDot {
 	
 	private StringBuilder sb = new StringBuilder();
 	

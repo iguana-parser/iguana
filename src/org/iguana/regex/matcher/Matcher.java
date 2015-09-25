@@ -27,7 +27,7 @@
 
 package org.iguana.regex.matcher;
 
-import org.iguana.util.Input;
+import iguana.utils.input.Input;
 
 /**
  * 

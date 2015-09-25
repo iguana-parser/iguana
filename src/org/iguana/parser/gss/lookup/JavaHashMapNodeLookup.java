@@ -31,10 +31,10 @@ import java.util.HashMap;
 //import java.util.HashMap;
 import java.util.Map;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.CollectionsUtil;
-import org.iguana.util.Input;
 
 public class JavaHashMapNodeLookup extends AbstractNodeLookup {
 

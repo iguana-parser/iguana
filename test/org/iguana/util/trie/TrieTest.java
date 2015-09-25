@@ -27,11 +27,9 @@
 
 package org.iguana.util.trie;
 
-import static org.iguana.util.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import static org.iguana.util.CollectionsUtil.list;
+import static org.junit.Assert.assertEquals;
 
-import org.iguana.util.trie.Node;
-import org.iguana.util.trie.Trie;
 import org.junit.Test;
 
 public class TrieTest {

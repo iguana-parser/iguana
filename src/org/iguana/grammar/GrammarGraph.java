@@ -41,6 +41,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
@@ -88,7 +89,6 @@ import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.Configuration.HashMapImpl;
 import org.iguana.util.Configuration.LookupImpl;
 import org.iguana.util.Configuration.MatcherType;
-import org.iguana.util.Input;
 
 public class GrammarGraph implements Serializable {
 
@@ -171,7 +171,7 @@ public class GrammarGraph implements Serializable {
 		return terminalsMap.get(regex);
 	}
 
-	public GrammarSlot getGrammarSlot(String s) {
+	public GrammarSlot getSlot(String s) {
 		return names.get(s);
 	}
 	

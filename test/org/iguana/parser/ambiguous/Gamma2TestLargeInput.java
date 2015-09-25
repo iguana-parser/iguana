@@ -27,16 +27,12 @@
 
 package org.iguana.parser.ambiguous;
 
-import static org.iguana.util.Configurations.all_configs;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.iguana.AbstractParserTest;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Character;
@@ -44,31 +40,12 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.ParserFactory;
-import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
-import org.junit.runners.Parameterized.Parameters;
 
-public class Gamma2TestLargeInput extends AbstractParserTest {
-	
-	private static int runCount = 2;
-	
-	@Parameters
-    public static Collection<Object> data() {
-		List<Object> parameters = Stream.iterate(1, n -> ++n)
-				                        .limit(runCount)
-				                        .flatMap(
-             i -> all_configs.stream().map(c -> new Object[] {
-	    		getInput(i * 50), 
-	    		getGrammar(), 
-	    		getStartSymbol(),
-	    		ParserFactory.getParser(c, getInput(i * 50), getGrammar()),
-	    		getNewParseResult(i - 1)
-	    	})).collect(Collectors.toList());
-		
-		return parameters;
-    }
+import iguana.utils.input.Input;
 
+public class Gamma2TestLargeInput {
+	
 	private static Input getInput(int size) {
 		return Input.fromString(Stream.generate(() -> "b").limit(size).collect(Collectors.joining()));
 	}

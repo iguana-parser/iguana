@@ -27,18 +27,18 @@
 
 package org.iguana.parser;
 
-import org.iguana.util.Input;
+import iguana.utils.input.Input;
 
 public interface ParseResult {
 	
-	public boolean isParseError();
+	boolean isParseError();
 	
-	public boolean isParseSuccess();
+	boolean isParseSuccess();
 	
-	public ParseError asParseError();
+	ParseError asParseError();
 	
-	public ParseSuccess asParseSuccess();
+	ParseSuccess asParseSuccess();
 	
-	public Input getInput();
+	Input getInput();
 	
 }

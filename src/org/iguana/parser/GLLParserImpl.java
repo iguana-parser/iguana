@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import iguana.parsetrees.sppf.*;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
@@ -50,16 +52,8 @@ import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.sppf.DummyNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.NonterminalOrIntermediateNode;
-import org.iguana.sppf.PackedNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.logging.ParserLogger;
 
@@ -73,7 +67,7 @@ import org.iguana.util.logging.ParserLogger;
 public class GLLParserImpl implements GLLParser {
 	
 	protected GSSNode cu;
-	
+
 	protected NonPackedNode cn = DummyNode.getInstance();
 	
 	protected int ci = 0;
@@ -428,15 +422,15 @@ public class GLLParserImpl implements GLLParser {
 	}
 
 	@Override
-	public void packedNodeAdded(PackedNode node) {
+	public void packedNodeAdded(Object slot, int pivot) {
 		countPackedNodes++;
-		logger.log("Packed node added %s", node);
+		logger.log("Packed node added (%s, %d)", slot, pivot);
 	}
 
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
 		countAmbiguousNodes++;
-		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
+//		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
 //		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
 //		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {

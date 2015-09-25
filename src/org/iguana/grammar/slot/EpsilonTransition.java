@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 
+import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
@@ -35,7 +36,6 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Tuple;
 
 public class EpsilonTransition extends AbstractTransition {

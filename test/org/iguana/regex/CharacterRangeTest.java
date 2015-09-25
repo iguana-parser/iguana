@@ -27,7 +27,12 @@
 
 package org.iguana.regex;
 
-import static org.junit.Assert.*;
+import static org.iguana.util.CharacterRanges.toNonOverlapping;
+import static org.iguana.util.CollectionsUtil.list;
+import static org.iguana.util.CollectionsUtil.map;
+import static org.iguana.util.CollectionsUtil.tuple;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -37,11 +42,9 @@ import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.util.Input;
 import org.junit.Test;
 
-import static org.iguana.util.CharacterRanges.*;
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 public class CharacterRangeTest {
 	

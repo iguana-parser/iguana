@@ -1,32 +1,26 @@
 package org.iguana.parser.datadependent.precedence;
 
-import java.util.Arrays;
-import org.iguana.datadependent.ast.AST;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Associativity;
 import org.iguana.grammar.symbol.Character;
-import static org.iguana.grammar.symbol.LayoutStrategy.*;
-import org.iguana.grammar.transformation.DesugarAlignAndOffside;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Recursion;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.grammar.transformation.DesugarState;
-import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.regex.*;
+import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class Test1_3_b {
@@ -57,7 +51,7 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+         GLLParser parser = ParserFactory.getParser();
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());

@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import iguana.utils.input.Input;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -138,7 +139,7 @@ public class IguanaCLI {
 	}
 	
 	private static void parse(Nonterminal startSymbol, Grammar grammar, Input input, Configuration config) {
-		GLLParser parser = ParserFactory.getParser(config, input, grammar);
+		GLLParser parser = ParserFactory.getParser(config);
 		ParseResult result = parser.parse(input, grammar, startSymbol);
 		if (result.isParseSuccess()) {
 			// TODO: fix it!

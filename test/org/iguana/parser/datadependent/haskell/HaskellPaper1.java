@@ -28,6 +28,7 @@
 package org.iguana.parser.datadependent.haskell;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.iguana.util.CollectionsUtil.set;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.ConditionType;
@@ -52,8 +53,6 @@ import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.junit.Test;
-
-import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * After align
@@ -145,7 +144,7 @@ Grammar.builder()
 //
 //         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);
 //
-//         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+//         GLLParser parser = ParserFactory.getParser();
 //         ParseResult result = parser.parse(input, graph, Nonterminal.withName("Module"));
 //
 //         Assert.assertTrue(result.isParseSuccess());

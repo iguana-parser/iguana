@@ -27,9 +27,9 @@
 
 package org.iguana.parser;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 
 /**
  * 
@@ -37,8 +37,12 @@ import org.iguana.util.Input;
  *
  */
 public class ParserFactory {
-	
-	public static GLLParser getParser(Configuration config, Input input, Grammar grammar) {
+
+	public static GLLParser getParser() {
+		return new GLLParserImpl(Configuration.DEFAULT);
+	}
+
+	public static GLLParser getParser(Configuration config) {
 		return new GLLParserImpl(config);		
 	}
 }

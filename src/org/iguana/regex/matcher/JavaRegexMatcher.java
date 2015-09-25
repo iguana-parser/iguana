@@ -29,10 +29,10 @@ package org.iguana.regex.matcher;
 
 import java.util.regex.Pattern;
 
+import iguana.utils.input.Input;
+import iguana.utils.input.IntArrayCharSequence;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.RegularExpressionOptimizer;
-import org.iguana.util.Input;
-import org.iguana.util.IntArrayCharSequence;
 
 /**
  * 

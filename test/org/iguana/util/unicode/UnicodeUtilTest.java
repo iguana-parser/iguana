@@ -27,7 +27,6 @@
 
 package org.iguana.util.unicode;
 
-import org.iguana.util.unicode.UnicodeUtil;
 import org.junit.Test;
 
 

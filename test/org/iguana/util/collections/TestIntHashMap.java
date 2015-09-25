@@ -1,20 +1,18 @@
 package org.iguana.util.collections;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestIntHashMap {
 	
 	int max = 1000_000;
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		Random rand = new Random();
@@ -32,7 +30,7 @@ public class TestIntHashMap {
 			IntHashMap<String> imap = new ChainingIntHashMap<>();
 			keys.forEach(k -> imap.put(k, k + ""));
 
-			keys.forEach(k -> assertTrue(map.containsKey(k) && imap.containsKey(k) && map.get(k).equals(imap.get(k))));
+			keys.forEach(k -> Assert.assertTrue(map.containsKey(k) && imap.containsKey(k) && map.get(k).equals(imap.get(k))));
 
 		}
 

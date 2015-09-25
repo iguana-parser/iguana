@@ -34,17 +34,10 @@ import static org.iguana.datadependent.ast.AST.string;
 import static org.iguana.datadependent.ast.AST.var;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -117,7 +110,7 @@ public class Test2 {
 //		Input input = Input.fromString("aab");
 //		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 //		
-//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+//		GLLParser parser = ParserFactory.getParser();
 //		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 //		
 //		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);

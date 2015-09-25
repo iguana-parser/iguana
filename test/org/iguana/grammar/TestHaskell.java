@@ -30,8 +30,6 @@ package org.iguana.grammar;
 import java.io.File;
 import java.io.IOException;
 
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.DesugarAlignAndOffside;
@@ -42,8 +40,9 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 public class TestHaskell {
 	
@@ -73,9 +72,8 @@ public class TestHaskell {
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/Test.hs");
 		GrammarGraph grammarGraph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammarGraph, start);
-		org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
 		System.out.println(result);
 	}
 	

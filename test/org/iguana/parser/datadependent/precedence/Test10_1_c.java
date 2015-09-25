@@ -1,37 +1,29 @@
 package org.iguana.parser.datadependent.precedence;
 
-import java.io.File;
-import java.util.Arrays;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
-import org.iguana.datadependent.ast.AST;
+import java.io.File;
+
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.precedence.OperatorPrecedence;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Associativity;
 import org.iguana.grammar.symbol.Character;
-
-import static org.iguana.grammar.symbol.LayoutStrategy.*;
-
-import org.iguana.grammar.transformation.DesugarAlignAndOffside;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.PrecedenceLevel;
+import org.iguana.grammar.symbol.Recursion;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.grammar.transformation.DesugarState;
-import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.regex.*;
+import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
-
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class Test10_1_c {
@@ -100,10 +92,10 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-         GLLParser parser1 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar1);
-         GLLParser parser2 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar2);
-         GLLParser parser3 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar3);
-         GLLParser parser4 = ParserFactory.getParser(Configuration.DEFAULT, input, grammar4);
+         GLLParser parser1 = ParserFactory.getParser();
+         GLLParser parser2 = ParserFactory.getParser();
+         GLLParser parser3 = ParserFactory.getParser();
+         GLLParser parser4 = ParserFactory.getParser();
          
          ParseResult result1 = parser1.parse(input, graph1, Nonterminal.withName("S"));
          ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("S"));

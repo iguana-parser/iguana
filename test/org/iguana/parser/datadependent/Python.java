@@ -27,8 +27,13 @@
 
 package org.iguana.parser.datadependent;
 
-import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.datadependent.ast.AST.equal;
+import static org.iguana.datadependent.ast.AST.indent;
+import static org.iguana.datadependent.ast.AST.lExt;
+import static org.iguana.datadependent.ast.AST.less;
+import static org.iguana.datadependent.ast.AST.var;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
+import static org.iguana.util.CollectionsUtil.set;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -46,11 +51,9 @@ import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Test;
 
-import static org.iguana.util.CollectionsUtil.*;
+import iguana.utils.input.Input;
 
 public class Python {
 	
@@ -699,15 +702,9 @@ public class Python {
 				                     + "   w=0   "   + "\n");
 		
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("IfStmt"));
-		
-		if (result.isParseSuccess()) {
-			 Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
-		
 	}
 	
 }

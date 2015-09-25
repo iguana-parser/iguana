@@ -27,9 +27,9 @@
 
 package org.iguana.grammar.condition;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.Input;
 
 @FunctionalInterface
 public interface SlotAction {

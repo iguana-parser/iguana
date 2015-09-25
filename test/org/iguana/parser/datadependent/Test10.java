@@ -27,7 +27,13 @@
 
 package org.iguana.parser.datadependent;
 
-import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.datadependent.ast.AST.equal;
+import static org.iguana.datadependent.ast.AST.indent;
+import static org.iguana.datadependent.ast.AST.integer;
+import static org.iguana.datadependent.ast.AST.lExt;
+import static org.iguana.datadependent.ast.AST.println;
+import static org.iguana.datadependent.ast.AST.rExt;
+import static org.iguana.datadependent.ast.AST.stat;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.grammar.Grammar;
@@ -45,10 +51,10 @@ import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -114,16 +120,8 @@ public class Test10 {
 		Input input = Input.fromString("a    b");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
-		
 	}
 
 }

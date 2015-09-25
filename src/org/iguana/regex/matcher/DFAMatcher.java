@@ -27,12 +27,12 @@
 
 package org.iguana.regex.matcher;
 
+import iguana.utils.input.Input;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.Transition;
-import org.iguana.util.Input;
 import org.iguana.util.collections.rangemap.AVLIntRangeTree;
 import org.iguana.util.collections.rangemap.ArrayIntRangeTree;
 import org.iguana.util.collections.rangemap.IntRangeTree;

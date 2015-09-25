@@ -51,10 +51,10 @@ import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
 import org.junit.Before;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -111,15 +111,8 @@ public class Test11 {
 		Input input = Input.fromString("a    b");
 		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
 		
 	}
 

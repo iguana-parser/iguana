@@ -27,19 +27,20 @@
 
 package org.iguana.regex;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Constants;
-import org.iguana.regex.Alt;
-import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.JavaRegexMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.util.Input;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 public class CharacterClassTest {
 	

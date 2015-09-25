@@ -43,9 +43,10 @@ import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
-import org.iguana.util.Input;
 import org.junit.Assert;
 import org.junit.Test;
+
+import iguana.utils.input.Input;
 
 @SuppressWarnings("unused")
 public class Test7_1 {
@@ -82,7 +83,7 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
+         GLLParser parser = ParserFactory.getParser();
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
