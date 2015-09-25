@@ -142,7 +142,7 @@ public class GrammarGraph implements Serializable {
 			matcherFactory = new DFAMatcherFactory();
 		}
 		
-		this.firstFollow = new FirstFollowSets(grammar);
+		this.firstFollow = new FirstFollowSets(this.grammar);
 		
 		epsilonSlot = new TerminalGrammarSlot(0, Epsilon.getInstance(), matcherFactory);
 		
