@@ -42,6 +42,7 @@ import java.util.Set;
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
+import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
@@ -106,6 +107,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Map<Integer, Set<Integer>> ibinary_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> iprefix_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
+		
+		public Map<String, Rule> right_rec_rules = new HashMap<>();
 		
 		int prefixBelow = -1;
 		int postfixBelow = -1;
@@ -347,6 +350,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					&& usedLabels.getLables().get(rule.getHead().getName()).contains(rule.getLabel())) {
 				
 				Map<String, Integer> labels = headsWithLabeledRules.get(head.getName());
+				Configuration config = configs.get(head.getName());
+				
+				if (rule.isRightRecursive() || rule.isIRightRecursive()) {
+					if (rule.isIRightRecursive()) {
+						boolean canBePostfix = canBePostfix(head.getName(), rule.getRightEnd(), configs, false);
+						if (!canBePostfix)
+							config.right_rec_rules.put(rule.getLabel(), rule);
+					} else
+						config.right_rec_rules.put(rule.getLabel(), rule);
+				}
+				
 				if (labels != null) {
 					if(!labels.containsKey(rule.getLabel()))
 						labels.put(rule.getLabel(), labels.size());
@@ -2517,6 +2531,19 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					if (labels != null) {
 						if (rule.isLeftRecursive() && isFirst) {
 							_not = integer(0);
+							if (isRecursiveUseOfLeftOrRight) {
+								Configuration c = configs.get(rule.getHead().getName());
+								if (c != null && !c.right_rec_rules.isEmpty()) {
+									
+									int n = 0;
+									for (Map.Entry<String, Rule> entry : c.right_rec_rules.entrySet()) {
+										if (rule.getPrecedence() != -1 && rule.getPrecedence() > entry.getValue().getPrecedenceLevel().getRhs()) {
+											n = 1 << labels.get(entry.getKey());
+										}
+									}
+									_not = AST.shift(var("_not"), integer(n));
+								}
+							}
 						} else {
 							int n = 0;
 							Set<String> excepts = symbol.getExcepts();

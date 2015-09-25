@@ -391,6 +391,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 				return AST.get(arguments[0], arguments[1]);
 			case "undef": 
 				return AST.undef();
+			case "shift":
+				return AST.shift(arguments[0], arguments[1]);
 			default:
 				throw new UndeclaredVariableException(name);
 		}

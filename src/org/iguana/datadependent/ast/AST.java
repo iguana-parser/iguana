@@ -792,6 +792,33 @@ public class AST {
 		}
 	};
 	
+	static public Expression shift(Expression arg1, Expression arg2) {
+		return new Expression.Call("shift", arg1, arg2) {
+			
+			private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object interpret(IEvaluatorContext ctx) {
+						int i = (java.lang.Integer) arg1.interpret(ctx);
+						if (i == 0)
+							return 0;
+						
+						int j = (java.lang.Integer) arg2.interpret(ctx);
+						return i & j;
+					}
+					
+					@Override
+					public java.lang.String getConstructorCode() {
+						return "AST.shift(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
+					}
+					
+					@Override
+					public java.lang.String toString() {
+						return java.lang.String.format("%s<<%s", arg1, arg2);
+					}
+		};
+	}
+	
 	static public Expression undef() {
 		return new Expression.Call("undef") {
 			
