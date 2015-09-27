@@ -28,6 +28,11 @@
 package org.iguana.parser;
 
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFVisitor;
+import iguana.parsetrees.tree.DefaultTreeBuilder;
+import iguana.parsetrees.tree.TermBuilderSPPFVisitor;
+import iguana.parsetrees.tree.TreeBuilder;
+import iguana.parsetrees.tree.TreeBuilderFactory;
 import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
 
@@ -35,12 +40,16 @@ public class ParseSuccess extends AbstractParseResult {
 
 	private final NonterminalNode sppfNode;
 	private final ParseStatistics parseStatistics;
+	private final Object tree;
 
 	public ParseSuccess(NonterminalNode sppfNode, ParseStatistics parseStatistics, Input input) {
 		super(input);
 		this.sppfNode = sppfNode;
 		this.parseStatistics = parseStatistics;
-	}
+        TreeBuilder builder = TreeBuilderFactory.getDefault(input);
+        TermBuilderSPPFVisitor visitor = new TermBuilderSPPFVisitor(builder);
+        tree = visitor.visit(sppfNode);
+    }
 	
 	@Override
 	public boolean isParseError() {
@@ -69,8 +78,12 @@ public class ParseSuccess extends AbstractParseResult {
 	public ParseStatistics getStatistics() {
 		return parseStatistics;
 	}
-	
-	@Override
+
+    public Object getTree() {
+        return tree;
+    }
+
+    @Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction.hash(parseStatistics.hashCode(), sppfNode.hashCode());
 	}

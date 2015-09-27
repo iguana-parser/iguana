@@ -41,8 +41,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	private TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, 
-			                  Conditions conditions, SemanticAction action) {
-		super(id, position, nonterminal, null, null, null, conditions, action);
+			                  Conditions conditions, SemanticAction action, Object ruleType) {
+		super(id, position, nonterminal, null, null, null, conditions, action, ruleType);
 		this.epsilonSlot = epsilonSlot;
 	}
 	

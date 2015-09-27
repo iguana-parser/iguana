@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/iguana.iml" filepath="$PROJECT_DIR$/iguana.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees.iml" filepath="$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees-build.iml" filepath="$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utils/utils.iml" filepath="$PROJECT_DIR$/../utils/utils.iml" />
     </modules>
   </component>
 </project>

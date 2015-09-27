@@ -27,9 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Collections;
-import java.util.Set;
-
 import iguana.parsetrees.sppf.NonPackedNode;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
@@ -38,22 +35,27 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.SemanticAction;
 
+import java.util.Collections;
+import java.util.Set;
+
 public class EndGrammarSlot extends BodyGrammarSlot {
 
 	private final NonterminalGrammarSlot nonterminal;
 	private final SemanticAction action;
+	private final Object ruleType;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, 
-			              String variable, Set<String> state, Conditions conditions, SemanticAction action) {
-		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action);
+	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label,
+			              String variable, Set<String> state, Conditions conditions, SemanticAction action, Object ruleType) {
+		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType);
 	}
 	
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, int i1, 
-            			  String variable, int i2, Set<String> state, Conditions conditions, SemanticAction action) {
+            			  String variable, int i2, Set<String> state, Conditions conditions, SemanticAction action, Object ruleType) {
 		super(id, position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
 		this.action = action;
-	}
+        this.ruleType = ruleType;
+    }
 	
 	public NonterminalGrammarSlot getNonterminal() {
 		return nonterminal;
@@ -92,8 +94,12 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	public SemanticAction getAction() {
 		return action;
 	}
-	
-	/**
+
+    public Object getRuleType() {
+        return ruleType;
+    }
+
+    /**
 	 * 
 	 * Data-dependent GLL parsing
 	 * 

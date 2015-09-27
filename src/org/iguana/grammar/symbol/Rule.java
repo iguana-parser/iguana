@@ -82,31 +82,39 @@ public class Rule implements ConstructorCode, Serializable {
 	private final String label;
 	
 	private final SemanticAction action;
-	
-	public Rule(Builder builder) {
-		this.body = builder.body;
-		this.head = builder.head;
-		this.object = builder.object;
-		this.layout = builder.layout;
-		this.layoutStrategy = builder.layoutStrategy;
-		this.recursion = builder.recursion;
-		this.irecursion = builder.irecursion;
-		this.leftEnd = builder.leftEnd;
-		this.rightEnd = builder.rightEnd;
-		this.leftEnds = builder.leftEnds;
-		this.rightEnds = builder.rightEnds;
-		this.associativity = builder.associativity;
-		
-		this.associativityGroup = builder.associativityGroup;
-		this.precedence = builder.precedence;
-		this.precedenceLevel = builder.precedenceLevel;
-		
-		this.label = builder.label;
-		
-		this.action = builder.action;
-	}
-		
-	public Nonterminal getHead() {
+    private final Object ruleType;
+    private final boolean hasRuleType;
+
+    public Rule(Builder builder) {
+        this.body = builder.body;
+        this.head = builder.head;
+        this.object = builder.object;
+        this.layout = builder.layout;
+        this.layoutStrategy = builder.layoutStrategy;
+        this.recursion = builder.recursion;
+        this.irecursion = builder.irecursion;
+        this.leftEnd = builder.leftEnd;
+        this.rightEnd = builder.rightEnd;
+        this.leftEnds = builder.leftEnds;
+        this.rightEnds = builder.rightEnds;
+        this.associativity = builder.associativity;
+
+        this.associativityGroup = builder.associativityGroup;
+        this.precedence = builder.precedence;
+        this.precedenceLevel = builder.precedenceLevel;
+
+        this.label = builder.label;
+
+        this.action = builder.action;
+        this.hasRuleType = builder.hasRuleType;
+        if (hasRuleType) {
+            this.ruleType = builder.ruleType == null ? this : builder.ruleType;
+        } else {
+            this.ruleType = null;
+        }
+    }
+
+    public Nonterminal getHead() {
 		return head;
 	}
 	
@@ -216,10 +224,14 @@ public class Rule implements ConstructorCode, Serializable {
 	public SemanticAction getAction() {
 		return action;
 	}
-	
-	@Override
+
+    public Object getRuleType() {
+        return ruleType;
+    }
+
+    @Override
 	public String toString() {
-		
+
 		if(body == null) {
 			return "";
 		}
@@ -312,7 +324,9 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		private String label;
 		
-		private SemanticAction action = SemanticAction.Unit;
+		private SemanticAction action = null;
+		private Object ruleType = null;
+        private boolean hasRuleType;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -340,6 +354,8 @@ public class Rule implements ConstructorCode, Serializable {
 			this.label = rule.label;
 			
 			this.action = rule.action;
+            this.ruleType = rule.ruleType;
+            this.hasRuleType = rule.hasRuleType;
 		}
 		
 		public Builder addSymbol(Symbol symbol) {
@@ -442,8 +458,24 @@ public class Rule implements ConstructorCode, Serializable {
 			this.action = action;
 			return this;
 		}
-		
-		public Rule build() {
+
+        public Builder setRuleType(Object ruleType) {
+            this.hasRuleType = true;
+            this.ruleType = ruleType;
+            return this;
+        }
+
+        public Builder withRuleType() {
+            this.hasRuleType = true;
+            return this;
+        }
+
+        public Builder setHasRuleType(boolean hasRuleType) {
+            this.hasRuleType = hasRuleType;
+            return this;
+        }
+
+        public Rule build() {
 			return new Rule(this);
 		}
 	}

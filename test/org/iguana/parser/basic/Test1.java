@@ -67,7 +67,7 @@ public class Test1 {
     private static Input input = Input.empty();
 
     static {
-		Rule r1 = Rule.withHead(A).build();
+		Rule r1 = Rule.withHead(A).withRuleType().build();
 		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
@@ -89,6 +89,7 @@ public class Test1 {
         GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
+        System.out.println(result.asParseSuccess().getTree());
         assertEquals(getParseResult(graph), result);
 	}
 		

@@ -40,5 +40,4 @@ public interface ParseResult {
 	ParseSuccess asParseSuccess();
 	
 	Input getInput();
-	
 }

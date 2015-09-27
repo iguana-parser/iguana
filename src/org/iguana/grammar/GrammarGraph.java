@@ -342,7 +342,7 @@ public class GrammarGraph implements Serializable {
 				throw new RuntimeException("Return symbol can only be used at the end of a grammar rule!");
 			else {
 				if (rule.size() == 1)
-					done = new EpsilonGrammarSlot(id++, rule.getPosition(i + 1), head, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction());
+					done = new EpsilonGrammarSlot(id++, rule.getPosition(i + 1), head, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction(), rule.getRuleType());
 				else
 					done = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
 			}
@@ -450,7 +450,7 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		
 		if (rule.size() == 0) {
-			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction());
+			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction(), rule.getRuleType());
 		} else {
 			// TODO: This is not a final solution; in particular, 
 			//       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.  
@@ -484,9 +484,9 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		if (current != null)
 			slot = new EndGrammarSlot(id++, position, nonterminal, label, (label != null && !label.isEmpty())? current.get(label) : -1, 
-									  variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());
+									  variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction(), rule.getRuleType());
 		else
-			slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction());
+			slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction(), rule.getRuleType());
 		
 		add(slot);
 		slot.setFollowTest(getFollowTest(rule, i));
