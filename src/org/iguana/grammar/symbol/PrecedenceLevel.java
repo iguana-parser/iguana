@@ -93,7 +93,7 @@ public class PrecedenceLevel implements Serializable {
 	
 	public static PrecedenceLevel getFirstAndDone() {
 		PrecedenceLevel level = new PrecedenceLevel(1);
-		level.done();
+		level.rhs = level.lhs;
 		return level;
 	}
 	
