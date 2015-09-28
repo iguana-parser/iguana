@@ -432,9 +432,11 @@ public class GrammarGraph implements Serializable {
 	}
 	
 	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
-		TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex, matcherFactory);
-		add(terminalSlot);
-		return terminalsMap.computeIfAbsent(regex, k -> terminalSlot);
+        return terminalsMap.computeIfAbsent(regex, k -> {
+            TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex, matcherFactory);
+            add(terminalSlot);
+            return terminalSlot;
+        });
 	}
 	
 	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
@@ -494,7 +496,7 @@ public class GrammarGraph implements Serializable {
 	}
 
 	private void add(GrammarSlot slot) {
-		names.put(slot.toString(), slot);
+        names.put(slot.toString(), slot);
 		slots.add(slot);
 	}
 	

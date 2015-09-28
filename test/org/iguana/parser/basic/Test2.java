@@ -95,7 +95,6 @@ public class Test2 {
         ParseResult result = parser.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -108,7 +107,7 @@ public class Test2 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {

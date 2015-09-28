@@ -81,7 +81,7 @@ public class IndirectRecursion2Test {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(expectedSPPF(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF(parser.getGrammarGraph())));
 	}
 	
 	//TODO: fix it

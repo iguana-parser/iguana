@@ -83,7 +83,7 @@ public class KeywordTest3 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 		
 //	private SPPFNode getSPPF(GrammarGraph registry) {

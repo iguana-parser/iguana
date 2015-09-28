@@ -86,7 +86,7 @@ public class DanglingElseGrammar1 {
 		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF1(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF1(parser.getGrammarGraph())));
 	}
 	
 	public void test2() {
@@ -94,7 +94,7 @@ public class DanglingElseGrammar1 {
 		parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF2(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF2(parser.getGrammarGraph())));
 	}
 	
 //	private SPPFNode getExpectedSPPF1(GrammarGraph registry) {

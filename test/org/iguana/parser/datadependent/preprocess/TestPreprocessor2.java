@@ -83,7 +83,7 @@ public class TestPreprocessor2 {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getRoot());
+//		}).visit(result.asParseSuccess().getSPPFNode());
 //
 //		assertEquals(expected, nodes.keySet());
 	}		
@@ -118,7 +118,7 @@ public class TestPreprocessor2 {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getRoot());
+//		}).visit(result.asParseSuccess().getSPPFNode());
 //
 //		assertEquals(expected, nodes.keySet());
 	}		
@@ -153,7 +153,7 @@ public class TestPreprocessor2 {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getRoot());
+//		}).visit(result.asParseSuccess().getSPPFNode());
 //
 //		assertEquals(expected, nodes.keySet());
 	}	
@@ -188,7 +188,7 @@ public class TestPreprocessor2 {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getRoot());
+//		}).visit(result.asParseSuccess().getSPPFNode());
 //
 //		assertEquals(expected, nodes.keySet());
 	}	

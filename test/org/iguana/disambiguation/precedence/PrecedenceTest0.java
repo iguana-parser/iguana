@@ -116,7 +116,7 @@ public class PrecedenceTest0 {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPFNode(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode(parser.getGrammarGraph())));
 	}
 	
 	private Grammar getGrammar() {

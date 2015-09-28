@@ -95,7 +95,7 @@ public class Gamma0Test {
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertEquals(1, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(getSPPF(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 	
 //	public SPPFNode getSPPF(GrammarGraph graph) {

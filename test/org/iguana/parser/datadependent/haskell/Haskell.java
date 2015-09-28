@@ -1014,7 +1014,7 @@ Grammar.builder()
          
          Assert.assertTrue(result.isParseSuccess());
          
-//         SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getRoot());
+//         SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getSPPFNode());
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
     }

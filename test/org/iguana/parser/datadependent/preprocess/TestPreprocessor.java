@@ -77,7 +77,7 @@ public class TestPreprocessor {
 //					String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //					nodes.put(yield, n);
 //				}
-//			}).visit(result.asParseSuccess().getRoot());
+//			}).visit(result.asParseSuccess().getSPPFNode());
 //
 //			assertEquals(expected, nodes.keySet());
 		}		

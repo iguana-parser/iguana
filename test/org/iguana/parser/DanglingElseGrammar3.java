@@ -80,7 +80,7 @@ public class DanglingElseGrammar3 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getRoot().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
 	}
 	
 //	private SPPFNode getExpectedSPPF(GrammarGraph registry) {

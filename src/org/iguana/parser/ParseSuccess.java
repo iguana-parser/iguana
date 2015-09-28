@@ -45,6 +45,13 @@ public class ParseSuccess extends AbstractParseResult {
 		this.parseStatistics = parseStatistics;
         tree = TermBuilder.build(sppfNode, TreeBuilderFactory.getDefault(input));
     }
+
+    public ParseSuccess(NonterminalNode sppfNode, Tree tree, ParseStatistics parseStatistics, Input input) {
+        super(input);
+        this.sppfNode = sppfNode;
+        this.parseStatistics = parseStatistics;
+        this.tree = tree;
+    }
 	
 	@Override
 	public boolean isParseError() {
@@ -66,7 +73,7 @@ public class ParseSuccess extends AbstractParseResult {
 		return this;
 	}
 	
-	public NonterminalNode getRoot() {
+	public NonterminalNode getSPPFNode() {
 		return sppfNode;
 	}
 	
@@ -92,8 +99,9 @@ public class ParseSuccess extends AbstractParseResult {
 			return false;
 		
 		ParseSuccess other = (ParseSuccess) obj;
-		// TODO: add deep equals for sppf nodes
-		return parseStatistics.equals(other.parseStatistics); // && sppfNode.deepEquals(other.sppfNode);
+		return parseStatistics.equals(other.parseStatistics)
+               && sppfNode.deepEquals(other.sppfNode)
+               && tree.equals(other.tree);
 	}
 	
 	@Override

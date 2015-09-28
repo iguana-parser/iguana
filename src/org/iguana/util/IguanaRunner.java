@@ -114,7 +114,7 @@ public class IguanaRunner {
 					}
 					
 //					System.out.print((i + 1) + " ");
-//					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getRoot(), input);
+//					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getSPPFNode(), input);
 				} catch (Exception e) {
 					System.out.println("Hi");
 					e.printStackTrace();
@@ -141,7 +141,7 @@ public class IguanaRunner {
 //                    			(n) -> countNonterminals.incrementAndGet(),
 //                    			(i) -> countIntermediates.incrementAndGet());
 //                    
-//                    visitor.visit(result.asParseSuccess().getRoot());
+//                    visitor.visit(result.asParseSuccess().getSPPFNode());
 //                    System.out.println(String.format("Actual nodes: %d, %d, %d",
 //                    								 countTerminals.get(),
 //                    								 countNonterminals.get(),

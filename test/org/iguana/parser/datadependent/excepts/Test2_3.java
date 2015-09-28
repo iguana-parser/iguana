@@ -89,7 +89,7 @@ Grammar.builder()
          Assert.assertTrue(result.isParseSuccess());
 
          // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/excepts/",
-         //                   result.asParseSuccess().getRoot(), input);
+         //                   result.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertEquals(3, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
     }

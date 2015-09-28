@@ -27,13 +27,17 @@
 
 package org.iguana.parser.basic;
 
+import static org.iguana.util.CollectionsUtil.list;
 import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.ReachabilityGraph;
@@ -42,7 +46,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParseSuccess;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -51,6 +54,7 @@ import org.junit.Test;
 import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
 
 /**
  * S ::= A B C
@@ -75,19 +79,16 @@ public class Test10 {
 	static Character b = Character.from('b');
 	static Character c = Character.from('c');
 
-	private static Grammar grammar;
+	static Rule r1 = Rule.withHead(S).addSymbols(A, B, C).build();
+    static Rule r2 = Rule.withHead(S).addSymbols(A, B, D).build();
+    static Rule r3 = Rule.withHead(A).addSymbol(a).build();
+    static Rule r4 = Rule.withHead(B).addSymbol(b).build();
+    static Rule r5 = Rule.withHead(C).addSymbol(c).build();
+    static Rule r6 = Rule.withHead(D).addSymbol(c).build();
+
+	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).build();
 	private static Input input =  Input.fromString("abc");
 	private static Nonterminal startSymbol = S;
-
-	static {
-		Rule r1 = Rule.withHead(S).addSymbols(A, B, C).build();
-		Rule r2 = Rule.withHead(S).addSymbols(A, B, D).build();
-		Rule r3 = Rule.withHead(A).addSymbol(a).build();
-		Rule r4 = Rule.withHead(B).addSymbol(b).build();
-		Rule r5 = Rule.withHead(C).addSymbol(c).build();
-		Rule r6 = Rule.withHead(D).addSymbol(c).build();
-		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).build();
-	}
 
 	@Test
 	public void testReachableNonterminals() {
@@ -105,11 +106,15 @@ public class Test10 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult(graph), result);
-	}
+        assertEquals(getParseStatistics(), result.asParseSuccess().getStatistics());
+        SPPFVisualization.generate(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf", input);
+        SPPFVisualization.generate(expectedSPPF(graph), "/Users/afroozeh/output", "sppf1", input);
+        assertTrue(expectedSPPF(graph).deepEquals(result.asParseSuccess().getSPPFNode()));
+        System.out.println(result.asParseSuccess().getTree());
+    }
 	
-	private static ParseSuccess getParseResult(GrammarGraph registry) {
-        ParseStatistics statistics = ParseStatistics.builder()
+	private static ParseStatistics getParseStatistics() {
+        return ParseStatistics.builder()
                 .setDescriptorsCount(12)
                 .setGSSNodesCount(5)
                 .setGSSEdgesCount(6)
@@ -118,7 +123,6 @@ public class Test10 {
                 .setIntermediateNodesCount(4)
                 .setPackedNodesCount(10)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF(registry), statistics, input);
     }
 
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
@@ -136,6 +140,11 @@ public class Test10 {
         NonterminalNode node11 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A B D ."), node7);
         node11.addPackedNode(registry.getSlot("S ::= A B C ."), node10);
         return node11;
+    }
+
+    public static RuleNode getTree() {
+        Tree t1 = createRule(r3, list(createTerminal("a")));
+        return createRule(r2, list(createTerminal("a"), t1, createTerminal("b")));
     }
 }
 	

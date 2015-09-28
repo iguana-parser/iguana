@@ -95,7 +95,7 @@ Grammar.builder()
          Assert.assertTrue(result2.isParseSuccess());
          Assert.assertTrue(result3.isParseSuccess());
 
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/", result3.asParseSuccess().getRoot(), input);
+         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/", result3.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getCountAmbiguousNodes());
          Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getCountAmbiguousNodes());

@@ -92,7 +92,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		return regex.toString();
 	}
 
-	@Override
+    @Override
 	public void reset(Input input) {
 		terminalNodes = new HashMap<>();
 	}
