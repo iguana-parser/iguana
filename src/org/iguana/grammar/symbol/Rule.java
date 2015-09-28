@@ -225,6 +225,10 @@ public class Rule implements ConstructorCode, Serializable {
 		return action;
 	}
 
+    public boolean hasRuleType() {
+        return hasRuleType;
+    }
+
     public Object getRuleType() {
         return ruleType;
     }

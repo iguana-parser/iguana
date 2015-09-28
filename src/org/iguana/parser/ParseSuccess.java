@@ -29,10 +29,7 @@ package org.iguana.parser;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFVisitor;
-import iguana.parsetrees.tree.DefaultTreeBuilder;
-import iguana.parsetrees.tree.TermBuilderSPPFVisitor;
-import iguana.parsetrees.tree.TreeBuilder;
-import iguana.parsetrees.tree.TreeBuilderFactory;
+import iguana.parsetrees.tree.*;
 import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
 
@@ -46,9 +43,7 @@ public class ParseSuccess extends AbstractParseResult {
 		super(input);
 		this.sppfNode = sppfNode;
 		this.parseStatistics = parseStatistics;
-        TreeBuilder builder = TreeBuilderFactory.getDefault(input);
-        TermBuilderSPPFVisitor visitor = new TermBuilderSPPFVisitor(builder);
-        tree = visitor.visit(sppfNode);
+        tree = TermBuilder.build(sppfNode, TreeBuilderFactory.getDefault(input));
     }
 	
 	@Override
