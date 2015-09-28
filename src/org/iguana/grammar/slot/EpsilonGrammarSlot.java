@@ -27,21 +27,22 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.parsetrees.sppf.Action;
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.parsetrees.sppf.NonterminalNodeType;
 import iguana.parsetrees.sppf.TerminalNode;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.SemanticAction;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, 
-			                  Conditions conditions, SemanticAction action, Object ruleType) {
+			                  Conditions conditions, Action action, Object ruleType) {
 		super(id, position, nonterminal, null, null, null, conditions, action, ruleType);
 		this.epsilonSlot = epsilonSlot;
 	}
@@ -50,7 +51,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, parser.getInput(), i);
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode, NonterminalNodeType.Basic(), action, ruleType));
 		}
 	}
 	
@@ -60,6 +61,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 	
 	/**
+	 *
 	 * 
 	 * Data-dependent GLL parsing
 	 * 
@@ -68,7 +70,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, parser.getInput(), i);
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, epsilonNode, NonterminalNodeType.Basic(), action, ruleType));
 		}
 		
 	}
@@ -77,7 +79,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
 		if (getNonterminal().testFollow(parser.getInput().charAt(i))) {
 			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, parser.getInput(), i);
-			parser.pop(u, i, u.addToPoppedElements(parser, this, epsilonNode, value));
+			parser.pop(u, i, u.addToPoppedElements(parser, this, epsilonNode, NonterminalNodeType.Basic(), value, action, ruleType));
 		}
 	}
 

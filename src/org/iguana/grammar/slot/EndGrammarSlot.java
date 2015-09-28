@@ -27,30 +27,31 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.parsetrees.sppf.Action;
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.parsetrees.sppf.NonterminalNodeType;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.SemanticAction;
 
 import java.util.Collections;
 import java.util.Set;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 
-	private final NonterminalGrammarSlot nonterminal;
-	private final SemanticAction action;
-	private final Object ruleType;
+	protected final NonterminalGrammarSlot nonterminal;
+	protected final Action action;
+	protected final Object ruleType;
 
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, SemanticAction action, Object ruleType) {
+			              String variable, Set<String> state, Conditions conditions, Action action, Object ruleType) {
 		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType);
 	}
 	
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, int i1, 
-            			  String variable, int i2, Set<String> state, Conditions conditions, SemanticAction action, Object ruleType) {
+            			  String variable, int i2, Set<String> state, Conditions conditions, Action action, Object ruleType) {
 		super(id, position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
 		this.action = action;
@@ -64,7 +65,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node, NonterminalNodeType.Basic(), action, ruleType));
 	}
 	
 	@Override
@@ -91,7 +92,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		return false;
 	}
 	
-	public SemanticAction getAction() {
+	public Action getAction() {
 		return action;
 	}
 
@@ -107,12 +108,12 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node, NonterminalNodeType.Basic(), action, ruleType));
 	}
 	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, this, node, value));
+			parser.pop(u, i, u.addToPoppedElements(parser, this, node, NonterminalNodeType.Basic(), value, action, ruleType));
 	}
 
 }

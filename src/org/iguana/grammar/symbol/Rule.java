@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.parsetrees.sppf.Action;
 import org.iguana.parser.HashFunctions;
-import org.iguana.util.SemanticAction;
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -81,7 +81,7 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final String label;
 	
-	private final SemanticAction action;
+	private final Action action;
     private final Object ruleType;
     private final boolean hasRuleType;
 
@@ -221,7 +221,7 @@ public class Rule implements ConstructorCode, Serializable {
 		return layout != null;
 	}
 	
-	public SemanticAction getAction() {
+	public Action getAction() {
 		return action;
 	}
 
@@ -324,7 +324,7 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		private String label;
 		
-		private SemanticAction action = null;
+		private Action action = null;
 		private Object ruleType = null;
         private boolean hasRuleType;
 
@@ -454,7 +454,7 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 		
-		public Builder setAction(SemanticAction action) {
+		public Builder setAction(Action action) {
 			this.action = action;
 			return this;
 		}

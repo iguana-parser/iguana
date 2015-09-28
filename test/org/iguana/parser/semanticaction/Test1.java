@@ -2,6 +2,7 @@ package org.iguana.parser.semanticaction;
 
 import static org.junit.Assert.assertTrue;
 
+import iguana.parsetrees.sppf.Action;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -9,8 +10,6 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
-import org.iguana.util.SemanticAction;
 import org.junit.Test;
 
 import iguana.utils.input.Input;
@@ -23,7 +22,7 @@ import iguana.utils.input.Input;
 public class Test1 {
 
 	private static Grammar getGrammar() {
-		SemanticAction action = SemanticAction.from(x -> System.out.println("Hi")); 
+        Action action = x -> { System.out.println(x); return null; };
 		Nonterminal A = Nonterminal.withName("A");
 		Character a = Character.from('a');
 		Rule r1 = Rule.withHead(A).addSymbol(a).setAction(action).build();
