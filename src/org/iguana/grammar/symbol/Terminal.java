@@ -37,6 +37,7 @@ public class Terminal extends AbstractRegularExpression {
 	private static final long serialVersionUID = 1L;
 	
 	private final RegularExpression regex;
+	private final int $token;
 	
 	public static Terminal from(RegularExpression regex) {
 		return builder(regex).build();
@@ -45,6 +46,7 @@ public class Terminal extends AbstractRegularExpression {
 	public Terminal(Builder builder) {
 		super(builder);
 		this.regex = builder.regex;
+		this.$token = builder.$token;
 	}
 
 	@Override
@@ -54,6 +56,10 @@ public class Terminal extends AbstractRegularExpression {
 	
 	public RegularExpression getRegularExpression() {
 		return regex;
+	}
+	
+	public int token() {
+		return $token;
 	}
 	
 	@Override
@@ -87,6 +93,7 @@ public class Terminal extends AbstractRegularExpression {
 	public static class Builder extends SymbolBuilder<Terminal> {
 		
 		private RegularExpression regex;
+		private int $token = 0;
 
 		public Builder(RegularExpression regex) {
 			super(regex.getName());
@@ -101,6 +108,11 @@ public class Terminal extends AbstractRegularExpression {
 		@Override
 		public Terminal build() {
 			return new Terminal(this);
+		}
+		
+		public Builder asToken() {
+			this.$token = 1;
+			return this;
 		}
 	}
 
@@ -125,6 +137,7 @@ public class Terminal extends AbstractRegularExpression {
 	
 	public String getConstructorCode() {
 		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
+				                              + ($token == 0? "" : ".asToken()")
 											  + super.getConstructorCode() 
 											  + ".build()";
 	}
