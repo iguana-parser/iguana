@@ -39,17 +39,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import iguana.utils.input.Input;
+
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.patterns.ExceptPattern;
@@ -62,6 +57,7 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
+import org.iguana.traversal.idea.IdeaIDEGenerator;
 import org.iguana.util.CollectionsUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.generator.ConstructorCode;
@@ -70,6 +66,7 @@ import org.iguana.util.generator.ConstructorCode;
 /**
  * 
  * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
  *
  */
 public class Grammar implements ConstructorCode, Serializable {
@@ -417,5 +414,9 @@ public class Grammar implements ConstructorCode, Serializable {
 							  + ")))")
 				.collect(Collectors.joining());
 	}
+
+	public void generate_idea_ide(String language, String extendsion, String path) {
+        new IdeaIDEGenerator().generate(this, language, "iggy", path);
+    }
 	
 }
