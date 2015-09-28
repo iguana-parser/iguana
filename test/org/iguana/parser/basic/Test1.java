@@ -32,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.*;
+import iguana.parsetrees.tree.RuleNode;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -47,8 +48,11 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
 
 import iguana.utils.input.Input;
+
+import java.util.Collections;
 
 /**
  * 
@@ -63,14 +67,14 @@ public class Test1 {
 	private static Nonterminal A = Nonterminal.withName("A");
 
     private static Nonterminal startSymbol = A;
-	private static Grammar grammar;
+    private static Rule r1 = Rule.withHead(A).withRuleType().build();
+    private static Grammar grammar;
     private static Input input = Input.empty();
 
     static {
-		Rule r1 = Rule.withHead(A).withRuleType().build();
-		grammar = Grammar.builder().addRule(r1).build();
-	}
-	
+        grammar = Grammar.builder().addRule(r1).build();
+    }
+
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -89,9 +93,9 @@ public class Test1 {
         GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
-        System.out.println(result.asParseSuccess().getTree());
         assertEquals(getParseResult(graph), result);
-	}
+        assertEquals(getTree(), result.asParseSuccess().getTree());
+    }
 		
 	public static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
@@ -111,5 +115,9 @@ public class Test1 {
         NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
 		return node1;
 	}
+
+    public static RuleNode getTree() {
+        return createRule(r1, Collections.emptyList());
+    }
 
 }

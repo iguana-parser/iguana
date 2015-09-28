@@ -35,6 +35,8 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -51,6 +53,8 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
 
 
 import iguana.utils.input.Input;
@@ -73,19 +77,16 @@ public class Test7 {
 	static Character b = Character.from('b');
 	static Character c = Character.from('c');
 	static Character d = Character.from('d');
+
+    static Rule r1 = Rule.withHead(A).addSymbols(B, C, D).build();
+    static Rule r2 = Rule.withHead(B).addSymbol(b).build();
+    static Rule r3 = Rule.withHead(C).addSymbol(c).build();
+    static Rule r4 = Rule.withHead(D).addSymbol(d).build();
 	
     private static Input input = Input.fromString("bcd");
     private static Nonterminal startSymbol = A;
-	private static Grammar grammar;
+	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 
-	static {
-		Rule r1 = Rule.withHead(A).addSymbols(B, C, D).build();
-		Rule r2 = Rule.withHead(B).addSymbol(b).build();
-		Rule r3 = Rule.withHead(C).addSymbol(c).build();
-		Rule r4 = Rule.withHead(D).addSymbol(d).build();
-		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
-	}
-	
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -111,7 +112,8 @@ public class Test7 {
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-	}
+        assertEquals(getTree(), result.asParseSuccess().getTree());
+    }
 
 	@Test
 	public void testLL1() {
@@ -145,5 +147,13 @@ public class Test7 {
 		NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B C D ."), node7);
 		return node8;
 	}
-	
+
+    public static RuleNode getTree() {
+        Tree t1 = createRule(r2, list(createTerminal("b")));
+        Tree t2 = createRule(r3, list(createTerminal("c")));
+        Tree t3 = createRule(r4, list(createTerminal("d")));
+        return createRule(r1, list(t1, t2, t3));
+    }
+
+
 }

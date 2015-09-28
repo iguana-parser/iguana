@@ -35,6 +35,8 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -51,6 +53,8 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
 
 import iguana.utils.input.Input;
 
@@ -72,20 +76,18 @@ public class Test8 {
 	static Character a = Character.from('a');
 	static Character b = Character.from('b');
 	static Character c = Character.from('c');
+
+	static Rule r1 = Rule.withHead(A).addSymbols(a, B, c).build();
+	static Rule r2 = Rule.withHead(A).addSymbol(C).build();
+	static Rule r3 = Rule.withHead(B).addSymbol(b).build();
+	static Rule r4 = Rule.withHead(C).addSymbols(a, C).build();
+	static Rule r5 = Rule.withHead(C).addSymbol(c).build();
     
     private static Input input1 = Input.fromString("abc");
     private static Input input2 = Input.fromString("aaaac");
     private static Nonterminal startSymbol = A;
-    private static Grammar grammar;
+    private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
 
-    static {
-        Rule r1 = Rule.withHead(A).addSymbols(a, B, c).build();
-        Rule r2 = Rule.withHead(A).addSymbol(C).build();
-        Rule r3 = Rule.withHead(B).addSymbol(b).build();
-        Rule r4 = Rule.withHead(C).addSymbols(a, C).build();
-        Rule r5 = Rule.withHead(C).addSymbol(c).build();
-        grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
-    }
 
 	@Test
 	public void testReachableNonterminals() {
@@ -117,7 +119,8 @@ public class Test8 {
 		ParseResult result = parser.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead1(graph), result);
-	}
+        assertEquals(getTree1(), result.asParseSuccess().getTree());
+    }
 
     @Test
     public void testParser1_0() {
@@ -126,6 +129,7 @@ public class Test8 {
         ParseResult result = parser.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead0(graph), result);
+        assertEquals(getTree1(), result.asParseSuccess().getTree());
     }
 
     @Test
@@ -135,6 +139,7 @@ public class Test8 {
         ParseResult result = parser.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead1(graph), result);
+        assertEquals(getTree2(), result.asParseSuccess().getTree());
     }
 
     @Test
@@ -144,9 +149,10 @@ public class Test8 {
         ParseResult result = parser.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead0(graph), result);
+        assertEquals(getTree2(), result.asParseSuccess().getTree());
     }
 
-    private static ParseSuccess getParseResult1_Lookahead0(GrammarGraph registry) {
+    private static ParseSuccess getParseResult1_Lookahead0(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(8)
 				.setGSSNodesCount(4)
@@ -156,7 +162,7 @@ public class Test8 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(null, statistics, input1);
+		return new ParseSuccess(expectedSPPF1(graph), statistics, input1);
 	}
 	
 	private static ParseSuccess getParseResult1_Lookahead1(GrammarGraph graph) {
@@ -209,6 +215,11 @@ public class Test8 {
         return node6;
 	}
 
+    public static RuleNode getTree1() {
+        Tree t1 = createRule(r3, list(createTerminal("b")));
+        return createRule(r1, list(createTerminal("a"), t1, createTerminal("c")));
+    }
+
 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
         TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
         TerminalNode node1 = createTerminalNode(registry.getSlot("a"), 1, 2);
@@ -226,6 +237,15 @@ public class Test8 {
         NonterminalNode node13 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= a C ."), node12);
         NonterminalNode node14 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= C ."), node13);
         return node14;
+    }
+
+    public static RuleNode getTree2() {
+        Tree t1 = createRule(r5, list(createTerminal("c")));
+        Tree t2 = createRule(r4, list(createTerminal("a"), t1));
+        Tree t3 = createRule(r4, list(createTerminal("a"), t2));
+        Tree t4 = createRule(r4, list(createTerminal("a"), t3));
+        Tree t5 = createRule(r4, list(createTerminal("a"), t4));
+        return createRule(r2, list(t5));
     }
 	
 }

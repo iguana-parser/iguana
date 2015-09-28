@@ -29,6 +29,7 @@ package org.iguana.parser.basic;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.RuleNode;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -45,9 +46,14 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
+
 
 /**
  * 
@@ -60,13 +66,13 @@ public class Test2 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
 	static Character a = Character.from('a');
+    static Rule r1 = Rule.withHead(A).addSymbol(a).build();
 
     private static Input input = Input.fromString("a");
     private static Grammar grammar;
 	private static Nonterminal startSymbol = A;
 
 	static {
-		Rule r1 = Rule.withHead(A).addSymbol(a).build();
 		grammar = Grammar.builder().addRule(r1).build();
 	}
 	
@@ -89,6 +95,7 @@ public class Test2 {
         ParseResult result = parser.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
+        assertEquals(getTree(), result.asParseSuccess().getTree());
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -109,5 +116,9 @@ public class Test2 {
         NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
         return node1;
 	}
+
+    public static RuleNode getTree() {
+        return createRule(r1, list(createTerminal("a")));
+    }
 
 }
