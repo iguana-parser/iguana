@@ -30,6 +30,7 @@ package org.iguana.parser.basic;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.RuleNode;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -50,6 +51,8 @@ import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.*;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * 
@@ -62,15 +65,16 @@ public class Test3 {
 	static Nonterminal A = Nonterminal.withName("A");
 	static Character a = Character.from('a');
 	static Character b = Character.from('b');
+	static Rule r1 = Rule.withHead(A).addSymbols(a, b).build();
 
 	private static Input input = Input.fromString("ab");
 	private static Nonterminal startSymbol = A;
 	private static Grammar grammar;
 
 	static {
-		Rule r1 = Rule.withHead(A).addSymbols(a, b).build();
 		grammar = Grammar.builder().addRule(r1).build();
 	}
+
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -90,7 +94,8 @@ public class Test3 {
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-    }
+		assertEquals(getTree(), result.asParseSuccess().getTree());
+	}
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
@@ -111,6 +116,10 @@ public class Test3 {
         IntermediateNode node2 = createIntermediateNode(registry.getSlot("A ::= a b ."), node0, node1);
         NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a b ."), node2);
 		return node3;
+	}
+
+	public static RuleNode getTree() {
+		return createRule(r1, list(createTerminal("a"), createTerminal("b")));
 	}
 
 }

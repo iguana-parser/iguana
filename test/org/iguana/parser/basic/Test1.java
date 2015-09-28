@@ -52,7 +52,6 @@ import static iguana.parsetrees.tree.TreeFactory.*;
 
 import iguana.utils.input.Input;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 /**
