@@ -65,17 +65,14 @@ import static org.iguana.util.CollectionsUtil.*;
 public class Test2 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
-	static Character a = Character.from('a');
+    static Character a = Character.from('a');
     static Rule r1 = Rule.withHead(A).addSymbol(a).build();
+    private static Grammar grammar = Grammar.builder().addRule(r1).build();
 
     private static Input input = Input.fromString("a");
-    private static Grammar grammar;
 	private static Nonterminal startSymbol = A;
 
-	static {
-		grammar = Grammar.builder().addRule(r1).build();
-	}
-	
+
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -93,6 +90,7 @@ public class Test2 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
+        System.out.println(result.asParseSuccess().getTree());
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
     }

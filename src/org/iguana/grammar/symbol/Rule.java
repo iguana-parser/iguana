@@ -330,7 +330,7 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		private Action action = null;
 		private Object ruleType = null;
-        private boolean hasRuleType;
+        private boolean hasRuleType = true;
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -464,7 +464,6 @@ public class Rule implements ConstructorCode, Serializable {
 		}
 
         public Builder setRuleType(Object ruleType) {
-            this.hasRuleType = true;
             this.ruleType = ruleType;
             return this;
         }

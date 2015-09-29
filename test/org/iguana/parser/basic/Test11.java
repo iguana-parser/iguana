@@ -27,14 +27,16 @@
 
 package org.iguana.parser.basic;
 
+import static org.iguana.util.CollectionsUtil.list;
 import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.sppf.*;
+import iguana.parsetrees.tree.Branch;
+import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.tree.TreeVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -53,6 +55,7 @@ import org.junit.Test;
 import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
 
 /**
  * S ::= A A b
@@ -68,18 +71,14 @@ public class Test11 {
 	static Nonterminal A = Nonterminal.withName("A");
 	static Character a = Character.from('a');
 	static Character b = Character.from('b');
+    static Rule r1 = Rule.withHead(S).addSymbols(A, A, b).build();
+    static Rule r2 = Rule.withHead(A).addSymbol(a).build();
+    static Rule r3 = Rule.withHead(A).build();
+    static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();;
 
     private static Input input = Input.fromString("ab");
     private static Nonterminal startSymbol = S;
 
-    private static Grammar grammar;
-
-    static {
-        Rule r1 = Rule.withHead(S).addSymbols(A, A, b).build();
-        Rule r2 = Rule.withHead(A).addSymbol(a).build();
-        Rule r3 = Rule.withHead(A).build();
-        grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
-    }
 
     @Test
 	public void testReachableNonterminals() {
@@ -100,7 +99,7 @@ public class Test11 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
-        assertTrue(result.isParseSuccess());
+        System.out.println(result.asParseSuccess().getTree());
         assertEquals(getParseResult(graph), result);
     }
 
@@ -114,22 +113,30 @@ public class Test11 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(7)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
+        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 0, 1);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2);
+        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
         NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4);
         IntermediateNode node6 = createIntermediateNode(registry.getSlot("S ::= A A . b"), node1, node3);
-        node6.addPackedNode(registry.getSlot("S ::= A A . b"), node5, node1);
+        node6.addPackedNode(registry.getSlot("S ::= A A . b"), node3, node5);
         TerminalNode node7 = createTerminalNode(registry.getSlot("b"), 1, 2);
         IntermediateNode node8 = createIntermediateNode(registry.getSlot("S ::= A A b ."), node6, node7);
         NonterminalNode node9 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A A b ."), node8);
         return node9;
 	}
+
+    public static Tree getTree() {
+        Tree t1 = createRule(r3, list()); // A()
+        Tree t2 = createRule(r2, list(createTerminal("a"))); // A(a)
+        Branch<Tree> b1 = createBranch(list(t1, t2));
+        Branch<Tree> b2 = createBranch(list(t2, t1));
+        return createRule(r1, list(createAmbiguity(set(b1, b2)), createTerminal("b")));
+    }
 }
 	

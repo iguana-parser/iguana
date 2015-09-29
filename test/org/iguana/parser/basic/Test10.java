@@ -34,9 +34,8 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Branch;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -46,6 +45,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParseSuccess;
 import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -106,15 +106,11 @@ public class Test10 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
-        assertEquals(getParseStatistics(), result.asParseSuccess().getStatistics());
-        SPPFVisualization.generate(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf", input);
-        SPPFVisualization.generate(expectedSPPF(graph), "/Users/afroozeh/output", "sppf1", input);
-        assertTrue(expectedSPPF(graph).deepEquals(result.asParseSuccess().getSPPFNode()));
-        System.out.println(result.asParseSuccess().getTree());
+        assertEquals(getParseResult(graph), result);
     }
 	
-	private static ParseStatistics getParseStatistics() {
-        return ParseStatistics.builder()
+	private static ParseResult getParseResult(GrammarGraph graph) {
+        ParseStatistics statistics = ParseStatistics.builder()
                 .setDescriptorsCount(12)
                 .setGSSNodesCount(5)
                 .setGSSEdgesCount(6)
@@ -123,6 +119,7 @@ public class Test10 {
                 .setIntermediateNodesCount(4)
                 .setPackedNodesCount(10)
                 .setAmbiguousNodesCount(1).build();
+        return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
     }
 
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
@@ -142,9 +139,14 @@ public class Test10 {
         return node11;
     }
 
-    public static RuleNode getTree() {
-        Tree t1 = createRule(r3, list(createTerminal("a")));
-        return createRule(r2, list(createTerminal("a"), t1, createTerminal("b")));
+    public static Tree getTree() {
+        Tree t1 = createRule(r3, list(createTerminal("a"))); // A(a)
+        Tree t2 = createRule(r4, list(createTerminal("b"))); // B(b)
+        Tree t3 = createRule(r5, list(createTerminal("c"))); // C(c)
+        Tree t4 = createRule(r6, list(createTerminal("c"))); // D(c)
+        Branch<Tree> b1 = createBranch(list(t1, t2, t3));
+        Branch<Tree> b2 = createBranch(list(t1, t2, t4));
+        return createAmbiguity(set(b1, b2));
     }
 }
 	
