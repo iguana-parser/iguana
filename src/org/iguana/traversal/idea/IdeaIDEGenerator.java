@@ -36,6 +36,10 @@ public class IdeaIDEGenerator {
             for (Symbol symbol : rule.getBody())
                 symbol.accept(new CollectRegularExpressions(terminals));
         }
+
+        if (grammar.getLayout().isTerminal()) // That is, defined as a token
+            grammar.getLayout().accept(new CollectRegularExpressions(terminals));
+
         new ToJFlexGenerator(language, path, terminals, tokenTypes).generate();
 
         generateBasicHighlighter(language, path, tokenTypes);
