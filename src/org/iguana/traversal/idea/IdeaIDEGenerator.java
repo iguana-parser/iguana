@@ -49,7 +49,9 @@ public class IdeaIDEGenerator {
         for (Rule rule : grammar.getRules())
             elements.add(rule.getHead().getName());
 
-//        generateElementTypes(elements, language, path);
+        generateElementTypes(elements, language, path);
+
+
     }
 
     private void generateBasicFiles(String language, String extension, String path) {
@@ -768,27 +770,41 @@ public class IdeaIDEGenerator {
         }
     }
 
-//    private void generateElementTypes(Set<String> elements, String language, String path) {
-//        File file = new File(path + language.toLowerCase() + "/gen/psi/" + language + "ElementTypes.java");
-//
-//        try {
-//            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
-//            writer.println("package " + language.toLowerCase() + ".gen.psi;");
-//            writer.println();
-//            writer.println("/* This file has been generated. */");
-//            writer.println();
-//            writer.println("import com.intellij.psi.tree.IElementType;");
-//            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementType;");
-//            writer.println();
-//            writer.println("interface " + language + "ElementTypes {");
-//            for (String element : elements)
-//                writer.println("    public IElementType " + element.toUpperCase() + " = new " + language + "ElementType(\"" + element.toUpperCase() + "\");");
-//            writer.println("}");
-//            writer.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void generateElementTypes(Set<String> elements, String language, String path) {
+        File file = new File(path + language.toLowerCase() + "/gen/psi/" + language + "ElementTypes.java");
+
+        try {
+            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.println("package " + language.toLowerCase() + ".gen.psi;");
+            writer.println();
+            writer.println("/* This file has been generated. */");
+            writer.println();
+            writer.println("import com.intellij.psi.tree.IElementType;");
+            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementType;");
+            writer.println();
+            writer.println("interface " + language + "ElementTypes {");
+            writer.println();
+            // ebnf related types
+            writer.println("    public IElementType LIST0 = new " + language + "ElementType(\"LIST0\");");
+            writer.println("    public IElementType LIST1 = new " + language + "ElementType(\"LIST1\");");
+            writer.println("    public IElementType OPTION = new " + language + "ElementType(\"OPTION\");");
+            writer.println("    public IElementType ALT_GROUP = new " + language + "ElementType(\"ALT_GROUP\");");
+            writer.println("    public IElementType SEQ_GROUP = new " + language + "ElementType(\"SEQ_GROUP\");");
+            writer.println("    public IElementType RANGE = new " + language + "ElementType(\"RANGE\");");
+            writer.println("    public IElementType CHARCLASS = new " + language + "ElementType(\"CHARCLASS\");");
+            writer.println();
+            for (String element : elements)
+                writer.println("    public IElementType " + element.toUpperCase() + " = new " + language + "ElementType(\"" + element.toUpperCase() + "\");");
+            writer.println("}");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void generatePhiElementTypes(Set<String> elements, String language, String path) {
+        // TODO:
+    }
 }
