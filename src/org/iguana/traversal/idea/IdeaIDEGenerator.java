@@ -307,6 +307,8 @@ public class IdeaIDEGenerator {
 
         @Override
         public Void visit(Plus symbol) {
+            for (Symbol sep : symbol.getSeparators())
+                sep.accept(this);
             return symbol.getSymbol().accept(this);
         }
 
@@ -319,6 +321,8 @@ public class IdeaIDEGenerator {
 
         @Override
         public Void visit(Star symbol) {
+            for (Symbol sep : symbol.getSeparators())
+                sep.accept(this);
             return symbol.getSymbol().accept(this);
         }
 
