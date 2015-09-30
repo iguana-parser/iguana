@@ -51,7 +51,7 @@ public class IdeaIDEGenerator {
 
         generateElementTypes(elements, language, path);
 
-
+        generatePhiElements(grammar.getRules(), language, path);
     }
 
     private void generateBasicFiles(String language, String extension, String path) {
@@ -788,8 +788,10 @@ public class IdeaIDEGenerator {
             writer.println("    public IElementType LIST0 = new " + language + "ElementType(\"LIST0\");");
             writer.println("    public IElementType LIST1 = new " + language + "ElementType(\"LIST1\");");
             writer.println("    public IElementType OPTION = new " + language + "ElementType(\"OPTION\");");
-            writer.println("    public IElementType ALT_GROUP = new " + language + "ElementType(\"ALT_GROUP\");");
-            writer.println("    public IElementType SEQ_GROUP = new " + language + "ElementType(\"SEQ_GROUP\");");
+            writer.println("    public IElementType GROUP = new " + language + "ElementType(\"GROUP\");");
+            writer.println("    public IElementType WHILE_AS_LIST = new " + language + "ElementType(\"WHILE_AS_LIST\");");
+            writer.println("    public IElementType IF_THEN_ELSE_AS_OPTION = new " + language + "ElementType(\"IF_THEN_ELSE_AS_OPTION\");");
+            writer.println("    public IElementType BLOCK_AS_GROUP = new " + language + "ElementType(\"BLOCK_AS_GROUP\");");
             writer.println("    public IElementType RANGE = new " + language + "ElementType(\"RANGE\");");
             writer.println("    public IElementType CHARCLASS = new " + language + "ElementType(\"CHARCLASS\");");
             writer.println();
@@ -804,7 +806,117 @@ public class IdeaIDEGenerator {
         }
     }
 
-    private void generatePhiElementTypes(Set<String> elements, String language, String path) {
+    private void generatePhiElements(List<Rule> rules, String language, String path) {
         // TODO:
+        // Interfaces and Implementations
+
+    }
+
+    private static class GetPhiElements implements ISymbolVisitor<String> {
+
+        @Override
+        public String visit(Align symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Block symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Character symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(CharacterRange symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Code symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Conditional symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(EOF symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Epsilon symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(IfThen symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(IfThenElse symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Ignore symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Nonterminal symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Offside symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Terminal symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(While symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Return symbol) {
+            return null;
+        }
+
+        @Override
+        public <E extends Symbol> String visit(Alt<E> symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Opt symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Plus symbol) {
+            return null;
+        }
+
+        @Override
+        public <E extends Symbol> String visit(Sequence<E> symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Star symbol) {
+            return null;
+        }
     }
 }
