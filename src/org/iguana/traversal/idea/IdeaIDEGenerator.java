@@ -39,6 +39,13 @@ public class IdeaIDEGenerator {
         new ToJFlexGenerator(language, path, terminals, tokenTypes).generate();
 
         generateBasicHighlighter(language, path, tokenTypes);
+
+        Set<String> elements = new LinkedHashSet<>();
+
+        for (Rule rule : grammar.getRules())
+            elements.add(rule.getHead().getName());
+
+//        generateElementTypes(elements, language, path);
     }
 
     private void generateBasicFiles(String language, String extension, String path) {
@@ -190,12 +197,14 @@ public class IdeaIDEGenerator {
 
         @Override
         public Void visit(Align symbol) {
-            throw new UnexpectedSymbol(symbol, "Generate a simple ide.");
+            return symbol.getSymbol().accept(this);
         }
 
         @Override
         public Void visit(Block symbol) {
-            throw new UnexpectedSymbol(symbol, "Generate a simple ide.");
+            for (Symbol sym : symbol.getSymbols())
+                sym.accept(this);
+            return null;
         }
 
         @Override
@@ -234,17 +243,18 @@ public class IdeaIDEGenerator {
 
         @Override
         public Void visit(IfThen symbol) {
-            throw new UnexpectedSymbol(symbol, "Generate a simple ide.");
+            return symbol.getThenPart().accept(this);
         }
 
         @Override
         public Void visit(IfThenElse symbol) {
-            throw new UnexpectedSymbol(symbol, "Generate a simple ide.");
+            symbol.getThenPart().accept(this);
+            return symbol.getElsePart().accept(this);
         }
 
         @Override
         public Void visit(Ignore symbol) {
-            throw new UnexpectedSymbol(symbol, "Generate a simple ide.");
+            return symbol.getSymbol().accept(this);
         }
 
         @Override
@@ -271,7 +281,7 @@ public class IdeaIDEGenerator {
 
         @Override
         public Void visit(While symbol) {
-            throw new UnexpectedSymbol(symbol, "Generate a simple ide.");
+            return symbol.getBody().accept(this);
         }
 
         @Override
@@ -749,4 +759,28 @@ public class IdeaIDEGenerator {
                     return null;
         }
     }
+
+//    private void generateElementTypes(Set<String> elements, String language, String path) {
+//        File file = new File(path + language.toLowerCase() + "/gen/psi/" + language + "ElementTypes.java");
+//
+//        try {
+//            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+//            writer.println("package " + language.toLowerCase() + ".gen.psi;");
+//            writer.println();
+//            writer.println("/* This file has been generated. */");
+//            writer.println();
+//            writer.println("import com.intellij.psi.tree.IElementType;");
+//            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementType;");
+//            writer.println();
+//            writer.println("interface " + language + "ElementTypes {");
+//            for (String element : elements)
+//                writer.println("    public IElementType " + element.toUpperCase() + " = new " + language + "ElementType(\"" + element.toUpperCase() + "\");");
+//            writer.println("}");
+//            writer.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
