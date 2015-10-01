@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -52,6 +53,8 @@ import org.junit.Test;
 import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
 
 
 /**
@@ -64,19 +67,14 @@ import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 public class Test12 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
+    static Rule r1 = Rule.withHead(A).addSymbols(A, A).build();
+    static Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
+    static Rule r3 = Rule.withHead(A).build();
+    static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
+    static Nonterminal startSymbol = A;
 
     private static Input input1 = Input.fromString("a");
     private static Input input2 = Input.empty();
-    private static Nonterminal startSymbol = A;
-
-    private static Grammar grammar;
-
-    static {
-        Rule r1 = Rule.withHead(A).addSymbols(A, A).build();
-        Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-        Rule r3 = Rule.withHead(A).build();
-        grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
-    }
 
 	@Test
 	public void testReachableNonterminals() {
@@ -96,7 +94,7 @@ public class Test12 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
-		assertEquals(getParseResult1(graph), result);
+        assertEquals(getParseResult1(graph), result);
 	}
 	
 	private static ParseSuccess getParseResult1(GrammarGraph graph) {
@@ -109,7 +107,7 @@ public class Test12 {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(4).build();
-		return new ParseSuccess(expectedSPPF1(graph), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(graph), getTree1(), statistics, input1);
 	}
 
     @Test
@@ -131,7 +129,7 @@ public class Test12 {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF2(graph), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(graph), getTree2(), statistics, input2);
 	}
 		
 	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
@@ -158,4 +156,22 @@ public class Test12 {
         node2.addPackedNode(registry.getSlot("A ::= A A ."), node1);
         return node2;
 	}
+
+    private static Tree getTree1() {
+        Tree t0 = createTerminal("a");
+        Tree t1 = createCycle();
+        Tree t2 = createEpsilon();
+        Tree t3 = createAmbiguity(set(createBranch(list(t2)), createBranch(list(t1, t1))));
+        Tree t4 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t3, t1))));
+        Tree t5 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t4))));
+        return t5;
+    }
+
+    private static Tree getTree2() {
+        Tree t0 = createEpsilon();
+        Tree t1 = createCycle();
+        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1, t1))));
+        return t2;
+    }
+
 }

@@ -11,6 +11,6 @@ public interface LookAheadTest {
 	 * Returns a list of first slots that can be parsed
 	 * at the given input character. 
 	 */
-	public List<BodyGrammarSlot> get(int v);
+	List<BodyGrammarSlot> get(int v);
 	
 }

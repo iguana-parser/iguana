@@ -28,6 +28,7 @@
 package org.iguana.parser;
 
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.parsetrees.tree.*;
 import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
@@ -105,6 +106,6 @@ public class ParseSuccess extends AbstractParseResult {
 	
 	@Override
 	public String toString() {
-		return sppfNode + "\n" + parseStatistics;
+		return parseStatistics + "\n" + SPPFToJavaCode.get(sppfNode) + "\n" + TreeToJavaCode.get((Tree) tree);
 	}
 }

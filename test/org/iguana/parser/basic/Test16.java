@@ -27,13 +27,12 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.Tree;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -49,10 +48,10 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
-
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -71,28 +70,25 @@ public class Test16 {
 	static Nonterminal B = Nonterminal.withName("B");
 	static Nonterminal C = Nonterminal.withName("C");
 	static Nonterminal D = Nonterminal.withName("D");
+
+    static Character a = Character.from('a');
+    static Rule r1 = Rule.withHead(S).addSymbols(A, B, C, D).build();
+    static Rule r2 = Rule.withHead(A).addSymbol(a).build();
+    static Rule r3 = Rule.withHead(A).build();
+    static Rule r4 = Rule.withHead(B).addSymbol(a).build();
+    static Rule r5 = Rule.withHead(B).build();
+    static Rule r6 = Rule.withHead(C).addSymbol(a).build();
+    static Rule r7 = Rule.withHead(C).build();
+    static Rule r8 = Rule.withHead(D).addSymbol(a).build();
+    static Rule r9 = Rule.withHead(D).build();
 	
     private static Nonterminal startSymbol = S;
     private static Input input = Input.fromString("a");
-	private static Grammar grammar;
+	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).
+                                                       addRule(r4).addRule(r5).addRule(r6).
+                                                       addRule(r7).addRule(r8).addRule(r9).build();
 
-    static {
-		Character a = Character.from('a');
-		Rule r1 = Rule.withHead(S).addSymbols(A, B, C, D).build();
-		Rule r2 = Rule.withHead(A).addSymbol(a).build();
-		Rule r3 = Rule.withHead(A).build();
-		Rule r4 = Rule.withHead(B).addSymbol(a).build();
-		Rule r5 = Rule.withHead(B).build();
-		Rule r6 = Rule.withHead(C).addSymbol(a).build();
-		Rule r7 = Rule.withHead(C).build();
-		Rule r8 = Rule.withHead(D).addSymbol(a).build();
-		Rule r9 = Rule.withHead(D).build();
 
-		grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).
-													   addRule(r4).addRule(r5).addRule(r6).
-													   addRule(r7).addRule(r8).addRule(r9).build();
-	}
-	
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -122,7 +118,7 @@ public class Test16 {
         assertEquals(getParseResult(graph), result);
     }
 
-    private static ParseSuccess getParseResult(GrammarGraph registry) {
+    private static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(18)
 				.setGSSNodesCount(8)
@@ -132,32 +128,50 @@ public class Test16 {
 				.setIntermediateNodesCount(5)
 				.setPackedNodesCount(19)
 				.setAmbiguousNodesCount(3).build();
-		return new ParseSuccess(null, statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= ."), node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
-        NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= a ."), node0);
-        IntermediateNode node7 = createIntermediateNode(registry.getSlot("S ::= A B . C D"), node1, node3);
-        node7.addPackedNode(registry.getSlot("S ::= A B . C D"), node5, node6);
-        NonterminalNode node8 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= ."), node2);
-        NonterminalNode node9 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= ."), node4);
-        IntermediateNode node10 = createIntermediateNode(registry.getSlot("S ::= A B . C D"), node5, node9);
-        NonterminalNode node11 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= a ."), node0);
-        IntermediateNode node12 = createIntermediateNode(registry.getSlot("S ::= A B C . D"), node7, node8);
-        node12.addPackedNode(registry.getSlot("S ::= A B C . D"), node10, node11);
-        NonterminalNode node13 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= ."), node2);
-        NonterminalNode node14 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= ."), node4);
-        IntermediateNode node15 = createIntermediateNode(registry.getSlot("S ::= A B C . D"), node10, node14);
-        NonterminalNode node16 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= a ."), node0);
-        IntermediateNode node17 = createIntermediateNode(registry.getSlot("S ::= A B C D ."), node12, node13);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= ."), node0);
+        IntermediateNode node3 = createIntermediateNode(registry.getSlot("S ::= A B . C D"), node1, node2);
+        NonterminalNode node4 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= ."), node0);
+        IntermediateNode node5 = createIntermediateNode(registry.getSlot("S ::= A B C . D"), node3, node4);
+        TerminalNode node6 = createTerminalNode(registry.getSlot("a"), 0, 1);
+        NonterminalNode node7 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= a ."), node6);
+        NonterminalNode node8 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= a ."), node6);
+        NonterminalNode node9 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= a ."), node6);
+        NonterminalNode node10 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node6);
+        TerminalNode node11 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
+        NonterminalNode node12 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= ."), node11);
+        IntermediateNode node13 = createIntermediateNode(registry.getSlot("S ::= A B . C D"), node1, node9);
+        node13.addPackedNode(registry.getSlot("S ::= A B . C D"), node10, node12);
+        NonterminalNode node14 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= ."), node11);
+        IntermediateNode node15 = createIntermediateNode(registry.getSlot("S ::= A B C . D"), node3, node8);
+        node15.addPackedNode(registry.getSlot("S ::= A B C . D"), node13, node14);
+        NonterminalNode node16 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= ."), node11);
+        IntermediateNode node17 = createIntermediateNode(registry.getSlot("S ::= A B C D ."), node5, node7);
         node17.addPackedNode(registry.getSlot("S ::= A B C D ."), node15, node16);
         NonterminalNode node18 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A B C D ."), node17);
         return node18;
+    }
+
+    private static Tree getTree() {
+        Tree t0 = createEpsilon();
+        Tree t1 = createRule(r3, list(t0));
+        Tree t2 = createTerminal("a");
+        Tree t3 = createRule(r4, list(t2));
+        Tree t4 = createRule(r2, list(t2));
+        Tree t5 = createRule(r5, list(t0));
+        Tree t6 = createAmbiguity(set(createBranch(list(t4, t5)), createBranch(list(t1, t3))));
+        Tree t7 = createRule(r7, list(t0));
+        Tree t8 = createRule(r6, list(t2));
+        Tree t9 = createAmbiguity(set(createBranch(list(t1, t5, t8)), createBranch(list(t6, t7))));
+        Tree t10 = createRule(r9, list(t0));
+        Tree t11 = createRule(r8, list(t2));
+        Tree t12 = createAmbiguity(set(createBranch(list(t9, t10)), createBranch(list(t1, t5, t7, t11))));
+        Tree t13 = createRule(r1, list(t12));
+        return t13;
     }
 }

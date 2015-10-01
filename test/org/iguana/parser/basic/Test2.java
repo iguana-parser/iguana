@@ -46,8 +46,6 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import java.util.Collections;
-
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.*;
@@ -90,7 +88,6 @@ public class Test2 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
-        System.out.println(result.asParseSuccess().getTree());
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
     }
