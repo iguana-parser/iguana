@@ -804,20 +804,41 @@ public class IdeaIDEGenerator {
 
         new File(path + language.toLowerCase() + "/gen/psi/impl").mkdir();
 
-        Map<String, Map<String, Integer>> elements = new LinkedHashMap<>();
+        // Symbol names with their occurrence counter, per nonterminal and per label of a rule
+        Map<String, Map<String, Map<String, Set<Integer>>>> elements = new LinkedHashMap<>();
 
         for (Rule rule : rules) {
-            Map<String, Integer> m1 = elements.get(rule.getHead().getName());
+            Map<String, Map<String, Set<Integer>>> m1 = elements.get(rule.getHead().getName());
             if (m1 == null) {
                 m1 = new LinkedHashMap<>();
                 elements.put(rule.getHead().getName(), m1);
             }
-            Map<String, Integer> m2 = new LinkedHashMap<>();
-            new GetPhiElements(rule, m2).compute(language, path);
-            for (Map.Entry<String, Integer> entry : m2.entrySet()) {
-                Integer num = m1.get(entry.getKey());
-                if (num == null || entry.getValue() > num)
-                    m1.put(entry.getKey(), entry.getValue());
+
+            String label = rule.getLabel();
+            if (label == null || label.isEmpty()) label = "Impl";
+
+            Map<String, Set<Integer>> m2 = m1.get(label);
+
+            Map<String, Integer> m3 = new LinkedHashMap<>();
+            new GetPhiElements(rule, m3).compute(language, path);
+
+            if (m2 == null) {
+                Map<String, Set<Integer>> m = new LinkedHashMap<>();
+                for (Map.Entry<String, Integer> entry : m3.entrySet()) {
+                    Set<Integer> nums = new HashSet<>();
+                    nums.add(entry.getValue());
+                    m.put(entry.getKey(), nums);
+                }
+                m1.put(label, m);
+                continue;
+            }
+
+            for (Map.Entry<String, Integer> entry : m3.entrySet()) {
+                Set<Integer> nums = m2.get(entry.getKey());
+                if (nums == null)
+                    m2.put(entry.getKey(), new HashSet<>(Arrays.asList(entry.getValue())));
+                else
+                   nums.add(entry.getValue());
             }
         }
 
@@ -851,7 +872,7 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(Block symbol) {
-            return "Seq";
+            return "EbnfElement";
         }
 
         @Override
@@ -886,12 +907,12 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(IfThen symbol) {
-            return "Opt";
+            return "EbnfElement";
         }
 
         @Override
         public String visit(IfThenElse symbol) {
-            return "Alt";
+            return "EbnfElement";
         }
 
         @Override
@@ -916,7 +937,7 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(While symbol) {
-            return "List";
+            return "EbnfElement";
         }
 
         @Override
@@ -926,69 +947,68 @@ public class IdeaIDEGenerator {
 
         @Override
         public <E extends Symbol> String visit(Alt<E> symbol) {
-            return "Alt";
+            return "EbnfElement";
         }
 
         @Override
         public String visit(Opt symbol) {
-            return "Opt";
+            return "EbnfElement";
         }
 
         @Override
         public String visit(Plus symbol) {
-            return "List";
+            return "EbnfElement";
         }
 
         @Override
         public <E extends Symbol> String visit(Sequence<E> symbol) {
-            return "Seq";
+            return "EbnfElement";
         }
 
         @Override
         public String visit(Star symbol) {
-            return "List";
+            return "EbnfElement";
         }
 
-        public static void generate(Map<String, Map<String, Integer>> elements, String language, String path) {
-            for (String ebnf : new HashSet<>(Arrays.asList("List", "Opt", "Alt", "Seq"))) {
-                File file = new File(path + language.toLowerCase() + "/gen/psi/I" + ebnf + ".java");
-                try {
-                    PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
-                    writer.println("package " + language.toLowerCase() + ".gen.psi;");
-                    writer.println();
-                    writer.println("/* This file has been generated. */");
-                    writer.println();
-                    writer.println("import com.intellij.psi.PsiElement;");
-                    writer.println("import java.util.List;");
-                    writer.println();
-                    writer.println("public interface I" + ebnf + " extends PsiElement {");
-                    switch (ebnf) {
-                        case "List":
-                        case "Seq":
-                            writer.println("    public List<PsiElement>" + " getChildren" + "();");
-                            break;
-                        case "Opt":
-                        case "Alt":
-                            writer.println("    public PsiElement" + " getChild" + "();");
-                            break;
-                        default:
-                    }
-                    writer.println("}");
-                    writer.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+        public static void generate(Map<String, Map<String, Map<String, Set<Integer>>>> elements, String language, String path) {
+
+            File file = new File(path + language.toLowerCase() + "/gen/psi/IEbnfElement.java");
+            try {
+                PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+                writer.println("package " + language.toLowerCase() + ".gen.psi;");
+                writer.println();
+                writer.println("/* This file has been generated. */");
+                writer.println();
+                writer.println("import com.intellij.psi.PsiElement;");
+                writer.println("import java.util.List;");
+                writer.println();
+                writer.println("public interface IEbnfElement" + " extends PsiElement {");
+                writer.println("    public List<PsiElement>" + " getElements" + "();");
+                writer.println("}");
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
 
             for (String head : elements.keySet()) {
 
-                Map<String, Integer> children = elements.get(head);
+                file = new File(path + language.toLowerCase() + "/gen/psi/I" + head + ".java");
 
-                if (children == null) continue;
+                Map<String, Set<Integer>> symbols = new HashMap<>();
 
-                File file = new File(path + language.toLowerCase() + "/gen/psi/I" + head + ".java");
+                for (Map<String, Set<Integer>> m : elements.get(head).values()) {
+                    for (Map.Entry<String, Set<Integer>> entry : m.entrySet()) {
+                        Set<Integer> nums = symbols.get(entry.getKey());
+                        if (nums == null) {
+                            nums = new HashSet<>();
+                            symbols.put(entry.getKey(), nums);
+                        }
+                        nums.addAll(entry.getValue());
+                    }
+                }
+
                 try {
                     PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
                     writer.println("package " + language.toLowerCase() + ".gen.psi;");
@@ -998,13 +1018,18 @@ public class IdeaIDEGenerator {
                     writer.println("import com.intellij.psi.PsiElement;");
                     writer.println();
                     writer.println("public interface I" + head + " extends PsiElement {");
-                    for (String child : children.keySet()) {
-                        int num = children.get(child);
-                        if (num == 1)
-                            writer.println("    public I" + child + " get" + child + "();");
-                        else {
-                            for (int i = 1; i < num + 1; i++)
-                                writer.println("    public I" + child + " get" + child + i + "();");
+                    for (String symbol : symbols.keySet()) {
+                        Set<Integer> nums = symbols.get(symbol);
+                        Integer[] arr = new Integer[nums.size()];
+                        nums.toArray(arr);
+                        Arrays.sort(arr);
+                        boolean hasSingle = nums.contains(1);
+                        int max = arr[arr.length - 1];
+                        if (hasSingle)
+                            writer.println("    public I" + symbol + " get" + symbol + "();");
+                        if (max > 1) {
+                            for (int i = 1; i < max + 1; i++)
+                                writer.println("    public I" + symbol + " get" + symbol + i + "();");
                         }
                     }
                     writer.println("}");
