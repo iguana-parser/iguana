@@ -3,7 +3,6 @@ package org.iguana.traversal.idea;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.exception.UnexpectedSymbol;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.regex.*;
@@ -784,16 +783,11 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("interface " + language + "ElementTypes {");
             writer.println();
-            // ebnf related types
-            writer.println("    public IElementType LIST0 = new " + language + "ElementType(\"LIST0\");");
-            writer.println("    public IElementType LIST1 = new " + language + "ElementType(\"LIST1\");");
-            writer.println("    public IElementType OPTION = new " + language + "ElementType(\"OPTION\");");
-            writer.println("    public IElementType GROUP = new " + language + "ElementType(\"GROUP\");");
-            writer.println("    public IElementType WHILE_AS_LIST = new " + language + "ElementType(\"WHILE_AS_LIST\");");
-            writer.println("    public IElementType IF_THEN_ELSE_AS_OPTION = new " + language + "ElementType(\"IF_THEN_ELSE_AS_OPTION\");");
-            writer.println("    public IElementType BLOCK_AS_GROUP = new " + language + "ElementType(\"BLOCK_AS_GROUP\");");
-            writer.println("    public IElementType RANGE = new " + language + "ElementType(\"RANGE\");");
-            writer.println("    public IElementType CHARCLASS = new " + language + "ElementType(\"CHARCLASS\");");
+            // ebnf related types, also data-dependent
+            writer.println("    public IElementType LIST = new " + language + "ElementType(\"LIST\");"); // * and while
+            writer.println("    public IElementType OPT = new " + language + "ElementType(\"OPT\");");     // ? and if-then
+            writer.println("    public IElementType ALT = new " + language + "ElementType(\"ALT\");");     // | and if-then-else
+            writer.println("    public IElementType SEQ = new " + language + "ElementType(\"SEQ\");");     // () and {}
             writer.println();
             for (String element : elements)
                 writer.println("    public IElementType " + element.toUpperCase() + " = new " + language + "ElementType(\"" + element.toUpperCase() + "\");");
@@ -807,21 +801,57 @@ public class IdeaIDEGenerator {
     }
 
     private void generatePhiElements(List<Rule> rules, String language, String path) {
-        // TODO:
-        // Interfaces and Implementations
 
+        new File(path + language.toLowerCase() + "/gen/psi/impl").mkdir();
+
+        Map<String, Map<String, Integer>> elements = new LinkedHashMap<>();
+
+        for (Rule rule : rules) {
+            Map<String, Integer> m1 = elements.get(rule.getHead().getName());
+            if (m1 == null) {
+                m1 = new LinkedHashMap<>();
+                elements.put(rule.getHead().getName(), m1);
+            }
+            Map<String, Integer> m2 = new LinkedHashMap<>();
+            new GetPhiElements(rule, m2).compute(language, path);
+            for (Map.Entry<String, Integer> entry : m2.entrySet()) {
+                Integer num = m1.get(entry.getKey());
+                if (num == null || entry.getValue() > num)
+                    m1.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        GetPhiElements.generate(elements, language, path);
     }
 
     private static class GetPhiElements implements ISymbolVisitor<String> {
 
+        private final Rule rule;
+        private final Map<String, Integer> children;
+
+        public GetPhiElements(Rule rule, Map<String, Integer> children) {
+            this.rule = rule;
+            this.children = children;
+        }
+
+        public void compute(String language, String path) {
+            for (Symbol symbol : rule.getBody()) {
+                String child = symbol.accept(this);
+                if (child != null) {
+                    Integer num = children.get(child);
+                    children.put(child, num == null? 1 : num + 1);
+                }
+            }
+        }
+
         @Override
         public String visit(Align symbol) {
-            return null;
+            return symbol.getSymbol().accept(this);
         }
 
         @Override
         public String visit(Block symbol) {
-            return null;
+            return "Seq";
         }
 
         @Override
@@ -836,12 +866,12 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(Code symbol) {
-            return null;
+            return symbol.getSymbol().accept(this);
         }
 
         @Override
         public String visit(Conditional symbol) {
-            return null;
+            return symbol.getSymbol().accept(this);
         }
 
         @Override
@@ -856,27 +886,27 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(IfThen symbol) {
-            return null;
+            return "Opt";
         }
 
         @Override
         public String visit(IfThenElse symbol) {
-            return null;
+            return "Alt";
         }
 
         @Override
         public String visit(Ignore symbol) {
-            return null;
+            return symbol.getSymbol().accept(this);
         }
 
         @Override
         public String visit(Nonterminal symbol) {
-            return null;
+            return symbol.getName();
         }
 
         @Override
         public String visit(Offside symbol) {
-            return null;
+            return symbol.getSymbol().getName();
         }
 
         @Override
@@ -886,7 +916,7 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(While symbol) {
-            return null;
+            return "List";
         }
 
         @Override
@@ -896,27 +926,95 @@ public class IdeaIDEGenerator {
 
         @Override
         public <E extends Symbol> String visit(Alt<E> symbol) {
-            return null;
+            return "Alt";
         }
 
         @Override
         public String visit(Opt symbol) {
-            return null;
+            return "Opt";
         }
 
         @Override
         public String visit(Plus symbol) {
-            return null;
+            return "List";
         }
 
         @Override
         public <E extends Symbol> String visit(Sequence<E> symbol) {
-            return null;
+            return "Seq";
         }
 
         @Override
         public String visit(Star symbol) {
-            return null;
+            return "List";
+        }
+
+        public static void generate(Map<String, Map<String, Integer>> elements, String language, String path) {
+            for (String ebnf : new HashSet<>(Arrays.asList("List", "Opt", "Alt", "Seq"))) {
+                File file = new File(path + language.toLowerCase() + "/gen/psi/I" + ebnf + ".java");
+                try {
+                    PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+                    writer.println("package " + language.toLowerCase() + ".gen.psi;");
+                    writer.println();
+                    writer.println("/* This file has been generated. */");
+                    writer.println();
+                    writer.println("import com.intellij.psi.PsiElement;");
+                    writer.println("import java.util.List;");
+                    writer.println();
+                    writer.println("public interface I" + ebnf + " extends PsiElement {");
+                    switch (ebnf) {
+                        case "List":
+                        case "Seq":
+                            writer.println("    public List<PsiElement>" + " getChildren" + "();");
+                            break;
+                        case "Opt":
+                        case "Alt":
+                            writer.println("    public PsiElement" + " getChild" + "();");
+                            break;
+                        default:
+                    }
+                    writer.println("}");
+                    writer.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for (String head : elements.keySet()) {
+
+                Map<String, Integer> children = elements.get(head);
+
+                if (children == null) continue;
+
+                File file = new File(path + language.toLowerCase() + "/gen/psi/I" + head + ".java");
+                try {
+                    PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+                    writer.println("package " + language.toLowerCase() + ".gen.psi;");
+                    writer.println();
+                    writer.println("/* This file has been generated. */");
+                    writer.println();
+                    writer.println("import com.intellij.psi.PsiElement;");
+                    writer.println();
+                    writer.println("public interface I" + head + " extends PsiElement {");
+                    for (String child : children.keySet()) {
+                        int num = children.get(child);
+                        if (num == 1)
+                            writer.println("    public I" + child + " get" + child + "();");
+                        else {
+                            for (int i = 1; i < num + 1; i++)
+                                writer.println("    public I" + child + " get" + child + i + "();");
+                        }
+                    }
+                    writer.println("}");
+                    writer.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
