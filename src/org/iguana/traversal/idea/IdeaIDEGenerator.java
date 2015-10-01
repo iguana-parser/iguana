@@ -800,15 +800,19 @@ public class IdeaIDEGenerator {
         }
     }
 
+    enum NUM {
+        ONE, MORE_THAN_ONE, ONE_AND_MORE
+    }
+
     private void generatePhiElements(List<Rule> rules, String language, String path) {
 
         new File(path + language.toLowerCase() + "/gen/psi/impl").mkdir();
 
         // Symbol names with their occurrence counter, per nonterminal and per label of a rule
-        Map<String, Map<String, Map<String, Set<Integer>>>> elements = new LinkedHashMap<>();
+        Map<String, Map<String, Map<String, NUM>>> elements = new LinkedHashMap<>();
 
         for (Rule rule : rules) {
-            Map<String, Map<String, Set<Integer>>> m1 = elements.get(rule.getHead().getName());
+            Map<String, Map<String, NUM>> m1 = elements.get(rule.getHead().getName());
             if (m1 == null) {
                 m1 = new LinkedHashMap<>();
                 elements.put(rule.getHead().getName(), m1);
@@ -817,28 +821,30 @@ public class IdeaIDEGenerator {
             String label = rule.getLabel();
             if (label == null || label.isEmpty()) label = "Impl";
 
-            Map<String, Set<Integer>> m2 = m1.get(label);
+            Map<String, NUM> m2 = m1.get(label);
 
-            Map<String, Integer> m3 = new LinkedHashMap<>();
+            Map<String, NUM> m3 = new LinkedHashMap<>();
             new GetPhiElements(rule, m3).compute(language, path);
 
             if (m2 == null) {
-                Map<String, Set<Integer>> m = new LinkedHashMap<>();
-                for (Map.Entry<String, Integer> entry : m3.entrySet()) {
-                    Set<Integer> nums = new HashSet<>();
-                    nums.add(entry.getValue());
-                    m.put(entry.getKey(), nums);
-                }
-                m1.put(label, m);
+                m1.put(label, m3);
                 continue;
             }
 
-            for (Map.Entry<String, Integer> entry : m3.entrySet()) {
-                Set<Integer> nums = m2.get(entry.getKey());
-                if (nums == null)
-                    m2.put(entry.getKey(), new HashSet<>(Arrays.asList(entry.getValue())));
+            for (Map.Entry<String, NUM> entry : m3.entrySet()) {
+                NUM num = m2.get(entry.getKey());
+                if (num == null)
+                    m2.put(entry.getKey(), entry.getValue());
                 else
-                   nums.add(entry.getValue());
+                   switch (num) {
+                       case ONE:
+                           if (entry.getValue() != NUM.ONE)
+                               num = entry.getValue();
+                           break;
+                       case MORE_THAN_ONE:
+                           break;
+                       case ONE_AND_MORE: throw new RuntimeException("Should not happen!");
+                   }
             }
         }
 
@@ -848,9 +854,9 @@ public class IdeaIDEGenerator {
     private static class GetPhiElements implements ISymbolVisitor<String> {
 
         private final Rule rule;
-        private final Map<String, Integer> children;
+        private final Map<String, NUM> children;
 
-        public GetPhiElements(Rule rule, Map<String, Integer> children) {
+        public GetPhiElements(Rule rule, Map<String, NUM> children) {
             this.rule = rule;
             this.children = children;
         }
@@ -859,8 +865,15 @@ public class IdeaIDEGenerator {
             for (Symbol symbol : rule.getBody()) {
                 String child = symbol.accept(this);
                 if (child != null) {
-                    Integer num = children.get(child);
-                    children.put(child, num == null? 1 : num + 1);
+                    NUM num = children.get(child);
+                    if (num == null)
+                        num = NUM.ONE;
+                    else
+                        switch (num) {
+                            case ONE: num = NUM.MORE_THAN_ONE; break;
+                            default: throw new RuntimeException("Should not happen!");
+                        }
+                    children.put(child, num);
                 }
             }
         }
@@ -970,7 +983,7 @@ public class IdeaIDEGenerator {
             return "EbnfElement";
         }
 
-        public static void generate(Map<String, Map<String, Map<String, Set<Integer>>>> elements, String language, String path) {
+        public static void generate(Map<String, Map<String, Map<String, NUM>>> elements, String language, String path) {
 
             File file = new File(path + language.toLowerCase() + "/gen/psi/IEbnfElement.java");
             try {
@@ -992,22 +1005,34 @@ public class IdeaIDEGenerator {
                 e.printStackTrace();
             }
 
-            Map<String, Map<String, Set<Integer>>> elements_per_nont = new HashMap<>();
+            Map<String, Map<String, NUM>> elements_per_nt = new HashMap<>();
 
             // Interfaces
             for (String head : elements.keySet()) {
 
-                Map<String, Set<Integer>> symbols = new HashMap<>();
-                elements_per_nont.put(head, symbols);
+                Map<String, NUM> symbols = new LinkedHashMap<>();
+                elements_per_nt.put(head, symbols);
 
-                for (Map<String, Set<Integer>> m : elements.get(head).values()) {
-                    for (Map.Entry<String, Set<Integer>> entry : m.entrySet()) {
-                        Set<Integer> nums = symbols.get(entry.getKey());
-                        if (nums == null) {
-                            nums = new HashSet<>();
-                            symbols.put(entry.getKey(), nums);
-                        }
-                        nums.addAll(entry.getValue());
+                for (Map<String, NUM> m : elements.get(head).values()) {
+                    for (Map.Entry<String, NUM> entry : m.entrySet()) {
+                        NUM num = symbols.get(entry.getKey());
+                        if (num == null)
+                            num = entry.getValue();
+                        else
+                            switch (num) {
+                                case ONE:
+                                    if (entry.getValue() != NUM.ONE)
+                                        num = NUM.ONE_AND_MORE;
+                                    break;
+                                case MORE_THAN_ONE:
+                                    if (entry.getValue() == NUM.ONE || entry.getValue() == NUM.ONE_AND_MORE)
+                                        num = NUM.ONE_AND_MORE;
+                                    break;
+                                case ONE_AND_MORE:
+                                    break;
+                                default:
+                            }
+                        symbols.put(entry.getKey(), num);
                     }
                 }
 
@@ -1020,20 +1045,23 @@ public class IdeaIDEGenerator {
                     writer.println("/* This file has been generated. */");
                     writer.println();
                     writer.println("import com.intellij.psi.PsiElement;");
+                    writer.println("import java.util.List;");
                     writer.println();
                     writer.println("public interface I" + head + " extends PsiElement {");
                     for (String symbol : symbols.keySet()) {
-                        Set<Integer> nums = symbols.get(symbol);
-                        Integer[] arr = new Integer[nums.size()];
-                        nums.toArray(arr);
-                        Arrays.sort(arr);
-                        boolean hasSingle = nums.contains(1);
-                        int max = arr[arr.length - 1];
-                        if (hasSingle)
-                            writer.println("    public I" + symbol + " get" + symbol + "();");
-                        if (max > 1) {
-                            for (int i = 1; i < max + 1; i++)
-                                writer.println("    public I" + symbol + " get" + symbol + i + "();");
+                        NUM num = symbols.get(symbol);
+                        switch (num) {
+                            case ONE:
+                                writer.println("    public I" + symbol + " get" + symbol + "();");
+                                break;
+                            case MORE_THAN_ONE:
+                                writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
+                                break;
+                            case ONE_AND_MORE:
+                                writer.println("    public I" + symbol + " get" + symbol + "();");
+                                writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
+                                break;
+                            default:
                         }
                     }
                     writer.println("}");
@@ -1056,8 +1084,9 @@ public class IdeaIDEGenerator {
                 writer.println("import com.intellij.psi.PsiElement;");
                 writer.println("import com.intellij.psi.util.PsiTreeUtil;");
                 writer.println("import java.util.List;");
+                writer.println("import " + language.toLowerCase() + ".gen.psi.IEbnfElement;");
                 writer.println();
-                writer.println("public interface IEbnfElement" + " extends PsiElement {");
+                writer.println("public class EbnfElementImpl" + " implements IEbnfElement {");
                 writer.println("    public List<PsiElement>" + " getElements" + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, PsiElement.class); }");
                 writer.println("}");
                 writer.close();
@@ -1069,9 +1098,9 @@ public class IdeaIDEGenerator {
 
             for (String head : elements.keySet()) {
 
-                Map<String, Set<Integer>> symbols = elements_per_nont.get(head);
+                Map<String, NUM> symbols = elements_per_nt.get(head);
 
-                for (Map.Entry<String, Map<String, Set<Integer>>> entry : elements.get(head).entrySet()) {
+                for (Map.Entry<String, Map<String, NUM>> entry : elements.get(head).entrySet()) {
 
                     String name = head + (entry.getKey().equals("Impl")? entry.getKey() : entry.getKey() + "Impl");
                     file = new File(path + language.toLowerCase() + "/gen/psi/impl/" + name + ".java");
@@ -1083,42 +1112,60 @@ public class IdeaIDEGenerator {
                         writer.println("/* This file has been generated. */");
                         writer.println();
                         writer.println("import com.intellij.psi.PsiElement;");
+                        writer.println("import com.intellij.psi.PsiElementVisitor;");
+                        writer.println("import com.intellij.psi.util.PsiTreeUtil;");
                         writer.println();
-                        writer.println("public class " + name + " extends I" + head + " {");
+                        writer.println("import com.intellij.extapi.psi.ASTWrapperPsiElement;");
+                        writer.println("import com.intellij.lang.ASTNode;");
+                        writer.println();
+                        writer.println("import java.util.List;");
+                        writer.println();
+                        writer.println("import " + language.toLowerCase() + ".gen.psi.*;");
+                        writer.println();
+                        writer.println("public class " + name + " extends ASTWrapperPsiElement implements I" + head + " {");
+                        writer.println();
+                        writer.println("    public " + name + "(ASTNode node) { super(node); }");
+                        writer.println();
+                        writer.println("    public void accept(PsiElementVisitor visitor) { super.accept(visitor); }");
+                        writer.println();
+
                         for (String symbol : symbols.keySet()) {
 
-                            Set<Integer> nums = symbols.get(symbol);
-                            Integer[] arr = new Integer[nums.size()];
-                            nums.toArray(arr);
-                            Arrays.sort(arr);
-                            boolean hasSingle1 = nums.contains(1);
-                            int max1 = arr[arr.length - 1];
+                            NUM num1 = symbols.get(symbol);
+                            NUM num2 = entry.getValue().get(symbol);
 
-                            boolean hasSingle2 = false;
-                            int max2 = 0;
-                            nums = entry.getValue().get(symbol);
-                            if (nums != null) {
-                                arr = new Integer[nums.size()];
-                                nums.toArray(arr);
-                                Arrays.sort(arr);
-                                hasSingle2 = nums.contains(1);
-                                max2 = arr[arr.length - 1];
-                            }
-
-                            if (hasSingle1) {
-                                if (hasSingle2)
-                                    writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I"+ symbol + ".class); }");
-                                else
-                                    writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
-                            }
-
-                            if (max1 > 1) {
-                                for (int i = 1; i < max1 + 1; i++) {
-                                    if (i <= max2)
-                                        writer.println("    public I" + symbol + " get" + symbol + i + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class).get(" + i + "); }");
+                            switch (num1) {
+                                case ONE:
+                                    if (num2 == null)
+                                        writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
                                     else
-                                        writer.println("    public I" + symbol + " get" + symbol + i + "() { return null; }");
-                                }
+                                        writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I"+ symbol + ".class); }");
+                                    break;
+                                case MORE_THAN_ONE:
+                                    if (num2 == null)
+                                        writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                    else
+                                        writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                    break;
+                                case ONE_AND_MORE:
+                                    if (num2 == null) {
+                                        writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
+                                        writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                    } else {
+                                        switch (num2) {
+                                            case ONE:
+                                                writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I"+ symbol + ".class); }");
+                                                writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                                break;
+                                            case MORE_THAN_ONE:
+                                            case ONE_AND_MORE:
+                                                writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
+                                                writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                default:
                             }
                         }
                         writer.println("}");
