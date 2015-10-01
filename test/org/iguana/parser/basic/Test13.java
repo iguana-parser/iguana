@@ -29,6 +29,7 @@ package org.iguana.parser.basic;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.Tree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -49,7 +50,8 @@ import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.*;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * 
@@ -113,5 +115,12 @@ public class Test13 {
         NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
         node1.addPackedNode(registry.getSlot("A ::= A ."), node1);
         return node1;
+    }
+
+    private static Tree getTree() {
+        Tree t0 = createTerminal("a");
+        Tree t1 = createCycle();
+        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
+        return t2;
     }
 }

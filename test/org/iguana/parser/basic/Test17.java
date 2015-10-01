@@ -27,14 +27,11 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.Tree;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -50,9 +47,12 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
-
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.tree.TreeFactory.createRule;
+import static iguana.parsetrees.tree.TreeFactory.createTerminal;
+import static org.iguana.util.CollectionsUtil.list;
+import static org.iguana.util.CollectionsUtil.set;
+import static org.junit.Assert.*;
 
 
 /**
@@ -71,16 +71,14 @@ public class Test17 {
 	static Character b = Character.from('b');
 	static Character c  = Character.from('c');
 
-    public static Grammar grammar;
+    static Rule r1 = Rule.withHead(A).addSymbols(a, A, b).build();
+    static Rule r2 = Rule.withHead(A).addSymbols(a, A, c).build();
+    static Rule r3 = Rule.withHead(A).addSymbols(a).build();
+
+    public static Grammar grammar = Grammar.builder().addRules(r1, r2, r3).build();
     private static Input input = Input.fromString("aaabb");
     private static Nonterminal startSymbol = A;
 
-    static {
-        Rule r1 = Rule.withHead(A).addSymbols(a, A, b).build();
-        Rule r2 = Rule.withHead(A).addSymbols(a, A, c).build();
-        Rule r3 = Rule.withHead(A).addSymbols(a).build();
-        grammar = Grammar.builder().addRules(r1, r2, r3).build();
-    }
 
 	@Test
 	public void testNullable() {
@@ -113,7 +111,7 @@ public class Test17 {
 				.setIntermediateNodesCount(4)
 				.setPackedNodesCount(7)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
 	}
 
 
@@ -131,5 +129,14 @@ public class Test17 {
         IntermediateNode node10 = createIntermediateNode(registry.getSlot("A ::= a A b ."), node8, node9);
         NonterminalNode node11 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a A b ."), node10);
         return  node11;
+    }
+
+    private static Tree getTree() {
+        Tree t0 = createTerminal("a");
+        Tree t1 = createRule(r3 , list(t0));
+        Tree t2 = createTerminal("b");
+        Tree t3 = createRule(r1, list(t0, t1, t2));
+        Tree t4 = createRule(r1, list(t0, t3, t2));
+        return t4;
     }
 }

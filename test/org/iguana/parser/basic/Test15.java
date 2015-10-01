@@ -34,6 +34,7 @@ import static org.junit.Assert.assertFalse;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -52,8 +53,8 @@ import org.junit.Test;
 import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static org.junit.Assert.assertTrue;
-
+import static iguana.parsetrees.tree.TreeFactory.*;
+import static org.iguana.util.CollectionsUtil.*;
 
 /**
  * 
@@ -68,17 +69,14 @@ public class Test15 {
 	static Nonterminal B = Nonterminal.withName("B");
 	static Character a = Character.from('a');
 	static Character b = Character.from('b');
+	static Rule r1 = Rule.withHead(A).addSymbols(B, a).build();
+	static Rule r2 = Rule.withHead(B).addSymbol(b).build();
 
 	private static Nonterminal startSymbol = A;
 	private static Input input = Input.fromString("ba");
-	private static Grammar grammar;
+	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();;
 
-    static {
-		Rule r1 = Rule.withHead(A).addSymbols(B, a).build();
-		Rule r2 = Rule.withHead(B).addSymbol(b).build();
-		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
-	}
-	
+
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
@@ -98,11 +96,10 @@ public class Test15 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
-        assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult(graph), result);
+		assertEquals(getParseResult(graph), result);
     }
 	
-	private static ParseSuccess getParseResult(GrammarGraph registry) {
+	private static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(3)
 				.setGSSNodesCount(2)
@@ -112,7 +109,7 @@ public class Test15 {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(null, statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
 	}
 		
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
@@ -123,4 +120,12 @@ public class Test15 {
         NonterminalNode node4 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B a ."), node3);
         return node4;
  	}
+
+    private static Tree getTree() {
+        Tree t0 = createTerminal("b");
+        Tree t1 = createRule(r2, list(t0));
+        Tree t2 = createTerminal("a");
+        Tree t3 = createRule(r1, list(t1, t2));
+        return t3;
+    }
 }

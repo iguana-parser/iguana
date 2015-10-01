@@ -30,14 +30,7 @@ package org.iguana.grammar;
 import static org.iguana.util.CharacterRanges.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -220,7 +213,7 @@ public class GrammarGraph implements Serializable {
 		Map<CharacterRange, List<BodyGrammarSlot>> nonOverlappingMap = new HashMap<>();
 		
 		// compute a list of body grammar slots from a non-overlapping range
-		Function<CharacterRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toSet());
+		Function<CharacterRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(f.apply(r))); 
 		

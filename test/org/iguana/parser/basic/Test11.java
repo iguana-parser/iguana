@@ -99,7 +99,6 @@ public class Test11 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
-        System.out.println(result.asParseSuccess().getTree());
         assertEquals(getParseResult(graph), result);
     }
 
@@ -132,7 +131,7 @@ public class Test11 {
 	}
 
     public static Tree getTree() {
-        Tree t1 = createRule(r3, list()); // A()
+        Tree t1 = createRule(r3, list(createEpsilon())); // A()
         Tree t2 = createRule(r2, list(createTerminal("a"))); // A(a)
         Branch<Tree> b1 = createBranch(list(t1, t2));
         Branch<Tree> b2 = createBranch(list(t2, t1));

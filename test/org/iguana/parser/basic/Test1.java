@@ -51,6 +51,7 @@ import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
 
 import iguana.utils.input.Input;
+import static org.iguana.util.CollectionsUtil.*;
 
 import java.util.Collections;
 
@@ -68,12 +69,9 @@ public class Test1 {
 
     private static Nonterminal startSymbol = A;
     private static Rule r1 = Rule.withHead(A).withRuleType().build();
-    private static Grammar grammar;
+    private static Grammar grammar = Grammar.builder().addRule(r1).build();
     private static Input input = Input.empty();
 
-    static {
-        grammar = Grammar.builder().addRule(r1).build();
-    }
 
 	@Test
 	public void testNullable() {
@@ -116,7 +114,7 @@ public class Test1 {
 	}
 
     public static RuleNode getTree() {
-        return createRule(r1, Collections.emptyList());
+        return createRule(r1, list(createEpsilon()));
     }
 
 }
