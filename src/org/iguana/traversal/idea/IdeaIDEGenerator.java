@@ -992,11 +992,13 @@ public class IdeaIDEGenerator {
                 e.printStackTrace();
             }
 
+            Map<String, Map<String, Set<Integer>>> elements_per_nont = new HashMap<>();
+
+            // Interfaces
             for (String head : elements.keySet()) {
 
-                file = new File(path + language.toLowerCase() + "/gen/psi/I" + head + ".java");
-
                 Map<String, Set<Integer>> symbols = new HashMap<>();
+                elements_per_nont.put(head, symbols);
 
                 for (Map<String, Set<Integer>> m : elements.get(head).values()) {
                     for (Map.Entry<String, Set<Integer>> entry : m.entrySet()) {
@@ -1008,6 +1010,8 @@ public class IdeaIDEGenerator {
                         nums.addAll(entry.getValue());
                     }
                 }
+
+                file = new File(path + language.toLowerCase() + "/gen/psi/I" + head + ".java");
 
                 try {
                     PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
@@ -1038,6 +1042,92 @@ public class IdeaIDEGenerator {
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
+                }
+            }
+
+            // Classes
+            file = new File(path + language.toLowerCase() + "/gen/psi/impl/EbnfElementImpl.java");
+            try {
+                PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+                writer.println("package " + language.toLowerCase() + ".gen.psi.impl;");
+                writer.println();
+                writer.println("/* This file has been generated. */");
+                writer.println();
+                writer.println("import com.intellij.psi.PsiElement;");
+                writer.println("import com.intellij.psi.util.PsiTreeUtil;");
+                writer.println("import java.util.List;");
+                writer.println();
+                writer.println("public interface IEbnfElement" + " extends PsiElement {");
+                writer.println("    public List<PsiElement>" + " getElements" + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, PsiElement.class); }");
+                writer.println("}");
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            for (String head : elements.keySet()) {
+
+                Map<String, Set<Integer>> symbols = elements_per_nont.get(head);
+
+                for (Map.Entry<String, Map<String, Set<Integer>>> entry : elements.get(head).entrySet()) {
+
+                    String name = head + (entry.getKey().equals("Impl")? entry.getKey() : entry.getKey() + "Impl");
+                    file = new File(path + language.toLowerCase() + "/gen/psi/impl/" + name + ".java");
+
+                    try {
+                        PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+                        writer.println("package " + language.toLowerCase() + ".gen.psi.impl;");
+                        writer.println();
+                        writer.println("/* This file has been generated. */");
+                        writer.println();
+                        writer.println("import com.intellij.psi.PsiElement;");
+                        writer.println();
+                        writer.println("public class " + name + " extends I" + head + " {");
+                        for (String symbol : symbols.keySet()) {
+
+                            Set<Integer> nums = symbols.get(symbol);
+                            Integer[] arr = new Integer[nums.size()];
+                            nums.toArray(arr);
+                            Arrays.sort(arr);
+                            boolean hasSingle1 = nums.contains(1);
+                            int max1 = arr[arr.length - 1];
+
+                            boolean hasSingle2 = false;
+                            int max2 = 0;
+                            nums = entry.getValue().get(symbol);
+                            if (nums != null) {
+                                arr = new Integer[nums.size()];
+                                nums.toArray(arr);
+                                Arrays.sort(arr);
+                                hasSingle2 = nums.contains(1);
+                                max2 = arr[arr.length - 1];
+                            }
+
+                            if (hasSingle1) {
+                                if (hasSingle2)
+                                    writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I"+ symbol + ".class); }");
+                                else
+                                    writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
+                            }
+
+                            if (max1 > 1) {
+                                for (int i = 1; i < max1 + 1; i++) {
+                                    if (i <= max2)
+                                        writer.println("    public I" + symbol + " get" + symbol + i + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class).get(" + i + "); }");
+                                    else
+                                        writer.println("    public I" + symbol + " get" + symbol + i + "() { return null; }");
+                                }
+                            }
+                        }
+                        writer.println("}");
+                        writer.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
