@@ -154,8 +154,8 @@ public class Test9 {
 	}
 
     public static RuleNode getTree() {
-        Tree t1 = createRule(r3, list(createTerminal("a")));
-        return createRule(r2, list(createTerminal("a"), t1, createTerminal("b")));
+        Tree t1 = createRule(r3, list(createTerminal(1, 2)));
+        return createRule(r2, list(createTerminal(0, 1), t1, createTerminal(2, 3)));
     }
 }
 	

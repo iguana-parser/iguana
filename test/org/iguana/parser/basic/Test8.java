@@ -212,8 +212,8 @@ public class Test8 {
 	}
 
     public static RuleNode getTree1() {
-        Tree t1 = createRule(r3, list(createTerminal("b")));
-        return createRule(r1, list(createTerminal("a"), t1, createTerminal("c")));
+        Tree t1 = createRule(r3, list(createTerminal(1, 2)));
+        return createRule(r1, list(createTerminal(0, 1), t1, createTerminal(2, 3)));
     }
 
 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -236,11 +236,11 @@ public class Test8 {
     }
 
     public static RuleNode getTree2() {
-        Tree t1 = createRule(r5, list(createTerminal("c")));
-        Tree t2 = createRule(r4, list(createTerminal("a"), t1));
-        Tree t3 = createRule(r4, list(createTerminal("a"), t2));
-        Tree t4 = createRule(r4, list(createTerminal("a"), t3));
-        Tree t5 = createRule(r4, list(createTerminal("a"), t4));
+        Tree t1 = createRule(r5, list(createTerminal(4, 5)));
+        Tree t2 = createRule(r4, list(createTerminal(3, 4), t1));
+        Tree t3 = createRule(r4, list(createTerminal(2, 3), t2));
+        Tree t4 = createRule(r4, list(createTerminal(1, 2), t3));
+        Tree t5 = createRule(r4, list(createTerminal(0, 1), t4));
         return createRule(r2, list(t5));
     }
 	

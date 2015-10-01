@@ -30,7 +30,7 @@ package org.iguana.parser.basic;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Tree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -47,12 +47,10 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import static org.iguana.util.CollectionsUtil.set;
-import static org.junit.Assert.*;
-
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
 import static org.iguana.util.CollectionsUtil.*;
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -117,8 +115,11 @@ public class Test3 {
 		return node3;
 	}
 
-	public static RuleNode getTree() {
-		return createRule(r1, list(createTerminal("a"), createTerminal("b")));
+	public static Tree getTree() {
+        Tree t0 = createTerminal(0, 1);
+        Tree t1 = createTerminal(1, 2);
+        Tree t2 = createRule(r1 , list(t0, t1));
+        return t2;
 	}
 
 }

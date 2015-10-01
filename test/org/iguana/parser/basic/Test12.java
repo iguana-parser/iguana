@@ -27,14 +27,11 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -50,11 +47,12 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
-
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static org.iguana.util.CollectionsUtil.list;
+import static org.iguana.util.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -158,19 +156,21 @@ public class Test12 {
 	}
 
     private static Tree getTree1() {
-        Tree t0 = createTerminal("a");
+        Tree t0 = createTerminal(0, 1);
         Tree t1 = createCycle();
-        Tree t2 = createEpsilon();
+        Tree t2 = createEpsilon(1);
         Tree t3 = createAmbiguity(set(createBranch(list(t2)), createBranch(list(t1, t1))));
-        Tree t4 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t3, t1))));
-        Tree t5 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t4))));
-        return t5;
+        Tree t4 = createEpsilon(0);
+        Tree t5 = createAmbiguity(set(createBranch(list(t4)), createBranch(list(t1, t1))));
+        Tree t6 = createAmbiguity(set(createBranch(list(t5, t1)), createBranch(list(t1, t3))));
+        Tree t7 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t6))));
+        return t7;
     }
 
     private static Tree getTree2() {
-        Tree t0 = createEpsilon();
-        Tree t1 = createCycle();
-        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1, t1))));
+        Tree t0 = createCycle();
+        Tree t1 = createEpsilon(0);
+        Tree t2 = createAmbiguity(set(createBranch(list(t0, t0)), createBranch(list(t1))));
         return t2;
     }
 

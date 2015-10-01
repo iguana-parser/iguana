@@ -140,10 +140,10 @@ public class Test10 {
     }
 
     public static Tree getTree() {
-        Tree t1 = createRule(r3, list(createTerminal("a"))); // A(a)
-        Tree t2 = createRule(r4, list(createTerminal("b"))); // B(b)
-        Tree t3 = createRule(r5, list(createTerminal("c"))); // C(c)
-        Tree t4 = createRule(r6, list(createTerminal("c"))); // D(c)
+        Tree t1 = createRule(r3, list(createTerminal(0, 1))); // A(a)
+        Tree t2 = createRule(r4, list(createTerminal(1, 2))); // B(b)
+        Tree t3 = createRule(r5, list(createTerminal(2, 3))); // C(c)
+        Tree t4 = createRule(r6, list(createTerminal(2, 3))); // D(c)
         Branch<Tree> b1 = createBranch(list(t1, t2, t3));
         Branch<Tree> b2 = createBranch(list(t1, t2, t4));
         return createAmbiguity(set(b1, b2));

@@ -35,6 +35,7 @@ import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.tree.TreeToJavaCode;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -96,7 +97,7 @@ public class Test15 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
-		assertEquals(getParseResult(graph), result);
+        assertEquals(getParseResult(graph), result);
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -122,9 +123,9 @@ public class Test15 {
  	}
 
     private static Tree getTree() {
-        Tree t0 = createTerminal("b");
+        Tree t0 = createTerminal(0, 1);
         Tree t1 = createRule(r2, list(t0));
-        Tree t2 = createTerminal("a");
+        Tree t2 = createTerminal(1, 2);
         Tree t3 = createRule(r1, list(t1, t2));
         return t3;
     }

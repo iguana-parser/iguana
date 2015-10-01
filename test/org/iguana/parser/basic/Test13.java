@@ -118,9 +118,10 @@ public class Test13 {
     }
 
     private static Tree getTree() {
-        Tree t0 = createTerminal("a");
-        Tree t1 = createCycle();
-        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
-        return t2;
+//        Tree t0 = createTerminal("a");
+//        Tree t1 = createCycle();
+//        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
+//        return t2;
+        return null;
     }
 }

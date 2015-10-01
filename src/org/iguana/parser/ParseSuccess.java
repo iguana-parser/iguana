@@ -106,6 +106,6 @@ public class ParseSuccess extends AbstractParseResult {
 	
 	@Override
 	public String toString() {
-		return parseStatistics + "\n" + SPPFToJavaCode.get(sppfNode) + "\n" + TreeToJavaCode.get((Tree) tree);
+		return parseStatistics + "\n" + SPPFToJavaCode.get(sppfNode) + "\n" + TreeToJavaCode.get((Tree) tree, input);
 	}
 }

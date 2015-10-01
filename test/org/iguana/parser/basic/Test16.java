@@ -32,6 +32,7 @@ import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.tree.TreeToJavaCode;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -158,20 +159,23 @@ public class Test16 {
     }
 
     private static Tree getTree() {
-        Tree t0 = createEpsilon();
-        Tree t1 = createRule(r3, list(t0));
-        Tree t2 = createTerminal("a");
-        Tree t3 = createRule(r4, list(t2));
-        Tree t4 = createRule(r2, list(t2));
-        Tree t5 = createRule(r5, list(t0));
-        Tree t6 = createAmbiguity(set(createBranch(list(t4, t5)), createBranch(list(t1, t3))));
-        Tree t7 = createRule(r7, list(t0));
-        Tree t8 = createRule(r6, list(t2));
-        Tree t9 = createAmbiguity(set(createBranch(list(t1, t5, t8)), createBranch(list(t6, t7))));
-        Tree t10 = createRule(r9, list(t0));
-        Tree t11 = createRule(r8, list(t2));
-        Tree t12 = createAmbiguity(set(createBranch(list(t9, t10)), createBranch(list(t1, t5, t7, t11))));
-        Tree t13 = createRule(r1, list(t12));
-        return t13;
+        Tree t0 = createTerminal(0, 1);
+        Tree t1 = createRule(r2, list(t0));
+        Tree t2 = createEpsilon(1);
+        Tree t3 = createRule(r5, list(t2));
+        Tree t4 = createEpsilon(0);
+        Tree t5 = createRule(r3, list(t4));
+        Tree t6 = createRule(r4, list(t0));
+        Tree t7 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t5, t6))));
+        Tree t8 = createRule(r7, list(t2));
+        Tree t9 = createRule(r5, list(t4));
+        Tree t10 = createRule(r6, list(t0));
+        Tree t11 = createAmbiguity(set(createBranch(list(t7, t8)), createBranch(list(t5, t9, t10))));
+        Tree t12 = createRule(r9, list(t2));
+        Tree t13 = createRule(r7, list(t4));
+        Tree t14 = createRule(r8, list(t0));
+        Tree t15 = createAmbiguity(set(createBranch(list(t5, t9, t13, t14)), createBranch(list(t11, t12))));
+        Tree t16 = createRule(r1, list(t15));
+        return t16;
     }
 }

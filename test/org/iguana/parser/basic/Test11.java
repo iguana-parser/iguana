@@ -36,6 +36,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.*;
 import iguana.parsetrees.tree.Branch;
 import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.tree.TreeToJavaCode;
 import iguana.parsetrees.tree.TreeVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -131,11 +132,16 @@ public class Test11 {
 	}
 
     public static Tree getTree() {
-        Tree t1 = createRule(r3, list(createEpsilon())); // A()
-        Tree t2 = createRule(r2, list(createTerminal("a"))); // A(a)
-        Branch<Tree> b1 = createBranch(list(t1, t2));
-        Branch<Tree> b2 = createBranch(list(t2, t1));
-        return createRule(r1, list(createAmbiguity(set(b1, b2)), createTerminal("b")));
+        Tree t0 = createEpsilon(0);
+        Tree t1 = createRule(r3, list(t0));
+        Tree t2 = createTerminal(0, 1);
+        Tree t3 = createRule(r2, list(t2));
+        Tree t4 = createEpsilon(1);
+        Tree t5 = createRule(r3, list(t4));
+        Tree t6 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t3, t5))));
+        Tree t7 = createTerminal(1, 2);
+        Tree t8 = createRule(r1, list(t6, t7));
+        return t8;
     }
 }
 	

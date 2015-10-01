@@ -123,7 +123,7 @@ public class Test4 {
     }
 
     public static RuleNode getTree() {
-        return createRule(r1, list(createTerminal("a"), createTerminal("b"), createTerminal("c")));
+        return createRule(r1, list(createTerminal(0, 1), createTerminal(1, 2), createTerminal(2, 3)));
     }
 
 }
