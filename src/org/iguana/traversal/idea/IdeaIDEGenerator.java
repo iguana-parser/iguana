@@ -864,15 +864,34 @@ public class IdeaIDEGenerator {
         }
 
         public void compute(String language, String path) {
+            String prev_ebnf_element = null;
             for (Symbol symbol : rule.getBody()) {
                 String child = symbol.accept(this);
                 if (child != null) {
+
+                    if (child.endsWith("$Ebnf")) {
+                        if (prev_ebnf_element != null && !prev_ebnf_element.equals(child)) {
+                            if (!prev_ebnf_element.equals("Element$Ebnf")) {
+                                children.remove(prev_ebnf_element);
+                                prev_ebnf_element = "Element$Ebnf";
+                                children.put(prev_ebnf_element, NUM.MORE_THAN_ONE);
+                            } else if (prev_ebnf_element.equals("Element$Ebnf")) {
+                                NUM num = children.get(prev_ebnf_element);
+                                if (num == NUM.ONE)
+                                    children.put(prev_ebnf_element, NUM.MORE_THAN_ONE);
+                            }
+                            continue;
+                        } else
+                            prev_ebnf_element = child;
+                    }
+
                     NUM num = children.get(child);
                     if (num == null)
                         num = NUM.ONE;
                     else
                         switch (num) {
                             case ONE: num = NUM.MORE_THAN_ONE; break;
+                            case MORE_THAN_ONE: break;
                             default: throw new RuntimeException("Should not happen!");
                         }
                     children.put(child, num);
@@ -888,7 +907,8 @@ public class IdeaIDEGenerator {
         @Override
         public String visit(Block symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
@@ -925,14 +945,16 @@ public class IdeaIDEGenerator {
         @Override
         public String visit(IfThen symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
         @Override
         public String visit(IfThenElse symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
@@ -959,7 +981,8 @@ public class IdeaIDEGenerator {
         @Override
         public String visit(While symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
@@ -971,35 +994,40 @@ public class IdeaIDEGenerator {
         @Override
         public <E extends Symbol> String visit(Alt<E> symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
         @Override
         public String visit(Opt symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
         @Override
         public String visit(Plus symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
         @Override
         public <E extends Symbol> String visit(Sequence<E> symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
         @Override
         public String visit(Star symbol) {
             String type = typer.visit(symbol);
-            if (type == null) return "Element$Ebnf";
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
             return type + "$Ebnf";
         }
 
