@@ -36,7 +36,7 @@ public class IdeaIDEGenerator {
                 symbol.accept(new CollectRegularExpressions(terminals));
         }
 
-        if (grammar.getLayout().isTerminal()) // That is, defined as a token
+        if (grammar.getLayout() instanceof Terminal) // That is, defined as a token
             grammar.getLayout().accept(new CollectRegularExpressions(terminals));
 
         new ToJFlexGenerator(language, path, terminals, tokenTypes).generate();
@@ -856,6 +856,8 @@ public class IdeaIDEGenerator {
         private final Rule rule;
         private final Map<String, NUM> children;
 
+        private static final InferPsiEbnfElementType typer = new InferPsiEbnfElementType();
+
         public GetPhiElements(Rule rule, Map<String, NUM> children) {
             this.rule = rule;
             this.children = children;
@@ -885,7 +887,9 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(Block symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
@@ -920,12 +924,16 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(IfThen symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
         public String visit(IfThenElse symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
@@ -950,7 +958,9 @@ public class IdeaIDEGenerator {
 
         @Override
         public String visit(While symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
@@ -960,27 +970,37 @@ public class IdeaIDEGenerator {
 
         @Override
         public <E extends Symbol> String visit(Alt<E> symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
         public String visit(Opt symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
         public String visit(Plus symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
         public <E extends Symbol> String visit(Sequence<E> symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         @Override
         public String visit(Star symbol) {
-            return "EbnfElement";
+            String type = typer.visit(symbol);
+            if (type == null) return "Element$Ebnf";
+            return type + "$Ebnf";
         }
 
         public static void generate(Map<String, Map<String, Map<String, NUM>>> elements, String language, String path) {
@@ -1052,14 +1072,27 @@ public class IdeaIDEGenerator {
                         NUM num = symbols.get(symbol);
                         switch (num) {
                             case ONE:
-                                writer.println("    public I" + symbol + " get" + symbol + "();");
+                                if (symbol.endsWith("$Ebnf"))
+                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
+                                else
+                                    writer.println("    public I" + symbol + " get" + symbol + "();");
                                 break;
                             case MORE_THAN_ONE:
-                                writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
+                                if (symbol.endsWith("$Ebnf"))
+                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
+                                else
+                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
                                 break;
                             case ONE_AND_MORE:
-                                writer.println("    public I" + symbol + " get" + symbol + "();");
-                                writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
+                                if (symbol.endsWith("$Ebnf"))
+                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
+                                else
+                                    writer.println("    public I" + symbol + " get" + symbol + "();");
+
+                                if (symbol.endsWith("$Ebnf"))
+                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
+                                else
+                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
                                 break;
                             default:
                         }
@@ -1177,6 +1210,152 @@ public class IdeaIDEGenerator {
                     }
                 }
             }
+        }
+    }
+
+    private static class InferPsiEbnfElementType implements ISymbolVisitor<String> {
+
+        @Override
+        public String visit(Align symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Block symbol) {
+            String type = null;
+            for (Symbol sym : symbol.getSymbols()) {
+                String curr = sym.accept(this);
+                if (type != null && curr != null && !type.equals(curr))
+                    return "PsiElement";
+                else if (type == null && curr != null)
+                     type = curr;
+            }
+            return type;
+        }
+
+        @Override
+        public String visit(Character symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(CharacterRange symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Code symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Conditional symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(EOF symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(Epsilon symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(IfThen symbol) {
+            return symbol.getThenPart().accept(this);
+        }
+
+        @Override
+        public String visit(IfThenElse symbol) {
+            String thenPart = symbol.getThenPart().accept(this);
+            String elsePart = symbol.getElsePart().accept(this);
+            if (thenPart != null && elsePart != null && !thenPart.equals(elsePart))
+                return "PsiElement";
+            else if (thenPart == null && elsePart != null)
+                return elsePart;
+            else if (thenPart != null && (elsePart == null || thenPart.equals(elsePart)))
+                return thenPart;
+            return null;
+        }
+
+        @Override
+        public String visit(Ignore symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Nonterminal symbol) {
+            return symbol.getName();
+        }
+
+        @Override
+        public String visit(Offside symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Terminal symbol) {
+            return null;
+        }
+
+        @Override
+        public String visit(While symbol) {
+            return symbol.getBody().accept(this);
+        }
+
+        @Override
+        public String visit(Return symbol) {
+            return null;
+        }
+
+        @Override
+        public <E extends Symbol> String visit(Alt<E> symbol) {
+            String type = null;
+            for (Symbol sym : symbol.getSymbols()) {
+                String res = sym.accept(this);
+                if (type != null && res != null && !type.equals(res))
+                    return "PsiElement";
+                else if (type == null && res != null)
+                    type = res;
+            }
+            return type;
+        }
+
+        @Override
+        public String visit(Opt symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Plus symbol) {
+            for (Symbol sep : symbol.getSeparators())
+                if (sep.accept(this) != null)
+                    return "PsiElement";
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public <E extends Symbol> String visit(Sequence<E> symbol) {
+            String type = null;
+            for (Symbol sym : symbol.getSymbols()) {
+                String res = sym.accept(this);
+                if (type != null && res != null && !type.equals(res))
+                    return "PsiElement";
+                else if (type == null && res != null)
+                    type = res;
+            }
+            return type;
+        }
+
+        @Override
+        public String visit(Star symbol) {
+            for (Symbol sep : symbol.getSeparators())
+                if (sep.accept(this) != null)
+                    return "PsiElement";
+            return symbol.getSymbol().accept(this);
         }
     }
 }
