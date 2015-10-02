@@ -1169,31 +1169,70 @@ public class IdeaIDEGenerator {
 
                             switch (num1) {
                                 case ONE:
-                                    if (num2 == null)
-                                        writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
-                                    else
-                                        writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I"+ symbol + ".class); }");
+                                    if (num2 == null) {
+                                        if (symbol.endsWith("$Ebnf"))
+                                            writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
+                                        else
+                                            writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
+                                    } else {
+                                        if (symbol.endsWith("$Ebnf"))
+                                            writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return findNotNullChildByClass(IEbnfElement.class).getElements(); }");
+                                        else
+                                            writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I" + symbol + ".class); }");
+                                    }
                                     break;
                                 case MORE_THAN_ONE:
-                                    if (num2 == null)
-                                        writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
-                                    else
-                                        writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                    if (num2 == null) {
+                                        if (symbol.endsWith("$Ebnf"))
+                                            writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
+                                        else
+                                            writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                    } else {
+                                        if (symbol.endsWith("$Ebnf")) {
+                                            writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() {");
+                                            writer.println("        List<PsiElement> flattened = new ArrayList<>();");
+                                            writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement))");
+                                            writer.println("            flattened.addAll(e.getElements());");
+                                            writer.println("        return flattened;");
+                                            writer.println("    }");
+                                        } else
+                                            writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                    }
                                     break;
                                 case ONE_AND_MORE:
                                     if (num2 == null) {
-                                        writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
-                                        writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                        if (symbol.endsWith("$Ebnf")) {
+                                            writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
+                                            writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
+                                        } else {
+                                            writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
+                                            writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                        }
                                     } else {
                                         switch (num2) {
                                             case ONE:
-                                                writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I"+ symbol + ".class); }");
-                                                writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                                if (symbol.endsWith("$Ebnf")) {
+                                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return findNotNullChildByClass(EbnfElement.class).getElements(); }");
+                                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
+                                                } else {
+                                                    writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I" + symbol + ".class); }");
+                                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                                }
                                                 break;
                                             case MORE_THAN_ONE:
                                             case ONE_AND_MORE:
-                                                writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
-                                                writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                                if (symbol.endsWith("$Ebnf")) {
+                                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
+                                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() {");
+                                                    writer.println("        List<PsiElement> flattened = new ArrayList<>();");
+                                                    writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement))");
+                                                    writer.println("            flattened.addAll(e.getElements());");
+                                                    writer.println("        return flattened;");
+                                                    writer.println("    }");
+                                                } else {
+                                                    writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
+                                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                                }
                                                 break;
                                         }
                                     }
