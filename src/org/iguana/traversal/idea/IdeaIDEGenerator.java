@@ -812,6 +812,9 @@ public class IdeaIDEGenerator {
         Map<String, Map<String, Map<String, NUM>>> elements = new LinkedHashMap<>();
 
         for (Rule rule : rules) {
+
+            if (rule.getHead().getName().equals("$default$")) continue;
+
             Map<String, Map<String, NUM>> m1 = elements.get(rule.getHead().getName());
             if (m1 == null) {
                 m1 = new LinkedHashMap<>();
@@ -1143,12 +1146,32 @@ public class IdeaIDEGenerator {
                 writer.println("/* This file has been generated. */");
                 writer.println();
                 writer.println("import com.intellij.psi.PsiElement;");
+                writer.println("import com.intellij.psi.PsiElementVisitor;");
                 writer.println("import com.intellij.psi.util.PsiTreeUtil;");
+                writer.println();
+                writer.println("import com.intellij.extapi.psi.ASTWrapperPsiElement;");
+                writer.println("import com.intellij.lang.ASTNode;");
+                writer.println();
                 writer.println("import java.util.List;");
+                writer.println("import java.util.ArrayList;");
                 writer.println("import " + language.toLowerCase() + ".gen.psi.IEbnfElement;");
                 writer.println();
-                writer.println("public class EbnfElementImpl" + " implements IEbnfElement {");
-                writer.println("    public List<PsiElement>" + " getElements" + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, PsiElement.class); }");
+                writer.println("public class EbnfElementImpl" + " extends ASTWrapperPsiElement implements IEbnfElement {");
+                writer.println();
+                writer.println("    public EbnfElementImpl(ASTNode node) { super(node); }");
+                writer.println();
+                writer.println("    public void accept(PsiElementVisitor visitor) { super.accept(visitor); }");
+                writer.println();
+                writer.println("    public List<PsiElement>" + " getElements" + "() {");
+                writer.println("        List<PsiElement> flattened = new ArrayList<>();");
+                writer.println("        for (PsiElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, PsiElement.class)) {");
+                writer.println("            if (e instanceof IEbnfElement) ");
+                writer.println("                flattened.addAll(((IEbnfElement) e).getElements());");
+                writer.println("            else ");
+                writer.println("                flattened.add(e);");
+                writer.println("        }");
+                writer.println("        return flattened;");
+                writer.println("    }");
                 writer.println("}");
                 writer.close();
             } catch (FileNotFoundException e) {
@@ -1180,6 +1203,7 @@ public class IdeaIDEGenerator {
                         writer.println("import com.intellij.lang.ASTNode;");
                         writer.println();
                         writer.println("import java.util.List;");
+                        writer.println("import java.util.ArrayList;");
                         writer.println();
                         writer.println("import " + language.toLowerCase() + ".gen.psi.*;");
                         writer.println();
@@ -1218,10 +1242,10 @@ public class IdeaIDEGenerator {
                                     } else {
                                         if (symbol.endsWith("$Ebnf")) {
                                             writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() {");
-                                            writer.println("        List<PsiElement> flattened = new ArrayList<>();");
-                                            writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement))");
-                                            writer.println("            flattened.addAll(e.getElements());");
-                                            writer.println("        return flattened;");
+                                            writer.println("        List<List<PsiElement>> result = new ArrayList<>();");
+                                            writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement.class))");
+                                            writer.println("            result.add(e.getElements());");
+                                            writer.println("        return result;");
                                             writer.println("    }");
                                         } else
                                             writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
@@ -1252,10 +1276,10 @@ public class IdeaIDEGenerator {
                                                 if (symbol.endsWith("$Ebnf")) {
                                                     writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
                                                     writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() {");
-                                                    writer.println("        List<PsiElement> flattened = new ArrayList<>();");
-                                                    writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement))");
-                                                    writer.println("            flattened.addAll(e.getElements());");
-                                                    writer.println("        return flattened;");
+                                                    writer.println("        List<List<PsiElement>> result = new ArrayList<>();");
+                                                    writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement.class))");
+                                                    writer.println("            result.add(e.getElements());");
+                                                    writer.println("        return result;");
                                                     writer.println("    }");
                                                 } else {
                                                     writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
