@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.parser.ambiguous;
+package org.iguana.parser.gamma;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;

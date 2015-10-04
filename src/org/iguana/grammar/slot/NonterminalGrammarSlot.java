@@ -35,6 +35,7 @@ import java.util.function.Supplier;
 import iguana.parsetrees.sppf.DummyNode;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.NonterminalNodeType;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
@@ -68,11 +69,14 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private FollowTest followTest;
 
-	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup) {
+	private final int nodeType;
+
+	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup, int nodeType) {
 		super(id);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
+		this.nodeType = nodeType;
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {
@@ -106,7 +110,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-	
+
+	public int getNodeType() {
+		return nodeType;
+	}
+
 	public String[] getParameters() {
 		return nonterminal.getParameters();
 	}

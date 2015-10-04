@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.parsetrees.sppf.NonterminalNodeType;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
@@ -80,7 +81,12 @@ public class EBNFToBNF implements GrammarTransformation {
 	
 	private Map<String, Set<String>> ebnfLefts;
 	private Map<String, Set<String>> ebnfRights;
-	
+
+	public static Grammar convert(Grammar grammar) {
+        EBNFToBNF ebnfToBNF = new EBNFToBNF();
+        return ebnfToBNF.transform(grammar);
+    }
+
 	@Override
 	public Grammar transform(Grammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
@@ -245,8 +251,8 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
-									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
+			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setType(NonterminalNodeType.Opt()).build()
+									: Nonterminal.builder(symbol.getName()).addParameters(parameters).setType(NonterminalNodeType.Opt()).build();
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
@@ -287,9 +293,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			List<Symbol> seperators = symbol.getSeparators().stream().map(sep -> sep.accept(this)).collect(Collectors.toList());
-			
-			Nonterminal newNt = parameters == null? Nonterminal.withName(getName(S, symbol.getSeparators(), layout) + "+")
-									: Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).build();
+
+			Nonterminal newNt = parameters == null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").setType(NonterminalNodeType.Plus()).build()
+									: Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).setType(NonterminalNodeType.Plus()).build();
 			
 			addedRules.add(Rule.withHead(newNt)
 									.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
@@ -334,8 +340,8 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName())
-									: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
+			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setType(NonterminalNodeType.Seq()).build()
+									: Nonterminal.builder(symbol.getName()).addParameters(parameters).setType(NonterminalNodeType.Seq()).build();
 			
 			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)
 								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
@@ -373,8 +379,8 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			String base = getName(symbol.getSymbol(), symbol.getSeparators(), layout);
-			Nonterminal newNt = parameters != null? Nonterminal.builder(base + "*").addParameters(parameters).build()
-						              : Nonterminal.withName(base + "*");
+			Nonterminal newNt = parameters != null? Nonterminal.builder(base + "*").addParameters(parameters).setType(NonterminalNodeType.Star()).build()
+						              : Nonterminal.builder(base + "*").setType(NonterminalNodeType.Star()).build();
 			
 			addedRules.add(Rule.withHead(newNt).addSymbols(S)
 									.setLayout(layout).setLayoutStrategy(strategy)

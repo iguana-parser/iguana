@@ -53,7 +53,6 @@ import static iguana.parsetrees.tree.TreeFactory.*;
 import iguana.utils.input.Input;
 import static org.iguana.util.CollectionsUtil.*;
 
-import java.util.Collections;
 
 /**
  * 

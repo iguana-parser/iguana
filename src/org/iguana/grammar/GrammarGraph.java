@@ -435,7 +435,7 @@ public class GrammarGraph implements Serializable {
 	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
 		return nonterminalsMap.computeIfAbsent(nonterminal, k -> {
 			NonterminalGrammarSlot ntSlot;
-			ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup());			
+			ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup(), nonterminal.getNodeType());
 			add(ntSlot);
 			return ntSlot;
 		});

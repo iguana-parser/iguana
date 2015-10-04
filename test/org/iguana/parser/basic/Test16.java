@@ -33,6 +33,7 @@ import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
 import iguana.parsetrees.tree.TreeToJavaCode;
+import iguana.parsetrees.tree.TreeVisualization;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -115,6 +116,8 @@ public class Test16 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
+        TreeVisualization.generate((Tree) result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
+        TreeVisualization.generate(getTree(), "/Users/afroozeh/output", "tree1", input);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
     }
