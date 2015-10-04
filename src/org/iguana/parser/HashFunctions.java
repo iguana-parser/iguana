@@ -37,6 +37,7 @@ public class HashFunctions {
 	public static HashFunction murmur3 = new MurmurHash3();
 	
 	public static HashFunction xxhash = new XXHash();
+
 	
 	public static HashFunction primeMultiplication = new PrimeMultiplication();
 	

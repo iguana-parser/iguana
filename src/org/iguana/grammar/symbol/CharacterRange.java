@@ -123,11 +123,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	}
 	
 	@Override
-	public boolean isTerminal() {
-		return true;
-	}
-
-	@Override
 	public int compareTo(CharacterRange o) {
 		return start == o.start ? end - o.end : start - o.start;
 	}

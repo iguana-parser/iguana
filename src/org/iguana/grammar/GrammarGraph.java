@@ -59,15 +59,7 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Position;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
@@ -348,8 +340,15 @@ public class GrammarGraph implements Serializable {
 		
 		@Override
 		public Void visit(RegularExpression symbol) {
-			TerminalGrammarSlot terminalSlot = getTerminalGrammarSlot(symbol);
-			
+
+            TerminalGrammarSlot terminalSlot;
+
+            if (symbol instanceof Terminal && ((Terminal) symbol).token() == 1) {
+                terminalSlot = getTerminalGrammarSlot(symbol, symbol.getName());
+            } else {
+                terminalSlot = getTerminalGrammarSlot(symbol, null);
+            }
+
 			BodyGrammarSlot slot;
 			
 			if (i == rule.size() - 1 && j == -1)
@@ -424,9 +423,9 @@ public class GrammarGraph implements Serializable {
 		return new TerminalTransition(slot, origin, dest, getConditions(preConditions), getConditions(postConditions));
 	}
 	
-	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex) {
+	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex, String name) {
         return terminalsMap.computeIfAbsent(regex, k -> {
-            TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex, matcherFactory);
+            TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex, matcherFactory, name);
             add(terminalSlot);
             return terminalSlot;
         });
