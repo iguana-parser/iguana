@@ -34,9 +34,11 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Branch;
 import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.tree.TreeVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.ReachabilityGraph;
@@ -106,6 +108,9 @@ public class Test10 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
+        SPPFVisualization.generate(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf", input);
+        TreeVisualization.generate((Tree) result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
+        TreeVisualization.generate(getTree(), "/Users/afroozeh/output", "tree1", input);
         assertEquals(getParseResult(graph), result);
     }
 	

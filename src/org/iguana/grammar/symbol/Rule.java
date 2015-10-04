@@ -262,7 +262,7 @@ public class Rule implements ConstructorCode, Serializable {
 		
 		Rule other = (Rule) obj;
 		
-		return head.equals(other.head) && body == null ? other.body == null : body.equals(other.body);
+		return head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
 	}
 	
 	@Override

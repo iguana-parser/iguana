@@ -139,11 +139,6 @@ public class Character extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public boolean isTerminal() {
-		return true;
-	}
-
-	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

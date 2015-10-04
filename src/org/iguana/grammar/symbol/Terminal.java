@@ -103,6 +103,7 @@ public class Terminal extends AbstractRegularExpression {
 		public Builder(Terminal terminal) {
 			super(terminal);
 			this.regex = terminal.regex;
+            this.$token = terminal.token();
 		}
 		
 		@Override
@@ -114,6 +115,11 @@ public class Terminal extends AbstractRegularExpression {
 			this.$token = 1;
 			return this;
 		}
+
+        public Builder setToken(int token) {
+            this.$token = token;
+            return this;
+        }
 	}
 
 	public boolean isNullable() {

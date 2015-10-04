@@ -55,6 +55,12 @@ public class Nonterminal extends AbstractSymbol {
 	private final Expression[] arguments;
 	
 	private final Set<String> excepts;
+
+	/**
+	 * The type of this nonterminal. This field is used to track EBNF to BNF conversion
+	 * information for each nonterminal. See NonterminalNodeType.
+	 */
+	private final int nodeType;
 	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
@@ -69,6 +75,7 @@ public class Nonterminal extends AbstractSymbol {
 		this.parameters = builder.parameters;
 		this.arguments = builder.arguments;
 		this.excepts = builder.excepts;
+		this.nodeType = builder.nodeType;
 	}
 	
 	public boolean isEbnfList() {
@@ -106,7 +113,11 @@ public class Nonterminal extends AbstractSymbol {
 	public Set<String> getExcepts() {
 		return excepts;
 	}
-	
+
+	public int getNodeType() {
+		return nodeType;
+	}
+
 	@Override
 	public String toString() {
 		return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
@@ -184,7 +195,9 @@ public class Nonterminal extends AbstractSymbol {
 		private Expression[] arguments;
 		
 		private Set<String> excepts;
-		
+
+		public int nodeType;
+
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
 			this.ebnfList = nonterminal.ebnfList;
@@ -194,6 +207,7 @@ public class Nonterminal extends AbstractSymbol {
 			this.parameters = nonterminal.parameters;
 			this.arguments = nonterminal.arguments;
 			this.excepts = nonterminal.excepts;
+			this.nodeType = nonterminal.nodeType;
 		}
 
 		public Builder(String name) {
@@ -314,7 +328,12 @@ public class Nonterminal extends AbstractSymbol {
 			excepts.addAll(labels);			
 			return this;
 		}
-		
+
+		public Builder setType(int nodeType) {
+			this.nodeType = nodeType;
+			return this;
+		}
+
 		@Override
 		public Nonterminal build() {
 			return new Nonterminal(this);

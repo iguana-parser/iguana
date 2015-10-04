@@ -77,7 +77,6 @@ public class Test4 {
     private static Nonterminal startSymbol = Nonterminal.withName("A");
     private static Grammar grammar = Grammar.builder().addRule(r1).build();
 
-
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);

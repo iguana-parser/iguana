@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import iguana.parsetrees.slot.TerminalSlot;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.utils.input.Input;
 import org.iguana.parser.GLLParser;
@@ -42,18 +43,24 @@ import org.iguana.regex.matcher.MatcherFactory;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 
 
-public class TerminalGrammarSlot extends AbstractGrammarSlot {
+public class TerminalGrammarSlot extends AbstractGrammarSlot implements TerminalSlot {
 	
 	private RegularExpression regex;
-	private Matcher matcher;
-	private Map<Integer, TerminalNode> terminalNodes;
+    private Matcher matcher;
+    private Map<Integer, TerminalNode> terminalNodes;
+    private String terminalName;
 
-	public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory) {
+	public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory, String terminalName) {
 		super(id, Collections.emptyList());
 		this.regex = regex;
-		this.matcher = factory.getMatcher(regex);
-		this.terminalNodes = new HashMap<>();
-	}
+        this.matcher = factory.getMatcher(regex);
+        this.terminalNodes = new HashMap<>();
+        this.terminalName = terminalName;
+    }
+
+    public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory) {
+        this(id, regex, factory, null);
+    }
 
 	@Override
 	public String getConstructorCode() {
@@ -97,4 +104,8 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		terminalNodes = new HashMap<>();
 	}
 
+	@Override
+	public String terminalName() {
+		return terminalName;
+	}
 }

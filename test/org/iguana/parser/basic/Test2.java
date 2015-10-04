@@ -70,7 +70,6 @@ public class Test2 {
     private static Input input = Input.fromString("a");
 	private static Nonterminal startSymbol = A;
 
-
 	@Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);

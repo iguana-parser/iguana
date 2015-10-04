@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.parser.ambiguous;
+package org.iguana.parser.gamma;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -67,11 +67,7 @@ public class Test3 {
 
 	private static Input input = Input.fromString("ab");
 	private static Nonterminal startSymbol = A;
-	private static Grammar grammar;
-
-	static {
-		grammar = Grammar.builder().addRule(r1).build();
-	}
+	private static Grammar grammar= Grammar.builder().addRule(r1).build();
 
 	@Test
 	public void testNullable() {

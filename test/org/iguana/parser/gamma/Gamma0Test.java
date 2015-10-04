@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.parser.ambiguous;
+package org.iguana.parser.gamma;
 
 
 import static org.junit.Assert.assertEquals;
@@ -38,7 +38,6 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 
