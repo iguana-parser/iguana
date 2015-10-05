@@ -33,6 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.*;
 import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -91,6 +92,7 @@ public class Test1 {
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
+        assertEquals(getTree(), result.asParseSuccess().getTree());
     }
 		
 	public static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -103,7 +105,7 @@ public class Test1 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), statistics, input);
 	}
 
 	public static NonterminalNode expectedSPPF(GrammarGraph registry) {
@@ -112,7 +114,7 @@ public class Test1 {
 		return node1;
 	}
 
-    public static RuleNode getTree() {
+    public static Tree getTree() {
         return createRule(r1, list(createEpsilon(0)));
     }
 

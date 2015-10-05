@@ -54,6 +54,7 @@ public class Test3 {
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input0, graph, S);
         assertEquals(getParseResult0(graph), result);
+        assertEquals(getTree0(), result.asParseSuccess().getTree());
     }
 
     @Test
@@ -64,6 +65,7 @@ public class Test3 {
         ParseResult result = parser.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
+        assertEquals(getTree1(), result.asParseSuccess().getTree());
     }
 
     private static ParseResult getParseResult0(GrammarGraph graph) {
@@ -76,7 +78,7 @@ public class Test3 {
                 .setIntermediateNodesCount(0)
                 .setPackedNodesCount(2)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF0(graph), getTree0(), statistics, input0);
+        return new ParseSuccess(expectedSPPF0(graph), statistics, input0);
     }
 
     private static NonterminalNode expectedSPPF0(GrammarGraph registry) {
@@ -103,7 +105,7 @@ public class Test3 {
                 .setIntermediateNodesCount(0)
                 .setPackedNodesCount(3)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(graph), getTree1(), statistics, input1);
+        return new ParseSuccess(expectedSPPF1(graph), statistics, input1);
     }
 
     private static NonterminalNode expectedSPPF1(GrammarGraph registry) {

@@ -37,22 +37,13 @@ public class ParseSuccess extends AbstractParseResult {
 
 	private final NonterminalNode sppfNode;
 	private final ParseStatistics parseStatistics;
-	private final Object tree;
 
 	public ParseSuccess(NonterminalNode sppfNode, ParseStatistics parseStatistics, Input input) {
 		super(input);
 		this.sppfNode = sppfNode;
 		this.parseStatistics = parseStatistics;
-        this.tree = TermBuilder.build(sppfNode, TreeBuilderFactory.getDefault(input));
     }
 
-    public ParseSuccess(NonterminalNode sppfNode, Tree tree, ParseStatistics parseStatistics, Input input) {
-        super(input);
-        this.sppfNode = sppfNode;
-        this.parseStatistics = parseStatistics;
-        this.tree = tree;
-    }
-	
 	@Override
 	public boolean isParseError() {
 		return false;
@@ -81,8 +72,12 @@ public class ParseSuccess extends AbstractParseResult {
 		return parseStatistics;
 	}
 
-    public Object getTree() {
-        return tree;
+    public Tree getTree() {
+        return TermBuilder.build(sppfNode, TreeBuilderFactory.getDefault(input));
+    }
+
+    public <T> T getTree(TreeBuilder<T> builder) {
+        return TermBuilder.build(sppfNode, builder);
     }
 
     @Override
@@ -99,13 +94,11 @@ public class ParseSuccess extends AbstractParseResult {
 			return false;
 		
 		ParseSuccess other = (ParseSuccess) obj;
-		return parseStatistics.equals(other.parseStatistics)
-               && sppfNode.deepEquals(other.sppfNode)
-               && tree.equals(other.tree);
+		return parseStatistics.equals(other.parseStatistics) && sppfNode.deepEquals(other.sppfNode);
 	}
 	
 	@Override
 	public String toString() {
-		return parseStatistics + "\n" + SPPFToJavaCode.get(sppfNode) + "\n" + TreeToJavaCode.get((Tree) tree, input);
+		return parseStatistics + "\n" + SPPFToJavaCode.get(sppfNode) + "\n";
 	}
 }

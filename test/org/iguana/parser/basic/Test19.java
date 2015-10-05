@@ -52,6 +52,7 @@ public class Test19 {
         ParseResult result = parser.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
+        assertEquals(getTree1(), result.asParseSuccess().getTree());
     }
 
     @Test
@@ -61,6 +62,7 @@ public class Test19 {
         ParseResult result = parser.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
+        assertEquals(getTree2(), result.asParseSuccess().getTree());
     }
 
     @Test
@@ -70,6 +72,7 @@ public class Test19 {
         ParseResult result = parser.parse(input3, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
+        assertEquals(getTree3(), result.asParseSuccess().getTree());
     }
 
     private ParseSuccess getParseResult1(GrammarGraph registry) {
@@ -82,7 +85,7 @@ public class Test19 {
                 .setIntermediateNodesCount(2)
                 .setPackedNodesCount(5)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(registry), getTree1(), statistics, input1);
+        return new ParseSuccess(expectedSPPF1(registry), statistics, input1);
     }
 
     private NonterminalNode expectedSPPF1(GrammarGraph registry) {
@@ -117,7 +120,7 @@ public class Test19 {
                 .setIntermediateNodesCount(7)
                 .setPackedNodesCount(14)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF2(registry), getTree2(), statistics, input1);
+        return new ParseSuccess(expectedSPPF2(registry), statistics, input1);
     }
 
     private NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -168,7 +171,7 @@ public class Test19 {
                 .setIntermediateNodesCount(26)
                 .setPackedNodesCount(51)
                 .setAmbiguousNodesCount(10).build();
-        return new ParseSuccess(expectedSPPF3(registry), getTree3(), statistics, input1);
+        return new ParseSuccess(expectedSPPF3(registry), statistics, input1);
     }
 
     private NonterminalNode expectedSPPF3(GrammarGraph registry) {

@@ -30,6 +30,7 @@ package org.iguana.parser.basic;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Tree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -89,6 +90,7 @@ public class Test2 {
         ParseResult result = parser.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
+        assertEquals(getTree(), result.asParseSuccess().getTree());
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -101,7 +103,7 @@ public class Test2 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), statistics, input);
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
@@ -110,7 +112,7 @@ public class Test2 {
         return node1;
 	}
 
-    public static RuleNode getTree() {
+    public static Tree getTree() {
         return createRule(r1, list(createTerminal(0, 1)));
     }
 

@@ -34,11 +34,9 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Branch;
 import iguana.parsetrees.tree.Tree;
-import iguana.parsetrees.tree.TreeVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.ReachabilityGraph;
@@ -109,6 +107,7 @@ public class Test10 {
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
+
     }
 	
 	private static ParseResult getParseResult(GrammarGraph graph) {
@@ -121,7 +120,7 @@ public class Test10 {
                 .setIntermediateNodesCount(4)
                 .setPackedNodesCount(10)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
+        return new ParseSuccess(expectedSPPF(graph), statistics, input);
     }
 
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
