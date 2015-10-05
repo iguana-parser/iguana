@@ -81,7 +81,8 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	private final String label;
 	
-	private final Action action;
+	
+	private transient final Action action;
     private final Object ruleType;
     private final boolean hasRuleType;
 

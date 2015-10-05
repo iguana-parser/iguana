@@ -9,14 +9,14 @@ Export-Package:
  org.iguana.disambiguation.precedence,
  org.iguana.grammar;uses:="org.iguana.grammar.symbol,org.iguana.util",
  org.iguana.grammar.condition;
-  uses:="iguana.utils.input,
-   org.iguana.traversal,
+  uses:="org.iguana.traversal,
    org.iguana.util.generator,
    org.iguana.regex.matcher,
+   iguana.utils.input,
    org.iguana.regex,
-   org.iguana.datadependent.env,
    org.iguana.datadependent.attrs,
    org.iguana.datadependent.ast,
+   org.iguana.datadependent.env,
    org.iguana.parser.gss",
  org.iguana.grammar.exception;uses:="org.iguana.grammar.symbol,org.iguana.datadependent.ast",
  org.iguana.grammar.leftfactorization,
@@ -24,16 +24,16 @@ Export-Package:
  org.iguana.grammar.precedence;uses:="org.iguana.grammar,org.iguana.grammar.symbol,org.iguana.grammar.patterns",
  org.iguana.grammar.slot;
   uses:="iguana.utils.input,
-   org.iguana.regex.matcher,
    org.iguana.util.generator,
+   org.iguana.regex.matcher,
    org.iguana.grammar.symbol,
-   org.iguana.util,
+   iguana.parsetrees.slot,
    org.iguana.grammar.condition,
    org.iguana.regex,
    iguana.parsetrees.sppf,
    org.iguana.parser,
-   org.iguana.datadependent.ast,
    org.iguana.datadependent.env,
+   org.iguana.datadependent.ast,
    org.iguana.grammar.slot.lookahead,
    org.iguana.util.collections,
    org.iguana.parser.gss.lookup,
@@ -41,9 +41,9 @@ Export-Package:
  org.iguana.grammar.symbol;
   uses:="org.iguana.traversal,
    org.iguana.util.generator,
+   iguana.parsetrees.slot,
    org.iguana.datadependent.ast,
    org.iguana.datadependent.attrs,
-   org.iguana.util,
    org.iguana.grammar.condition,
    org.iguana.regex",
  org.iguana.grammar.transformation;
@@ -59,6 +59,7 @@ Export-Package:
   uses:="org.iguana.grammar.symbol,
    org.iguana.grammar,
    iguana.parsetrees.sppf,
+   iguana.parsetrees.tree,
    org.iguana.parser",
  org.iguana.parser.descriptor;
   uses:="iguana.parsetrees.sppf,
@@ -98,6 +99,7 @@ Export-Package:
 Require-Bundle: com.google.guava,
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.imp.pdb.values;bundle-version="0.4.1",
- utils;bundle-version="1.0.0"
+ utils;bundle-version="1.0.0",
+ parse-trees;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.iguana.grammar
