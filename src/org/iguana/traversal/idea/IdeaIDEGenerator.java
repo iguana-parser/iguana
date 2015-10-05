@@ -45,8 +45,10 @@ public class IdeaIDEGenerator {
 
         Set<String> elements = new LinkedHashSet<>();
 
-        for (Rule rule : grammar.getRules())
-            elements.add(rule.getHead().getName());
+        for (Rule rule : grammar.getRules()) {
+            if (!rule.getHead().getName().equals("$default$"))
+                elements.add(rule.getHead().getName() + (rule.getLabel() == null ? "" : "_" + rule.getLabel()));
+        }
 
         generateElementTypes(elements, language, path);
 
