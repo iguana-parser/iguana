@@ -99,7 +99,7 @@ public class TestCSharp {
 
 	@Test
 	public void test3() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test3.cs").getPath());
+		Input input = Input.fromPath(getClass().getResource("examples/Test7.cs").getPath());
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, grammar, start);
 		System.out.println(result);

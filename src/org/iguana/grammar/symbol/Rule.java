@@ -245,12 +245,20 @@ public class Rule implements ConstructorCode, Serializable {
 		for(Symbol s : body) {
 			sb.append(s).append(" ");
 		}
-		return sb.toString() + 
-				" {" + associativity.name() + "," + precedence + "," + recursion + "} " + 
-				(associativityGroup != null? associativityGroup + " " : "") +
-				(precedenceLevel != null? precedenceLevel + " ": "") +
-				(label != null? label : "");
-	} 
+
+        if (associativity != Associativity.UNDEFINED || precedence != 0) {
+            sb.append(" {").append(associativity.name());
+            if (precedence != 0) sb.append(", " + precedence);
+            if (recursion != Recursion.UNDEFINED) sb.append(", " + recursion);
+            sb.append(" }");
+        }
+
+        if (associativityGroup != null) sb.append(associativityGroup + " " );
+        if (precedenceLevel != null) sb.append(precedenceLevel + " ");
+        if (label != null) sb.append(label);
+
+        return sb.toString();
+	}
 	
 	public boolean equals(Object obj) {
 		

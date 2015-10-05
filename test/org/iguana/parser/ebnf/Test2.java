@@ -2,10 +2,8 @@ package org.iguana.parser.ebnf;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
-import iguana.parsetrees.tree.TreeVisualization;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -17,7 +15,6 @@ import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Plus;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
