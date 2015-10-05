@@ -107,7 +107,7 @@ public class Test13 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(2)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, input);
+		return new ParseSuccess(expectedSPPF(graph), getTree(), statistics, input);
 	}
 		
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
@@ -118,10 +118,9 @@ public class Test13 {
     }
 
     private static Tree getTree() {
-//        Tree t0 = createTerminal("a");
-//        Tree t1 = createCycle();
-//        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
-//        return t2;
-        return null;
+        Tree t0 = createTerminal(0, 1);
+        Tree t1 = createCycle();
+        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
+        return t2;
     }
 }

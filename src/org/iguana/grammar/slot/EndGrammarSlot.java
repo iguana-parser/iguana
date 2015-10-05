@@ -27,9 +27,9 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.parsetrees.sppf.Action;
+import iguana.parsetrees.slot.Action;
+import iguana.parsetrees.slot.EndSlot;
 import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.sppf.NonterminalNodeType;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
@@ -39,7 +39,7 @@ import org.iguana.parser.gss.GSSNode;
 import java.util.Collections;
 import java.util.Set;
 
-public class EndGrammarSlot extends BodyGrammarSlot {
+public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 
 	protected final NonterminalGrammarSlot nonterminal;
 	protected final Action action;
@@ -65,7 +65,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node, nonterminal.getNodeType(), action, ruleType));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node));
 	}
 	
 	@Override
@@ -91,15 +91,17 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	public boolean addTransition(Transition transition) {
 		return false;
 	}
-	
-	public Action getAction() {
-		return action;
-	}
 
-    public Object getRuleType() {
+    @Override
+    public Object ruleType() {
         return ruleType;
     }
 
+    @Override
+    public Action action() {
+        return action;
+    }
+	
     /**
 	 * 
 	 * Data-dependent GLL parsing
@@ -108,12 +110,12 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	@Override
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node, nonterminal.getNodeType(), action, ruleType));
+			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node));
 	}
 	
 	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
 		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, this, node, nonterminal.getNodeType(), value, action, ruleType));
+			parser.pop(u, i, u.addToPoppedElements(parser, this, node, value));
 	}
 
 }

@@ -116,8 +116,6 @@ public class Test16 {
         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
         GLLParser parser = ParserFactory.getParser();
         ParseResult result = parser.parse(input, graph, startSymbol);
-        TreeVisualization.generate((Tree) result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
-        TreeVisualization.generate(getTree(), "/Users/afroozeh/output", "tree1", input);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
     }

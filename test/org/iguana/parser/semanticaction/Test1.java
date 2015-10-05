@@ -2,7 +2,7 @@ package org.iguana.parser.semanticaction;
 
 import static org.junit.Assert.assertTrue;
 
-import iguana.parsetrees.sppf.Action;
+import iguana.parsetrees.slot.Action;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;

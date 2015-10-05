@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import iguana.parsetrees.sppf.Action;
+import iguana.parsetrees.slot.Action;
 import org.iguana.parser.HashFunctions;
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;

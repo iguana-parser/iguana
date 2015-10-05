@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.sppf.*;
 import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.slot.EndGrammarSlot;
@@ -46,18 +47,17 @@ public class PoppedElements {
 	
 	private Map<Object, NonterminalNode> poppedElements;
 	
-	public NonterminalNode add(GLLParser parser, int inputIndex, int j, EndGrammarSlot slot, NonPackedNode child,
-                               int nodeType, Action action, Object ruleType) {
+	public NonterminalNode add(GLLParser parser, int inputIndex, int j, EndGrammarSlot slot, NonPackedNode child) {
 
 		// No node added yet
 		if (first == null) {
-			first = createNonterminalNode(slot.getNonterminal(), slot, child, nodeType, action, ruleType);
+			first = createNonterminalNode(slot.getNonterminal(), slot, child);
             parser.packedNodeAdded(slot, child.getRightExtent());
 			parser.nonterminalNodeAdded(first);
 			return first;
 		// Only one node is added and there is an ambiguity
 		} else if (poppedElements == null && first.getRightExtent() == j) {
-            boolean ambiguous = first.addPackedNode(slot, child, action, ruleType);
+            boolean ambiguous = first.addPackedNode(slot, child);
             parser.packedNodeAdded(slot, child.getRightExtent());
             if (ambiguous) parser.ambiguousNodeAdded(first);
 			return null;
@@ -72,14 +72,14 @@ public class PoppedElements {
 			Holder<NonterminalNode> holder = new Holder<>();
 			poppedElements.compute(j, (k, v) -> {
 				if (v == null) {
-                    NonterminalNode node = createNonterminalNode(slot.getNonterminal(), slot, child, nodeType, action, ruleType);
+                    NonterminalNode node = createNonterminalNode(slot.getNonterminal(), slot, child);
 					parser.nonterminalNodeAdded(node);
                     parser.packedNodeAdded(slot, child.getRightExtent());
 					holder.set(node);
 					return node;
 				}
 				else {
-					boolean ambiguous = v.addPackedNode(slot, child, action, ruleType);
+					boolean ambiguous = v.addPackedNode(slot, child);
 					parser.packedNodeAdded(slot, child.getRightExtent());
 					if (ambiguous) parser.ambiguousNodeAdded(v);
 					return v;
@@ -90,17 +90,16 @@ public class PoppedElements {
 		}
 	}
 	
-	public NonterminalNode add(GLLParser parser, int inputIndex, Key key, EndGrammarSlot slot, NonPackedNode child,
-                               int nodeType, Object value, Action action, Object ruleType) {
+	public NonterminalNode add(GLLParser parser, int inputIndex, Key key, EndGrammarSlot slot, NonPackedNode child, Object value) {
 		// No node added yet
 		if (first == null) {
-			first = createNonterminalNode(slot.getNonterminal(), slot, child, nodeType, value, action, ruleType);
+			first = createNonterminalNode(slot.getNonterminal(), slot, child, value);
 			parser.nonterminalNodeAdded(first);
             parser.packedNodeAdded(slot, child.getRightExtent());
 			return first;
 		// Only one node is added and there is an ambiguity
 		} else if (poppedElements == null && IntKey1PlusObject.from(first.getRightExtent(), first.getValue(), parser.getInput().length()).equals(key)) {
-            boolean ambiguous = first.addPackedNode(slot, child, action, ruleType);
+            boolean ambiguous = first.addPackedNode(slot, child);
             parser.packedNodeAdded(slot, child.getRightExtent());
             if (ambiguous) parser.ambiguousNodeAdded(first);
 			return null;
@@ -114,14 +113,14 @@ public class PoppedElements {
 			Holder<NonterminalNode> holder = new Holder<>();
 			poppedElements.compute(key, (k, v) -> {
 				if (v == null) {
-					NonterminalNode node = createNonterminalNode(slot.getNonterminal(), slot, child, nodeType, value, action, ruleType);
+					NonterminalNode node = createNonterminalNode(slot.getNonterminal(), slot, child, value);
 					parser.nonterminalNodeAdded(node);
                     parser.packedNodeAdded(slot, child.getLeftExtent());
 					holder.set(node);
 					return node;
 				}
 				else {
-                    boolean ambiguous = v.addPackedNode(slot, child, action, ruleType);
+                    boolean ambiguous = v.addPackedNode(slot, child);
                     parser.packedNodeAdded(slot, child.getRightExtent());
                     if (ambiguous) parser.ambiguousNodeAdded(v);
 					return v;

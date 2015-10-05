@@ -32,10 +32,10 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import iguana.parsetrees.slot.NonterminalSlot;
 import iguana.parsetrees.sppf.DummyNode;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.NonterminalNodeType;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
@@ -57,7 +57,7 @@ import org.iguana.util.collections.Key;
  * @author Ali Afroozeh
  *
  */
-public class NonterminalGrammarSlot extends AbstractGrammarSlot {
+public class NonterminalGrammarSlot extends AbstractGrammarSlot implements NonterminalSlot {
 	
 	private final Nonterminal nonterminal;
 	
@@ -280,4 +280,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	public <T> GSSNode getGSSNode(int i, GSSNodeData<T> data) {
 		return nodeLookup.get(this, i, data);
 	}
+
+    @Override
+    public int nodeType() {
+        return nodeType;
+    }
 }

@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import iguana.parsetrees.sppf.NonterminalNodeType;
+import iguana.parsetrees.slot.NonterminalNodeType;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;

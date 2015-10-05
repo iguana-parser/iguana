@@ -108,9 +108,6 @@ public class Test10 {
 		GLLParser parser = ParserFactory.getParser();
 		ParseResult result = parser.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
-        SPPFVisualization.generate(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf", input);
-        TreeVisualization.generate((Tree) result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
-        TreeVisualization.generate(getTree(), "/Users/afroozeh/output", "tree1", input);
         assertEquals(getParseResult(graph), result);
     }
 	

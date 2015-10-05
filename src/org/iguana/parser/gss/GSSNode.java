@@ -30,7 +30,7 @@ package org.iguana.parser.gss;
 import java.util.ArrayList;
 import java.util.List;
 
-import iguana.parsetrees.sppf.Action;
+import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import org.iguana.datadependent.env.Environment;
@@ -65,9 +65,8 @@ public class GSSNode {
 		this.gssEdges = new ArrayList<>();
 	}
 	
-	public NonterminalNode addToPoppedElements(GLLParser parser, int j, EndGrammarSlot slot, NonPackedNode child,
-											   int nodeType, Action action, Object ruleType) {
-		return poppedElements.add(parser, inputIndex, j, slot, child, nodeType, action, ruleType);
+	public NonterminalNode addToPoppedElements(GLLParser parser, int j, EndGrammarSlot slot, NonPackedNode child) {
+		return poppedElements.add(parser, inputIndex, j, slot, child);
 	}
 	
 	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
@@ -143,10 +142,8 @@ public class GSSNode {
 	 * 
 	 */
 	
-	public NonterminalNode addToPoppedElements(GLLParser parser, EndGrammarSlot slot, NonPackedNode node,
-                                               int nodeType, Object value, Action action, Object ruleType) {
- 		return poppedElements.add(parser, inputIndex, IntKey1PlusObject.from(node.getRightExtent(),
-                value, parser.getInput().length()), slot, node, nodeType, value, action, ruleType);
+	public NonterminalNode addToPoppedElements(GLLParser parser, EndGrammarSlot slot, NonPackedNode node, Object value) {
+ 		return poppedElements.add(parser, inputIndex, IntKey1PlusObject.from(node.getRightExtent(), value, parser.getInput().length()), slot, node, value);
 	}
 	
 	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
