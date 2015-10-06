@@ -39,7 +39,13 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import iguana.parsetrees.tree.TreeBuilder;
+import iguana.parsetrees.tree.TreeBuilderFactory;
+import iguana.parsetrees.tree.TreeVisualization;
 import iguana.utils.input.Input;
+import iguana.utils.logging.IguanaLogger;
+import iguana.utils.logging.JavaUtilIguanaLogger;
+import iguana.utils.logging.LogLevel;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -60,6 +66,10 @@ public class IguanaRunner {
 	private final Nonterminal start;
 	private final boolean runGCInBetween;
 	private final int timeout;
+    private final boolean buildTrees;
+    private final TreeBuilder<?> treeBuilder;
+
+    private final IguanaLogger logger;
 
 	public IguanaRunner(Builder builder) {
 		this.inputs = builder.inputs;
@@ -70,8 +80,16 @@ public class IguanaRunner {
 		this.runCount = builder.runCount;
 		this.runGCInBetween = builder.runGCInBetween;
 		this.timeout = builder.timeout;
+        this.buildTrees = builder.buildTrees;
+        this.treeBuilder = builder.treeBuilder;
+        if (builder.log) {
+            logger = new JavaUtilIguanaLogger();
+            logger.setLevel(builder.logLevel);
+        } else {
+            logger = IguanaLogger.DEFAULT;
+        }
 	}
-	
+
 	public List<RunResult> run() {
 
 		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
@@ -83,73 +101,57 @@ public class IguanaRunner {
 		while (it.hasNext()) {
 			
 			Input input = it.next();
-//			System.out.print(input.getURI());
-			
+
+            logger.log(input.getURI());
+
 			GLLParser parser = ParserFactory.getParser(config);
 
-//			System.out.print("Warming up: ");
+
+			logger.log("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
-					run(parser, grammarGraph, input, start);
-//					if (result.isParseError()) {
-//						System.out.println(result.asParseError());
-//					}
-//					System.out.print((i + 1) + " ");
+                    ParseResult result = run(parser, grammarGraph, input, start);
+                    if (result.isParseError()) {
+						logger.log(result.asParseError());
+					} else {
+                        if (buildTrees) {
+                            result.asParseSuccess().getTree(TreeBuilderFactory.getDefault(input));
+                        }
+                    }
+					logger.log((i + 1) + " ");
 				} catch (Exception e) {
 					continue;
 				}
 			}
-//			System.out.println();
-						
-//			System.out.print("Running: ");
+            logger.log("\n");
+            logger.log("Running: ");
 			for (int i = 0; i < runCount; i++) {			
 				try {
 					ParseResult result = run(parser, grammarGraph, input, start);
 					if (result.isParseSuccess()) {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
-//						System.out.println("  : Success");
+                        logger.log("  : Success");
+                        if (buildTrees) {
+                            System.out.println(result.asParseSuccess().getTree(TreeBuilderFactory.getDefault(input)));
+                            TreeVisualization.generate(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
+                        }
 					} else {
 						results.add(new FailureResult(input.getURI(), result.asParseError().toString()));
-//						System.out.println("  : Error");
+                        logger.log("  : Error");
 					}
-					
-//					System.out.print((i + 1) + " ");
-//					org.iguana.util.Visualization.generateSPPFGraph("/Users/aliafroozeh/output", result.asParseSuccess().getSPPFNode(), input);
+
+                    logger.log((i + 1) + " ");
 				} catch (Exception e) {
-					System.out.println("Hi");
 					e.printStackTrace();
-//					results.add(new FailureResult(input.getURI(), "Time out"));
-//					System.out.println("Time out");
+					results.add(new FailureResult(input.getURI(), "Time out"));
+                    logger.log("Time out");
 					continue;
 				}
 			}
-//			System.out.println();
+            logger.log("\n");
 		}
 		
 		return results;
-
-//			ParseResult result;
-//            try {
-//                result = run(parser, grammarGraph, input, start);
-//                if (result.isParseSuccess()) {
-//                    AtomicInteger countNonterminals = new AtomicInteger();
-//                    AtomicInteger countTerminals = new AtomicInteger();
-//                    AtomicInteger countIntermediates = new AtomicInteger();
-//                    
-//                    GeneralNodeVisitor visitor = new GeneralNodeVisitor(
-//                    			(t) -> countTerminals.incrementAndGet(), 
-//                    			(n) -> countNonterminals.incrementAndGet(),
-//                    			(i) -> countIntermediates.incrementAndGet());
-//                    
-//                    visitor.visit(result.asParseSuccess().getSPPFNode());
-//                    System.out.println(String.format("Actual nodes: %d, %d, %d",
-//                    								 countTerminals.get(),
-//                    								 countNonterminals.get(),
-//                    								 countIntermediates.get()));
-//                }
-//            } catch (Exception e) {
-//            	System.out.println("Time out");
-//            }
             
 	}
 	
@@ -195,7 +197,11 @@ public class IguanaRunner {
 		private boolean runGCInBetween = false;
 		private int timeout = 30;
 		private int limit = Integer.MAX_VALUE;
-		
+        private boolean buildTrees;
+        private TreeBuilder<?> treeBuilder;
+        private boolean log;
+        private LogLevel logLevel= LogLevel.INFO;
+
 		private Set<String> ignoreSet = new HashSet<>();
 		
 		public Builder(Grammar grammar, Nonterminal start) {
@@ -257,8 +263,28 @@ public class IguanaRunner {
 			this.limit = limit;
 			return this;
 		}
-		
-		public IguanaRunner build() {
+
+        public Builder setBuildTrees(boolean buildTrees) {
+            this.buildTrees = buildTrees;
+            return this;
+        }
+
+        public Builder setTreeBuilder(TreeBuilder<?> treeBuilder) {
+            this.treeBuilder = treeBuilder;
+            return this;
+        }
+
+        public Builder log() {
+            this.log = log;
+            return this;
+        }
+
+        public Builder setLogLevel(LogLevel logLevel) {
+            this.logLevel = logLevel;
+            return this;
+        }
+
+        public IguanaRunner build() {
 			inputs = inputs.limit(limit);
 			return new IguanaRunner(this);
 		}

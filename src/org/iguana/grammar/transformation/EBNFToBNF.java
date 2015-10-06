@@ -219,8 +219,8 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.withName(symbol.getName()) 
-					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).build();
+			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setType(NonterminalNodeType.Alt()).build()
+					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).setType(NonterminalNodeType.Alt()).build();
 			
 			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy)
 														.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
