@@ -54,7 +54,7 @@ public class IdeaIDEGenerator {
 
         generatePhiElements(grammar.getRules(), language, path);
 
-        generateTreeBuider(language, path);
+        generateParserDefinition(language, path);
     }
 
     private void generateBasicFiles(String language, String extension, String path) {
@@ -781,7 +781,7 @@ public class IdeaIDEGenerator {
         }
     }
 
-    private void generateElementTypes(Set<String> elements, String language, String path) {
+    private static void generateElementTypes(Set<String> elements, String language, String path) {
         File file = new File(path + language.toLowerCase() + "/gen/psi/" + language + "ElementTypes.java");
 
         try {
@@ -827,7 +827,7 @@ public class IdeaIDEGenerator {
         ONE, MORE_THAN_ONE, ONE_AND_MORE
     }
 
-    private void generatePhiElements(List<Rule> rules, String language, String path) {
+    private static void generatePhiElements(List<Rule> rules, String language, String path) {
 
         new File(path + language.toLowerCase() + "/gen/psi/impl").mkdir();
 
@@ -1473,8 +1473,35 @@ public class IdeaIDEGenerator {
         }
     }
 
-    private void generateTreeBuider(String language, String path) {
+    private static void generateParserDefinition(String language, String path) {
         new File(path + language.toLowerCase() + "/gen/parser").mkdir();
+
+        File file = new File(path + language.toLowerCase() + "/gen/parser/" + language + "Parser.java");
+
+        try {
+            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        file = new File(path + language.toLowerCase() + "/gen/parser/" + language + "ParserDefinition.java");
+
+        try {
+            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        generateTreeBuider(language, path);
+    }
+
+    private static void generateTreeBuider(String language, String path) {
         File file = new File(path + language.toLowerCase() + "/gen/parser/" + language + "TreeBuilder.java");
         try {
             PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
@@ -1486,8 +1513,8 @@ public class IdeaIDEGenerator {
             writer.println("import com.intellij.psi.impl.source.tree.CompositeElement;");
             writer.println("import com.intellij.psi.impl.source.tree.TreeElement;");
             writer.println("import com.intellij.psi.tree.IElementType;");
-            writer.println("import iggy.gen.psi.IGGYElementTypes;");
-            writer.println("import iggy.gen.psi.IGGYTokenTypes;");
+            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementTypes;");
+            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "TokenTypes;");
             writer.println("import iguana.parsetrees.tree.Branch;");
             writer.println("import iguana.parsetrees.tree.TreeBuilder;");
             writer.println("import iguana.utils.input.Input;");
@@ -1544,7 +1571,14 @@ public class IdeaIDEGenerator {
             writer.println("        return node;");
             writer.println("    }");
             writer.println();
-            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(IGGYTokenTypes.CHARACTER, \"\"); }");
+            writer.println("    public TreeElement alt(Seq<TreeElement> children) {");
+            writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.ALT);");
+            writer.println("        Iterator<TreeElement> iterator = children.iterator();");
+            writer.println("        while (iterator.hasNext()) node.rawAddChildren(iterator.next());");
+            writer.println("        return node;");
+            writer.println("    }");
+            writer.println();
+            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, \"\"); }");
             writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
