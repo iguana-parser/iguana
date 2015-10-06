@@ -435,6 +435,14 @@ public class IdeaIDEGenerator {
                 writer.println("public interface " + language + "TokenTypes {");
                 writer.print(tokenTypes.toString());
                 writer.println("    public IElementType BAD_CHARACTER = new " + language + "TokenType(\"BAD_CHARACTER\");");
+                writer.println();
+                writer.println("    public static IElementType get(String name) {");
+                writer.println("        switch (name) {");
+                for (String tokenType : seenTokenTypes)
+                    writer.println("            case \"" + tokenType + "\": return " + tokenType + ";");
+                writer.println("            default: return CHARACTER;");
+                writer.println("        }");
+                writer.println("    }");
                 writer.println("}");
                 writer.println();
                 writer.close();
