@@ -435,6 +435,14 @@ public class IdeaIDEGenerator {
                 writer.println("public interface " + language + "TokenTypes {");
                 writer.print(tokenTypes.toString());
                 writer.println("    public IElementType BAD_CHARACTER = new " + language + "TokenType(\"BAD_CHARACTER\");");
+                writer.println();
+                writer.println("    public static IElementType get(String name) {");
+                writer.println("        switch (name) {");
+                for (String tokenType : seenTokenTypes)
+                    writer.println("            case \"" + tokenType + "\": return " + tokenType + ";");
+                writer.println("            default: return CHARACTER;");
+                writer.println("        }");
+                writer.println("    }");
                 writer.println("}");
                 writer.println();
                 writer.close();
@@ -793,6 +801,17 @@ public class IdeaIDEGenerator {
             writer.println();
             for (String element : elements)
                 writer.println("    public IElementType " + element.toUpperCase() + " = new " + language + "ElementType(\"" + element.toUpperCase() + "\");");
+            writer.println();
+            writer.println("    public static IElementType get(String name) {");
+            writer.println("        switch (name) {");
+            writer.println("            case \"LIST\": return LIST;");
+            writer.println("            case \"OPT\": return OPT;");
+            writer.println("            case \"ALT\": return ALT;");
+            writer.println("            case \"SEQ\": return SEQ;");
+            for (String element : elements)
+                writer.println("            case \"" + element.toUpperCase() + "\": return " + element.toUpperCase() + ";");
+            writer.println("        }");
+            writer.println("    }");
             writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
