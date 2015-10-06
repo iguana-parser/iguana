@@ -55,7 +55,7 @@ import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.logging.ParserLogger;
+import iguana.utils.logging.IguanaLogger;
 
 /**
  * 
@@ -100,13 +100,13 @@ public class GLLParserImpl implements GLLParser {
 	
 	private Deque<Descriptor> descriptorsStack;
 	
-	private ParserLogger logger;
+	private IguanaLogger logger;
 
 	public GLLParserImpl(Configuration config) {
 		this.config = config;
 		this.descriptorsStack = new ArrayDeque<>();
-//		this.logger = new org.iguana.util.logging.JavaUtilParserLogger();
-		logger = ParserLogger.DEFAULT;
+//		this.logger = new org.iguana.util.logging.JavaUtilIguanaLogger();
+		logger = IguanaLogger.DEFAULT;
 	}
 	
 	@Override
