@@ -53,6 +53,8 @@ public class IdeaIDEGenerator {
         generateElementTypes(elements, language, path);
 
         generatePhiElements(grammar.getRules(), language, path);
+
+        generateTreeBuider(language, path);
     }
 
     private void generateBasicFiles(String language, String extension, String path) {
@@ -1468,6 +1470,87 @@ public class IdeaIDEGenerator {
                 if (sep.accept(this) != null)
                     return "PsiElement";
             return symbol.getSymbol().accept(this);
+        }
+    }
+
+    private void generateTreeBuider(String language, String path) {
+        new File(path + language.toLowerCase() + "/gen/parser").mkdir();
+        File file = new File(path + language.toLowerCase() + "/gen/parser/" + language + "TreeBuilder.java");
+        try {
+            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.println("package " + language.toLowerCase() + ".gen.parser;");
+            writer.println();
+            writer.println("/* This file has been generated. */");
+            writer.println();
+            writer.println("import com.intellij.lang.ASTFactory;");
+            writer.println("import com.intellij.psi.impl.source.tree.CompositeElement;");
+            writer.println("import com.intellij.psi.impl.source.tree.TreeElement;");
+            writer.println("import com.intellij.psi.tree.IElementType;");
+            writer.println("import iggy.gen.psi.IGGYElementTypes;");
+            writer.println("import iggy.gen.psi.IGGYTokenTypes;");
+            writer.println("import iguana.parsetrees.tree.Branch;");
+            writer.println("import iguana.parsetrees.tree.TreeBuilder;");
+            writer.println("import iguana.utils.input.Input;");
+            writer.println("import org.iguana.grammar.symbol.Rule;");
+            writer.println("import scala.collection.*;");
+            writer.println();
+            writer.println("public class " + language + "TreeBuilder implements TreeBuilder<TreeElement> {");
+            writer.println();
+            writer.println("    private final Input input;");
+            writer.println();
+            writer.println("    public " + language + "TreeBuilder(Input input) { this.input = input; }");
+            writer.println();
+            writer.println("    public TreeElement terminalNode(int l, int r) { return return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, input.subString(l, r)); }");
+            writer.println();
+            writer.println("    public TreeElement terminalNode(String name, int l, int r) {");
+            writer.println("        IElementType tokenType = " + language + "TokenTypes.get(name);");
+            writer.println("        return ASTFactory.leaf(tokenType, input.subString(l, r));");
+            writer.println("    }");
+            writer.println();
+            writer.println("    public TreeElement nonterminalNode(Object type, Seq<TreeElement> children, int l, int r) {");
+            writer.println("        Rule rule = (Rule) type;");
+            writer.println("        String name = rule.getHead().getName().toUpperCase() + (rule.getLabel() == null? \"\" : \"_\" + rule.getLabel().toUpperCase());");
+            writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.get(name));");
+            writer.println("        Iterator<TreeElement> iterator = children.iterator();");
+            writer.println("        while (iterator.hasNext()) node.rawAddChildren(iterator.next());");
+            writer.println("        return node;");
+            writer.println("    }");
+            writer.println();
+            writer.println("    public TreeElement ambiguityNode(scala.collection.Iterable<Branch<TreeElement>> children, int l, int r) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); }");
+            writer.println();
+            writer.println("    public TreeElement cycle() { throw new RuntimeException(\"Not yet supported in the idea tree builder: cycles.\"); }");
+            writer.println();
+            writer.println("    public Branch<TreeElement> branch(Seq<TreeElement> children) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); } ");
+            writer.println();
+            writer.println("    public TreeElement star(Seq<TreeElement> children) {");
+            writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.LIST);");
+            writer.println("        Iterator<TreeElement> iterator = children.iterator();");
+            writer.println("        while (iterator.hasNext()) node.rawAddChildren(iterator.next());");
+            writer.println("        return node;");
+            writer.println("    }");
+            writer.println();
+            writer.println("    public TreeElement plus(Seq<TreeElement> children) { return star(children); }");
+            writer.println();
+            writer.println("    public TreeElement opt(TreeElement child) {");
+            writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.OPT);");
+            writer.println("        node.rawAddChildren(child);");
+            writer.println("        return node;");
+            writer.println("    }");
+            writer.println();
+            writer.println("    public TreeElement group(Seq<TreeElement> children) {");
+            writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.SEQ);");
+            writer.println("        Iterator<TreeElement> iterator = children.iterator();");
+            writer.println("        while (iterator.hasNext()) node.rawAddChildren(iterator.next());");
+            writer.println("        return node;");
+            writer.println("    }");
+            writer.println();
+            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(IGGYTokenTypes.CHARACTER, \"\"); }");
+            writer.println("}");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }
