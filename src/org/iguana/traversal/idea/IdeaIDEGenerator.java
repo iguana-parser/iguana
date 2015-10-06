@@ -1480,6 +1480,59 @@ public class IdeaIDEGenerator {
 
         try {
             PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.println("package " + language.toLowerCase() + ".gen.parser;");
+            writer.println();
+            writer.println("/* This file has been generated. */");
+            writer.println();
+            writer.println("import com.intellij.lang.ASTNode;");
+            writer.println("import com.intellij.lang.PsiBuilder;");
+            writer.println("import com.intellij.lang.PsiParser;");
+            writer.println("import com.intellij.psi.impl.source.tree.Factory;");
+            writer.println("import com.intellij.psi.tree.IElementType;");
+            writer.println("import iguana.parsetrees.sppf.NonterminalNode;");
+            writer.println("import iguana.parsetrees.tree.TermBuilder;");
+            writer.println("import iguana.utils.input.Input;");
+            writer.println("import org.iguana.grammar.Grammar;");
+            writer.println("import org.iguana.grammar.GrammarGraph;");
+            writer.println("import org.iguana.grammar.symbol.Nonterminal;");
+            writer.println("import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;");
+            writer.println("import org.iguana.grammar.transformation.EBNFToBNF;");
+            writer.println("import org.iguana.grammar.transformation.LayoutWeaver;");
+            writer.println("import org.iguana.parser.GLLParser;");
+            writer.println("import org.iguana.parser.ParseResult;");
+            writer.println("import org.iguana.parser.ParserFactory;");
+            writer.println("import org.iguana.util.Configuration;");
+            writer.println();
+            writer.println("public class " + language + "Parser implements PsiParser {");
+            writer.println();
+            writer.println("    private Grammar grammar;");
+            writer.println("    private GrammarGraph graph;");
+            writer.println("    private GLLParser parser;");
+            writer.println();
+            writer.println("    public ASTNode parse(IElementType root, PsiBuilder builder) {");
+            writer.println("        Input input = Input.fromString(builder.getOriginalText().toString());");
+            writer.println("        if (parser == null) {");
+            writer.println("            grammar = Grammar.load(this.getClass().getClassLoader().getResourceAsStream(\"" + language.toLowerCase() + "/gen/parser/grammar/" + language + "\"));");
+            writer.println("            DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();");
+            writer.println("            precedenceAndAssociativity.setOP2();");
+            writer.println("            grammar = new EBNFToBNF().transform(grammar);");
+            writer.println("            grammar = precedenceAndAssociativity.transform(grammar);");
+            writer.println("            grammar = new LayoutWeaver().transform(grammar);");
+            writer.println("            graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);");
+            writer.println("            parser = ParserFactory.getParser();");
+            writer.println("        }");
+            writer.println("        ParseResult result = parser.parse(input, graph, Nonterminal.withName(\"\"));");
+            writer.println("        if (result.isParseSuccess()) {");
+            writer.println("            System.out.println(\"Success...\");");
+            writer.println("            NonterminalNode sppf = result.asParseSuccess().getSPPFNode();");
+            writer.println("            ASTNode ast = TermBuilder.build(sppf, new " + language + "TreeBuilder(input));");
+            writer.println("            return ast;");
+            writer.println("        } else {");
+            writer.println("            System.out.println(\"Parse error...\");");
+            writer.println("            return Factory.createErrorElement(\"Sorry, you have a parse error.\");");
+            writer.println("        }");
+            writer.println("    }");
+            writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1491,6 +1544,65 @@ public class IdeaIDEGenerator {
 
         try {
             PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.println("package " + language.toLowerCase() + ".gen.parser;");
+            writer.println();
+            writer.println("/* This file has been generated. */");
+            writer.println();
+            writer.println("import com.intellij.lang.ASTNode;");
+            writer.println("import com.intellij.lang.Language;");
+            writer.println("import com.intellij.lang.ParserDefinition;");
+            writer.println("import com.intellij.lang.PsiParser;");
+            writer.println("import com.intellij.lexer.Lexer;");
+            writer.println("import com.intellij.openapi.project.Project;");
+            writer.println("import com.intellij.psi.FileViewProvider;");
+            writer.println("import com.intellij.psi.PsiElement;");
+            writer.println("import com.intellij.psi.PsiFile;");
+            writer.println("import com.intellij.psi.tree.IFileElementType;");
+            writer.println("import com.intellij.psi.tree.TokenSet;");
+            writer.println("import " + language.toLowerCase() + ".gen.lang." + language + "File;");
+            writer.println("import " + language.toLowerCase() + ".gen.lang." + language + "Lang;");
+            writer.println("import " + language.toLowerCase() + ".gen.lexer." + language + "Lexer;");
+            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementTypes;");
+            writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "TokenTypes;");
+            writer.println();
+            writer.println("public class " + language + "ParserDefinition implements ParserDefinition {");
+            writer.println("    public static final IFileElementType FILE = new IFileElementType(Language.<" + language + "Lang>findInstance(" + language + "Lang.class));");
+            writer.println("    public Lexer createLexer(Project project) { return new " + language + "Lexer(); }");
+            writer.println("    public PsiParser createParser(Project project) { return new " + language + "Parser(); }");
+            writer.println("    public IFileElementType getFileNodeType() { return FILE; }");
+            writer.println("    public TokenSet getWhitespaceTokens() { return TokenSet.EMPTY; }");
+            writer.println("    public TokenSet getCommentTokens() { return TokenSet.EMPTY; }");
+            writer.println("    public TokenSet getStringLiteralElements() { return TokenSet.EMPTY; }");
+            writer.println("    public PsiElement createElement(ASTNode node) { return " + language + "ElementTypes.Factory.createElement(node); }");
+            writer.println("    public PsiFile createFile(FileViewProvider viewProvider) { return new " + language + "File(viewProvider); } ");
+            writer.println("    public PsiFile createFile(FileViewProvider viewProvider) { return new " + language + "File(viewProvider); }");
+            writer.println("    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) { return SpaceRequirements.MAY; }");
+            writer.println("}");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        file = new File(path + language.toLowerCase() + "/gen/lang/" + language + "File.java");
+
+        try {
+            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.println("package " + language.toLowerCase() + ".gen.lang;");
+            writer.println();
+            writer.println("/* This file has been generated. */");
+            writer.println();
+            writer.println("import com.intellij.extapi.psi.PsiFileBase;");
+            writer.println("import com.intellij.openapi.fileTypes.FileType;");
+            writer.println("import com.intellij.psi.FileViewProvider;");
+            writer.println();
+            writer.println("public class " + language + "File extends PsiFileBase {");
+            writer.println("    public " + language + "File(FileViewProvider viewProvider) { super(viewProvider, " + language + "Lang.instance); }");
+            writer.println("    public FileType getFileType() { return " + language + "FileType.instance; }");
+            writer.println("    public String toString() { return \"" + language + " file\"; }");
+            writer.println("    public Icon getIcon(int flags) { return super.getIcon(flags); }");
+            writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
