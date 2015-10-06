@@ -30,6 +30,7 @@ package org.iguana.grammar.slot;
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.slot.EndSlot;
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.parsetrees.tree.RuleType;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
@@ -43,15 +44,15 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 
 	protected final NonterminalGrammarSlot nonterminal;
 	protected final Action action;
-	protected final Object ruleType;
+	protected final RuleType ruleType;
 
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, Action action, Object ruleType) {
+			              String variable, Set<String> state, Conditions conditions, Action action, RuleType ruleType) {
 		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType);
 	}
 	
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, int i1, 
-            			  String variable, int i2, Set<String> state, Conditions conditions, Action action, Object ruleType) {
+            			  String variable, int i2, Set<String> state, Conditions conditions, Action action, RuleType ruleType) {
 		super(id, position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
 		this.action = action;
@@ -93,7 +94,7 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	}
 
     @Override
-    public Object ruleType() {
+    public RuleType ruleType() {
         return ruleType;
     }
 
