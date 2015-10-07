@@ -43,11 +43,17 @@ public class IdeaIDEGenerator {
 
         generateBasicHighlighter(language, path, tokenTypes);
 
-        Set<String> elements = new LinkedHashSet<>();
+        Map<String, Set<String>> elements = new LinkedHashMap<>();
 
         for (Rule rule : grammar.getRules()) {
-            if (!rule.getHead().getName().equals("$default$"))
-                elements.add(rule.getHead().getName() + (rule.getLabel() == null ? "" : "_" + rule.getLabel()));
+            if (!rule.getHead().getName().equals("$default$")) {
+                Set<String> labels = elements.get(rule.getHead().getName());
+                if (labels == null) {
+                    labels = new HashSet<>();
+                    elements.put(rule.getHead().getName(), labels);
+                }
+                labels.add(rule.getLabel() == null ? "Impl" : rule.getLabel());
+            }
         }
 
         generateElementTypes(elements, language, path);
@@ -781,7 +787,7 @@ public class IdeaIDEGenerator {
         }
     }
 
-    private static void generateElementTypes(Set<String> elements, String language, String path) {
+    private static void generateElementTypes(Map<String, Set<String>> elements, String language, String path) {
         File file = new File(path + language.toLowerCase() + "/gen/psi/" + language + "ElementTypes.java");
 
         try {
@@ -801,8 +807,14 @@ public class IdeaIDEGenerator {
             writer.println("    public IElementType ALT = new " + language + "ElementType(\"ALT\");");     // | and if-then-else
             writer.println("    public IElementType SEQ = new " + language + "ElementType(\"SEQ\");");     // () and {}
             writer.println();
-            for (String element : elements)
-                writer.println("    public IElementType " + element.toUpperCase() + " = new " + language + "ElementType(\"" + element.toUpperCase() + "\");");
+            for (String head : elements.keySet()) {
+                for (String label : elements.get(head)) {
+                    if (label.equals("Impl"))
+                        writer.println("    public IElementType " + head.toUpperCase() + " = new " + language + "ElementType(\"" + head.toUpperCase() + "\");");
+                    else
+                        writer.println("    public IElementType " + head.toUpperCase() + "_" + label.toUpperCase() + " = new " + language + "ElementType(\"" + head.toUpperCase() + "_" + label.toUpperCase() + "\");");
+                }
+            }
             writer.println();
             writer.println("    public static IElementType get(String name) {");
             writer.println("        switch (name) {");
@@ -810,11 +822,32 @@ public class IdeaIDEGenerator {
             writer.println("            case \"OPT\": return OPT;");
             writer.println("            case \"ALT\": return ALT;");
             writer.println("            case \"SEQ\": return SEQ;");
-            for (String element : elements)
-                writer.println("            case \"" + element.toUpperCase() + "\": return " + element.toUpperCase() + ";");
+            for (String head : elements.keySet()) {
+                for (String label : elements.get(head)) {
+                    if (label.equals("Impl"))
+                        writer.println("            case \"" + head.toUpperCase() + "\": return " + head.toUpperCase() + ";");
+                    else
+                        writer.println("            case \"" + head.toUpperCase() + "_" + label.toUpperCase() + "\": return " + head.toUpperCase() + "_" + label.toUpperCase() + ";");
+                }
+            }
             writer.println("        }");
             writer.println("    }");
-            writer.println("}");
+            writer.println();
+            writer.println("    class Factory {");
+            writer.println("        public static PsiElement createElement(ASTNode node) {");
+            writer.println("            IElementType type = node.getElementType();");
+            writer.println("            if (type == LIST || type == OPT || type == ALT || type == SEQ) return new EbnfElementImpl(node);");
+            for (String head : elements.keySet()) {
+                for (String label : elements.get(head)) {
+                    if (label.equals("Impl"))
+                        writer.println("            if (type == " + head.toUpperCase() + ") return new " + head + "Impl(node);");
+                    else
+                        writer.println("            if (type == " + head.toUpperCase() + "_" + label.toUpperCase() + ") return new " + head + label + "Impl(node)");
+                }
+            }
+            writer.println("            throw new RuntimeException(\"Should not have happened!\")");
+            writer.println("        }");
+            writer.println("    }");
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
