@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
+import iguana.parsetrees.tree.RuleType;
 import org.iguana.parser.HashFunctions;
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
@@ -45,7 +46,7 @@ import org.iguana.util.generator.GeneratorUtil;
  * @authors Ali Afroozeh, Anastasia Izmaylova
  *
  */
-public class Rule implements ConstructorCode, Serializable {
+public class Rule implements ConstructorCode, Serializable, RuleType {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -83,7 +84,7 @@ public class Rule implements ConstructorCode, Serializable {
 	
 	
 	private transient final Action action;
-    private final Object ruleType;
+    private final RuleType ruleType;
     private final boolean hasRuleType;
 
     public Rule(Builder builder) {
@@ -230,7 +231,7 @@ public class Rule implements ConstructorCode, Serializable {
         return hasRuleType;
     }
 
-    public Object getRuleType() {
+    public RuleType getRuleType() {
         return ruleType;
     }
 
@@ -312,8 +313,18 @@ public class Rule implements ConstructorCode, Serializable {
 	public static Builder withHead(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
-	
-	public static class Builder {
+
+    @Override
+    public String head() {
+        return head.getName();
+    }
+
+    @Override
+    public List<String> body() {
+        return body.stream().map(s -> s.getName()).collect(Collectors.toList());
+    }
+
+    public static class Builder {
 		
 		private Nonterminal head;
 		private List<Symbol> body;
@@ -338,7 +349,7 @@ public class Rule implements ConstructorCode, Serializable {
 		private String label;
 		
 		private Action action = null;
-		private Object ruleType = null;
+		private RuleType ruleType = null;
         private boolean hasRuleType = true;
 
 		public Builder(Nonterminal head) {
@@ -472,7 +483,7 @@ public class Rule implements ConstructorCode, Serializable {
 			return this;
 		}
 
-        public Builder setRuleType(Object ruleType) {
+        public Builder setRuleType(RuleType ruleType) {
             this.ruleType = ruleType;
             return this;
         }
