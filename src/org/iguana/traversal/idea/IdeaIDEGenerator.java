@@ -796,10 +796,13 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("/* This file has been generated. */");
             writer.println();
+            writer.println("import com.intellij.lang.ASTNode;");
+            writer.println("import com.intellij.psi.PsiElement;");
             writer.println("import com.intellij.psi.tree.IElementType;");
             writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementType;");
+            writer.println("import " + language.toLowerCase() + ".gen.psi.impl.*;");
             writer.println();
-            writer.println("interface " + language + "ElementTypes {");
+            writer.println("public interface " + language + "ElementTypes {");
             writer.println();
             // ebnf related types, also data-dependent
             writer.println("    public IElementType LIST = new " + language + "ElementType(\"LIST\");"); // * and while
@@ -831,6 +834,7 @@ public class IdeaIDEGenerator {
                 }
             }
             writer.println("        }");
+            writer.println("        throw new RuntimeException(\"Should not have happened!\");");
             writer.println("    }");
             writer.println();
             writer.println("    class Factory {");
@@ -842,12 +846,13 @@ public class IdeaIDEGenerator {
                     if (label.equals("Impl"))
                         writer.println("            if (type == " + head.toUpperCase() + ") return new " + head + "Impl(node);");
                     else
-                        writer.println("            if (type == " + head.toUpperCase() + "_" + label.toUpperCase() + ") return new " + head + label + "Impl(node)");
+                        writer.println("            if (type == " + head.toUpperCase() + "_" + label.toUpperCase() + ") return new " + head + label + "Impl(node);");
                 }
             }
-            writer.println("            throw new RuntimeException(\"Should not have happened!\")");
+            writer.println("            throw new RuntimeException(\"Should not have happened!\");");
             writer.println("        }");
             writer.println("    }");
+            writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1599,16 +1604,25 @@ public class IdeaIDEGenerator {
             writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "TokenTypes;");
             writer.println();
             writer.println("public class " + language + "ParserDefinition implements ParserDefinition {");
+            writer.println();
             writer.println("    public static final IFileElementType FILE = new IFileElementType(Language.<" + language + "Lang>findInstance(" + language + "Lang.class));");
+            writer.println();
             writer.println("    public Lexer createLexer(Project project) { return new " + language + "Lexer(); }");
+            writer.println();
             writer.println("    public PsiParser createParser(Project project) { return new " + language + "Parser(); }");
+            writer.println();
             writer.println("    public IFileElementType getFileNodeType() { return FILE; }");
+            writer.println();
             writer.println("    public TokenSet getWhitespaceTokens() { return TokenSet.EMPTY; }");
+            writer.println();
             writer.println("    public TokenSet getCommentTokens() { return TokenSet.EMPTY; }");
+            writer.println();
             writer.println("    public TokenSet getStringLiteralElements() { return TokenSet.EMPTY; }");
+            writer.println();
             writer.println("    public PsiElement createElement(ASTNode node) { return " + language + "ElementTypes.Factory.createElement(node); }");
+            writer.println();
             writer.println("    public PsiFile createFile(FileViewProvider viewProvider) { return new " + language + "File(viewProvider); } ");
-            writer.println("    public PsiFile createFile(FileViewProvider viewProvider) { return new " + language + "File(viewProvider); }");
+            writer.println();
             writer.println("    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) { return SpaceRequirements.MAY; }");
             writer.println("}");
             writer.close();
@@ -1629,6 +1643,7 @@ public class IdeaIDEGenerator {
             writer.println("import com.intellij.extapi.psi.PsiFileBase;");
             writer.println("import com.intellij.openapi.fileTypes.FileType;");
             writer.println("import com.intellij.psi.FileViewProvider;");
+            writer.println("import javax.swing.Icon;");
             writer.println();
             writer.println("public class " + language + "File extends PsiFileBase {");
             writer.println("    public " + language + "File(FileViewProvider viewProvider) { super(viewProvider, " + language + "Lang.instance); }");
@@ -1661,6 +1676,7 @@ public class IdeaIDEGenerator {
             writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "ElementTypes;");
             writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "TokenTypes;");
             writer.println("import iguana.parsetrees.tree.Branch;");
+            writer.println("import iguana.parsetrees.tree.RuleType;");
             writer.println("import iguana.parsetrees.tree.TreeBuilder;");
             writer.println("import iguana.utils.input.Input;");
             writer.println("import org.iguana.grammar.symbol.Rule;");
@@ -1672,14 +1688,14 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("    public " + language + "TreeBuilder(Input input) { this.input = input; }");
             writer.println();
-            writer.println("    public TreeElement terminalNode(int l, int r) { return return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, input.subString(l, r)); }");
+            writer.println("    public TreeElement terminalNode(int l, int r) { return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, input.subString(l, r)); }");
             writer.println();
             writer.println("    public TreeElement terminalNode(String name, int l, int r) {");
             writer.println("        IElementType tokenType = " + language + "TokenTypes.get(name);");
             writer.println("        return ASTFactory.leaf(tokenType, input.subString(l, r));");
             writer.println("    }");
             writer.println();
-            writer.println("    public TreeElement nonterminalNode(Object type, Seq<TreeElement> children, int l, int r) {");
+            writer.println("    public TreeElement nonterminalNode(RuleType type, Seq<TreeElement> children, int l, int r) {");
             writer.println("        Rule rule = (Rule) type;");
             writer.println("        String name = rule.getHead().getName().toUpperCase() + (rule.getLabel() == null? \"\" : \"_\" + rule.getLabel().toUpperCase());");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.get(name));");
