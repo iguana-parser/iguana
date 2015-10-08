@@ -1,10 +1,8 @@
 package org.iguana.parser.ebnf;
 
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
-import iguana.parsetrees.tree.TreeVisualization;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -17,8 +15,6 @@ import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
@@ -123,8 +119,4 @@ public class Test3 {
         Tree t3 = createRule(r1, list(t2));
         return t3;
     }
-
-//    assertTrue(result.isParseSuccess());
-//    SPPFVisualization.generate(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf", input0);
-//    TreeVisualization.generate((Tree) result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input0);
 }

@@ -29,6 +29,7 @@ package org.iguana.parser.basic;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.Tree;
 import iguana.utils.input.Input;
@@ -159,7 +160,7 @@ public class Test12 {
 
     private static Tree getTree1() {
         Tree t0 = createTerminal(0, 1);
-        Tree t1 = createCycle();
+        Tree t1 = createCycle("A");
         Tree t2 = createEpsilon(1);
         Tree t3 = createAmbiguity(set(createBranch(list(t2)), createBranch(list(t1, t1))));
         Tree t4 = createEpsilon(0);
@@ -170,7 +171,7 @@ public class Test12 {
     }
 
     private static Tree getTree2() {
-        Tree t0 = createCycle();
+        Tree t0 = createCycle("A");
         Tree t1 = createEpsilon(0);
         Tree t2 = createAmbiguity(set(createBranch(list(t0, t0)), createBranch(list(t1))));
         return t2;

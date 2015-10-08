@@ -53,12 +53,12 @@ public class TestJava {
 
         List<RunResult> results = IguanaRunner.builder(grammar, start)
 //				                              .setWarmupCount(3)
-                .setRunCount(1)
+//                .setRunCount(1)
 //				                              .setRunGCInBetween(false)
 //				                              .setLimit(20)
-                .addFile("resources/java/Test.java")
+//                .addFile("resources/java/Test.java")
 //				                              .addDirectory(jdk1_7, "java", true)
-//				                              .addDirectory(slf4j, "java", true)
+				                              .addDirectory(slf4j, "java", true)
 //				                              .addDirectory(junit, "java", true)
 //				                              .addFile("files/Test.java")
                 .setBuildTrees(true)
@@ -66,7 +66,7 @@ public class TestJava {
                 .build()
                 .run();
 
-        System.out.println(results);
+//        System.out.println(results);
 
 
         System.out.println(RunResultUtil.format(results));

@@ -132,8 +132,8 @@ public class IguanaRunner {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
                         logger.log("  : Success");
                         if (buildTrees) {
-                            System.out.println(result.asParseSuccess().getTree(TreeBuilderFactory.getDefault(input)));
-                            TreeVisualization.generate(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
+                            result.asParseSuccess().getTree(TreeBuilderFactory.getDefault(input));
+//                            TreeVisualization.generate(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
                         }
 					} else {
 						results.add(new FailureResult(input.getURI(), result.asParseError().toString()));
