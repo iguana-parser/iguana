@@ -88,7 +88,6 @@ Export-Package:
    org.iguana.parser,
    org.iguana.util",
  org.iguana.util.hashing.hashfunction,
- org.iguana.util.logging,
  org.iguana.util.trie,
  org.iguana.util.unicode,
  org.iguana.util.visualization;
