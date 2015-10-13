@@ -6,39 +6,34 @@ import java.util.logging.Logger;
 
 public class JavaUtilIguanaLogger implements IguanaLogger {
 	
-	private static Logger log = Logger.getLogger(JavaUtilIguanaLogger.class.getName());
-    private Level level = Level.SEVERE;
+	private final Logger log;
+    private final Level level;
 
-    public JavaUtilIguanaLogger() {
+    public JavaUtilIguanaLogger(String name) {
+        this(name, LogLevel.INFO);
+    }
+
+    public JavaUtilIguanaLogger(String name, LogLevel level) {
+        this.level = getLevel(level);
+        log = Logger.getLogger(name);
         log.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
-        log.setLevel(level);
-        handler.setLevel(level);
+        log.setLevel(this.level);
+        handler.setLevel(this.level);
         handler.setFormatter(new IguanaLogFormatter());
         log.addHandler(handler);
     }
 
-    @Override
-    public void setLevel(LogLevel l) {
+    private static Level getLevel(LogLevel l) {
 
         switch (l) {
-
-            case INFO:
-                level = Level.INFO;
-                break;
-
-            case DEBUG:
-                level = Level.FINEST;
-                break;
-
-            case WARNING:
-                level = Level.WARNING;
-                break;
-
-            case ERROR:
-                level = Level.SEVERE;
-                break;
+            case INFO:    return Level.INFO;
+            case DEBUG:   return Level.FINEST;
+            case WARNING: return Level.WARNING;
+            case ERROR:   return Level.SEVERE;
         }
+
+        throw new RuntimeException("Unknown level " + l);
     }
 
     @Override
@@ -51,7 +46,7 @@ public class JavaUtilIguanaLogger implements IguanaLogger {
 		log.log(level, String.format(s, args));
 	}
 
-	@Override
+    @Override
 	public void log(String s, Object arg) {
 		log.log(level, String.format(s, arg));
 	}

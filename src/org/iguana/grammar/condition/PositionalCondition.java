@@ -68,5 +68,4 @@ public class PositionalCondition extends Condition {
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-
 }

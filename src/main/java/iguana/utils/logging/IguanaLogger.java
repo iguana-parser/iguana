@@ -2,8 +2,6 @@ package iguana.utils.logging;
 
 public interface IguanaLogger {
 
-    void setLevel(LogLevel level);
-
 	void log(String s);
 
     default void log(Object obj) {
@@ -36,9 +34,6 @@ public interface IguanaLogger {
 		
 		@Override
 		public void log(String s, Object... args) {}
-
-        @Override
-        public void setLevel(LogLevel level) {}
 
         @Override
 		public void log(String s) {}
