@@ -41,7 +41,6 @@ import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.tree.TreeBuilder;
 import iguana.parsetrees.tree.TreeBuilderFactory;
-import iguana.parsetrees.tree.TreeVisualization;
 import iguana.utils.input.Input;
 import iguana.utils.logging.IguanaLogger;
 import iguana.utils.logging.JavaUtilIguanaLogger;
@@ -83,8 +82,7 @@ public class IguanaRunner {
         this.buildTrees = builder.buildTrees;
         this.treeBuilder = builder.treeBuilder;
         if (builder.log) {
-            logger = new JavaUtilIguanaLogger();
-            logger.setLevel(builder.logLevel);
+            logger = new JavaUtilIguanaLogger("Iguana", builder.logLevel);
         } else {
             logger = IguanaLogger.DEFAULT;
         }
@@ -275,7 +273,7 @@ public class IguanaRunner {
         }
 
         public Builder log() {
-            this.log = log;
+            this.log = true;
             return this;
         }
 

@@ -70,11 +70,9 @@ public interface GLLParser {
 		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol, map, true);
 	}
 	
-	void pop(GSSNode gssNode, int inputIndex, NonterminalNode node);
+	void pop(GSSNode gssNode, Input input, int inputIndex, NonterminalNode node);
 	
 	void recordParseError(GrammarSlot slot);
-	
-	Input getInput();
 	
 	Iterable<GSSNode> getGSSNodes();
 	

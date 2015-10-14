@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
@@ -62,7 +63,7 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
 //			return;
@@ -70,10 +71,10 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
 			
-			if (preConditions.execute(parser.getInput(), u, i))
+			if (preConditions.execute(input, u, i))
 				return;
 			
-			nonterminal.create(parser, dest, u, i, node);
+			nonterminal.create(parser, input, dest, u, i, node);
 			
 		} else {
 			
@@ -85,10 +86,10 @@ public class NonterminalTransition extends AbstractTransition {
 			
 			parser.setEnvironment(env);
 			
-			if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			
-			nonterminal.create(parser, dest, u, i, node, arguments, parser.getEnvironment());
+			nonterminal.create(parser, input, dest, u, i, node, arguments, parser.getEnvironment());
 		}
 		
 	}
@@ -121,7 +122,7 @@ public class NonterminalTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
@@ -134,10 +135,10 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		parser.setEnvironment(env);
 		
-		if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
 			return;
 				
-		nonterminal.create(parser, dest, u, i, node, arguments, parser.getEnvironment());
+		nonterminal.create(parser, input, dest, u, i, node, arguments, parser.getEnvironment());
 	}
 
 }

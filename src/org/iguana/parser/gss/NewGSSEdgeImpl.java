@@ -28,6 +28,7 @@
 package org.iguana.parser.gss;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
@@ -89,7 +90,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	}
 
 	@Override
-	public Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
+	public Descriptor addDescriptor(GLLParser parser, Input input, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
 		
 		/**
 		 * 
@@ -105,30 +106,30 @@ public class NewGSSEdgeImpl implements GSSEdge {
 			
 			parser.setEnvironment(env);
 			
-			if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, parser.getEvaluatorContext()))
+			if (returnSlot.getConditions().execute(input, source, inputIndex, parser.getEvaluatorContext()))
 				return null;
 			
 			env = parser.getEnvironment();	
 			
-			y = returnSlot.getIntermediateNode2(parser, node, sppfNode, env);
+			y = returnSlot.getIntermediateNode2(parser, input, node, sppfNode, env);
 			
 //			y = parser.getNode(returnSlot, node, sppfNode, env);
 //			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 //				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 			
-			return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env) : null;
+			return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, input, env) : null;
 		}
 		
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex))
+		if (returnSlot.getConditions().execute(input, source, inputIndex))
 			return null;
 		
 //		y = parser.getNode(returnSlot, node, sppfNode);
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 //			return new Descriptor(returnSlot, destination, inputIndex, y);
 		
-		y = returnSlot.getIntermediateNode2(parser, node, sppfNode);
+		y = returnSlot.getIntermediateNode2(parser, input, node, sppfNode);
 		
-		return y != null ? new Descriptor(returnSlot, destination, inputIndex, y) : null;
+		return y != null ? new Descriptor(returnSlot, destination, inputIndex, y, input) : null;
 	}
 
 }

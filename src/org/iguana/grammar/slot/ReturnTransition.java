@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.GLLParser;
@@ -43,9 +44,9 @@ public class ReturnTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
 	   Object value = parser.evaluate(expression, parser.getEmptyEnvironment());
-	   ((EndGrammarSlot) dest).execute(parser, u, i, node, value);
+	   ((EndGrammarSlot) dest).execute(parser, input, u, i, node, value);
 	}
 
 	@Override
@@ -54,9 +55,9 @@ public class ReturnTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
 		Object value = parser.evaluate(expression, env);
-		((EndGrammarSlot) dest).execute(parser, u, i, node, value);
+		((EndGrammarSlot) dest).execute(parser, input, u, i, node, value);
 	}
 
 	@Override

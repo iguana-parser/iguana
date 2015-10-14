@@ -47,31 +47,20 @@ import org.iguana.util.generator.ConstructorCode;
  *
  */
 public interface GrammarSlot extends ConstructorCode {
-	
-	default Set<GrammarSlot> getReachableSlots() {
-		return StreamSupport.stream(getTransitions().spliterator(), false).map(t -> t.destination()).collect(Collectors.toSet());
-	}
-	
+
 	/**
 	 * Corresponds to a grammar position A ::= B . \alpha 
 	 */
 	default boolean isFirst() { return false; }
 	
-	/**
-	 * Corresponds to a grammar position after the last terminal or nonterminal symbol 
-	 */
-	default boolean isLast() { return false; }
-	
 	default boolean isEnd() { return false; }
 
-	public void reset(Input input);
+	void reset(Input input);
 	
-	public boolean addTransition(Transition transition);
+	boolean addTransition(Transition transition);
 	
-	public Iterable<Transition> getTransitions();
-	
-	default GrammarSlot withId(int id) { return this; }
-	
-	public int getId();
+	Iterable<Transition> getTransitions();
+
+	int getId();
 	
 }

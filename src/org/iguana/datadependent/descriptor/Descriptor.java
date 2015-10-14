@@ -28,6 +28,7 @@
 package org.iguana.datadependent.descriptor;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
@@ -37,8 +38,8 @@ public class Descriptor extends org.iguana.parser.descriptor.Descriptor {
 	
 	private final Environment env;
 	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Environment env) {
-		super(slot, gssNode, inputIndex, sppfNode);
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Input input, Environment env) {
+		super(slot, gssNode, inputIndex, sppfNode, input);
 		
 		assert env != null;
 		this.env = env;
@@ -46,6 +47,6 @@ public class Descriptor extends org.iguana.parser.descriptor.Descriptor {
 
 	@Override
 	public void execute(GLLParser parser) {
-		getGrammarSlot().execute(parser, getGSSNode(), getInputIndex(), getSPPFNode(), env);
+		getGrammarSlot().execute(parser, input, getGSSNode(), getInputIndex(), getSPPFNode(), env);
 	}
 }

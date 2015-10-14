@@ -117,7 +117,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return newNode;
 	}
 	
-	public NonPackedNode getIntermediateNode2(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public NonPackedNode getIntermediateNode2(GLLParser parser, Input input, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		if (isFirst())
 			return rightChild;
@@ -137,12 +137,12 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			}
 		};
 		
-		intermediateNodes.compute(IntKey2.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), parser.getInput().length()), creator);
+		intermediateNodes.compute(IntKey2.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), input.length()), creator);
 		
 		return holder.get();
 	}
 	
-	public NonPackedNode getIntermediateNode2(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+	public NonPackedNode getIntermediateNode2(GLLParser parser, Input input, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		
 		if (isFirst())
 			return rightChild;
@@ -161,7 +161,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			}
 		};
 		
-		intermediateNodes.compute(IntKey2PlusObject.from(env, leftChild.getLeftExtent(), rightChild.getRightExtent(), parser.getInput().length()), creator);
+		intermediateNodes.compute(IntKey2PlusObject.from(env, leftChild.getLeftExtent(), rightChild.getRightExtent(), input.length()), creator);
 		
 		return holder.get();
 	}	
@@ -175,8 +175,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		intermediateNodes = new HashMap<>();
 	}
 	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, u, i, node));
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(parser, input, u, i, node));
 	}
 	
 	/**
@@ -192,8 +192,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return variable;
 	}
 	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
+		getTransitions().forEach(t -> t.execute(parser, input, u, i, node, env));
 	}
 		
 	public boolean requiresBinding() {
