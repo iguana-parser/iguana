@@ -108,6 +108,30 @@ public class InputTest {
 		assertTrue(input.matchBackward(37, "wall"));
 		assertTrue(input.matchBackward(37, "all"));
 		assertTrue(input.matchBackward(32, "the"));
-	
 	}
+
+    @Test
+    public void testInsert1() {
+        Input input1 = Input.fromString("We are just in the wall");
+        Input input2 = Input.fromString(" another brick");
+        Input result = input1.insert(11, input2);
+        assertEquals(Input.fromString("We are just another brick in the wall"), result);
+    }
+
+    @Test
+    public void testInsert2() {
+        Input input1 = Input.fromString(" another brick in the wall");
+        Input input2 = Input.fromString("We are just");
+        Input result = input1.insert(0, input2);
+        assertEquals(Input.fromString("We are just another brick in the wall"), result);
+    }
+
+    @Test
+    public void testInsert3() {
+        Input input1 = Input.fromString("We are just another");
+        Input input2 = Input.fromString(" brick in the wall");
+        Input result = input1.insert(input1.length() - 1, input2);
+        assertEquals(Input.fromString("We are just another brick in the wall"), result);
+    }
+
 }
