@@ -215,24 +215,6 @@ public class GLLParserImpl implements GLLParser {
 		}
 	}
 	
-	@Override
-	public final void pop(GSSNode gssNode, Input input, int inputIndex, NonterminalNode node) {
-		
-		if (node == null) return;
-		
-		logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
-		
-		for(GSSEdge edge : gssNode.getGSSEdges()) {
-			
-			if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
-			
-			Descriptor descriptor = edge.addDescriptor(this, input, gssNode, inputIndex, node);
-			if (descriptor != null) {
-				scheduleDescriptor(descriptor);
-			}
-		}			
-	}
-				
 	/**
 	 * Replaces the previously reported parse error with the new one if the
 	 * inputIndex of the new parse error is greater than the previous one. In

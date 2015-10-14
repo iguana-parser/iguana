@@ -66,10 +66,6 @@ public class GSSNode {
 		this.gssEdges = new ArrayList<>();
 	}
 	
-	public NonterminalNode addToPoppedElements(GLLParser parser, Input input, int j, EndGrammarSlot slot, NonPackedNode child) {
-		return poppedElements.add(parser, input, inputIndex, j, slot, child);
-	}
-	
 	public void createGSSEdge(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		parser.gssEdgeAdded(edge);
@@ -84,8 +80,25 @@ public class GSSNode {
 				}
 			}
 		});
-		
 	}
+
+    public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child) {
+//        logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
+
+        NonterminalNode node = poppedElements.add(parser, input, inputIndex, inputIndex, slot, child);
+
+        if (node == null) return;
+
+        for(GSSEdge edge : getGSSEdges()) {
+
+            if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
+
+            Descriptor descriptor = edge.addDescriptor(parser, input, this, inputIndex, node);
+            if (descriptor != null) {
+                parser.scheduleDescriptor(descriptor);
+            }
+        }
+    }
 	
 	public NonterminalNode getNonterminalNode(int j) {
 		return poppedElements.getNonterminalNode(j);

@@ -67,7 +67,7 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	@Override
 	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
 		if (nonterminal.testFollow(input.charAt(i)))
-			parser.pop(u, input, i, u.addToPoppedElements(parser, input, i, this, node));
+            u.pop(parser, input, i, this, node);
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	@Override
 	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
 		if (nonterminal.testFollow(input.charAt(i)))
-			parser.pop(u, input, i, u.addToPoppedElements(parser, input, i, this, node));
+            u.pop(parser, input, i, this, node);
 	}
 	
 	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Object value) {
