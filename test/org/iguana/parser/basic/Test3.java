@@ -105,10 +105,10 @@ public class Test3 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        TerminalNode node1 = createTerminalNode(registry.getSlot("b"), 1, 2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        TerminalNode node1 = createTerminalNode(registry.getSlot("b"), 1, 2, input);
         IntermediateNode node2 = createIntermediateNode(registry.getSlot("A ::= a b ."), node0, node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a b ."), node2);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a b ."), node2, input);
 		return node3;
 	}
 

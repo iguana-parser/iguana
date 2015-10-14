@@ -123,13 +123,13 @@ public class Test14 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 1, 2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0, input);
+        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 1, 2, input);
         IntermediateNode node3 = createIntermediateNode(registry.getSlot("A ::= B a . c"), node1, node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("c"), 2, 3);
+        TerminalNode node4 = createTerminalNode(registry.getSlot("c"), 2, 3, input);
         IntermediateNode node5 = createIntermediateNode(registry.getSlot("A ::= B a c ."), node3, node4);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B a c ."), node5);
+        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B a c ."), node5, input);
         return node6;
 	}
 

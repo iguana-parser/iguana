@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import iguana.parsetrees.slot.Slot;
 import iguana.utils.input.Input;
 import org.iguana.util.generator.ConstructorCode;
 
@@ -46,7 +47,7 @@ import org.iguana.util.generator.ConstructorCode;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot extends ConstructorCode {
+public interface GrammarSlot extends ConstructorCode, Slot {
 
 	/**
 	 * Corresponds to a grammar position A ::= B . \alpha 

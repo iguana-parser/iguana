@@ -73,10 +73,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	
 	@Override
 	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Object value) {
-		if (getNonterminal().testFollow(input.charAt(i))) {
-			TerminalNode epsilonNode = epsilonSlot.getTerminalNode(parser, input, i);
-			parser.pop(u, input, i, u.addToPoppedElements(parser, input, this, epsilonNode, value));
-		}
+		if (getNonterminal().testFollow(input.charAt(i)))
+            u.pop(parser, input, i, this, epsilonSlot.getTerminalNode(parser, input, i), value);
 	}
 
 }

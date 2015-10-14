@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.sppf.*;
 import iguana.utils.input.Input;
+import iguana.utils.logging.LogLevel;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;

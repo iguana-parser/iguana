@@ -118,17 +118,17 @@ public class Test11 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
-        NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0, input);
+        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2, input);
+        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 1, 1, input);
+        NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4, input);
         IntermediateNode node6 = createIntermediateNode(registry.getSlot("S ::= A A . b"), node1, node3);
         node6.addPackedNode(registry.getSlot("S ::= A A . b"), node3, node5);
-        TerminalNode node7 = createTerminalNode(registry.getSlot("b"), 1, 2);
+        TerminalNode node7 = createTerminalNode(registry.getSlot("b"), 1, 2, input);
         IntermediateNode node8 = createIntermediateNode(registry.getSlot("S ::= A A b ."), node6, node7);
-        NonterminalNode node9 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A A b ."), node8);
+        NonterminalNode node9 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A A b ."), node8, input);
         return node9;
 	}
 

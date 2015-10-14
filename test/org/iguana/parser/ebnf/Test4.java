@@ -93,10 +93,10 @@ public class Test4 {
     }
 
     private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input1);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1, input1);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node2, input1);
         return node3;
     }
 
@@ -122,14 +122,14 @@ public class Test4 {
     }
 
     private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1);
-        TerminalNode node3 = createTerminalNode(registry.getSlot("a"), 1, 2);
-        NonterminalNode node4 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node3);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input2);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input2);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1, input2);
+        TerminalNode node3 = createTerminalNode(registry.getSlot("a"), 1, 2, input2);
+        NonterminalNode node4 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node3, input2);
         IntermediateNode node5 = createIntermediateNode(registry.getSlot("A+ ::= A+ A ."), node2, node4);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node5);
-        NonterminalNode node7 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node6);
+        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node5, input2);
+        NonterminalNode node7 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node6, input2);
         return node7;
     }
 
@@ -157,18 +157,18 @@ public class Test4 {
     }
 
     private static NonterminalNode expectedSPPF3(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1);
-        TerminalNode node3 = createTerminalNode(registry.getSlot("a"), 1, 2);
-        NonterminalNode node4 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node3);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input3);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input3);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1, input3);
+        TerminalNode node3 = createTerminalNode(registry.getSlot("a"), 1, 2, input3);
+        NonterminalNode node4 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node3, input3);
         IntermediateNode node5 = createIntermediateNode(registry.getSlot("A+ ::= A+ A ."), node2, node4);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node5);
-        TerminalNode node7 = createTerminalNode(registry.getSlot("a"), 2, 3);
-        NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node7);
+        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node5, input3);
+        TerminalNode node7 = createTerminalNode(registry.getSlot("a"), 2, 3, input3);
+        NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node7, input3);
         IntermediateNode node9 = createIntermediateNode(registry.getSlot("A+ ::= A+ A ."), node6, node8);
-        NonterminalNode node10 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node9);
-        NonterminalNode node11 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node10);
+        NonterminalNode node10 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node9, input3);
+        NonterminalNode node11 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node10, input3);
         return node11;
     }
 

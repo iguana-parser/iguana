@@ -117,7 +117,7 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	
 	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Object value) {
 		if (nonterminal.testFollow(input.charAt(i)))
-			parser.pop(u, input, i, u.addToPoppedElements(parser, input, this, node, value));
+            u.pop(parser, input, i, this, node, value);
 	}
 
 }

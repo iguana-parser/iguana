@@ -117,18 +117,18 @@ public class Test17 {
 
 
     private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        TerminalNode node1 = createTerminalNode(registry.getSlot("a"), 1, 2);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 2, 3);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        TerminalNode node1 = createTerminalNode(registry.getSlot("a"), 1, 2, input);
+        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 2, 3, input);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2, input);
         IntermediateNode node4 = createIntermediateNode(registry.getSlot("A ::= a A . b"), node1, node3);
-        TerminalNode node5 = createTerminalNode(registry.getSlot("b"), 3, 4);
+        TerminalNode node5 = createTerminalNode(registry.getSlot("b"), 3, 4, input);
         IntermediateNode node6 = createIntermediateNode(registry.getSlot("A ::= a A b ."), node4, node5);
-        NonterminalNode node7 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a A b ."), node6);
+        NonterminalNode node7 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a A b ."), node6, input);
         IntermediateNode node8 = createIntermediateNode(registry.getSlot("A ::= a A . b"), node0, node7);
-        TerminalNode node9 = createTerminalNode(registry.getSlot("b"), 4, 5);
+        TerminalNode node9 = createTerminalNode(registry.getSlot("b"), 4, 5, input);
         IntermediateNode node10 = createIntermediateNode(registry.getSlot("A ::= a A b ."), node8, node9);
-        NonterminalNode node11 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a A b ."), node10);
+        NonterminalNode node11 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a A b ."), node10, input);
         return  node11;
     }
 

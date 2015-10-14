@@ -124,18 +124,18 @@ public class Test10 {
     }
 
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("b"), 1, 2);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input);
+        TerminalNode node2 = createTerminalNode(registry.getSlot("b"), 1, 2, input);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node2, input);
         IntermediateNode node4 = createIntermediateNode(registry.getSlot("S ::= A B . D"), node1, node3);
-        TerminalNode node5 = createTerminalNode(registry.getSlot("c"), 2, 3);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= c ."), node5);
+        TerminalNode node5 = createTerminalNode(registry.getSlot("c"), 2, 3, input);
+        NonterminalNode node6 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= c ."), node5, input);
         IntermediateNode node7 = createIntermediateNode(registry.getSlot("S ::= A B D ."), node4, node6);
         IntermediateNode node8 = createIntermediateNode(registry.getSlot("S ::= A B . C"), node1, node3);
-        NonterminalNode node9 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node5);
+        NonterminalNode node9 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node5, input);
         IntermediateNode node10 = createIntermediateNode(registry.getSlot("S ::= A B C ."), node8, node9);
-        NonterminalNode node11 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A B D ."), node7);
+        NonterminalNode node11 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A B D ."), node7, input);
         node11.addPackedNode(registry.getSlot("S ::= A B C ."), node10);
         return node11;
     }

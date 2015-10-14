@@ -134,16 +134,16 @@ public class Test12 {
 	}
 		
 	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        TerminalNode node1 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node1);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
+        TerminalNode node1 = createTerminalNode(registry.getSlot("epsilon"), 1, 1, input1);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node1, input1);
         IntermediateNode node2 = createIntermediateNode(registry.getSlot("A ::= A A ."), node3, node3);
         node3.addPackedNode(registry.getSlot("A ::= A A ."), node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4);
+        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input1);
+        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4, input1);
         IntermediateNode node5 = createIntermediateNode(registry.getSlot("A ::= A A ."), node6, node6);
         node6.addPackedNode(registry.getSlot("A ::= A A ."), node5);
-        NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
+        NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input1);
         IntermediateNode node7 = createIntermediateNode(registry.getSlot("A ::= A A ."), node8, node3);
         node7.addPackedNode(registry.getSlot("A ::= A A ."), node6, node8);
         node8.addPackedNode(registry.getSlot("A ::= A A ."), node7);
@@ -151,8 +151,8 @@ public class Test12 {
 	}
 
  	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input1);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0, input1);
         IntermediateNode node1 = createIntermediateNode(registry.getSlot("A ::= A A ."), node2, node2);
         node2.addPackedNode(registry.getSlot("A ::= A A ."), node1);
         return node2;

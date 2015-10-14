@@ -99,10 +99,10 @@ public class Test6 {
     }
 
     private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A | B | C)"), registry.getSlot("(A | B | C) ::= A ."), node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A | B | C) ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input1);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A | B | C)"), registry.getSlot("(A | B | C) ::= A ."), node1, input1);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A | B | C) ."), node2, input1);
         return node3;
     }
 
@@ -128,10 +128,10 @@ public class Test6 {
     }
 
     private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A | B | C)"), registry.getSlot("(A | B | C) ::= B ."), node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A | B | C) ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1, input2);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0, input2);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A | B | C)"), registry.getSlot("(A | B | C) ::= B ."), node1, input2);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A | B | C) ."), node2, input2);
         return node3;
     }
 
@@ -157,10 +157,10 @@ public class Test6 {
     }
 
     private static NonterminalNode expectedSPPF3(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("c"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A | B | C)"), registry.getSlot("(A | B | C) ::= C ."), node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A | B | C) ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("c"), 0, 1, input3);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node0, input3);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A | B | C)"), registry.getSlot("(A | B | C) ::= C ."), node1, input3);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A | B | C) ."), node2, input3);
         return node3;
     }
 

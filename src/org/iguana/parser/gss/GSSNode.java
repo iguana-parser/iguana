@@ -84,11 +84,16 @@ public class GSSNode {
 
     public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child) {
 //        logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
-
         NonterminalNode node = poppedElements.add(parser, input, inputIndex, inputIndex, slot, child);
+        if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
+    }
 
-        if (node == null) return;
+    public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child, Object value) {
+        NonterminalNode node = poppedElements.add(parser, input, inputIndex, IntKey1PlusObject.from(child.getRightExtent(), value, input.length()), slot, child, value);
+        if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
+    }
 
+    private void iterateOverEdges(GLLParser parser, Input input, int inputIndex, NonterminalNode node) {
         for(GSSEdge edge : getGSSEdges()) {
 
             if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
@@ -99,8 +104,8 @@ public class GSSNode {
             }
         }
     }
-	
-	public NonterminalNode getNonterminalNode(int j) {
+
+    public NonterminalNode getNonterminalNode(int j) {
 		return poppedElements.getNonterminalNode(j);
 	}
 	
@@ -155,10 +160,6 @@ public class GSSNode {
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	
-	public NonterminalNode addToPoppedElements(GLLParser parser, Input input, EndGrammarSlot slot, NonPackedNode node, Object value) {
- 		return poppedElements.add(parser, input, inputIndex, IntKey1PlusObject.from(node.getRightExtent(), value, input.length()), slot, node, value);
-	}
 	
 	public void createGSSEdge(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
 		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
