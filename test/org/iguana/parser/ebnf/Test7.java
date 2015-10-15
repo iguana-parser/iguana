@@ -139,12 +139,12 @@ public class Test7 {
     public static Tree getTree1() {
         Tree t0 = createEpsilon(0);
         Tree t1 = createOpt(t0);
-        Tree t2 = createTerminal(0, 1);
-        Tree t3 = createRule(r3, list(t2));
+        Tree t2 = createTerminal(0, 1, input1);
+        Tree t3 = createRule(r3, list(t2), input1);
         Tree t4 = createPlus(list(t3));
         Tree t5 = createEpsilon(1);
         Tree t6 = createStar(list(t5));
-        Tree t7 = createRule(r1, list(t1, t4, t6));
+        Tree t7 = createRule(r1, list(t1, t4, t6), input1);
         return t7;
     }
 
@@ -177,15 +177,15 @@ public class Test7 {
     }
 
     public static Tree getTree2() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
+        Tree t0 = createTerminal(0, 1, input2);
+        Tree t1 = createRule(r2, list(t0), input2);
         Tree t2 = createOpt(t1);
-        Tree t3 = createTerminal(1, 2);
-        Tree t4 = createRule(r3, list(t3));
+        Tree t3 = createTerminal(1, 2, input2);
+        Tree t4 = createRule(r3, list(t3), input2);
         Tree t5 = createPlus(list(t4));
         Tree t6 = createEpsilon(2);
         Tree t7 = createStar(list(t6));
-        Tree t8 = createRule(r1, list(t2, t5, t7));
+        Tree t8 = createRule(r1, list(t2, t5, t7), input2);
         return t8;
     }
 
@@ -221,13 +221,13 @@ public class Test7 {
     public static Tree getTree3() {
         Tree t0 = createEpsilon(0);
         Tree t1 = createOpt(t0);
-        Tree t2 = createTerminal(0, 1);
-        Tree t3 = createRule(r3, list(t2));
+        Tree t2 = createTerminal(0, 1, input3);
+        Tree t3 = createRule(r3, list(t2), input3);
         Tree t4 = createPlus(list(t3));
-        Tree t5 = createTerminal(1, 2);
-        Tree t6 = createRule(r4, list(t5));
+        Tree t5 = createTerminal(1, 2, input3);
+        Tree t6 = createRule(r4, list(t5), input3);
         Tree t7 = createStar(list(t6));
-        Tree t8 = createRule(r1, list(t1, t4, t7));
+        Tree t8 = createRule(r1, list(t1, t4, t7), input3);
         return t8;
     }
 
@@ -262,16 +262,16 @@ public class Test7 {
     }
 
     public static Tree getTree4() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
+        Tree t0 = createTerminal(0, 1, input4);
+        Tree t1 = createRule(r2, list(t0), input4);
         Tree t2 = createOpt(t1);
-        Tree t3 = createTerminal(1, 2);
-        Tree t4 = createRule(r3, list(t3));
+        Tree t3 = createTerminal(1, 2, input4);
+        Tree t4 = createRule(r3, list(t3), input4);
         Tree t5 = createPlus(list(t4));
-        Tree t6 = createTerminal(2, 3);
-        Tree t7 = createRule(r4, list(t6));
+        Tree t6 = createTerminal(2, 3, input4);
+        Tree t7 = createRule(r4, list(t6), input4);
         Tree t8 = createStar(list(t7));
-        Tree t9 = createRule(r1, list(t2, t5, t8));
+        Tree t9 = createRule(r1, list(t2, t5, t8), input4);
         return t9;
     }
 
@@ -334,30 +334,30 @@ public class Test7 {
     }
 
     public static Tree getTree5() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
+        Tree t0 = createTerminal(0, 1, input5);
+        Tree t1 = createRule(r2, list(t0), input5);
         Tree t2 = createOpt(t1);
-        Tree t3 = createTerminal(1, 2);
-        Tree t4 = createRule(r3, list(t3));
-        Tree t5 = createTerminal(2, 3);
-        Tree t6 = createRule(r3, list(t5));
-        Tree t7 = createTerminal(3, 4);
-        Tree t8 = createRule(r3, list(t7));
-        Tree t9 = createTerminal(4, 5);
-        Tree t10 = createRule(r3, list(t9));
+        Tree t3 = createTerminal(1, 2, input5);
+        Tree t4 = createRule(r3, list(t3), input5);
+        Tree t5 = createTerminal(2, 3, input5);
+        Tree t6 = createRule(r3, list(t5), input5);
+        Tree t7 = createTerminal(3, 4, input5);
+        Tree t8 = createRule(r3, list(t7), input5);
+        Tree t9 = createTerminal(4, 5, input5);
+        Tree t10 = createRule(r3, list(t9), input5);
         Tree t11 = createPlus(list(t4, t6, t8, t10));
-        Tree t12 = createTerminal(5, 6);
-        Tree t13 = createRule(r4, list(t12));
-        Tree t14 = createTerminal(6, 7);
-        Tree t15 = createRule(r4, list(t14));
-        Tree t16 = createTerminal(7, 8);
-        Tree t17 = createRule(r4, list(t16));
-        Tree t18 = createTerminal(8, 9);
-        Tree t19 = createRule(r4, list(t18));
-        Tree t20 = createTerminal(9, 10);
-        Tree t21 = createRule(r4, list(t20));
+        Tree t12 = createTerminal(5, 6, input5);
+        Tree t13 = createRule(r4, list(t12), input5);
+        Tree t14 = createTerminal(6, 7, input5);
+        Tree t15 = createRule(r4, list(t14), input5);
+        Tree t16 = createTerminal(7, 8, input5);
+        Tree t17 = createRule(r4, list(t16), input5);
+        Tree t18 = createTerminal(8, 9, input5);
+        Tree t19 = createRule(r4, list(t18), input5);
+        Tree t20 = createTerminal(9, 10, input5);
+        Tree t21 = createRule(r4, list(t20), input5);
         Tree t22 = createStar(list(t13, t15, t17, t19, t21));
-        Tree t23 = createRule(r1, list(t2, t11, t22));
+        Tree t23 = createRule(r1, list(t2, t11, t22), input5);
         return t23;
     }
 

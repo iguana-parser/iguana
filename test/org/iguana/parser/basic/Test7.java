@@ -36,6 +36,7 @@ import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -86,8 +87,11 @@ public class Test7 {
     private static Input input = Input.fromString("bcd");
     private static Nonterminal startSymbol = A;
 	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
+    private static Terminal t2;
+    private static Terminal t1;
+    private static Terminal t0;
 
-	@Test
+    @Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
 		assertFalse(firstFollowSets.isNullable(A));
@@ -149,10 +153,13 @@ public class Test7 {
 	}
 
     public static Tree getTree() {
-        Tree t1 = createRule(r2, list(createTerminal(0, 1)));
-        Tree t2 = createRule(r3, list(createTerminal(1, 2)));
-        Tree t3 = createRule(r4, list(createTerminal(2, 3)));
-        return createRule(r1, list(t1, t2, t3));
+        Tree t0 = createTerminal(0, 1, input);
+        Tree t1 = createTerminal(1, 2, input);
+        Tree t2 = createTerminal(2, 3, input);
+        Tree t3 = createRule(r2, list(t0), input);
+        Tree t4 = createRule(r3, list(t1), input);
+        Tree t5 = createRule(r4, list(t2), input);
+        return createRule(r1, list(t3, t4, t5), input);
     }
 
 

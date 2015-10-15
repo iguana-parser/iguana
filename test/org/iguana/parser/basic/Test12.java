@@ -159,7 +159,7 @@ public class Test12 {
 	}
 
     private static Tree getTree1() {
-        Tree t0 = createTerminal(0, 1);
+        Tree t0 = createTerminal(0, 1, input1);
         Tree t1 = createCycle("A");
         Tree t2 = createEpsilon(1);
         Tree t3 = createAmbiguity(set(createBranch(list(t2)), createBranch(list(t1, t1))));

@@ -35,6 +35,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -86,9 +87,10 @@ public class Test8 {
     private static Input input2 = Input.fromString("aaaac");
     private static Nonterminal startSymbol = A;
     private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
+    private static Terminal t0;
 
 
-	@Test
+    @Test
 	public void testReachableNonterminals() {
 		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
 		assertEquals(set(B, C), reachabilityGraph.getReachableNonterminals(A));
@@ -215,8 +217,9 @@ public class Test8 {
 	}
 
     public static Tree getTree1() {
-        Tree t1 = createRule(r3, list(createTerminal(1, 2)));
-        return createRule(r1, list(createTerminal(0, 1), t1, createTerminal(2, 3)));
+        Tree t0 = createTerminal(1, 2, input1);
+        Tree t1 = createRule(r3, list(t0), input1);
+        return createRule(r1, list(createTerminal(0, 1, input1), t1, createTerminal(2, 3, input1)), input1);
     }
 
 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -239,12 +242,12 @@ public class Test8 {
     }
 
     public static Tree getTree2() {
-        Tree t1 = createRule(r5, list(createTerminal(4, 5)));
-        Tree t2 = createRule(r4, list(createTerminal(3, 4), t1));
-        Tree t3 = createRule(r4, list(createTerminal(2, 3), t2));
-        Tree t4 = createRule(r4, list(createTerminal(1, 2), t3));
-        Tree t5 = createRule(r4, list(createTerminal(0, 1), t4));
-        return createRule(r2, list(t5));
+        Tree t1 = createRule(r5, list(createTerminal(4, 5, input2)), input2);
+        Tree t2 = createRule(r4, list(createTerminal(3, 4, input2), t1), input2);
+        Tree t3 = createRule(r4, list(createTerminal(2, 3, input2), t2), input2);
+        Tree t4 = createRule(r4, list(createTerminal(1, 2, input2), t3), input2);
+        Tree t5 = createRule(r4, list(createTerminal(0, 1, input2), t4), input2);
+        return createRule(r2, list(t5), input2);
     }
 	
 }

@@ -107,10 +107,10 @@ public class Test6 {
     }
 
     public static Tree getTree1() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
+        Tree t0 = createTerminal(0, 1, input1);
+        Tree t1 = createRule(r2, list(t0), input1);
         Tree t2 = createAlt(list(t1));
-        Tree t3 = createRule(r1, list(t2));
+        Tree t3 = createRule(r1, list(t2), input1);
         return t3;
     }
 
@@ -136,10 +136,10 @@ public class Test6 {
     }
 
     public static Tree getTree2() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r3, list(t0));
+        Tree t0 = createTerminal(0, 1, input2);
+        Tree t1 = createRule(r3, list(t0), input2);
         Tree t2 = createAlt(list(t1));
-        Tree t3 = createRule(r1, list(t2));
+        Tree t3 = createRule(r1, list(t2), input2);
         return t3;
     }
 
@@ -165,10 +165,10 @@ public class Test6 {
     }
 
     public static Tree getTree3() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r4, list(t0));
+        Tree t0 = createTerminal(0, 1, input3);
+        Tree t1 = createRule(r4, list(t0), input3);
         Tree t2 = createAlt(list(t1));
-        Tree t3 = createRule(r1, list(t2));
+        Tree t3 = createRule(r1, list(t2), input3);
         return t3;
     }
 }

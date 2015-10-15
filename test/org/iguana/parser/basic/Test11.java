@@ -134,14 +134,14 @@ public class Test11 {
 
     public static Tree getTree() {
         Tree t0 = createEpsilon(0);
-        Tree t1 = createRule(r3, list(t0));
-        Tree t2 = createTerminal(0, 1);
-        Tree t3 = createRule(r2, list(t2));
+        Tree t1 = createRule(r3, list(t0), input);
+        Tree t2 = createTerminal(0, 1, input);
+        Tree t3 = createRule(r2, list(t2), input);
         Tree t4 = createEpsilon(1);
-        Tree t5 = createRule(r3, list(t4));
+        Tree t5 = createRule(r3, list(t4), input);
         Tree t6 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t3, t5))));
-        Tree t7 = createTerminal(1, 2);
-        Tree t8 = createRule(r1, list(t6, t7));
+        Tree t7 = createTerminal(1, 2, input);
+        Tree t8 = createRule(r1, list(t6, t7), input);
         return t8;
     }
 }

@@ -113,7 +113,8 @@ public class Test2 {
 	}
 
     public static Tree getTree() {
-        return createRule(r1, list(createTerminal(0, 1)));
+        Tree t0 = createTerminal(0, 1, input);
+        return createRule(r1, list(t0), input);
     }
 
 }

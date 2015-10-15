@@ -113,9 +113,9 @@ public class Test3 {
 	}
 
 	public static Tree getTree() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createTerminal(1, 2);
-        Tree t2 = createRule(r1 , list(t0, t1));
+        Tree t0 = createTerminal(0, 1, input);
+        Tree t1 = createTerminal(1, 2, input);
+        Tree t2 = createRule(r1 , list(t0, t1), input);
         return t2;
 	}
 

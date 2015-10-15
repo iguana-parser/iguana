@@ -134,11 +134,11 @@ public class Test14 {
 	}
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
-        Tree t2 = createTerminal(1, 2);
-        Tree t3 = createTerminal(2, 3);
-        Tree t4 = createRule(r1, list(t1, t2, t3));
+        Tree t0 = createTerminal(0, 1, input);
+        Tree t1 = createRule(r2, list(t0), input);
+        Tree t2 = createTerminal(1, 2, input);
+        Tree t3 = createTerminal(2, 3, input);
+        Tree t4 = createRule(r1, list(t1, t2, t3), input);
         return t4;
     }
 }

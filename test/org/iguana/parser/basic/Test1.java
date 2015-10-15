@@ -115,7 +115,8 @@ public class Test1 {
 	}
 
     public static Tree getTree() {
-        return createRule(r1, list(createEpsilon(0)));
+        Tree t0 = createEpsilon(0);
+        return createRule(r1, list(t0), input);
     }
 
 }

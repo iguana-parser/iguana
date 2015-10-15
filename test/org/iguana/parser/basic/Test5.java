@@ -35,6 +35,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -78,8 +79,9 @@ public class Test5 {
 
     private static Input input = Input.fromString("b");
     private static Nonterminal startSymbol = A;
-	
-	@Test
+    private static Terminal t0;
+
+    @Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
 		
@@ -138,7 +140,8 @@ public class Test5 {
 	}
 
     public static Tree getTree() {
-        Tree t1 = createRule(r2, list(createTerminal(0, 1)));
-        return createRule(r1, list(t1));
+        t0 = createTerminal(0, 1, input);
+        Tree t1 = createRule(r2, list(t0), input);
+        return createRule(r1, list(t1), input);
     }
 }
