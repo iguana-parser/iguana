@@ -28,11 +28,11 @@
 package org.iguana.parser.gss;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.collections.hash.HashFunctions;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
-import org.iguana.parser.HashFunctions;
 import org.iguana.parser.descriptor.Descriptor;
 
 public class NewGSSEdgeImpl implements GSSEdge {
@@ -79,7 +79,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public int hashCode() {
-		return  HashFunctions.defaulFunction.hash(returnSlot.hashCode(), 
+		return  HashFunctions.defaulFunction.hash(returnSlot.hashCode(),
 												  destination.getInputIndex(), 
 												  destination.getGrammarSlot().hashCode());
 	}

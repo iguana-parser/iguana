@@ -31,9 +31,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import iguana.utils.collections.hash.HashFunctions;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.parser.HashFunctions;
 import org.iguana.util.generator.ConstructorCode;
 
 public class AbstractPattern implements Serializable, ConstructorCode {

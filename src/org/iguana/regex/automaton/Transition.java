@@ -29,9 +29,9 @@ package org.iguana.regex.automaton;
 
 import java.io.Serializable;
 
+import iguana.utils.collections.hash.HashFunctions;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.EOF;
-import org.iguana.parser.HashFunctions;
 
 public class Transition implements Comparable<Transition>, Serializable {
 	

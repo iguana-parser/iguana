@@ -27,8 +27,8 @@
 
 package org.iguana.datadependent.gss;
 
+import iguana.utils.collections.hash.HashFunctions;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.HashFunctions;
 import org.iguana.parser.gss.GSSNodeData;
 
 public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {

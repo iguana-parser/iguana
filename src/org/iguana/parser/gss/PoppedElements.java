@@ -33,11 +33,11 @@ import java.util.function.Consumer;
 
 import iguana.parsetrees.sppf.*;
 import iguana.utils.input.Input;
-import org.iguana.datadependent.util.collections.IntKey1PlusObject;
+import iguana.utils.collections.IntKey1PlusObject;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.util.Holder;
-import org.iguana.util.collections.Key;
+import iguana.utils.collections.Key;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 

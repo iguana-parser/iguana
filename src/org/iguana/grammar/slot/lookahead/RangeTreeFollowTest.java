@@ -3,9 +3,9 @@ package org.iguana.grammar.slot.lookahead;
 import java.util.Set;
 
 import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.rangemap.AVLIntRangeTree;
-import org.iguana.util.collections.rangemap.ArrayIntRangeTree;
-import org.iguana.util.collections.rangemap.IntRangeTree;
+import iguana.utils.collections.rangemap.AVLIntRangeTree;
+import iguana.utils.collections.rangemap.ArrayIntRangeTree;
+import iguana.utils.collections.rangemap.IntRangeTree;
 
 public class RangeTreeFollowTest implements FollowTest {
 

@@ -30,6 +30,7 @@ package org.iguana.parser;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.parsetrees.tree.*;
+import iguana.utils.collections.hash.HashFunctions;
 import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
 

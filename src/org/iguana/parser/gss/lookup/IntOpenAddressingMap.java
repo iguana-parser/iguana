@@ -4,8 +4,8 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.CollectionsUtil;
-import org.iguana.util.collections.IntHashMap;
-import org.iguana.util.collections.OpenAddressingIntHashMap;
+import iguana.utils.collections.IntHashMap;
+import iguana.utils.collections.OpenAddressingIntHashMap;
 
 public class IntOpenAddressingMap extends AbstractNodeLookup {
 

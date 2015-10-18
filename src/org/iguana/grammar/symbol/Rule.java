@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.tree.RuleType;
-import org.iguana.parser.HashFunctions;
+import iguana.utils.collections.hash.HashFunctions;
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
 

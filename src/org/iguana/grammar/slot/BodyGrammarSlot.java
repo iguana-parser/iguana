@@ -45,8 +45,8 @@ import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Holder;
-import org.iguana.util.collections.Key;
-import org.iguana.util.hashing.hashfunction.MurmurHash3;
+import iguana.utils.collections.Key;
+import iguana.utils.collections.hash.MurmurHash3;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {

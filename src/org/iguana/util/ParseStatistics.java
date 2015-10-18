@@ -27,7 +27,7 @@
 
 package org.iguana.util;
 
-import org.iguana.parser.HashFunctions;
+import iguana.utils.collections.hash.HashFunctions;
 
 
 public class ParseStatistics {

@@ -49,7 +49,7 @@ import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup.GSSNodeCreator;
 import org.iguana.util.Configuration.EnvironmentImpl;
-import org.iguana.util.collections.Key;
+import iguana.utils.collections.Key;
 
 
 /**

@@ -32,7 +32,8 @@ import static org.iguana.util.CollectionsUtil.*;
 import java.util.Collections;
 import java.util.Set;
 
-import org.iguana.parser.HashFunctions;
+import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.rangemap.Range;
 import org.iguana.traversal.ISymbolVisitor;
 
 /**
@@ -40,7 +41,7 @@ import org.iguana.traversal.ISymbolVisitor;
  * @author Ali Afroozeh
  *
  */
-public class CharacterRange extends AbstractRegularExpression implements Comparable<CharacterRange> {
+public class CharacterRange extends AbstractRegularExpression implements Range {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -77,28 +78,18 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 			return Character.getName(start) + "-" + Character.getName(end);			
 		}
 	}
-	
+
+    @Override
 	public int getStart() {
 		return start;
 	}
-	
+
+    @Override
 	public int getEnd() {
 		return end;
 	}
-	
-	public boolean contains(int c) {
-		return start <= c && c <= end;
-	}
-	
-	public boolean contains(CharacterRange other) {
-		return start <= other.start && end >= other.end;
-	}
-	
-	public boolean overlaps(CharacterRange other) {
-		return !(end < other.start || other.end < start);
-	}
 
-	@Override
+    @Override
 	public int hashCode() {
 		return HashFunctions.defaulFunction.hash(start, end);
 	}
@@ -107,8 +98,7 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		
-		
+
 		if (!(obj instanceof CharacterRange))
 			return false;
 		
@@ -122,11 +112,6 @@ public class CharacterRange extends AbstractRegularExpression implements Compara
 		return false;
 	}
 	
-	@Override
-	public int compareTo(CharacterRange o) {
-		return start == o.start ? end - o.end : start - o.start;
-	}
-
 	@Override
 	public Set<CharacterRange> getFirstSet() {
 		return firstSet;

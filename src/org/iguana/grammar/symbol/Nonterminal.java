@@ -32,9 +32,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.utils.collections.hash.HashFunctions;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
-import org.iguana.parser.HashFunctions;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.generator.GeneratorUtil;
 
