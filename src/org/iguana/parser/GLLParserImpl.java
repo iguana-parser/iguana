@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.sppf.*;
 import iguana.utils.input.Input;
+import iguana.utils.logging.JavaUtilIguanaLogger;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
@@ -105,7 +106,7 @@ public class GLLParserImpl implements GLLParser {
 	public GLLParserImpl(Configuration config) {
 		this.config = config;
 		this.descriptorsStack = new ArrayDeque<>();
-//		this.logger = new org.iguana.util.logging.JavaUtilIguanaLogger();
+//		this.logger = new JavaUtilIguanaLogger();
 		logger = IguanaLogger.DEFAULT;
 	}
 	

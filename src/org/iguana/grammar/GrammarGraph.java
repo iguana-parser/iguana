@@ -35,6 +35,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import iguana.utils.input.Input;
+
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
@@ -60,6 +61,7 @@ import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Terminal.Category;
 import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
@@ -343,7 +345,7 @@ public class GrammarGraph implements Serializable {
 
             TerminalGrammarSlot terminalSlot;
 
-            if (symbol instanceof Terminal && ((Terminal) symbol).token() == 1) {
+            if (symbol instanceof Terminal && ((Terminal) symbol).category() == Category.REGEX) {
                 terminalSlot = getTerminalGrammarSlot(symbol, symbol.getName());
             } else {
                 terminalSlot = getTerminalGrammarSlot(symbol, null);

@@ -5,6 +5,7 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal.Category;
 import org.iguana.regex.*;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.traversal.RegularExpressionVisitor;
@@ -285,8 +286,8 @@ public class IdeaIDEGenerator {
         @Override
         public Void visit(Terminal symbol) {
             RegularExpression regex = symbol.getRegularExpression();
-            terminals.put((symbol.token() == 0? "" : "|token|:") + symbol.getName(), regex);
-            if (symbol.token() != 0) {
+            terminals.put((symbol.category() == Category.REGEX? "" : "|token|:") + symbol.getName(), regex);
+            if (symbol.category() == Category.REGEX) {
                 tokens += 1;
                 regex.accept(this);
                 tokens -= 1;

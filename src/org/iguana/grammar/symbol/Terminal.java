@@ -37,7 +37,12 @@ public class Terminal extends AbstractRegularExpression {
 	private static final long serialVersionUID = 1L;
 	
 	private final RegularExpression regex;
-	private final int $token;
+	
+	public static enum Category {
+		REGEX, KEYWORD, TERMINAL
+	}
+	
+	private final Category category;
 	
 	public static Terminal from(RegularExpression regex) {
 		return builder(regex).build();
@@ -46,7 +51,7 @@ public class Terminal extends AbstractRegularExpression {
 	public Terminal(Builder builder) {
 		super(builder);
 		this.regex = builder.regex;
-		this.$token = builder.$token;
+		this.category = builder.category;
 	}
 
 	@Override
@@ -58,8 +63,8 @@ public class Terminal extends AbstractRegularExpression {
 		return regex;
 	}
 	
-	public int token() {
-		return $token;
+	public Category category() {
+		return category;
 	}
 	
 	@Override
@@ -93,7 +98,7 @@ public class Terminal extends AbstractRegularExpression {
 	public static class Builder extends SymbolBuilder<Terminal> {
 		
 		private RegularExpression regex;
-		private int $token = 0;
+		private Category category = Category.TERMINAL;
 
 		public Builder(RegularExpression regex) {
 			super(regex.getName());
@@ -103,7 +108,7 @@ public class Terminal extends AbstractRegularExpression {
 		public Builder(Terminal terminal) {
 			super(terminal);
 			this.regex = terminal.regex;
-            this.$token = terminal.token();
+            this.category = terminal.category();
 		}
 		
 		@Override
@@ -111,13 +116,8 @@ public class Terminal extends AbstractRegularExpression {
 			return new Terminal(this);
 		}
 		
-		public Builder asToken() {
-			this.$token = 1;
-			return this;
-		}
-
-        public Builder setToken(int token) {
-            this.$token = token;
+		public Builder setCategory(Category category) {
+            this.category = category;
             return this;
         }
 	}
@@ -143,7 +143,7 @@ public class Terminal extends AbstractRegularExpression {
 	
 	public String getConstructorCode() {
 		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
-				                              + ($token == 0? "" : ".asToken()")
+				                              + ".setCategory(" + category + ")"
 											  + super.getConstructorCode() 
 											  + ".build()";
 	}
