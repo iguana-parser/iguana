@@ -178,7 +178,7 @@ public class Test1 {
         Tree t0 = createTerminal(0, 1, input2);
         Tree t1 = createTerminal(1, 2, input2);
         Tree t2 = createStar(list(t0, t1));
-        Tree t3 = createRule(r1, list(t2), input3);
+        Tree t3 = createRule(r1, list(t2), input2);
         return t3;
     }
 
