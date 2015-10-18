@@ -28,7 +28,9 @@
 package org.iguana.grammar.symbol;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,6 +57,8 @@ public class Nonterminal extends AbstractSymbol {
 	private final Expression[] arguments;
 	
 	private final Set<String> excepts;
+	
+	private final Map<String, Object> attributes;
 
 	/**
 	 * The type of this nonterminal. This field is used to track EBNF to BNF conversion
@@ -76,6 +80,7 @@ public class Nonterminal extends AbstractSymbol {
 		this.arguments = builder.arguments;
 		this.excepts = builder.excepts;
 		this.nodeType = builder.nodeType;
+		this.attributes = builder.attributes;
 	}
 	
 	public boolean isEbnfList() {
@@ -168,6 +173,13 @@ public class Nonterminal extends AbstractSymbol {
 		if (this.excepts != null)
 			excepts = GeneratorUtil.listToString(this.excepts.stream().map(l -> ".addExcept(\"" + l + "\")").collect(Collectors.toSet()));
 		
+		String attributes = "";
+		if (attributes != null && !attributes.isEmpty())
+			attributes = GeneratorUtil.listToString(this.attributes.entrySet().stream()
+					.map(entry -> ".addAttribute(\"" + entry.getKey() + "\"," 
+			                                         + (entry.getValue() instanceof String? "\"" + entry.getValue() + "\"": entry.getValue()) + ")")
+			        .collect(Collectors.toSet()));
+		
 		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
 				+ (parameters != null? ".addParameters(" 
 						+ GeneratorUtil.listToString(Arrays.asList(parameters).stream().map(param -> "\"" + param + "\"").collect(Collectors.toList()), ",") + ")" : "")
@@ -177,6 +189,7 @@ public class Nonterminal extends AbstractSymbol {
 				+ (index > 0 ?  ".setIndex(" + index + ")" : "")
 				+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
 				+ excepts
+				+ attributes
 				+ ".build()";
 	}
 
@@ -197,6 +210,8 @@ public class Nonterminal extends AbstractSymbol {
 		private Set<String> excepts;
 
 		public int nodeType;
+		
+		private Map<String, Object> attributes = new HashMap<>();
 
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
@@ -208,6 +223,7 @@ public class Nonterminal extends AbstractSymbol {
 			this.arguments = nonterminal.arguments;
 			this.excepts = nonterminal.excepts;
 			this.nodeType = nonterminal.nodeType;
+			this.attributes = nonterminal.attributes;
 		}
 
 		public Builder(String name) {
@@ -331,6 +347,21 @@ public class Nonterminal extends AbstractSymbol {
 
 		public Builder setType(int nodeType) {
 			this.nodeType = nodeType;
+			return this;
+		}
+		
+		public Builder setAttributes(Map<String, Object> attributes) {
+			this.attributes = attributes;
+			return this;
+		}
+		
+		public Builder addAttribute(String key, Object value) {
+			this.attributes.put(key, value);
+			return this;
+		}
+		
+		public Builder addAttributes(Map<String, Object> attributes) {
+			this.attributes.putAll(attributes);
 			return this;
 		}
 

@@ -39,7 +39,16 @@ public class Terminal extends AbstractRegularExpression {
 	private final RegularExpression regex;
 	
 	public static enum Category {
-		REGEX, KEYWORD, TERMINAL
+		REGEX, KEYWORD, TERMINAL;
+		
+		public String getConstructorCode() {
+			return this.getClass().getSimpleName() + "." + this.name();
+		}
+		
+		@Override
+		public String toString() {
+			return this.name();
+		}
 	}
 	
 	private final Category category;

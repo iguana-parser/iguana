@@ -30,13 +30,16 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.tree.RuleType;
+
 import org.iguana.parser.HashFunctions;
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
@@ -86,6 +89,8 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
 	private transient final Action action;
     private final RuleType ruleType;
     private final boolean hasRuleType;
+    
+    private final Map<String, Object> attributes;
 
     public Rule(Builder builder) {
         this.body = builder.body;
@@ -114,6 +119,8 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
         } else {
             this.ruleType = null;
         }
+        
+        this.attributes = builder.attributes;
     }
 
     public Nonterminal getHead() {
@@ -351,6 +358,8 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
 		private Action action = null;
 		private RuleType ruleType = null;
         private boolean hasRuleType = true;
+        
+        private Map<String, Object> attributes = new HashMap<>();
 
 		public Builder(Nonterminal head) {
 			this.head = head;
@@ -380,6 +389,8 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
 			this.action = rule.action;
             this.ruleType = rule.ruleType;
             this.hasRuleType = rule.hasRuleType;
+            
+            this.attributes = rule.attributes;
 		}
 		
 		public Builder addSymbol(Symbol symbol) {
@@ -497,6 +508,21 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
             this.hasRuleType = hasRuleType;
             return this;
         }
+        
+        public Builder setAttributes(Map<String, Object> attributes) {
+        	this.attributes = attributes;
+        	return this;
+        }
+        
+        public Builder addAtribute(String key, Object value) {
+        	this.attributes.put(key, value);
+        	return this;
+        }
+        
+        public Builder addAttributes(Map<String, Object> attributes) {
+        	this.attributes.putAll(attributes);
+        	return this;
+        }
 
         public Rule build() {
 			return new Rule(this);
@@ -525,6 +551,11 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
 			(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
 			
 			(label != null? ".setLabel(\"" + label + "\")" : "") +
+			
+			(attributes != null && !attributes.isEmpty()? GeneratorUtil.listToString(attributes.entrySet().stream()
+					.map(entry -> ".addAttribute(\"" + entry.getKey() + "\"," 
+			                                         + (entry.getValue() instanceof String? "\"" + entry.getValue() + "\"" : entry.getValue()) + ")")
+			        .collect(Collectors.toSet())) : "") +
 			
 			".build()";
 	}
