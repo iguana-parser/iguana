@@ -406,7 +406,7 @@ public class IdeaIDEGenerator {
                         }
 
                         rules.append(regex + getConditions(entry.getValue().getPostConditions()))
-                                .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
 
             regularExpressions.entrySet().stream()
@@ -426,35 +426,21 @@ public class IdeaIDEGenerator {
                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
 
-            for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
+            regularExpressions.entrySet().stream()
+                    .filter(entry -> !(entry.getKey().startsWith("|regex|:") || entry.getKey().startsWith("|keyword|:")))
+                    .forEach(entry -> {
+                        String regex = entry.getValue().accept(this);
+                        String tokenType = getTokenType(regex);
 
-            }
+                        if (!seenTokenTypes.contains(tokenType)) {
+                            tokenTypes.append("    public IElementType " + tokenType + " = " +
+                                    "new " + language + "TokenType(\"" + tokenType + "\");").append("\n");
+                            seenTokenTypes.add(tokenType);
+                        }
 
-            for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
-
-                if (entry.getKey().startsWith("|regex|:")) {
-
-
-                }
-            }
-
-            for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
-
-                if (!entry.getKey().startsWith("|regex|:")) {
-
-                    String regex = entry.getValue().accept(this);
-                    String tokenType = getTokenType(regex);
-
-                    if (!seenTokenTypes.contains(tokenType)) {
-                        tokenTypes.append("    public IElementType " + tokenType + " = " +
-                                               "new " + language + "TokenType(\"" + tokenType + "\");").append("\n");
-                        seenTokenTypes.add(tokenType);
-                    }
-
-                    rules.append(regex + getConditions(entry.getValue().getPostConditions()))
-                         .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
-                }
-            }
+                        rules.append(regex + getConditions(entry.getValue().getPostConditions()))
+                             .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                    });
 
             rules.append("[^]").append("\t { return " + language + "TokenTypes.BAD_CHARACTER; }\n");
             rules.append("}").append("\n");
@@ -480,7 +466,7 @@ public class IdeaIDEGenerator {
                 writer.println("        switch (name) {");
                 for (String tokenType : seenTokenTypes)
                     writer.println("            case \"" + tokenType + "\": return " + tokenType + ";");
-                writer.println("            default: return CHARACTER;");
+                writer.println("            default: return TERMINAL;");
                 writer.println("        }");
                 writer.println("    }");
                 writer.println("}");
@@ -652,7 +638,7 @@ public class IdeaIDEGenerator {
                 case "[\\|]": return "OPERATOR";
                 case "[=]": return "OPERATOR";
 
-                default: return "CHARACTER";
+                default: return "TERMINAL";
             }
         }
 
