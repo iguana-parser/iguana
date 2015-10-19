@@ -27,188 +27,184 @@
 
 package iguana.utils.collections.hash;
 
-public class MurmurHash3 implements HashFunction {
+import iguana.utils.function.*;
 
-	private static final long serialVersionUID = 1L;
-	
+public class MurmurHash3 {
+
 	private final static int C1 = 0xcc9e2d51;
 	private final static int C2 = 0x1b873593;
 	private final static int M = 5;
 	private final static int N = 0xe6546b64;
 
-	private int seed;
+    public static IntFunction2 f2() {
+        return f2(19);
+    }
 
-	public MurmurHash3(int seed) {
-		this.seed = seed;
+    public static IntFunction2 f2(int seed) {
+        return (a, b) -> {
+            int h = seed;
+
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // finalizing
+            h ^= 2;
+
+            h ^= h >>> 16;
+            h *= 0x85ebca6b;
+            h ^= h >>> 13;
+            h *= 0xc2b2ae35;
+            h ^= h >>> 16;
+
+            return h;
+        };
 	}
 
-	public MurmurHash3() {
-		this(0);
-	}
-	
-	@Override
-	public int hash(int...keys) {
-		int h = seed;
-		
-		int k = 0;
-		for(int i = 0; i < keys.length; i++) {
-			k = keys[i];
-			k = mixK(k);
-			h = mixH(h, k);
-		}
-		
-		h ^= keys.length;
+    public static IntFunction3 f3() {
+        return f3(19);
+    }
 
-		h ^= h >>> 16;
-		h *= 0x85ebca6b;
-		h ^= h >>> 13;
-		h *= 0xc2b2ae35;
-		h ^= h >>> 16;
-		
-		return h;
-	}
-	
-	@Override
-	public int hash(int a) {
-		int h = seed;
+	public static IntFunction3 f3(int seed) {
+        return (a, b, c) -> {
+            int h = seed;
 
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
 
-		// finalizing
-		h ^= 1;
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
 
-		h ^= h >>> 16;
-		h *= 0x85ebca6b;
-		h ^= h >>> 13;
-		h *= 0xc2b2ae35;
-		h ^= h >>> 16;
+            k = c;
+            k = mixK(k);
+            h = mixH(h, k);
 
-		return h;
+            // finalizing
+            h ^= 3;
+
+            h ^= h >>> 16;
+            h *= 0x85ebca6b;
+            h ^= h >>> 13;
+            h *= 0xc2b2ae35;
+            h ^= h >>> 16;
+
+            return h;
+        };
 	}
 
-	@Override
-	public int hash(int a, int b) {
-		int h = seed;
+    public static IntFunction4 f4() {
+        return f4(19);
+    }
 
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
+    public static IntFunction4 f4(int seed) {
+        return (a, b, c, d) -> {
+            int h = seed;
 
-		k = b;
-		k = mixK(k);
-		h = mixH(h, k);
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
 
-		// finalizing
-		h ^= 2;
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
 
-		h ^= h >>> 16;
-		h *= 0x85ebca6b;
-		h ^= h >>> 13;
-		h *= 0xc2b2ae35;
-		h ^= h >>> 16;
-		
-		return h;
+            k = c;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            k = d;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // finalizing
+            h ^= 4;
+
+            h ^= h >>> 16;
+            h *= 0x85ebca6b;
+            h ^= h >>> 13;
+            h *= 0xc2b2ae35;
+            h ^= h >>> 16;
+
+            return h;
+        };
+    }
+
+    public static IntFunction5 f5() {
+        return f5(19);
+    }
+
+	public static IntFunction5 f5(int seed) {
+        return (a, b, c, d, e) -> {
+            int h = seed;
+
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            k = c;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            k = d;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            k = e;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // finalizing
+            h ^= 5;
+
+            h ^= h >>> 16;
+            h *= 0x85ebca6b;
+            h ^= h >>> 13;
+            h *= 0xc2b2ae35;
+            h ^= h >>> 16;
+
+            return h;
+        };
 	}
 
-	@Override
-	public int hash(int a, int b, int c) {
-		int h = seed;
+    public static IntFunctionAny fn() {
+        return fn(19);
+    }
 
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
+    public static IntFunctionAny fn(int seed) {
+        return (Object...elements) -> {
+            int h = seed;
 
-		k = b;
-		k = mixK(k);
-		h = mixH(h, k);
+            int k = 0;
+            for (int i = 0; i < elements.length; i++) {
+                Object element = elements[i];
+                k = element == null? 0 : element.hashCode();
+                k = mixK(k);
+                h = mixH(h, k);
+            }
 
-		k = c;
-		k = mixK(k);
-		h = mixH(h, k);
+            h ^= elements.length;
 
-		// finalizing
-		h ^= 3;
+            h ^= h >>> 16;
+            h *= 0x85ebca6b;
+            h ^= h >>> 13;
+            h *= 0xc2b2ae35;
+            h ^= h >>> 16;
 
-		h ^= h >>> 16;
-		h *= 0x85ebca6b;
-		h ^= h >>> 13;
-		h *= 0xc2b2ae35;
-		h ^= h >>> 16;
-		
-		return h;
-	}
-	
-	public int hash(int a, int b, int c, int d, int e) {
-		int h = seed;
+            return h;
+        };
+    }
 
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		k = b;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		k = c;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		k = d;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		k = e;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		// finalizing
-		h ^= 5;
-
-		h ^= h >>> 16;
-		h *= 0x85ebca6b;
-		h ^= h >>> 13;
-		h *= 0xc2b2ae35;
-		h ^= h >>> 16;
-
-		return h;
-	}
-
-
-	public int hash(int a, int b, int c, int d) {
-
-		int h = seed;
-
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		k = b;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		k = c;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		k = d;
-		k = mixK(k);
-		h = mixH(h, k);
-
-		// finalizing
-		h ^= 4;
-
-		h ^= h >>> 16;
-		h *= 0x85ebca6b;
-		h ^= h >>> 13;
-		h *= 0xc2b2ae35;
-		h ^= h >>> 16;
-
-		return h;
-	}
-
-	private final static int mixK(int k) {
+    private final static int mixK(int k) {
 		k *= C1;
 		k = Integer.rotateLeft(k, 15);
 		k = k * C2;

@@ -27,126 +27,190 @@
 
 package iguana.utils.collections.hash;
 
-public class MurmurHash2 implements HashFunction {
+import iguana.utils.function.*;
 
-	private static final long serialVersionUID = 1L;
-	
-	private final int m = 0x5bd1e995;
-	private final int r = 24;
+public class MurmurHash2 {
 
-	private int seed;
-	
-	public MurmurHash2() {
-		this(0);
+	private final static int m = 0x5bd1e995;
+	private final static int r = 24;
+
+    public static IntFunction5 hash5() {
+        return hash5(19);
+    }
+
+    public static IntFunction5 hash5(int seed) {
+        return (a, b, c, d, e) -> {
+
+            int h = seed ^ 4;
+
+            // a
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // b
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // c
+            k = c;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // d
+            k = d;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // last mix
+            h *= m;
+            h ^= h >>> 13;
+            h *= m;
+            h ^= h >>> 15;
+
+            return h;
+        };
+    }
+
+    public static IntFunction4 hash4() {
+        return hash4(19);
+    }
+
+	public static IntFunction4 hash4(int seed) {
+        return (a, b, c, d) -> {
+
+            int h = seed ^ 4;
+
+            // a
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // b
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // c
+            k = c;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // d
+            k = d;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // last mix
+            h *= m;
+            h ^= h >>> 13;
+            h *= m;
+            h ^= h >>> 15;
+
+            return h;
+        };
 	}
-	
-	public MurmurHash2(int seed) {
-		this.seed = seed;
-	}
-	
-	@Override
-	public int hash(int a, int b, int c, int d) {
-		
-		int h = seed ^ 4;
 
-		// a
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// b
-		k = b;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// c
-		k = c;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// d
-		k = d;
-		k = mixK(k);
-		h = mixH(h, k);
+    public static IntFunction3 hash3() {
+        return hash3(19);
+    }
 
-		// last mix
-		h *= m;
-		h ^= h >>> 13;
-		h *= m;
-		h ^= h >>> 15;
-		
-		return h;
-	}
-	
-	private int mixK(int k) {
-		k *= m;
-		k ^= k >>> r;
-		k *= m;
-		return k;
-	}
-	
-	private int mixH(int h, int k) {
-		h *= m;
-		h ^= k;
-		return h;
-	}
+	public static IntFunction3 hash3(int seed) {
+        return (a, b, c) -> {
 
-	@Override
-	public int hash(int a, int b, int c) {
-		return hash(0, a, b, c);
-	}
+            int h = seed ^ 4;
 
-	@Override
-	public int hash(int k) {
-		return 0;
-	}
+            // a
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
 
-	@Override
-	public int hash(int k1, int k2) {
-		return 0;
-	}
+            // b
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
 
-	@Override
-	public int hash(int... keys) {
-		return 0;
-	}
+            // c
+            k = c;
+            k = mixK(k);
+            h = mixH(h, k);
 
-	@Override
-	public int hash(int a, int b, int c, int d, int e) {
-		int h = seed ^ 4;
+            // last mix
+            h *= m;
+            h ^= h >>> 13;
+            h *= m;
+            h ^= h >>> 15;
 
-		// a
-		int k = a;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// b
-		k = b;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// c
-		k = c;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// d
-		k = d;
-		k = mixK(k);
-		h = mixH(h, k);
-		
-		// e
-		k = e;
-		k = mixK(k);
-		h = mixH(h, k);
+            return h;
+        };
+    }
 
-		// last mix
-		h *= m;
-		h ^= h >>> 13;
-		h *= m;
-		h ^= h >>> 15;
-		
-		return h;
-	}
+    public static IntFunction2 hash2() {
+        return hash2(19);
+    }
+
+    public static IntFunction2 hash2(int seed) {
+        return (a, b) -> {
+
+            int h = seed ^ 4;
+
+            // a
+            int k = a;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // b
+            k = b;
+            k = mixK(k);
+            h = mixH(h, k);
+
+            // last mix
+            h *= m;
+            h ^= h >>> 13;
+            h *= m;
+            h ^= h >>> 15;
+
+            return h;
+        };
+    }
+
+    public static IntFunctionAny hashN() {
+        return hashN(19);
+    }
+
+    public static IntFunctionAny hashN(int seed) {
+        return (Object[] elements) -> {
+
+            int h = seed ^ 4;
+
+            for (int i = 0; i < elements.length; i++) {
+                int k = elements[i].hashCode();
+                k = mixK(k);
+                h = mixH(h, k);
+            }
+
+            // last mix
+            h *= m;
+            h ^= h >>> 13;
+            h *= m;
+            h ^= h >>> 15;
+
+            return h;
+        };
+    }
+
+    private static int mixK(int k) {
+        k *= m;
+        k ^= k >>> r;
+        k *= m;
+        return k;
+    }
+
+    private static int mixH(int h, int k) {
+        h *= m;
+        h ^= k;
+        return h;
+    }
 
 }

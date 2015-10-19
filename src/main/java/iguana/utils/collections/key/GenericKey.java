@@ -25,9 +25,45 @@
  *
  */
 
-package iguana.utils.collections.hash;
+package iguana.utils.collections.key;
 
-@FunctionalInterface
-public interface IntHash3 {
-	public int hash(int x, int y, int z);
+import iguana.utils.function.IntFunctionAny;
+
+import java.util.Arrays;
+
+public class GenericKey implements Key {
+	
+	private final Object[] elements;
+
+	private final int hash;
+
+	public GenericKey(IntFunctionAny f, Object...elements) {
+	    this.elements = elements;
+		this.hash = f.apply(elements);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) return true;
+		
+		if (!(other instanceof GenericKey)) return false;
+		
+		GenericKey that = (GenericKey) other;
+		return hash == that.hash && Arrays.equals(elements, that.elements);
+	}
+
+	@Override
+	public int hashCode() {
+		return hash;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("(%s)", Arrays.toString(elements));
+	}
+
+    @Override
+    public int hashCode(IntFunctionAny f) {
+        return f.apply(elements);
+    }
 }

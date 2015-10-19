@@ -25,16 +25,9 @@
  *
  */
 
-package iguana.utils.collections;
+package iguana.utils.function;
 
-import iguana.utils.collections.hash.HashFunction;
-
-public interface Key {
-
-	default int hash(HashFunction f) {
-		return f.hash(components());
-	}
-	
-	int[] components();
-	
+@FunctionalInterface
+public interface IntFunctionAny {
+	int apply(Object... elements);
 }

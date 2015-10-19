@@ -25,39 +25,42 @@
  *
  */
 
-package iguana.utils.collections;
+package iguana.utils.collections.key;
 
-import iguana.utils.collections.hash.IntHash3;
+import iguana.utils.function.IntFunction4;
+import iguana.utils.function.IntFunctionAny;
 
-public class IntKey2PlusObject implements Key {
+
+public class IntKey4 implements Key, Comparable<IntKey4> {
 	
 	private final int k1;
 	private final int k2;
-	private final Object obj;
+	private final int k3;
+	private final int k4;
 	
 	private final int hash;
 
-	private IntKey2PlusObject(Object obj, int k1, int k2, IntHash3 f) {
+	public IntKey4(int k1, int k2, int k3, int k4, IntFunction4 f) {
 		this.k1 = k1;
 		this.k2 = k2;
-		this.obj = obj;
-		this.hash = f.hash(obj.hashCode(), k1, k2);
-	}
-	
-	public static IntKey2PlusObject from(Object obj, int k1, int k2, IntHash3 f) {
-		return new IntKey2PlusObject(obj, k1, k2, f);
+		this.k3 = k3;
+		this.k4 = k4;
+		this.hash = f.hash(k1, k2, k3, k4);
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if (this == other) return true;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
 		
-		if (!(other instanceof IntKey2PlusObject)) return false;
+		if (!(obj instanceof IntKey4))
+			return false;
 		
-		IntKey2PlusObject that = (IntKey2PlusObject) other;
-		return hash == that.hash 
-				&& k1 == that.k1 && k2 == that.k2 
-				&& obj.equals(that.obj);
+		IntKey4 other = (IntKey4) obj;
+		return k1 == other.k1 && 
+			   k2 == other.k2 &&
+			   k3 == other.k3 &&
+			   k4 == other.k4;
 	}
 	
 	@Override
@@ -65,14 +68,23 @@ public class IntKey2PlusObject implements Key {
 		return hash;
 	}
 
-	@Override
-	public int[] components() {
-		return new int[] {k1, k2};
-	}
+    @Override
+    public int hashCode(IntFunctionAny f) {
+        return f.apply(k1, k2, k3, k4);
+    }
 
+    @Override
+	public int compareTo(IntKey4 o) {
+		int r;
+		return (r = k1 - o.k1) != 0 ? r : 
+			   (r = k2 - o.k2) != 0 ? r : 
+			   (r = k3 - o.k3) != 0 ? r : 
+			   k4 - o.k4;
+	}
+	
 	@Override
 	public String toString() {
-		return String.format("(%d, %d, %s)", k1, k2, obj);
+		return String.format("(%d, %d, %d, %d)", k1, k2, k3, k4);
 	}
 
 }

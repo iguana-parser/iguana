@@ -27,60 +27,63 @@
 
 package iguana.utils.collections.hash;
 
-public class PrimeMultiplication implements HashFunction {
+import iguana.utils.function.*;
 
-	private static final long serialVersionUID = 1L;
+public class PrimeMultiplication {
 
-	@Override
-	public int hash(int k) {
-		return k;
+    private static final int P1 = 17;
+    private static final int P2 = 31;
+
+	public static IntFunction2 f2() {
+        return (k1, k2) -> {
+            int result = P1;
+            result = P2 * result + k1;
+            result = P2 * result + k2;
+            return result;
+        };
 	}
 
-	@Override
-	public int hash(int k1, int k2) {
-		int result = 17;
-		result = 31 * result + k1;
-		result = 31 * result + k2;
-		return result;
+	public static IntFunction3 f3() {
+        return (k1, k2, k3) -> {
+            int result = P1;
+            result = P2 * result + k1;
+            result = P2 * result + k2;
+            result = P2 * result + k3;
+            return result;
+        };
 	}
 
-	@Override
-	public int hash(int k1, int k2, int k3) {
-		int result = 17;
-		result = 31 * result + k1;
-		result = 31 * result + k2;
-		result = 31 * result + k3;
-		return result;
+	public static IntFunction4 f4() {
+        return (k1, k2, k3, k4) -> {
+            int result = P1;
+            result = P2 * result + k1;
+            result = P2 * result + k2;
+            result = P2 * result + k3;
+            result = P2 * result + k4;
+            return result;
+        };
 	}
 
-	@Override
-	public int hash(int k1, int k2, int k3, int k4) {
-		int result = 17;
-		result = 31 * result + k1;
-		result = 31 * result + k2;
-		result = 31 * result + k3;
-		result = 31 * result + k4;
-		return result;
+	public static IntFunction5 f5() {
+        return (k1, k2, k3, k4, k5) -> {
+            int result = P1;
+            result = P2 * result + k1;
+            result = P2 * result + k2;
+            result = P2 * result + k3;
+            result = P2 * result + k4;
+            result = P2 * result + k5;
+            return result;
+        };
 	}
 
-	@Override
-	public int hash(int k1, int k2, int k3, int k4, int k5) {
-		int result = 17;
-		result = 31 * result + k1;
-		result = 31 * result + k2;
-		result = 31 * result + k3;
-		result = 31 * result + k4;
-		result = 31 * result + k5;
-		return result;
-	}
-
-	@Override
-	public int hash(int... keys) {
-		int result = 17;
-		for (int key : keys) {
-			result = 31 * result + key;
-		}
-		return result;
+	public static IntFunctionAny fn() {
+        return (Object...objects) -> {
+            int result = P1;
+            for (Object o : objects) {
+                result = P2 * result + o.hashCode();
+            }
+            return result;
+        };
 	}
 
 }

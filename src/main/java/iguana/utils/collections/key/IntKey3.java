@@ -25,65 +25,59 @@
  *
  */
 
-package iguana.utils.collections.hash;
+package iguana.utils.collections.key;
+
+import iguana.utils.function.IntFunction3;
+import iguana.utils.function.IntFunctionAny;
 
 
-public class CoefficientHash implements HashFunction {
+public class IntKey3 implements Key, Comparable<IntKey3> {
+	
+	private final int k1;
+	private final int k2;
+	private final int k3;
+	private final int hash;
 
-	private static final long serialVersionUID = 1L;
-	
-	private final int coef1;
-	private final int coef2;
-	private final int coef3;
-	private final int coef4;
-	
-	public CoefficientHash(int coef1) {
-		this(coef1, 1);
-	}
-	
-	public CoefficientHash(int coef1, int coef2) {
-		this(coef1, coef2, 1);
-	}
-	
-	public CoefficientHash(int coef1, int coef2, int coef3) {
-		this(coef1, coef2, coef3, 1);
-	}
-	
-	public CoefficientHash(int coef1, int coef2, int coef3, int coef4) {
-		this.coef1 = coef1;
-		this.coef2 = coef2;
-		this.coef3 = coef3;
-		this.coef4 = coef4;
+	public IntKey3(int k1, int k2, int k3, IntFunction3 f) {
+		this.k1 = k1;
+		this.k2 = k2;
+		this.k3 = k3;
+		this.hash = f.apply(k1, k2, k3);
 	}
 	
 	@Override
-	public int hash(int k) {
-		return k;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof IntKey3))
+			return false;
+		
+		IntKey3 other = (IntKey3) obj;
+		return k1 == other.k1 && k2 == other.k2 && k3 == other.k3;
+	}
+	
+	@Override
+	public int hashCode() {
+		return hash;
 	}
 
-	@Override
-	public int hash(int k1, int k2) {
-		return k1 * coef1 + k2;
-	}
+    @Override
+    public int hashCode(IntFunctionAny f) {
+        return f.apply(k1, k2, k3);
+    }
 
 	@Override
-	public int hash(int k1, int k2, int k3) {
-		return hash(k1, k2) * coef2 + k3;
+	public int compareTo(IntKey3 o) {
+		int r;
+		return (r = k1 - o.k1) != 0 ? r : 
+			   (r = k2 - o.k2) != 0 ? r : 
+			   k3 - o.k3; 
 	}
-
+	
 	@Override
-	public int hash(int k1, int k2, int k3, int k4) {
-		return hash(k1, k2, k3) * coef3 + k4;
-	}
-
-	@Override
-	public int hash(int k1, int k2, int k3, int k4, int k5) {
-		return hash(k1, k2, k3, k4) * coef4 + k5;
-	}
-
-	@Override
-	public int hash(int... keys) {
-		throw new UnsupportedOperationException();
+	public String toString() {
+		return String.format("(%d, %d, %d)", k1, k2, k3);
 	}
 
 }

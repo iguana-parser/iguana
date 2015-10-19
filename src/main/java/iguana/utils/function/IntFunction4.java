@@ -25,9 +25,9 @@
  *
  */
 
-package iguana.utils.collections.hash;
+package iguana.utils.function;
 
 @FunctionalInterface
-public interface IntHash5 {
-	public int hash(int x, int y, int z, int w, int v);
+public interface IntFunction4 {
+	int hash(int x, int y, int z, int w);
 }

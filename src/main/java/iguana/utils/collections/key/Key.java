@@ -25,20 +25,11 @@
  *
  */
 
-package iguana.utils.collections.hash;
+package iguana.utils.collections.key;
 
-public class HashFunctions {
+import iguana.utils.function.IntFunctionAny;
 
-	public static HashFunction murmur3 = new MurmurHash3();
-	
-	public static HashFunction xxhash = new XXHash();
-
-	
-	public static HashFunction primeMultiplication = new PrimeMultiplication();
-	
-	public static HashFunction defaulFunction =  primeMultiplication;
-	
-	public static HashFunction murmur3(int seed) {
-		return new MurmurHash3(seed);
-	}
+@FunctionalInterface
+public interface Key {
+	int hashCode(IntFunctionAny f);
 }
