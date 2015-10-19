@@ -397,16 +397,16 @@ public class IdeaIDEGenerator {
                     .filter(entry -> entry.getKey().startsWith("|keyword|:"))
                     .forEach(entry -> {
                         String regex = entry.getValue().accept(this);
-                        String tokenType = getTokenType(regex);
+                        String tokenType = "KEYWORD";
 
                         if (!seenTokenTypes.contains(tokenType)) {
-                            tokenTypes.append("    public IElementType KEYWORD = " +
-                                    "new " + language + "TokenType(\"KEYWORD\");").append("\n");
                             seenTokenTypes.add(tokenType);
+                            tokenTypes.append("    IElementType KEYWORD = new " + language + "TokenType(\"KEYWORD\");")
+                                      .append("\n");
                         }
 
                         rules.append(regex + getConditions(entry.getValue().getPostConditions()))
-                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                             .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
 
             regularExpressions.entrySet().stream()
@@ -416,12 +416,11 @@ public class IdeaIDEGenerator {
 
                         if (!seenTokenTypes.contains(tokenType)) {
                             seenTokenTypes.add(tokenType);
-                            tokenTypes.append("    public IElementType " + tokenType + " = " +
-                                                       "new " + language + "TokenType(\"" + tokenType + "\");").append("\n");
+                            tokenTypes.append("    IElementType " + tokenType + " = new " + language + "TokenType(\"" + tokenType + "\");")
+                                      .append("\n");
                         }
 
                         macros.append(tokenType + "=" + entry.getValue().accept(this)).append("\n");
-
                         rules.append("{" + tokenType + "} " + getConditions(entry.getValue().getPostConditions()))
                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
@@ -433,9 +432,9 @@ public class IdeaIDEGenerator {
                         String tokenType = getTokenType(regex);
 
                         if (!seenTokenTypes.contains(tokenType)) {
-                            tokenTypes.append("    public IElementType " + tokenType + " = " +
-                                    "new " + language + "TokenType(\"" + tokenType + "\");").append("\n");
                             seenTokenTypes.add(tokenType);
+                            tokenTypes.append("    IElementType " + tokenType + " = new " + language + "TokenType(\"" + tokenType + "\");")
+                                      .append("\n");
                         }
 
                         rules.append(regex + getConditions(entry.getValue().getPostConditions()))
@@ -459,10 +458,13 @@ public class IdeaIDEGenerator {
                 writer.println("import " + language.toLowerCase() + ".gen.psi." + language + "TokenType;");
                 writer.println();
                 writer.println("public interface " + language + "TokenTypes {");
-                writer.print(tokenTypes.toString());
-                writer.println("    public IElementType BAD_CHARACTER = new " + language + "TokenType(\"BAD_CHARACTER\");");
                 writer.println();
-                writer.println("    public static IElementType get(String name) {");
+                writer.print(tokenTypes.toString());
+                if (!seenTokenTypes.contains("TERMINAL"))
+                    writer.println("    IElementType TERMINAL = new " + language + "TokenType(\"TERMINAL\");");
+                writer.println("    IElementType BAD_CHARACTER = new " + language + "TokenType(\"BAD_CHARACTER\");");
+                writer.println();
+                writer.println("    static IElementType get(String name) {");
                 writer.println("        switch (name) {");
                 for (String tokenType : seenTokenTypes)
                     writer.println("            case \"" + tokenType + "\": return " + tokenType + ";");
