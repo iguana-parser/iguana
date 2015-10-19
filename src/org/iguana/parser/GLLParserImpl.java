@@ -73,8 +73,6 @@ public class GLLParserImpl implements GLLParser {
 	
 	protected int ci = 0;
 	
-	protected Input input;
-	
 	/**
 	 * 
 	 */
@@ -113,7 +111,6 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ? extends Object> map, boolean global) {
 		this.grammarGraph = grammarGraph;
-		this.input = input;
 
 		grammarGraph.reset(input);
 		resetParser();
@@ -150,16 +147,16 @@ public class GLLParserImpl implements GLLParser {
 		}
 		
 		cu = startGSSNode;
-		
+
 		logger.log("Parsing %s:", input.getURI());
 
 		long start = System.nanoTime();
 		long startUserTime = BenchmarkUtil.getUserTime();
 		long startSystemTime = BenchmarkUtil.getSystemTime();
 		
-		parse(startSymbol, env);
+		parse(startSymbol, input, env);
 		
-		root = startGSSNode.getNonterminalNode(input.length() - 1);
+		root = startGSSNode.getNonterminalNode(input, input.length() - 1);
 		
 		ParseResult parseResult;
 		
@@ -197,7 +194,7 @@ public class GLLParserImpl implements GLLParser {
 		return grammarGraph.getHead(nonterminal);
 	}
 	
-	protected void parse(NonterminalGrammarSlot startSymbol, Environment env) {
+	protected void parse(NonterminalGrammarSlot startSymbol, Input input, Environment env) {
 		
 //		if(!startSymbol.testPredict(input.charAt(ci))) {
 //			recordParseError(startSymbol);
@@ -205,9 +202,9 @@ public class GLLParserImpl implements GLLParser {
 //		}
 		
 		if (env == null)
-			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance())));
+			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance(), input)));
 		else 
-			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, cu, ci, DummyNode.getInstance(), env)));
+			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, cu, ci, DummyNode.getInstance(), input, env)));
 		
 		while(!descriptorsStack.isEmpty()) {
 			Descriptor descriptor = descriptorsStack.pop();
@@ -219,24 +216,6 @@ public class GLLParserImpl implements GLLParser {
 		}
 	}
 	
-	@Override
-	public final void pop(GSSNode gssNode, int inputIndex, NonterminalNode node) {
-		
-		if (node == null) return;
-		
-		logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
-		
-		for(GSSEdge edge : gssNode.getGSSEdges()) {
-			
-			if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
-			
-			Descriptor descriptor = edge.addDescriptor(this, gssNode, inputIndex, node);
-			if (descriptor != null) {
-				scheduleDescriptor(descriptor);
-			}
-		}			
-	}
-				
 	/**
 	 * Replaces the previously reported parse error with the new one if the
 	 * inputIndex of the new parse error is greater than the previous one. In
@@ -261,11 +240,6 @@ public class GLLParserImpl implements GLLParser {
 		descriptorsCount++;
 	}
 		
-	@Override
-	public Input getInput() {
-		return input;
-	}
-	
 	private void resetParser() {
 		descriptorsStack.clear();
 		ci = 0;
@@ -431,7 +405,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
 		countAmbiguousNodes++;
-//		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
+		logger.log("Ambiguous node added: %s", node);
 //		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
 //		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {

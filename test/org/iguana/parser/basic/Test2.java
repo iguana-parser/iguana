@@ -107,13 +107,14 @@ public class Test2 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input);
         return node1;
 	}
 
     public static Tree getTree() {
-        return createRule(r1, list(createTerminal(0, 1)));
+        Tree t0 = createTerminal(0, 1, input);
+        return createRule(r1, list(t0), input);
     }
 
 }

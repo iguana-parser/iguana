@@ -33,9 +33,9 @@ import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.Transition;
-import org.iguana.util.collections.rangemap.AVLIntRangeTree;
-import org.iguana.util.collections.rangemap.ArrayIntRangeTree;
-import org.iguana.util.collections.rangemap.IntRangeTree;
+import iguana.utils.collections.rangemap.AVLIntRangeTree;
+import iguana.utils.collections.rangemap.ArrayIntRangeTree;
+import iguana.utils.collections.rangemap.IntRangeTree;
 
 public class DFAMatcher implements Matcher {
 	

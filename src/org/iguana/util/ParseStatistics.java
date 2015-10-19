@@ -27,8 +27,8 @@
 
 package org.iguana.util;
 
-import org.iguana.parser.HashFunctions;
 
+import iguana.utils.collections.hash.MurmurHash3;
 
 public class ParseStatistics {
 
@@ -135,7 +135,7 @@ public class ParseStatistics {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(descriptorsCount,
+		return MurmurHash3.fn().apply(descriptorsCount,
 				gssNodesCount, gssEdgesCount, nonterminalNodesCount,
 				terminalNodesCount, intermediateNodesCount, packedNodesCount,
 				ambiguousNodesCount);

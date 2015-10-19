@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -36,19 +37,19 @@ import org.iguana.util.generator.ConstructorCode;
 
 public interface Transition extends ConstructorCode {
 	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node);
+	void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node);
 	
-	public GrammarSlot destination();
+	GrammarSlot destination();
 	
-	public GrammarSlot origin();
+	GrammarSlot origin();
 
-	public String getLabel();
+	String getLabel();
 	
 	/**
 	 * 
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
+	void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env);
 	
 }

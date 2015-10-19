@@ -28,6 +28,7 @@
 package org.iguana.datadependent.gss;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
@@ -46,7 +47,7 @@ public class NewGSSEdgeImpl extends org.iguana.parser.gss.NewGSSEdgeImpl {
 	}
 	
 	@Override
-	public Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
+	public Descriptor addDescriptor(GLLParser parser, Input input, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
 		
 		BodyGrammarSlot returnSlot = getReturnSlot();
 		GSSNode destination = getDestination();
@@ -58,18 +59,18 @@ public class NewGSSEdgeImpl extends org.iguana.parser.gss.NewGSSEdgeImpl {
 		
 		parser.setEnvironment(env);
 		
-		if (returnSlot.getConditions().execute(parser.getInput(), source, inputIndex, parser.getEvaluatorContext()))
+		if (returnSlot.getConditions().execute(input, source, inputIndex, parser.getEvaluatorContext()))
 			return null;
 		
 		env = parser.getEnvironment();
 		
-		NonPackedNode y = returnSlot.getIntermediateNode2(parser, getNode(), sppfNode, env);
+		NonPackedNode y = returnSlot.getIntermediateNode2(parser, input, getNode(), sppfNode, env);
 		
 //		NonPackedNode y = parser.getNode(returnSlot, getNode(), sppfNode, env);
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 //			return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 		
-		return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env) : null;
+		return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, input, env) : null;
 	}
 
 }

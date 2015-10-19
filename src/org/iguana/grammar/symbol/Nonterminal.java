@@ -34,9 +34,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
-import org.iguana.parser.HashFunctions;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -154,7 +154,7 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(name.hashCode(), index);
+		return MurmurHash3.f2().apply(name.hashCode(), index);
 	}
 	
 	public static Builder builder(String name) {

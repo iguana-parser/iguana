@@ -67,18 +67,18 @@ public class Test5 {
     }
 
     private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A)"), registry.getSlot("(A) ::= A ."), node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A) ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input1);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("(A)"), registry.getSlot("(A) ::= A ."), node1, input1);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= (A) ."), node2, input1);
         return node3;
     }
 
     public static Tree getTree1() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
+        Tree t0 = createTerminal(0, 1, input1);
+        Tree t1 = createRule(r2, list(t0), input1);
         Tree t2 = createGroup(list(t1));
-        Tree t3 = createRule(r1, list(t2));
+        Tree t3 = createRule(r1, list(t2), input1);
         return t3;
     }
 }

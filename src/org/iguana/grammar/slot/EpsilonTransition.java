@@ -29,6 +29,7 @@ package org.iguana.grammar.slot;
 
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
@@ -66,11 +67,11 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
 		switch(type) {
 		
 		case DUMMY:
-			if (conditions.execute(parser.getInput(), u, i))
+			if (conditions.execute(input, u, i))
 				return;	
 			break;
 			
@@ -78,17 +79,17 @@ public class EpsilonTransition extends AbstractTransition {
 			break;
 			
 		case OPEN: 
-			if (conditions.execute(parser.getInput(), u, i)) 
+			if (conditions.execute(input, u, i))
 				return;
 			
 			parser.setEnvironment(parser.getEmptyEnvironment());
 			parser.getEvaluatorContext().pushEnvironment();
 			
-			dest.execute(parser, u, i, node, parser.getEnvironment());
+			dest.execute(parser, input, u, i, node, parser.getEnvironment());
 			return;
 			
 		case CLOSE:
-			if (conditions.execute(parser.getInput(), u, i))
+			if (conditions.execute(input, u, i))
 				return;
 			break;
 			
@@ -99,10 +100,10 @@ public class EpsilonTransition extends AbstractTransition {
 			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
 			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
 			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			
-			dest.execute(parser, u, i, node, parser.getEnvironment());
+			dest.execute(parser, input, u, i, node, parser.getEnvironment());
 			return;
 			
 		case STORE_LABEL:
@@ -120,14 +121,14 @@ public class EpsilonTransition extends AbstractTransition {
 			
 			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
 			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			
-			dest.execute(parser, u, i, node, parser.getEnvironment());	
+			dest.execute(parser, input, u, i, node, parser.getEnvironment());
 			return;
 		}
 		
-		dest.execute(parser, u, i, node);
+		dest.execute(parser, input, u, i, node);
 	}
 
 	@Override
@@ -150,14 +151,14 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 		parser.setEnvironment(env);
 		
 		switch(type) {
 		
 		case DUMMY:
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;	
 			break;
 			
@@ -165,14 +166,14 @@ public class EpsilonTransition extends AbstractTransition {
 			break;
 			
 		case OPEN: 
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext())) 
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			parser.getEvaluatorContext().pushEnvironment();
 			break;
 			
 		case CLOSE:
 			parser.getEvaluatorContext().popEnvironment();
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			break;
 			
@@ -180,7 +181,7 @@ public class EpsilonTransition extends AbstractTransition {
 			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
 			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
 			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			break;
 			
@@ -197,12 +198,12 @@ public class EpsilonTransition extends AbstractTransition {
 			
 			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
 			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
 				return;
 			break;
 		}
 		
-		dest.execute(parser, u, i, node, parser.getEnvironment());
+		dest.execute(parser, input, u, i, node, parser.getEnvironment());
 	}
 
 	@Override

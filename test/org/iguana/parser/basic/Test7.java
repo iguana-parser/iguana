@@ -36,6 +36,7 @@ import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -86,8 +87,11 @@ public class Test7 {
     private static Input input = Input.fromString("bcd");
     private static Nonterminal startSymbol = A;
 	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
+    private static Terminal t2;
+    private static Terminal t1;
+    private static Terminal t0;
 
-	@Test
+    @Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
 		assertFalse(firstFollowSets.isNullable(A));
@@ -136,23 +140,26 @@ public class Test7 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-		TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1);
-		NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0);
-		TerminalNode node2 = createTerminalNode(registry.getSlot("c"), 1, 2);
-		NonterminalNode node3 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node2);
+		TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1, input);
+		NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0, input);
+		TerminalNode node2 = createTerminalNode(registry.getSlot("c"), 1, 2, input);
+		NonterminalNode node3 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node2, input);
 		IntermediateNode node4 = createIntermediateNode(registry.getSlot("A ::= B C . D"), node1, node3);
-		TerminalNode node5 = createTerminalNode(registry.getSlot("d"), 2, 3);
-		NonterminalNode node6 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= d ."), node5);
+		TerminalNode node5 = createTerminalNode(registry.getSlot("d"), 2, 3, input);
+		NonterminalNode node6 = createNonterminalNode(registry.getSlot("D"), registry.getSlot("D ::= d ."), node5, input);
 		IntermediateNode node7 = createIntermediateNode(registry.getSlot("A ::= B C D ."), node4, node6);
-		NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B C D ."), node7);
+		NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B C D ."), node7, input);
 		return node8;
 	}
 
     public static Tree getTree() {
-        Tree t1 = createRule(r2, list(createTerminal(0, 1)));
-        Tree t2 = createRule(r3, list(createTerminal(1, 2)));
-        Tree t3 = createRule(r4, list(createTerminal(2, 3)));
-        return createRule(r1, list(t1, t2, t3));
+        Tree t0 = createTerminal(0, 1, input);
+        Tree t1 = createTerminal(1, 2, input);
+        Tree t2 = createTerminal(2, 3, input);
+        Tree t3 = createRule(r2, list(t0), input);
+        Tree t4 = createRule(r3, list(t1), input);
+        Tree t5 = createRule(r4, list(t2), input);
+        return createRule(r1, list(t3, t4, t5), input);
     }
 
 

@@ -112,14 +112,14 @@ public class Test13 {
 	}
 		
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input);
         node1.addPackedNode(registry.getSlot("A ::= A ."), node1);
         return node1;
     }
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1);
+        Tree t0 = createTerminal(0, 1, input);
         Tree t1 = createCycle("A");
         Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
         return t2;

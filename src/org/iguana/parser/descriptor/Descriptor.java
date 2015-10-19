@@ -28,6 +28,7 @@
 package org.iguana.parser.descriptor;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
@@ -50,8 +51,10 @@ public class Descriptor {
 	
 	// (L, i, j)
 	private final NonPackedNode sppfNode;
+
+    protected final Input input;
 	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Input input) {
 		assert slot != null;
 		assert gssNode != null;
 		assert inputIndex >= 0;
@@ -61,6 +64,7 @@ public class Descriptor {
 		this.gssNode = gssNode;
 		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
+        this.input = input;
 	}
 	
 	public BodyGrammarSlot getGrammarSlot() {
@@ -80,7 +84,7 @@ public class Descriptor {
 	}
 	
 	public void execute(GLLParser parser) {
-		slot.execute(parser, gssNode, inputIndex, sppfNode);
+		slot.execute(parser, input, gssNode, inputIndex, sppfNode);
 	}
 	
 	@Override

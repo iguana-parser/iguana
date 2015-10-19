@@ -54,13 +54,11 @@ public class TerminalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
 		
 		if (dest.getLabel() != null)
-			execute(parser, u, i, node, parser.getEmptyEnvironment());
+			execute(parser, input, u, i, node, parser.getEmptyEnvironment());
 		
-		Input input = parser.getInput();
-			
 		if (preConditions.execute(input, u, i))
 			return;
 			
@@ -78,7 +76,7 @@ public class TerminalTransition extends AbstractTransition {
 			
 		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(parser, node, cr);
 				
-		dest.execute(parser, u, rightExtent, n);
+		dest.execute(parser, input, u, rightExtent, n);
 	}
 	
 	public TerminalGrammarSlot getSlot() {
@@ -106,9 +104,7 @@ public class TerminalTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		
-		Input input = parser.getInput();
+	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
 		
 		parser.setEnvironment(env);
 		
@@ -135,7 +131,7 @@ public class TerminalTransition extends AbstractTransition {
 		
 		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(parser, node, cr);
 				
-		dest.execute(parser, u, rightExtent, n, env);
+		dest.execute(parser, input, u, rightExtent, n, env);
 	}
 	
 }

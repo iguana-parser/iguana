@@ -144,19 +144,19 @@ public class Test9 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-		TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-		TerminalNode node1 = createTerminalNode(registry.getSlot("a"), 1, 2);
-		NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node1);
+		TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+		TerminalNode node1 = createTerminalNode(registry.getSlot("a"), 1, 2, input);
+		NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node1, input);
 		IntermediateNode node3 = createIntermediateNode(registry.getSlot("S ::= a A . b"), node0, node2);
-		TerminalNode node4 = createTerminalNode(registry.getSlot("b"), 2, 3);
+		TerminalNode node4 = createTerminalNode(registry.getSlot("b"), 2, 3, input);
 		IntermediateNode node5 = createIntermediateNode(registry.getSlot("S ::= a A b ."), node3, node4);
-		NonterminalNode node6 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= a A b ."), node5);
+		NonterminalNode node6 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= a A b ."), node5, input);
 		return node6;
 	}
 
     public static RuleNode getTree() {
-        Tree t1 = createRule(r3, list(createTerminal(1, 2)));
-        return createRule(r2, list(createTerminal(0, 1), t1, createTerminal(2, 3)));
+        Tree t1 = createRule(r3, list(createTerminal(1, 2, input)), input);
+        return createRule(r2, list(createTerminal(0, 1, input), t1, createTerminal(2, 3, input)), input);
     }
 }
 	

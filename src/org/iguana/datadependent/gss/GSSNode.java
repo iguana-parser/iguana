@@ -27,8 +27,8 @@
 
 package org.iguana.datadependent.gss;
 
+import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.HashFunctions;
 import org.iguana.parser.gss.GSSNodeData;
 
 public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
@@ -59,7 +59,7 @@ public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(getGrammarSlot().getId(), getInputIndex(), data.hashCode());
+		return MurmurHash3.fn().apply(getGrammarSlot().getId(), getInputIndex(), data);
 	}
 	
 	@Override

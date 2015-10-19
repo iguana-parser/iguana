@@ -78,16 +78,16 @@ public class Test3 {
     }
 
     private static NonterminalNode expectedSPPF0(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A?"), registry.getSlot("A? ::= ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? ."), node1);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input0);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A?"), registry.getSlot("A? ::= ."), node0, input0);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? ."), node1, input0);
         return node2;
     }
 
     public static Tree getTree0() {
         Tree t0 = createEpsilon(0);
         Tree t1 = createOpt(t0);
-        Tree t2 = createRule(r1, list(t1));
+        Tree t2 = createRule(r1, list(t1), input0);
         return t2;
     }
 
@@ -105,18 +105,18 @@ public class Test3 {
     }
 
     private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A?"), registry.getSlot("A? ::= A ."), node1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? ."), node2);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input1);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A?"), registry.getSlot("A? ::= A ."), node1, input1);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? ."), node2, input1);
         return node3;
     }
 
     public static Tree getTree1() {
-        Tree t0 = createTerminal(0, 1);
-        Tree t1 = createRule(r2, list(t0));
+        Tree t0 = createTerminal(0, 1, input1);
+        Tree t1 = createRule(r2, list(t0), input1);
         Tree t2 = createOpt(t1);
-        Tree t3 = createRule(r1, list(t2));
+        Tree t3 = createRule(r1, list(t2), input1);
         return t3;
     }
 }

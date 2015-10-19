@@ -30,16 +30,17 @@ package org.iguana.parser.gss;
 import java.util.ArrayList;
 import java.util.List;
 
-import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.hash.MurmurHash3;
+import iguana.utils.collections.key.Key;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.GLLParser;
-import org.iguana.parser.HashFunctions;
 import org.iguana.parser.descriptor.Descriptor;
 
 /**
@@ -65,29 +66,47 @@ public class GSSNode {
 		this.gssEdges = new ArrayList<>();
 	}
 	
-	public NonterminalNode addToPoppedElements(GLLParser parser, int j, EndGrammarSlot slot, NonPackedNode child) {
-		return poppedElements.add(parser, inputIndex, j, slot, child);
-	}
-	
-	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
+	public void createGSSEdge(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
 		parser.gssEdgeAdded(edge);
 		
 		gssEdges.add(edge);
 		
 		poppedElements.forEach(z -> {
-			if (edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) {
-				Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
+			if (edge.getReturnSlot().testFollow(input.charAt(z.getRightExtent()))) {
+				Descriptor descriptor = edge.addDescriptor(parser, input, this, z.getRightExtent(), z);
 				if (descriptor != null) {
 					parser.scheduleDescriptor(descriptor);
 				}
 			}
 		});
-		
 	}
-	
-	public NonterminalNode getNonterminalNode(int j) {
-		return poppedElements.getNonterminalNode(j);
+
+    public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child) {
+//        logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
+        NonterminalNode node = poppedElements.add(parser, input, slot, child);
+        if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
+    }
+
+    public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child, Object value) {
+        NonterminalNode node = poppedElements.add(parser, input, slot, child, value);
+        if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
+    }
+
+    private void iterateOverEdges(GLLParser parser, Input input, int inputIndex, NonterminalNode node) {
+        for(GSSEdge edge : getGSSEdges()) {
+
+            if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
+
+            Descriptor descriptor = edge.addDescriptor(parser, input, this, inputIndex, node);
+            if (descriptor != null) {
+                parser.scheduleDescriptor(descriptor);
+            }
+        }
+    }
+
+    public NonterminalNode getNonterminalNode(Input input, int j) {
+		return poppedElements.getNonterminalNode(input, j);
 	}
 	
 	public NonterminalGrammarSlot getGrammarSlot() {
@@ -125,7 +144,7 @@ public class GSSNode {
 	}
 
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.getId(), inputIndex);
+		return MurmurHash3.f2().apply(slot.getId(), inputIndex);
 	}
 	
 	public String toString() {
@@ -142,19 +161,15 @@ public class GSSNode {
 	 * 
 	 */
 	
-	public NonterminalNode addToPoppedElements(GLLParser parser, EndGrammarSlot slot, NonPackedNode node, Object value) {
- 		return poppedElements.add(parser, inputIndex, IntKey1PlusObject.from(node.getRightExtent(), value, parser.getInput().length()), slot, node, value);
-	}
-	
-	public void createGSSEdge(GLLParser parser, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
+	public void createGSSEdge(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
 		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
 		
 		gssEdges.add(edge);
 		parser.gssEdgeAdded(edge);
 
 		poppedElements.forEach(z -> {
-			if (edge.getReturnSlot().testFollow(parser.getInput().charAt(z.getRightExtent()))) {
-				Descriptor descriptor = edge.addDescriptor(parser, this, z.getRightExtent(), z);
+			if (edge.getReturnSlot().testFollow(input.charAt(z.getRightExtent()))) {
+				Descriptor descriptor = edge.addDescriptor(parser, input, this, z.getRightExtent(), z);
 				if (descriptor != null) {
 					parser.scheduleDescriptor(descriptor);
 				}

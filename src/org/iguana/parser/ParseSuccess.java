@@ -30,6 +30,7 @@ package org.iguana.parser;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.parsetrees.tree.*;
+import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
 
@@ -82,7 +83,7 @@ public class ParseSuccess extends AbstractParseResult {
 
     @Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(parseStatistics.hashCode(), sppfNode.hashCode());
+		return MurmurHash3.fn().apply(parseStatistics, sppfNode);
 	}
 	
 	@Override

@@ -35,6 +35,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.RuleNode;
+import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -78,8 +79,9 @@ public class Test5 {
 
     private static Input input = Input.fromString("b");
     private static Nonterminal startSymbol = A;
-	
-	@Test
+    private static Terminal t0;
+
+    @Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
 		
@@ -131,14 +133,15 @@ public class Test5 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B ."), node1);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("b"), 0, 1, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= b ."), node0, input);
+        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B ."), node1, input);
         return node2;
 	}
 
     public static Tree getTree() {
-        Tree t1 = createRule(r2, list(createTerminal(0, 1)));
-        return createRule(r1, list(t1));
+        t0 = createTerminal(0, 1, input);
+        Tree t1 = createRule(r2, list(t0), input);
+        return createRule(r1, list(t1), input);
     }
 }

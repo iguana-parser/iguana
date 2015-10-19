@@ -28,6 +28,7 @@
 package org.iguana.parser.gss;
 
 import iguana.parsetrees.sppf.NonPackedNode;
+import iguana.utils.input.Input;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.descriptor.Descriptor;
@@ -49,6 +50,6 @@ public interface GSSEdge {
 	 * (2.2) if no, creates one and returns it
 	 * 
 	 */
-	Descriptor addDescriptor(GLLParser parser, GSSNode source, int inputIndex, NonPackedNode sppfNode);
+	Descriptor addDescriptor(GLLParser parser, Input input, GSSNode source, int inputIndex, NonPackedNode sppfNode);
 
 }

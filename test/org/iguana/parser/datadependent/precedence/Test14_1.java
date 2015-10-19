@@ -5,6 +5,7 @@ import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import iguana.parsetrees.sppf.SPPFVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Associativity;

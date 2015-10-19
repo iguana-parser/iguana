@@ -77,7 +77,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
 			if (length < 0) {
 				return null;
 			} else {
-				TerminalNode t = createTerminalNode(this, i, i + length);
+				TerminalNode t = createTerminalNode(this, i, i + length, input);
 				parser.terminalNodeAdded(t);
 				return t;
 			}

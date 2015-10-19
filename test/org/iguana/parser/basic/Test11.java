@@ -118,30 +118,30 @@ public class Test11 {
 	}
 	
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 0, 1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 1, 1);
-        NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4);
+        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input);
+        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0, input);
+        TerminalNode node2 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
+        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node2, input);
+        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 1, 1, input);
+        NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4, input);
         IntermediateNode node6 = createIntermediateNode(registry.getSlot("S ::= A A . b"), node1, node3);
         node6.addPackedNode(registry.getSlot("S ::= A A . b"), node3, node5);
-        TerminalNode node7 = createTerminalNode(registry.getSlot("b"), 1, 2);
+        TerminalNode node7 = createTerminalNode(registry.getSlot("b"), 1, 2, input);
         IntermediateNode node8 = createIntermediateNode(registry.getSlot("S ::= A A b ."), node6, node7);
-        NonterminalNode node9 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A A b ."), node8);
+        NonterminalNode node9 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A A b ."), node8, input);
         return node9;
 	}
 
     public static Tree getTree() {
         Tree t0 = createEpsilon(0);
-        Tree t1 = createRule(r3, list(t0));
-        Tree t2 = createTerminal(0, 1);
-        Tree t3 = createRule(r2, list(t2));
+        Tree t1 = createRule(r3, list(t0), input);
+        Tree t2 = createTerminal(0, 1, input);
+        Tree t3 = createRule(r2, list(t2), input);
         Tree t4 = createEpsilon(1);
-        Tree t5 = createRule(r3, list(t4));
+        Tree t5 = createRule(r3, list(t4), input);
         Tree t6 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t3, t5))));
-        Tree t7 = createTerminal(1, 2);
-        Tree t8 = createRule(r1, list(t6, t7));
+        Tree t7 = createTerminal(1, 2, input);
+        Tree t8 = createRule(r1, list(t6, t7), input);
         return t8;
     }
 }
