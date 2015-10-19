@@ -139,7 +139,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 			}
 		};
 
-        Key key = Keys.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), (x, y) -> x * input.length() + y);
+        Key key = Keys.from((x, y) -> x * input.length() + y, leftChild.getLeftExtent(), rightChild.getRightExtent());
 
         intermediateNodes.compute(key, creator);
 		
