@@ -123,6 +123,10 @@ public class Nonterminal extends AbstractSymbol {
 		return nodeType;
 	}
 
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
 	@Override
 	public String toString() {
 		return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")

@@ -242,6 +242,10 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
         return ruleType;
     }
 
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
     @Override
 	public String toString() {
 
