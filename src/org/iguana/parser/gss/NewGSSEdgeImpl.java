@@ -28,7 +28,7 @@
 package org.iguana.parser.gss;
 
 import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -79,9 +79,7 @@ public class NewGSSEdgeImpl implements GSSEdge {
 
 	@Override
 	public int hashCode() {
-		return  HashFunctions.defaulFunction.hash(returnSlot.hashCode(),
-												  destination.getInputIndex(), 
-												  destination.getGrammarSlot().hashCode());
+		return MurmurHash3.fn().apply(returnSlot, destination.getInputIndex(), destination.getGrammarSlot());
 	}
 	
 	@Override

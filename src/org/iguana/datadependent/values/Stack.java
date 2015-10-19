@@ -16,7 +16,7 @@ public class Stack<T> {
 		this.parent = null;
 		this.top = top;
 		this.size = 1;
-		this.hash = f.hash(top.hashCode());
+		this.hash = top.hashCode();
 	}
 	
 	Stack(T top, Stack<T> parent) {
@@ -32,7 +32,7 @@ public class Stack<T> {
 			root = root.parent;
 		}
 		
-		this.hash = f.hash(hs);
+		this.hash = MurmurHash3.fn().apply(hs);
 	}
 	
 	public static <T> Stack<T> from(T top) {

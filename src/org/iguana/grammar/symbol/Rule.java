@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.tree.RuleType;
-import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -277,7 +277,7 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(head.hashCode(), body == null ? 0 : body.hashCode());
+		return MurmurHash3.fn().apply(head, body);
 	}
 	
 	public Position getPosition(int i) {

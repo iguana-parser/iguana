@@ -147,7 +147,7 @@ public class GLLParserImpl implements GLLParser {
 		}
 		
 		cu = startGSSNode;
-		
+
 		logger.log("Parsing %s:", input.getURI());
 
 		long start = System.nanoTime();
@@ -156,7 +156,7 @@ public class GLLParserImpl implements GLLParser {
 		
 		parse(startSymbol, input, env);
 		
-		root = startGSSNode.getNonterminalNode(input.length() - 1);
+		root = startGSSNode.getNonterminalNode(input, input.length() - 1);
 		
 		ParseResult parseResult;
 		
@@ -405,7 +405,7 @@ public class GLLParserImpl implements GLLParser {
 	@Override
 	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
 		countAmbiguousNodes++;
-//		logger.log("Ambiguous node added: %s %s", node, input.getNodeInfo(node));
+		logger.log("Ambiguous node added: %s", node);
 //		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
 //		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {

@@ -37,6 +37,8 @@ import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFNodeFactory;
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.key.IntKey2;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
@@ -45,7 +47,7 @@ import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Holder;
-import iguana.utils.collections.Key;
+import iguana.utils.collections.key.Key;
 import iguana.utils.collections.hash.MurmurHash3;
 
 
@@ -136,8 +138,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 				return newNode;				
 			}
 		};
-		
-		intermediateNodes.compute(IntKey2.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), input.length()), creator);
+
+        Key key = Keys.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), (x, y) -> x * input.length() + y);
+
+        intermediateNodes.compute(key, creator);
 		
 		return holder.get();
 	}
@@ -160,8 +164,9 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 				return newNode;				
 			}
 		};
-		
-		intermediateNodes.compute(IntKey2PlusObject.from(env, leftChild.getLeftExtent(), rightChild.getRightExtent(), input.length()), creator);
+
+        Key key = Keys.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
+        intermediateNodes.compute(key, creator);
 		
 		return holder.get();
 	}	
@@ -247,107 +252,5 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		
 		return env;
 	}
-	
-	static class IntKey2 implements Key, Comparable<IntKey2> {
-		
-		private final int k1;
-		private final int k2;
-		private final int hash;
-
-		private IntKey2(int k1, int k2, int size) {
-			this.k1 = k1;
-			this.k2 = k2;
-			this.hash = k1 * size + k2;
-		}
-		
-		public static Key from(int k1, int k2, int size) {
-			return new IntKey2(k1, k2, size);
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			
-			if (!(obj instanceof IntKey2))
-				return false;
-			
-			IntKey2 other = (IntKey2) obj;
-			return k1 == other.k1 && k2 == other.k2;
-		}
-		
-		@Override
-		public int hashCode() {
-			return hash;
-		}
-
-		@Override
-		public int[] components() {
-			return new int[] {k1, k2};
-		}
-
-		@Override
-		public int compareTo(IntKey2 o) {
-			int r;
-			return (r = k1 - o.k1) != 0 ? r : k2 - o.k2;
-		}
-		
-		@Override
-		public String toString() {
-			return String.format("(%d, %d)", k1, k2);
-		}
-	}
-	
-	
-	static class IntKey2PlusObject implements Key {
-		
-		private static MurmurHash3 f = new MurmurHash3();
-		
-		private final int k1;
-		private final int k2;
-		private final Object obj;
-		
-		private final int hash;
-
-		private IntKey2PlusObject(Object obj, int k1, int k2, int size) {
-			this.k1 = k1;
-			this.k2 = k2;
-			this.obj = obj;
-			this.hash =  f.hash(obj.hashCode(), k1, k2);
-		}
-		
-		public static Key from(Object obj, int k1, int k2, int size) {
-			return new IntKey2PlusObject(obj, k1, k2, size);
-		}
-		
-		@Override
-		public boolean equals(Object other) {
-			if (this == other) return true;
-			
-			if (!(other instanceof IntKey2PlusObject)) return false;
-			
-			IntKey2PlusObject that = (IntKey2PlusObject) other;
-			return hash == that.hash 
-					&& k1 == that.k1 && k2 == that.k2 
-					&& obj.equals(that.obj);
-		}
-		
-		@Override
-		public int hashCode() {
-			return hash;
-		}
-
-		@Override
-		public int[] components() {
-			return new int[] {k1, k2};
-		}
-
-		@Override
-		public String toString() {
-			return String.format("(%d, %d, %s)", k1, k2, obj);
-		}
-
-	}
-
 
 }

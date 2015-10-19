@@ -29,7 +29,7 @@ package org.iguana.regex.automaton;
 
 import java.io.Serializable;
 
-import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.EOF;
 
@@ -126,7 +126,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 		if (isEpsilonTransition())
 			return super.hashCode();
 		
-		return HashFunctions.defaulFunction.hash(range.getStart(), range.getEnd());
+		return MurmurHash3.f2().apply(range.getStart(), range.getEnd());
 	}
 	
 	@Override

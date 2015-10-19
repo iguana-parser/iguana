@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.util.generator.ConstructorCode;
@@ -84,7 +84,7 @@ public class AbstractPattern implements Serializable, ConstructorCode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(nonterminal.hashCode(), position, parent.hashCode());
+		return MurmurHash3.fn().apply(nonterminal, position, parent);
 	}
 	
 	/**

@@ -32,7 +32,7 @@ import static org.iguana.util.CollectionsUtil.*;
 import java.util.Collections;
 import java.util.Set;
 
-import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.collections.rangemap.Range;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -91,7 +91,7 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 
     @Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(start, end);
+		return MurmurHash3.f2().apply(start, end);
 	}
 
 	@Override

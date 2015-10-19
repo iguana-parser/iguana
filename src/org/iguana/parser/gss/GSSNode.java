@@ -32,10 +32,11 @@ import java.util.List;
 
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.utils.collections.hash.HashFunctions;
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.hash.MurmurHash3;
+import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import iguana.utils.collections.IntKey1PlusObject;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
@@ -83,12 +84,12 @@ public class GSSNode {
 
     public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child) {
 //        logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
-        NonterminalNode node = poppedElements.add(parser, input, inputIndex, inputIndex, slot, child);
+        NonterminalNode node = poppedElements.add(parser, input, slot, child);
         if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
     }
 
     public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child, Object value) {
-        NonterminalNode node = poppedElements.add(parser, input, inputIndex, IntKey1PlusObject.from(child.getRightExtent(), value, input.length()), slot, child, value);
+        NonterminalNode node = poppedElements.add(parser, input, slot, child, value);
         if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
     }
 
@@ -104,8 +105,8 @@ public class GSSNode {
         }
     }
 
-    public NonterminalNode getNonterminalNode(int j) {
-		return poppedElements.getNonterminalNode(j);
+    public NonterminalNode getNonterminalNode(Input input, int j) {
+		return poppedElements.getNonterminalNode(input, j);
 	}
 	
 	public NonterminalGrammarSlot getGrammarSlot() {
@@ -143,7 +144,7 @@ public class GSSNode {
 	}
 
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(slot.getId(), inputIndex);
+		return MurmurHash3.f2().apply(slot.getId(), inputIndex);
 	}
 	
 	public String toString() {
