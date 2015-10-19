@@ -36,7 +36,6 @@ import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.sppf.*;
 import iguana.utils.input.Input;
-import iguana.utils.logging.JavaUtilIguanaLogger;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
@@ -44,8 +43,6 @@ import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.DummySlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -275,45 +272,12 @@ public class GLLParserImpl implements GLLParser {
 	 * 
 	 */
 	private IEvaluatorContext ctx;
-	private BodyGrammarSlot currentEndGrammarSlot = DummySlot.getInstance();
-	private final Object defaultValue = new Object();
-	private Object currentValue = defaultValue;
-	
+
 	@Override
 	public IEvaluatorContext getEvaluatorContext() {
 		return ctx;
 	}
-	
-	@Override
-	public BodyGrammarSlot getCurrentEndGrammarSlot() {
-		return currentEndGrammarSlot;
-	}
-	
-	@Override
-	public Object getCurrentValue() {
-		return currentValue;
-	}
-	
-	@Override
-	public boolean hasCurrentValue() {
-		return currentValue != defaultValue;
-	}
-	
-	@Override
-	public void setCurrentEndGrammarSlot(BodyGrammarSlot slot) {
-		currentEndGrammarSlot = slot;
-	}
-	
-	@Override
-	public void setCurrentValue(Object value) {
-		currentValue = value;
-	}
-	
-	@Override
-	public void resetCurrentValue() {
-		currentValue = defaultValue;
-	}
-	
+
 	@Override
 	public Environment getEnvironment() {
 		return ctx.getEnvironment();
