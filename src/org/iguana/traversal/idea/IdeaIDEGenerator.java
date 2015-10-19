@@ -205,7 +205,7 @@ public class IdeaIDEGenerator {
 
         private final Map<String, RegularExpression> terminals;
 
-        private int tokens = 0;
+        private int regexs = 0;
 
         public CollectRegularExpressions(Map<String, RegularExpression> terminals) {
             this.terminals = terminals;
@@ -225,14 +225,14 @@ public class IdeaIDEGenerator {
 
         @Override
         public Void visit(org.iguana.grammar.symbol.Character symbol) {
-            if (tokens != 0) return null;
+            if (regexs != 0) return null;
             terminals.put(symbol.getName(), symbol);
             return null;
         }
 
         @Override
         public Void visit(CharacterRange symbol) {
-            if (tokens != 0) return null;
+            if (regexs != 0) return null;
             terminals.put(symbol.getName(), symbol);
             return null;
         }
@@ -286,12 +286,17 @@ public class IdeaIDEGenerator {
         @Override
         public Void visit(Terminal symbol) {
             RegularExpression regex = symbol.getRegularExpression();
-            terminals.put((symbol.category() == Category.REGEX? "" : "|token|:") + symbol.getName(), regex);
+
             if (symbol.category() == Category.REGEX) {
-                tokens += 1;
+                terminals.put("|regex|:" + symbol.getName(), regex);
+                regexs += 1;
                 regex.accept(this);
-                tokens -= 1;
-            }
+                regexs -= 1;
+            } else if (symbol.category() == Category.KEYWORD)
+                terminals.put("|keyword|:" + symbol.getName(), regex);
+            else
+                terminals.put(symbol.getName(), regex);
+
             return null;
         }
 
@@ -388,28 +393,54 @@ public class IdeaIDEGenerator {
             rules.append("%%").append("\n").append("\n");
             rules.append("<YYINITIAL> {").append("\n");
 
+            regularExpressions.entrySet().stream()
+                    .filter(entry -> entry.getKey().startsWith("|keyword|:"))
+                    .forEach(entry -> {
+                        String regex = entry.getValue().accept(this);
+                        String tokenType = getTokenType(regex);
+
+                        if (!seenTokenTypes.contains(tokenType)) {
+                            tokenTypes.append("    public IElementType KEYWORD = " +
+                                    "new " + language + "TokenType(\"KEYWORD\");").append("\n");
+                            seenTokenTypes.add(tokenType);
+                        }
+
+                        rules.append(regex + getConditions(entry.getValue().getPostConditions()))
+                                .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                    });
+
+            regularExpressions.entrySet().stream()
+                    .filter(entry -> entry.getKey().startsWith("|regex|:"))
+                    .forEach(entry -> {
+                        String tokenType = entry.getKey().replaceFirst("\\|regex\\|:", "").toUpperCase();
+
+                        if (!seenTokenTypes.contains(tokenType)) {
+                            seenTokenTypes.add(tokenType);
+                            tokenTypes.append("    public IElementType " + tokenType + " = " +
+                                                       "new " + language + "TokenType(\"" + tokenType + "\");").append("\n");
+                        }
+
+                        macros.append(tokenType + "=" + entry.getValue().accept(this)).append("\n");
+
+                        rules.append("{" + tokenType + "} " + getConditions(entry.getValue().getPostConditions()))
+                             .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                    });
+
             for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
 
-                if (entry.getKey().startsWith("|token|:")) {
+            }
 
-                    String tokenType = entry.getKey().replaceFirst("\\|token\\|:", "").toUpperCase();
+            for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
 
-                    if (!seenTokenTypes.contains(tokenType)) {
-                        tokenTypes.append("    public IElementType " + tokenType + " = " +
-                                               "new " + language + "TokenType(\"" + tokenType + "\");").append("\n");
-                        seenTokenTypes.add(tokenType);
-                    }
+                if (entry.getKey().startsWith("|regex|:")) {
 
-                    macros.append(tokenType + "=" + entry.getValue().accept(this)).append("\n");
 
-                    rules.append("{" + tokenType + "} " + getConditions(entry.getValue().getPostConditions()))
-                         .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                 }
             }
 
             for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
 
-                if (!entry.getKey().startsWith("|token|:")) {
+                if (!entry.getKey().startsWith("|regex|:")) {
 
                     String regex = entry.getValue().accept(this);
                     String tokenType = getTokenType(regex);
