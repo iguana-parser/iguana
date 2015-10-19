@@ -97,13 +97,14 @@ public class PoppedElements {
 		// No node added yet
 		if (firstNode == null) {
             firstNode = createNonterminalNode(slot.getNonterminal(), slot, child, value, input);
+            firstInput = input;
             parser.nonterminalNodeAdded(firstNode);
             parser.packedNodeAdded(slot, child.getRightExtent());
             return firstNode;
         } else {
-            Key key = Keys.from(child.getRightExtent(), value);
+            Key key = Keys.from(child.getRightExtent(), value, input);
             // Only one node is added and there is an ambiguity
-            if (poppedElements == null && Keys.from(firstNode.getRightExtent(), firstNode.getValue()).equals(key)) {
+            if (poppedElements == null && Keys.from(firstNode.getRightExtent(), firstNode.getValue(), firstInput).equals(key)) {
             boolean ambiguous = firstNode.addPackedNode(slot, child);
             parser.packedNodeAdded(slot, child.getRightExtent());
             if (ambiguous) parser.ambiguousNodeAdded(firstNode);
@@ -112,7 +113,7 @@ public class PoppedElements {
             // Initialize the map and put the firstNode element there
             if (poppedElements == null) {
                 poppedElements = new HashMap<>();
-                poppedElements.put(Keys.from(firstNode.getRightExtent(), firstNode.getValue()), firstNode);
+                poppedElements.put(Keys.from(firstNode.getRightExtent(), firstNode.getValue(), firstInput), firstNode);
             }
 
             Holder<NonterminalNode> holder = new Holder<>();
