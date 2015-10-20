@@ -36,7 +36,6 @@ import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
@@ -90,19 +89,7 @@ public interface GLLParser {
 	Object[] evaluate(Expression[] arguments, Environment env);
 	
 	IEvaluatorContext getEvaluatorContext();
-	
-	BodyGrammarSlot getCurrentEndGrammarSlot();
-	
-	Object getCurrentValue();
-	
-	boolean hasCurrentValue();
-	
-	void setCurrentEndGrammarSlot(BodyGrammarSlot slot);
-	
-	void setCurrentValue(Object value);
-	
-	void resetCurrentValue();
-	
+
 	Environment getEnvironment();
 	
 	void setEnvironment(Environment env);
