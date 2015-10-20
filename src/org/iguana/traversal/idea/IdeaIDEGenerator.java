@@ -1170,6 +1170,8 @@ public class IdeaIDEGenerator {
 
                 file = new File(path + language.toLowerCase() + "/gen/psi/I" + head + ".java");
 
+                boolean declaration = head.endsWith("$Declaration");
+                boolean reference = head.endsWith("$Reference");
                 try {
                     PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
                     writer.println("package " + language.toLowerCase() + ".gen.psi;");
@@ -1177,9 +1179,16 @@ public class IdeaIDEGenerator {
                     writer.println("/* This file has been generated. */");
                     writer.println();
                     writer.println("import com.intellij.psi.PsiElement;");
+                    if (declaration) writer.println("import com.intellij.psi.PsiNamedElement;");
+                    if (reference) writer.println("import com.intellij.psi.PsiReference;");
                     writer.println("import java.util.List;");
                     writer.println();
-                    writer.println("public interface I" + head + " extends PsiElement {");
+                    if (declaration)
+                        writer.println("public interface I" + head + " extends PsiElement, PsiNamedElement {");
+                    else if (reference)
+                        writer.println("public interface I" + head + " extends PsiElement, PsiReference {");
+                    else
+                        writer.println("public interface I" + head + " extends PsiElement {");
                     for (String symbol : symbols.keySet()) {
                         NUM num = symbols.get(symbol);
                         switch (num) {
@@ -1270,6 +1279,8 @@ public class IdeaIDEGenerator {
                     String name = head + (entry.getKey().equals("Impl")? entry.getKey() : entry.getKey() + "Impl");
                     file = new File(path + language.toLowerCase() + "/gen/psi/impl/" + name + ".java");
 
+                    boolean declaration = head.endsWith("$Declaration");
+                    boolean reference = head.endsWith("$Reference");
                     try {
                         PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
                         writer.println("package " + language.toLowerCase() + ".gen.psi.impl;");
@@ -1278,10 +1289,15 @@ public class IdeaIDEGenerator {
                         writer.println();
                         writer.println("import com.intellij.psi.PsiElement;");
                         writer.println("import com.intellij.psi.PsiElementVisitor;");
+                        if (reference) writer.println("import com.intellij.psi.PsiReference;");
                         writer.println("import com.intellij.psi.util.PsiTreeUtil;");
                         writer.println();
                         writer.println("import com.intellij.extapi.psi.ASTWrapperPsiElement;");
                         writer.println("import com.intellij.lang.ASTNode;");
+                        if (reference) writer.println("import com.intellij.openapi.util.TextRange;");
+                        writer.println();
+                        if (declaration || reference)
+                            writer.println("import com.intellij.util.IncorrectOperationException;");
                         writer.println();
                         writer.println("import java.util.List;");
                         writer.println("import java.util.ArrayList;");
@@ -1373,6 +1389,28 @@ public class IdeaIDEGenerator {
                                 default:
                             }
                         }
+
+                        if (declaration) {
+                            writer.println();
+                            writer.println("    public String getName() { return getNode().getText(); }");
+                            writer.println("    public PsiElement setName(String name) throws IncorrectOperationException { return null; }");
+                        }
+
+                        if (reference) {
+                            writer.println();
+                            writer.println("    public PsiReference[] getReferences() { return new PsiReference[] {this}; }");
+                            writer.println("    public PsiReference getReference() { return this; }");
+                            writer.println("    public PsiElement getElement() { return this; }");
+                            writer.println("    public TextRange getRangeInElement() { return new TextRange(0, getTextLength()); }");
+                            writer.println("    public PsiElement resolve() { return null; }");
+                            writer.println("    public String getCanonicalText() { return this.getText(); }");
+                            writer.println("    public PsiElement handleElementRename(String name) throws IncorrectOperationException { return null; }");
+                            writer.println("    public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException { return null; }");
+                            writer.println("    public boolean isReferenceTo(PsiElement element) { return false; }");
+                            writer.println("    public Object[] getVariants() { return new Object[0]; }");
+                            writer.println("    public boolean isSoft() { return false; }");
+                        }
+
                         writer.println("}");
                         writer.close();
                     } catch (FileNotFoundException e) {
