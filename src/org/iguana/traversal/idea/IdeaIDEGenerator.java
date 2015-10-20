@@ -37,7 +37,7 @@ public class IdeaIDEGenerator {
                 symbol.accept(new CollectRegularExpressions(terminals));
         }
 
-        if (grammar.getLayout() instanceof Terminal) // That is, defined as a token
+        if (grammar.getLayout() instanceof Terminal)
             grammar.getLayout().accept(new CollectRegularExpressions(terminals));
 
         new ToJFlexGenerator(language, path, terminals, tokenTypes).generate();
