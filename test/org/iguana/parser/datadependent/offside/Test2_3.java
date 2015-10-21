@@ -52,8 +52,8 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
@@ -118,11 +118,11 @@ Grammar.builder()
 						                 + "       a             \n"
 						                 + "      +              \n"
 						                 + "     a               \n");
-         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 
-         GLLParser parser = ParserFactory.getParser();
+         GLLParser parser = new GLLParserImpl();
          ParseResult result = parser.parse(input, graph, Start.from(Nonterminal.withName("S")));
 
          Assert.assertTrue(result.isParseError());

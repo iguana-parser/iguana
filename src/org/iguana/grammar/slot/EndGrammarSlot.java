@@ -36,6 +36,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 
 import java.util.Collections;
@@ -48,13 +49,15 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	protected final RuleType ruleType;
 
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, Action action, RuleType ruleType) {
-		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType);
+			              String variable, Set<String> state, Conditions conditions, Action action,
+                          RuleType ruleType, ParserRuntime runtime) {
+		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType, runtime);
 	}
 	
 	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, int i1, 
-            			  String variable, int i2, Set<String> state, Conditions conditions, Action action, RuleType ruleType) {
-		super(id, position, label, i1, variable, i2, state, conditions);
+            			  String variable, int i2, Set<String> state, Conditions conditions,
+                          Action action, RuleType ruleType, ParserRuntime runtime) {
+		super(id, position, label, i1, variable, i2, state, conditions, runtime);
 		this.nonterminal = nonterminal;
 		this.action = action;
         this.ruleType = ruleType;
@@ -65,9 +68,9 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.testFollow(input.charAt(i)))
-            u.pop(parser, input, i, this, node);
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
+		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
+            u.pop(input, this, node);
 	}
 	
 	@Override
@@ -110,14 +113,14 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(input.charAt(i)))
-            u.pop(parser, input, i, this, node);
+	public void execute(Input input, GSSNode u,NonPackedNode node, Environment env) {
+		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
+            u.pop(input, this, node);
 	}
 	
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Object value) {
-		if (nonterminal.testFollow(input.charAt(i)))
-            u.pop(parser, input, i, this, node, value);
+	public void execute(Input input, GSSNode u, NonPackedNode node, Object value) {
+		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
+            u.pop(input, this, node, value);
 	}
 
 }

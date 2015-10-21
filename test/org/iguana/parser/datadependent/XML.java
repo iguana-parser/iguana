@@ -21,8 +21,8 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
@@ -81,11 +81,11 @@ Grammar.builder()
 
          Input input = Input.fromString("<note> <to>John</to> <from>Alice</from> </note>");
          
-         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
 
-         GLLParser parser = ParserFactory.getParser();
+         GLLParser parser = new GLLParserImpl();
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("Element"));
 
          Assert.assertTrue(result.isParseSuccess());

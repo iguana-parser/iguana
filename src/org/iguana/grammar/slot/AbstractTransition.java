@@ -28,15 +28,20 @@
 package org.iguana.grammar.slot;
 
 
+import org.iguana.parser.ParserRuntime;
+
 public abstract class AbstractTransition implements Transition {
 	
 	protected final BodyGrammarSlot dest;
 
 	protected final BodyGrammarSlot origin;
 
-	public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest) {
+    protected final ParserRuntime runtime;
+
+	public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
 		this.origin = origin;
 		this.dest = dest;
+        this.runtime = runtime;
 	}
 
 	@Override

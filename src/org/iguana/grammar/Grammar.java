@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import iguana.utils.input.Input;
 
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
@@ -51,7 +50,6 @@ import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
 import org.iguana.util.CollectionsUtil;
-import org.iguana.util.Configuration;
 import org.iguana.util.generator.ConstructorCode;
 
 
@@ -152,16 +150,12 @@ public class Grammar implements ConstructorCode, Serializable {
 		return null;
 	}
 	
-	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
-		return new GrammarGraph(this, input, config);
-	}
-	
 	private static Set<RuntimeException> validate(List<Rule> rules, Map<Nonterminal, List<Rule>> definitions) {
 		return rules.stream().filter(r -> r.getBody() != null)
 		   .<RuntimeException>flatMap(r -> r.getBody().stream()
-		                                              .filter(s -> !definitions.containsKey(s))
-		                                              .filter(s -> s instanceof Nonterminal)
-		                                              .map(s -> new NonterminalNotDefinedException((Nonterminal)s)))
+                   .filter(s -> !definitions.containsKey(s))
+                   .filter(s -> s instanceof Nonterminal)
+                   .map(s -> new NonterminalNotDefinedException((Nonterminal) s)))
 						     .collect(Collectors.toSet());		
 	}
 	

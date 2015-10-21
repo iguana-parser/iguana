@@ -78,8 +78,8 @@ public class Gamma3Test {
 	@Test
 	public void test100bs() {
 		Input input = Input.fromString(get100b());		
-		GLLParser parser = ParserFactory.getParser();
-		parser.parse(input, grammar, Nonterminal.withName("S"));
+		GLLParser parser = new GLLParserImpl();
+		parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 	}
 	
 	private String get100b() {

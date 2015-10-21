@@ -13,8 +13,8 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.junit.Assert;
@@ -65,15 +65,15 @@ public class JavaNat {
          grammar4 = new LayoutWeaver().transform(grammar4);
 
          Input input = Input.fromFile(new File("src/org/iguana/util/hashing/hashfunction/MurmurHash2.java"));
-         GrammarGraph graph1 = grammar1.toGrammarGraph(input, Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
-         GrammarGraph graph2 = grammar2.toGrammarGraph(input, Configuration.DEFAULT);
-         GrammarGraph graph3 = grammar3.toGrammarGraph(input, Configuration.DEFAULT);
-         GrammarGraph graph4 = grammar4.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph1 = GrammarGraph.from(grammar1, input, Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
+         GrammarGraph graph2 = GrammarGraph.from(grammar2, input, Configuration.DEFAULT);
+         GrammarGraph graph3 = GrammarGraph.from(grammar3, input, Configuration.DEFAULT);
+         GrammarGraph graph4 = GrammarGraph.from(grammar4, input, Configuration.DEFAULT);
 
-         GLLParser parser1 = ParserFactory.getParser(Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
-         GLLParser parser2 = ParserFactory.getParser();
-         GLLParser parser3 = ParserFactory.getParser();
-         GLLParser parser4 = ParserFactory.getParser();
+         GLLParser parser1 = new GLLParserImpl();
+         GLLParser parser2 = new GLLParserImpl();
+         GLLParser parser3 = new GLLParserImpl();
+         GLLParser parser4 = new GLLParserImpl();
          
          ParseResult result1 = parser1.parse(input, graph1, Nonterminal.withName("CompilationUnit"));
          ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("CompilationUnit"));

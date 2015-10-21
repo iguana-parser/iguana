@@ -19,8 +19,8 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
@@ -58,9 +58,9 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("aa;cb;d");
-         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         GLLParser parser = ParserFactory.getParser();
+         GLLParser parser = new GLLParserImpl();
          
          Map<String, Object> inits = new HashMap<>();
          inits.put("x", 0);
@@ -75,7 +75,7 @@ Grammar.builder()
         	 }
          }
          
-         ParseResult result = parser.parse(input, graph, start, inits, false);
+         ParseResult result = parser.parse(input, graph, Configuration.DEFAULT, start, inits, false);
 
          Assert.assertTrue(result.isParseSuccess());
 

@@ -43,8 +43,8 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
@@ -105,9 +105,9 @@ public class Test4 {
 		System.out.println(grammar);
 		
 		Input input = Input.fromString("abcbcbc");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 		
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = new GLLParserImpl();
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());

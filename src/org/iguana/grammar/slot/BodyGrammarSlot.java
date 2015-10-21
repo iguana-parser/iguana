@@ -38,17 +38,15 @@ import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFNodeFactory;
 import iguana.utils.collections.Keys;
-import iguana.utils.collections.key.IntKey2;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Holder;
 import iguana.utils.collections.key.Key;
-import iguana.utils.collections.hash.MurmurHash3;
 
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
@@ -71,12 +69,12 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	private FollowTest followTest;
 	
-	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions) {
-		this(id, position, label, -1, variable, -1, state, conditions);
+	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
+		this(id, position, label, -1, variable, -1, state, conditions, runtime);
 	}
 	
-	public BodyGrammarSlot(int id, Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions) {
-		super(id);
+	public BodyGrammarSlot(int id, Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, ParserRuntime runtime) {
+		super(id, runtime);
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
@@ -112,14 +110,14 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return followTest.test(v);
 	}
 	
-	public IntermediateNode createIntermediateNode(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public IntermediateNode createIntermediateNode(NonPackedNode leftChild, NonPackedNode rightChild) {
 		IntermediateNode newNode = SPPFNodeFactory.createIntermediateNode(this, leftChild, rightChild);
-		parser.intermediateNodeAdded(newNode);
-        parser.packedNodeAdded(this, leftChild.getRightExtent());
+		runtime.intermediateNodeAdded(newNode);
+        runtime.packedNodeAdded(this, leftChild.getRightExtent());
 		return newNode;
 	}
 	
-	public NonPackedNode getIntermediateNode2(GLLParser parser, Input input, NonPackedNode leftChild, NonPackedNode rightChild) {
+	public NonPackedNode getIntermediateNode2(Input input, NonPackedNode leftChild, NonPackedNode rightChild) {
 		
 		if (isFirst())
 			return rightChild;
@@ -129,11 +127,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
 			if (value != null) {
 				boolean ambiguous = value.addPackedNode(this, leftChild, rightChild);
-                parser.packedNodeAdded(this, leftChild.getRightExtent());
-                if (ambiguous) parser.ambiguousNodeAdded(value);
+                runtime.packedNodeAdded(this, leftChild.getRightExtent());
+                if (ambiguous) runtime.ambiguousNodeAdded(value);
 				return value;
 			} else {
-				IntermediateNode newNode = createIntermediateNode(parser, leftChild, rightChild);
+				IntermediateNode newNode = createIntermediateNode(leftChild, rightChild);
 				holder.set(newNode);
 				return newNode;				
 			}
@@ -146,7 +144,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return holder.get();
 	}
 	
-	public NonPackedNode getIntermediateNode2(GLLParser parser, Input input, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
+	public NonPackedNode getIntermediateNode2(Input input, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
 		
 		if (isFirst())
 			return rightChild;
@@ -155,11 +153,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
 			if (value != null) {
                 boolean ambiguous = value.addPackedNode(this, leftChild, rightChild);
-                parser.packedNodeAdded(this, leftChild.getRightExtent());
-                if (ambiguous) parser.ambiguousNodeAdded(value);
+                runtime.packedNodeAdded(this, leftChild.getRightExtent());
+                if (ambiguous) runtime.ambiguousNodeAdded(value);
 				return value;
 			} else {
-				IntermediateNode newNode = createIntermediateNode(parser, leftChild, rightChild);
+				IntermediateNode newNode = createIntermediateNode(leftChild, rightChild);
 				holder.set(newNode);
 				return newNode;				
 			}
@@ -180,8 +178,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		intermediateNodes = new HashMap<>();
 	}
 	
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, input, u, i, node));
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
+		getTransitions().forEach(t -> t.execute(input, u, node));
 	}
 	
 	/**
@@ -197,8 +195,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return variable;
 	}
 	
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
-		getTransitions().forEach(t -> t.execute(parser, input, u, i, node, env));
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+		getTransitions().forEach(t -> t.execute(input, u, node, env));
 	}
 		
 	public boolean requiresBinding() {

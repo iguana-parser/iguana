@@ -32,12 +32,12 @@ import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.descriptor.Descriptor;
 
 public class NewGSSEdgeImpl implements GSSEdge {
 	
-	private final BodyGrammarSlot returnSlot;
+	protected final BodyGrammarSlot returnSlot;
 	private final NonPackedNode node;
 	private final GSSNode destination;
 
@@ -88,46 +88,49 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	}
 
 	@Override
-	public Descriptor addDescriptor(GLLParser parser, Input input, GSSNode source, int inputIndex, NonPackedNode sppfNode) {
+	public Descriptor addDescriptor(Input input, GSSNode source, NonPackedNode sppfNode) {
 		
 		/**
 		 * 
 		 * Data-dependent GLL parsing
 		 * 
 		 */
+
+        int i = sppfNode.getRightExtent();
+        ParserRuntime runtime = returnSlot.getRuntime();
 		
 		NonPackedNode y;
 		BodyGrammarSlot returnSlot = this.returnSlot;
 		
 		if (returnSlot.requiresBinding()) {
-			Environment env = returnSlot.doBinding(sppfNode, parser.getEmptyEnvironment());
+			Environment env = returnSlot.doBinding(sppfNode, runtime.getEmptyEnvironment());
+
+            runtime.setEnvironment(env);
 			
-			parser.setEnvironment(env);
-			
-			if (returnSlot.getConditions().execute(input, source, inputIndex, parser.getEvaluatorContext()))
+			if (returnSlot.getConditions().execute(input, source, i, runtime.getEvaluatorContext()))
 				return null;
 			
-			env = parser.getEnvironment();	
+			env = runtime.getEnvironment();
 			
-			y = returnSlot.getIntermediateNode2(parser, input, node, sppfNode, env);
+			y = returnSlot.getIntermediateNode2(input, node, sppfNode, env);
 			
 //			y = parser.getNode(returnSlot, node, sppfNode, env);
 //			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 //				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 			
-			return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, input, env) : null;
+			return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, y, input, env) : null;
 		}
 		
-		if (returnSlot.getConditions().execute(input, source, inputIndex))
+		if (returnSlot.getConditions().execute(input, source, i))
 			return null;
 		
 //		y = parser.getNode(returnSlot, node, sppfNode);
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 //			return new Descriptor(returnSlot, destination, inputIndex, y);
 		
-		y = returnSlot.getIntermediateNode2(parser, input, node, sppfNode);
+		y = returnSlot.getIntermediateNode2(input, node, sppfNode);
 		
-		return y != null ? new Descriptor(returnSlot, destination, inputIndex, y, input) : null;
+		return y != null ? new Descriptor(returnSlot, destination, y, input) : null;
 	}
 
 }

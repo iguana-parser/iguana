@@ -42,7 +42,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
@@ -71,8 +71,8 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 
 	private final int nodeType;
 
-	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup, int nodeType) {
-		super(id);
+	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup, int nodeType, ParserRuntime runtime) {
+		super(id, runtime);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
@@ -132,16 +132,18 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 		           .append(")").toString();
 	}
 	
-	public void create(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode u, int i, NonPackedNode node) {
-		
+	public void create(Input input, BodyGrammarSlot returnSlot, GSSNode u, NonPackedNode node) {
+
+        int i = node.getRightExtent();
+
 		GSSNodeCreator creator = gssNode -> {
 			// No GSS node labelled (slot, k) exits
 			if (gssNode == null) {
 				
 				gssNode = new GSSNode(this, i);
-				parser.gssNodeAdded(gssNode);
+				runtime.gssNodeAdded(gssNode);
 
-				gssNode.createGSSEdge(parser, input, returnSlot, u, node);
+				gssNode.createGSSEdge(input, returnSlot, u, node);
 				
 				final GSSNode __gssNode = gssNode;
 				
@@ -149,12 +151,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 				if (firstSlots != null)
 					for (BodyGrammarSlot s : firstSlots) {
 						if (!s.getConditions().execute(input, __gssNode, i))
-							parser.scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance(), input));
+							runtime.scheduleDescriptor(new Descriptor(s, __gssNode, new DummyNode(i), input));
 					}
 				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 			} else {
-//				log.trace("GSSNode found: %s",  gssNode);
-				gssNode.createGSSEdge(parser, input, returnSlot, u, node);
+				runtime.log("GSSNode found: %s", gssNode);
+				gssNode.createGSSEdge(input, returnSlot, u, node);
 			}
 			return gssNode;
 		};
@@ -193,8 +195,10 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	public void create(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode u, int i, NonPackedNode node, Expression[] arguments, Environment env) {
+	public void create(Input input, BodyGrammarSlot returnSlot, GSSNode u, NonPackedNode node, Expression[] arguments, Environment env) {
 		assert !(env.isEmpty() && arguments == null);
+
+        int i = node.getRightExtent();
 		
 		if (arguments == null) {
 			
@@ -203,9 +207,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 				if (gssNode == null) {
 					
 					gssNode = new GSSNode(this, i);
-					parser.gssNodeAdded(gssNode);
+					runtime.gssNodeAdded(gssNode);
 					
-					gssNode.createGSSEdge(parser, input, returnSlot, u, node, env); // Record environment on the edge;
+					gssNode.createGSSEdge(input, returnSlot, u, node, env); // Record environment on the edge;
 					
 					final GSSNode __gssNode = gssNode;
 					
@@ -213,12 +217,12 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 					if (firstSlots != null)
 						for (BodyGrammarSlot s : firstSlots) {
 							if (!s.getConditions().execute(input, __gssNode, i))
-								parser.scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance(), input));
+								runtime.scheduleDescriptor(new Descriptor(s, __gssNode, new DummyNode(i), input));
 						}
 					// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 				} else {
-//					log.trace("GSSNode found: %s",  gssNode);
-					gssNode.createGSSEdge(parser, input, returnSlot, u, node, env); // Record environment on the edge
+					runtime.log("GSSNode found: %s", gssNode);
+					gssNode.createGSSEdge(input, returnSlot, u, node, env); // Record environment on the edge
 				}
 				return gssNode;
 			};	
@@ -227,45 +231,45 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 			return;
 		}
 		
-		GSSNodeData<Object> data = new GSSNodeData<>(parser.evaluate(arguments, env));
+		GSSNodeData<Object> data = new GSSNodeData<>(runtime.evaluate(arguments, env));
 		
 		GSSNodeCreator creator = gssNode -> {
 			if (gssNode == null) {
 				
 				gssNode = new org.iguana.datadependent.gss.GSSNode<>(this, i, data);
 				 
-				parser.gssNodeAdded(gssNode);
-//				log.trace("GSSNode created: %s(%s)",  gssNode, data);
+				runtime.gssNodeAdded(gssNode);
+				runtime.log("GSSNode created: %s(%s)", gssNode, data);
 				
-				if (env.isEmpty()) gssNode.createGSSEdge(parser, input, returnSlot, u, node);
-				else gssNode.createGSSEdge(parser, input, returnSlot, u, node, env);
+				if (env.isEmpty()) gssNode.createGSSEdge(input, returnSlot, u, node);
+				else gssNode.createGSSEdge(input, returnSlot, u, node, env);
 				
 				Environment newEnv;
 				
-				if (parser.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY)
-					newEnv = parser.getEmptyEnvironment().declare(data.getValues());
+				if (runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY)
+					newEnv = runtime.getEmptyEnvironment().declare(data.getValues());
 				else
-					newEnv = parser.getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
+					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
 				
 				final GSSNode __gssNode = gssNode;
 				
 				for (BodyGrammarSlot s : getFirstSlots(input.charAt(i))) {
 					
-					parser.setEnvironment(newEnv);
-					
+					runtime.setEnvironment(newEnv);
+
 					if (s.getLabel() != null)
-						parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
-					
-					if (!s.getConditions().execute(input, __gssNode, i, parser.getEvaluatorContext()))
-						parser.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), input, parser.getEnvironment()));
+						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
+
+					if (!s.getConditions().execute(input, __gssNode, i, runtime.getEvaluatorContext()))
+						runtime.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, __gssNode, new DummyNode(i), input, runtime.getEnvironment()));
 				}
 				
 				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));
 				
 			} else {
 //				log.trace("GSSNode found: %s",  gssNode);
-				if (env.isEmpty()) gssNode.createGSSEdge(parser, input, returnSlot, u, node);
-				else gssNode.createGSSEdge(parser, input, returnSlot, u, node, env);
+				if (env.isEmpty()) gssNode.createGSSEdge(input, returnSlot, u, node);
+				else gssNode.createGSSEdge(input, returnSlot, u, node, env);
 			}
 			return gssNode;
 		};

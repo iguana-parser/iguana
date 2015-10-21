@@ -44,8 +44,8 @@ import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
@@ -701,8 +701,8 @@ public class Python {
 				                     + "      k=0  " + "\n"
 				                     + "   w=0   "   + "\n");
 		
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-		GLLParser parser = ParserFactory.getParser();
+		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
+		GLLParser parser = new GLLParserImpl();
 		
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("IfStmt"));
 	}

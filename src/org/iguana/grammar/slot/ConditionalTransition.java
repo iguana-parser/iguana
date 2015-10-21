@@ -32,7 +32,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 
 public class ConditionalTransition extends AbstractTransition {
@@ -41,12 +41,13 @@ public class ConditionalTransition extends AbstractTransition {
 	
 	private final BodyGrammarSlot ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(condition, origin, dest, null);
+	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
+		this(condition, origin, dest, null, runtime);
 	}
 	
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, BodyGrammarSlot ifFalse) {
-		super(origin, dest);
+	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest,
+                                 BodyGrammarSlot ifFalse, ParserRuntime runtime) {
+		super(origin, dest, runtime);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
 	}
@@ -56,9 +57,9 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
 		
-		Object value = parser.evaluate(condition, parser.getEmptyEnvironment());
+		Object value = runtime.evaluate(condition, runtime.getEmptyEnvironment());
 		
 		if (!(value instanceof Boolean)) {
 			throw new UnexpectedRuntimeTypeException(condition);
@@ -67,9 +68,9 @@ public class ConditionalTransition extends AbstractTransition {
 		boolean isTrue = ((Boolean) value) == true;
 		
 		if (isTrue)
-			dest.execute(parser, input, u, i, node);
+			dest.execute(input, u, node);
 		else if (ifFalse != null)
-			ifFalse.execute(parser, input, u, i, node);
+			ifFalse.execute(input, u, node);
 		// TODO: logging
 	}
 
@@ -79,9 +80,9 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
 		
-		Object value = parser.evaluate(condition, env);
+		Object value = runtime.evaluate(condition, env);
 		
 		if (!(value instanceof Boolean)) {
 			throw new UnexpectedRuntimeTypeException(condition);
@@ -90,9 +91,9 @@ public class ConditionalTransition extends AbstractTransition {
 		boolean isTrue = ((Boolean) value) == true;
 		
 		if (isTrue)
-			dest.execute(parser, input, u, i, node, env);
+			dest.execute(input, u, node, env);
 		else if (ifFalse != null)
-			ifFalse.execute(parser, input, u, i, node, env);
+			ifFalse.execute(input, u, node, env);
 		// TODO: logging
 	}
 

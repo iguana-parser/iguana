@@ -27,20 +27,10 @@
 
 package org.iguana.parser;
 
-import iguana.parsetrees.sppf.*;
 import iguana.utils.input.Input;
-import org.iguana.datadependent.ast.Expression;
-import org.iguana.datadependent.ast.Statement;
-import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSEdge;
-import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Configuration;
 
 import java.util.Collections;
@@ -55,63 +45,17 @@ import java.util.Map;
  */
 public interface GLLParser {
 	
-	ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol, Map<String, ? extends Object> map, boolean global);
+	ParseResult parse(Input input, GrammarGraph grammarGraph, Configuration config, Nonterminal startSymbol, Map<String, ?> map, boolean global);
 	
 	default ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
-		return parse(input, grammarGraph, startSymbol, Collections.emptyMap(), true);
+		return parse(input, grammarGraph, Configuration.DEFAULT, startSymbol, Collections.emptyMap(), true);
 	}
 	
-	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
-		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol);
+	default ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol) {
+		return parse(input, GrammarGraph.from(grammar, input, config), startSymbol);
 	}
 	
-	default ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, ? extends Object> map) {
-		return parse(input, grammar.toGrammarGraph(input, getConfiguration()), startSymbol, map, true);
+	default ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol, Map<String, ?> map) {
+		return parse(input, GrammarGraph.from(grammar, input, config), config, startSymbol, map, true);
 	}
-	
-	void recordParseError(GrammarSlot slot);
-	
-	Iterable<GSSNode> getGSSNodes();
-	
-	Configuration getConfiguration();
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */	
-	Object evaluate(Statement[] statements, Environment env);
-	
-	Object evaluate(DataDependentCondition condition, Environment env);
-	
-	Object evaluate(Expression expression, Environment env);
-	
-	Object[] evaluate(Expression[] arguments, Environment env);
-	
-	IEvaluatorContext getEvaluatorContext();
-
-	Environment getEnvironment();
-	
-	void setEnvironment(Environment env);
-	
-	Environment getEmptyEnvironment();
-		
-	GrammarGraph getGrammarGraph();
-	
-	void scheduleDescriptor(Descriptor descriptor);
-
-	void terminalNodeAdded(TerminalNode node);
-	
-	void nonterminalNodeAdded(NonterminalNode node);
-	
-	void intermediateNodeAdded(IntermediateNode node);
-
-	void packedNodeAdded(Object slot, int pivot);
-
-	void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
-
-	void gssNodeAdded(GSSNode node);
-	
-	void gssEdgeAdded(GSSEdge edge);
-
 }

@@ -27,6 +27,8 @@
 
 package org.iguana.util;
 
+import iguana.utils.logging.LogLevel;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -47,6 +49,8 @@ public class Configuration {
 	private final HashMapImpl hashmapImpl;
 	
 	private final EnvironmentImpl envImpl;
+
+    private final LogLevel logLevel;
 	
 	private Configuration(Builder builder) {
 		this.gssLookupImpl = builder.gssLookupImpl;
@@ -54,6 +58,7 @@ public class Configuration {
 		this.matcherType = builder.matcherType;
 		this.hashmapImpl = builder.hashmapImpl;
 		this.envImpl = builder.envImpl;
+        this.logLevel = builder.logLevel;
 	}
 		
 	public LookupImpl getGSSLookupImpl() {
@@ -75,8 +80,12 @@ public class Configuration {
 	public EnvironmentImpl getEnvImpl() {
 		return envImpl;
 	}
-	
-	public static Builder builder() {
+
+    public LogLevel getLogLevel() {
+        return logLevel;
+    }
+
+    public static Builder builder() {
 		return new Builder();
 	}
 	
@@ -119,6 +128,7 @@ public class Configuration {
 		private MatcherType matcherType = MatcherType.JAVA_REGEX;
 		private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
+        private LogLevel logLevel = LogLevel.None;
 		
 		private EnvironmentImpl envImpl = EnvironmentImpl.ARRAY;
 				
@@ -150,5 +160,11 @@ public class Configuration {
 			this.envImpl = impl;
 			return this;
 		}
+
+        public Builder setLogLevel(LogLevel logLevel) {
+            this.logLevel = logLevel;
+            return this;
+        }
+
 	}
 }

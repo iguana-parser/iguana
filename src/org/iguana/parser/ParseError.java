@@ -41,12 +41,14 @@ public class ParseError extends AbstractParseResult {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
-	
-	public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode curerntNode) {
+    private final GSSNode gssNode;
+
+    public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode gssNode) {
 		super(input);
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-	}
+        this.gssNode = gssNode;
+    }
 	
 	public int getInputIndex() {
 		return inputIndex;

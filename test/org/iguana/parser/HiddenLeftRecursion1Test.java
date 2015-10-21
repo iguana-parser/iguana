@@ -85,8 +85,8 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("xca");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1(parser.getGrammarGraph())));
 	}
@@ -94,8 +94,8 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("ycb");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2(parser.getGrammarGraph())));
 	}
@@ -103,8 +103,8 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("cababaab");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3(parser.getGrammarGraph())));
 	}
@@ -112,8 +112,8 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test4() {
 		Input input = Input.fromString("xcabbbbb");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode4(parser.getGrammarGraph())));
 	}
@@ -121,8 +121,8 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test5() {
 		Input input = Input.fromString("ycaaaabaaaa");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode5(parser.getGrammarGraph())));
 	}

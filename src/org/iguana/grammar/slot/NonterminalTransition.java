@@ -33,7 +33,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -46,50 +46,53 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions) {
-		this(nonterminal, origin, dest, null, preConditions);
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest,
+                                 Conditions preConditions, ParserRuntime runtime) {
+		this(nonterminal, origin, dest, null, preConditions, runtime);
 	}
 	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT);
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
+		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT, runtime);
 	}	
 	
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			Expression[] arguments, Conditions preConditions) {
-		super(origin, dest);
+			                     Expression[] arguments, Conditions preConditions, ParserRuntime runtime) {
+		super(origin, dest, runtime);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
 		this.preConditions = preConditions;
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
 //			return;
 //		}
+
+        int i = node.getRightExtent();
 		
 		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
 			
 			if (preConditions.execute(input, u, i))
 				return;
 			
-			nonterminal.create(parser, input, dest, u, i, node);
+			nonterminal.create(input, dest, u, node);
 			
 		} else {
 			
-			Environment env = parser.getEmptyEnvironment();
+			Environment env = runtime.getEmptyEnvironment();
 			
 			if (dest.getLabel() != null) {
 				env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 			}
 			
-			parser.setEnvironment(env);
+			runtime.setEnvironment(env);
 			
-			if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
+			if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
 				return;
 			
-			nonterminal.create(parser, input, dest, u, i, node, arguments, parser.getEnvironment());
+			nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment());
 		}
 		
 	}
@@ -122,23 +125,25 @@ public class NonterminalTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
 		
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
 //			return;
 //		}
-		
-		if (dest.getLabel() != null) {
+
+        int i = node.getRightExtent();
+
+        if (dest.getLabel() != null) {
 			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 		}
 		
-		parser.setEnvironment(env);
+		runtime.setEnvironment(env);
 		
-		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
 			return;
 				
-		nonterminal.create(parser, input, dest, u, i, node, arguments, parser.getEnvironment());
+		nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment());
 	}
 
 }

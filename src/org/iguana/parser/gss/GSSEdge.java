@@ -50,6 +50,6 @@ public interface GSSEdge {
 	 * (2.2) if no, creates one and returns it
 	 * 
 	 */
-	Descriptor addDescriptor(GLLParser parser, Input input, GSSNode source, int inputIndex, NonPackedNode sppfNode);
+	Descriptor addDescriptor(Input input, GSSNode source, NonPackedNode sppfNode);
 
 }

@@ -27,6 +27,8 @@
 
 package org.iguana.grammar.slot;
 
+import org.iguana.parser.ParserRuntime;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,13 +39,16 @@ public abstract class AbstractGrammarSlot implements GrammarSlot {
 	private final int id;
 	
 	protected final List<Transition> transitions;
+
+    protected final ParserRuntime runtime;
 	
-	public AbstractGrammarSlot(int id) {
-		this(id, Collections.emptyList());
+	public AbstractGrammarSlot(int id, ParserRuntime runtime) {
+		this(id, runtime, Collections.emptyList());
 	}
 	
-	public AbstractGrammarSlot(int id, List<Transition> transitions) {
+	public AbstractGrammarSlot(int id, ParserRuntime runtime, List<Transition> transitions) {
 		this.id = id;
+        this.runtime = runtime;
 		this.transitions = new ArrayList<>(transitions);
 	}
 
@@ -61,5 +66,10 @@ public abstract class AbstractGrammarSlot implements GrammarSlot {
 	public int getId() {
 		return id;
 	}
+
+    @Override
+    public ParserRuntime getRuntime() {
+        return runtime;
+    }
 	
 }

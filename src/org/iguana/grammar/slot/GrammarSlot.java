@@ -33,6 +33,7 @@ import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.slot.Slot;
 import iguana.utils.input.Input;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.util.generator.ConstructorCode;
 
 /**
@@ -63,5 +64,7 @@ public interface GrammarSlot extends ConstructorCode, Slot {
 	Iterable<Transition> getTransitions();
 
 	int getId();
+
+    ParserRuntime getRuntime();
 	
 }

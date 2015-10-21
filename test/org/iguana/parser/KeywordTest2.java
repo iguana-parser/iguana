@@ -72,8 +72,8 @@ public class KeywordTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("ifb");
-		GLLParser parser = ParserFactory.getParser();
-		parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 	}
 	
 }
