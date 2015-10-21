@@ -114,6 +114,10 @@ public class GrammarGraph implements Serializable {
 
     private ParserRuntime runtime;
 
+    public static GrammarGraph from(Grammar grammar, Input input) {
+        return from(grammar, input, Configuration.DEFAULT);
+    }
+
     public static GrammarGraph from(Grammar grammar, Input input, Configuration config) {
         IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config, input);
         GrammarGraph grammarGraph = new GrammarGraph(grammar, input, config);

@@ -130,6 +130,10 @@ public class Iguana {
 	public static ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
 		return parse(input, grammarGraph, Configuration.DEFAULT, startSymbol, Collections.emptyMap(), true);
 	}
+
+    public static ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
+        return parse(input, GrammarGraph.from(grammar, input, Configuration.DEFAULT), startSymbol);
+    }
 	
 	public static ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol) {
 		return parse(input, GrammarGraph.from(grammar, input, config), startSymbol);
