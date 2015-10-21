@@ -20,8 +20,7 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Sequence;
@@ -85,8 +84,7 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
 
-         GLLParser parser = new GLLParserImpl();
-         ParseResult result = parser.parse(input, graph, Nonterminal.withName("Element"));
+         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("Element"));
 
          Assert.assertTrue(result.isParseSuccess());
 

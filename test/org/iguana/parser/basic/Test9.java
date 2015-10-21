@@ -44,8 +44,7 @@ import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.Configuration;
@@ -101,8 +100,7 @@ public class Test9 {
 	@Test
 	public void testParser0() {
 		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.builder().setLookaheadCount(0).build());
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, graph, startSymbol);
+		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult0(graph), result);
 	}
@@ -110,8 +108,7 @@ public class Test9 {
 	@Test
 	public void testParser1() {
 		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, graph, startSymbol);
+		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult1(graph), result);
         assertEquals(getTree(), result.asParseSuccess().getTree());

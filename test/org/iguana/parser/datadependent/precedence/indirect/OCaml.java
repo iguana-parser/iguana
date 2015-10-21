@@ -8,8 +8,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
@@ -40,8 +39,7 @@ public class OCaml {
 
         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/indirect/", graph);
 
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input, graph, Nonterminal.withName("CompilationUnit"));
+        ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("CompilationUnit"));
 
         Assert.assertTrue(result.isParseSuccess());
 

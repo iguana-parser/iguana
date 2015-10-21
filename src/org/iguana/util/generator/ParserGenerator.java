@@ -31,7 +31,7 @@ import java.io.StringWriter;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.Iguana;
 import org.iguana.util.Configuration;
 
 import com.google.common.truth.codegen.CompilingClassLoader;
@@ -45,13 +45,13 @@ import com.google.common.truth.codegen.CompilingClassLoader.CompilerException;
  */
 public class ParserGenerator {
 	
-	public static GLLParser getParser(Grammar grammar, Input input, Configuration config) {
+	public static Iguana getParser(Grammar grammar, Input input, Configuration config) {
 		
 		Class<?> clazz = getClass("test", "Test", getParserCode(grammar, input, config));
 		
-		GLLParser parser = null;
+		Iguana parser = null;
 		try {
-			parser = (GLLParser) clazz.newInstance();
+			parser = (Iguana) clazz.newInstance();
 		} catch (IllegalAccessException | IllegalArgumentException
 				| SecurityException | InstantiationException e) {
 			e.printStackTrace();

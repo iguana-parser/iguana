@@ -19,8 +19,7 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
@@ -80,8 +79,7 @@ Grammar.builder()
         	 }
          }
          
-         GLLParser parser = new GLLParserImpl();
-         ParseResult result = parser.parse(input, graph, Configuration.DEFAULT, start, inits, false);
+         ParseResult result = Iguana.parse(input, graph, Configuration.DEFAULT, start, inits, false);
 
          Assert.assertTrue(result.isParseSuccess());
 

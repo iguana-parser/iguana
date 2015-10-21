@@ -53,7 +53,7 @@ import iguana.utils.input.Input;
 // TODO: Context-free conditions don't work.
 public class DanglingElseGrammar1 {
 
-	private GLLParser parser;
+	private Iguana parser;
 	
 	private Nonterminal S = Nonterminal.withName("S");
 	private Character s = Character.from('s');
@@ -83,16 +83,14 @@ public class DanglingElseGrammar1 {
 	
 	public void test1() {
 		Input input = Input.fromString("aasbs");
-		parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF1(parser.getGrammarGraph())));
 	}
 	
 	public void test2() {
 		Input input = Input.fromString("aaaaasbsbsbs");
-		parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF2(parser.getGrammarGraph())));
 	}

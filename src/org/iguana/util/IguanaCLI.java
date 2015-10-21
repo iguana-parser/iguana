@@ -46,8 +46,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 
 public class IguanaCLI {
@@ -139,8 +138,7 @@ public class IguanaCLI {
 	}
 	
 	private static void parse(Nonterminal startSymbol, Grammar grammar, Input input, Configuration config) {
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, startSymbol);
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, startSymbol);
 		if (result.isParseSuccess()) {
 			// TODO: fix it!
 //			System.out.println(BenchmarkUtil.format(input, result.asParseSuccess().getStatistics()));

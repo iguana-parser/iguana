@@ -7,8 +7,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
@@ -34,8 +33,7 @@ public class Test1 {
 	public void test() {
 		Input input = Input.fromString("a");
 		Grammar grammar = getGrammar();
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 	}
 

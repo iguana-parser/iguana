@@ -39,8 +39,7 @@ import org.iguana.grammar.precedence.OperatorPrecedence;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Before;
@@ -60,7 +59,7 @@ import iguana.utils.input.Input;
  */
 public class PrecedenceTest1 {
 
-	private GLLParser parser;
+	private Iguana parser;
 
 	private Nonterminal E = Nonterminal.withName("E");
 	private Character plus = Character.from('+');
@@ -102,8 +101,7 @@ public class PrecedenceTest1 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a+-a+a");
-		parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
         assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode(parser.getGrammarGraph())));

@@ -9,8 +9,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.Configuration;
@@ -48,8 +47,7 @@ public class Test19 {
     @Test
     public void testParser1() {
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input1, graph, startSymbol);
+        ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
         assertEquals(getTree1(), result.asParseSuccess().getTree());
@@ -58,8 +56,7 @@ public class Test19 {
     @Test
     public void testParser2() {
         GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input2, graph, startSymbol);
+        ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
         assertEquals(getTree2(), result.asParseSuccess().getTree());
@@ -68,8 +65,7 @@ public class Test19 {
     @Test
     public void testParser3() {
         GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input3, graph, startSymbol);
+        ParseResult result = Iguana.parse(input3, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
         assertEquals(getTree3(), result.asParseSuccess().getTree());

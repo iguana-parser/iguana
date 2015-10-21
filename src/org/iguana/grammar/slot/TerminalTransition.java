@@ -33,7 +33,6 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.parser.GLLParser;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 

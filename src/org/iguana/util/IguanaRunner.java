@@ -49,8 +49,7 @@ import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 
 import com.google.common.testing.GcFinalization;
@@ -102,12 +101,10 @@ public class IguanaRunner {
 
             logger.log(input.getURI());
 
-			GLLParser parser = new GLLParserImpl();
-
 			logger.log("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {
 				try {
-                    ParseResult result = run(parser, grammarGraph, input, start);
+                    ParseResult result = run(grammarGraph, input, start);
                     if (result.isParseError()) {
 						logger.log(result.asParseError());
 					} else {
@@ -124,7 +121,7 @@ public class IguanaRunner {
             logger.log("Running: ");
 			for (int i = 0; i < runCount; i++) {			
 				try {
-					ParseResult result = run(parser, grammarGraph, input, start);
+					ParseResult result = run(grammarGraph, input, start);
 					if (result.isParseSuccess()) {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
                         logger.log("  : Success");
@@ -152,8 +149,8 @@ public class IguanaRunner {
             
 	}
 	
-	private ParseResult run(GLLParser parser, GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
-		ParseResult result = parser.parse(input, grammarGraph, start);
+	private ParseResult run(GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
+		ParseResult result = Iguana.parse(input, grammarGraph, start);
 		if (runGCInBetween)
 			GcFinalization.awaitFullGc();
 		

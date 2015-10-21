@@ -33,8 +33,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Before;
@@ -57,7 +56,7 @@ import iguana.utils.input.Input;
  */
 public class ManualArithmeticExpressionsTest {
 
-	private GLLParser parser;
+	private Iguana parser;
 	private Grammar grammar;
 
 	@Before
@@ -88,8 +87,7 @@ public class ManualArithmeticExpressionsTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a*a+a");
-		parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 		// TODO: add tree comparison text here.
 	}

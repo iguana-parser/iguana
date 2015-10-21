@@ -31,7 +31,6 @@ import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.GLLParser;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 

@@ -99,8 +99,7 @@ public class LeftFactorizedArithmeticGrammarTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("a+a*a+a");
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}

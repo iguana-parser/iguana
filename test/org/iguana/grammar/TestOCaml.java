@@ -35,8 +35,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
@@ -56,9 +55,7 @@ public class TestOCaml {
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/test.ml");
 		GrammarGraph grammarGraph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		GLLParser parser = new GLLParserImpl();
-		grammarGraph.reset(input);
-		ParseResult result = parser.parse(input, grammarGraph, startSymbol);
+		ParseResult result = Iguana.parse(input, grammarGraph, startSymbol);
 		System.out.println(result);
 	}
 	
