@@ -1194,26 +1194,26 @@ public class IdeaIDEGenerator {
                         switch (num) {
                             case ONE:
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
+                                    writer.println("    List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
                                 else
-                                    writer.println("    public I" + symbol + " get" + symbol + "();");
+                                    writer.println("    I" + symbol + " get" + symbol + "();");
                                 break;
                             case MORE_THAN_ONE:
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
+                                    writer.println("    List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
                                 else
-                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
+                                    writer.println("    List<I" + symbol + "> get" + symbol + "s();");
                                 break;
                             case ONE_AND_MORE:
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
+                                    writer.println("    List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
                                 else
-                                    writer.println("    public I" + symbol + " get" + symbol + "();");
+                                    writer.println("    I" + symbol + " get" + symbol + "();");
 
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
+                                    writer.println("    List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
                                 else
-                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s();");
+                                    writer.println("    List<I" + symbol + "> get" + symbol + "s();");
                                 break;
                             default:
                         }
@@ -1361,7 +1361,7 @@ public class IdeaIDEGenerator {
                                         switch (num2) {
                                             case ONE:
                                                 if (symbol.endsWith("$Ebnf")) {
-                                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return findNotNullChildByClass(EbnfElement.class).getElements(); }");
+                                                    writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return findNotNullChildByClass(IEbnfElement.class).getElements(); }");
                                                     writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
                                                 } else {
                                                     writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I" + symbol + ".class); }");
@@ -1621,7 +1621,7 @@ public class IdeaIDEGenerator {
             writer.println("        if (result.isParseSuccess()) {");
             writer.println("            System.out.println(\"Success...\");");
             writer.println("            NonterminalNode sppf = result.asParseSuccess().getSPPFNode();");
-            writer.println("            ASTNode ast = TermBuilder.build_no_memo(sppf, new " + language + "TreeBuilder(input));");
+            writer.println("            ASTNode ast = TermBuilder.build_no_memo(sppf, new " + language + "TreeBuilder());");
             writer.println("            return ast;");
             writer.println("        } else {");
             writer.println("            System.out.println(\"Parse error...\");");
@@ -1653,6 +1653,7 @@ public class IdeaIDEGenerator {
             writer.println("import com.intellij.psi.FileViewProvider;");
             writer.println("import com.intellij.psi.PsiElement;");
             writer.println("import com.intellij.psi.PsiFile;");
+            writer.println("import com.intellij.psi.text.BlockSupport;");
             writer.println("import com.intellij.psi.tree.IFileElementType;");
             writer.println("import com.intellij.psi.tree.TokenSet;");
             writer.println("import " + language.toLowerCase() + ".gen.lang." + language + "File;");
@@ -1679,7 +1680,11 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("    public PsiElement createElement(ASTNode node) { return " + language + "ElementTypes.Factory.createElement(node); }");
             writer.println();
-            writer.println("    public PsiFile createFile(FileViewProvider viewProvider) { return new " + language + "File(viewProvider); } ");
+            writer.println("    public PsiFile createFile(FileViewProvider viewProvider) {");
+            writer.println("        " + language + "File file = new " + language + "File(viewProvider);");
+            writer.println("        file.putUserData(BlockSupport.DO_NOT_REPARSE_INCREMENTALLY, Boolean.TRUE);");
+            writer.println("        return file;");
+            writer.println("    }");
             writer.println();
             writer.println("    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) { return SpaceRequirements.MAY; }");
             writer.println("}");
@@ -1742,18 +1747,14 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("public class " + language + "TreeBuilder implements TreeBuilder<TreeElement> {");
             writer.println();
-            writer.println("    private final Input input;");
+            writer.println("    public TreeElement terminalNode(int l, int r, Input input) { return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, input.subString(l, r)); }");
             writer.println();
-            writer.println("    public " + language + "TreeBuilder(Input input) { this.input = input; }");
-            writer.println();
-            writer.println("    public TreeElement terminalNode(int l, int r) { return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, input.subString(l, r)); }");
-            writer.println();
-            writer.println("    public TreeElement terminalNode(String name, int l, int r) {");
+            writer.println("    public TreeElement terminalNode(String name, int l, int r, Input input) {");
             writer.println("        IElementType tokenType = " + language + "TokenTypes.get(name);");
             writer.println("        return ASTFactory.leaf(tokenType, input.subString(l, r));");
             writer.println("    }");
             writer.println();
-            writer.println("    public TreeElement nonterminalNode(RuleType type, Seq<TreeElement> children, int l, int r) {");
+            writer.println("    public TreeElement nonterminalNode(RuleType type, Seq<TreeElement> children, int l, int r, Input input) {");
             writer.println("        Rule rule = (Rule) type;");
             writer.println("        String name = rule.getHead().getName().toUpperCase() + (rule.getLabel() == null? \"\" : \"_\" + rule.getLabel().toUpperCase());");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.get(name));");
@@ -1764,7 +1765,7 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("    public TreeElement ambiguityNode(scala.collection.Iterable<Branch<TreeElement>> children, int l, int r) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); }");
             writer.println();
-            writer.println("    public TreeElement cycle() { throw new RuntimeException(\"Not yet supported in the idea tree builder: cycles.\"); }");
+            writer.println("    public TreeElement cycle(String label) { throw new RuntimeException(\"Not yet supported in the idea tree builder: cycles.\"); }");
             writer.println();
             writer.println("    public Branch<TreeElement> branch(Seq<TreeElement> children) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); } ");
             writer.println();
