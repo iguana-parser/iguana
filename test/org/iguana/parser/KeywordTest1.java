@@ -65,8 +65,7 @@ public class KeywordTest1 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("if");
-		GLLParser parser = new GLLParserImpl();
-		parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 	}
 	
 }

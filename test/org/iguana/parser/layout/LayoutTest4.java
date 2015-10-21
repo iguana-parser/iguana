@@ -34,8 +34,7 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Plus;
 import org.iguana.util.Configuration;
@@ -85,8 +84,7 @@ public class LayoutTest4 {
 		
 		Input input = Input.fromString("a b , b , b , b c");
 		Grammar grammar = getGrammar();
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 	}
 }

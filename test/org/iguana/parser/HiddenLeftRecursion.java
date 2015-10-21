@@ -71,8 +71,7 @@ public class HiddenLeftRecursion {
 	@Test
 	public void test() {
 		Input input = Input.fromString("ba+a+a");
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 	}
 

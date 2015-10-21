@@ -38,7 +38,6 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.GLLParser;
 import org.iguana.parser.descriptor.Descriptor;
 
 /**

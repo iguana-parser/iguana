@@ -34,8 +34,7 @@ import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
@@ -57,7 +56,7 @@ import iguana.utils.input.Input;
  */
 public class FollowRestrictionTest {
 	
-	private GLLParser parser;
+	private Iguana parser;
 	private Grammar grammar;
 	
 	@Before
@@ -79,8 +78,7 @@ public class FollowRestrictionTest {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("abc:");
-		parser =  new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 

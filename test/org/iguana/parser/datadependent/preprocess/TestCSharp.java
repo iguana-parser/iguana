@@ -38,8 +38,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
@@ -56,8 +55,7 @@ public class TestCSharp {
 	@Test
 	public void test1() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test1.cs").getPath());
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
 		System.out.println(result);
 		
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
@@ -78,10 +76,9 @@ public class TestCSharp {
 	@Test
 	public void test2() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test2.cs").getPath());
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
 		System.out.println(result);
-		
+
 		Map<String, NonterminalNode> nodes = new HashMap<>();
 		
 //		NonterminalNodeVisitor.create(n -> {
@@ -100,8 +97,7 @@ public class TestCSharp {
 	@Test
 	public void test3() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test7.cs").getPath());
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
 		System.out.println(result);
 		
 //		Map<String, NonterminalNode> nodes = new HashMap<>();

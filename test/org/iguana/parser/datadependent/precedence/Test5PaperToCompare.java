@@ -15,8 +15,7 @@ import org.iguana.grammar.symbol.Recursion;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
@@ -82,13 +81,9 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-         GLLParser parser1 = new GLLParserImpl();
-         GLLParser parser2 = new GLLParserImpl();
-         GLLParser parser3 = new GLLParserImpl();
-         
-         ParseResult result1 = parser1.parse(input, graph1, Nonterminal.withName("S"));
-         ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("S"));
-         ParseResult result3 = parser3.parse(input, graph3, Nonterminal.withName("S"));
+         ParseResult result1 = Iguana.parse(input, graph1, Nonterminal.withName("S"));
+         ParseResult result2 = Iguana.parse(input, graph2, Nonterminal.withName("S"));
+         ParseResult result3 = Iguana.parse(input, graph3, Nonterminal.withName("S"));
 
          Assert.assertTrue(result1.isParseSuccess());
          Assert.assertTrue(result2.isParseSuccess());

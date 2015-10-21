@@ -1594,7 +1594,7 @@ public class IdeaIDEGenerator {
             writer.println("import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;");
             writer.println("import org.iguana.grammar.transformation.EBNFToBNF;");
             writer.println("import org.iguana.grammar.transformation.LayoutWeaver;");
-            writer.println("import org.iguana.parser.GLLParser;");
+            writer.println("import org.iguana.parser.Iguana;");
             writer.println("import org.iguana.parser.ParseResult;");
             writer.println("import org.iguana.parser.ParserFactory;");
             writer.println("import org.iguana.util.Configuration;");
@@ -1603,7 +1603,7 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("    private Grammar grammar;");
             writer.println("    private GrammarGraph graph;");
-            writer.println("    private GLLParser parser;");
+            writer.println("    private Iguana parser;");
             writer.println();
             writer.println("    public ASTNode parse(IElementType root, PsiBuilder builder) {");
             writer.println("        Input input = Input.fromString(builder.getOriginalText().toString());");

@@ -44,8 +44,7 @@ import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.Configuration;
@@ -116,8 +115,7 @@ public class Test8 {
 	@Test
 	public void testParser1_1() {
 		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input1, graph, startSymbol);
+		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead1(graph), result);
         assertEquals(getTree1(), result.asParseSuccess().getTree());
@@ -126,8 +124,7 @@ public class Test8 {
     @Test
     public void testParser1_0() {
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build());
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input1, graph, startSymbol);
+        ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead0(graph), result);
         assertEquals(getTree1(), result.asParseSuccess().getTree());
@@ -136,8 +133,7 @@ public class Test8 {
     @Test
     public void testParser2_1() {
         GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input2, graph, startSymbol);
+        ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead1(graph), result);
         assertEquals(getTree2(), result.asParseSuccess().getTree());
@@ -146,8 +142,7 @@ public class Test8 {
     @Test
     public void testParser2_0() {
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build());
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input2, graph, startSymbol);
+        ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead0(graph), result);
         assertEquals(getTree2(), result.asParseSuccess().getTree());

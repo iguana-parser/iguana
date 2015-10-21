@@ -34,8 +34,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
@@ -51,8 +50,7 @@ public class TestCSharp {
 	@Test
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/test.cs");
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
 		System.out.println(result);
 	}
 }

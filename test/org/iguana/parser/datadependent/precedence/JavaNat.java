@@ -12,8 +12,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.iguana.util.Configuration.EnvironmentImpl;
@@ -70,15 +69,10 @@ public class JavaNat {
          GrammarGraph graph3 = GrammarGraph.from(grammar3, input, Configuration.DEFAULT);
          GrammarGraph graph4 = GrammarGraph.from(grammar4, input, Configuration.DEFAULT);
 
-         GLLParser parser1 = new GLLParserImpl();
-         GLLParser parser2 = new GLLParserImpl();
-         GLLParser parser3 = new GLLParserImpl();
-         GLLParser parser4 = new GLLParserImpl();
-         
-         ParseResult result1 = parser1.parse(input, graph1, Nonterminal.withName("CompilationUnit"));
-         ParseResult result2 = parser2.parse(input, graph2, Nonterminal.withName("CompilationUnit"));
-         ParseResult result3 = parser3.parse(input, graph3, Nonterminal.withName("CompilationUnit"));
-         ParseResult result4 = parser4.parse(input, graph4, Nonterminal.withName("CompilationUnit"));
+         ParseResult result1 = Iguana.parse(input, graph1, Nonterminal.withName("CompilationUnit"));
+         ParseResult result2 = Iguana.parse(input, graph2, Nonterminal.withName("CompilationUnit"));
+         ParseResult result3 = Iguana.parse(input, graph3, Nonterminal.withName("CompilationUnit"));
+         ParseResult result4 = Iguana.parse(input, graph4, Nonterminal.withName("CompilationUnit"));
          
          Assert.assertTrue(result1.isParseSuccess());
          Assert.assertTrue(result2.isParseSuccess());

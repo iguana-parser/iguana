@@ -10,8 +10,7 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.regex.Opt;
@@ -47,8 +46,7 @@ public class Test3 {
     public void testParser0() {
         grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input0, graph, S);
+        ParseResult result = Iguana.parse(input0, graph, S);
         assertEquals(getParseResult0(graph), result);
         assertEquals(getTree0(), result.asParseSuccess().getTree());
     }
@@ -57,8 +55,7 @@ public class Test3 {
     public void testParser1() {
         grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input1, graph, S);
+        ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
         assertEquals(getTree1(), result.asParseSuccess().getTree());

@@ -34,8 +34,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -76,8 +75,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(129, parseStatistics.getDescriptorsCount());
@@ -90,8 +88,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(374, parseStatistics.getDescriptorsCount());
@@ -104,8 +101,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(26159, parseStatistics.getDescriptorsCount());

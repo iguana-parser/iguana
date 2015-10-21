@@ -35,8 +35,7 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Plus;
@@ -78,32 +77,28 @@ public class KeywordExclusionTest {
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 

@@ -10,8 +10,7 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.regex.Sequence;
@@ -46,8 +45,7 @@ public class Test5 {
     public void testParse1() {
         grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
-        GLLParser parser = new GLLParserImpl();
-        ParseResult result = parser.parse(input1, graph, S);
+        ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
         assertEquals(getTree1(), result.asParseSuccess().getTree());

@@ -36,8 +36,7 @@ import org.iguana.grammar.transformation.DesugarAlignAndOffside;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
@@ -72,8 +71,7 @@ public class TestHaskell {
 	public void test() throws IOException {
 		Input input = Input.fromPath("/Users/aliafroozeh/Test.hs");
 		GrammarGraph grammarGraph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, grammarGraph, start);
+		ParseResult result = Iguana.parse(input, grammarGraph, start);
 		System.out.println(result);
 	}
 	

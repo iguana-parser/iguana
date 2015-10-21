@@ -83,8 +83,7 @@ public class EBNFTest1 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("aaaaaa");
-		GLLParser parser = new GLLParserImpl();
-		parser.parse(input, grammar, Configuration.DEFAULT, S);
+		Iguana.parse(input, grammar, Configuration.DEFAULT, S);
 	}
 
 }

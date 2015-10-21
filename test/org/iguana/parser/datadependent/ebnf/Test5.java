@@ -42,8 +42,7 @@ import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
@@ -109,8 +108,7 @@ public class Test5 {
 		
 		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
 		
-		GLLParser parser = new GLLParserImpl();
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());
 		

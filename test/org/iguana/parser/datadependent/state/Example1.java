@@ -18,8 +18,7 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.GLLParserImpl;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
@@ -60,8 +59,6 @@ Grammar.builder()
          Input input = Input.fromString("aa;cb;d");
          GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         GLLParser parser = new GLLParserImpl();
-         
          Map<String, Object> inits = new HashMap<>();
          inits.put("x", 0);
          inits.put("y", 0);
@@ -75,7 +72,7 @@ Grammar.builder()
         	 }
          }
          
-         ParseResult result = parser.parse(input, graph, Configuration.DEFAULT, start, inits, false);
+         ParseResult result = Iguana.parse(input, graph, Configuration.DEFAULT, start, inits, false);
 
          Assert.assertTrue(result.isParseSuccess());
 

@@ -72,8 +72,7 @@ public class KeywordTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("ifb");
-		GLLParser parser = new GLLParserImpl();
-		parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 	}
 	
 }
