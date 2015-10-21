@@ -35,8 +35,8 @@ import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
@@ -78,16 +78,16 @@ public class FollowRestrictionTest2 {
 	@Test
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
-		parser =  ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
+		parser =  new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
-		parser =  ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
+		parser =  new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 

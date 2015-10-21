@@ -34,38 +34,40 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 
 
 public class TerminalTransition extends AbstractTransition {
-	
-	protected final TerminalGrammarSlot slot;
+
+    protected final TerminalGrammarSlot slot;
 	
 	private final Conditions preConditions;
 	
 	private final Conditions postConditions;
-	
-	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			                          Conditions preConditions, Conditions postConditions) {
-		super(origin, dest);
-		this.slot = slot;
-		this.preConditions = preConditions;
-		this.postConditions = postConditions;
-	}
+
+    public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest,
+                              Conditions preConditions, Conditions postConditions, ParserRuntime runtime) {
+		super(origin, dest, runtime);
+        this.slot = slot;
+        this.preConditions = preConditions;
+        this.postConditions = postConditions;
+    }
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
-		
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
+		int i = node.getRightExtent();
+
 		if (dest.getLabel() != null)
-			execute(parser, input, u, i, node, parser.getEmptyEnvironment());
+			execute(input, u, node, runtime.getEmptyEnvironment());
 		
 		if (preConditions.execute(input, u, i))
 			return;
 			
-		TerminalNode cr = slot.getTerminalNode(parser, input, i);
+		TerminalNode cr = slot.getTerminalNode(input, i);
 		
 		if (cr == null) {
-			parser.recordParseError(origin);
+			runtime.recordParseError(input, i, origin, u);
 			return;			
 		}
 
@@ -74,9 +76,9 @@ public class TerminalTransition extends AbstractTransition {
 		if (postConditions.execute(input, u, rightExtent))
 			return;
 			
-		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(parser, node, cr);
+		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
 				
-		dest.execute(parser, input, u, rightExtent, n);
+		dest.execute(input, u, n);
 	}
 	
 	public TerminalGrammarSlot getSlot() {
@@ -104,34 +106,34 @@ public class TerminalTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
-		
-		parser.setEnvironment(env);
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+
+        int i = node.getRightExtent();
+
+		runtime.setEnvironment(env);
 		
 		if (dest.getLabel() != null)
-			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+			runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-		if (preConditions.execute(input, u, i, parser.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
 			return;
 		
-		TerminalNode cr = slot.getTerminalNode(parser, input, i);
+		TerminalNode cr = slot.getTerminalNode(input, i);
 		
 		if (cr == null) {
-			parser.recordParseError(origin);
+			runtime.recordParseError(input, i, origin, u);
 			return;
 		}
 
-		int rightExtent = cr.getRightExtent();
-				
 		if (dest.getLabel() != null)
-			parser.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, rightExtent, parser.getEvaluatorContext()))
+		if (postConditions.execute(input, u, cr.getRightExtent(), runtime.getEvaluatorContext()))
 			return;
 		
-		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(parser, node, cr);
+		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
 				
-		dest.execute(parser, input, u, rightExtent, n, env);
+		dest.execute(input, u, n, env);
 	}
 	
 }

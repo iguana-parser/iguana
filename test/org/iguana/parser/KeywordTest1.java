@@ -65,8 +65,8 @@ public class KeywordTest1 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("if");
-		GLLParser parser = ParserFactory.getParser();
-		parser.parse(input, grammar, Nonterminal.withName("A"));
+		GLLParser parser = new GLLParserImpl();
+		parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
 	}
 	
 }

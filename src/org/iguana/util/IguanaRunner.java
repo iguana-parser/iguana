@@ -50,8 +50,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 
 import com.google.common.testing.GcFinalization;
 
@@ -90,7 +90,7 @@ public class IguanaRunner {
 
 	public List<RunResult> run() {
 
-		final GrammarGraph grammarGraph = grammar.toGrammarGraph(Input.empty(), config);
+		final GrammarGraph grammarGraph = GrammarGraph.from(grammar, Input.empty(), config);
 		
 		List<RunResult> results = new ArrayList<>();
 
@@ -102,8 +102,7 @@ public class IguanaRunner {
 
             logger.log(input.getURI());
 
-			GLLParser parser = ParserFactory.getParser(config);
-
+			GLLParser parser = new GLLParserImpl();
 
 			logger.log("Warming up: ");
 			for (int i = 0; i < warmupCount; i++) {

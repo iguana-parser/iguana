@@ -11,9 +11,9 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -45,8 +45,8 @@ public class Test5 {
     @Test
     public void testParse1() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = grammar.toGrammarGraph(input1, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);

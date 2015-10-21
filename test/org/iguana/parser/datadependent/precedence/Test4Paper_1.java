@@ -46,8 +46,8 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Sequence;
 import org.iguana.regex.Star;
@@ -93,11 +93,11 @@ public class Test4Paper_1 {
         grammar = new LayoutWeaver().transform(grammar);
 
         Input input = Input.fromString("a + if a then a else a + a"); // // a + (if a then a else (a + a))
-        GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-        GLLParser parser = ParserFactory.getParser();
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
         Assert.assertTrue(result.isParseSuccess());

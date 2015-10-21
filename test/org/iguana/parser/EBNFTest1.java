@@ -83,8 +83,8 @@ public class EBNFTest1 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("aaaaaa");
-		GLLParser parser = ParserFactory.getParser();
-		parser.parse(input, grammar, S);
+		GLLParser parser = new GLLParserImpl();
+		parser.parse(input, grammar, Configuration.DEFAULT, S);
 	}
 
 }

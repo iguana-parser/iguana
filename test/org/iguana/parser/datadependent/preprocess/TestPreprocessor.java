@@ -39,8 +39,8 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.Tuple;
 import org.junit.Test;
@@ -66,9 +66,9 @@ public class TestPreprocessor {
 			System.out.println(variables);
 			System.out.println(expected);
 			
-			GLLParser parser = ParserFactory.getParser();
+			GLLParser parser = new GLLParserImpl();
 			
-			ParseResult result = parser.parse(input, grammar, start, variables);
+			ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, start, variables);
 			
 			Map<String, NonterminalNode> nodes = new HashMap<>();
 			

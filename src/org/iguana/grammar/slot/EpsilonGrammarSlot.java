@@ -29,13 +29,12 @@ package org.iguana.grammar.slot;
 
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.tree.RuleType;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
@@ -43,15 +42,16 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	private TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, 
-			                  Conditions conditions, Action action, RuleType ruleType) {
-		super(id, position, nonterminal, null, null, null, conditions, action, ruleType);
+			                  Conditions conditions, Action action, RuleType ruleType, ParserRuntime runtime) {
+		super(id, position, nonterminal, null, null, null, conditions, action, ruleType, runtime);
 		this.epsilonSlot = epsilonSlot;
 	}
 	
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
+        int i = node.getRightExtent();
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(parser, input, i, this, epsilonSlot.getTerminalNode(parser, input, i));
+            u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
 	}
 	
 	@Override
@@ -66,15 +66,17 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+        int i = node.getRightExtent();
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(parser, input, i, this, epsilonSlot.getTerminalNode(parser, input, i));
+            u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
 	}
 	
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Object value) {
+	public void execute(Input input, GSSNode u,NonPackedNode node, Object value) {
+        int i = node.getRightExtent();
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(parser, input, i, this, epsilonSlot.getTerminalNode(parser, input, i), value);
+            u.pop(input, this, epsilonSlot.getTerminalNode(input, i), value);
 	}
 
 }

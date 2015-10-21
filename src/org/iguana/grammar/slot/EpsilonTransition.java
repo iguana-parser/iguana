@@ -35,7 +35,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
-import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Tuple;
 
@@ -45,19 +45,19 @@ public class EpsilonTransition extends AbstractTransition {
 	private final String label;
 	private final Conditions conditions;
 
-	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(Type.DUMMY, conditions, origin, dest);
+	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
+		this(Type.DUMMY, conditions, origin, dest, runtime);
 	}
 	
-	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		super(origin, dest);
+	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
+		super(origin, dest, runtime);
 		this.type = type;
 		this.label = null;
 		this.conditions = conditions;
 	}
 	
-	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		super(origin, dest);
+	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
+		super(origin, dest, runtime);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
 		
@@ -67,68 +67,68 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
+        int i = node.getRightExtent();
 		switch(type) {
+            case DUMMY:
+                if (conditions.execute(input, u, i))
+                    return;
+                break;
+
+            case CLEAR_LABEL: // TODO: Decide if this case is needed
+                break;
+
+            case OPEN:
+                if (conditions.execute(input, u, i))
+                    return;
+
+                runtime.setEnvironment(runtime.getEmptyEnvironment());
+                runtime.getEvaluatorContext().pushEnvironment();
+
+                dest.execute(input, u, node, runtime.getEnvironment());
+                return;
+
+            case CLOSE:
+                if (conditions.execute(input, u, i))
+                    return;
+                break;
+
+            case DECLARE_LABEL:
+
+                runtime.setEnvironment(runtime.getEmptyEnvironment());
+
+                runtime.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
+                runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
+
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+
+                dest.execute(input, u, node, runtime.getEnvironment());
+                return;
+
+            case STORE_LABEL:
+
+                runtime.setEnvironment(runtime.getEmptyEnvironment());
+
+                Object value = runtime.getEvaluatorContext().lookupVariable(label);
+
+                Integer lhs;
+                if (!(value instanceof Tuple)) {
+                    lhs = (Integer) ((Tuple<?,?>) value).getFirst();
+                } else {
+                    throw new UnexpectedRuntimeTypeException(AST.var(label));
+                }
+
+                runtime.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
+
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+
+                dest.execute(input, u, node, runtime.getEnvironment());
+                return;
+        }
 		
-		case DUMMY:
-			if (conditions.execute(input, u, i))
-				return;	
-			break;
-			
-		case CLEAR_LABEL: // TODO: Decide if this case is needed
-			break;
-			
-		case OPEN: 
-			if (conditions.execute(input, u, i))
-				return;
-			
-			parser.setEnvironment(parser.getEmptyEnvironment());
-			parser.getEvaluatorContext().pushEnvironment();
-			
-			dest.execute(parser, input, u, i, node, parser.getEnvironment());
-			return;
-			
-		case CLOSE:
-			if (conditions.execute(input, u, i))
-				return;
-			break;
-			
-		case DECLARE_LABEL:
-			
-			parser.setEnvironment(parser.getEmptyEnvironment());
-			
-			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
-			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
-			
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;
-			
-			dest.execute(parser, input, u, i, node, parser.getEnvironment());
-			return;
-			
-		case STORE_LABEL:
-			
-			parser.setEnvironment(parser.getEmptyEnvironment());
-			
-			Object value = parser.getEvaluatorContext().lookupVariable(label);
-			
-			Integer lhs;
-			if (!(value instanceof Tuple)) {
-				lhs = (Integer) ((Tuple<?,?>) value).getFirst();
-			} else {
-				throw new UnexpectedRuntimeTypeException(AST.var(label));
-			}
-			
-			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
-			
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;
-			
-			dest.execute(parser, input, u, i, node, parser.getEnvironment());
-			return;
-		}
-		
-		dest.execute(parser, input, u, i, node);
+		dest.execute(input, u, node);
 	}
 
 	@Override
@@ -151,59 +151,61 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
-		
-		parser.setEnvironment(env);
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+
+        int i = node.getRightExtent();
+
+		runtime.setEnvironment(env);
 		
 		switch(type) {
 		
-		case DUMMY:
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;	
-			break;
-			
-		case CLEAR_LABEL: // TODO: Decide if this case is needed
-			break;
-			
-		case OPEN: 
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;
-			parser.getEvaluatorContext().pushEnvironment();
-			break;
-			
-		case CLOSE:
-			parser.getEvaluatorContext().popEnvironment();
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;
-			break;
-			
-		case DECLARE_LABEL:
-			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
-			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
-			
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;
-			break;
-			
-		case STORE_LABEL:
-			
-			Object value = parser.getEvaluatorContext().lookupVariable(label);
-			
-			Integer lhs;
-			if (!(value instanceof Tuple)) {
-				lhs = (Integer) ((Tuple<?,?>) value).getFirst();
-			} else {
-				throw new UnexpectedRuntimeTypeException(AST.var(label));
-			}
-			
-			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
-			
-			if (conditions.execute(input, u, i, parser.getEvaluatorContext()))
-				return;
-			break;
-		}
+            case DUMMY:
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+                break;
+
+            case CLEAR_LABEL: // TODO: Decide if this case is needed
+                break;
+
+            case OPEN:
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+                runtime.getEvaluatorContext().pushEnvironment();
+                break;
+
+            case CLOSE:
+                runtime.getEvaluatorContext().popEnvironment();
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+                break;
+
+            case DECLARE_LABEL:
+                runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
+                runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
+
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+                break;
+
+            case STORE_LABEL:
+
+                Object value = runtime.getEvaluatorContext().lookupVariable(label);
+
+                Integer lhs;
+                if (!(value instanceof Tuple)) {
+                    lhs = (Integer) ((Tuple<?,?>) value).getFirst();
+                } else {
+                    throw new UnexpectedRuntimeTypeException(AST.var(label));
+                }
+
+                runtime.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
+
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                    return;
+                break;
+            }
 		
-		dest.execute(parser, input, u, i, node, parser.getEnvironment());
+		dest.execute(input, u, node, runtime.getEnvironment());
 	}
 
 	@Override

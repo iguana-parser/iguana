@@ -38,15 +38,15 @@ public class Descriptor extends org.iguana.parser.descriptor.Descriptor {
 	
 	private final Environment env;
 	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Input input, Environment env) {
-		super(slot, gssNode, inputIndex, sppfNode, input);
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, NonPackedNode sppfNode, Input input, Environment env) {
+		super(slot, gssNode, sppfNode, input);
 		
 		assert env != null;
 		this.env = env;
 	}
 
 	@Override
-	public void execute(GLLParser parser) {
-		getGrammarSlot().execute(parser, input, getGSSNode(), getInputIndex(), getSPPFNode(), env);
+	public void execute() {
+		getGrammarSlot().execute(input, getGSSNode(), getSPPFNode(), env);
 	}
 }

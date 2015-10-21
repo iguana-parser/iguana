@@ -38,6 +38,8 @@ import iguana.utils.input.Input;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
+import org.iguana.datadependent.env.GLLEvaluator;
+import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
@@ -63,6 +65,8 @@ import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Terminal.Category;
 import org.iguana.grammar.transformation.VarToInt;
+import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.ParserRuntimeImpl;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.IntOpenAddressingMap;
@@ -77,6 +81,8 @@ import org.iguana.util.Configuration.HashMapImpl;
 import org.iguana.util.Configuration.LookupImpl;
 import org.iguana.util.Configuration.MatcherType;
 
+import javax.swing.text.html.parser.Parser;
+
 public class GrammarGraph implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -89,7 +95,7 @@ public class GrammarGraph implements Serializable {
 	
 	private List<GrammarSlot> slots;
 	
-	private final FirstFollowSets firstFollow;
+	private FirstFollowSets firstFollow;
 	
 	Grammar grammar;
 
@@ -102,11 +108,50 @@ public class GrammarGraph implements Serializable {
 	private final Map<Integer, Map<String, Integer>> mapping;
 	private Map<String, Integer> current;
 	
-	private final MatcherFactory matcherFactory;
+	private MatcherFactory matcherFactory;
 	
-	private final TerminalGrammarSlot epsilonSlot;
+	private TerminalGrammarSlot epsilonSlot;
+
+    private ParserRuntime runtime;
+
+    public static GrammarGraph from(Grammar grammar, Input input, Configuration config) {
+        IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config, input);
+        GrammarGraph grammarGraph = new GrammarGraph(grammar, input, config);
+        ParserRuntime runtime = new ParserRuntimeImpl(grammarGraph, config, ctx);
+        grammarGraph.convert(runtime);
+        return grammarGraph;
+    }
+
+    private void convert(ParserRuntime runtime) {
+        if (config.getMatcherType() == MatcherType.JAVA_REGEX) {
+            matcherFactory = new JavaRegexMatcherFactory();
+        } else {
+            matcherFactory = new DFAMatcherFactory();
+        }
+
+        this.runtime = runtime;
+        this.firstFollow = new FirstFollowSets(this.grammar);
+
+        epsilonSlot = new TerminalGrammarSlot(0, Epsilon.getInstance(), matcherFactory, runtime);
+
+        terminalsMap.put(Epsilon.getInstance(), epsilonSlot);
+
+        add(epsilonSlot);
+
+        Set<Nonterminal> nonterminals = this.grammar.getNonterminals();
+        nonterminals.forEach(n -> getNonterminalGrammarSlot(n));
+
+        int i = 0;
+        for (Rule r : this.grammar.getRules()) {
+            current = mapping.get(i);
+            convert(r);
+            i++;
+        }
+
+        nonterminals.forEach(n -> setFirstFollowTests(n));
+    }
 	
-	public GrammarGraph(Grammar grammar, Input input, Configuration config) {
+	private GrammarGraph(Grammar grammar, Input input, Configuration config) {
 		if (config.getEnvImpl() == EnvironmentImpl.ARRAY) {
 			VarToInt transformer = new VarToInt();
 			this.grammar = transformer.transform(grammar);
@@ -122,32 +167,6 @@ public class GrammarGraph implements Serializable {
 		this.terminalsMap = new LinkedHashMap<>();
 		this.names = new HashMap<>();
 		this.slots = new ArrayList<>();
-		
-		if (config.getMatcherType() == MatcherType.JAVA_REGEX) {
-			matcherFactory = new JavaRegexMatcherFactory();
-		} else {
-			matcherFactory = new DFAMatcherFactory();
-		}
-		
-		this.firstFollow = new FirstFollowSets(this.grammar);
-		
-		epsilonSlot = new TerminalGrammarSlot(0, Epsilon.getInstance(), matcherFactory);
-		
-		terminalsMap.put(Epsilon.getInstance(), epsilonSlot);
-
-		add(epsilonSlot);
-
-		Set<Nonterminal> nonterminals = this.grammar.getNonterminals();
-		nonterminals.forEach(n -> getNonterminalGrammarSlot(n));
-		
-		int i = 0;
-		for (Rule r : this.grammar.getRules()) {
-			current = mapping.get(i);
-			convert(r);
-			i++;
-		}
-		
-		nonterminals.forEach(n -> setFirstFollowTests(n));
 	}
 	
 	public NonterminalGrammarSlot getHead(Nonterminal start) {
@@ -245,8 +264,12 @@ public class GrammarGraph implements Serializable {
 		while (rule2graph.hasNext()) 
 			rule2graph.nextSymbol();
 	}
-	
-	private class GrammarGraphSymbolVisitor extends  AbstractGrammarGraphSymbolVisitor<Void> {
+
+    public ParserRuntime getRuntime() {
+        return runtime;
+    }
+
+    private class GrammarGraphSymbolVisitor extends  AbstractGrammarGraphSymbolVisitor<Void> {
 		
 		private final NonterminalGrammarSlot head;
 		private final Rule rule;
@@ -287,7 +310,7 @@ public class GrammarGraph implements Serializable {
 			validateNumberOfArguments(nonterminalSlot.getNonterminal(), arguments);
 			
 			Set<Condition> preConditions = (i == 0 && j == -1)? new HashSet<>() : symbol.getPreConditions();
-			currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, getConditions(preConditions)));
+			currentSlot.addTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, getConditions(preConditions), runtime));
 			currentSlot = slot;
 			
 			return null;
@@ -302,7 +325,7 @@ public class GrammarGraph implements Serializable {
 			visitSymbol(sym);
 			
 			BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-			currentSlot.addTransition(new ConditionalTransition(expression, currentSlot, thenSlot));
+			currentSlot.addTransition(new ConditionalTransition(expression, currentSlot, thenSlot, runtime));
 			currentSlot = thenSlot;
 			
 			return null;
@@ -317,7 +340,7 @@ public class GrammarGraph implements Serializable {
 			visitSymbol(sym);
 			
 			BodyGrammarSlot done = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-			currentSlot.addTransition(new CodeTransition(statements, currentSlot, done));
+			currentSlot.addTransition(new CodeTransition(statements, currentSlot, done, runtime));
 			currentSlot = done;
 			
 			return null;
@@ -329,12 +352,12 @@ public class GrammarGraph implements Serializable {
 				throw new RuntimeException("Return symbol can only be used at the end of a grammar rule!");
 			else {
 				if (rule.size() == 1)
-					done = new EpsilonGrammarSlot(id++, rule.getPosition(i + 1), head, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction(), rule.getRuleType());
+					done = new EpsilonGrammarSlot(id++, rule.getPosition(i + 1), head, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction(), rule.getRuleType(), runtime);
 				else
 					done = getEndGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
 			}
 			
-			currentSlot.addTransition(new ReturnTransition(symbol.getExpression(), currentSlot, done));
+			currentSlot.addTransition(new ReturnTransition(symbol.getExpression(), currentSlot, done, runtime));
 			currentSlot = done;
 			
 			return null;
@@ -379,11 +402,11 @@ public class GrammarGraph implements Serializable {
 			
 			if (symbol.getLabel() != null) {
 				BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), preconditions, currentSlot, declared));
+				currentSlot.addTransition(new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(), preconditions, currentSlot, declared, runtime));
 				currentSlot = declared;
 			} else {
 				BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
-				currentSlot.addTransition(new EpsilonTransition(preconditions, currentSlot, checked));
+				currentSlot.addTransition(new EpsilonTransition(preconditions, currentSlot, checked, runtime));
 				currentSlot = checked;
 			}
 			
@@ -401,7 +424,7 @@ public class GrammarGraph implements Serializable {
 				else
 					stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
 				
-				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), getConditions(symbol.getPostConditions()), currentSlot, stored));
+				currentSlot.addTransition(new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(), getConditions(symbol.getPostConditions()), currentSlot, stored, runtime));
 				currentSlot = stored;
 			} else {
 				
@@ -411,7 +434,7 @@ public class GrammarGraph implements Serializable {
 				else
 					checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
 				
-				currentSlot.addTransition(new EpsilonTransition(getConditions(symbol.getPostConditions()), currentSlot, checked));
+				currentSlot.addTransition(new EpsilonTransition(getConditions(symbol.getPostConditions()), currentSlot, checked, runtime));
 				currentSlot = checked;
 			}
 		}
@@ -422,12 +445,12 @@ public class GrammarGraph implements Serializable {
 															 BodyGrammarSlot origin, BodyGrammarSlot dest,
 															 Set<Condition> preConditions, Set<Condition> postConditions) {
 		
-		return new TerminalTransition(slot, origin, dest, getConditions(preConditions), getConditions(postConditions));
+		return new TerminalTransition(slot, origin, dest, getConditions(preConditions), getConditions(postConditions), runtime);
 	}
 	
 	private TerminalGrammarSlot getTerminalGrammarSlot(RegularExpression regex, String name) {
         return terminalsMap.computeIfAbsent(regex, k -> {
-            TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex, matcherFactory, name);
+            TerminalGrammarSlot terminalSlot = new TerminalGrammarSlot(id++, regex, matcherFactory, name, runtime);
             add(terminalSlot);
             return terminalSlot;
         });
@@ -436,7 +459,7 @@ public class GrammarGraph implements Serializable {
 	private NonterminalGrammarSlot getNonterminalGrammarSlot(Nonterminal nonterminal) {
 		return nonterminalsMap.computeIfAbsent(nonterminal, k -> {
 			NonterminalGrammarSlot ntSlot;
-			ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup(), nonterminal.getNodeType());
+			ntSlot = new NonterminalGrammarSlot(id++, nonterminal, getNodeLookup(), nonterminal.getNodeType(), runtime);
 			add(ntSlot);
 			return ntSlot;
 		});
@@ -446,14 +469,14 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		
 		if (rule.size() == 0) {
-			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction(), rule.getRuleType());
+			slot = new EpsilonGrammarSlot(id++, rule.getPosition(0,0), nonterminal, epsilonSlot, ConditionsFactory.DEFAULT, rule.getAction(), rule.getRuleType(), runtime);
 		} else {
 			// TODO: This is not a final solution; in particular, 
 			//       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.  
 			Set<Condition> preConditions = new HashSet<>();
 			preConditions.addAll(rule.symbolAt(0).getPreConditions());
 			 
-			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions));
+			slot = new BodyGrammarSlot(id++, rule.getPosition(0,0), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions), runtime);
 		}
 		add(slot);
 		return slot;
@@ -464,10 +487,10 @@ public class GrammarGraph implements Serializable {
 		
 		BodyGrammarSlot slot;
 		if (current != null)
-			slot = new BodyGrammarSlot(id++, position, label, (label != null && !label.isEmpty())? current.get(label) : -1, 
-									   variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
+			slot = new BodyGrammarSlot(id++, position, label, (label != null && !label.isEmpty())? current.get(label) : -1,
+									   variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), runtime);
 		else
-			slot = new BodyGrammarSlot(id++, position, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()));
+			slot = new BodyGrammarSlot(id++, position, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), runtime);
 		
 		add(slot);
 		slot.setFollowTest(getFollowTest(rule, i));
@@ -480,9 +503,9 @@ public class GrammarGraph implements Serializable {
 		BodyGrammarSlot slot;
 		if (current != null)
 			slot = new EndGrammarSlot(id++, position, nonterminal, label, (label != null && !label.isEmpty())? current.get(label) : -1, 
-									  variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction(), rule.getRuleType());
+									  variable, (variable != null && !variable.isEmpty())? current.get(variable) : -1, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction(), rule.getRuleType(), runtime);
 		else
-			slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction(), rule.getRuleType());
+			slot = new EndGrammarSlot(id++, position, nonterminal, label, variable, state, getConditions(rule.symbolAt(i - 1).getPostConditions()), rule.getAction(), rule.getRuleType(), runtime);
 		
 		add(slot);
 		slot.setFollowTest(getFollowTest(rule, i));

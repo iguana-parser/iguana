@@ -46,23 +46,18 @@ public class Descriptor {
 	// (L1, i)
 	private final GSSNode gssNode;
 	
-	// j
-	private final int inputIndex;
-	
 	// (L, i, j)
 	private final NonPackedNode sppfNode;
 
     protected final Input input;
 	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode, Input input) {
+	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, NonPackedNode sppfNode, Input input) {
 		assert slot != null;
 		assert gssNode != null;
-		assert inputIndex >= 0;
 		assert sppfNode != null;
 		
 		this.slot = slot;
 		this.gssNode = gssNode;
-		this.inputIndex = inputIndex;
 		this.sppfNode = sppfNode;
         this.input = input;
 	}
@@ -76,20 +71,20 @@ public class Descriptor {
 	}
 	
 	public int getInputIndex() {
-		return inputIndex;
+		return sppfNode.getRightExtent();
 	}
 
 	public NonPackedNode getSPPFNode() {
 		return sppfNode;
 	}
 	
-	public void execute(GLLParser parser) {
-		slot.execute(parser, input, gssNode, inputIndex, sppfNode);
+	public void execute() {
+		slot.execute(input, gssNode, sppfNode);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %s, %s)", slot, inputIndex, gssNode, sppfNode);
+		return String.format("(%s, %d, %s, %s)", slot, sppfNode.getRightExtent(), gssNode, sppfNode);
 	}
 	
 }

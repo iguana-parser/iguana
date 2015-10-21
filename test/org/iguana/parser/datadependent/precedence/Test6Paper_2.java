@@ -16,8 +16,8 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
@@ -65,11 +65,11 @@ Grammar.builder()
          // grammar = new LayoutWeaver().transform(grammar);
 
          Input input = Input.fromString("a+ifathena+a");
-         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
          // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
 
-         GLLParser parser = ParserFactory.getParser();
+         GLLParser parser = new GLLParserImpl();
          ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());

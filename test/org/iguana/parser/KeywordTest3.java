@@ -80,8 +80,8 @@ public class KeywordTest3 {
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("if s then s");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}

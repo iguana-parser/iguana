@@ -10,9 +10,9 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Character;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
@@ -47,8 +47,8 @@ public class Test19 {
 
     @Test
     public void testParser1() {
-        GrammarGraph graph = grammar.toGrammarGraph(input1, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
@@ -57,8 +57,8 @@ public class Test19 {
 
     @Test
     public void testParser2() {
-        GrammarGraph graph = grammar.toGrammarGraph(input2, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
@@ -67,8 +67,8 @@ public class Test19 {
 
     @Test
     public void testParser3() {
-        GrammarGraph graph = grammar.toGrammarGraph(input3, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input3, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);

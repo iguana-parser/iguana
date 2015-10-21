@@ -82,8 +82,8 @@ public class DanglingElseGrammar4 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("aasb");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
 	}

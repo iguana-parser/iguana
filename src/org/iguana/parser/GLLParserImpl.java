@@ -28,32 +28,22 @@
 package org.iguana.parser;
 
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.sppf.*;
+import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
-import org.iguana.datadependent.ast.Expression;
-import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
-import iguana.utils.logging.IguanaLogger;
 
 /**
  * 
@@ -64,63 +54,19 @@ import iguana.utils.logging.IguanaLogger;
  */
 public class GLLParserImpl implements GLLParser {
 	
-	protected GSSNode cu;
 
-	protected NonPackedNode cn = DummyNode.getInstance();
-	
-	protected int ci = 0;
-	
-	/**
-	 * 
-	 */
-	protected GrammarGraph grammarGraph;
-	
-	/**
-	 * The grammar slot at which a parse error is occurred. 
-	 */
-	protected GrammarSlot errorSlot;
-	
-	/**
-	 * The last input index at which an error is occurred. 
-	 */
-	protected int errorIndex;
-	
-	/**
-	 * The current GSS node at which an error is occurred.
-	 */
-	protected GSSNode errorGSSNode;
-	
-	protected GSSNode startGSSNode;
-	
-	private final Configuration config;
-	
-	private Deque<Descriptor> descriptorsStack;
-	
-	private IguanaLogger logger;
+	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Configuration config, Nonterminal nonterminal, Map<String, ? extends Object> map, boolean global) {
 
-	public GLLParserImpl(Configuration config) {
-		this.config = config;
-		this.descriptorsStack = new ArrayDeque<>();
-//		this.logger = new JavaUtilIguanaLogger();
-		logger = IguanaLogger.DEFAULT;
-	}
-	
-	@Override
-	public final ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ? extends Object> map, boolean global) {
-		this.grammarGraph = grammarGraph;
+        IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config, input);
+
+        ParserRuntime runtime = grammarGraph.getRuntime();
 
 		grammarGraph.reset(input);
-		resetParser();
-		
-		/**
-		 * Data-dependent GLL parsing
-		 */
-		this.ctx = GLLEvaluator.getEvaluatorContext(config, input);
-		
+
 		if (global)
 			map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));
 		
-		NonterminalGrammarSlot startSymbol = getStartSymbol(nonterminal);
+		NonterminalGrammarSlot startSymbol = grammarGraph.getHead(nonterminal);
 		
 		if(startSymbol == null) {
 			throw new RuntimeException("No nonterminal named " + nonterminal + " found");
@@ -128,8 +74,10 @@ public class GLLParserImpl implements GLLParser {
 		
 		NonterminalNode root;
 		
-		Environment env = null;
-		
+		final Environment env;
+
+        GSSNode startGSSNode;
+
 		if (!global && !map.isEmpty()) {
 			Object[] arguments = new Object[map.size()];
 			
@@ -138,275 +86,45 @@ public class GLLParserImpl implements GLLParser {
 				arguments[i++] = map.get(parameter);
 			
 			startGSSNode = startSymbol.getGSSNode(0, new GSSNodeData<>(arguments));
-			env = getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
+			env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
 		} else {
+            env = null;
 			startGSSNode = startSymbol.getGSSNode(0);
 		}
 		
-		cu = startGSSNode;
+		runtime.log("Parsing %s:", input.getURI());
 
-		logger.log("Parsing %s:", input.getURI());
+        Timer timer = new Timer();
+        timer.start();
 
-		long start = System.nanoTime();
-		long startUserTime = BenchmarkUtil.getUserTime();
-		long startSystemTime = BenchmarkUtil.getSystemTime();
-		
-		parse(startSymbol, input, env);
-		
+        if (env == null)
+            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(new Descriptor(s, startGSSNode, new DummyNode(0), input)));
+        else
+            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, startGSSNode, new DummyNode(0), input, env)));
+
+        while(runtime.hasDescriptor()) {
+            Descriptor descriptor = runtime.nextDescriptor();
+            runtime.log("Processing %s", descriptor);
+            descriptor.execute();
+        }
+
 		root = startGSSNode.getNonterminalNode(input, input.length() - 1);
-		
+
+        timer.stop();
+
 		ParseResult parseResult;
 		
-		long end = System.nanoTime();
-		long endUserTime = BenchmarkUtil.getUserTime();
-		long endSystemTime = BenchmarkUtil.getSystemTime();
-		
 		if (root == null) {
-			parseResult = new ParseError(errorSlot, input, errorIndex, errorGSSNode);
-			logger.log("Parse error:\n %s", parseResult);
+			parseResult = runtime.getParseError();
+			runtime.log("Parse error:\n %s", parseResult);
 		} else {
-			ParseStatistics parseStatistics = ParseStatistics.builder()
-					.setNanoTime(end - start)
-					.setUserTime(endUserTime - startUserTime)
-					.setSystemTime(endSystemTime - startSystemTime) 
-					.setMemoryUsed(BenchmarkUtil.getMemoryUsed())
-					.setDescriptorsCount(descriptorsCount) 
-					.setGSSNodesCount(countGSSNodes + 1) // + start gss node 
-					.setGSSEdgesCount(countGSSEdges) 
-					.setNonterminalNodesCount(countNonterminalNodes)
-					.setTerminalNodesCount(countTerminalNodes)
-					.setIntermediateNodesCount(countIntemediateNodes) 
-					.setPackedNodesCount(countPackedNodes) 
-					.setAmbiguousNodesCount(countAmbiguousNodes).build();
-
+			ParseStatistics parseStatistics = runtime.getParseStatistics(timer);
 			parseResult = new ParseSuccess(root, parseStatistics, input);
-			logger.log("Parsing finished successfully.");			
-			logger.log(parseStatistics.toString());
+			runtime.log("Parsing finished successfully.");
+			runtime.log(parseStatistics.toString());
 		}
 		
 		return parseResult;
 	}
-	
-	protected NonterminalGrammarSlot getStartSymbol(Nonterminal nonterminal) {
-		return grammarGraph.getHead(nonterminal);
-	}
-	
-	protected void parse(NonterminalGrammarSlot startSymbol, Input input, Environment env) {
-		
-//		if(!startSymbol.testPredict(input.charAt(ci))) {
-//			recordParseError(startSymbol);
-//			return;
-//		}
-		
-		if (env == null)
-			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, cu, ci, DummyNode.getInstance(), input)));
-		else 
-			startSymbol.getFirstSlots().forEach(s -> scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, cu, ci, DummyNode.getInstance(), input, env)));
-		
-		while(!descriptorsStack.isEmpty()) {
-			Descriptor descriptor = descriptorsStack.pop();
-			ci = descriptor.getInputIndex();
-			cu = descriptor.getGSSNode();
-			cn = descriptor.getSPPFNode();
-			logger.log("Processing %s", descriptor);
-			descriptor.execute(this);
-		}
-	}
-	
-	/**
-	 * Replaces the previously reported parse error with the new one if the
-	 * inputIndex of the new parse error is greater than the previous one. In
-	 * other words, we throw away an error if we find an error which happens at
-	 * the next position of input.
-	 * 
-	 */
-	@Override
-	public void recordParseError(GrammarSlot slot) {
-		if (ci >= this.errorIndex) {
-			logger.log("Error recorded at %s %d", slot, ci);
-			this.errorIndex = ci;
-			this.errorSlot = slot;
-			this.errorGSSNode = cu;
-		}
-	}
-	
-	@Override
-	public final void scheduleDescriptor(Descriptor descriptor) {
-		descriptorsStack.push(descriptor);
-		logger.log("Descriptor created: %s", descriptor);
-		descriptorsCount++;
-	}
-		
-	private void resetParser() {
-		descriptorsStack.clear();
-		ci = 0;
-		cu = null;			
-		cn = DummyNode.getInstance();
-		errorSlot = null;
-		errorIndex = 0;
-		errorGSSNode = null;
-		
-		descriptorsCount = 0;
-		countGSSNodes = 0;
-		countGSSEdges = 0;
-		countNonterminalNodes = 0;
-		countIntemediateNodes = 0;
-		countTerminalNodes = 0;
-		countPackedNodes = 0;
-		countAmbiguousNodes = 0;
-	}
-			
-	@Override
-	public Configuration getConfiguration() {
-		return config;
-	}
-	
-	@Override
-	public Iterable<GSSNode> getGSSNodes() {
-		return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
-	}
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	private IEvaluatorContext ctx;
-
-	@Override
-	public IEvaluatorContext getEvaluatorContext() {
-		return ctx;
-	}
-
-	@Override
-	public Environment getEnvironment() {
-		return ctx.getEnvironment();
-	}
-	
-	@Override
-	public void setEnvironment(Environment env) {
-		ctx.setEnvironment(env);
-	}
-	
-	@Override
-	public Environment getEmptyEnvironment() {
-		return ctx.getEmptyEnvironment();
-	}
-	
-	@Override
-	public Object evaluate(Statement[] statements, Environment env) {
-		assert statements.length > 1;
-		
-		ctx.setEnvironment(env);
-		
-		int i = 0;
-		while (i < statements.length) {
-			statements[i].interpret(ctx);
-			i++;
-		}
-		
-		return null;
-	}
-	
-	@Override
-	public Object evaluate(DataDependentCondition condition, Environment env) {
-		ctx.setEnvironment(env);
-		return condition.getExpression().interpret(ctx);
-	}
-	
-	@Override
-	public Object evaluate(Expression expression, Environment env) {
-		ctx.setEnvironment(env);
-		return expression.interpret(ctx);
-	}
-	
-	@Override
-	public Object[] evaluate(Expression[] arguments, Environment env) {
-		if (arguments == null) return null;
-		
-		ctx.setEnvironment(env);
-		
-		Object[] values = new Object[arguments.length];
-		
-		int i = 0;
-		while (i < arguments.length) {
-			values[i] = arguments[i].interpret(ctx);
-			i++;
-		}
-		
-		return values;
-	}
-		
-	@Override
-	public GrammarGraph getGrammarGraph() {
-		return grammarGraph;
-	}
-
-	@Override
-	public void terminalNodeAdded(TerminalNode node) {
-		countTerminalNodes++;
-		logger.log("Terminal node added %s", node);
-	}
-
-	@Override
-	public void nonterminalNodeAdded(NonterminalNode node) {
-		countNonterminalNodes++;
-		logger.log("Nonterminal node added %s", node);
-	}
-
-	@Override
-	public void intermediateNodeAdded(IntermediateNode node) {
-		countIntemediateNodes++;
-		logger.log("Intermediate node added %s", node);
-	}
-
-	@Override
-	public void packedNodeAdded(Object slot, int pivot) {
-		countPackedNodes++;
-		logger.log("Packed node added (%s, %d)", slot, pivot);
-	}
-
-	@Override
-	public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
-		countAmbiguousNodes++;
-		logger.log("Ambiguous node added: %s", node);
-//		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
-//		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
-//		for (PackedNode packedNode : node.getChildren()) {
-//			System.out.println("   Packed node: " + packedNode.toString());
-//			for (org.iguana.sppf.NonPackedNode child : packedNode.getChildren()) {
-//				System.out.println(String.format("       %s %s", child, input.getNodeInfo(child)));
-//			}
-//		}
-//		System.exit(0);
-	}
-
-	@Override
-	public void gssNodeAdded(GSSNode node) {
-		countGSSNodes++;
-		logger.log("GSS node added %s", node);
-	}
-
-	@Override
-	public void gssEdgeAdded(GSSEdge edge) {
-		countGSSEdges++;
-		logger.log("GSS Edge added %s", edge);
-	}
-	
-	private int descriptorsCount;
-	
-	private int countNonterminalNodes;
-	
-	private int countIntemediateNodes;
-	
-	private int countTerminalNodes;
-
-	private int countPackedNodes;
-	
-	private int countAmbiguousNodes;
-	
-	private int countGSSNodes;
-	
-	private int countGSSEdges;
 
 }

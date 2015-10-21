@@ -32,6 +32,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -39,8 +40,8 @@ public class CodeTransition extends AbstractTransition {
 	
 	private final Statement[] statements;
 
-	public CodeTransition(Statement[] statements, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		super(origin, dest);
+	public CodeTransition(Statement[] statements, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
+		super(origin, dest, runtime);
 		this.statements = statements;
 	}
 
@@ -50,12 +51,12 @@ public class CodeTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node) {
-		parser.evaluate(statements, parser.getEmptyEnvironment());
-		if (parser.getEnvironment().isEmpty())
-			dest.execute(parser, input, u, i, node);
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
+		runtime.evaluate(statements, runtime.getEmptyEnvironment());
+		if (runtime.getEnvironment().isEmpty())
+			dest.execute(input, u, node);
 		else
-			dest.execute(parser, input, u, i, node, parser.getEnvironment());
+			dest.execute(input, u, node, runtime.getEnvironment());
 	}
 	
 	/**
@@ -64,9 +65,9 @@ public class CodeTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(GLLParser parser, Input input, GSSNode u, int i, NonPackedNode node, Environment env) {
-		parser.evaluate(statements, env);
-		dest.execute(parser, input, u, i, node, parser.getEnvironment());
+	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+		runtime.evaluate(statements, env);
+		dest.execute(input, u, node, runtime.getEnvironment());
 	}
 
 	@Override

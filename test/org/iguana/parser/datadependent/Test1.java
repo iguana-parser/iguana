@@ -39,8 +39,8 @@ import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,9 +92,9 @@ public class Test1 {
 		System.out.println(grammar);
 		
 		Input input = Input.fromString("ab");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
+		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 		
-		GLLParser parser = ParserFactory.getParser();
+		GLLParser parser = new GLLParserImpl();
 		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
 	}
 

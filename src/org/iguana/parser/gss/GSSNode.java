@@ -32,9 +32,7 @@ import java.util.List;
 
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.utils.collections.Keys;
 import iguana.utils.collections.hash.MurmurHash3;
-import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -62,45 +60,45 @@ public class GSSNode {
 	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.poppedElements = new PoppedElements();
+		this.poppedElements = new PoppedElements(slot.getRuntime());
 		this.gssEdges = new ArrayList<>();
 	}
 	
-	public void createGSSEdge(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
+	public void createGSSEdge(Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w) {
 		NewGSSEdgeImpl edge = new NewGSSEdgeImpl(returnSlot, w, destination);
-		parser.gssEdgeAdded(edge);
+		slot.getRuntime().gssEdgeAdded(edge);
 		
 		gssEdges.add(edge);
 		
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(z.getRightExtent()))) {
-				Descriptor descriptor = edge.addDescriptor(parser, input, this, z.getRightExtent(), z);
+				Descriptor descriptor = edge.addDescriptor(input, this, z);
 				if (descriptor != null) {
-					parser.scheduleDescriptor(descriptor);
+					slot.getRuntime().scheduleDescriptor(descriptor);
 				}
 			}
 		});
 	}
 
-    public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child) {
-//        logger.log("Pop %s, %d, %s", gssNode, inputIndex, node);
-        NonterminalNode node = poppedElements.add(parser, input, slot, child);
-        if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
+    public void pop(Input input, EndGrammarSlot slot, NonPackedNode child) {
+        slot.getRuntime().log("Pop %s, %d, %s", this, inputIndex, child);
+        NonterminalNode node = poppedElements.add(input, slot, child);
+        if (node == null) return; else iterateOverEdges(input, node);
     }
 
-    public void pop(GLLParser parser, Input input, int inputIndex, EndGrammarSlot slot, NonPackedNode child, Object value) {
-        NonterminalNode node = poppedElements.add(parser, input, slot, child, value);
-        if (node == null) return; else iterateOverEdges(parser, input, inputIndex, node);
+    public void pop(Input input, EndGrammarSlot slot, NonPackedNode child, Object value) {
+        NonterminalNode node = poppedElements.add(input, slot, child, value);
+        if (node == null) return; else iterateOverEdges(input, node);
     }
 
-    private void iterateOverEdges(GLLParser parser, Input input, int inputIndex, NonterminalNode node) {
+    private void iterateOverEdges(Input input, NonterminalNode node) {
         for(GSSEdge edge : getGSSEdges()) {
 
-            if (!edge.getReturnSlot().testFollow(input.charAt(inputIndex))) continue;
+            if (!edge.getReturnSlot().testFollow(input.charAt(node.getRightExtent()))) continue;
 
-            Descriptor descriptor = edge.addDescriptor(parser, input, this, inputIndex, node);
+            Descriptor descriptor = edge.addDescriptor(input, this, node);
             if (descriptor != null) {
-                parser.scheduleDescriptor(descriptor);
+                slot.getRuntime().scheduleDescriptor(descriptor);
             }
         }
     }
@@ -161,17 +159,17 @@ public class GSSNode {
 	 * 
 	 */
 	
-	public void createGSSEdge(GLLParser parser, Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
+	public void createGSSEdge(Input input, BodyGrammarSlot returnSlot, GSSNode destination, NonPackedNode w, Environment env) {
 		NewGSSEdgeImpl edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl(returnSlot, w, destination, env);
 		
 		gssEdges.add(edge);
-		parser.gssEdgeAdded(edge);
+		returnSlot.getRuntime().gssEdgeAdded(edge);
 
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(z.getRightExtent()))) {
-				Descriptor descriptor = edge.addDescriptor(parser, input, this, z.getRightExtent(), z);
+				Descriptor descriptor = edge.addDescriptor(input, this, z);
 				if (descriptor != null) {
-					parser.scheduleDescriptor(descriptor);
+                    returnSlot.getRuntime().scheduleDescriptor(descriptor);
 				}
 			}
 		});

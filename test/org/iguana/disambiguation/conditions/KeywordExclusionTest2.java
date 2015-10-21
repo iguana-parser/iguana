@@ -36,8 +36,8 @@ import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Alt;
 import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
@@ -81,32 +81,32 @@ public class KeywordExclusionTest2 {
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 

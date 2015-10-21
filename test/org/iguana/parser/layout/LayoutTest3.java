@@ -34,8 +34,8 @@ import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Plus;
 import org.iguana.util.Configuration;
 import org.junit.Test;
@@ -80,8 +80,8 @@ public class LayoutTest3 {
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
 		Grammar grammar = getGrammar();
-		GLLParser parser = ParserFactory.getParser();
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
+		GLLParser parser = new GLLParserImpl();
+		ParseResult result = parser.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 	}
 }

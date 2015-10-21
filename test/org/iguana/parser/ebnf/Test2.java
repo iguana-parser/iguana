@@ -12,9 +12,9 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.GLLParser;
+import org.iguana.parser.GLLParserImpl;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.ParserFactory;
 import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -47,8 +47,8 @@ public class Test2 {
     @Test
     public void testParser0() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = grammar.toGrammarGraph(input0, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input0, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult0(graph), result);
@@ -58,8 +58,8 @@ public class Test2 {
     @Test
     public void testParser1() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = grammar.toGrammarGraph(input1, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
@@ -69,8 +69,8 @@ public class Test2 {
     @Test
     public void testParser2() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = grammar.toGrammarGraph(input2, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input2, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
@@ -80,8 +80,8 @@ public class Test2 {
     @Test
     public void testParser3() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = grammar.toGrammarGraph(input3, Configuration.DEFAULT);
-        GLLParser parser = ParserFactory.getParser();
+        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT);
+        GLLParser parser = new GLLParserImpl();
         ParseResult result = parser.parse(input3, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
@@ -110,8 +110,7 @@ public class Test2 {
     }
 
     public static Tree getTree0() {
-        Tree t0 = createEpsilon(0);
-        Tree t1 = createStar(list(t0));
+        Tree t1 = createStar(list());
         Tree t2 = createRule(r1, list(t1), input0);
         return t2;
     }
