@@ -747,12 +747,12 @@ public class IdeaIDEGenerator {
                     else
                         color = "DefaultLanguageHighlighterColors." + color;
 
-                    writer.println((i ==0? "        if " : "        else if ") + "(tokenType.equals(" + language + "TokenTypes." + tokenType + "))");
+                    writer.println((i == 0? "        if " : "        else if ") + "(tokenType.equals(" + language + "TokenTypes." + tokenType + "))");
                     writer.println("            return new TextAttributesKey[] {TextAttributesKey.createTextAttributesKey(\"" + tokenType + "\", " + color + ")};");
                     i++;
                 }
             }
-            writer.println("        return new TextAttributesKey[0];");
+            writer.println("        return new TextAttributesKey[] {TextAttributesKey.createTextAttributesKey()};");
             writer.println("    }");
             writer.println("}");
             writer.println();
@@ -798,12 +798,10 @@ public class IdeaIDEGenerator {
             case "CLOSE_BRACKET": return "BRACKETS";
             case "BAD_CHARACTER": return "BAD_CHARACTER";
             default:
-                if (tokenType.toUpperCase().contains("IDENTIFIER"))
-                    return "IDENTIFIER";
-                else if (tokenType.toUpperCase().contains("COMMENT"))
+                if (tokenType.toUpperCase().contains("COMMENT"))
                     return "LINE_COMMENT";
                 else
-                    return null;
+                    return "IDENTIFIER";
         }
     }
 
