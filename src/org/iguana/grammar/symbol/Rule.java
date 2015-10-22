@@ -258,7 +258,7 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
 			sb.append(s).append(" ");
 		}
 
-        if (associativity != Associativity.UNDEFINED || precedence != 0) {
+        if (associativity != Associativity.UNDEFINED && precedence != 0) {
             sb.append(" {").append(associativity.name());
             if (precedence != 0) sb.append(", " + precedence);
             if (recursion != Recursion.UNDEFINED) sb.append(", " + recursion);
