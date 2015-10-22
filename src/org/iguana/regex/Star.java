@@ -137,6 +137,7 @@ public class Star extends AbstractRegularExpression {
 		public Builder(Star star) {
 			super(star);
 			this.s = star.s;
+            this.addSeparators(star.getSeparators());
 		}
 		
 		public Builder addSeparator(Symbol symbol) {

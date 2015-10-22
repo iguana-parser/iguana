@@ -138,6 +138,7 @@ public class Plus extends AbstractRegularExpression {
 		public Builder(Plus plus) {
 			super(plus);
 			this.s = plus.s;
+            this.addSeparators(plus.getSeparators());
 		}
 		
 		public Builder addSeparator(Symbol symbol) {
