@@ -19,13 +19,15 @@ public class Names implements GrammarTransformation {
     public Grammar transform(Grammar grammar) {
         List<Rule> rules = new ArrayList<>();
 
-        NameVisitor visitor = new NameVisitor(rules);
+        NameVisitor visitor = new NameVisitor(rules, (Nonterminal) grammar.getLayout());
 
         for (Rule rule : grammar.getRules())
             rules.add(visitor.visitRule(rule));
 
         return Grammar.builder()
                 .addRules(rules)
+                .addEBNFl(grammar.getEBNFLefts())
+                .addEBNFr(grammar.getEBNFRights())
                 .setLayout(grammar.getLayout())
                 .build();
     }
@@ -35,8 +37,11 @@ public class Names implements GrammarTransformation {
         final List<Rule> rules;
         private Set<Nonterminal> heads = new HashSet<>();
 
-        NameVisitor(List<Rule> rules) {
+        private final Nonterminal layout;
+
+        NameVisitor(List<Rule> rules, Nonterminal layout) {
             this.rules = rules;
+            this.layout = layout;
         }
 
         public Rule visitRule(Rule rule) {
@@ -121,14 +126,22 @@ public class Names implements GrammarTransformation {
                         sym = Nonterminal.withName(symbol.getName() + "$Declaration");
                         if (!heads.contains(sym)) {
                             heads.add(sym);
-                            rules.add(Rule.withHead(sym).addSymbol(symbol).build());
+                            rules.add(Rule.withHead(sym).addSymbol(symbol)
+                                        .setLayout(layout).setLayoutStrategy(LayoutStrategy.INHERITED)
+                                        .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+                                        .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+                                        .build());
                         }
                         return sym;
                     case 1:
                         sym = Nonterminal.withName(symbol.getName() + "$Reference");
                         if (!heads.contains(sym)) {
                             heads.add(sym);
-                            rules.add(Rule.withHead(sym).addSymbol(symbol).build());
+                            rules.add(Rule.withHead(sym).addSymbol(symbol)
+                                        .setLayout(layout).setLayoutStrategy(LayoutStrategy.INHERITED)
+                                        .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
+                                        .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+                                        .build());
                         }
                         return sym;
                     default:
@@ -170,7 +183,7 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Plus symbol) {
-            return Plus.from(visitSymbol(symbol.getSymbol()));
+            return Plus.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
 
         @Override
@@ -180,7 +193,7 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Star symbol) {
-            return Star.from(visitSymbol(symbol.getSymbol()));
+            return Star.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
     }
 }

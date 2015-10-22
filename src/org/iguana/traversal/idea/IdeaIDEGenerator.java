@@ -743,7 +743,7 @@ public class IdeaIDEGenerator {
                 if (color != null) {
 
                     if (color.equals("BAD_CHARACTER"))
-                        color = "HighlighterColors." + color;
+                        color = "HighlighterColors.TEXT";
                     else
                         color = "DefaultLanguageHighlighterColors." + color;
 
@@ -752,7 +752,7 @@ public class IdeaIDEGenerator {
                     i++;
                 }
             }
-            writer.println("        return new TextAttributesKey[] {TextAttributesKey.createTextAttributesKey()};");
+            writer.println("        return new TextAttributesKey[0];");
             writer.println("    }");
             writer.println("}");
             writer.println();
@@ -1594,28 +1594,25 @@ public class IdeaIDEGenerator {
             writer.println("import org.iguana.grammar.transformation.LayoutWeaver;");
             writer.println("import org.iguana.parser.Iguana;");
             writer.println("import org.iguana.parser.ParseResult;");
-            writer.println("import org.iguana.parser.ParserFactory;");
             writer.println("import org.iguana.util.Configuration;");
             writer.println();
             writer.println("public class " + language + "Parser implements PsiParser {");
             writer.println();
             writer.println("    private Grammar grammar;");
             writer.println("    private GrammarGraph graph;");
-            writer.println("    private Iguana parser;");
             writer.println();
             writer.println("    public ASTNode parse(IElementType root, PsiBuilder builder) {");
             writer.println("        Input input = Input.fromString(builder.getOriginalText().toString());");
-            writer.println("        if (parser == null) {");
+            writer.println("        if (graph == null) {");
             writer.println("            grammar = Grammar.load(this.getClass().getClassLoader().getResourceAsStream(\"" + language.toLowerCase() + "/gen/parser/grammar/" + language + "\"));");
             writer.println("            DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();");
             writer.println("            precedenceAndAssociativity.setOP2();");
             writer.println("            grammar = new EBNFToBNF().transform(grammar);");
             writer.println("            grammar = precedenceAndAssociativity.transform(grammar);");
             writer.println("            grammar = new LayoutWeaver().transform(grammar);");
-            writer.println("            graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);");
-            writer.println("            parser = ParserFactory.getParser();");
+            writer.println("            graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);");
             writer.println("        }");
-            writer.println("        ParseResult result = parser.parse(input, graph, Nonterminal.withName(\"\"));");
+            writer.println("        ParseResult result = Iguana.parse(input, graph, Nonterminal.withName(\"\"));");
             writer.println("        if (result.isParseSuccess()) {");
             writer.println("            System.out.println(\"Success...\");");
             writer.println("            NonterminalNode sppf = result.asParseSuccess().getSPPFNode();");
@@ -1765,7 +1762,7 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("    public TreeElement cycle(String label) { throw new RuntimeException(\"Not yet supported in the idea tree builder: cycles.\"); }");
             writer.println();
-            writer.println("    public Branch<TreeElement> branch(Seq<TreeElement> children) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); } ");
+            writer.println("    public Branch<TreeElement> branch(RuleType type, Seq<TreeElement> children) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); } ");
             writer.println();
             writer.println("    public TreeElement star(Seq<TreeElement> children) {");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.LIST);");
