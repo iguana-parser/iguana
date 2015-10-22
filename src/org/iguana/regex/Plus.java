@@ -96,7 +96,7 @@ public class Plus extends AbstractRegularExpression {
 	
 	@Override
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
-		return builder(s);
+		return new Builder(this);
 	}
 
 	public Symbol getSymbol() {

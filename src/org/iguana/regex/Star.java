@@ -96,7 +96,7 @@ public class Star extends AbstractRegularExpression {
 
 	@Override
 	public Builder copyBuilder() {
-		return builder(s);
+		return new Builder(this);
 	}
 
 	public Symbol getSymbol() {
@@ -119,8 +119,8 @@ public class Star extends AbstractRegularExpression {
 	public int hashCode() {
 		return name.hashCode();
 	}
-	
-	public static Builder builder(Symbol s) {
+
+    public static Builder builder(Symbol s) {
 		return new Builder(s);
 	}
 	
