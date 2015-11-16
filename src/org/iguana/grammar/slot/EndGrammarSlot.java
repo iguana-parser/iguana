@@ -28,7 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.parsetrees.slot.Action;
-import iguana.parsetrees.slot.EndSlot;
+import iguana.parsetrees.slot.PackedNodeSlot;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.tree.RuleType;
 import iguana.utils.input.Input;
@@ -41,7 +41,7 @@ import org.iguana.parser.gss.GSSNode;
 import java.util.Collections;
 import java.util.Set;
 
-public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
+public class EndGrammarSlot extends BodyGrammarSlot implements PackedNodeSlot {
 
 	protected final NonterminalGrammarSlot nonterminal;
 	protected final Action action;
@@ -101,13 +101,8 @@ public class EndGrammarSlot extends BodyGrammarSlot implements EndSlot {
         return ruleType;
     }
 
-    @Override
-    public Action action() {
-        return action;
-    }
-	
     /**
-	 * 
+	 *
 	 * Data-dependent GLL parsing
 	 * 
 	 */

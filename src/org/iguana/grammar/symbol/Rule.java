@@ -334,6 +334,16 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
         return body.stream().map(s -> s.getName()).collect(Collectors.toList());
     }
 
+    @Override
+    public Action action() {
+        return action;
+    }
+
+    @Override
+    public int position() {
+        return size();
+    }
+
     public static class Builder {
 		
 		private Nonterminal head;

@@ -52,7 +52,6 @@ public class Test9 {
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         Tree tree = result.asParseSuccess().getTree();
-        System.out.println(tree);
     }
 
     @Test
