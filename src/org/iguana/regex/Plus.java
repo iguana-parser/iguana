@@ -96,7 +96,7 @@ public class Plus extends AbstractRegularExpression {
 	
 	@Override
 	public SymbolBuilder<? extends Symbol> copyBuilder() {
-		return builder(s);
+		return new Builder(this);
 	}
 
 	public Symbol getSymbol() {
@@ -138,6 +138,7 @@ public class Plus extends AbstractRegularExpression {
 		public Builder(Plus plus) {
 			super(plus);
 			this.s = plus.s;
+            this.addSeparators(plus.getSeparators());
 		}
 		
 		public Builder addSeparator(Symbol symbol) {
