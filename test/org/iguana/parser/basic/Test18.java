@@ -44,7 +44,7 @@ public class Test18 {
 
     @Test
     public void testParser1() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar, input1);
         ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);

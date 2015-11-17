@@ -29,12 +29,6 @@ package org.iguana.util;
 
 import iguana.utils.logging.LogLevel;
 import org.iguana.util.config.XMLConfigFileParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * 
@@ -66,7 +60,6 @@ public class Configuration {
             configuration = parser.getConfiguration();
         } catch (Exception e) {
             configuration = Configuration.DEFAULT;
-            e.printStackTrace();
         }
         return configuration;
     }
@@ -108,22 +101,22 @@ public class Configuration {
 		return new Builder();
 	}
 	
-	public static enum MatcherType {
+	public enum MatcherType {
 		DFA,
 		JAVA_REGEX
 	}
 		
-	public static enum LookupImpl {
+	public enum LookupImpl {
 		ARRAY,
 		HASH_MAP
 	}
 	
-	public static enum HashMapImpl {
+	public enum HashMapImpl {
 		JAVA,
 		INT_OPEN_ADDRESSING
 	}
 	
-	public static enum EnvironmentImpl {
+	public enum EnvironmentImpl {
 		ARRAY,
 		HASH_MAP,
 		TRIE

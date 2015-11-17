@@ -2,6 +2,10 @@
 
     <Parser>
         <Lookahead>1</Lookahead>
+        <GSSLookupImpl>HASH_MAP</GSSLookupImpl>
+        <MatcherType>DFA</MatcherType>
+        <HashMapImpl>JAVA</HashMapImpl>
+        <EnvironmentImpl>ARRAY</EnvironmentImpl>
     </Parser>
 
     <Logging>

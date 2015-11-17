@@ -40,9 +40,24 @@ public class XMLConfigFileParser implements ConfigFileParser {
             Node node = childNodes.item(i);
 
             switch (node.getNodeName()) {
-
                 case "Lookahead":
-                    builder.setLookaheadCount(Integer.parseInt(node.getTextContent()));
+                    builder.setLookaheadCount(Integer.parseInt(node.getTextContent().toUpperCase()));
+                    break;
+
+                case "GSSLookupImpl":
+                    builder.setGSSLookupImpl(Configuration.LookupImpl.valueOf(node.getTextContent().toUpperCase()));
+                    break;
+
+                case "MatcherType":
+                    builder.setMatcherType(Configuration.MatcherType.valueOf(node.getTextContent().toUpperCase()));
+                    break;
+
+                case "HashMapImpl":
+                    builder.setHashmapImpl(Configuration.HashMapImpl.valueOf(node.getTextContent().toUpperCase()));
+                    break;
+
+                case "EnvironmentImpl":
+                    builder.setEnvironmentImpl(Configuration.EnvironmentImpl.valueOf(node.getTextContent().toUpperCase()));
                     break;
             }
         }
@@ -56,7 +71,7 @@ public class XMLConfigFileParser implements ConfigFileParser {
             switch (node.getNodeName()) {
 
                 case "LogLevel":
-                    builder.setLogLevel(LogLevel.valueOf(node.getTextContent()));
+                    builder.setLogLevel(LogLevel.valueOf(node.getTextContent().toUpperCase()));
                     break;
             }
         }

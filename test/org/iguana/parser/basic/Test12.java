@@ -42,7 +42,6 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
@@ -87,7 +86,7 @@ public class Test12 {
 
 	@Test
 	public void testParser1() {
-		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
+		GrammarGraph graph = GrammarGraph.from(grammar, input1);
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
@@ -109,7 +108,7 @@ public class Test12 {
 
     @Test
     public void testParser2() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar, input2);
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
