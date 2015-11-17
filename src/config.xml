@@ -1,0 +1,11 @@
+<Iguana>
+
+    <Parser>
+        <Lookahead>1</Lookahead>
+    </Parser>
+
+    <Logging>
+        <LogLevel>NONE</LogLevel>
+    </Logging>
+
+</Iguana>

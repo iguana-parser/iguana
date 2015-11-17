@@ -28,6 +28,13 @@
 package org.iguana.util;
 
 import iguana.utils.logging.LogLevel;
+import org.iguana.util.config.XMLConfigFileParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * 
@@ -51,6 +58,18 @@ public class Configuration {
 	private final EnvironmentImpl envImpl;
 
     private final LogLevel logLevel;
+
+    public static Configuration load() {
+        Configuration configuration;
+        try {
+            XMLConfigFileParser parser = XMLConfigFileParser.create("config.xml");
+            configuration = parser.getConfiguration();
+        } catch (Exception e) {
+            configuration = Configuration.DEFAULT;
+            e.printStackTrace();
+        }
+        return configuration;
+    }
 	
 	private Configuration(Builder builder) {
 		this.gssLookupImpl = builder.gssLookupImpl;
