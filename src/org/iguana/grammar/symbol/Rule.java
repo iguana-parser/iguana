@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.tree.RuleType;
 import iguana.utils.collections.hash.MurmurHash3;
+
 import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
 
@@ -333,6 +334,12 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
     public List<String> body() {
         return body.stream().map(s -> s.getName()).collect(Collectors.toList());
     }
+    
+    @Override
+    public String label() {
+    	return label;
+    }
+        
 
     public static class Builder {
 		
