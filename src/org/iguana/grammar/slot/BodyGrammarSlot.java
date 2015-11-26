@@ -42,6 +42,7 @@ import iguana.parsetrees.sppf.SPPFNodeFactory;
 import iguana.parsetrees.tree.RuleType;
 import iguana.utils.collections.Keys;
 import iguana.utils.input.Input;
+
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
@@ -49,6 +50,7 @@ import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Holder;
+
 import iguana.utils.collections.key.Key;
 
 
@@ -266,6 +268,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSl
             @Override
             public List<String> body() {
                 return position.getRule().getRuleType().body();
+            }
+            
+            @Override
+            public String label() {
+            	return position.getRule().getRuleType().label();
             }
 
             @Override
