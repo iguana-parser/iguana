@@ -114,7 +114,7 @@ public class Test8 {
 
 	@Test
 	public void testParser1_1() {
-		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
+		GrammarGraph graph = GrammarGraph.from(grammar, input1);
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead1(graph), result);

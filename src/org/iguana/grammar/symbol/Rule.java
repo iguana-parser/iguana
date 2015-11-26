@@ -341,6 +341,16 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
     }
         
 
+    @Override
+    public Action action() {
+        return action;
+    }
+
+    @Override
+    public int position() {
+        return size();
+    }
+
     public static class Builder {
 		
 		private Nonterminal head;

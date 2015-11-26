@@ -33,10 +33,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import iguana.parsetrees.slot.Action;
+import iguana.parsetrees.slot.PackedNodeSlot;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFNodeFactory;
+import iguana.parsetrees.tree.RuleType;
 import iguana.utils.collections.Keys;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
@@ -49,7 +52,7 @@ import org.iguana.util.Holder;
 import iguana.utils.collections.key.Key;
 
 
-public class BodyGrammarSlot extends AbstractGrammarSlot {
+public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSlot {
 	
 	protected final Position position;
 	
@@ -250,5 +253,35 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		
 		return env;
 	}
+
+    @Override
+    public RuleType ruleType() {
+        return new RuleType() {
+
+            @Override
+            public String head() {
+                return position.getRule().getRuleType().head();
+            }
+
+            @Override
+            public List<String> body() {
+                return position.getRule().getRuleType().body();
+            }
+
+            @Override
+            public Action action() {
+                return null;
+            }
+            @Override
+            public int position() {
+                return position.getPosition();
+            }
+
+            @Override
+            public String toString() {
+                return head() + " ::= " + body() + ", " + position();
+            }
+        };
+    }
 
 }

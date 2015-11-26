@@ -28,6 +28,7 @@
 package org.iguana.util;
 
 import iguana.utils.logging.LogLevel;
+import org.iguana.util.config.XMLConfigFileParser;
 
 /**
  * 
@@ -51,6 +52,17 @@ public class Configuration {
 	private final EnvironmentImpl envImpl;
 
     private final LogLevel logLevel;
+
+    public static Configuration load() {
+        Configuration configuration;
+        try {
+            XMLConfigFileParser parser = XMLConfigFileParser.create("config.xml");
+            configuration = parser.getConfiguration();
+        } catch (Exception e) {
+            configuration = Configuration.DEFAULT;
+        }
+        return configuration;
+    }
 	
 	private Configuration(Builder builder) {
 		this.gssLookupImpl = builder.gssLookupImpl;
@@ -89,22 +101,22 @@ public class Configuration {
 		return new Builder();
 	}
 	
-	public static enum MatcherType {
+	public enum MatcherType {
 		DFA,
 		JAVA_REGEX
 	}
 		
-	public static enum LookupImpl {
+	public enum LookupImpl {
 		ARRAY,
 		HASH_MAP
 	}
 	
-	public static enum HashMapImpl {
+	public enum HashMapImpl {
 		JAVA,
 		INT_OPEN_ADDRESSING
 	}
 	
-	public static enum EnvironmentImpl {
+	public enum EnvironmentImpl {
 		ARRAY,
 		HASH_MAP,
 		TRIE
