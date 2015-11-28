@@ -534,7 +534,7 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
         	return this;
         }
         
-        public Builder addAtribute(String key, Object value) {
+        public Builder addAttribute(String key, Object value) {
         	this.attributes.put(key, value);
         	return this;
         }
