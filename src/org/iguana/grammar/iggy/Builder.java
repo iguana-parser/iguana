@@ -28,10 +28,6 @@ package org.iguana.grammar.iggy;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
-
-
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -58,17 +54,20 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 		body.forEach(elem -> {
 			PrecG g = (PrecG) elem;
 			g.alts.forEach(alt -> {
-				Nonterminal head = Nonterminal.withName((String) name);
-				head = Nonterminal.builder(head).addParameters(params.stream().map(p -> (String)p).toArray(String[]::new)).build();
-				org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
-				if (alt instanceof Sequence)
+				final Nonterminal head = params.isEmpty() ? Nonterminal.withName((String)name)
+						                   : Nonterminal.builder((String)name).addParameters(params.stream().map(p -> (String)p).toArray(String[]::new))
+						                       .build();
+				if (alt instanceof Sequence) {
+					org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
 					builder.addSymbols(((Sequence)alt).syms);
-				else if (alt instanceof AssocG) {
+					rules.add(builder.build());
+				} else if (alt instanceof AssocG) {
 					((AssocG)alt).seqs.forEach(seq -> {
+						org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
 						builder.addSymbols(seq.syms);
+						rules.add(builder.build());
 					});
 				}
-				rules.add(builder.build());
 			});
 		});
 		return rules;
@@ -111,6 +110,83 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 				attrs.add((String) elem);
 		});
 		return new Sequence(syms, attrs);
+	}
+	
+	/*
+	 * EBNF related
+	 */
+	
+	@Override
+	public Object star(Object arg0) {
+		// TODO:
+		return null;
+	}
+	
+	@Override
+	public Object plus(Object arg0) {
+		// TODO:
+		return null;
+	}
+	
+	@Override
+	public Object opt(Object arg0) {
+		// TODO:
+		return null;
+	}
+	
+	@Override
+	public Object seqG(List<Object> arg0) {
+		// TODO:
+		return null;
+	}
+	
+	@Override
+	public Object altG(List<Object> arg0) {
+		// TODO:
+		return null;
+	}
+	
+	/*
+	 * Symbols
+	 */
+	
+	@Override
+	public Nonterminal callS(Object sym, List<Object> args) {
+		org.iguana.grammar.symbol.Nonterminal.Builder builder = Nonterminal.builder((Nonterminal) sym);
+		if (args.isEmpty()) 
+			return builder.build();
+		return builder
+				.apply(args.stream().map(arg -> (Expression) args)
+						.toArray(Expression[]::new)).build();
+	}
+	
+	@Override
+	public Nonterminal variable(Object name, Object sym) {
+		return Nonterminal.builder(((Nonterminal)sym)).setVariable((String) name).build();
+	}
+	
+	@Override
+	public Symbol label(Object name, Object sym) {
+		return ((Symbol)sym).copyBuilder().setLabel((String)name).build();
+	}
+	
+	@Override
+	public Nonterminal nont(Object name) {
+		return Nonterminal.withName((String)name);
+	}
+	
+	@Override
+	public org.iguana.regex.Sequence<org.iguana.grammar.symbol.Character> string(Object obj) {
+		String s = (String) obj;
+		s = s.substring(1, s.length() - 1);
+		return org.iguana.regex.Sequence.from(s.chars().toArray());
+	}
+	
+	@Override
+	public Object character(Object obj) {
+		String s = (String) obj;
+		s = s.substring(1, s.length() - 1);
+		return org.iguana.grammar.symbol.Character.from(s.charAt(0));
 	}
 	
 	
