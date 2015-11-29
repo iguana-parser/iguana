@@ -1198,9 +1198,9 @@ public class IdeaIDEGenerator {
                                 break;
                             case MORE_THAN_ONE:
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
+                                    writer.println("    List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
                                 else
-                                    writer.println("    List<I" + symbol + "> get" + symbol + "s();");
+                                    writer.println("    List<I" + symbol + "> getAll" + symbol + "();");
                                 break;
                             case ONE_AND_MORE:
                                 if (symbol.endsWith("$Ebnf"))
@@ -1209,9 +1209,9 @@ public class IdeaIDEGenerator {
                                     writer.println("    I" + symbol + " get" + symbol + "();");
 
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists();");
+                                    writer.println("    List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
                                 else
-                                    writer.println("    List<I" + symbol + "> get" + symbol + "s();");
+                                    writer.println("    List<I" + symbol + "> getAll" + symbol + "();");
                                 break;
                             default:
                         }
@@ -1297,6 +1297,11 @@ public class IdeaIDEGenerator {
                         if (declaration || reference)
                             writer.println("import com.intellij.util.IncorrectOperationException;");
                         writer.println();
+                        if (declaration || reference)
+                            writer.println("import " + language.toLowerCase() + ".gen.utils." + language + "ElementFactory;");
+                        if (reference)
+                            writer.println("import " + language.toLowerCase() + ".gen.utils." + language + "Util;");
+                        writer.println();
                         writer.println("import java.util.List;");
                         writer.println("import java.util.ArrayList;");
                         writer.println();
@@ -1331,46 +1336,46 @@ public class IdeaIDEGenerator {
                                 case MORE_THAN_ONE:
                                     if (num2 == null) {
                                         if (symbol.endsWith("$Ebnf"))
-                                            writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
+                                            writer.println("    public List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
                                         else
-                                            writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                            writer.println("    public List<I" + symbol + "> getAll" + symbol + "() { return null; }");
                                     } else {
                                         if (symbol.endsWith("$Ebnf")) {
-                                            writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() {");
+                                            writer.println("    public List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() {");
                                             writer.println("        List<List<PsiElement>> result = new ArrayList<>();");
                                             writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement.class))");
                                             writer.println("            result.add(e.getElements());");
                                             writer.println("        return result;");
                                             writer.println("    }");
                                         } else
-                                            writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                            writer.println("    public List<I" + symbol + "> getAll" + symbol + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
                                     }
                                     break;
                                 case ONE_AND_MORE:
                                     if (num2 == null) {
                                         if (symbol.endsWith("$Ebnf")) {
                                             writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
-                                            writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
+                                            writer.println("    public List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
                                         } else {
                                             writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
-                                            writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                            writer.println("    public List<I" + symbol + "> getAll" + symbol + "() { return null; }");
                                         }
                                     } else {
                                         switch (num2) {
                                             case ONE:
                                                 if (symbol.endsWith("$Ebnf")) {
                                                     writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return findNotNullChildByClass(IEbnfElement.class).getElements(); }");
-                                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() { return null; }");
+                                                    writer.println("    public List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
                                                 } else {
                                                     writer.println("    public I" + symbol + " get" + symbol + "() { return findNotNullChildByClass(I" + symbol + ".class); }");
-                                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return null; }");
+                                                    writer.println("    public List<I" + symbol + "> getAll" + symbol + "() { return null; }");
                                                 }
                                                 break;
                                             case MORE_THAN_ONE:
                                             case ONE_AND_MORE:
                                                 if (symbol.endsWith("$Ebnf")) {
                                                     writer.println("    public List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() { return null; }");
-                                                    writer.println("    public List<List<PsiElement>> get" + symbol.substring(0, symbol.lastIndexOf("$")) + "Lists() {");
+                                                    writer.println("    public List<List<PsiElement>> getAll" + symbol.substring(0, symbol.lastIndexOf("$")) + "List() {");
                                                     writer.println("        List<List<PsiElement>> result = new ArrayList<>();");
                                                     writer.println("        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, IEbnfElement.class))");
                                                     writer.println("            result.add(e.getElements());");
@@ -1378,7 +1383,7 @@ public class IdeaIDEGenerator {
                                                     writer.println("    }");
                                                 } else {
                                                     writer.println("    public I" + symbol + " get" + symbol + "() { return null; }");
-                                                    writer.println("    public List<I" + symbol + "> get" + symbol + "s() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
+                                                    writer.println("    public List<I" + symbol + "> getAll" + symbol + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" + symbol + ".class); }");
                                                 }
                                                 break;
                                         }
@@ -1391,21 +1396,49 @@ public class IdeaIDEGenerator {
                         if (declaration) {
                             writer.println();
                             writer.println("    public String getName() { return getNode().getText(); }");
-                            writer.println("    public PsiElement setName(String name) throws IncorrectOperationException { return null; }");
+                            writer.println();
+                            writer.println("    public PsiElement setName(String name) throws IncorrectOperationException {");
+                            writer.println("        ASTNode node = " + language + "ElementFactory.create" + head.substring(0, head.length() - 12) + "(getProject(), name);");
+                            writer.println("        ASTNode child = getNode().getFirstChildNode();");
+                            writer.println("        getNode().replaceChild(child, node);");
+                            writer.println("        return this;");
+                            writer.println("    }");
                         }
 
                         if (reference) {
                             writer.println();
                             writer.println("    public PsiReference[] getReferences() { return new PsiReference[] {this}; }");
+                            writer.println();
                             writer.println("    public PsiReference getReference() { return this; }");
+                            writer.println();
                             writer.println("    public PsiElement getElement() { return this; }");
+                            writer.println();
                             writer.println("    public TextRange getRangeInElement() { return new TextRange(0, getTextLength()); }");
-                            writer.println("    public PsiElement resolve() { return null; }");
+                            writer.println();
+                            writer.println("    public PsiElement resolve() {");
+                            writer.println("        PsiElement element = " + language + "Util.find" + head.substring(0, head.length() - 10) + "(getProject(), this);");
+                            writer.println("        return element;");
+                            writer.println("    }");
+                            writer.println();
                             writer.println("    public String getCanonicalText() { return this.getText(); }");
-                            writer.println("    public PsiElement handleElementRename(String name) throws IncorrectOperationException { return null; }");
+                            writer.println();
+                            writer.println("    public PsiElement handleElementRename(String name) throws IncorrectOperationException {");
+                            writer.println("        ASTNode node = " + language + "ElementFactory.create" + head.substring(0, head.length() - 10) + "(getProject(), name);");
+                            writer.println("        ASTNode child = getNode().getFirstChildNode();");
+                            writer.println("        getNode().replaceChild(child, node);");
+                            writer.println("        return this;");
+                            writer.println("    }");
+                            writer.println();
                             writer.println("    public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException { return null; }");
-                            writer.println("    public boolean isReferenceTo(PsiElement element) { return false; }");
+                            writer.println();
+                            writer.println("    public boolean isReferenceTo(PsiElement element) {");
+                            writer.println("        return element instanceof " + head.substring(0, head.length() - 10) + "$DeclarationImpl");
+                            writer.println("                 && element.getTextLength() == this.getTextLength()");
+                            writer.println("                 && element.getText().equals(this.getText());");
+                            writer.println("    }");
+                            writer.println();
                             writer.println("    public Object[] getVariants() { return new Object[0]; }");
+                            writer.println();
                             writer.println("    public boolean isSoft() { return false; }");
                         }
 
@@ -1742,7 +1775,7 @@ public class IdeaIDEGenerator {
             writer.println();
             writer.println("public class " + language + "TreeBuilder implements TreeBuilder<TreeElement> {");
             writer.println();
-            writer.println("    public TreeElement terminalNode(int l, int r, Input input) { return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, input.subString(l, r)); }");
+            writer.println("    public TreeElement terminalNode(int l, int r, Input input) { return ASTFactory.leaf(" + language + "TokenTypes.TERMINAL, input.subString(l, r)); }");
             writer.println();
             writer.println("    public TreeElement terminalNode(String name, int l, int r, Input input) {");
             writer.println("        IElementType tokenType = " + language + "TokenTypes.get(name);");
@@ -1793,7 +1826,7 @@ public class IdeaIDEGenerator {
             writer.println("        return node;");
             writer.println("    }");
             writer.println();
-            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(" + language + "TokenTypes.CHARACTER, \"\"); }");
+            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(" + language + "TokenTypes.TERMINAL, \"\"); }");
             writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
