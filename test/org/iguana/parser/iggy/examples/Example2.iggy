@@ -5,10 +5,14 @@ regex Char ::= [a-Az-Z]
 @NoLayout
 Identifier ::= Char* !>> [a-Zz-A]
 
-Expression(p,a) ::= [4 >= p] '-' x=l:Expression(4) {val y=x, val z=x+y}   {4}  <unMinus>
+Expression(p,a) ::= [5 >= p] Expression Expression*                       {5}  <funCall>
+                 |  [4 >= p] '-' x=l:Expression(4) {var y=x, var z=x+y}   {4}  <unMinus>
                  >  [3 >= p] l=Expression(p) [l >= 3] '*' r=Expression(p) {3}  <mult>        left
                  >  (Expression '+' Expression                                 <add>
                  |   Expression '-' Expression                                 <minus>)      left
                  >  "if" Expression(0) "then" Expression "else" Expression {1}  <ifThenElse>
                  |  Number
                  |  [a-Az-Z] !<< regex { [a-Az-Z]* }
+
+Body ::= align (offside Declaration)*
+       | ignore '{' Declaration (';' Declaration)* '}'
