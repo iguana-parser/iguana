@@ -1,13 +1,14 @@
-regex Number ::= [a-Az-Z]*
-
-regex Char ::= [a-Az-Z]
+regex {
+Number ::= [a-Az-Z]*
+Char ::= [a-Az-Z]
+}
 
 @NoLayout
 Identifier ::= Char* !>> [a-Zz-A]
 
 Expression ::=  '-' Expression                                       <unMinus>
-             >  Expression '*' Expression                            <mult>        left
+             >  Expression '*' Expression                            <mult>         left
              > (Expression '+' Expression                            <add>
-             |  Expression '-' Expression                            <minus>)      left
+             |  Expression '-' Expression                            <minus>      ) left
              > "if" Expression "then" Expression "else" Expression   <ifThenElse>
              | Number

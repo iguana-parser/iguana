@@ -1642,6 +1642,7 @@ public class IdeaIDEGenerator {
             writer.println("            precedenceAndAssociativity.setOP2();");
             writer.println("            grammar = new EBNFToBNF().transform(grammar);");
             writer.println("            grammar = precedenceAndAssociativity.transform(grammar);");
+            writer.println("            grammar = new Names().transform(grammar);");
             writer.println("            grammar = new LayoutWeaver().transform(grammar);");
             writer.println("            graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);");
             writer.println("        }");

@@ -1,18 +1,20 @@
-regex Number ::= [a-Az-Z]*
+regex {
+Number ::= [a-Az-Z]*
+Chars ::= [a-Az-Z]*
+}
 
-regex Char ::= [a-Az-Z]
+/*
+ * lexical Indentifier ::= [aA-Zz] !<< [aA-zZ]*
+ */
 
 @NoLayout
-Identifier ::= Char* !>> [a-Zz-A]
+Identifier ::= [aA-zZ] !<< Chars
 
-Expression(p,a) ::= [5 >= p] Expression Expression*                       {5}  <funCall>
-                 |  [4 >= p] '-' x=l:Expression(4) {var y=x, var z=x+y}   {4}  <unMinus>
-                 >  [3 >= p] l=Expression(p) [l >= 3] '*' r=Expression(p) {3}  <mult>        left
-                 >  (Expression '+' Expression                                 <add>
-                 |   Expression '-' Expression                                 <minus>)      left
-                 >  "if" Expression(0) "then" Expression "else" Expression {1}  <ifThenElse>
+Expression(p,a) ::= [5 >= p] Expression Expression*                        {5}   <funCall>
+                 |  [4 >= p] '-' x=l:Expression(4) {var y=x, var z=x+y}    {4}   <unMinus>
+                 >  [3 >= p] l=Expression(p) [l >= 3] '*' r=Expression(p)  {3}   <mult>          left
+                 >  (Expression '+' Expression                                   <add>
+                 |   Expression '-' Expression                                   <minus>       ) left
+                 >  'if' Expression(0) 'then' Expression 'else' Expression {1}   <ifThenElse>
+                 |  Identifier
                  |  Number
-                 |  [a-Az-Z] !<< regex { [a-Az-Z]* }
-
-Body ::= align (offside Declaration)*
-       | ignore '{' Declaration (';' Declaration)* '}'
