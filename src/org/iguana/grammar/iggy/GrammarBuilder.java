@@ -26,7 +26,7 @@
  */
 package org.iguana.grammar.iggy;
 
-import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.symbol.*;
 import org.iguana.regex.*;
 
@@ -245,12 +245,95 @@ public class GrammarBuilder {
         public static org.iguana.grammar.symbol.Symbol labeled(Identifier name, org.iguana.grammar.symbol.Symbol symbol) {
             return symbol.copyBuilder().setLabel(name.id).build();
         }
+        public static org.iguana.grammar.symbol.Symbol contraints(List<org.iguana.datadependent.ast.Expression> expressions) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol bindings(List<org.iguana.datadependent.ast.Statement> bindings) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol precede(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol notprecede(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol follow(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol nonfollow(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol exclude(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+            return null;
+        }
+        public static org.iguana.grammar.symbol.Symbol nont(Identifier name) {
+            return Nonterminal.withName(name.id);
+        }
+        public static org.iguana.grammar.symbol.Symbol string(String s) {
+            return Terminal.from(org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray()));
+        }
+        public static org.iguana.grammar.symbol.Symbol character(String s) {
+            return Terminal.from(org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray()));
+        }
     }
 
     public static Symbol symbol() { return new Symbol(); }
 
     public static class Expression {
-
+        public static org.iguana.datadependent.ast.Expression call(org.iguana.datadependent.ast.Expression expression, List<org.iguana.datadependent.ast.Expression> arguments) {
+            return null;
+        }
+        public static org.iguana.datadependent.ast.Expression multiplication(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return null;
+        }
+        public static org.iguana.datadependent.ast.Expression division(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return null;
+        }
+        public static org.iguana.datadependent.ast.Expression plus(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return null;
+        }
+        public static org.iguana.datadependent.ast.Expression minus(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return null;
+        }
+        public static org.iguana.datadependent.ast.Expression greatereq(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.greaterEq(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression lesseq(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.lessEq(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression greater(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.greater(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression less(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.less(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression equal(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.equal(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression notequal(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.notEqual(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression and(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.and(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression or(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
+            return AST.or(lhs, rhs);
+        }
+        public static org.iguana.datadependent.ast.Expression lextent(Identifier name) {
+            return AST.lExt(name.id);
+        }
+        public static org.iguana.datadependent.ast.Expression rextent(Identifier name) {
+            return AST.rExt(name.id);
+        }
+        public static org.iguana.datadependent.ast.Expression yield(Identifier name) {
+            return AST.yield(name.id);
+        }
+        public static org.iguana.datadependent.ast.Expression name(Identifier name) {
+            return AST.var(name.id);
+        }
+        public static org.iguana.datadependent.ast.Expression number(String n) {
+            return AST.integer(Integer.valueOf(n));
+        }
     }
 
     public static Expression expression() { return new Expression(); }
@@ -262,7 +345,12 @@ public class GrammarBuilder {
     public static Regex regex() { return new Regex(); }
 
     public static class Binding {
-
+        public static org.iguana.datadependent.ast.Statement assign(Identifier name, org.iguana.datadependent.ast.Expression expression) {
+            return AST.stat(AST.assign(name.id, expression));
+        }
+        public static org.iguana.datadependent.ast.Statement declare(Identifier name, org.iguana.datadependent.ast.Expression expression) {
+            return AST.varDeclStat(name.id, expression);
+        }
     }
 
     public static Binding binding() { return new Binding(); }
