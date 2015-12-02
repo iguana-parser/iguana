@@ -27,8 +27,6 @@
 package org.iguana.grammar.iggy;
 
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +56,7 @@ public class GrammarBuilder {
                     if (alternate.rest != null) { // Associativity group
                         {   // Note: Do not move this block!
                             org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
-                            List<Symbol> symbols = new ArrayList<>();
+                            List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                             symbols.add(alternate.first.first);
                             if (alternate.first.rest != null)
                                 symbols.addAll(alternate.first.rest);
@@ -67,7 +65,7 @@ public class GrammarBuilder {
                         }
                         alternate.rest.forEach(sequence -> {
                             org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
-                            List<Symbol> symbols = new ArrayList<>();
+                            List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                             symbols.add(sequence.first);
                             if (sequence.rest != null)
                                 symbols.addAll(sequence.rest);
@@ -76,7 +74,7 @@ public class GrammarBuilder {
                         });
                     } else {
                         org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
-                        List<Symbol> symbols = new ArrayList<>();
+                        List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                         symbols.add(alternate.first.first);
                         if (alternate.first.rest != null)
                             symbols.addAll(alternate.first.rest);
@@ -135,13 +133,13 @@ public class GrammarBuilder {
 
     public static class Sequence {
 
-        public final Symbol first;
-        public final List<Symbol> rest;
-        public final List<Symbol> ret;
+        public final org.iguana.grammar.symbol.Symbol first;
+        public final List<org.iguana.grammar.symbol.Symbol> rest;
+        public final List<org.iguana.grammar.symbol.Symbol> ret;
         public final List<Attribute> attributes;
         public final List<String> label;
 
-        public Sequence(Symbol symbol, List<Symbol> ret, List<String> label) {
+        public Sequence(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> ret, List<String> label) {
             this.first = symbol;
             this.rest = null;
             this.ret = ret;
@@ -149,7 +147,7 @@ public class GrammarBuilder {
             this.label = label;
         }
 
-        public Sequence(Symbol symbol, List<Symbol> symbols, List<Symbol> ret, List<Attribute> attributes) {
+        public Sequence(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> symbols, List<org.iguana.grammar.symbol.Symbol> ret, List<Attribute> attributes) {
             this.first = symbol;
             this.rest = symbols;
             this.ret = ret;
@@ -157,11 +155,11 @@ public class GrammarBuilder {
             this.label = null;
         }
 
-        public static Sequence single(Symbol symbol, List<Symbol> ret, List<String> label) {
+        public static Sequence single(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> ret, List<String> label) {
             return new Sequence(symbol, ret, label);
         }
 
-        public static Sequence morethantwo(Symbol symbol, List<Symbol> symbols, List<Symbol> ret, List<Attribute> attributes) {
+        public static Sequence morethantwo(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> symbols, List<org.iguana.grammar.symbol.Symbol> ret, List<Attribute> attributes) {
             return new Sequence(symbol, symbols, ret, attributes);
         }
 
@@ -182,10 +180,11 @@ public class GrammarBuilder {
     public static Attribute attribute() { return new Attribute(null); }
 
     public static class Symbols {
-        public final List<Symbol> symbols;
-        public Symbols(List<Symbol> symbols) {
-            this.symbols = symbols;
-        }
+        public static org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<org.iguana.grammar.symbol.Symbol> symbols) { return org.iguana.regex.Sequence.from(symbols); }
     }
+
+    public static Symbols symbols() { return new Symbols(); }
+
+
 
 }
