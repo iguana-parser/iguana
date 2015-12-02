@@ -26,7 +26,9 @@
  */
 package org.iguana.grammar.iggy;
 
-import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +187,84 @@ public class GrammarBuilder {
 
     public static Symbols symbols() { return new Symbols(); }
 
+    public static class Symbol {
 
+        public static org.iguana.grammar.symbol.Symbol star(org.iguana.grammar.symbol.Symbol symbol) {
+            return Star.from(symbol);
+        }
+        public static org.iguana.grammar.symbol.Symbol plus(org.iguana.grammar.symbol.Symbol symbol) {
+            return Plus.from(symbol);
+        }
+        public static org.iguana.grammar.symbol.Symbol option(org.iguana.grammar.symbol.Symbol symbol) {
+            return Opt.from(symbol);
+        }
+        public static org.iguana.grammar.symbol.Symbol sequence(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> symbols) {
+            List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
+            l.add(symbol);
+            l.addAll(symbols);
+            return org.iguana.regex.Sequence.from(l);
+        }
+        public static org.iguana.grammar.symbol.Symbol alternation(org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence, List<org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol>> sequences) {
+            List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
+            if (sequence.getSymbols().isEmpty())
+                l.add(Epsilon.getInstance());
+            else if (sequence.getSymbols().size() == 1)
+                l.add(sequence.getSymbols().get(0));
+            else
+                l.add(sequence);
+            sequences.forEach(s -> {
+                if (s.getSymbols().isEmpty())
+                    l.add(Epsilon.getInstance());
+                else if (s.getSymbols().size() == 1)
+                    l.add(s.getSymbols().get(0));
+                else
+                    l.add(s);
+            });
+            return Alt.from(l);
+        }
+        public static org.iguana.grammar.symbol.Symbol call(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.datadependent.ast.Expression> arguments) {
+            Nonterminal nt = (Nonterminal) symbol;
+            return nt.copyBuilder().apply(arguments.stream().toArray(org.iguana.datadependent.ast.Expression[]::new)).build();
+        }
+        public static org.iguana.grammar.symbol.Symbol align(org.iguana.grammar.symbol.Symbol symbol) {
+            return Align.align(symbol);
+        }
+        public static org.iguana.grammar.symbol.Symbol offside(org.iguana.grammar.symbol.Symbol symbol) {
+            return Offside.offside(symbol);
+        }
+        public static org.iguana.grammar.symbol.Symbol ignore(org.iguana.grammar.symbol.Symbol symbol) {
+            return Ignore.ignore(symbol);
+        }
+        public static org.iguana.grammar.symbol.Symbol conditional(org.iguana.datadependent.ast.Expression expression, org.iguana.grammar.symbol.Symbol thenPart, org.iguana.grammar.symbol.Symbol elsePart) {
+            return IfThenElse.ifThenElse(expression, thenPart, elsePart);
+        }
+        public static org.iguana.grammar.symbol.Symbol variable(Identifier name, org.iguana.grammar.symbol.Symbol symbol) {
+            Nonterminal nt = (Nonterminal) symbol;
+            return nt.copyBuilder().setVariable(name.id).build();
+        }
+        public static org.iguana.grammar.symbol.Symbol labeled(Identifier name, org.iguana.grammar.symbol.Symbol symbol) {
+            return symbol.copyBuilder().setLabel(name.id).build();
+        }
+    }
+
+    public static Symbol symbol() { return new Symbol(); }
+
+    public static class Expression {
+
+    }
+
+    public static Expression expression() { return new Expression(); }
+
+    public static class Regex {
+
+    }
+
+    public static Regex regex() { return new Regex(); }
+
+    public static class Binding {
+
+    }
+
+    public static Binding binding() { return new Binding(); }
 
 }
