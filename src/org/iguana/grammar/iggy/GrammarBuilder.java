@@ -26,18 +26,66 @@
  */
 package org.iguana.grammar.iggy;
 
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Anastasia Izmaylova
  */
 public class GrammarBuilder {
+
+    public static class Identifier {
+        public final String id;
+        public Identifier(String id) {
+            this.id = id;
+        }
+        public static Identifier id(String name) {
+            return new Identifier(name);
+        }
+    }
+
+    public static Identifier identifier() { return new Identifier(null); }
 	
 	public static class Rule {
-		public static List<org.iguana.grammar.symbol.Rule> syntax(List<String> tag, Ident name, List<Ident> parameters, List<Alternates> body) {
-			return null; 
+		public static List<org.iguana.grammar.symbol.Rule> syntax(List<String> tag, Identifier name, List<Identifier> parameters, List<Alternates> body) {
+            List<org.iguana.grammar.symbol.Rule> rules = new ArrayList<>();
+            body.forEach(group -> { // TODO: integrate precedence logic
+                group.alternates.forEach(alternate -> {
+                    if (alternate.rest != null) { // Associativity group
+                        {   // Note: Do not move this block!
+                            org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
+                            List<Symbol> symbols = new ArrayList<>();
+                            symbols.add(alternate.first.first);
+                            if (alternate.first.rest != null)
+                                symbols.addAll(alternate.first.rest);
+                            symbols.addAll(alternate.first.ret);
+                            rules.add(builder.addSymbols().build());
+                        }
+                        alternate.rest.forEach(sequence -> {
+                            org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
+                            List<Symbol> symbols = new ArrayList<>();
+                            symbols.add(sequence.first);
+                            if (sequence.rest != null)
+                                symbols.addAll(sequence.rest);
+                            symbols.addAll(sequence.ret);
+                            rules.add(builder.addSymbols(symbols).build());
+                        });
+                    } else {
+                        org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
+                        List<Symbol> symbols = new ArrayList<>();
+                        symbols.add(alternate.first.first);
+                        if (alternate.first.rest != null)
+                            symbols.addAll(alternate.first.rest);
+                        symbols.addAll(alternate.first.ret);
+                        rules.add(builder.addSymbols().build());
+                    }
+                });
+            });
+			return rules;
 		}
 		public static List<org.iguana.grammar.symbol.Rule> regex() {
 			return null;
@@ -49,32 +97,18 @@ public class GrammarBuilder {
 	
 	public static Rule rule() { return new Rule(); }
 
-    public static class Identifier {
-        public static Ident id(String name) {
-            return new Ident(name);
-        }
-    }
-
-    public static Identifier identifier() {return new Identifier(); }
-
-    /*
-     * Wrappers
-     */
-    public static class Ident {
-        public final String id;
-        public Ident(String id) {
-            this.id = id;
-        }
-    }
-
     public static class Alternates {
         public final List<Alternate> alternates;
         public Alternates(List<Alternate> alternates) {
             this.alternates = alternates;
         }
+
+        public static Alternates prec(List<Alternate> alternates) { return new Alternates(alternates); }
     }
 
-    public static abstract class Alternate {
+    public static Alternates alternates() { return new Alternates(null); }
+
+    public static class Alternate {
 
         public final Sequence first;
         public final List<Sequence> rest;
@@ -90,7 +124,14 @@ public class GrammarBuilder {
             this.rest = sequences;
             this.associativity = associativity;
         }
+
+        public static Alternate sequence(Sequence sequence) { return new Alternate(sequence); }
+        public static Alternate assoc(Sequence sequence, List<Sequence> sequences, String associativity) {
+            return new Alternate(sequence, sequences, associativity);
+        }
     }
+
+    public static Alternate alternate() { return new Alternate(null); }
 
     public static class Sequence {
 
@@ -116,14 +157,29 @@ public class GrammarBuilder {
             this.label = null;
         }
 
+        public static Sequence single(Symbol symbol, List<Symbol> ret, List<String> label) {
+            return new Sequence(symbol, ret, label);
+        }
+
+        public static Sequence morethantwo(Symbol symbol, List<Symbol> symbols, List<Symbol> ret, List<Attribute> attributes) {
+            return new Sequence(symbol, symbols, ret, attributes);
+        }
+
     }
+
+    public static Sequence sequence() { return new Sequence(null, null, null); }
 
     public static class Attribute {
         public final String attribute;
         public Attribute(String attribute) {
             this.attribute = attribute;
         }
+
+        public static Attribute assoc(String associativity) { return new Attribute(associativity); }
+        public static Attribute label(Identifier label) { return new Attribute(label.id); }
     }
+
+    public static Attribute attribute() { return new Attribute(null); }
 
     public static class Symbols {
         public final List<Symbol> symbols;
