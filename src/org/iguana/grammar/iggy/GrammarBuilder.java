@@ -26,6 +26,7 @@
  */
 package org.iguana.grammar.iggy;
 
+import iguana.parsetrees.iggy.TermTraversal;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.symbol.*;
 import org.iguana.regex.*;
@@ -36,16 +37,14 @@ import java.util.List;
 /**
  * @author Anastasia Izmaylova
  */
-public class GrammarBuilder {
+public class GrammarBuilder implements TermTraversal.Actions {
 
     public static class Identifier {
         public final String id;
         public Identifier(String id) {
             this.id = id;
         }
-        public static Identifier id(String name) {
-            return new Identifier(name);
-        }
+        public static Identifier ident(String name) { return new Identifier(name); }
     }
 
     public static Identifier identifier() { return new Identifier(null); }
@@ -63,7 +62,7 @@ public class GrammarBuilder {
                             if (alternate.first.rest != null)
                                 symbols.addAll(alternate.first.rest);
                             symbols.addAll(alternate.first.ret);
-                            rules.add(builder.addSymbols().build());
+                            rules.add(builder.addSymbols(symbols).build());
                         }
                         alternate.rest.forEach(sequence -> {
                             org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
@@ -81,11 +80,11 @@ public class GrammarBuilder {
                         if (alternate.first.rest != null)
                             symbols.addAll(alternate.first.rest);
                         symbols.addAll(alternate.first.ret);
-                        rules.add(builder.addSymbols().build());
+                        rules.add(builder.addSymbols(symbols).build());
                     }
                 });
             });
-			return rules;
+            return rules;
 		}
 		public static List<org.iguana.grammar.symbol.Rule> regex() {
 			return null;
@@ -112,21 +111,21 @@ public class GrammarBuilder {
 
         public final Sequence first;
         public final List<Sequence> rest;
-        public final String associativity;
+        public final Attribute associativity;
 
         public Alternate(Sequence sequence) {
             this.first = sequence;
             this.rest = null;
             this.associativity = null;
         }
-        public Alternate(Sequence sequence, List<Sequence> sequences, String associativity) {
+        public Alternate(Sequence sequence, List<Sequence> sequences, Attribute associativity) {
             this.first = sequence;
             this.rest = sequences;
             this.associativity = associativity;
         }
 
         public static Alternate sequence(Sequence sequence) { return new Alternate(sequence); }
-        public static Alternate assoc(Sequence sequence, List<Sequence> sequences, String associativity) {
+        public static Alternate assoc(Sequence sequence, List<Sequence> sequences, Attribute associativity) {
             return new Alternate(sequence, sequences, associativity);
         }
     }
@@ -139,9 +138,9 @@ public class GrammarBuilder {
         public final List<org.iguana.grammar.symbol.Symbol> rest;
         public final List<org.iguana.grammar.symbol.Symbol> ret;
         public final List<Attribute> attributes;
-        public final List<String> label;
+        public final List<Attribute> label;
 
-        public Sequence(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> ret, List<String> label) {
+        public Sequence(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> ret, List<Attribute> label) {
             this.first = symbol;
             this.rest = null;
             this.ret = ret;
@@ -157,7 +156,7 @@ public class GrammarBuilder {
             this.label = null;
         }
 
-        public static Sequence single(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> ret, List<String> label) {
+        public static Sequence single(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> ret, List<Attribute> label) {
             return new Sequence(symbol, ret, label);
         }
 
@@ -179,7 +178,17 @@ public class GrammarBuilder {
         public static Attribute label(Identifier label) { return new Attribute(label.id); }
     }
 
-    public static Attribute attribute() { return new Attribute(null); }
+    public static class AAttribute {
+        public static Attribute assoc(String attribute) { return new Attribute(attribute); }
+    }
+
+    public static AAttribute aattribute() { return new AAttribute(); }
+
+    public static class LAttribute {
+        public static Attribute label(String attribute) { return new Attribute(attribute); }
+    }
+
+    public static LAttribute lattribute() { return new LAttribute(); }
 
     public static class Symbols {
         public static org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<org.iguana.grammar.symbol.Symbol> symbols) { return org.iguana.regex.Sequence.from(symbols); }
