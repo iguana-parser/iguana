@@ -27,12 +27,21 @@
 package org.iguana.grammar.iggy;
 
 import iguana.parsetrees.iggy.TermTraversal;
+import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.ast.Statement;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.regex.*;
+import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Anastasia Izmaylova
@@ -60,7 +69,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
                             List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                             symbols.add(alternate.first.first);
                             if (alternate.first.rest != null)
-                                symbols.addAll(alternate.first.rest);
+                                addAll(symbols, alternate.first.rest);
                             symbols.addAll(alternate.first.ret);
                             rules.add(builder.addSymbols(symbols).build());
                         }
@@ -69,7 +78,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
                             List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                             symbols.add(sequence.first);
                             if (sequence.rest != null)
-                                symbols.addAll(sequence.rest);
+                                addAll(symbols, sequence.rest);
                             symbols.addAll(sequence.ret);
                             rules.add(builder.addSymbols(symbols).build());
                         });
@@ -78,7 +87,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
                         List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                         symbols.add(alternate.first.first);
                         if (alternate.first.rest != null)
-                            symbols.addAll(alternate.first.rest);
+                            addAll(symbols, alternate.first.rest);
                         symbols.addAll(alternate.first.ret);
                         rules.add(builder.addSymbols(symbols).build());
                     }
@@ -255,10 +264,10 @@ public class GrammarBuilder implements TermTraversal.Actions {
             return symbol.copyBuilder().setLabel(name.id).build();
         }
         public static org.iguana.grammar.symbol.Symbol contraints(List<org.iguana.datadependent.ast.Expression> expressions) {
-            return null;
+            return new CodeHolder(null, expressions);
         }
-        public static org.iguana.grammar.symbol.Symbol bindings(List<org.iguana.datadependent.ast.Statement> bindings) {
-            return null;
+        public static org.iguana.grammar.symbol.Symbol bindings(List<org.iguana.datadependent.ast.Statement> statements) {
+            return new CodeHolder(statements, null);
         }
         public static org.iguana.grammar.symbol.Symbol precede(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
             return null;
@@ -363,5 +372,104 @@ public class GrammarBuilder implements TermTraversal.Actions {
     }
 
     public static Binding binding() { return new Binding(); }
+
+    // TODO: this should be a temporary trick!
+    private static class CodeHolder implements org.iguana.grammar.symbol.Symbol {
+
+        public final List<org.iguana.datadependent.ast.Statement> statements;
+        public final List<org.iguana.datadependent.ast.Expression> expressions;
+
+        public CodeHolder(List<org.iguana.datadependent.ast.Statement> statements, List<org.iguana.datadependent.ast.Expression> expressions) {
+            this.statements = statements;
+            this.expressions = expressions;
+        }
+
+        @Override
+        public String getName() {
+            return null;
+        }
+
+        @Override
+        public Set<Condition> getPreConditions() {
+            return null;
+        }
+
+        @Override
+        public Set<Condition> getPostConditions() {
+            return null;
+        }
+
+        @Override
+        public Object getObject() {
+            return null;
+        }
+
+        @Override
+        public String getLabel() {
+            return null;
+        }
+
+        @Override
+        public SymbolBuilder<? extends org.iguana.grammar.symbol.Symbol> copyBuilder() {
+            return null;
+        }
+
+        @Override
+        public String toString(int j) {
+            return null;
+        }
+
+        @Override
+        public <T> T accept(ISymbolVisitor<T> visitor) {
+            return null;
+        }
+
+        @Override
+        public ImmutableSet<String> getEnv() {
+            return null;
+        }
+
+        @Override
+        public void setEnv(ImmutableSet<String> env) {}
+
+        @Override
+        public void setEmpty() {}
+
+        @Override
+        public String getConstructorCode() {
+            return null;
+        }
+    }
+
+    private static void addAll(List<org.iguana.grammar.symbol.Symbol> symbols, List<org.iguana.grammar.symbol.Symbol> rest) {
+        int i = 0;
+        List<Condition> preConditions = new ArrayList<>();
+        for (org.iguana.grammar.symbol.Symbol symbol : rest) {
+            if (symbol instanceof CodeHolder) {
+                CodeHolder holder = (CodeHolder) symbol;
+                if (holder.expressions != null) {
+                    if (i != rest.size() - 1) {
+                        for (org.iguana.datadependent.ast.Expression e : holder.expressions)
+                            preConditions.add(DataDependentCondition.predicate(e));
+                    } else {
+                        org.iguana.grammar.symbol.Symbol last = symbols.remove(symbols.size() - 1);
+                        symbols.add(last.copyBuilder().addPostConditions(holder.expressions.stream()
+                                .map(e -> DataDependentCondition.predicate(e)).collect(Collectors.toList())).build());
+                    }
+                } else if (holder.statements != null) {
+                    org.iguana.grammar.symbol.Symbol last = symbols.remove(symbols.size() - 1);
+                    symbols.add(Code.code(last, holder.statements.stream().toArray(org.iguana.datadependent.ast.Statement[]::new)));
+                }
+            } else {
+                if (preConditions.isEmpty())
+                    symbols.add(symbol);
+                else {
+                    symbols.add(symbol.copyBuilder().addPreConditions(preConditions).build());
+                    preConditions = new ArrayList<>();
+                }
+            }
+            i++;
+        }
+    }
 
 }
