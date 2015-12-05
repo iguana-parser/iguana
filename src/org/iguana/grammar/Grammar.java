@@ -116,7 +116,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		Rule startRule;
 		if (layout != null)
-			startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout)
+			startRule = Rule.withHead(start).setLabel("Start").addSymbol(layout).addSymbol(nt).addSymbol(layout)
 								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
 		else 
