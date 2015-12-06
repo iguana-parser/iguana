@@ -1,14 +1,14 @@
 regex {
-Number ::= [a-Az-Z]*
-Chars ::= [a-Az-Z]*
+Number ::= [a-zA-Z]*
+Chars ::= [a-zA-Z]*
 }
 
 /*
- * lexical Indentifier ::= [aA-Zz] !<< [aA-zZ]*
+ * lexical Indentifier ::= [a-zA-Z] !<< [a-zA-Z]*
  */
 
 @NoLayout
-Identifier ::= [aA-zZ] !<< Chars
+Identifier ::= [a-zA-Z] !<< Chars
 
 Expression(p,a) ::= [5 >= p] Expression Expression*                        {5}   <funCall>
                  |  [4 >= p] '-' x=l:Expression(4) {var y=x, var z=x+y}    {4}   <unMinus>

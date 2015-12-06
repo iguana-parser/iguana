@@ -27,7 +27,6 @@
 package org.iguana.grammar.iggy;
 
 import iguana.parsetrees.iggy.TermTraversal;
-import iguana.utils.collections.rangemap.Range;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.condition.Condition;
@@ -264,7 +263,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
         public static org.iguana.grammar.symbol.Symbol labeled(Identifier name, org.iguana.grammar.symbol.Symbol symbol) {
             return symbol.copyBuilder().setLabel(name.id).build();
         }
-        public static org.iguana.grammar.symbol.Symbol contraints(List<org.iguana.datadependent.ast.Expression> expressions) {
+        public static org.iguana.grammar.symbol.Symbol constraints(List<org.iguana.datadependent.ast.Expression> expressions) {
             return new CodeHolder(null, expressions);
         }
         public static org.iguana.grammar.symbol.Symbol bindings(List<org.iguana.datadependent.ast.Statement> statements) {
@@ -356,6 +355,14 @@ public class GrammarBuilder implements TermTraversal.Actions {
     }
 
     public static Expression expression() { return new Expression(); }
+
+    public static class ReturnExpression {
+        public static org.iguana.grammar.symbol.Symbol returnexpression(org.iguana.datadependent.ast.Expression expression) {
+            return Return.ret(expression);
+        }
+    }
+
+    public static ReturnExpression returnexpression() { return new ReturnExpression(); }
 
     public static class Regex {
         public static RegularExpression star(RegularExpression regex) { return Star.from(regex); }
@@ -510,6 +517,18 @@ public class GrammarBuilder implements TermTraversal.Actions {
     private static void addAll(List<org.iguana.grammar.symbol.Symbol> symbols, List<org.iguana.grammar.symbol.Symbol> rest) {
         int i = 0;
         List<Condition> preConditions = new ArrayList<>();
+        if (symbols.get(0) instanceof CodeHolder) {
+            CodeHolder holder = (CodeHolder) symbols.get(0);
+            if (holder.expressions != null) {
+                symbols.remove(0);
+                preConditions = holder.expressions.stream().map(e -> DataDependentCondition.predicate(e)).collect(Collectors.toList());
+                if (rest.isEmpty()) {
+                    symbols.add(Epsilon.getInstance().copyBuilder().addPreConditions(preConditions).build());
+                    return;
+                }
+            }
+
+        }
         for (org.iguana.grammar.symbol.Symbol symbol : rest) {
             if (symbol instanceof CodeHolder) {
                 CodeHolder holder = (CodeHolder) symbol;

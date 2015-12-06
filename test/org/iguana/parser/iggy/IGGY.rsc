@@ -56,8 +56,8 @@ syntax Alternate = Sequence: Sequence
             
 syntax RegexBody = {RegexSequence "|"}*;
                 
-syntax Sequence = MoreThanTwo: Symbol Symbol+ Return? Attribute*
-                | Single: Symbol Return? LAttribute?
+syntax Sequence = MoreThanTwo: Symbol Symbol+ ReturnExpression? Attribute*
+                | Single: Symbol ReturnExpression? LAttribute?
                 ;
                 
 syntax RegexSequence = Regex+;
@@ -137,7 +137,7 @@ syntax Expression =            Call           : Expression Arguments
                   |            Bracket        : "(" Expression ")"
                   ;
 
-syntax Return = "{" Expression "}";
+syntax ReturnExpession = ReturnExpession: "{" Expression "}";
 
 syntax Binding = Assign  : VarName@1 "=" Expression
                | Declare : "var" VarName@0 "=" Expression
