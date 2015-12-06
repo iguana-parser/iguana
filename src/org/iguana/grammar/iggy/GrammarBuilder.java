@@ -29,6 +29,7 @@ package org.iguana.grammar.iggy;
 import iguana.parsetrees.iggy.TermTraversal;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
+import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -200,7 +201,13 @@ public class GrammarBuilder implements TermTraversal.Actions {
     public static LAttribute lattribute() { return new LAttribute(); }
 
     public static class Symbols {
-        public static org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<org.iguana.grammar.symbol.Symbol> symbols) { return org.iguana.regex.Sequence.from(symbols); }
+        public static org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<org.iguana.grammar.symbol.Symbol> symbols) {
+            if (symbols.isEmpty())
+                return org.iguana.regex.Sequence.from(symbols);
+            List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
+            addAll(l, symbols);
+            return org.iguana.regex.Sequence.from(l);
+        }
     }
 
     public static Symbols symbols() { return new Symbols(); }
@@ -219,7 +226,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
         public static org.iguana.grammar.symbol.Symbol sequence(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.grammar.symbol.Symbol> symbols) {
             List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
             l.add(symbol);
-            l.addAll(symbols);
+            addAll(l, symbols);
             return org.iguana.regex.Sequence.from(l);
         }
         public static org.iguana.grammar.symbol.Symbol alternation(org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence, List<org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol>> sequences) {
@@ -299,6 +306,13 @@ public class GrammarBuilder implements TermTraversal.Actions {
 
     public static class Expression {
         public static org.iguana.datadependent.ast.Expression call(org.iguana.datadependent.ast.Expression expression, List<org.iguana.datadependent.ast.Expression> arguments) {
+            if (expression instanceof org.iguana.datadependent.ast.Expression.Name) {
+                String name = ((org.iguana.datadependent.ast.Expression.Name) expression).getName();
+                switch (name) {
+                    case "col": return AST.indent(arguments.get(0));
+                    default: // TODO: Add all the cases
+                }
+            }
             return null;
         }
         public static org.iguana.datadependent.ast.Expression multiplication(org.iguana.datadependent.ast.Expression lhs, org.iguana.datadependent.ast.Expression rhs) {
@@ -517,7 +531,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
     private static void addAll(List<org.iguana.grammar.symbol.Symbol> symbols, List<org.iguana.grammar.symbol.Symbol> rest) {
         int i = 0;
         List<Condition> preConditions = new ArrayList<>();
-        if (symbols.get(0) instanceof CodeHolder) {
+        if (symbols.size() == 1 && symbols.get(0) instanceof CodeHolder) {
             CodeHolder holder = (CodeHolder) symbols.get(0);
             if (holder.expressions != null) {
                 symbols.remove(0);
