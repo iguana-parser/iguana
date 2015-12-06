@@ -270,10 +270,10 @@ public class GrammarBuilder implements TermTraversal.Actions {
         public static org.iguana.grammar.symbol.Symbol bindings(List<org.iguana.datadependent.ast.Statement> statements) {
             return new CodeHolder(statements, null);
         }
-        public static org.iguana.grammar.symbol.Symbol precede(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+        public static org.iguana.grammar.symbol.Symbol precede(RegularExpression regex, org.iguana.grammar.symbol.Symbol symbol) {
             return symbol.copyBuilder().addPreCondition(ContextFreeCondition.precede(regex)).build();
         }
-        public static org.iguana.grammar.symbol.Symbol notprecede(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
+        public static org.iguana.grammar.symbol.Symbol notprecede(RegularExpression regex, org.iguana.grammar.symbol.Symbol symbol) {
             return symbol.copyBuilder().addPreCondition(ContextFreeCondition.notPrecede(regex)).build();
         }
         public static org.iguana.grammar.symbol.Symbol follow(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
