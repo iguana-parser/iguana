@@ -67,7 +67,7 @@ private static final long serialVersionUID = 1L;
 	
 	@Override
 	public String toString() {
-		return String.format("ignore %s", symbol.toString());
+		return super.toString();
 	}
 	
 	@Override

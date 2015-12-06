@@ -67,7 +67,7 @@ public class Align extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("align %s", symbol.toString());
+		return super.toString();
 	}
 	
 	@Override
