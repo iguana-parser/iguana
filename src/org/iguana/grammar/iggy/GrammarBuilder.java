@@ -27,6 +27,7 @@
 package org.iguana.grammar.iggy;
 
 import iguana.parsetrees.iggy.TermTraversal;
+import iguana.utils.collections.rangemap.Range;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.condition.Condition;
@@ -93,15 +94,17 @@ public class GrammarBuilder implements TermTraversal.Actions {
             });
             return rules;
 		}
-		public static List<org.iguana.grammar.symbol.Rule> regex() {
-			return null;
-		}
-        public static List<org.iguana.grammar.symbol.Rule> regexs() {
-            return null;
-        }
 	}
 	
 	public static Rule rule() { return new Rule(); }
+
+    public static class RegexRule {
+        public static org.iguana.grammar.symbol.Rule regex(Identifier name, List<org.iguana.grammar.symbol.Symbol> body) {
+            return org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id)).addSymbols(body).build();
+        }
+    }
+
+    public static RegexRule regexrule() { return new RegexRule(); }
 
     public static class Alternates {
         public final List<Alternate> alternates;
@@ -192,7 +195,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
     public static AAttribute aattribute() { return new AAttribute(); }
 
     public static class LAttribute {
-        public static Attribute label(String attribute) { return new Attribute(attribute); }
+        public static Attribute label(Identifier attribute) { return new Attribute(attribute.id); }
     }
 
     public static LAttribute lattribute() { return new LAttribute(); }
@@ -384,6 +387,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
             return Alt.from(l);
         }
         // public static RegularExpression nont(Identifier name) { return Nonterminal.withName(name.id); }
+        public static RegularExpression charclass(RegularExpression regex) { return regex; }
         public static RegularExpression string(String s) {
             return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
         }
@@ -401,6 +405,28 @@ public class GrammarBuilder implements TermTraversal.Actions {
     }
 
     public static Regexs regexs() { return new Regexs(); }
+
+    public static class CharClass {
+        public static RegularExpression chars(List<CharacterRange> ranges) {
+            return Alt.from(ranges);
+        }
+        public static RegularExpression notchars(List<CharacterRange> ranges) {
+            return null;
+        }
+    }
+
+    public static CharClass charclass() { return new CharClass(); }
+
+    public static class Range {
+        public static CharacterRange range(String from, String delimiter, String to) {
+            return CharacterRange.in(from.charAt(0), to.charAt(0));
+        }
+        public static CharacterRange character(String s) {
+            return CharacterRange.from(s.charAt(0));
+        }
+    }
+
+    public static Range range() { return new Range(); }
 
     public static class Binding {
         public static org.iguana.datadependent.ast.Statement assign(Identifier name, org.iguana.datadependent.ast.Expression expression) {

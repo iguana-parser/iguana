@@ -40,9 +40,11 @@ syntax Attribute = LAttribute | AAttribute;
 syntax Definition = @scope="NontName" Rule+;
 
 syntax Rule = @scope="VarName" Syntax: Tag? NontName@0 Parameters? "::=" Body
-            | Regex: "regex" NontName@0 "::=" RegexBody
-            | Regexs: "regex" "{" (NontName@0 "::=" RegexBody)+ "}"
+            | "regex" RegexRule
+            | "regex" "{" RegexRule+ "}"
             ;
+
+syntax RegexRule = Regex: NontName@0 "::=" RegexBody;
             
 syntax Body = {Alternates "\>"}*;
 

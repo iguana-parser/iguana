@@ -1,10 +1,10 @@
 regex {
-Number ::= [a-Az-Z]*
-Char ::= [a-Az-Z]
+Number ::= [a-zA-Z]*
+Char ::= [a-zA-Z]
 }
 
 @NoLayout
-Identifier ::= Char* !>> [a-Zz-A]
+Identifier ::= Char* !>> [a-zA-Z]
 
 Expression ::=  '-' Expression                                       <unMinus>
              >  Expression '*' Expression                            <mult>         left
