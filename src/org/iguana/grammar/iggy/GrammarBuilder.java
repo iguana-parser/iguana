@@ -29,7 +29,6 @@ package org.iguana.grammar.iggy;
 import iguana.parsetrees.iggy.TermTraversal;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
-import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -100,7 +99,11 @@ public class GrammarBuilder implements TermTraversal.Actions {
 
     public static class RegexRule {
         public static org.iguana.grammar.symbol.Rule regex(Identifier name, List<org.iguana.grammar.symbol.Symbol> body) {
-            return org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id)).addSymbols(body).build();
+            return org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id))
+                    .addSymbol(body.isEmpty()? Epsilon.getInstance()
+                                   : (body.size() == 1? body.get(0) : org.iguana.regex.Sequence.from(body)))
+                    .addAttribute("regex", true)
+                    .build();
         }
     }
 
