@@ -37,6 +37,7 @@ import org.iguana.regex.*;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,40 +60,94 @@ public class GrammarBuilder implements TermTraversal.Actions {
 	public static class Rule {
 		public static List<org.iguana.grammar.symbol.Rule> syntax(List<String> tag, Identifier name, List<Identifier> parameters, List<Alternates> body) {
             List<org.iguana.grammar.symbol.Rule> rules = new ArrayList<>();
+            PrecedenceLevel level = PrecedenceLevel.getFirst();
+            Nonterminal head = Nonterminal.withName(name.id);
             body.forEach(group -> { // TODO: integrate precedence logic
                 group.alternates.forEach(alternate -> {
+                    AssociativityGroup assocGroup = new AssociativityGroup(null, level);
                     if (alternate.rest != null) { // Associativity group
-                        {   // Note: Do not move this block!
-                            org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
-                            List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
-                            symbols.add(alternate.first.first);
-                            if (alternate.first.rest != null)
-                                addAll(symbols, alternate.first.rest);
-                            symbols.addAll(alternate.first.ret);
-                            rules.add(builder.addSymbols(symbols).build());
-                        }
-                        alternate.rest.forEach(sequence -> {
-                            org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
+                        List<Sequence> sequences = new ArrayList<>(Arrays.asList(alternate.first));
+                        sequences.addAll(alternate.rest);
+                        sequences.forEach(sequence -> {
                             List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                             symbols.add(sequence.first);
                             if (sequence.rest != null)
                                 addAll(symbols, sequence.rest);
                             symbols.addAll(sequence.ret);
-                            rules.add(builder.addSymbols(symbols).build());
+                            List<Attribute> attributes = new ArrayList<>(Arrays.asList(alternate.associativity));
+                            attributes.addAll(alternate.first.attributes);
+                            org.iguana.grammar.symbol.Rule rule = getRule(head, symbols, attributes);
+                            int precedence = assocGroup.getPrecedence(rule);
+                            if (precedence != -1)
+                                rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                            rules.add(rule);
                         });
+                        assocGroup.done();
+                        level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                     } else {
-                        org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id));
                         List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                         symbols.add(alternate.first.first);
                         if (alternate.first.rest != null)
                             addAll(symbols, alternate.first.rest);
                         symbols.addAll(alternate.first.ret);
-                        rules.add(builder.addSymbols(symbols).build());
+                        org.iguana.grammar.symbol.Rule rule = getRule(head, symbols, alternate.first.attributes);
+                        int precedence = level.getPrecedence(rule);
+                        if (precedence != -1)
+                            rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rules.add(rule);
                     }
                 });
+                level.getNext();
             });
             return rules;
 		}
+
+        private static org.iguana.grammar.symbol.Rule getRule(Nonterminal head, List<org.iguana.grammar.symbol.Symbol> symbols, List<Attribute> attributes) {
+            // TODO: The first and the last symbol should be visited!
+            boolean isLeft = symbols.isEmpty()? false : symbols.get(0).getName().equals(head.getName());
+            boolean isRight = symbols.isEmpty()? false : symbols.get(symbols.size() - 1).getName().equals(head.getName());
+
+            Associativity associativity = null;
+            String label = null;
+            for (Attribute attr : attributes) {
+                switch (attr.attribute) {
+                    case "left": if (associativity == null) associativity = Associativity.LEFT; break;
+                    case "right": if (associativity == null) associativity = Associativity.RIGHT; break;
+                    case "non-assoc": if (associativity == null) associativity = Associativity.NON_ASSOC; break;
+                    default: if (label == null) label = attr.attribute;
+                }
+            }
+            if (associativity == null)
+                associativity = Associativity.UNDEFINED;
+
+            Recursion recursion = Recursion.NON_REC;
+
+            if (isLeft && isRight)
+                recursion = Recursion.LEFT_RIGHT_REC;
+            else if (isLeft)
+                recursion = Recursion.LEFT_REC;
+            else if (isRight)
+                recursion = Recursion.RIGHT_REC;
+
+            if (recursion == Recursion.NON_REC)
+                associativity = Associativity.UNDEFINED;
+
+            return org.iguana.grammar.symbol.Rule.withHead(head)
+                    .addSymbols(symbols)
+                    .setRecursion(recursion)
+                    .setAssociativity(associativity)
+                    .build();
+        }
+
+        private static Associativity getAssociativity(Attribute attribute) {
+            switch (attribute.attribute) {
+                case "left": return Associativity.LEFT;
+                case "right": return Associativity.RIGHT;
+                case "non-assoc": return Associativity.NON_ASSOC;
+                default: ;
+            }
+            return Associativity.UNDEFINED;
+        }
 	}
 	
 	public static Rule rule() { return new Rule(); }
