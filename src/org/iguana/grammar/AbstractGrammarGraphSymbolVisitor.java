@@ -54,11 +54,6 @@ public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVis
 	}
 
 	@Override
-	public T visit(Terminal symbol) {
-		return visit(symbol);
-	}
-
-	@Override
 	public T visit(Ignore symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}

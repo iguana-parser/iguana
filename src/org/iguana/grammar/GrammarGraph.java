@@ -80,7 +80,6 @@ import org.iguana.util.Configuration;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.Configuration.HashMapImpl;
 import org.iguana.util.Configuration.LookupImpl;
-import org.iguana.util.Configuration.MatcherType;
 
 public class GrammarGraph implements Serializable {
 
@@ -105,6 +104,7 @@ public class GrammarGraph implements Serializable {
 	private int id = 1;
 	
 	private final Map<Integer, Map<String, Integer>> mapping;
+
 	private Map<String, Integer> current;
 	
 	private MatcherFactory matcherFactory;
@@ -126,7 +126,7 @@ public class GrammarGraph implements Serializable {
     }
 
     private void convert(ParserRuntime runtime) {
-       matcherFactory = new DFAMatcherFactory();
+        matcherFactory = new DFAMatcherFactory();
 
         this.runtime = runtime;
         this.firstFollow = new FirstFollowSets(this.grammar);
@@ -384,7 +384,7 @@ public class GrammarGraph implements Serializable {
 		 */
 		private void visitSymbol(Symbol symbol) {
 			
-			if (symbol instanceof Nonterminal || symbol instanceof RegularExpression || symbol instanceof Return) { // TODO: I think this can be unified
+			if (symbol instanceof Nonterminal || symbol instanceof Terminal || symbol instanceof Return) { // TODO: I think this can be unified
 				symbol.accept(this);
 				return;
 			}

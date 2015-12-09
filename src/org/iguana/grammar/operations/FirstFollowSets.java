@@ -35,15 +35,10 @@ import java.util.Set;
 
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.*;
 import org.iguana.regex.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
 
@@ -386,7 +381,12 @@ public class FirstFollowSets {
 		@Override
 		public Set<CharacterRange> visit(Nonterminal symbol) { return new HashSet<>(firstSets.get(symbol)); }
 
-		@Override
+        @Override
+        public Set<CharacterRange> visit(Terminal symbol) {
+            return symbol.getRegularExpression().getFirstSet();
+        }
+
+        @Override
 		public Set<CharacterRange> visit(Return symbol) { return new HashSet<>(); }
 
     }
@@ -401,7 +401,12 @@ public class FirstFollowSets {
 		@Override
 		public Nonterminal visit(Nonterminal symbol) { return symbol; }
 
-		@Override
+        @Override
+        public Nonterminal visit(Terminal symbol) {
+            return null;
+        }
+
+        @Override
 		public Nonterminal visit(Return symbol) { return null; }
 
     }
@@ -423,7 +428,12 @@ public class FirstFollowSets {
 		@Override
 		public Boolean visit(Nonterminal symbol) { return nullableNonterminals.contains(symbol); }
 
-		@Override
+        @Override
+        public Boolean visit(Terminal symbol) {
+            return symbol.getRegularExpression().isNullable();
+        }
+
+        @Override
 		public Boolean visit(Return symbol) { return true; }
 
     }
