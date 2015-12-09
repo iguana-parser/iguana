@@ -37,9 +37,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
-import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.matcher.JavaRegexMatcherFactory;
+import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.junit.Test;
@@ -48,7 +47,7 @@ import iguana.utils.input.Input;
 
 public class CharacterRangeTest {
 	
-	MatcherFactory factory = new JavaRegexMatcherFactory();
+	MatcherFactory factory = new DFAMatcherFactory();
 	
 	@Test
 	public void overlappingTest1() {

@@ -8,7 +8,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.precedence.OperatorPrecedence;
 import org.iguana.grammar.symbol.Associativity;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.PrecedenceLevel;
 import org.iguana.grammar.symbol.Recursion;

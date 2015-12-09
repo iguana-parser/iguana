@@ -30,7 +30,8 @@ package org.iguana.parser;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.util.Configuration;
@@ -56,11 +57,11 @@ public class LeftFactorizedArithmeticGrammarTest {
 	private Nonterminal E1 = Nonterminal.withName("E1");
 	private Nonterminal F = Nonterminal.withName("F");
 	private Nonterminal T1 = Nonterminal.withName("T1");
-	private Character plus = Character.from('+');
-	private Character star = Character.from('*');
-	private Character a = Character.from('a');
-	private Character openPar = Character.from('(');
-	private Character closePar = Character.from(')');
+	private Terminal plus = Terminal.from(Character.from('+'));
+	private Terminal star = Terminal.from(Character.from('*'));
+	private Terminal a = Terminal.from(Character.from('a'));
+	private Terminal openPar = Terminal.from(Character.from('('));
+	private Terminal closePar = Terminal.from(Character.from(')'));
 
 	@Before
 	public void createGrammar() {

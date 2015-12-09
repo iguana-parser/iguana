@@ -41,7 +41,6 @@ import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.tree.RuleType;
 import iguana.utils.collections.hash.MurmurHash3;
 
-import org.iguana.util.generator.ConstructorCode;
 import org.iguana.util.generator.GeneratorUtil;
 
 /**
@@ -49,7 +48,7 @@ import org.iguana.util.generator.GeneratorUtil;
  * @authors Ali Afroozeh, Anastasia Izmaylova
  *
  */
-public class Rule implements ConstructorCode, Serializable, RuleType {
+public class Rule implements Serializable, RuleType {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -352,167 +351,167 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
     }
 
     public static class Builder {
-		
-		private Nonterminal head;
-		private List<Symbol> body;
-		private Serializable object;
-		private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
-		private Nonterminal layout;
-		
-		private Recursion recursion = Recursion.UNDEFINED;
-		private Recursion irecursion = Recursion.UNDEFINED;
-		
-		private String leftEnd = "";
-		private String rightEnd = "";
-		private Set<String> leftEnds = new HashSet<>();
-		private Set<String> rightEnds = new HashSet<>();
-		
-		private Associativity associativity = Associativity.UNDEFINED;
-		private AssociativityGroup associativityGroup;
-		
-		private int precedence;
-		private PrecedenceLevel precedenceLevel;
-		
-		private String label;
-		
-		private Action action = null;
-		private RuleType ruleType = null;
+
+        private Nonterminal head;
+        private List<Symbol> body;
+        private Serializable object;
+        private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
+        private Nonterminal layout;
+
+        private Recursion recursion = Recursion.UNDEFINED;
+        private Recursion irecursion = Recursion.UNDEFINED;
+
+        private String leftEnd = "";
+        private String rightEnd = "";
+        private Set<String> leftEnds = new HashSet<>();
+        private Set<String> rightEnds = new HashSet<>();
+
+        private Associativity associativity = Associativity.UNDEFINED;
+        private AssociativityGroup associativityGroup;
+
+        private int precedence;
+        private PrecedenceLevel precedenceLevel;
+
+        private String label;
+
+        private Action action = null;
+        private RuleType ruleType = null;
         private boolean hasRuleType = true;
-        
+
         private Map<String, Object> attributes = new HashMap<>();
 
-		public Builder(Nonterminal head) {
-			this.head = head;
-			this.body = new ArrayList<>();
-		}
-		
-		public Builder(Rule rule) {
-			this.head = rule.head;
-			this.body = rule.body;
-			this.object = rule.object;
-			this.layoutStrategy = rule.layoutStrategy;
-			this.layout = rule.layout;
-			this.recursion = rule.recursion;
-			this.irecursion = rule.irecursion;
-			this.leftEnd = rule.leftEnd;
-			this.rightEnd = rule.rightEnd;
-			this.leftEnds = rule.leftEnds;
-			this.rightEnds = rule.rightEnds;
-			this.associativity = rule.associativity;
-			
-			this.associativityGroup = rule.associativityGroup;
-			this.precedence = rule.precedence;
-			this.precedenceLevel = rule.precedenceLevel;
-			
-			this.label = rule.label;
-			
-			this.action = rule.action;
+        public Builder(Nonterminal head) {
+            this.head = head;
+            this.body = new ArrayList<>();
+        }
+
+        public Builder(Rule rule) {
+            this.head = rule.head;
+            this.body = rule.body;
+            this.object = rule.object;
+            this.layoutStrategy = rule.layoutStrategy;
+            this.layout = rule.layout;
+            this.recursion = rule.recursion;
+            this.irecursion = rule.irecursion;
+            this.leftEnd = rule.leftEnd;
+            this.rightEnd = rule.rightEnd;
+            this.leftEnds = rule.leftEnds;
+            this.rightEnds = rule.rightEnds;
+            this.associativity = rule.associativity;
+
+            this.associativityGroup = rule.associativityGroup;
+            this.precedence = rule.precedence;
+            this.precedenceLevel = rule.precedenceLevel;
+
+            this.label = rule.label;
+
+            this.action = rule.action;
             this.ruleType = rule.ruleType;
             this.hasRuleType = rule.hasRuleType;
-            
+
             this.attributes = rule.attributes;
-		}
-		
-		public Builder addSymbol(Symbol symbol) {
-			body.add(symbol);
-			return this;
-		}
-		
-		public Builder addSymbols(Symbol...symbols) {
-			body.addAll(Arrays.asList(symbols));
-			return this;
-		}
-		
-		public Builder addSymbols(List<Symbol> symbols) {
-			if (symbols == null) {
-				body = null;
-			} else {
-				body.addAll(symbols);
-			}
-			return this;
-		}
-		
-		public Builder setSymbols(List<Symbol> symbols) {
-			body = symbols;
-			return this;
-		}
-		
-		public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
-			this.layoutStrategy = layoutStrategy;
-			return this;
-		}
-		
-		public Builder setObject(Serializable object) {
-			this.object = object;
-			return this;
-		}
-		
-		public Builder setLayout(Nonterminal layout) {
-			this.layout = layout;
-			return this;
-		}
-		
-		public Builder setRecursion(Recursion recursion) {
-			this.recursion = recursion;
-			return this;
-		}
-		
-		public Builder setiRecursion(Recursion irecursion) {
-			this.irecursion = irecursion;
-			return this;
-		}
-		
-		public Builder setLeftEnd(String end) {
-			this.leftEnd = end;
-			return this;
-		}
-		
-		public Builder setRightEnd(String end) {
-			this.rightEnd = end;
-			return this;
-		}
-		
-		public Builder setLeftEnds(Set<String> leftEnds) {
-			if (leftEnds != null)
-				this.leftEnds = leftEnds;
-			return this;
-		}
-		
-		public Builder setRightEnds(Set<String> rightEnds) {
-			if (rightEnds != null)
-				this.rightEnds = rightEnds;
-			return this;
-		}
-		
-		public Builder setAssociativity(Associativity associativity) {
-			this.associativity = associativity;
-			return this;
-		}
-		
-		public Builder setAssociativityGroup(AssociativityGroup associativityGroup) {
-			this.associativityGroup = associativityGroup;
-			return this;
-		}
-		
-		public Builder setPrecedence(int precedence) {
-			this.precedence = precedence;
-			return this;
-		}
-		
-		public Builder setPrecedenceLevel(PrecedenceLevel precedenceLevel) {
-			this.precedenceLevel = precedenceLevel;
-			return this;
-		}
-		
-		public Builder setLabel(String label) {
-			this.label = label;
-			return this;
-		}
-		
-		public Builder setAction(Action action) {
-			this.action = action;
-			return this;
-		}
+        }
+
+        public Builder addSymbol(Symbol symbol) {
+            body.add(symbol);
+            return this;
+        }
+
+        public Builder addSymbols(Symbol... symbols) {
+            body.addAll(Arrays.asList(symbols));
+            return this;
+        }
+
+        public Builder addSymbols(List<Symbol> symbols) {
+            if (symbols == null) {
+                body = null;
+            } else {
+                body.addAll(symbols);
+            }
+            return this;
+        }
+
+        public Builder setSymbols(List<Symbol> symbols) {
+            body = symbols;
+            return this;
+        }
+
+        public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
+            this.layoutStrategy = layoutStrategy;
+            return this;
+        }
+
+        public Builder setObject(Serializable object) {
+            this.object = object;
+            return this;
+        }
+
+        public Builder setLayout(Nonterminal layout) {
+            this.layout = layout;
+            return this;
+        }
+
+        public Builder setRecursion(Recursion recursion) {
+            this.recursion = recursion;
+            return this;
+        }
+
+        public Builder setiRecursion(Recursion irecursion) {
+            this.irecursion = irecursion;
+            return this;
+        }
+
+        public Builder setLeftEnd(String end) {
+            this.leftEnd = end;
+            return this;
+        }
+
+        public Builder setRightEnd(String end) {
+            this.rightEnd = end;
+            return this;
+        }
+
+        public Builder setLeftEnds(Set<String> leftEnds) {
+            if (leftEnds != null)
+                this.leftEnds = leftEnds;
+            return this;
+        }
+
+        public Builder setRightEnds(Set<String> rightEnds) {
+            if (rightEnds != null)
+                this.rightEnds = rightEnds;
+            return this;
+        }
+
+        public Builder setAssociativity(Associativity associativity) {
+            this.associativity = associativity;
+            return this;
+        }
+
+        public Builder setAssociativityGroup(AssociativityGroup associativityGroup) {
+            this.associativityGroup = associativityGroup;
+            return this;
+        }
+
+        public Builder setPrecedence(int precedence) {
+            this.precedence = precedence;
+            return this;
+        }
+
+        public Builder setPrecedenceLevel(PrecedenceLevel precedenceLevel) {
+            this.precedenceLevel = precedenceLevel;
+            return this;
+        }
+
+        public Builder setLabel(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public Builder setAction(Action action) {
+            this.action = action;
+            return this;
+        }
 
         public Builder setRuleType(RuleType ruleType) {
             this.ruleType = ruleType;
@@ -528,56 +527,25 @@ public class Rule implements ConstructorCode, Serializable, RuleType {
             this.hasRuleType = hasRuleType;
             return this;
         }
-        
+
         public Builder setAttributes(Map<String, Object> attributes) {
-        	this.attributes = attributes;
-        	return this;
+            this.attributes = attributes;
+            return this;
         }
-        
+
         public Builder addAttribute(String key, Object value) {
-        	this.attributes.put(key, value);
-        	return this;
+            this.attributes.put(key, value);
+            return this;
         }
-        
+
         public Builder addAttributes(Map<String, Object> attributes) {
-        	this.attributes.putAll(attributes);
-        	return this;
+            this.attributes.putAll(attributes);
+            return this;
         }
 
         public Rule build() {
-			return new Rule(this);
-		}
-	}
-
-	@Override
-	public String getConstructorCode() {
-		return Rule.class.getSimpleName() + ".withHead(" + head.getConstructorCode() + ")" + 
-			(body == null ? "" : body.stream().map(s -> ".addSymbol(" + s.getConstructorCode() + ")").collect(Collectors.joining())) +
-			(layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-			(layoutStrategy == LayoutStrategy.INHERITED ? "" : ".setLayoutStrategy(" + layoutStrategy + ")") +
-			
-			".setRecursion(" + recursion.getConstructorCode() + ")" +
-			
-			".setiRecursion(" + irecursion.getConstructorCode() + ")" +
-			".setLeftEnd(\"" + leftEnd + "\")" +
-			".setRightEnd(\"" + rightEnd + "\")" +
-			".setLeftEnds(new HashSet<String>(Arrays.asList(" + GeneratorUtil.listToString(leftEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + ")))" +
-			".setRightEnds(new HashSet<String>(Arrays.asList(" + GeneratorUtil.listToString(rightEnds.stream().map(end -> "\"" + end + "\"").collect(Collectors.toList()), ",") + ")))" +
-			
-			".setAssociativity(" + associativity.getConstructorCode() + ")" +
-			".setPrecedence(" + precedence + ")" +
-			
-			(associativityGroup != null? ".setAssociativityGroup(" + associativityGroup.getConstructorCode() + ")" : "") +
-			(precedenceLevel != null? ".setPrecedenceLevel(" + precedenceLevel.getConstructorCode() + ")" : "") +
-			
-			(label != null? ".setLabel(\"" + label + "\")" : "") +
-			
-			(attributes != null && !attributes.isEmpty()? GeneratorUtil.listToString(attributes.entrySet().stream()
-					.map(entry -> ".addAttribute(\"" + entry.getKey() + "\"," 
-			                                         + (entry.getValue() instanceof String? "\"" + entry.getValue() + "\"" : entry.getValue()) + ")")
-			        .collect(Collectors.toSet())) : "") +
-			
-			".build()";
-	}
+            return new Rule(this);
+        }
+    }
 	
 }

@@ -31,12 +31,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Before;
@@ -64,7 +65,7 @@ public class FollowRestrictionTest {
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Sequence.from(":"))).build();
 		CharacterRange az = CharacterRange.in('a', 'z');
-		Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
+		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 
 		Grammar.Builder builder = new Grammar.Builder();
 		

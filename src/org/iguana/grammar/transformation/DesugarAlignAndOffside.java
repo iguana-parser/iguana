@@ -41,29 +41,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class DesugarAlignAndOffside implements GrammarTransformation {
@@ -284,32 +262,6 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 
 		@Override
-		public Symbol visit(Character symbol) {
-			if (isOffsided) {
-				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
-				return symbol.copyBuilder()
-								.setLabel(l)
-								.addConditions(symbol)
-								.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
-								.build();
-			}
-			return symbol;
-		}
-
-		@Override
-		public Symbol visit(CharacterRange symbol) {
-			if (isOffsided) {
-				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
-				return symbol.copyBuilder()
-								.setLabel(l)
-								.addConditions(symbol)
-								.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
-								.build();
-			}
-			return symbol;
-		}
-
-		@Override
 		public Symbol visit(Code symbol) {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
@@ -325,16 +277,6 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				return symbol;
 			
 			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
-		}
-
-		@Override
-		public Symbol visit(EOF symbol) {
-			return symbol;
-		}
-
-		@Override
-		public Symbol visit(Epsilon symbol) {
-			return symbol;
 		}
 
 		@Override
@@ -650,16 +592,6 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 
 		@Override
-		public Void visit(Character symbol) {
-			return null;
-		}
-
-		@Override
-		public Void visit(CharacterRange symbol) {
-			return null;
-		}
-
-		@Override
 		public Void visit(Code symbol) {
 			return symbol.getSymbol().accept(this);
 		}
@@ -667,16 +599,6 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Void visit(Conditional symbol) {
 			return symbol.getSymbol().accept(this);
-		}
-
-		@Override
-		public Void visit(EOF symbol) {
-			return null;
-		}
-
-		@Override
-		public Void visit(Epsilon symbol) {
-			return null;
 		}
 
 		@Override

@@ -35,8 +35,8 @@ import java.util.Set;
 import iguana.parsetrees.slot.TerminalSlot;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.utils.input.Input;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.regex.RegularExpression;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 
@@ -45,32 +45,23 @@ import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot implements TerminalSlot {
 	
-	private RegularExpression regex;
-    private Matcher matcher;
-    private Map<Integer, TerminalNode> terminalNodes;
-    private String terminalName;
+	private final Terminal terminal;
+    private final Matcher matcher;
+    private final Map<Integer, TerminalNode> terminalNodes;
+    private final String terminalName;
 
-	public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
+	public TerminalGrammarSlot(int id, Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
 		super(id, runtime, Collections.emptyList());
-		this.regex = regex;
-        this.matcher = factory.getMatcher(regex);
+		this.terminal = terminal;
+        this.matcher = factory.getMatcher(terminal.getRegex());
         this.terminalNodes = new HashMap<>();
         this.terminalName = terminalName;
     }
 
-    public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory, ParserRuntime runtime) {
-        this(id, regex, factory, null, runtime);
+    public TerminalGrammarSlot(int id, Terminal terminal, MatcherFactory factory, ParserRuntime runtime) {
+        this(id, terminal, factory, null, runtime);
     }
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
-	public RegularExpression getRegularExpression() {
-		return regex;
-	}
-		
 	public TerminalNode getTerminalNode(Input input, int i) {
 		return terminalNodes.computeIfAbsent(i, k -> {
 			int length = matcher.match(input, i);
@@ -83,8 +74,12 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
 			}
 		});
 	}
-	
-	@Override
+
+    public Terminal getTerminal() {
+        return terminal;
+    }
+
+    @Override
 	public Set<Transition> getTransitions() {
 		return Collections.emptySet();
 	}
@@ -96,16 +91,21 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
 
 	@Override
 	public String toString() {
-		return regex.toString();
+		return terminal.toString();
 	}
 
     @Override
 	public void reset(Input input) {
-		terminalNodes = new HashMap<>();
+		terminalNodes.clear();
 	}
 
 	@Override
 	public String terminalName() {
 		return terminalName;
 	}
+
+    @Override
+    public int terminalNodeType() {
+        return 0;
+    }
 }

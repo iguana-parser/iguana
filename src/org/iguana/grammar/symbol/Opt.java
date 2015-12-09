@@ -27,14 +27,80 @@
 
 package org.iguana.grammar.symbol;
 
-import org.iguana.regex.RegularExpression;
-import org.iguana.regex.automaton.Automaton;
+import org.iguana.traversal.ISymbolVisitor;
 
-public abstract class AbstractRegularExpression extends AbstractSymbol implements RegularExpression {
+public class Opt extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
+
+	private final Symbol s;
 	
-	public AbstractRegularExpression(SymbolBuilder<? extends RegularExpression> builder) {
+	private Opt(Builder builder) {
 		super(builder);
-	}		
+		this.s = builder.s;
+	}
+
+	public static Opt from(Symbol s) {
+		return builder(s).build();
+	}
+	
+	public Symbol getSymbol() {
+		return s;
+	}
+
+	private static String getName(Symbol s) {
+		return s.getName() + "?";
+	}
+
+	@Override
+	public SymbolBuilder<? extends Symbol> copyBuilder() {
+		return new Builder(s);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Opt))
+			return false;
+		
+		Opt other = (Opt) obj;
+		return s.equals(other.s);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	public static Builder builder(Symbol s) {
+		return new Builder(s);
+	}
+	
+	public static class Builder extends SymbolBuilder<Opt> {
+
+		private Symbol s;
+
+		public Builder(Symbol s) {
+			super(getName(s));
+			this.s = s;
+		}
+		
+		public Builder(Opt opt) {
+			super(opt);
+			this.s = opt.s;
+		}
+		
+		@Override
+		public Opt build() {
+			return new Opt(this);
+		}
+	}
+
+	@Override
+	public <T> T accept(ISymbolVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+	
 }

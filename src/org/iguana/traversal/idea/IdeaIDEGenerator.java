@@ -4,9 +4,14 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Terminal.Category;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Sequence;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.regex.*;
+import org.iguana.grammar.symbol.Terminal.Category;
+import org.iguana.regex.Character;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.traversal.RegularExpressionVisitor;
 import org.iguana.util.unicode.UnicodeUtil;
@@ -224,20 +229,6 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public Void visit(org.iguana.grammar.symbol.Character symbol) {
-            if (regexs != 0) return null;
-            terminals.put(symbol.getName(), symbol);
-            return null;
-        }
-
-        @Override
-        public Void visit(CharacterRange symbol) {
-            if (regexs != 0) return null;
-            terminals.put(symbol.getName(), symbol);
-            return null;
-        }
-
-        @Override
         public Void visit(Code symbol) {
             return symbol.getSymbol().accept(this);
         }
@@ -245,16 +236,6 @@ public class IdeaIDEGenerator {
         @Override
         public Void visit(Conditional symbol) {
             return symbol.getSymbol().accept(this);
-        }
-
-        @Override
-        public Void visit(EOF symbol) {
-            return null;
-        }
-
-        @Override
-        public Void visit(Epsilon symbol) {
-            return null;
         }
 
         @Override
@@ -289,9 +270,9 @@ public class IdeaIDEGenerator {
 
             if (symbol.category() == Category.REGEX) {
                 terminals.put("|regex|:" + symbol.getName(), regex);
-                regexs += 1;
-                regex.accept(this);
-                regexs -= 1;
+//                regexs += 1;
+//                regex.accept(this);
+//                regexs -= 1;
             } else if (symbol.category() == Category.KEYWORD)
                 terminals.put("|keyword|:" + symbol.getName(), regex);
             else
@@ -405,7 +386,7 @@ public class IdeaIDEGenerator {
                                       .append("\n");
                         }
 
-                        rules.append(regex + getConditions(entry.getValue().getPostConditions()))
+                        rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
 
@@ -421,7 +402,7 @@ public class IdeaIDEGenerator {
                         }
 
                         macros.append(tokenType + "=" + entry.getValue().accept(this)).append("\n");
-                        rules.append("{" + tokenType + "} " + getConditions(entry.getValue().getPostConditions()))
+                        rules.append("{" + tokenType + "} " + getLookaheads(entry.getValue().getLookaheads()))
                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
 
@@ -437,7 +418,7 @@ public class IdeaIDEGenerator {
                                       .append("\n");
                         }
 
-                        rules.append(regex + getConditions(entry.getValue().getPostConditions()))
+                        rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
                              .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
                     });
 
@@ -520,16 +501,6 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public String visit(Character c) {
-            return getChar(c.getValue());
-        }
-
-        @Override
-        public String visit(CharacterRange r) {
-            return "[" +  getRange(r) + "]";
-        }
-
-        @Override
         public String visit(EOF eof) {
             throw new UnsupportedOperationException();
         }
@@ -540,27 +511,32 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public String visit(Terminal t) {
-            return t.getRegularExpression().accept(this);
+        public String visit(Character c) {
+            return getChar(c.getValue());
         }
 
         @Override
-        public String visit(Star s) {
+        public String visit(CharacterRange r) {
+            return "[" +  getRange(r) + "]";
+        }
+
+        @Override
+        public String visit(org.iguana.regex.Star s) {
             return s.getSymbol().accept(this) + "*";
         }
 
         @Override
-        public String visit(Plus p) {
+        public String visit(org.iguana.regex.Plus p) {
             return p.getSymbol().accept(this) + "+";
         }
 
         @Override
-        public String visit(Opt o) {
+        public String visit(org.iguana.regex.Opt o) {
             return o.getSymbol().accept(this) + "?";
         }
 
         @Override
-        public <E extends Symbol> String visit(Alt<E> symbol) {
+        public <E extends RegularExpression> String visit(org.iguana.regex.Alt<E> symbol) {
             Map<Boolean, List<E>> parition = symbol.getSymbols().stream().collect(Collectors.partitioningBy(s -> isCharClass(s)));
             List<E> charClasses = parition.get(true);
             List<E> other = parition.get(false);
@@ -594,7 +570,7 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public <E extends Symbol> String visit(Sequence<E> symbol) {
+        public <E extends RegularExpression> String visit(org.iguana.regex.Sequence<E> symbol) {
 
             List<E> symbols = symbol.getSymbols();
 
@@ -604,12 +580,12 @@ public class IdeaIDEGenerator {
             return "(" + symbols.stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")";
         }
 
-        private boolean isCharClass(Symbol s) {
-            if (!s.getPostConditions().isEmpty()) return false;
+        private boolean isCharClass(RegularExpression s) {
+            if (!s.getLookaheads().isEmpty()) return false;
             return s instanceof Character || s instanceof CharacterRange;
         }
 
-        private String asCharClass(Symbol s) {
+        private String asCharClass(RegularExpression s) {
             if (s instanceof Character) {
                 Character c = (Character) s;
                 return getChar(c.getValue());
@@ -650,6 +626,14 @@ public class IdeaIDEGenerator {
                 code.append(getCondition(condition));
 
             return code.toString();
+        }
+
+        private String getLookaheads(Set<CharacterRange> lookaheads) {
+            return "";
+        }
+
+        private String getLookbehinds(Set<CharacterRange> lookbehinds) {
+            return "";
         }
 
         private String getCondition(Condition condition) {
@@ -995,16 +979,6 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public String visit(Character symbol) {
-            return null;
-        }
-
-        @Override
-        public String visit(CharacterRange symbol) {
-            return null;
-        }
-
-        @Override
         public String visit(Code symbol) {
             return symbol.getSymbol().accept(this);
         }
@@ -1012,16 +986,6 @@ public class IdeaIDEGenerator {
         @Override
         public String visit(Conditional symbol) {
             return symbol.getSymbol().accept(this);
-        }
-
-        @Override
-        public String visit(EOF symbol) {
-            return null;
-        }
-
-        @Override
-        public String visit(Epsilon symbol) {
-            return null;
         }
 
         @Override
@@ -1469,19 +1433,9 @@ public class IdeaIDEGenerator {
                 if (type != null && curr != null && !type.equals(curr))
                     return "PsiElement";
                 else if (type == null && curr != null)
-                     type = curr;
+                    type = curr;
             }
             return type;
-        }
-
-        @Override
-        public String visit(Character symbol) {
-            return null;
-        }
-
-        @Override
-        public String visit(CharacterRange symbol) {
-            return null;
         }
 
         @Override
@@ -1492,16 +1446,6 @@ public class IdeaIDEGenerator {
         @Override
         public String visit(Conditional symbol) {
             return symbol.getSymbol().accept(this);
-        }
-
-        @Override
-        public String visit(EOF symbol) {
-            return null;
-        }
-
-        @Override
-        public String visit(Epsilon symbol) {
-            return null;
         }
 
         @Override

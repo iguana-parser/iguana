@@ -30,7 +30,8 @@ package org.iguana.parser;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.util.Configuration;
@@ -59,11 +60,11 @@ public class IndirectRecursion3Test {
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
 	private Nonterminal C = Nonterminal.withName("C");
-	private Character c = Character.from('c');
-	private Character d = Character.from('d');
-	private Character e = Character.from('e');
-	private Character f = Character.from('f');
-	private Character g = Character.from('g');
+	private Terminal c = Terminal.from(Character.from('c'));
+	private Terminal d = Terminal.from(Character.from('d'));
+	private Terminal e = Terminal.from(Character.from('e'));
+	private Terminal f = Terminal.from(Character.from('f'));
+	private Terminal g = Terminal.from(Character.from('g'));
 
 	@Before
 	public void init() {

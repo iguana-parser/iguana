@@ -50,13 +50,6 @@ public class Return extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "Return.builder(" + expression.getConstructorCode() + ")" 
-	           + super.getConstructorCode() 
-	           + ".build()";
-	}
-	
-	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}

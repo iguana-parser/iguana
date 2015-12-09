@@ -35,7 +35,8 @@ import java.util.stream.Collectors;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.*;
+import org.iguana.regex.Character;
+import org.iguana.regex.Epsilon;
 
 /**
  * @author Anastasia Izmaylova
@@ -135,7 +136,7 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 	
 	@Override
 	public Object seqGroup(List<Object> syms) {
-        return org.iguana.regex.Sequence.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
+        return org.iguana.grammar.symbol.Sequence.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
 	}
 	
 	@Override
@@ -145,7 +146,7 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
             if (elem instanceof Symbol)
                 syms.add((Symbol)elem);
             else if (elem instanceof Sequence)
-                syms.add(org.iguana.regex.Sequence.from(((Sequence)elem).syms));
+                syms.add(org.iguana.grammar.symbol.Sequence.from(((Sequence)elem).syms));
         }
 		return Alt.from(syms);
 	}
@@ -217,7 +218,7 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 	}
 	
 	@Override
-	public org.iguana.regex.Sequence<org.iguana.grammar.symbol.Character> string(Object obj) {
+	public org.iguana.regex.Sequence<Character> string(Object obj) {
         String s = (String) obj;
         s = s.substring(1, s.length() - 1);
         return org.iguana.regex.Sequence.from(s.chars().toArray());

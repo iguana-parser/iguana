@@ -85,16 +85,6 @@ public class TerminalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-			.append("new NonterminalTransition(")
-			.append("slot" + slot.getId()).append(", ")
-			.append("slot" + origin.getId()).append(", ")
-			.append("slot" + dest.getId()).append(", ")
-			.toString();
-	}
-
-	@Override
 	public String getLabel() {
 		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getSlot();
 	}

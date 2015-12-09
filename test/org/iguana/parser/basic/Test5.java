@@ -34,15 +34,15 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.EOF;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -69,14 +69,13 @@ public class Test5 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
-	static Character b = Character.from('b');
+	static Terminal b = Terminal.from(Character.from('b'));
 	static Rule r1 = Rule.withHead(A).addSymbols(B).build();
 	static Rule r2 = Rule.withHead(B).addSymbol(b).build();
 	static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 
     private static Input input = Input.fromString("b");
     private static Nonterminal startSymbol = A;
-    private static Terminal t0;
 
     @Test
 	public void testNullable() {
@@ -136,7 +135,7 @@ public class Test5 {
 	}
 
     public static Tree getTree() {
-        t0 = createTerminal(0, 1, input);
+        iguana.parsetrees.tree.Terminal t0 = createTerminal(0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
         return createRule(r1, list(t1), input);
     }

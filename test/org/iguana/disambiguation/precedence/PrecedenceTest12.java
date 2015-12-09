@@ -36,7 +36,8 @@ import java.util.List;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.precedence.OperatorPrecedence;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -63,10 +64,10 @@ public class PrecedenceTest12 {
 	private Iguana parser;
 
 	private Nonterminal E = Nonterminal.withName("E");
-	private Character plus = Character.from('+');
-	private Character star = Character.from('*');
-	private Character minus = Character.from('-');
-	private Character a = Character.from('a');
+	private Terminal plus = Terminal.from(Character.from('+'));
+	private Terminal star = Terminal.from(Character.from('*'));
+	private Terminal minus = Terminal.from(Character.from('-'));
+	private Terminal a = Terminal.from(Character.from('a'));
 
 	private Grammar grammar;
 	
@@ -116,21 +117,21 @@ public class PrecedenceTest12 {
 	private Grammar getGrammar() {
 		return Grammar.builder()
 		//E ::= E2 + E1 
-		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Terminal.from(Character.from(43))).addSymbol(Nonterminal.builder("E").setIndex(1).build()).build())
 		//E ::= - E 
-		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(45)).addSymbol(Nonterminal.builder("E").build()).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.from(Character.from(45))).addSymbol(Nonterminal.builder("E").build()).build())
 		//E ::= a 
-		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(97)).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.from(Character.from(97))).build())
 		//E1 ::= - E 
-		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(45)).addSymbol(Nonterminal.builder("E").build()).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Terminal.from(Character.from(45))).addSymbol(Nonterminal.builder("E").build()).build())
 		//E1 ::= a 
-		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(97)).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Terminal.from(Character.from(97))).build())
 		//E2 ::= E2 + E3 
-		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Terminal.from(Character.from(43))).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
 		//E2 ::= a 
-		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(97)).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Terminal.from(Character.from(97))).build())
 		//E3 ::= a 
-		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(97)).build())
+		.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Terminal.from(Character.from(97))).build())
 		.build();
 	}
 	

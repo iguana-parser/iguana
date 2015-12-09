@@ -49,11 +49,6 @@ public class DataDependentCondition extends Condition {
 		return true;
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
 	static public DataDependentCondition predicate(org.iguana.datadependent.ast.Expression expression) {
 		return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
 	}

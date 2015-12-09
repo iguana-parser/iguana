@@ -35,7 +35,8 @@ import java.util.stream.Stream;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.ParseResult;
@@ -52,7 +53,7 @@ public class Gamma2TestLargeInput {
 	
 	private static Grammar getGrammar() {
 		Nonterminal S = Nonterminal.withName("S");
-		Character b = Character.from('b');
+		Terminal b = Terminal.from(Character.from('b'));
 		Rule rule1 = Rule.withHead(S).addSymbols(S, S, S).build();
 		Rule rule2 = Rule.withHead(S).addSymbols(S, S).build();
 		Rule rule3 = Rule.withHead(S).addSymbols(b).build();

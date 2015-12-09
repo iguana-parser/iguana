@@ -7,14 +7,15 @@ import iguana.parsetrees.tree.Tree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
@@ -31,10 +32,10 @@ public class Test2 {
 
     static Nonterminal S = Nonterminal.withName("S");
     static Nonterminal A = Nonterminal.withName("A");
-    static Character a = Character.from('a');
+    static Terminal a = Terminal.from(Character.from('a'));
 
     static Rule r1 = Rule.withHead(S).addSymbols(Star.from(A)).build();
-    static Rule r2 = Rule.withHead(A).addSymbols(Character.from('a')).build();
+    static Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Character.from('a'))).build();
 
     private static Grammar grammar = Grammar.builder().addRules(r1, r2).build();
 

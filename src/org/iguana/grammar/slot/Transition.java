@@ -31,10 +31,9 @@ import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.generator.ConstructorCode;
 
 
-public interface Transition extends ConstructorCode {
+public interface Transition {
 	
 	void execute(Input input, GSSNode u, NonPackedNode node);
 	

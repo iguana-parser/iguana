@@ -91,13 +91,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSl
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-    	  .append("new BodyGrammarSlot(")
-    	  .append(")").toString();
-	}
-	
-	@Override
 	public String toString() {
 		return position.toString();
 	}

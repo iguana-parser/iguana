@@ -45,11 +45,6 @@ public class CodeTransition extends AbstractTransition {
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
-	@Override
 	public void execute(Input input, GSSNode u, NonPackedNode node) {
 		runtime.evaluate(statements, runtime.getEmptyEnvironment());
 		if (runtime.getEnvironment().isEmpty())

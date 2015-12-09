@@ -77,11 +77,6 @@ public class EndGrammarSlot extends BodyGrammarSlot implements PackedNodeSlot {
 		return true;
 	}
 	
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-	
 	public Object getObject() {
 		return null;
 	}

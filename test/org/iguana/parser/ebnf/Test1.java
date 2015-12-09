@@ -8,12 +8,11 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
@@ -29,7 +28,7 @@ import static org.iguana.util.CollectionsUtil.*;
 public class Test1 {
 
     static Nonterminal A = Nonterminal.withName("A");
-    static Character a = Character.from('a');
+    static Terminal a = Terminal.from(Character.from('a'));
     static Rule r1 = Rule.withHead(A).addSymbols(Star.from(a)).build();
 
     private static Grammar grammar = Grammar.builder().addRule(r1).build();

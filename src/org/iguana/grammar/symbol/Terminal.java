@@ -27,23 +27,18 @@
 
 package org.iguana.grammar.symbol;
 
-import java.util.Set;
-
+import org.iguana.regex.Epsilon;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;
 
-public class Terminal extends AbstractRegularExpression {
+public class Terminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final RegularExpression regex;
 	
-	public static enum Category {
+	public enum Category {
 		REGEX, KEYWORD, TERMINAL;
-		
-		public String getConstructorCode() {
-			return this.getClass().getSimpleName() + "." + this.name();
-		}
 		
 		@Override
 		public String toString() {
@@ -52,6 +47,12 @@ public class Terminal extends AbstractRegularExpression {
 	}
 	
 	private final Category category;
+
+    private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
+
+    public static Terminal epsilon() {
+        return epsilon;
+    }
 	
 	public static Terminal from(RegularExpression regex) {
 		return builder(regex).build();
@@ -63,7 +64,11 @@ public class Terminal extends AbstractRegularExpression {
 		this.category = builder.category;
 	}
 
-	@Override
+    public RegularExpression getRegex() {
+        return regex;
+    }
+
+    @Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
@@ -74,11 +79,6 @@ public class Terminal extends AbstractRegularExpression {
 	
 	public Category category() {
 		return category;
-	}
-	
-	@Override
-	public int length() {
-		return regex.length();
 	}
 	
 	@Override
@@ -136,25 +136,8 @@ public class Terminal extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return regex.getFirstSet();
-	}
-
-	@Override
-	public Set<CharacterRange> getNotFollowSet() {
-		return regex.getNotFollowSet();
-	}
-	
-	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
-	}
-	
-	public String getConstructorCode() {
-		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
-				                              + ".setCategory(" + category + ")"
-											  + super.getConstructorCode() 
-											  + ".build()";
 	}
 
 }

@@ -32,12 +32,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.regex.Plus;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;

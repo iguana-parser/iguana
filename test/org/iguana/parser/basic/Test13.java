@@ -35,7 +35,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -70,7 +71,7 @@ public class Test13 {
 
     static {
         Rule r1 = Rule.withHead(A).addSymbols(A).build();
-        Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
+        Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
         grammar = Grammar.builder().addRule(r1).addRule(r2).build();
     }
 

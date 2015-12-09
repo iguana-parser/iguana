@@ -98,11 +98,4 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 		return this.toString() + (j == 1? " . " : "");
 	}
 	
-	@Override
-	public String getConstructorCode() {
-		return (label == null ? "" : ".setLabel(\"" + label + "\")") + 
-			   (preConditions.isEmpty() ? "" : ".addPreConditions(" + asSet(preConditions) + ")") +
-			   (postConditions.isEmpty() ? "" : ".addPostConditions(" + asSet(postConditions) + ")");
-	}
-	
 }

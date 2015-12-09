@@ -8,7 +8,7 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
@@ -29,9 +29,9 @@ import static org.junit.Assert.*;
 public class Test19 {
 
     static Nonterminal E = Nonterminal.withName("E");
-    static org.iguana.grammar.symbol.Character a = Character.from('a');
-    static Character plus = Character.from('+');
-    static Character star = Character.from('*');
+    static Terminal a = Terminal.from(Character.from('a'));
+    static Terminal plus = Terminal.from(Character.from('+'));
+    static Terminal star = Terminal.from(Character.from('*'));
 
     static Rule r1 = Rule.withHead(E).addSymbols(E, star, E).build();
     static Rule r2 = Rule.withHead(E).addSymbols(E, plus, E).build();

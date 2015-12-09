@@ -30,7 +30,8 @@ package org.iguana.parser.layout;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -56,8 +57,8 @@ import iguana.utils.input.Input;
 public class LayoutTest2 {
 
 	private static Grammar getGrammar() {
-		Character a = Character.from('a');
-		Character c = Character.from('c');
+		Terminal a = Terminal.from(Character.from('a'));
+		Terminal c = Terminal.from(Character.from('c'));
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
@@ -70,7 +71,7 @@ public class LayoutTest2 {
 		Rule r3 = Rule.withHead(B).setLayout(L).build();
 		Rule r4 = Rule.withHead(C).setLayout(L).addSymbol(c).build();
 		
-		Rule layout1 = Rule.withHead(L).addSymbol(Character.from(' ')).build();
+		Rule layout1 = Rule.withHead(L).addSymbol(Terminal.from(Character.from(' '))).build();
 		Rule layout2 = Rule.withHead(L).build();
 		
 		return Grammar.builder().addRules(r1, r2, r3, r4, layout1, layout2).build();

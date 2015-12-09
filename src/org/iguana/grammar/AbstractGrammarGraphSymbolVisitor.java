@@ -28,25 +28,7 @@
 package org.iguana.grammar;
 
 import org.iguana.grammar.exception.UnexpectedSymbol;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.RegularExpression;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
 public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVisitor<T> {
@@ -61,28 +43,6 @@ public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVis
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
-	public abstract T visit(RegularExpression symbol);
-
-	@Override
-	public T visit(Character symbol) {
-		return visit((RegularExpression) symbol);
-	}
-
-	@Override
-	public T visit(CharacterRange symbol) {
-		return visit((RegularExpression) symbol);
-	}
-	
-		@Override
-	public T visit(EOF symbol) {
-		return visit((RegularExpression) symbol);
-	}
-
-	@Override
-	public T visit(Epsilon symbol) {
-		return visit((RegularExpression) symbol);
-	}
-	
 	@Override
 	public T visit(IfThen symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
@@ -95,9 +55,9 @@ public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVis
 
 	@Override
 	public T visit(Terminal symbol) {
-		return visit((RegularExpression) symbol);
+		return visit(symbol);
 	}
-	
+
 	@Override
 	public T visit(Ignore symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");

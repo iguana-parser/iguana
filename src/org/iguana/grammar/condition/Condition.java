@@ -31,10 +31,9 @@ import java.io.Serializable;
 
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.traversal.IConditionVisitor;
-import org.iguana.util.generator.ConstructorCode;
 
 
-public abstract class Condition extends AbstractAttrs implements Serializable, ConstructorCode {
+public abstract class Condition extends AbstractAttrs implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

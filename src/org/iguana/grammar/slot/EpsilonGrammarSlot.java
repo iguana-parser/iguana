@@ -54,11 +54,6 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
             u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
 	}
 	
-	@Override
-	public String getConstructorCode() {
-		return "new EpsilonGrammarSlot(slot" + getNonterminal().getId() + ")";
-	}
-	
 	/**
 	 *
 	 * 

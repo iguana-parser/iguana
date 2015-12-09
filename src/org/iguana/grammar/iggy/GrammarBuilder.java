@@ -29,12 +29,13 @@ package org.iguana.grammar.iggy;
 import iguana.parsetrees.iggy.TermTraversal;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
-import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.*;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.Epsilon;
+import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.ArrayList;
@@ -201,12 +202,12 @@ public class GrammarBuilder implements TermTraversal.Actions {
     public static LAttribute lattribute() { return new LAttribute(); }
 
     public static class Symbols {
-        public static org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<org.iguana.grammar.symbol.Symbol> symbols) {
+        public static org.iguana.grammar.symbol.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<org.iguana.grammar.symbol.Symbol> symbols) {
             if (symbols.isEmpty())
-                return org.iguana.regex.Sequence.from(symbols);
+                return org.iguana.grammar.symbol.Sequence.from(symbols);
             List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
             addAll(l, symbols);
-            return org.iguana.regex.Sequence.from(l);
+            return org.iguana.grammar.symbol.Sequence.from(l);
         }
     }
 
@@ -227,19 +228,20 @@ public class GrammarBuilder implements TermTraversal.Actions {
             List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
             l.add(symbol);
             addAll(l, symbols);
-            return org.iguana.regex.Sequence.from(l);
+            return org.iguana.grammar.symbol.Sequence.from(l);
         }
-        public static org.iguana.grammar.symbol.Symbol alternation(org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence, List<org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol>> sequences) {
+
+        public static org.iguana.grammar.symbol.Symbol alternation(org.iguana.grammar.symbol.Sequence<org.iguana.grammar.symbol.Symbol> sequence, List<org.iguana.grammar.symbol.Sequence<org.iguana.grammar.symbol.Symbol>> sequences) {
             List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
             if (sequence.getSymbols().isEmpty())
-                l.add(Epsilon.getInstance());
+                l.add(Terminal.epsilon());
             else if (sequence.getSymbols().size() == 1)
                 l.add(sequence.getSymbols().get(0));
             else
                 l.add(sequence);
             sequences.forEach(s -> {
                 if (s.getSymbols().isEmpty())
-                    l.add(Epsilon.getInstance());
+                    l.add(Terminal.epsilon());
                 else if (s.getSymbols().size() == 1)
                     l.add(s.getSymbols().get(0));
                 else
@@ -247,6 +249,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
             });
             return Alt.from(l);
         }
+
         public static org.iguana.grammar.symbol.Symbol call(org.iguana.grammar.symbol.Symbol symbol, List<org.iguana.datadependent.ast.Expression> arguments) {
             Nonterminal nt = (Nonterminal) symbol;
             return nt.copyBuilder().apply(arguments.stream().toArray(org.iguana.datadependent.ast.Expression[]::new)).build();
@@ -277,28 +280,28 @@ public class GrammarBuilder implements TermTraversal.Actions {
             return new CodeHolder(statements, null);
         }
         public static org.iguana.grammar.symbol.Symbol precede(RegularExpression regex, org.iguana.grammar.symbol.Symbol symbol) {
-            return symbol.copyBuilder().addPreCondition(ContextFreeCondition.precede(regex)).build();
+            return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.precede(regex)).build();
         }
         public static org.iguana.grammar.symbol.Symbol notprecede(RegularExpression regex, org.iguana.grammar.symbol.Symbol symbol) {
-            return symbol.copyBuilder().addPreCondition(ContextFreeCondition.notPrecede(regex)).build();
+            return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
         }
         public static org.iguana.grammar.symbol.Symbol follow(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
-            return symbol.copyBuilder().addPostCondition(ContextFreeCondition.follow(regex)).build();
+            return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.follow(regex)).build();
         }
         public static org.iguana.grammar.symbol.Symbol notfollow(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
-            return symbol.copyBuilder().addPostCondition(ContextFreeCondition.notFollow(regex)).build();
+            return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
         }
         public static org.iguana.grammar.symbol.Symbol exclude(org.iguana.grammar.symbol.Symbol symbol, RegularExpression regex) {
-            return symbol.copyBuilder().addPostCondition(ContextFreeCondition.notMatch(regex)).build();
+            return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
         }
         public static org.iguana.grammar.symbol.Symbol nont(Identifier name) {
             return Nonterminal.withName(name.id);
         }
         public static org.iguana.grammar.symbol.Symbol string(String s) {
-            return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
+            return Terminal.from(org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray()));
         }
         public static org.iguana.grammar.symbol.Symbol character(String s) {
-            return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
+            return Terminal.from(org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray()));
         }
     }
 
@@ -379,18 +382,18 @@ public class GrammarBuilder implements TermTraversal.Actions {
     public static ReturnExpression returnexpression() { return new ReturnExpression(); }
 
     public static class Regex {
-        public static RegularExpression star(RegularExpression regex) { return Star.from(regex); }
-        public static RegularExpression plus(RegularExpression regex) { return Plus.from(regex); }
-        public static RegularExpression option(RegularExpression regex) { return Opt.from(regex); }
+        public static RegularExpression star(RegularExpression regex) { return org.iguana.regex.Star.from(regex); }
+        public static RegularExpression plus(RegularExpression regex) { return org.iguana.regex.Plus.from(regex); }
+        public static RegularExpression option(RegularExpression regex) { return org.iguana.regex.Opt.from(regex); }
         public static RegularExpression bracket(RegularExpression regex) { return regex; }
         public static RegularExpression sequence(RegularExpression regex, List<RegularExpression> regexs) {
-            List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
+            List<org.iguana.regex.RegularExpression> l = new ArrayList<>();
             l.add(regex);
             l.addAll(regexs);
             return org.iguana.regex.Sequence.from(l);
         }
-        public static RegularExpression alternation(org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence, List<org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol>> sequences) {
-            List<org.iguana.grammar.symbol.Symbol> l = new ArrayList<>();
+        public static RegularExpression alternation(org.iguana.regex.Sequence<org.iguana.regex.RegularExpression> sequence, List<org.iguana.regex.Sequence<org.iguana.regex.RegularExpression>> sequences) {
+            List<org.iguana.regex.RegularExpression> l = new ArrayList<>();
             if (sequence.getSymbols().isEmpty())
                 l.add(Epsilon.getInstance());
             else if (sequence.getSymbols().size() == 1)
@@ -405,7 +408,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
                 else
                     l.add(s);
             });
-            return Alt.from(l);
+            return org.iguana.regex.Alt.from(l);
         }
         // public static RegularExpression nont(Identifier name) { return Nonterminal.withName(name.id); }
         public static RegularExpression charclass(RegularExpression regex) { return regex; }
@@ -420,8 +423,8 @@ public class GrammarBuilder implements TermTraversal.Actions {
     public static Regex regex() { return new Regex(); }
 
     public static class Regexs {
-        public static org.iguana.regex.Sequence<org.iguana.grammar.symbol.Symbol> sequence(List<RegularExpression> regexs) {
-            return org.iguana.regex.Sequence.from(regexs.stream().map(regex -> (org.iguana.grammar.symbol.Symbol)regex).collect(Collectors.toList()));
+        public static org.iguana.regex.Sequence<org.iguana.regex.RegularExpression> sequence(List<RegularExpression> regexs) {
+            return org.iguana.regex.Sequence.from(regexs.stream().map(regex -> (org.iguana.regex.RegularExpression)regex).collect(Collectors.toList()));
         }
     }
 
@@ -429,7 +432,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
 
     public static class CharClass {
         public static RegularExpression chars(List<CharacterRange> ranges) {
-            return Alt.from(ranges);
+            return org.iguana.regex.Alt.from(ranges);
         }
         public static RegularExpression notchars(List<CharacterRange> ranges) {
             return null;
@@ -522,10 +525,6 @@ public class GrammarBuilder implements TermTraversal.Actions {
         @Override
         public void setEmpty() {}
 
-        @Override
-        public String getConstructorCode() {
-            return null;
-        }
     }
 
     private static void addAll(List<org.iguana.grammar.symbol.Symbol> symbols, List<org.iguana.grammar.symbol.Symbol> rest) {
@@ -537,7 +536,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
                 symbols.remove(0);
                 preConditions = holder.expressions.stream().map(e -> DataDependentCondition.predicate(e)).collect(Collectors.toList());
                 if (rest.isEmpty()) {
-                    symbols.add(Epsilon.getInstance().copyBuilder().addPreConditions(preConditions).build());
+                    symbols.add(Terminal.epsilon().copyBuilder().addPreConditions(preConditions).build());
                     return;
                 }
             }

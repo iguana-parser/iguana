@@ -35,7 +35,8 @@ import java.util.List;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.precedence.OperatorPrecedence;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -62,11 +63,11 @@ public class PrecedenceTest5 {
 	private Iguana parser;
 	
 	private Nonterminal E = Nonterminal.withName("E");
-	private Character a = Character.from('a');
-	private Character w = Character.from('w');
-	private Character x = Character.from('x');
-	private Character y = Character.from('y');
-	private Character z = Character.from('z');
+	private Terminal a = Terminal.from(Character.from('a'));
+	private Terminal w = Terminal.from(Character.from('w'));
+	private Terminal x = Terminal.from(Character.from('x'));
+	private Terminal y = Terminal.from(Character.from('y'));
+	private Terminal z = Terminal.from(Character.from('z'));
 
 	private Grammar grammar;
 

@@ -30,7 +30,8 @@ package org.iguana.parser;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.util.Configuration;
@@ -59,10 +60,10 @@ public class HiddenLeftRecursion {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 
-		Rule r1 = Rule.withHead(A).addSymbols(B, A, Character.from('+'), A).build();
-		Rule r2 = Rule.withHead(A).addSymbols(Character.from('a')).build();
+		Rule r1 = Rule.withHead(A).addSymbols(B, A, Terminal.from(Character.from('+')), A).build();
+		Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Character.from('a'))).build();
 		
-		Rule r3 = Rule.withHead(B).addSymbols(Character.from('b')).build();
+		Rule r3 = Rule.withHead(B).addSymbols(Terminal.from(Character.from('b'))).build();
 		Rule r4 = Rule.withHead(B).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();

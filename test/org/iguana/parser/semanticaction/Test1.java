@@ -4,7 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.slot.Action;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -24,7 +25,7 @@ public class Test1 {
 	private static Grammar getGrammar() {
         Action action = x -> { System.out.println(x); return null; };
 		Nonterminal A = Nonterminal.withName("A");
-		Character a = Character.from('a');
+		Terminal a = Terminal.from(Character.from('a'));
 		Rule r1 = Rule.withHead(A).addSymbol(a).setAction(action).build();
 		return Grammar.builder().addRule(r1).build();
 	}

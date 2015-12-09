@@ -62,13 +62,6 @@ public class IfThenElse extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "IfThenElse.builder(" + expression.getConstructorCode() + "," + thenPart.getConstructorCode() + "," + elsePart.getConstructorCode() + ")" 
-				 					 + super.getConstructorCode()
-				 					 + ".build()";
-	}
-
-	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}

@@ -39,16 +39,12 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.LayoutStrategy;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Alt;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,18 +78,18 @@ public class Test11 {
 		Rule r0 = Rule.withHead(X).addSymbol(S).build();
 		
 		Rule r1 = Rule.withHead(S)
-					.addSymbol(Code.code(Character.builder('a').setLabel("a")
+					.addSymbol(Code.code(Terminal.builder(Character.from('a')).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
 										 stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(NoNL) // TODO: Should be removed
-					.addSymbol(Code.code(Character.builder('b').setLabel("b")
+					.addSymbol(Code.code(Terminal.builder(Character.from('b')).setLabel("b")
 												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
 		Rule r2 = Rule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t')))
+						.addSymbol(Star.builder(Terminal.from(Alt.from(Character.from(' '), Character.from('\t'))))
 								.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
 								.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build();
 		

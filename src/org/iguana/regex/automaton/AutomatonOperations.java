@@ -38,7 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.CharacterRange;
 import org.iguana.util.CharacterRanges;
 
 public class AutomatonOperations {

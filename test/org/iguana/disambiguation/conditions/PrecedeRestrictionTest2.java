@@ -31,16 +31,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Before;
@@ -62,22 +57,22 @@ import iguana.utils.input.Input;
 public class PrecedeRestrictionTest2 {
 	
 	private Nonterminal S = Nonterminal.withName("S");
-	private RegularExpression forr = Terminal.from(Sequence.from("for"));
-	private RegularExpression forall = Terminal.from(Sequence.from("forall"));
+	private Terminal forr = Terminal.from(Sequence.from("for"));
+	private Terminal forall = Terminal.from(Sequence.from("forall"));
 	private Nonterminal L = Nonterminal.withName("L");
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Character ws = Character.from(' ');
 	private CharacterRange az = CharacterRange.in('a', 'z');
 	private Grammar grammar;
-	private Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az))
-			                              .addPostCondition(RegularExpressionCondition.notPrecede(forr)).build();
+	private Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
+			                              .addPostCondition(RegularExpressionCondition.notPrecede(Sequence.from("for"))).build();
 
 	@Before
 	public void createGrammar() {
 		Rule r1 = Rule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
 		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
 		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
-		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
+		Rule r4 = Rule.withHead(L).addSymbol(Terminal.from(ws)).build();
 
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 	}

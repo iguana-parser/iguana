@@ -30,7 +30,8 @@ package org.iguana.parser;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 //import org.iguana.sppf.IntermediateNode;
@@ -57,9 +58,9 @@ import iguana.utils.input.Input;
 public class DanglingElseGrammar4 {
 
 	Nonterminal S = Nonterminal.withName("S");
-	Character s = Character.from('s');
-	Character a = Character.from('a');
-	Character b = Character.from('b');
+	Terminal s = Terminal.from(Character.from('s'));
+    Terminal a = Terminal.from(Character.from('a'));
+    Terminal b = Terminal.from(Character.from('b'));
 	private Grammar grammar;
 
 	@Before

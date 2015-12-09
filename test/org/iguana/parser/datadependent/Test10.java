@@ -39,16 +39,12 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.LayoutStrategy;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Alt;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
@@ -98,11 +94,11 @@ public class Test10 {
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
 		
 		Rule r4 = Rule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t')))
+						.addSymbol(Star.builder(Terminal.from(Alt.from(Character.from(' '), Character.from('\t'))))
 										.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
 										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build();
 		

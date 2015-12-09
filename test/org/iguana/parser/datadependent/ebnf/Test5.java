@@ -37,15 +37,11 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
@@ -88,9 +84,9 @@ public class Test5 {
 																	   stat(println(var("c"))))).build())
 									.setLabel("b").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
-		Rule r4 = Rule.withHead(C).addSymbol(Character.from('c')).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
+		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Character.from('c'))).build();
 		
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 		

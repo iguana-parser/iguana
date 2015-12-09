@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.CharacterRange;
 import iguana.utils.collections.rangemap.RangeTree;
 
 public class RangeTreeLookaheadTest implements LookAheadTest {

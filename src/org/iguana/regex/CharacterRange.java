@@ -25,16 +25,17 @@
  *
  */
 
-package org.iguana.grammar.symbol;
+package org.iguana.regex;
 
 import static org.iguana.util.CollectionsUtil.*;
 
+import java.lang.*;
 import java.util.Collections;
 import java.util.Set;
 
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.collections.rangemap.Range;
-import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.traversal.RegularExpressionVisitor;
 
 /**
  * 
@@ -75,7 +76,7 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 		if (start == end) {
 			return Character.getName(start);
 		} else {
-			return Character.getName(start) + "-" + Character.getName(end);			
+			return Character.getName(start) + "-" + Character.getName(end);
 		}
 	}
 
@@ -121,22 +122,22 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
-	
-	public static Builder builder(int start, int end) {
+
+    @Override
+    public int length() {
+        return 1;
+    }
+
+    public static Builder builder(int start, int end) {
 		return new Builder(start, end);
 	}
 	
     @Override
-    public SymbolBuilder<? extends Symbol> copyBuilder() {
+    public Builder copyBuilder() {
         return new Builder(this);
     }
     
-	@Override
-	public String getConstructorCode() {
-		return CharacterRange.class.getSimpleName() + ".builder(" + start + ", " + end + ")" + super.getConstructorCode() + ".build()";
-	}
-	
-	public static class Builder extends SymbolBuilder<CharacterRange> {
+	public static class Builder extends RegexBuilder<CharacterRange> {
 
 		private int start;
 		private int end;
@@ -160,7 +161,7 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	}
 
 	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
+	public <T> T accept(RegularExpressionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 	

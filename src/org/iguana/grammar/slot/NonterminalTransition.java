@@ -102,17 +102,6 @@ public class NonterminalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-			.append("new NonterminalTransition(")
-			.append("slot" + nonterminal.getId()).append(", ")
-			.append("slot" + origin.getId()).append(", ")
-			.append("slot" + dest.getId()).append(", ")
-			.append(preConditions)
-			.toString();
-	}
-	
-	@Override
 	public String getLabel() {
 		return (dest.getVariable() != null? dest.getVariable() + "=" : "") 
 				+ (dest.getLabel() != null? dest.getLabel() + ":"  : "")

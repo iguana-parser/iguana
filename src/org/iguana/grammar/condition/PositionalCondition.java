@@ -60,11 +60,6 @@ public class PositionalCondition extends Condition {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "new PositionalCondition(" + type.name() + ")";
-	}
-	
-	@Override
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

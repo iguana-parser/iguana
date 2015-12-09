@@ -3,7 +3,6 @@ package org.iguana.traversal.idea;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.GrammarTransformation;
-import org.iguana.regex.*;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
@@ -71,16 +70,6 @@ public class Names implements GrammarTransformation {
         }
 
         @Override
-        public Symbol visit(org.iguana.grammar.symbol.Character symbol) {
-            return symbol;
-        }
-
-        @Override
-        public Symbol visit(CharacterRange symbol) {
-            return symbol;
-        }
-
-        @Override
         public Symbol visit(Code symbol) {
             return Code.code(visitSymbol(symbol.getSymbol()), symbol.getStatements());
         }
@@ -88,16 +77,6 @@ public class Names implements GrammarTransformation {
         @Override
         public Symbol visit(Conditional symbol) {
             return Conditional.when(visitSymbol(symbol.getSymbol()), symbol.getExpression());
-        }
-
-        @Override
-        public Symbol visit(EOF symbol) {
-            return symbol;
-        }
-
-        @Override
-        public Symbol visit(Epsilon symbol) {
-            return symbol;
         }
 
         @Override

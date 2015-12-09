@@ -30,8 +30,7 @@ package org.iguana.regex;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.iguana.grammar.symbol.Character;
-import org.iguana.regex.matcher.JavaRegexMatcherFactory;
+import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.junit.Test;
@@ -40,7 +39,7 @@ import iguana.utils.input.Input;
 
 public class PlusTest {
 	
-	MatcherFactory factory = new JavaRegexMatcherFactory();
+	MatcherFactory factory = new DFAMatcherFactory();
 	
 	@Test
 	public void testAutomaton() {

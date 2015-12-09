@@ -46,7 +46,7 @@ public enum ConditionType {
 	
 	private String symbol;
 	
-	private ConditionType(String symbol) {
+	ConditionType(String symbol) {
 		this.symbol = symbol;
 	}
 	

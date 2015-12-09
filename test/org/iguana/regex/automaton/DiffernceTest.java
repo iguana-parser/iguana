@@ -30,7 +30,7 @@ package org.iguana.regex.automaton;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.regex.Alt;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;

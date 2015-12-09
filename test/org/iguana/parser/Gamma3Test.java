@@ -28,7 +28,8 @@
 package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.util.Configuration;
@@ -52,7 +53,7 @@ public class Gamma3Test {
 	private Grammar grammar;
 
 	private Nonterminal S = Nonterminal.withName("S");
-	private Character b = Character.from('b');
+	private Terminal b = Terminal.from(Character.from('b'));
 	
 	@Before
 	public void init() {

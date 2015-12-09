@@ -41,34 +41,8 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Associativity;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.LayoutStrategy;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.PrecedenceLevel;
-import org.iguana.grammar.symbol.Recursion;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
 
 /**
@@ -545,16 +519,6 @@ public class EBNFToBNF implements GrammarTransformation {
 		}
 
 		@Override
-		public Symbol visit(Character symbol) {
-			return symbol;
-		}
-
-		@Override
-		public Symbol visit(CharacterRange symbol) {
-			return symbol;
-		}
-
-		@Override
 		public Symbol visit(Code symbol) {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
@@ -572,16 +536,6 @@ public class EBNFToBNF implements GrammarTransformation {
 			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
-		@Override
-		public Symbol visit(EOF symbol) {
-			return symbol;
-		}
-
-		@Override
-		public Symbol visit(Epsilon symbol) {
-			return symbol;
-		}
-		
 		@Override
 		public Symbol visit(Ignore symbol) {
 			Symbol sym = symbol.getSymbol().accept(this);

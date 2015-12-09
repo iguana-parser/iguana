@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.CharacterRange;
 import static org.iguana.util.CollectionsUtil.*;
 
 public class CharacterRanges {

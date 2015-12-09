@@ -31,33 +31,11 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.exception.UnexpectedSymbol;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -65,11 +43,6 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	
 	public final Set<java.lang.String> labels = new HashSet<>();
 	
-	@Override
-	public Void visit(ContextFreeCondition condition) {
-		return null;
-	}
-
 	@Override
 	public Void visit(DataDependentCondition condition) {
 		condition.getExpression().accept(this);
@@ -97,16 +70,6 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	}
 
 	@Override
-	public Void visit(Character symbol) {
-		return null;
-	}
-
-	@Override
-	public Void visit(CharacterRange symbol) {
-		return null;
-	}
-
-	@Override
 	public Void visit(Code symbol) {
 		visitSymbol(symbol.getSymbol());
 		
@@ -120,16 +83,6 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	public Void visit(Conditional symbol) {
 		visitSymbol(symbol.getSymbol());
 		symbol.getExpression().accept(this);
-		return null;
-	}
-
-	@Override
-	public Void visit(EOF symbol) {
-		return null;
-	}
-
-	@Override
-	public Void visit(Epsilon symbol) {
 		return null;
 	}
 

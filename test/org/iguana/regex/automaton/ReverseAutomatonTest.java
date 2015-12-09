@@ -29,8 +29,8 @@ package org.iguana.regex.automaton;
 
 import static org.junit.Assert.assertTrue;
 
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
 import org.iguana.regex.Alt;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;

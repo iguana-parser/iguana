@@ -32,7 +32,6 @@ import java.util.Map;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -53,11 +52,6 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		this.factory = factory;
 	}
 	
-	@Override
-	public SlotAction visit(ContextFreeCondition condition) {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public SlotAction visit(DataDependentCondition condition) {
 		return new SlotAction() {

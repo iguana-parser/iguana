@@ -124,14 +124,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 		return nonterminal.toString();
 	}
 	
-	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-		           .append("new NonterminalGrammarSlot(")
-		           .append(nonterminal.getConstructorCode())
-		           .append(")").toString();
-	}
-	
 	public void create(Input input, BodyGrammarSlot returnSlot, GSSNode u, NonPackedNode node) {
 
         int i = node.getRightExtent();

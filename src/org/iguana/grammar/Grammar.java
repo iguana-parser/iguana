@@ -50,7 +50,6 @@ import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
 import org.iguana.util.CollectionsUtil;
-import org.iguana.util.generator.ConstructorCode;
 
 
 /**
@@ -59,7 +58,7 @@ import org.iguana.util.generator.ConstructorCode;
  * @author Anastasia Izmaylova
  *
  */
-public class Grammar implements ConstructorCode, Serializable {
+public class Grammar implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -376,18 +375,9 @@ public class Grammar implements ConstructorCode, Serializable {
 		return heads + bodySymbols;
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return "Grammar.builder()\n" +
-			   (ebnfLefts.isEmpty()? ""  : leftsToString(ebnfLefts)) +
-			   (ebnfRights.isEmpty()? "" : rightsToString(ebnfRights)) +
-			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-			   definitions.values().stream().map(l -> rulesToString(l)).collect(Collectors.joining()) + "\n.build()";
-	}
-	
 	private static String rulesToString(Iterable<Rule> rules) {
 		return StreamSupport.stream(rules.spliterator(), false)
-				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
+				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r + ")")
 				.collect(Collectors.joining());
 	}
 	

@@ -97,9 +97,4 @@ public class ConditionalTransition extends AbstractTransition {
 		// TODO: logging
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
 }

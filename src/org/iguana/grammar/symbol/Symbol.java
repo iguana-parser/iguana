@@ -34,7 +34,6 @@ import org.iguana.datadependent.attrs.Attr;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.CollectionsUtil;
-import org.iguana.util.generator.ConstructorCode;
 
 /**
  * 
@@ -58,13 +57,13 @@ import org.iguana.util.generator.ConstructorCode;
  *          
  *
  */
-public interface Symbol extends ConstructorCode, Serializable, Attr {
+public interface Symbol extends Serializable, Attr {
 	
-	public String getName();
+	String getName();
 	
-	public Set<Condition> getPreConditions();
+	Set<Condition> getPreConditions();
 	
-	public Set<Condition> getPostConditions();
+	Set<Condition> getPostConditions();
 	
 	default Set<Condition> getConditions() {
 		return CollectionsUtil.union(getPreConditions(), getPostConditions());
@@ -74,17 +73,17 @@ public interface Symbol extends ConstructorCode, Serializable, Attr {
 		return !getConditions().isEmpty();
 	}
 	
-	public Object getObject();
+	Object getObject();
 	
-	public String getLabel();
+	String getLabel();
 	
-	public SymbolBuilder<? extends Symbol> copyBuilder();
+	SymbolBuilder<? extends Symbol> copyBuilder();
 	
 	default int size() {
 		return 1;
 	}
 		
-	public String toString(int j);
+	String toString(int j);
 	
-	public <T> T accept(ISymbolVisitor<T> visitor);
+	<T> T accept(ISymbolVisitor<T> visitor);
 }	

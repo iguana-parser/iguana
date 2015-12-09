@@ -208,11 +208,6 @@ public class EpsilonTransition extends AbstractTransition {
 		dest.execute(input, u, node, runtime.getEnvironment());
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-	
 	public static enum Type {
 		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL;
 	}

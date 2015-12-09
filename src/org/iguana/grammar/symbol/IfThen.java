@@ -28,6 +28,7 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.regex.Epsilon;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class IfThen extends AbstractSymbol {
@@ -56,13 +57,6 @@ public class IfThen extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "IfThen.builder(" + expression.getConstructorCode() + "," + thenPart.getConstructorCode() + ")" 
-								 + super.getConstructorCode()
-								 + ".build()";
-	}
-
-	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
@@ -82,7 +76,7 @@ public class IfThen extends AbstractSymbol {
 		return String.format("if (%s) { %s } else %s", 
 								expression.toString(), 
 								thenPart.toString(j), 
-								j - thenPart.size() <= 1? Epsilon.getInstance().toString(j - thenPart.size()) 
+								j - thenPart.size() <= 1? Epsilon.getInstance().toString(j - thenPart.size())
 														  : Epsilon.getInstance().toString());
 	}
 	

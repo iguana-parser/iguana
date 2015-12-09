@@ -36,7 +36,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -64,7 +65,7 @@ public class Test12 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
     static Rule r1 = Rule.withHead(A).addSymbols(A, A).build();
-    static Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
+    static Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
     static Rule r3 = Rule.withHead(A).build();
     static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
     static Nonterminal startSymbol = A;

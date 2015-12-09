@@ -30,8 +30,8 @@ package org.iguana.regex.automaton;
 import java.io.Serializable;
 
 import iguana.utils.collections.hash.MurmurHash3;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.EOF;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.EOF;
 
 public class Transition implements Comparable<Transition>, Serializable {
 	

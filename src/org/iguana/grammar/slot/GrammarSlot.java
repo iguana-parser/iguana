@@ -27,14 +27,9 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import iguana.parsetrees.slot.Slot;
 import iguana.utils.input.Input;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.util.generator.ConstructorCode;
 
 /**
  * A GrammarSlot is a position immediately before or after
@@ -48,7 +43,7 @@ import org.iguana.util.generator.ConstructorCode;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot extends ConstructorCode, Slot {
+public interface GrammarSlot extends Slot {
 
 	/**
 	 * Corresponds to a grammar position A ::= B . \alpha 

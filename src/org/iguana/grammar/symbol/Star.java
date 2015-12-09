@@ -27,80 +27,105 @@
 
 package org.iguana.grammar.symbol;
 
-import static org.iguana.util.CollectionsUtil.*;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Collections;
-import java.util.Set;
-
 import org.iguana.traversal.ISymbolVisitor;
 
-public class EOF extends AbstractRegularExpression {
-	
+import java.util.*;
+
+public class Star extends AbstractSymbol {
+
 	private static final long serialVersionUID = 1L;
 	
-	public static final int TOKEN_ID = 1;
+	private final Symbol s;
 	
-	public static int VALUE = -1;
+	private final List<Symbol> separators;
 	
-	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
+	public static Star from(Symbol s) {
+		return builder(s).build();
+	}
+
+	private Star(Builder builder) {
+		super(builder);
+		this.s = builder.s;
+		this.separators = Collections.unmodifiableList(builder.separators);
+	}
 	
-	private static EOF instance;
+	private static String getName(Symbol s) {
+		return s + "*";
+	}
 	
-	public static EOF getInstance() {
-		if(instance == null) {
-			instance = new EOF();
+	public List<Symbol> getSeparators() {
+		return separators;
+	}
+
+	@Override
+	public Builder copyBuilder() {
+		return new Builder(this);
+	}
+
+	public Symbol getSymbol() {
+		return s;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Star))
+			return false;
+		
+		Star other = (Star) obj;
+		return s.equals(other.s) && separators.equals(other.separators);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+    public static Builder builder(Symbol s) {
+		return new Builder(s);
+	}
+	
+	public static class Builder extends SymbolBuilder<Star> {
+
+		private Symbol s;
+		private List<Symbol> separators = new ArrayList<>();
+		
+		public Builder(Symbol s) {
+			super(getName(s));
+			this.s = s;
 		}
-		return instance;
+		
+		public Builder(Star star) {
+			super(star);
+			this.s = star.s;
+            this.addSeparators(star.getSeparators());
+		}
+		
+		public Builder addSeparator(Symbol symbol) {
+			separators.add(symbol);
+			return this;
+		}
+		
+		public Builder addSeparators(List<Symbol> symbols) {
+			separators.addAll(symbols);
+			return this;
+		}
+		
+		public Builder addSeparators(Symbol...symbols) {
+			separators.addAll(Arrays.asList(symbols));
+			return this;
+		}
+		
+		@Override
+		public Star build() {
+			return new Star(this);
+		}
 	}
-	
-	private EOF() {
-		super(new SymbolBuilder<EOF>("$") {
-			@Override
-			public EOF build() {
-				return EOF.getInstance();
-			}
-		});
-	}
-	
-	private Object readResolve()  {
-	    return instance;
-	}
-	
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-	    ois.defaultReadObject();
-	    instance = this;
-	}
-
-	@Override
-	public boolean isNullable() {
-		return false;
-	}
-	
-	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return firstSet;
-	}
-
-	@Override
-	public Set<CharacterRange> getNotFollowSet() {
-		return Collections.emptySet();
-	}
-
-	@Override
-	public String getConstructorCode() {
-		return "EOF.getInstance()";
-	}
-	
-    @Override
-    public SymbolBuilder<? extends Symbol> copyBuilder() {
-        throw new UnsupportedOperationException();
-    }
 
 	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-	
 }
