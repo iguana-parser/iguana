@@ -58,8 +58,6 @@ public interface GrammarSlot extends Slot {
 	
 	Iterable<Transition> getTransitions();
 
-	int getId();
-
     ParserRuntime getRuntime();
-	
+
 }

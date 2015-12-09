@@ -50,16 +50,16 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
     private final Map<Integer, TerminalNode> terminalNodes;
     private final String terminalName;
 
-	public TerminalGrammarSlot(int id, Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
-		super(id, runtime, Collections.emptyList());
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
+		super(runtime, Collections.emptyList());
 		this.terminal = terminal;
         this.matcher = factory.getMatcher(terminal.getRegex());
         this.terminalNodes = new HashMap<>();
         this.terminalName = terminalName;
     }
 
-    public TerminalGrammarSlot(int id, Terminal terminal, MatcherFactory factory, ParserRuntime runtime) {
-        this(id, terminal, factory, null, runtime);
+    public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime runtime) {
+        this(terminal, factory, null, runtime);
     }
 
 	public TerminalNode getTerminalNode(Input input, int i) {

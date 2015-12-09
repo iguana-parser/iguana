@@ -36,18 +36,15 @@ import java.util.List;
 
 public abstract class AbstractGrammarSlot implements GrammarSlot {
 
-	private final int id;
-	
 	protected final List<Transition> transitions;
 
     protected final ParserRuntime runtime;
 	
-	public AbstractGrammarSlot(int id, ParserRuntime runtime) {
-		this(id, runtime, Collections.emptyList());
+	public AbstractGrammarSlot(ParserRuntime runtime) {
+		this(runtime, Collections.emptyList());
 	}
 	
-	public AbstractGrammarSlot(int id, ParserRuntime runtime, List<Transition> transitions) {
-		this.id = id;
+	public AbstractGrammarSlot(ParserRuntime runtime, List<Transition> transitions) {
         this.runtime = runtime;
 		this.transitions = new ArrayList<>(transitions);
 	}
@@ -60,11 +57,6 @@ public abstract class AbstractGrammarSlot implements GrammarSlot {
 	@Override
 	public Iterable<Transition> getTransitions() {
 		return transitions;
-	}
-
-	@Override
-	public int getId() {
-		return id;
 	}
 
     @Override
