@@ -278,6 +278,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSl
             }
 
             @Override
+            public boolean layout() {
+                return position.getRule().getRuleType().layout();
+            }
+
+            @Override
             public String toString() {
                 return head() + " ::= " + body() + ", " + position();
             }

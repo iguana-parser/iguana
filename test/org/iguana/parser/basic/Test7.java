@@ -112,7 +112,7 @@ public class Test7 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 
 	@Test
@@ -149,9 +149,9 @@ public class Test7 {
 	}
 
     public static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
-        Tree t1 = createTerminal(1, 2, input);
-        Tree t2 = createTerminal(2, 3, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
+        Tree t1 = createTerminal(c, 1, 2, input);
+        Tree t2 = createTerminal(d, 2, 3, input);
         Tree t3 = createRule(r2, list(t0), input);
         Tree t4 = createRule(r3, list(t1), input);
         Tree t5 = createRule(r4, list(t2), input);

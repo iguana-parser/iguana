@@ -113,7 +113,7 @@ public class Test16 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 
     private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -156,22 +156,22 @@ public class Test16 {
     }
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(a, 0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
         Tree t2 = createEpsilon(1);
         Tree t3 = createRule(r5, list(t2), input);
         Tree t4 = createEpsilon(0);
         Tree t5 = createRule(r3, list(t4), input);
         Tree t6 = createRule(r4, list(t0), input);
-        Tree t7 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t5, t6))));
+        Tree t7 = createAmbiguity(list(createBranch(list(t5, t6)), createBranch(list(t1, t3))));
         Tree t8 = createRule(r7, list(t2), input);
         Tree t9 = createRule(r5, list(t4), input);
         Tree t10 = createRule(r6, list(t0), input);
-        Tree t11 = createAmbiguity(set(createBranch(list(t7, t8)), createBranch(list(t5, t9, t10))));
+        Tree t11 = createAmbiguity(list(createBranch(list(t5, t9, t10)), createBranch(list(t7, t8))));
         Tree t12 = createRule(r9, list(t2), input);
         Tree t13 = createRule(r7, list(t4), input);
         Tree t14 = createRule(r8, list(t0), input);
-        Tree t15 = createAmbiguity(set(createBranch(list(t5, t9, t13, t14)), createBranch(list(t11, t12))));
+        Tree t15 = createAmbiguity(list(createBranch(list(t5, t9, t13, t14)), createBranch(list(t11, t12))));
         Tree t16 = createRule(r1, list(t15), input);
         return t16;
     }

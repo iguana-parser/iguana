@@ -62,6 +62,7 @@ import static org.iguana.util.CollectionsUtil.*;
 public class Test13 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
+    static Terminal a = Terminal.from(Character.from('a'));
 
     private static Input input = Input.fromString("a");
 	
@@ -71,7 +72,7 @@ public class Test13 {
 
     static {
         Rule r1 = Rule.withHead(A).addSymbols(A).build();
-        Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
+        Rule r2 = Rule.withHead(A).addSymbol(a).build();
         grammar = Grammar.builder().addRule(r1).addRule(r2).build();
     }
 
@@ -93,8 +94,8 @@ public class Test13 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
-	}
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
+    }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
@@ -117,9 +118,9 @@ public class Test13 {
     }
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(a, 0, 1, input);
         Tree t1 = createCycle("A");
-        Tree t2 = createAmbiguity(set(createBranch(list(t0)), createBranch(list(t1))));
+        Tree t2 = createAmbiguity(list(createBranch(list(t0)), createBranch(list(t1))));
         return t2;
     }
 }

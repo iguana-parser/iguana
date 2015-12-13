@@ -72,7 +72,7 @@ public class Test5 {
     }
 
     public static Tree getTree1() {
-        Tree t0 = createTerminal(0, 1, input1);
+        Tree t0 = createTerminal(a, 0, 1, input1);
         Tree t1 = createRule(r2, list(t0), input1);
         Tree t2 = createGroup(list(t1));
         Tree t3 = createRule(r1, list(t2), input1);

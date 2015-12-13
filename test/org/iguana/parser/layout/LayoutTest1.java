@@ -29,8 +29,13 @@ package org.iguana.parser.layout;
 
 import static org.junit.Assert.assertTrue;
 
+import iguana.parsetrees.slot.NonterminalNodeType;
+import iguana.parsetrees.sppf.SPPFVisualization;
+import iguana.parsetrees.sppf.SPPFVisualization$;
+import iguana.parsetrees.tree.TreeVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -59,22 +64,25 @@ public class LayoutTest1 {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		
-		Nonterminal L = Nonterminal.withName("L");
+		Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout()).build();
 		
 		Rule r1 = Rule.withHead(S).addSymbols(A, B).setLayout(L).build();
 		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
 		Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
-		
+
 		Rule layout = Rule.withHead(L).addSymbol(Terminal.from(Character.from(' '))).build();
-		
-		return Grammar.builder().addRules(r1, r2, r3, layout).build();
+
+		return new LayoutWeaver().transform(Grammar.builder().addRules(r1, r2, r3, layout).build());
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b");
 		Grammar grammar = getGrammar();
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        System.out.println(grammar);
+        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-	}
+        SPPFVisualization.generateWithoutLayout(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf");
+        TreeVisualization.generateWithoutLayout(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree");
+    }
 }

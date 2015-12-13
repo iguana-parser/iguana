@@ -32,8 +32,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import iguana.parsetrees.slot.TerminalNodeType;
 import iguana.parsetrees.slot.TerminalSlot;
 import iguana.parsetrees.sppf.TerminalNode;
+import iguana.parsetrees.tree.TerminalType;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
@@ -99,13 +101,8 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
 		terminalNodes.clear();
 	}
 
-	@Override
-	public String terminalName() {
-		return terminalName;
-	}
-
     @Override
-    public int terminalNodeType() {
-        return 0;
+    public TerminalType terminalType() {
+        return terminal;
     }
 }

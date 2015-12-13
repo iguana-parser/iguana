@@ -111,7 +111,7 @@ public class Test5 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -135,7 +135,7 @@ public class Test5 {
 	}
 
     public static Tree getTree() {
-        iguana.parsetrees.tree.Terminal t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
         return createRule(r1, list(t1), input);
     }

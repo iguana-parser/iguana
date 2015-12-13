@@ -54,6 +54,7 @@ import iguana.utils.input.Input;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
 import static org.iguana.util.CollectionsUtil.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -95,7 +96,7 @@ public class Test15 {
         GrammarGraph graph = GrammarGraph.from(grammar, input);
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -121,9 +122,9 @@ public class Test15 {
  	}
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
-        Tree t2 = createTerminal(1, 2, input);
+        Tree t2 = createTerminal(a, 1, 2, input);
         Tree t3 = createRule(r1, list(t1, t2), input);
         return t3;
     }

@@ -64,6 +64,7 @@ import static org.junit.Assert.assertTrue;
  * B ::= 'b'
  * 
  * @author Ali Afroozeh
+ *
  */
 public class Test14 {
 
@@ -102,7 +103,7 @@ public class Test14 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -130,10 +131,10 @@ public class Test14 {
 	}
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
-        Tree t2 = createTerminal(1, 2, input);
-        Tree t3 = createTerminal(2, 3, input);
+        Tree t2 = createTerminal(a, 1, 2, input);
+        Tree t3 = createTerminal(c, 2, 3, input);
         Tree t4 = createRule(r1, list(t1, t2, t3), input);
         return t4;
     }

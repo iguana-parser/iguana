@@ -38,6 +38,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
+import iguana.parsetrees.slot.NonterminalNodeType;
+import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.tree.RuleType;
 import iguana.utils.collections.hash.MurmurHash3;
 
@@ -350,6 +352,11 @@ public class Rule implements Serializable, RuleType {
         return size();
     }
 
+    @Override
+    public boolean layout() {
+        return head.getNodeType() == NonterminalNodeType.Layout();
+    }
+
     public static class Builder {
 
         private Nonterminal head;
@@ -447,6 +454,7 @@ public class Rule implements Serializable, RuleType {
         }
 
         public Builder setLayout(Nonterminal layout) {
+            this.layoutStrategy = LayoutStrategy.FIXED;
             this.layout = layout;
             return this;
         }
