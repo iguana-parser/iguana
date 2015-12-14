@@ -36,10 +36,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.regex.*;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,26 +59,34 @@ public class GrammarBuilder implements TermTraversal.Actions {
             List<org.iguana.grammar.symbol.Rule> rules = new ArrayList<>();
             PrecedenceLevel level = PrecedenceLevel.getFirst();
             Nonterminal head = Nonterminal.withName(name.id);
-            body.forEach(group -> { // TODO: integrate precedence logic
-                group.alternates.forEach(alternate -> {
-                    AssociativityGroup assocGroup = new AssociativityGroup(null, level);
+            ListIterator<Alternates> altsIt = body.listIterator(body.size());
+            while (altsIt.hasPrevious()) {
+                Alternates group = altsIt.previous();
+                ListIterator<Alternate> altIt = group.alternates.listIterator(group.alternates.size());
+                while (altIt.hasPrevious()) {
+                    Alternate alternate = altIt.previous();
                     if (alternate.rest != null) { // Associativity group
+                        AssociativityGroup assocGroup = new AssociativityGroup(getAssociativity(alternate.associativity), level);
                         List<Sequence> sequences = new ArrayList<>(Arrays.asList(alternate.first));
                         sequences.addAll(alternate.rest);
-                        sequences.forEach(sequence -> {
+                        ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
+                        while (seqIt.hasPrevious()) {
+                            Sequence sequence = seqIt.previous();
                             List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
                             symbols.add(sequence.first);
                             if (sequence.rest != null)
                                 addAll(symbols, sequence.rest);
                             symbols.addAll(sequence.ret);
                             List<Attribute> attributes = new ArrayList<>(Arrays.asList(alternate.associativity));
-                            attributes.addAll(alternate.first.attributes);
-                            org.iguana.grammar.symbol.Rule rule = getRule(head, symbols, attributes);
+                            if (sequence.attributes != null)
+                                attributes.addAll(sequence.attributes);
+                            else
+                                attributes.addAll(sequence.label);
+                            org.iguana.grammar.symbol.Rule rule = getRule(head, symbols, attributes, tag);
                             int precedence = assocGroup.getPrecedence(rule);
-                            if (precedence != -1)
-                                rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                            rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                             rules.add(rule);
-                        });
+                        }
                         assocGroup.done();
                         level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                     } else {
@@ -90,19 +95,22 @@ public class GrammarBuilder implements TermTraversal.Actions {
                         if (alternate.first.rest != null)
                             addAll(symbols, alternate.first.rest);
                         symbols.addAll(alternate.first.ret);
-                        org.iguana.grammar.symbol.Rule rule = getRule(head, symbols, alternate.first.attributes);
+                        org.iguana.grammar.symbol.Rule rule = getRule(head, symbols,
+                                alternate.first.attributes != null? alternate.first.attributes : alternate.first.label,
+                                tag);
                         int precedence = level.getPrecedence(rule);
-                        if (precedence != -1)
-                            rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
                     }
-                });
-                level.getNext();
-            });
+                }
+                level.setUndefinedIfNeeded();
+                level = level.getNext();
+            }
+            level.done();
             return rules;
 		}
 
-        private static org.iguana.grammar.symbol.Rule getRule(Nonterminal head, List<org.iguana.grammar.symbol.Symbol> symbols, List<Attribute> attributes) {
+        private static org.iguana.grammar.symbol.Rule getRule(Nonterminal head, List<org.iguana.grammar.symbol.Symbol> symbols, List<Attribute> attributes, List<String> tag) {
             // TODO: The first and the last symbol should be visited!
             boolean isLeft = symbols.isEmpty()? false : symbols.get(0).getName().equals(head.getName());
             boolean isRight = symbols.isEmpty()? false : symbols.get(symbols.size() - 1).getName().equals(head.getName());
@@ -111,12 +119,20 @@ public class GrammarBuilder implements TermTraversal.Actions {
             String label = null;
             for (Attribute attr : attributes) {
                 switch (attr.attribute) {
-                    case "left": if (associativity == null) associativity = Associativity.LEFT; break;
-                    case "right": if (associativity == null) associativity = Associativity.RIGHT; break;
-                    case "non-assoc": if (associativity == null) associativity = Associativity.NON_ASSOC; break;
-                    default: if (label == null) label = attr.attribute;
+                    case "left":
+                        if (associativity == null) associativity = Associativity.LEFT;
+                        break;
+                    case "right":
+                        if (associativity == null) associativity = Associativity.RIGHT;
+                        break;
+                    case "non-assoc":
+                        if (associativity == null) associativity = Associativity.NON_ASSOC;
+                        break;
+                    default:
+                        if (label == null) label = attr.attribute;
                 }
             }
+
             if (associativity == null)
                 associativity = Associativity.UNDEFINED;
 
@@ -132,11 +148,14 @@ public class GrammarBuilder implements TermTraversal.Actions {
             if (recursion == Recursion.NON_REC)
                 associativity = Associativity.UNDEFINED;
 
-            return org.iguana.grammar.symbol.Rule.withHead(head)
-                    .addSymbols(symbols)
-                    .setRecursion(recursion)
-                    .setAssociativity(associativity)
-                    .build();
+            org.iguana.grammar.symbol.Rule.Builder builder = org.iguana.grammar.symbol.Rule.withHead(head)
+                                                             .addSymbols(symbols)
+                                                             .setRecursion(recursion)
+                                                             .setAssociativity(associativity);
+            if (!tag.isEmpty())
+                builder.addAttribute(tag.get(0), true);
+
+            return builder.build();
         }
 
         private static Associativity getAssociativity(Attribute attribute) {
@@ -353,10 +372,10 @@ public class GrammarBuilder implements TermTraversal.Actions {
             return Nonterminal.withName(name.id);
         }
         public static org.iguana.grammar.symbol.Symbol string(String s) {
-            return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
+            return Terminal.from(org.iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray())));
         }
         public static org.iguana.grammar.symbol.Symbol character(String s) {
-            return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
+            return Terminal.from(org.iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray())));
         }
     }
 
@@ -468,11 +487,37 @@ public class GrammarBuilder implements TermTraversal.Actions {
         // public static RegularExpression nont(Identifier name) { return Nonterminal.withName(name.id); }
         public static RegularExpression charclass(RegularExpression regex) { return regex; }
         public static RegularExpression string(String s) {
-            return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
+            return org.iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray()));
         }
         public static RegularExpression character(String s) {
-            return org.iguana.regex.Sequence.from(s.substring(1,s.length() - 1).chars().toArray());
+            return org.iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray()));
         }
+    }
+
+    private static int[] getChars(int[] chars) {
+        int i = 0;
+        int j = 0;
+        while (i < chars.length) {
+            if (chars[i] == '\\') {
+                if (i != chars.length) {
+                    switch (chars[i + 1]) {
+                        case  'n': chars[j++] = '\n'; break;
+                        case  'r': chars[j++] = '\r'; break;
+                        case  't': chars[j++] = '\t'; break;
+                        case  'f': chars[j++] = '\f'; break;
+                        case  ' ': chars[j++] = ' ';  break;
+                        case '\\': chars[j++] = '\\'; break;
+                        case '\'': chars[j++] = '\''; break;
+                        case  '"': chars[j++] = '"';  break;
+                    }
+                    i += 2;
+                } else
+                    chars[j++] = chars[i++];
+            } else {
+                chars[j++] = chars[i++];
+            }
+        }
+        return Arrays.copyOf(chars, j);
     }
 
     public static Regex regex() { return new Regex(); }
@@ -498,10 +543,23 @@ public class GrammarBuilder implements TermTraversal.Actions {
 
     public static class Range {
         public static CharacterRange range(String from, String delimiter, String to) {
-            return CharacterRange.in(from.charAt(0), to.charAt(0));
+            return CharacterRange.in(getChar(from), getChar(to));
         }
         public static CharacterRange character(String s) {
-            return CharacterRange.from(s.charAt(0));
+            return CharacterRange.from(getChar(s));
+        }
+
+        private static int getChar(String s) {
+            switch (s) {
+                case "\\n": return '\n';
+                case "\\r": return '\r';
+                case "\\t": return '\t';
+                case "\\f": return '\f';
+                case "\\'": return '\'';
+                case "\\\"": return '\"';
+                case "\\ ": return ' ';
+            }
+            return s.charAt(0);
         }
     }
 

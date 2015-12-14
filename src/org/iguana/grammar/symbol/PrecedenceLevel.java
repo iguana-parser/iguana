@@ -193,7 +193,6 @@ public class PrecedenceLevel implements Serializable {
 	}
 	
 	public void done() {
-		assert rhs != -1;
 		rhs = index == lhs? index : index - 1;
 	}
 	
