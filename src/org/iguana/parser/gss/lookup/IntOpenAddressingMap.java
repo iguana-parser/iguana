@@ -1,9 +1,9 @@
 package org.iguana.parser.gss.lookup;
 
+import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.CollectionsUtil;
 import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.OpenAddressingIntHashMap;
 

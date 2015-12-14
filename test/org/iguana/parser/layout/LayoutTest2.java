@@ -29,8 +29,10 @@ package org.iguana.parser.layout;
 
 import static org.junit.Assert.assertTrue;
 
+import iguana.parsetrees.slot.NonterminalNodeType;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -64,7 +66,7 @@ public class LayoutTest2 {
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		
-		Nonterminal L = Nonterminal.withName("L");
+		Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout()).build();
 		
 		Rule r1 = Rule.withHead(S).addSymbols(A, B, C).setLayout(L).build();
 		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
@@ -73,8 +75,10 @@ public class LayoutTest2 {
 		
 		Rule layout1 = Rule.withHead(L).addSymbol(Terminal.from(Character.from(' '))).build();
 		Rule layout2 = Rule.withHead(L).build();
-		
-		return Grammar.builder().addRules(r1, r2, r3, r4, layout1, layout2).build();
+
+        Grammar grammar = Grammar.builder().addRules(r1, r2, r3, r4, layout1, layout2).build();
+
+        return new LayoutWeaver().transform(grammar);
 	}
 	
 	@Test

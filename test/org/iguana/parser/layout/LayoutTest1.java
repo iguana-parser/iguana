@@ -30,9 +30,6 @@ package org.iguana.parser.layout;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.parsetrees.sppf.SPPFVisualization;
-import iguana.parsetrees.sppf.SPPFVisualization$;
-import iguana.parsetrees.tree.TreeVisualization;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.LayoutWeaver;
@@ -79,10 +76,7 @@ public class LayoutTest1 {
 	public void test() {
 		Input input = Input.fromString("a b");
 		Grammar grammar = getGrammar();
-        System.out.println(grammar);
         ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-        SPPFVisualization.generateWithoutLayout(result.asParseSuccess().getSPPFNode(), "/Users/afroozeh/output", "sppf");
-        TreeVisualization.generateWithoutLayout(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree");
     }
 }

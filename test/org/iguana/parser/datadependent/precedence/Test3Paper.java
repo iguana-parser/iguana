@@ -28,7 +28,7 @@
 package org.iguana.parser.datadependent.precedence;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.set;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;

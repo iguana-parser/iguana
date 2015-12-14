@@ -27,7 +27,7 @@
 
 package org.iguana.parser;
 
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 
 import org.iguana.grammar.Grammar;

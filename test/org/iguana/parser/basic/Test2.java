@@ -46,11 +46,9 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
-
+import static iguana.utils.collections.CollectionsUtil.*;
 
 /**
  * 

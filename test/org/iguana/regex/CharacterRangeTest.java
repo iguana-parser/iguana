@@ -28,9 +28,7 @@
 package org.iguana.regex;
 
 import static org.iguana.util.CharacterRanges.toNonOverlapping;
-import static org.iguana.util.CollectionsUtil.list;
-import static org.iguana.util.CollectionsUtil.map;
-import static org.iguana.util.CollectionsUtil.tuple;
+import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

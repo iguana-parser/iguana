@@ -28,7 +28,7 @@
 package org.iguana.parser.datadependent.offside;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.set;
 
 import java.util.Arrays;
 

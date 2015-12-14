@@ -27,7 +27,7 @@
 
 package org.iguana.regex;
 
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 import java.lang.*;
 import java.util.Collections;

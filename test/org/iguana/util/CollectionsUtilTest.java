@@ -32,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import iguana.utils.collections.CollectionsUtil;
 import org.junit.Test;
 
 public class CollectionsUtilTest {

@@ -49,8 +49,7 @@ import org.junit.Test;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.createRule;
 import static iguana.parsetrees.tree.TreeFactory.createTerminal;
-import static org.iguana.util.CollectionsUtil.list;
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 

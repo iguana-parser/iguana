@@ -1,7 +1,7 @@
 package org.iguana.parser.datadependent.precedence.indirect;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-import static org.iguana.util.CollectionsUtil.list;
+import static iguana.utils.collections.CollectionsUtil.list;
 
 import java.util.Arrays;
 import java.util.HashSet;

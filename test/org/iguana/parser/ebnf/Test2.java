@@ -23,7 +23,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
+
 /**
  * S ::= A*
  * A ::= 'a'

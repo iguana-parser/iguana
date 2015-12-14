@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 
+import iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.patterns.ExceptPattern;
@@ -49,7 +50,6 @@ import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
-import org.iguana.util.CollectionsUtil;
 
 
 /**

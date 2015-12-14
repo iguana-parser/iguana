@@ -30,10 +30,10 @@ package org.iguana.parser.gss.lookup;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.CollectionsUtil;
 
 public class ArrayNodeLookup extends AbstractNodeLookup {
 

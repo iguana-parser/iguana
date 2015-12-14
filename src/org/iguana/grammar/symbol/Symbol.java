@@ -30,10 +30,10 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.Set;
 
+import iguana.utils.collections.CollectionsUtil;
 import org.iguana.datadependent.attrs.Attr;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.CollectionsUtil;
 
 /**
  * 
