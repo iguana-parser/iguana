@@ -900,6 +900,10 @@ public class AST {
 	static public Expression yield(String label) {
 		return new Expression.Yield(label);
 	}
+
+    static public Expression yield(String label, int i) {
+        return new Expression.Yield(label, i);
+    }
 	
 	static public Expression val(String label) {
 		return new Expression.Val(label);

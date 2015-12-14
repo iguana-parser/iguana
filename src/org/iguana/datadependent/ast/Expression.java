@@ -1127,10 +1127,15 @@ public abstract class Expression extends AbstractAST {
 		static public java.lang.String format = "%s.yield";
 		
 		private final java.lang.String label;
+        private final int i;
 		
 		Yield(java.lang.String label) {
-			this.label = label;
+			this(label, -1);
 		}
+        Yield(java.lang.String label, int i) {
+            this.label = label;
+            this.i = i;
+        }
 		
 		public java.lang.String getLabel() {
 			return label;
@@ -1138,7 +1143,7 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public Object interpret(IEvaluatorContext ctx) {
-			Object value = ctx.lookupVariable(label);
+			Object value = i == -1? ctx.lookupVariable(label) : ctx.lookupVariable(i);
 			if (value == null) {
 				throw new UndeclaredVariableException(label);
 			}
@@ -1153,18 +1158,17 @@ public abstract class Expression extends AbstractAST {
 		
 		@Override
 		public java.lang.String getConstructorCode() {
-			return "AST.yield(" + "\"" + label + "\"" + ")";
+			return "AST.yield(" + "\"" + label + "\"" + (i == -1? "" : "," + i) + ")";
 		}
 		
 		@Override
 		public java.lang.String toString() {
-			return java.lang.String.format("%s.yield", label);
+			return i == -1? java.lang.String.format("%s.yield", label) : java.lang.String.format("%s:%d.yield", label, i);
 		}
 
 		@Override
 		public <T> T accept(IAbstractASTVisitor<T> visitor) {
-			// return visitor.visit(this);
-			return null;
+			return visitor.visit(this);
 		}
 	}
 	

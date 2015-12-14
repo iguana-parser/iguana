@@ -494,7 +494,13 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
 	@Override
 	public AbstractAST visit(Yield expression) {
-		throw new RuntimeException("Unsupported yet expression: " + expression);
+        java.lang.String label = expression.getLabel();
+        java.lang.Integer i = current.get(label);
+
+        if (i == null)
+            throw new UndeclaredVariableException(label);
+
+        return AST.yield(label, i);
 	}
 
 	@Override
