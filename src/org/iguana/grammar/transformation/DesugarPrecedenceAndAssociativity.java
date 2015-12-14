@@ -1497,7 +1497,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									if (this.larity == 2)
 										ret = tuple(integer(prec), integer(0));
 									else
-										integer(prec);
+										ret = integer(prec);
 								}
 							}
 							
@@ -1544,7 +1544,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 												if (this.larity == 2)
 													ret = tuple(integer(newprec), integer(0));
 												else
-													integer(newprec);
+													ret = integer(newprec);
 											}
 										}
 										
@@ -1597,7 +1597,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 												if (this.larity == 2)
 													ret = tuple(integer(newprec), integer(0));
 												else
-													integer(newprec);
+													ret = integer(newprec);
 											}
 										}
 									}
