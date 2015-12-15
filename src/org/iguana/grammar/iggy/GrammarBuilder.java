@@ -59,6 +59,8 @@ public class GrammarBuilder implements TermTraversal.Actions {
             List<org.iguana.grammar.symbol.Rule> rules = new ArrayList<>();
             PrecedenceLevel level = PrecedenceLevel.getFirst();
             Nonterminal head = Nonterminal.withName(name.id);
+            if (!parameters.isEmpty())
+                head = head.copyBuilder().addParameters(parameters.stream().map(p -> p.id).toArray(String[]::new)).build();
             ListIterator<Alternates> altsIt = body.listIterator(body.size());
             while (altsIt.hasPrevious()) {
                 Alternates group = altsIt.previous();
