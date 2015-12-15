@@ -158,18 +158,18 @@ public class Test12 {
         Tree t0 = createTerminal(a, 0, 1, input1);
         Tree t1 = createCycle("A");
         Tree t2 = createEpsilon(0);
-        Tree t3 = createAmbiguity(list(createBranch(list(t2)), createBranch(list(t1, t1))));
+        Tree t3 = createAmbiguity(list(list(t2), list(t1, t1)));
         Tree t4 = createEpsilon(1);
-        Tree t5 = createAmbiguity(list(createBranch(list(t4)), createBranch(list(t1, t1))));
-        Tree t6 = createAmbiguity(list(createBranch(list(t1, t5)), createBranch(list(t3, t1))));
-        Tree t7 = createAmbiguity(list(createBranch(list(t0)), createBranch(list(t6))));
+        Tree t5 = createAmbiguity(list(list(t4), list(t1, t1)));
+        Tree t6 = createAmbiguity(list(list(t1, t5), list(t3, t1)));
+        Tree t7 = createAmbiguity(list(list(t0), list(t6)));
         return t7;
     }
 
     private static Tree getTree2() {
         Tree t0 = createCycle("A");
         Tree t1 = createEpsilon(0);
-        Tree t2 = createAmbiguity(list(createBranch(list(t1)), createBranch(list(t0, t0))));
+        Tree t2 = createAmbiguity(list(list(t1), list(t0, t0)));
         return t2;
     }
 

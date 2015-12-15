@@ -34,7 +34,6 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Branch;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -142,9 +141,7 @@ public class Test10 {
         Tree t2 = createRule(r4, list(createTerminal(b, 1, 2, input)), input); // B(b)
         Tree t3 = createRule(r5, list(createTerminal(c, 2, 3, input)), input); // C(c)
         Tree t4 = createRule(r6, list(createTerminal(c, 2, 3, input)), input); // D(c)
-        Branch<Tree> b1 = createBranch(r1, list(t1, t2, t3));
-        Branch<Tree> b2 = createBranch(r2, list(t1, t2, t4));
-        return createAmbiguity(list(b2, b1));
+        return createAmbiguity(list(list(t1, t2, t4), list(t1, t2, t3)));
     }
 }
 	

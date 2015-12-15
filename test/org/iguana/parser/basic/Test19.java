@@ -152,7 +152,7 @@ public class Test19 {
         Tree t7 = createRule(r3, list(t6), input2);
         Tree t8 = createRule(r1, list(t4, t5, t7), input2);
         Tree t9 = createRule(r2, list(t1, t2, t4), input2);
-        Tree t10 = createAmbiguity(list(createBranch(list(t1, t2, t8)), createBranch(list(t9, t5, t7))));
+        Tree t10 = createAmbiguity(list(list(t1, t2, t8), list(t9, t5, t7)));
         return t10;
     }
 
@@ -247,21 +247,21 @@ public class Test19 {
         Tree t10 = createTerminal(a, 6, 7, input3);
         Tree t11 = createRule(r3, list(t10), input3);
         Tree t12 = createRule(r2, list(t7, t9, t11), input3);
-        Tree t13 = createAmbiguity(list(createBranch(list(t8, t9, t11)), createBranch(list(t4, t5, t12))));
+        Tree t13 = createAmbiguity(list(list(t8, t9, t11), list(t4, t5, t12)));
         Tree t14 = createTerminal(star, 7, 8, input3);
         Tree t15 = createTerminal(a, 8, 9, input3);
         Tree t16 = createRule(r3, list(t15), input3);
         Tree t17 = createRule(r1, list(t11, t14, t16), input3);
-        Tree t18 = createAmbiguity(list(createBranch(list(t7, t9, t17)), createBranch(list(t12, t14, t16))));
-        Tree t19 = createAmbiguity(list(createBranch(list(t13, t14, t16)), createBranch(list(t4, t5, t18))));
-        Tree t20 = createAmbiguity(list(createBranch(list(t19)), createBranch(list(t8, t9, t17))));
+        Tree t18 = createAmbiguity(list(list(t7, t9, t17), list(t12, t14, t16)));
+        Tree t19 = createAmbiguity(list(list(t13, t14, t16), list(t4, t5, t18)));
+        Tree t20 = createAmbiguity(list(list(t19), list(t8, t9, t17)));
         Tree t21 = createRule(r2, list(t1, t2, t4), input3);
-        Tree t22 = createAmbiguity(list(createBranch(list(t1, t2, t8)), createBranch(list(t21, t5, t7))));
-        Tree t23 = createAmbiguity(list(createBranch(list(t1, t2, t20)), createBranch(list(t22, t9, t17))));
-        Tree t24 = createAmbiguity(list(createBranch(list(t1, t2, t13)), createBranch(list(t22, t9, t11))));
-        Tree t25 = createAmbiguity(list(createBranch(list(t24)), createBranch(list(t21, t5, t12))));
-        Tree t26 = createAmbiguity(list(createBranch(list(t25, t14, t16)), createBranch(list(t21, t5, t18))));
-        Tree t27 = createAmbiguity(list(createBranch(list(t23)), createBranch(list(t26))));
+        Tree t22 = createAmbiguity(list(list(t1, t2, t8), list(t21, t5, t7)));
+        Tree t23 = createAmbiguity(list(list(t1, t2, t20), list(t22, t9, t17)));
+        Tree t24 = createAmbiguity(list(list(t1, t2, t13), list(t22, t9, t11)));
+        Tree t25 = createAmbiguity(list(list(t24), list(t21, t5, t12)));
+        Tree t26 = createAmbiguity(list(list(t25, t14, t16), list(t21, t5, t18)));
+        Tree t27 = createAmbiguity(list(list(t23), list(t26)));
         return t27;
     }
 
