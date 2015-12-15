@@ -37,7 +37,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.precedence.OperatorPrecedence;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -66,8 +67,8 @@ public class PrecedenceTest3 {
 	
 	private Nonterminal E = Nonterminal.withName("E");
 	private Nonterminal EPlus = new Nonterminal.Builder("E+").setEbnfList(true).build();
-	private Character a = Character.from('a');
-	private Character plus = Character.from('+');
+	private Terminal a = Terminal.from(Character.from('a'));
+	private Terminal plus = Terminal.from(Character.from('+'));
 
 	private Grammar grammar;
 	
@@ -149,9 +150,9 @@ public class PrecedenceTest3 {
 				//E ::= E1 E+1 
 				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Nonterminal.builder("E+").setIndex(1).setEbnfList(true).build()).build())
 				//E ::= E + E2 
-				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Character.from(43)).addSymbol(Nonterminal.builder("E").setIndex(2).build()).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.from(Character.from(43))).addSymbol(Nonterminal.builder("E").setIndex(2).build()).build())
 				//E ::= a 
-				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Character.from(97)).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.from(Character.from(97))).build())
 				//E+2 ::= E+ E3 
 				.addRule(Rule.withHead(Nonterminal.builder("E+").setIndex(2).setEbnfList(true).build()).addSymbol(Nonterminal.builder("E+").setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
 				//E+2 ::= E3 
@@ -161,13 +162,13 @@ public class PrecedenceTest3 {
 				//E+1 ::= E3 
 				.addRule(Rule.withHead(Nonterminal.builder("E+").setIndex(1).setEbnfList(true).build()).addSymbol(Nonterminal.builder("E").setIndex(3).build()).build())
 				//E1 ::= a 
-				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Character.from(97)).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Terminal.from(Character.from(97))).build())
 				//E2 ::= E1 E+2 
 				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Nonterminal.builder("E").setIndex(1).build()).addSymbol(Nonterminal.builder("E+").setIndex(2).setEbnfList(true).build()).build())
 				//E2 ::= a 
-				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Character.from(97)).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(2).build()).addSymbol(Terminal.from(Character.from(97))).build())
 				//E3 ::= a 
-				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Character.from(97)).build())
+				.addRule(Rule.withHead(Nonterminal.builder("E").setIndex(3).build()).addSymbol(Terminal.from(Character.from(97))).build())
 				.build();
 	}
 	

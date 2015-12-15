@@ -38,10 +38,13 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.util.generator.GeneratorUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GrammarGraphToDot {
 
 	public static String toDot(GrammarGraph g) {
-		
+		ids.clear();
 		final StringBuilder sb = new StringBuilder();
 		
 		for (NonterminalGrammarSlot nonterminal : g.getNonterminals()) {
@@ -52,35 +55,42 @@ public class GrammarGraphToDot {
 	}
 	
 	private static void toDot(NonterminalGrammarSlot slot, StringBuilder sb) {
-		sb.append("\"" + slot.getId() + "\"" + String.format(NONTERMINAL_SLOT, 
+		sb.append("\"" + getId(slot) + "\"" + String.format(NONTERMINAL_SLOT,
 				escape(slot.getNonterminal().getParameters() != null? 
 						String.format("%s(%s)", slot.getNonterminal().getName(), GeneratorUtil.listToString(slot.getNonterminal().getParameters(), ",")) 
 						: slot.getNonterminal().getName())) + "\n");
 		
-		slot.getFirstSlots().forEach(s -> sb.append(EPSILON_TRANSITION + "\"" + slot.getId() + "\"" + "->" + "{\"" + s.getId() + "\"}" + "\n"));
+		slot.getFirstSlots().forEach(s -> sb.append(EPSILON_TRANSITION + "\"" + getId(slot) + "\"" + "->" + "{\"" + getId(s) + "\"}" + "\n"));
 		slot.getFirstSlots().forEach(s -> toDot(s, sb));
 	}
 	
 	private static void toDot(GrammarSlot slot, StringBuilder sb) {
 		if (slot instanceof EndGrammarSlot) {
-			sb.append("\"" + slot.getId() + "\"" + String.format(END_SLOT, "") + "\n");
+			sb.append("\"" + getId(slot) + "\"" + String.format(END_SLOT, "") + "\n");
 		} else {
-			sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
+			sb.append("\"" + getId(slot) + "\"" + BODY_SLOT + "\n");
 		}
 		
 		// TODO: improve this code
 		slot.getTransitions().forEach(t -> { 
 			if(t instanceof ConditionalTransition) {
-				sb.append(String.format(TRANSITION, t.getLabel() + ", true") + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n");
+				sb.append(String.format(TRANSITION, t.getLabel() + ", true") + "\"" + getId(slot) + "\"" + "->" + "{\"" + getId(t.destination()) + "\"}" + "\n");
 				
 				BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
 				
 				if (ifFalse != null)
-					sb.append(String.format(TRANSITION, t.getLabel() + ", false") + "\"" + slot.getId() + "\"" + "->" + "{\"" + ifFalse.getId() + "\"}" + "\n");
+					sb.append(String.format(TRANSITION, t.getLabel() + ", false") + "\"" + getId(slot) + "\"" + "->" + "{\"" + getId(ifFalse) + "\"}" + "\n");
 			}
-			else sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"); 
+			else sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + getId(slot) + "\"" + "->" + "{\"" + getId(t.destination()) + "\"}" + "\n");
 		});
 		slot.getTransitions().forEach(t -> toDot(t.destination(), sb));
 	}
+
+
+    private static Map<GrammarSlot, Integer> ids = new HashMap<>();
+
+    private static int getId(GrammarSlot slot) {
+        return ids.computeIfAbsent(slot, k -> ids.size() + 1);
+    }
 	
 }

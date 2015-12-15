@@ -48,7 +48,7 @@ import org.iguana.parser.descriptor.Descriptor;
  */
 public class GSSNode {
 	
-	private final NonterminalGrammarSlot slot;
+	protected final NonterminalGrammarSlot slot;
 
 	private final int inputIndex;
 	
@@ -141,7 +141,7 @@ public class GSSNode {
 	}
 
 	public int hashCode() {
-		return MurmurHash3.f2().apply(slot.getId(), inputIndex);
+		return MurmurHash3.f2().apply(slot.hashCode(), inputIndex);
 	}
 	
 	public String toString() {

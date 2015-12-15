@@ -31,14 +31,15 @@ import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Alt;
-import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Before;
@@ -61,14 +62,14 @@ public class KeywordExclusionTest {
 	@Before
 	public void init() {
 		Nonterminal Id = Nonterminal.withName("Id");
-		CharacterRange az = CharacterRange.in('a', 'z');
+		Terminal az = Terminal.from(CharacterRange.in('a', 'z'));
 		
 		Sequence<Character> iff = Sequence.from("if");
 		Sequence<Character> when = Sequence.from("when");
 		Sequence<Character> doo = Sequence.from("do");
 		Sequence<Character> whilee = Sequence.from("while");
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);
-		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az)).addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
+		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(CharacterRange.in('a', 'z'))).addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
 		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		grammar = Grammar.builder().addRule(r1).build();

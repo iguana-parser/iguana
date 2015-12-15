@@ -27,7 +27,6 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -41,7 +40,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -53,7 +53,7 @@ import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 import iguana.utils.input.Input;
 
@@ -70,9 +70,9 @@ public class Test9 {
 	
 	static Nonterminal S = Nonterminal.withName("S");
 	static Nonterminal A = Nonterminal.withName("A");
-	static Character a = Character.from('a');
-	static Character b = Character.from('b');
-	static Character c = Character.from('c');
+	static Terminal a = Terminal.from(Character.from('a'));
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
 
     static Rule r1 = Rule.withHead(S).addSymbols(a, A, c).build();
     static Rule r2 = Rule.withHead(S).addSymbols(a, A, b).build();
@@ -111,7 +111,7 @@ public class Test9 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
 	}
 
 	private static ParseSuccess getParseResult0(GrammarGraph graph) {
@@ -152,8 +152,8 @@ public class Test9 {
 	}
 
     public static RuleNode getTree() {
-        Tree t1 = createRule(r3, list(createTerminal(1, 2, input)), input);
-        return createRule(r2, list(createTerminal(0, 1, input), t1, createTerminal(2, 3, input)), input);
+        Tree t1 = createRule(r3, list(createTerminal(a, 1, 2, input)), input);
+        return createRule(r2, list(createTerminal(a, 0, 1, input), t1, createTerminal(b, 2, 3, input)), input);
     }
 }
 	

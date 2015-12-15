@@ -47,16 +47,16 @@ public class EndGrammarSlot extends BodyGrammarSlot implements PackedNodeSlot {
 	protected final Action action;
 	protected final RuleType ruleType;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label,
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
 			              String variable, Set<String> state, Conditions conditions, Action action,
                           RuleType ruleType, ParserRuntime runtime) {
-		this(id, position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType, runtime);
+		this(position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType, runtime);
 	}
 	
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, int i1, 
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
             			  String variable, int i2, Set<String> state, Conditions conditions,
                           Action action, RuleType ruleType, ParserRuntime runtime) {
-		super(id, position, label, i1, variable, i2, state, conditions, runtime);
+		super(position, label, i1, variable, i2, state, conditions, runtime);
 		this.nonterminal = nonterminal;
 		this.action = action;
         this.ruleType = ruleType;
@@ -75,11 +75,6 @@ public class EndGrammarSlot extends BodyGrammarSlot implements PackedNodeSlot {
 	@Override
 	public boolean isEnd() {
 		return true;
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return null;
 	}
 	
 	public Object getObject() {

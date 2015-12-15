@@ -169,33 +169,6 @@ public class Nonterminal extends AbstractSymbol {
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
-	@Override
-	public String getConstructorCode() {	
-		
-		String excepts = "";
-		if (this.excepts != null)
-			excepts = GeneratorUtil.listToString(this.excepts.stream().map(l -> ".addExcept(\"" + l + "\")").collect(Collectors.toSet()));
-		
-		String attributes = "";
-		if (attributes != null && !attributes.isEmpty())
-			attributes = GeneratorUtil.listToString(this.attributes.entrySet().stream()
-					.map(entry -> ".addAttribute(\"" + entry.getKey() + "\"," 
-			                                         + (entry.getValue() instanceof String? "\"" + entry.getValue() + "\"": entry.getValue()) + ")")
-			        .collect(Collectors.toSet()));
-		
-		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
-				+ (parameters != null? ".addParameters(" 
-						+ GeneratorUtil.listToString(Arrays.asList(parameters).stream().map(param -> "\"" + param + "\"").collect(Collectors.toList()), ",") + ")" : "")
-				+ (arguments != null? ".apply(" 
-						+ GeneratorUtil.listToString(Arrays.asList(arguments).stream().map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",") + ")" : "")
-				+ super.getConstructorCode() 
-				+ (index > 0 ?  ".setIndex(" + index + ")" : "")
-				+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
-				+ excepts
-				+ attributes
-				+ ".build()";
-	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
 

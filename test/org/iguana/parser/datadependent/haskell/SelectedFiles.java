@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent.haskell;
 
-import static org.iguana.util.CollectionsUtil.immutableSet;
+import static iguana.utils.collections.CollectionsUtil.immutableSet;
 
 import java.util.Set;
 

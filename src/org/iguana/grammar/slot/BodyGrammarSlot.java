@@ -74,12 +74,12 @@ public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSl
 	
 	private FollowTest followTest;
 	
-	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
-		this(id, position, label, -1, variable, -1, state, conditions, runtime);
+	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
+		this(position, label, -1, variable, -1, state, conditions, runtime);
 	}
 	
-	public BodyGrammarSlot(int id, Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, ParserRuntime runtime) {
-		super(id, runtime);
+	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, ParserRuntime runtime) {
+		super(runtime);
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
@@ -88,13 +88,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSl
 		this.i2 = i2;
 		this.state = state;
 		this.intermediateNodes = new HashMap<>();
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-    	  .append("new BodyGrammarSlot(")
-    	  .append(")").toString();
 	}
 	
 	@Override
@@ -282,6 +275,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot implements PackedNodeSl
             @Override
             public int position() {
                 return position.getPosition();
+            }
+
+            @Override
+            public boolean layout() {
+                return position.getRule().getRuleType().layout();
             }
 
             @Override

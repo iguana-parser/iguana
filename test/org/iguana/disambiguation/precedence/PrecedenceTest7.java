@@ -37,7 +37,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.precedence.OperatorPrecedence;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -66,8 +67,8 @@ public class PrecedenceTest7 {
 	
 	private Nonterminal E = Nonterminal.withName("E");
 	private Nonterminal EPlus = new Nonterminal.Builder("EPlus").setEbnfList(true).build();
-	private Character a = Character.from('a');
-	private Character plus = Character.from('+');
+	private Terminal a = Terminal.from(Character.from('a'));
+	private Terminal plus = Terminal.from(Character.from('+'));
 
 	private Grammar grammar;
 

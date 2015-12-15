@@ -49,13 +49,6 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "Ignore.builder(" + symbol.getConstructorCode() + ")" 
-								  + super.getConstructorCode()
-								  + ".build()";
-	}
-
-	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}

@@ -27,7 +27,6 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -49,7 +48,7 @@ import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
 
 import iguana.utils.input.Input;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 
 /**
@@ -88,7 +87,7 @@ public class Test1 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 		
 	public static ParseSuccess getParseResult(GrammarGraph graph) {

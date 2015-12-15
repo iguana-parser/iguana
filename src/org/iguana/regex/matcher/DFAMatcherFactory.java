@@ -30,9 +30,9 @@ package org.iguana.regex.matcher;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Epsilon;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.Epsilon;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.RegularExpression;
 

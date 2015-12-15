@@ -30,32 +30,28 @@ package org.iguana.regex;
 import java.util.Collections;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.AbstractRegularExpression;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.traversal.RegularExpressionVisitor;
 
 public class Opt extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Symbol s;
+	private final RegularExpression s;
 	
 	private Opt(Builder builder) {
 		super(builder);
 		this.s = builder.s;
 	}
 
-	public static Opt from(Symbol s) {
+	public static Opt from(RegularExpression s) {
 		return builder(s).build();
 	}
 	
-	public Symbol getSymbol() {
+	public RegularExpression getSymbol() {
 		return s;
 	}
 
-	private static String getName(Symbol s) {
+	private static String getName(RegularExpression s) {
 		return s.getName() + "?";
 	}
 	
@@ -80,12 +76,7 @@ public class Opt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return Opt.class.getSimpleName() + ".builder(" + s.getConstructorCode() + ")" + super.getConstructorCode() + ".build()";
-	}
-	
-	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
+	public RegexBuilder<Opt> copyBuilder() {
 		return new Builder(s);
 	}
 	
@@ -103,18 +94,18 @@ public class Opt extends AbstractRegularExpression {
 	
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return s.hashCode();
 	}
 	
-	public static Builder builder(Symbol s) {
+	public static Builder builder(RegularExpression s) {
 		return new Builder(s);
 	}
 	
-	public static class Builder extends SymbolBuilder<Opt> {
+	public static class Builder extends RegexBuilder<Opt> {
 
-		private Symbol s;
+		private RegularExpression s;
 
-		public Builder(Symbol s) {
+		public Builder(RegularExpression s) {
 			super(getName(s));
 			this.s = s;
 		}
@@ -131,7 +122,7 @@ public class Opt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
+	public <T> T accept(RegularExpressionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 	

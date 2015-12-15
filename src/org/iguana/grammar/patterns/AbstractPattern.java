@@ -34,9 +34,8 @@ import java.util.List;
 import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.util.generator.ConstructorCode;
 
-public class AbstractPattern implements Serializable, ConstructorCode {
+public class AbstractPattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -142,11 +141,4 @@ public class AbstractPattern implements Serializable, ConstructorCode {
 		return sb.toString();
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return nonterminal.getConstructorCode() + ", " + 
-			   asList(parent) + ", " +
-			   position + ", " +
-			   asList(child);
-	}
 }

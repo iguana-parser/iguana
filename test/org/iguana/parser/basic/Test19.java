@@ -8,17 +8,16 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
 /**
@@ -29,9 +28,9 @@ import static org.junit.Assert.*;
 public class Test19 {
 
     static Nonterminal E = Nonterminal.withName("E");
-    static org.iguana.grammar.symbol.Character a = Character.from('a');
-    static Character plus = Character.from('+');
-    static Character star = Character.from('*');
+    static Terminal a = Terminal.from(Character.from('a'));
+    static Terminal plus = Terminal.from(Character.from('+'));
+    static Terminal star = Terminal.from(Character.from('*'));
 
     static Rule r1 = Rule.withHead(E).addSymbols(E, star, E).build();
     static Rule r2 = Rule.withHead(E).addSymbols(E, plus, E).build();
@@ -50,7 +49,7 @@ public class Test19 {
         ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTree());
+        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
     }
 
     @Test
@@ -59,16 +58,16 @@ public class Test19 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertEquals(getTree2(), result.asParseSuccess().getTree());
+        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
     }
 
     @Test
     public void testParser3() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar, input3);
         ParseResult result = Iguana.parse(input3, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
-        assertEquals(getTree3(), result.asParseSuccess().getTree());
+        assertTrue(getTree3().equals(result.asParseSuccess().getTree()));
     }
 
     private ParseSuccess getParseResult1(GrammarGraph registry) {
@@ -97,10 +96,10 @@ public class Test19 {
     }
 
     private Tree getTree1() {
-        Tree t0 = createTerminal(0, 1, input1);
+        Tree t0 = createTerminal(a, 0, 1, input1);
         Tree t1 = createRule(r3, list(t0), input1);
-        Tree t2 = createTerminal(1, 2, input1);
-        Tree t3 = createTerminal(2, 3, input1);
+        Tree t2 = createTerminal(plus, 1, 2, input1);
+        Tree t3 = createTerminal(a, 2, 3, input1);
         Tree t4 = createRule(r3, list(t3), input1);
         Tree t5 = createRule(r2, list(t1, t2, t4), input1);
         return t5;
@@ -143,17 +142,17 @@ public class Test19 {
     }
 
     private Tree getTree2() {
-        Tree t0 = createTerminal(0, 1, input2);
+        Tree t0 = createTerminal(a, 0, 1, input2);
         Tree t1 = createRule(r3, list(t0), input2);
-        Tree t2 = createTerminal(1, 2, input2);
-        Tree t3 = createTerminal(2, 3, input2);
+        Tree t2 = createTerminal(plus, 1, 2, input2);
+        Tree t3 = createTerminal(a, 2, 3, input2);
         Tree t4 = createRule(r3, list(t3), input2);
-        Tree t5 = createRule(r2, list(t1, t2, t4), input2);
-        Tree t6 = createTerminal(3, 4, input2);
-        Tree t7 = createTerminal(4, 5, input2);
-        Tree t8 = createRule(r3, list(t7), input2);
-        Tree t9 = createRule(r1, list(t4, t6, t8), input2);
-        Tree t10 = createAmbiguity(set(createBranch(list(t5, t6, t8)), createBranch(list(t1, t2, t9))));
+        Tree t5 = createTerminal(star, 3, 4, input2);
+        Tree t6 = createTerminal(a, 4, 5, input2);
+        Tree t7 = createRule(r3, list(t6), input2);
+        Tree t8 = createRule(r1, list(t4, t5, t7), input2);
+        Tree t9 = createRule(r2, list(t1, t2, t4), input2);
+        Tree t10 = createAmbiguity(list(list(t1, t2, t8), list(t9, t5, t7)));
         return t10;
     }
 
@@ -235,34 +234,34 @@ public class Test19 {
     }
 
     private Tree getTree3() {
-        Tree t0 = createTerminal(0, 1, input3);
+        Tree t0 = createTerminal(a, 0, 1, input3);
         Tree t1 = createRule(r3, list(t0), input3);
-        Tree t2 = createTerminal(1, 2, input3);
-        Tree t3 = createTerminal(2, 3, input3);
+        Tree t2 = createTerminal(plus, 1, 2, input3);
+        Tree t3 = createTerminal(a, 2, 3, input3);
         Tree t4 = createRule(r3, list(t3), input3);
-        Tree t5 = createRule(r2, list(t1, t2, t4), input3);
-        Tree t6 = createTerminal(3, 4, input3);
-        Tree t7 = createTerminal(4, 5, input3);
-        Tree t8 = createRule(r3, list(t7), input3);
-        Tree t9 = createTerminal(5, 6, input3);
-        Tree t10 = createTerminal(6, 7, input3);
+        Tree t5 = createTerminal(star, 3, 4, input3);
+        Tree t6 = createTerminal(a, 4, 5, input3);
+        Tree t7 = createRule(r3, list(t6), input3);
+        Tree t8 = createRule(r1, list(t4, t5, t7), input3);
+        Tree t9 = createTerminal(plus, 5, 6, input3);
+        Tree t10 = createTerminal(a, 6, 7, input3);
         Tree t11 = createRule(r3, list(t10), input3);
-        Tree t12 = createRule(r2, list(t8, t9, t11), input3);
-        Tree t13 = createTerminal(7, 8, input3);
-        Tree t14 = createTerminal(8, 9, input3);
-        Tree t15 = createRule(r3, list(t14), input3);
-        Tree t16 = createRule(r1, list(t11, t13, t15), input3);
-        Tree t17 = createAmbiguity(set(createBranch(list(t12, t13, t15)), createBranch(list(t8, t9, t16))));
-        Tree t18 = createRule(r1, list(t4, t6, t8), input3);
-        Tree t19 = createAmbiguity(set(createBranch(list(t4, t6, t12)), createBranch(list(t18, t9, t11))));
-        Tree t20 = createAmbiguity(set(createBranch(list(t1, t2, t18)), createBranch(list(t5, t6, t8))));
-        Tree t21 = createAmbiguity(set(createBranch(list(t20, t9, t11)), createBranch(list(t1, t2, t19))));
-        Tree t22 = createAmbiguity(set(createBranch(list(t21)), createBranch(list(t5, t6, t12))));
-        Tree t23 = createAmbiguity(set(createBranch(list(t5, t6, t17)), createBranch(list(t22, t13, t15))));
-        Tree t24 = createAmbiguity(set(createBranch(list(t19, t13, t15)), createBranch(list(t4, t6, t17))));
-        Tree t25 = createAmbiguity(set(createBranch(list(t24)), createBranch(list(t18, t9, t16))));
-        Tree t26 = createAmbiguity(set(createBranch(list(t20, t9, t16)), createBranch(list(t1, t2, t25))));
-        Tree t27 = createAmbiguity(set(createBranch(list(t26)), createBranch(list(t23))));
+        Tree t12 = createRule(r2, list(t7, t9, t11), input3);
+        Tree t13 = createAmbiguity(list(list(t8, t9, t11), list(t4, t5, t12)));
+        Tree t14 = createTerminal(star, 7, 8, input3);
+        Tree t15 = createTerminal(a, 8, 9, input3);
+        Tree t16 = createRule(r3, list(t15), input3);
+        Tree t17 = createRule(r1, list(t11, t14, t16), input3);
+        Tree t18 = createAmbiguity(list(list(t7, t9, t17), list(t12, t14, t16)));
+        Tree t19 = createAmbiguity(list(list(t13, t14, t16), list(t4, t5, t18)));
+        Tree t20 = createAmbiguity(list(list(t19), list(t8, t9, t17)));
+        Tree t21 = createRule(r2, list(t1, t2, t4), input3);
+        Tree t22 = createAmbiguity(list(list(t1, t2, t8), list(t21, t5, t7)));
+        Tree t23 = createAmbiguity(list(list(t1, t2, t20), list(t22, t9, t17)));
+        Tree t24 = createAmbiguity(list(list(t1, t2, t13), list(t22, t9, t11)));
+        Tree t25 = createAmbiguity(list(list(t24), list(t21, t5, t12)));
+        Tree t26 = createAmbiguity(list(list(t25, t14, t16), list(t21, t5, t18)));
+        Tree t27 = createAmbiguity(list(list(t23), list(t26)));
         return t27;
     }
 

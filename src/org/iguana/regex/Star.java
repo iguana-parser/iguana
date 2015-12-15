@@ -33,136 +33,124 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.AbstractRegularExpression;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.traversal.RegularExpressionVisitor;
 
 public class Star extends AbstractRegularExpression {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final Symbol s;
-	
-	private final List<Symbol> separators;
-	
-	public static Star from(Symbol s) {
-		return builder(s).build();
-	}
+    private static final long serialVersionUID = 1L;
 
-	private Star(Builder builder) {
-		super(builder);
-		this.s = builder.s;
-		this.separators = Collections.unmodifiableList(builder.separators);
-	}
-	
-	private static String getName(Symbol s) {
-		return s + "*";
-	}
-	
-	@Override
-	public int length() {
-		return ((RegularExpression)s).length();
-	}
-	
-	@Override
-	public boolean isNullable() {
-		return true;
-	}
+    private final RegularExpression s;
 
-	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return ((RegularExpression) s).getFirstSet();
-	}
-	
-	@Override
-	public Set<CharacterRange> getNotFollowSet() {
-		return ((RegularExpression) s).getFirstSet();
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return Star.class.getSimpleName() + 
-			   ".builder(" + s.getConstructorCode() + ")" + 
-			   super.getConstructorCode() +
-			   (separators.isEmpty() ? "" : ".addSeparators(" + asList(separators) + ")") +
-			   ".build()";
-	}
-	
-	public List<Symbol> getSeparators() {
-		return separators;
-	}
+    private final List<RegularExpression> separators;
 
-	@Override
-	public Builder copyBuilder() {
-		return new Builder(this);
-	}
+    public static Star from(RegularExpression s) {
+        return builder(s).build();
+    }
 
-	public Symbol getSymbol() {
-		return s;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Star))
-			return false;
-		
-		Star other = (Star) obj;
-		return s.equals(other.s) && separators.equals(other.separators);
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
+    private Star(Builder builder) {
+        super(builder);
+        this.s = builder.s;
+        this.separators = Collections.unmodifiableList(builder.separators);
+    }
 
-    public static Builder builder(Symbol s) {
-		return new Builder(s);
-	}
-	
-	public static class Builder extends SymbolBuilder<Star> {
+    private static String getName(RegularExpression s) {
+        return s + "*";
+    }
 
-		private Symbol s;
-		private List<Symbol> separators = new ArrayList<>();
-		
-		public Builder(Symbol s) {
-			super(getName(s));
-			this.s = s;
-		}
-		
-		public Builder(Star star) {
-			super(star);
-			this.s = star.s;
+    @Override
+    public int length() {
+        return ((RegularExpression) s).length();
+    }
+
+    @Override
+    public <T> T accept(RegularExpressionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public boolean isNullable() {
+        return true;
+    }
+
+    @Override
+    public Set<CharacterRange> getFirstSet() {
+        return ((RegularExpression) s).getFirstSet();
+    }
+
+    @Override
+    public Set<CharacterRange> getNotFollowSet() {
+        return ((RegularExpression) s).getFirstSet();
+    }
+
+    public List<RegularExpression> getSeparators() {
+        return separators;
+    }
+
+    @Override
+    public Builder copyBuilder() {
+        return new Builder(this);
+    }
+
+    public RegularExpression getSymbol() {
+        return s;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Star))
+            return false;
+
+        Star other = (Star) obj;
+        return s.equals(other.s) && separators.equals(other.separators);
+    }
+
+    @Override
+    public int hashCode() {
+        return s.hashCode();
+    }
+
+    public static Builder builder(RegularExpression s) {
+        return new Builder(s);
+    }
+
+    public static class Builder extends RegexBuilder<Star> {
+
+        private RegularExpression s;
+        private List<RegularExpression> separators = new ArrayList<>();
+
+        public Builder(RegularExpression s) {
+            super(getName(s));
+            this.s = s;
+        }
+
+        public Builder(Star star) {
+            super(star);
+            this.s = star.s;
             this.addSeparators(star.getSeparators());
-		}
-		
-		public Builder addSeparator(Symbol symbol) {
-			separators.add(symbol);
-			return this;
-		}
-		
-		public Builder addSeparators(List<Symbol> symbols) {
-			separators.addAll(symbols);
-			return this;
-		}
-		
-		public Builder addSeparators(Symbol...symbols) {
-			separators.addAll(Arrays.asList(symbols));
-			return this;
-		}
-		
-		@Override
-		public Star build() {
-			return new Star(this);
-		}
-	}
+        }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+        public Builder addSeparator(RegularExpression symbol) {
+            separators.add(symbol);
+            return this;
+        }
+
+        public Builder addSeparators(List<RegularExpression> symbols) {
+            separators.addAll(symbols);
+            return this;
+        }
+
+        public Builder addSeparators(RegularExpression... symbols) {
+            separators.addAll(Arrays.asList(symbols));
+            return this;
+        }
+
+        @Override
+        public Star build() {
+            return new Star(this);
+        }
+    }
+
 }

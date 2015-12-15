@@ -31,11 +31,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Constants;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
-import org.iguana.regex.matcher.JavaRegexMatcherFactory;
+import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.junit.Test;
@@ -44,8 +43,8 @@ import iguana.utils.input.Input;
 
 public class CharacterClassTest {
 	
-	MatcherFactory factory = new JavaRegexMatcherFactory();
-	
+	MatcherFactory factory = new DFAMatcherFactory();
+
 	@Test
 	public void test1() {
 		RegularExpression regex = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));

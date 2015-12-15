@@ -34,7 +34,8 @@ import static org.iguana.datadependent.ast.AST.var;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -79,8 +80,8 @@ public class Test1 {
 											stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1, r2, r3).build();
 		

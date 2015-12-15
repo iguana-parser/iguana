@@ -27,22 +27,21 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.EOF;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.EOF;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -55,7 +54,7 @@ import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 
 /**
@@ -69,14 +68,13 @@ public class Test5 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
-	static Character b = Character.from('b');
+	static Terminal b = Terminal.from(Character.from('b'));
 	static Rule r1 = Rule.withHead(A).addSymbols(B).build();
 	static Rule r2 = Rule.withHead(B).addSymbol(b).build();
 	static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 
     private static Input input = Input.fromString("b");
     private static Nonterminal startSymbol = A;
-    private static Terminal t0;
 
     @Test
 	public void testNullable() {
@@ -112,7 +110,7 @@ public class Test5 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -136,7 +134,7 @@ public class Test5 {
 	}
 
     public static Tree getTree() {
-        t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
         return createRule(r1, list(t1), input);
     }

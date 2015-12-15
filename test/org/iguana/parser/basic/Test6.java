@@ -27,7 +27,6 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -35,13 +34,13 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -54,7 +53,7 @@ import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 /**
  * A ::= B C
@@ -69,8 +68,8 @@ public class Test6 {
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
 	static Nonterminal C = Nonterminal.withName("C");
-	static Character b = Character.from('b');
-	static Character c = Character.from('c');
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
 
     static Rule r1 = Rule.withHead(A).addSymbols(B, C).build();
     static Rule r2 = Rule.withHead(B).addSymbol(b).build();
@@ -79,8 +78,6 @@ public class Test6 {
     private static Input input = Input.fromString("bc");
 	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
     private static Nonterminal startSymbol = A;
-    private static Terminal t0;
-    private static Terminal t1;
 
 
     @Test
@@ -103,7 +100,7 @@ public class Test6 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -137,9 +134,9 @@ public class Test6 {
     }
 
     public static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
         Tree t2 = createRule(r2, list(t0), input);
-        Tree t1 = createTerminal(1, 2, input);
+        Tree t1 = createTerminal(c, 1, 2, input);
         Tree t3 = createRule(r3, list(t1), input);
         return createRule(r1, list(t2, t3), input);
     }

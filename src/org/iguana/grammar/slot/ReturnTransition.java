@@ -60,9 +60,4 @@ public class ReturnTransition extends AbstractTransition {
 		((EndGrammarSlot) dest).execute(input, u, node, value);
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
 }

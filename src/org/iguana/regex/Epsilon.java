@@ -25,77 +25,70 @@
  *
  */
 
-package org.iguana.grammar.symbol;
+package org.iguana.regex;
 
+import static iguana.utils.collections.CollectionsUtil.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
-import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.unicode.UnicodeUtil;
+import org.iguana.traversal.RegularExpressionVisitor;
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
-public class Character extends AbstractRegularExpression {
-	
+public class Epsilon extends AbstractRegularExpression {
+
 	private static final long serialVersionUID = 1L;
 	
-	private final int c;
+	public static int VALUE = -2;
+	
+	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
+	
+	private static Epsilon instance;
 
-	private Character(Builder builder) {
+	public static Epsilon getInstance() {
+		if(instance == null)
+			instance = new Epsilon();
+		
+		return instance;
+	}
+	
+	private static RegexBuilder<Epsilon> builder =
+			new RegexBuilder<Epsilon>("epsilon") {
+					@Override
+					public Epsilon build() {
+						return Epsilon.getInstance();
+					}};
+
+    public static CharacterRange asCharacterRange() {
+        return CharacterRange.in(VALUE, VALUE);
+    }
+	
+	private Epsilon() {
 		super(builder);
-		this.c = builder.c;
-	}	
-	
-	public static Character from(int c) {
-		return new Builder(c).build();
-	}
-	
-	public int getValue() {
-		return c;
 	}
 
-	@Override
-	public int hashCode() {
-		return c;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (this == obj)
-			return true;
-
-		if (!(obj instanceof Character))
-			return false;
-		
-		Character other = (Character) obj;
-		
-		return c == other.c;
-	}
-
-	public static String getName(int c) {
-		if(UnicodeUtil.isPrintableAscii(c)) {
-			return (char) c + "";			
-		} else {
-			String s = "\\u" + String.format("%04X", c);
-			// Escape newline inside strings
-			return s.equals("\\u000D") || s.equals("\\u000A") ? "\\" + s  : s;
-		}
+	private Object readResolve()  {
+	    return instance;
 	}
 	
+	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+	    ois.defaultReadObject();
+	    instance = this;
+	}
+
+    public String toString(int j) {
+        return this.toString() + (j == 1? " . " : "");
+    }
+
 	@Override
 	public boolean isNullable() {
-		return false;
+		return true;
 	}
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		Set<CharacterRange> firstSet = new HashSet<>();
-		firstSet.add(CharacterRange.in(c, c));
 		return firstSet;
 	}
 	
@@ -103,43 +96,19 @@ public class Character extends AbstractRegularExpression {
 	public Set<CharacterRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
-	
-	public static Builder builder(int c) {
-		return new Builder(c);
-	}
-	
-	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
-		return new Builder(this);
+
+    @Override
+    public int length() {
+        return 0;
+    }
+
+    @Override
+	public RegexBuilder<Epsilon> copyBuilder() {
+		return builder;
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return Character.class.getSimpleName() + ".builder(" + c + ")" + super.getConstructorCode() + ".build()";
-	}
-	
-	public static class Builder extends SymbolBuilder<Character> {
-		
-		private int c;
-		
-		public Builder(int c) {
-			super(getName(c));
-			this.c = c; 
-		}
-
-		public Builder(Character character) {
-			super(character);
-			this.c = character.c;
-		}
-		
-		@Override
-		public Character build() {
-			return new Character(this);
-		}
-	}
-	
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
+	public <T> T accept(RegularExpressionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 }

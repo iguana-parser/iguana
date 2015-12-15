@@ -29,10 +29,16 @@ package org.iguana.grammar.iggy;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Sequence;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.transformation.GrammarTransformation;
 import org.iguana.regex.*;
+import org.iguana.regex.Character;
 import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.traversal.RegularExpressionVisitor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,7 +46,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Anastasia Izmaylova on 06/12/15.
  */
-public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol> {
+public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol>, RegularExpressionVisitor<RegularExpression> {
 
     private final Map<String, RegularExpression> definitions = new HashMap<>();
     private String head;
@@ -64,7 +70,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
             changed = false;
             for (Map.Entry<String, RegularExpression> entry : definitions.entrySet()) {
                 head = entry.getKey();
-                RegularExpression regex = (RegularExpression) visitSym(entry.getValue());
+                RegularExpression regex = entry.getValue().accept(this);
                 definitions.put(entry.getKey(), regex);
                 changed |= regex != entry.getValue();
             }
@@ -96,12 +102,12 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public Symbol visit(Character symbol) {
+    public RegularExpression visit(Character symbol) {
         return symbol;
     }
 
     @Override
-    public Symbol visit(CharacterRange symbol) {
+    public RegularExpression visit(CharacterRange symbol) {
         return symbol;
     }
 
@@ -122,12 +128,12 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public Symbol visit(EOF symbol) {
+    public RegularExpression visit(EOF symbol) {
         return symbol;
     }
 
     @Override
-    public Symbol visit(Epsilon symbol) {
+    public RegularExpression visit(Epsilon symbol) {
         return symbol;
     }
 
@@ -242,6 +248,58 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         if (sym == symbol.getSymbol())
             return symbol;
         return Star.from(sym);
+    }
+
+    @Override
+    public RegularExpression visit(org.iguana.regex.Star s) {
+        RegularExpression sym = s.getSymbol().accept(this);
+        if (sym == s.getSymbol())
+            return s;
+        return org.iguana.regex.Star.from(sym);
+    }
+
+    @Override
+    public RegularExpression visit(org.iguana.regex.Plus p) {
+        RegularExpression sym = p.getSymbol().accept(this);
+        if (sym == p.getSymbol())
+            return p;
+        return org.iguana.regex.Plus.from(sym);
+    }
+
+    @Override
+    public RegularExpression visit(org.iguana.regex.Opt o) {
+        RegularExpression sym = o.getSymbol().accept(this);
+        if (sym == o.getSymbol())
+            return o;
+        return org.iguana.regex.Opt.from(sym);
+    }
+
+    @Override
+    public <E extends RegularExpression> RegularExpression visit(org.iguana.regex.Alt<E> alt) {
+        boolean changed = false;
+        List<RegularExpression> syms = new ArrayList<>();
+        for (RegularExpression s : alt.getSymbols()) {
+            RegularExpression sym = s.accept(this);
+            changed |= sym != s;
+            syms.add(sym);
+        }
+        if (!changed)
+            return alt;
+        return org.iguana.regex.Alt.from(syms);
+    }
+
+    @Override
+    public <E extends RegularExpression> RegularExpression visit(org.iguana.regex.Sequence<E> seq) {
+        boolean changed = false;
+        List<RegularExpression> syms = new ArrayList<>();
+        for (RegularExpression s : seq.getSymbols()) {
+            RegularExpression sym = s.accept(this);
+            changed |= sym != s;
+            syms.add(sym);
+        }
+        if (!changed)
+            return seq;
+        return org.iguana.regex.Sequence.from(syms);
     }
 
     private Symbol visitSym(Symbol symbol) {

@@ -1,71 +1,30 @@
 package org.iguana.traversal;
 
-import org.iguana.grammar.exception.UnexpectedSymbol;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.EOF;
+import org.iguana.regex.Epsilon;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.regex.*;
 
-public interface RegularExpressionVisitor<T> extends ISymbolVisitor<T> {
+public interface RegularExpressionVisitor<T> {
 	
-	public T visit(Character c);
+	T visit(Character c);
 	
-	public T visit(CharacterRange r);
+    T visit(CharacterRange r);
 	
-	public T visit(EOF eof);
+	T visit(EOF eof);
 	
-	public T visit(Epsilon e);
+	T visit(Epsilon e);
 	
-	public T visit(Terminal t);
+	T visit(Star s);
 	
-	public T visit(Star s);
+	T visit(Plus p);
 	
-	public T visit(Plus p);
+	T visit(Opt o);
 	
-	public T visit(Opt o);
+	<E extends RegularExpression> T visit(Alt<E> alt);
 	
-	public <E extends Symbol> T visit(Alt<E> symbol);
-	
-	public <E extends Symbol> T visit(Sequence<E> symbol);
+    <E extends RegularExpression> T visit(Sequence<E> seq);
 
-	default T visit(Align symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Block symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Code symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Conditional symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(IfThen symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(IfThenElse symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Ignore symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Nonterminal symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Offside symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(While symbol) { throw new UnexpectedSymbol(symbol); }
-	
-	default T visit(Return symbol) { throw new UnexpectedSymbol(symbol); }
-	
 }

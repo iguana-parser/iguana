@@ -33,21 +33,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.AbstractRegularExpression;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.traversal.RegularExpressionVisitor;
 
 public class Plus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final Symbol s;
+	private final RegularExpression s;
 	
-	private final List<Symbol> separators;
+	private final List<RegularExpression> separators;
 	
-	public static Plus from(Symbol s) {
+	public static Plus from(RegularExpression s) {
 		return builder(s).build();
 	}
 	
@@ -57,7 +53,7 @@ public class Plus extends AbstractRegularExpression {
 		this.separators = Collections.unmodifiableList(builder.separators);
 	}
 	
-	private static String getName(Symbol s) {
+	private static String getName(RegularExpression s) {
 		return s.getName() + "+";
 	}
 	
@@ -81,25 +77,16 @@ public class Plus extends AbstractRegularExpression {
 		return ((RegularExpression) s).getFirstSet();
 	}
 	
-	public List<Symbol> getSeparators() {
+	public List<RegularExpression> getSeparators() {
 		return separators;
 	}
-	
+
 	@Override
-	public String getConstructorCode() {
-		return Plus.class.getSimpleName() + 
-			   ".builder(" + s.getConstructorCode() + ")" + 
-			   super.getConstructorCode() + 
-			   (separators.isEmpty() ? "" : ".addSeparators(" + asList(separators) + ")") +
-			   ".build()";
-	}
-	
-	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
+	public RegexBuilder<Plus> copyBuilder() {
 		return new Builder(this);
 	}
 
-	public Symbol getSymbol() {
+	public RegularExpression getSymbol() {
 		return s;
 	}
 	
@@ -117,20 +104,20 @@ public class Plus extends AbstractRegularExpression {
 	
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return s.hashCode();
 	}
 	
-	public static Builder builder(Symbol s) {
+	public static Builder builder(RegularExpression s) {
 		return new Builder(s);
 	}
 
-	public static class Builder extends SymbolBuilder<Plus> {
+	public static class Builder extends RegexBuilder<Plus> {
 
-		private Symbol s;
+		private RegularExpression s;
 		
-		private final List<Symbol> separators = new ArrayList<>();
+		private final List<RegularExpression> separators = new ArrayList<>();
 
-		public Builder(Symbol s) {
+		public Builder(RegularExpression s) {
 			super(getName(s));
 			this.s = s;
 		}
@@ -141,17 +128,17 @@ public class Plus extends AbstractRegularExpression {
             this.addSeparators(plus.getSeparators());
 		}
 		
-		public Builder addSeparator(Symbol symbol) {
+		public Builder addSeparator(RegularExpression symbol) {
 			separators.add(symbol);
 			return this;
 		}
 		
-		public Builder addSeparators(List<Symbol> symbols) {
+		public Builder addSeparators(List<RegularExpression> symbols) {
 			separators.addAll(symbols);
 			return this;
 		}
 		
-		public Builder addSeparators(Symbol...symbols) {
+		public Builder addSeparators(RegularExpression...symbols) {
 			separators.addAll(Arrays.asList(symbols));
 			return this;
 		}
@@ -163,7 +150,7 @@ public class Plus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
+	public <T> T accept(RegularExpressionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 	

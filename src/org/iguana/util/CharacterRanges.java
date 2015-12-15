@@ -36,8 +36,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.iguana.grammar.symbol.CharacterRange;
-import static org.iguana.util.CollectionsUtil.*;
+import org.iguana.regex.CharacterRange;
+
+import static iguana.utils.collections.CollectionsUtil.*;
 
 public class CharacterRanges {
 
@@ -45,7 +46,7 @@ public class CharacterRanges {
 		return toNonOverlapping(toList(ranges)).values().stream().flatMap(l -> l.stream()).collect(Collectors.toSet());
 	}
 
-	/**
+    /**
 	 * 
 	 * @return a map from the new, non-overlapping ranges to original ranges
 	 */

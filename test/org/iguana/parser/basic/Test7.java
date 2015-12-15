@@ -27,7 +27,6 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -35,13 +34,13 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -52,7 +51,7 @@ import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 
 import iguana.utils.input.Input;
@@ -72,9 +71,9 @@ public class Test7 {
 	static Nonterminal B = Nonterminal.withName("B");
 	static Nonterminal C = Nonterminal.withName("C");
 	static Nonterminal D = Nonterminal.withName("D");
-	static Character b = Character.from('b');
-	static Character c = Character.from('c');
-	static Character d = Character.from('d');
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
+	static Terminal d = Terminal.from(Character.from('d'));
 
     static Rule r1 = Rule.withHead(A).addSymbols(B, C, D).build();
     static Rule r2 = Rule.withHead(B).addSymbol(b).build();
@@ -112,7 +111,7 @@ public class Test7 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 
 	@Test
@@ -149,9 +148,9 @@ public class Test7 {
 	}
 
     public static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
-        Tree t1 = createTerminal(1, 2, input);
-        Tree t2 = createTerminal(2, 3, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
+        Tree t1 = createTerminal(c, 1, 2, input);
+        Tree t2 = createTerminal(d, 2, 3, input);
         Tree t3 = createRule(r2, list(t0), input);
         Tree t4 = createRule(r3, list(t1), input);
         Tree t5 = createRule(r4, list(t2), input);

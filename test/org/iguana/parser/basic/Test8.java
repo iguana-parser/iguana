@@ -27,7 +27,6 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -35,13 +34,13 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Terminal;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -53,7 +52,7 @@ import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 import iguana.utils.input.Input;
 
@@ -72,9 +71,9 @@ public class Test8 {
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
 	static Nonterminal C = Nonterminal.withName("C");
-	static Character a = Character.from('a');
-	static Character b = Character.from('b');
-	static Character c = Character.from('c');
+	static Terminal a = Terminal.from(Character.from('a'));
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
 
 	static Rule r1 = Rule.withHead(A).addSymbols(a, B, c).build();
 	static Rule r2 = Rule.withHead(A).addSymbol(C).build();
@@ -118,7 +117,7 @@ public class Test8 {
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTree());
+        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
     }
 
     @Test
@@ -127,16 +126,16 @@ public class Test8 {
         ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead0(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTree());
+        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
     }
 
     @Test
     public void testParser2_1() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar, input2);
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead1(graph), result);
-        assertEquals(getTree2(), result.asParseSuccess().getTree());
+        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
     }
 
     @Test
@@ -145,7 +144,7 @@ public class Test8 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead0(graph), result);
-        assertEquals(getTree2(), result.asParseSuccess().getTree());
+        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
     }
 
 
@@ -213,9 +212,8 @@ public class Test8 {
 	}
 
     public static Tree getTree1() {
-        Tree t0 = createTerminal(1, 2, input1);
-        Tree t1 = createRule(r3, list(t0), input1);
-        return createRule(r1, list(createTerminal(0, 1, input1), t1, createTerminal(2, 3, input1)), input1);
+        Tree t1 = createRule(r3, list(createTerminal(b, 1, 2, input1)), input1);
+        return createRule(r1, list(createTerminal(a, 0, 1, input1), t1, createTerminal(c, 2, 3, input1)), input1);
     }
 
 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -238,11 +236,11 @@ public class Test8 {
     }
 
     public static Tree getTree2() {
-        Tree t1 = createRule(r5, list(createTerminal(4, 5, input2)), input2);
-        Tree t2 = createRule(r4, list(createTerminal(3, 4, input2), t1), input2);
-        Tree t3 = createRule(r4, list(createTerminal(2, 3, input2), t2), input2);
-        Tree t4 = createRule(r4, list(createTerminal(1, 2, input2), t3), input2);
-        Tree t5 = createRule(r4, list(createTerminal(0, 1, input2), t4), input2);
+        Tree t1 = createRule(r5, list(createTerminal(c, 4, 5, input2)), input2);
+        Tree t2 = createRule(r4, list(createTerminal(a, 3, 4, input2), t1), input2);
+        Tree t3 = createRule(r4, list(createTerminal(a, 2, 3, input2), t2), input2);
+        Tree t4 = createRule(r4, list(createTerminal(a, 1, 2, input2), t3), input2);
+        Tree t5 = createRule(r4, list(createTerminal(a, 0, 1, input2), t4), input2);
         return createRule(r2, list(t5), input2);
     }
 	

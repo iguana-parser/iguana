@@ -5,11 +5,10 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.regex.Star;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -24,7 +23,7 @@ public class Test9 {
 
     static Nonterminal S = Nonterminal.withName("S");
     static Nonterminal A = Nonterminal.withName("A");
-    static org.iguana.grammar.symbol.Character a = Character.from('a');
+    static Terminal a = Terminal.from(Character.from('a'));
 
     static Rule r1 = Rule.withHead(S).addSymbols(Star.from(A), Star.from(A)).build();
     static Rule r2 = Rule.withHead(A).addSymbols(a).build();

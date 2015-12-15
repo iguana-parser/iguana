@@ -30,9 +30,6 @@ package org.iguana.regex;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-
 public class RegularExpressionExamples {
 
 	/**

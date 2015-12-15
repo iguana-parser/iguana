@@ -31,37 +31,40 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.automaton.Automaton;
+import org.iguana.traversal.RegularExpressionVisitor;
 import org.iguana.traversal.ToAutomatonRegexVisitor;
-import org.iguana.traversal.ToJavaRegexVisitor;
-import org.iguana.util.generator.ConstructorCode;
 
-public interface RegularExpression extends Serializable, Symbol, ConstructorCode {
+public interface RegularExpression extends Serializable {
 
-	public boolean isNullable();
+    String getName();
+
+    Object getObject();
+
+	boolean isNullable();
+
+    Set<CharacterRange> getLookaheads();
+
+    Set<CharacterRange> getLookbehinds();
 	
-	public Set<CharacterRange> getFirstSet();
+	Set<CharacterRange> getFirstSet();
 	
 	/**
 	 * The set of characters (ranges) that cannot follow this regular expressions. 
 	 */
-	public Set<CharacterRange> getNotFollowSet();
+	Set<CharacterRange> getNotFollowSet();
 		
-	default int length() {
-		return 1;
-	}
+	int length();
+
+    <T> T accept(RegularExpressionVisitor<T> visitor);
 	
 	default Automaton getAutomaton() {
 		return accept(new ToAutomatonRegexVisitor());
 	}
 
-	default String getJavaRegexPattern() {
-		return accept(new ToJavaRegexVisitor());
-	}
+    RegexBuilder<? extends RegularExpression> copyBuilder();
 	
-	public static <T> Comparator<T> lengthComparator() {
+	static <T> Comparator<T> lengthComparator() {
 		return (T o1, T o2) -> {
 			if (!(o1 instanceof RegularExpression) || !(o2 instanceof RegularExpression)) { return 0; }
 			

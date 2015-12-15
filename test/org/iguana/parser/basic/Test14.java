@@ -27,7 +27,6 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -39,7 +38,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -52,7 +52,7 @@ import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -63,14 +63,15 @@ import static org.junit.Assert.assertTrue;
  * B ::= 'b'
  * 
  * @author Ali Afroozeh
+ *
  */
 public class Test14 {
 
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
-	static Character a = Character.from('a');
-	static Character b = Character.from('b');
-	static Character c = Character.from('c');
+	static Terminal a = Terminal.from(Character.from('a'));
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
 
     static Rule r1 = Rule.withHead(A).addSymbols(B, a, c).build();
     static Rule r2 = Rule.withHead(B).addSymbol(b).build();
@@ -101,7 +102,7 @@ public class Test14 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -129,10 +130,10 @@ public class Test14 {
 	}
 
     private static Tree getTree() {
-        Tree t0 = createTerminal(0, 1, input);
+        Tree t0 = createTerminal(b, 0, 1, input);
         Tree t1 = createRule(r2, list(t0), input);
-        Tree t2 = createTerminal(1, 2, input);
-        Tree t3 = createTerminal(2, 3, input);
+        Tree t2 = createTerminal(a, 1, 2, input);
+        Tree t3 = createTerminal(c, 2, 3, input);
         Tree t4 = createRule(r1, list(t1, t2, t3), input);
         return t4;
     }

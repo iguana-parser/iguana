@@ -34,7 +34,8 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -85,15 +86,15 @@ public class Test5 {
 					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
 							.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
-					.addSymbol(Character.from('+'))
+					.addSymbol(Terminal.from(Character.from('+')))
 					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		Rule r1_2 = Rule.withHead(E)
-				.addSymbol(Character.builder('-')
+				.addSymbol(Terminal.builder(Character.from('-'))
 					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
 				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_3 = Rule.withHead(E).addSymbol(Character.from('a')).build();
+		Rule r1_3 = Rule.withHead(E).addSymbol(Terminal.from(Character.from('a'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3).build();
 		

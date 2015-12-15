@@ -31,16 +31,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Before;
@@ -64,15 +59,15 @@ public class PrecedeRestrictionTest1 {
 	private Grammar grammar;
 	
 	private Nonterminal S = Nonterminal.withName("S");
-	private RegularExpression forr = Terminal.from(Sequence.from("for"));
-	private RegularExpression forall = Terminal.from(Sequence.from("forall"));
+	private Terminal forr = Terminal.from(Sequence.from("for"));
+	private Terminal forall = Terminal.from(Sequence.from("forall"));
 	private Nonterminal L = Nonterminal.withName("L");
 	private Nonterminal Id = Nonterminal.withName("Id");
-	private Character ws = Character.from(' ');
-	private CharacterRange az = CharacterRange.in('a', 'z');
+	private Terminal ws = Terminal.from(Character.from(' '));
+	private Terminal az = Terminal.from(CharacterRange.in('a', 'z'));
 	
-	private Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az))
-			                              .addPreCondition(RegularExpressionCondition.notPrecede(az)).build();
+	private Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
+			                              .addPreCondition(RegularExpressionCondition.notPrecede(CharacterRange.in('a', 'z'))).build();
 
 	@Before
 	public void init() {

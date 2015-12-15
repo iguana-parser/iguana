@@ -27,20 +27,19 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.list;
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Branch;
 import iguana.parsetrees.tree.Tree;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -73,9 +72,9 @@ public class Test10 {
 	static Nonterminal B = Nonterminal.withName("B");
 	static Nonterminal C = Nonterminal.withName("C");
 	static Nonterminal D = Nonterminal.withName("D");
-	static Character a = Character.from('a');
-	static Character b = Character.from('b');
-	static Character c = Character.from('c');
+	static Terminal a = Terminal.from(Character.from('a'));
+	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal c = Terminal.from(Character.from('c'));
 
 	static Rule r1 = Rule.withHead(S).addSymbols(A, B, C).build();
     static Rule r2 = Rule.withHead(S).addSymbols(A, B, D).build();
@@ -104,7 +103,7 @@ public class Test10 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 	
 	private static ParseResult getParseResult(GrammarGraph graph) {
@@ -138,13 +137,11 @@ public class Test10 {
     }
 
     public static Tree getTree() {
-        Tree t1 = createRule(r3, list(createTerminal(0, 1, input)), input); // A(a)
-        Tree t2 = createRule(r4, list(createTerminal(1, 2, input)), input); // B(b)
-        Tree t3 = createRule(r5, list(createTerminal(2, 3, input)), input); // C(c)
-        Tree t4 = createRule(r6, list(createTerminal(2, 3, input)), input); // D(c)
-        Branch<Tree> b1 = createBranch(list(t1, t2, t3));
-        Branch<Tree> b2 = createBranch(list(t1, t2, t4));
-        return createAmbiguity(set(b1, b2));
+        Tree t1 = createRule(r3, list(createTerminal(a, 0, 1, input)), input); // A(a)
+        Tree t2 = createRule(r4, list(createTerminal(b, 1, 2, input)), input); // B(b)
+        Tree t3 = createRule(r5, list(createTerminal(c, 2, 3, input)), input); // C(c)
+        Tree t4 = createRule(r6, list(createTerminal(c, 2, 3, input)), input); // D(c)
+        return createAmbiguity(list(list(t1, t2, t4), list(t1, t2, t3)));
     }
 }
 	

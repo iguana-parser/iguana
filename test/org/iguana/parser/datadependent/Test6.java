@@ -34,7 +34,8 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -74,9 +75,9 @@ public class Test6 {
 		
 		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
 		
-		Character hat = Character.from('^');
-		Character star = Character.from('*');
-		Character plus = Character.from('+');
+		Terminal hat = Terminal.from(Character.from('^'));
+        Terminal star = Terminal.from(Character.from('*'));
+        Terminal plus = Terminal.from(Character.from('+'));
 		
 		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
 		
@@ -98,7 +99,7 @@ public class Test6 {
 				.addSymbol(plus)
 				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Character.from('a')).build();
+		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Character.from('a'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
 		

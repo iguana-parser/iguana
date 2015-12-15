@@ -59,7 +59,7 @@ public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
 	
 	@Override
 	public int hashCode() {
-		return MurmurHash3.fn().apply(getGrammarSlot().getId(), getInputIndex(), data);
+		return MurmurHash3.fn().apply(slot.hashCode(), getInputIndex(), data);
 	}
 	
 	@Override

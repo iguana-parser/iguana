@@ -71,8 +71,8 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 
 	private final int nodeType;
 
-	public NonterminalGrammarSlot(int id, Nonterminal nonterminal, GSSNodeLookup nodeLookup, int nodeType, ParserRuntime runtime) {
-		super(id, runtime);
+	public NonterminalGrammarSlot(Nonterminal nonterminal, GSSNodeLookup nodeLookup, int nodeType, ParserRuntime runtime) {
+		super(runtime);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
 		this.firstSlots = new ArrayList<>();
@@ -122,14 +122,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 	@Override
 	public String toString() {
 		return nonterminal.toString();
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-		           .append("new NonterminalGrammarSlot(")
-		           .append(nonterminal.getConstructorCode())
-		           .append(")").toString();
 	}
 	
 	public void create(Input input, BodyGrammarSlot returnSlot, GSSNode u, NonPackedNode node) {

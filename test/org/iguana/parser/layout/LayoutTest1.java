@@ -29,8 +29,11 @@ package org.iguana.parser.layout;
 
 import static org.junit.Assert.assertTrue;
 
+import iguana.parsetrees.slot.NonterminalNodeType;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -52,28 +55,28 @@ import iguana.utils.input.Input;
 public class LayoutTest1 {
 
 	private static Grammar getGrammar() {
-		Character a = Character.from('a');
-		Character b = Character.from('b');
+		Terminal a = Terminal.from(Character.from('a'));
+		Terminal b = Terminal.from(Character.from('b'));
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		
-		Nonterminal L = Nonterminal.withName("L");
+		Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout()).build();
 		
 		Rule r1 = Rule.withHead(S).addSymbols(A, B).setLayout(L).build();
 		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
 		Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
-		
-		Rule layout = Rule.withHead(L).addSymbol(Character.from(' ')).build();
-		
-		return Grammar.builder().addRules(r1, r2, r3, layout).build();
+
+		Rule layout = Rule.withHead(L).addSymbol(Terminal.from(Character.from(' '))).build();
+
+		return new LayoutWeaver().transform(Grammar.builder().addRules(r1, r2, r3, layout).build());
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b");
 		Grammar grammar = getGrammar();
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-	}
+    }
 }

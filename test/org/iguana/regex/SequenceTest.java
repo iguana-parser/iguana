@@ -31,10 +31,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.matcher.JavaRegexMatcherFactory;
+import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.junit.Test;
@@ -43,7 +41,7 @@ import iguana.utils.input.Input;
 
 public class SequenceTest {
 	
-	MatcherFactory factory = new JavaRegexMatcherFactory();
+	MatcherFactory factory = new DFAMatcherFactory();
 	
 	// ab
 	private Sequence<Character> seq1 = Sequence.builder(Character.from('a'), Character.from('b')).build();

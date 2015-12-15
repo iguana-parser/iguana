@@ -30,7 +30,7 @@ package org.iguana.parser;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
@@ -59,8 +59,8 @@ public class KeywordTest3 {
 	private Terminal iff = Terminal.from(Sequence.from("if"));
 	private Terminal then = Terminal.from(Sequence.from("then"));
 	private Nonterminal L = Nonterminal.withName("L");
-	private Character s = Character.from('s');
-	private Character ws = Character.from(' ');
+	private Terminal s = Terminal.from(Character.from('s'));
+	private Terminal ws = Terminal.from(Character.from(' '));
 
 	@Before
 	public void init() {

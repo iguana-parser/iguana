@@ -27,79 +27,107 @@
 
 package org.iguana.grammar.symbol;
 
-import static org.iguana.util.CollectionsUtil.*;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Collections;
-import java.util.Set;
-
 import org.iguana.traversal.ISymbolVisitor;
 
-public class Epsilon extends AbstractRegularExpression {
+import java.util.*;
+
+public class Plus extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	public static int VALUE = -2;
+	private final Symbol s;
 	
-	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
+	private final List<Symbol> separators;
 	
-	private static Epsilon instance;
-	
-	public static Epsilon getInstance() {
-		if(instance == null)
-			instance = new Epsilon();
-		
-		return instance;
+	public static Plus from(Symbol s) {
+		return builder(s).build();
 	}
 	
-	private static SymbolBuilder<Epsilon> builder = 
-			new SymbolBuilder<Epsilon>("epsilon") {
-					@Override
-					public Epsilon build() {
-						return Epsilon.getInstance();
-					}};
-	
-	private Epsilon() {
+	private Plus(Builder builder) {
 		super(builder);
+		this.s = builder.s;
+		this.separators = Collections.unmodifiableList(builder.separators);
 	}
 	
-	private Object readResolve()  {
-	    return instance;
+	private static String getName(Symbol s) {
+		return s.getName() + "+";
 	}
 	
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-	    ois.defaultReadObject();
-	    instance = this;
+	public List<Symbol> getSeparators() {
+		return separators;
+	}
+	
+	@Override
+	public SymbolBuilder<Plus> copyBuilder() {
+		return new Builder(this);
 	}
 
-	@Override
-	public boolean isNullable() {
-		return true;
+	public Symbol getSymbol() {
+		return s;
 	}
 	
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return firstSet;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof Plus))
+			return false;
+		
+		Plus other = (Plus) obj;
+		return s.equals(other.s) && separators.equals(other.separators);
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
-		return Collections.emptySet();
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	public static Builder builder(Symbol s) {
+		return new Builder(s);
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return Epsilon.class.getSimpleName() + ".getInstance()";
-	}
-	
-	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
-		return builder;
+	public static class Builder extends SymbolBuilder<Plus> {
+
+		private Symbol s;
+		
+		private final List<Symbol> separators = new ArrayList<>();
+
+		public Builder(Symbol s) {
+			super(getName(s));
+			this.s = s;
+		}
+		
+		public Builder(Plus plus) {
+			super(plus);
+			this.s = plus.s;
+            this.addSeparators(plus.getSeparators());
+		}
+		
+		public Builder addSeparator(Symbol symbol) {
+			separators.add(symbol);
+			return this;
+		}
+		
+		public Builder addSeparators(List<Symbol> symbols) {
+			separators.addAll(symbols);
+			return this;
+		}
+		
+		public Builder addSeparators(Symbol...symbols) {
+			separators.addAll(Arrays.asList(symbols));
+			return this;
+		}
+		
+		@Override
+		public Plus build() {
+			return new Plus(this);
+		}
 	}
 
 	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+	
 }

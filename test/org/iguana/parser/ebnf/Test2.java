@@ -7,14 +7,15 @@ import iguana.parsetrees.tree.Tree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
@@ -22,7 +23,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.tree.TreeFactory.*;
-import static org.iguana.util.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.*;
+
 /**
  * S ::= A*
  * A ::= 'a'
@@ -31,10 +33,10 @@ public class Test2 {
 
     static Nonterminal S = Nonterminal.withName("S");
     static Nonterminal A = Nonterminal.withName("A");
-    static Character a = Character.from('a');
+    static Terminal a = Terminal.from(Character.from('a'));
 
     static Rule r1 = Rule.withHead(S).addSymbols(Star.from(A)).build();
-    static Rule r2 = Rule.withHead(A).addSymbols(Character.from('a')).build();
+    static Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Character.from('a'))).build();
 
     private static Grammar grammar = Grammar.builder().addRules(r1, r2).build();
 
@@ -133,7 +135,7 @@ public class Test2 {
     }
 
     public static Tree getTree1() {
-        Tree t0 = createTerminal(0, 1, input1);
+        Tree t0 = createTerminal(a, 0, 1, input1);
         Tree t1 = createRule(r2, list(t0), input1);
         Tree t2 = createStar(list(t1));
         Tree t3 = createRule(r1, list(t2), input1);
@@ -167,9 +169,9 @@ public class Test2 {
     }
 
     public static Tree getTree2() {
-        Tree t0 = createTerminal(0, 1, input2);
+        Tree t0 = createTerminal(a, 0, 1, input2);
         Tree t1 = createRule(r2, list(t0), input2);
-        Tree t2 = createTerminal(1, 2, input2);
+        Tree t2 = createTerminal(a, 1, 2, input2);
         Tree t3 = createRule(r2, list(t2), input2);
         Tree t4 = createStar(list(t1, t3));
         Tree t5 = createRule(r1, list(t4), input2);
@@ -239,27 +241,27 @@ public class Test2 {
     }
 
     public static Tree getTree3() {
-        Tree t0 = createTerminal(0, 1, input3);
+        Tree t0 = createTerminal(a, 0, 1, input3);
         Tree t1 = createRule(r2 , list(t0), input3);
-        Tree t2 = createTerminal(1, 2, input3);
+        Tree t2 = createTerminal(a, 1, 2, input3);
         Tree t3 = createRule(r2, list(t2), input3);
-        Tree t4 = createTerminal(2, 3, input3);
+        Tree t4 = createTerminal(a, 2, 3, input3);
         Tree t5 = createRule(r2, list(t4), input3);
-        Tree t6 = createTerminal(3, 4, input3);
+        Tree t6 = createTerminal(a, 3, 4, input3);
         Tree t7 = createRule(r2, list(t6), input3);
-        Tree t8 = createTerminal(4, 5, input3);
+        Tree t8 = createTerminal(a, 4, 5, input3);
         Tree t9 = createRule(r2, list(t8), input3);
-        Tree t10 = createTerminal(5, 6, input3);
+        Tree t10 = createTerminal(a, 5, 6, input3);
         Tree t11 = createRule(r2, list(t10), input3);
-        Tree t12 = createTerminal(6, 7, input3);
+        Tree t12 = createTerminal(a, 6, 7, input3);
         Tree t13 = createRule(r2, list(t12), input3);
-        Tree t14 = createTerminal(7, 8, input3);
+        Tree t14 = createTerminal(a, 7, 8, input3);
         Tree t15 = createRule(r2, list(t14), input3);
-        Tree t16 = createTerminal(8, 9, input3);
+        Tree t16 = createTerminal(a, 8, 9, input3);
         Tree t17 = createRule(r2, list(t16), input3);
-        Tree t18 = createTerminal(9, 10, input3);
+        Tree t18 = createTerminal(a, 9, 10, input3);
         Tree t19 = createRule(r2, list(t18), input3);
-        Tree t20 = createTerminal(10, 11, input3);
+        Tree t20 = createTerminal(a, 10, 11, input3);
         Tree t21 = createRule(r2, list(t20), input3);
         Tree t22 = createStar(list(t1, t3, t5, t7, t9, t11, t13, t15, t17, t19, t21));
         Tree t23 = createRule(r1, list(t22), input3);

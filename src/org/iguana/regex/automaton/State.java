@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.CharacterRange;
+import org.iguana.regex.CharacterRange;
 import org.iguana.regex.RegularExpression;
 
 public class State implements Serializable {

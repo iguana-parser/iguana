@@ -27,7 +27,7 @@
 
 package org.iguana.util.trie;
 
-import static org.iguana.util.CollectionsUtil.list;
+import static iguana.utils.collections.CollectionsUtil.list;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

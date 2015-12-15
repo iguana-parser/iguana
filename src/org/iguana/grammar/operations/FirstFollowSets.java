@@ -33,18 +33,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.regex.RegularExpression;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.CharacterRange;
+import org.iguana.regex.EOF;
+import org.iguana.regex.Epsilon;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
 
@@ -107,7 +102,10 @@ public class FirstFollowSets {
 	}
 	
 	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal);
+        Set<CharacterRange> firstSet = new HashSet<>(firstSets.get(nonterminal));
+        if (isNullable(nonterminal))
+            firstSet.addAll(Epsilon.getInstance().getFirstSet());
+        return firstSet;
 	}
 	
 	public Set<CharacterRange> getFollowSet(Nonterminal nonterminal) {
@@ -158,10 +156,6 @@ public class FirstFollowSets {
 	
 	/**
 	 * Adds the first set of the current slot to the given set.
-	 * 
-	 * @param firstSet
-	 * @param currentSlot
-	 * @param changed
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
@@ -242,11 +236,7 @@ public class FirstFollowSets {
 		}
 
 		for (Nonterminal head : nonterminals) {
-			// Remove the epsilon which may have been added from nullable
-			// nonterminals
-			followSets.get(head).removeAll(Epsilon.getInstance().getFirstSet());
-
-			// Add the EOF to all nonterminals as each nonterminal can be used
+            // Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
 			followSets.get(head).addAll(EOF.getInstance().getFirstSet());			
 		}
@@ -391,15 +381,16 @@ public class FirstFollowSets {
 		@Override
 		public Set<CharacterRange> visit(Nonterminal symbol) { return new HashSet<>(firstSets.get(symbol)); }
 
-		@Override
+        @Override
+        public Set<CharacterRange> visit(Terminal symbol) {
+            return symbol.getRegularExpression().getFirstSet();
+        }
+
+        @Override
 		public Set<CharacterRange> visit(Return symbol) { return new HashSet<>(); }
 
-		@Override
-		public Set<CharacterRange> visit(RegularExpression symbol) {
-			return new HashSet<>(symbol.getFirstSet());
-		}
     }
-    
+
     private static class NonterminalVisitor extends AbstractGrammarGraphSymbolVisitor<Nonterminal> {
 		@Override
 		public Nonterminal visit(Code symbol) { return symbol.getSymbol().accept(this); }
@@ -410,12 +401,14 @@ public class FirstFollowSets {
 		@Override
 		public Nonterminal visit(Nonterminal symbol) { return symbol; }
 
-		@Override
+        @Override
+        public Nonterminal visit(Terminal symbol) {
+            return null;
+        }
+
+        @Override
 		public Nonterminal visit(Return symbol) { return null; }
 
-		@Override
-		public Nonterminal visit(RegularExpression symbol) { return null; }
-    	
     }
     
     private static class NullableSymbolVisitor extends AbstractGrammarGraphSymbolVisitor<Boolean> {
@@ -435,10 +428,13 @@ public class FirstFollowSets {
 		@Override
 		public Boolean visit(Nonterminal symbol) { return nullableNonterminals.contains(symbol); }
 
-		@Override
+        @Override
+        public Boolean visit(Terminal symbol) {
+            return symbol.getRegularExpression().isNullable();
+        }
+
+        @Override
 		public Boolean visit(Return symbol) { return true; }
 
-		@Override
-		public Boolean visit(RegularExpression symbol) { return symbol.isNullable(); }
     }
 }

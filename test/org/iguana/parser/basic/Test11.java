@@ -27,8 +27,7 @@
 
 package org.iguana.parser.basic;
 
-import static org.iguana.util.CollectionsUtil.list;
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -39,7 +38,8 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -65,8 +65,8 @@ public class Test11 {
 	
 	static Nonterminal S = Nonterminal.withName("S");
 	static Nonterminal A = Nonterminal.withName("A");
-	static Character a = Character.from('a');
-	static Character b = Character.from('b');
+	static Terminal a = Terminal.from(Character.from('a'));
+	static Terminal b = Terminal.from(Character.from('b'));
     static Rule r1 = Rule.withHead(S).addSymbols(A, A, b).build();
     static Rule r2 = Rule.withHead(A).addSymbol(a).build();
     static Rule r3 = Rule.withHead(A).build();
@@ -95,7 +95,7 @@ public class Test11 {
         GrammarGraph graph = GrammarGraph.from(grammar, input);
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertEquals(getParseResult(graph), result);
-        assertEquals(getTree(), result.asParseSuccess().getTree());
+        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
     }
 
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -129,12 +129,12 @@ public class Test11 {
     public static Tree getTree() {
         Tree t0 = createEpsilon(0);
         Tree t1 = createRule(r3, list(t0), input);
-        Tree t2 = createTerminal(0, 1, input);
+        Tree t2 = createTerminal(a, 0, 1, input);
         Tree t3 = createRule(r2, list(t2), input);
         Tree t4 = createEpsilon(1);
         Tree t5 = createRule(r3, list(t4), input);
-        Tree t6 = createAmbiguity(set(createBranch(list(t1, t3)), createBranch(list(t3, t5))));
-        Tree t7 = createTerminal(1, 2, input);
+        Tree t6 = createAmbiguity(list(list(t1, t3), list(t3, t5)));
+        Tree t7 = createTerminal(b, 1, 2, input);
         Tree t8 = createRule(r1, list(t6, t7), input);
         return t8;
     }

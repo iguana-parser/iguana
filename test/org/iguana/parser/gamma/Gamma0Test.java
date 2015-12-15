@@ -32,7 +32,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -52,10 +53,10 @@ import iguana.utils.input.Input;
  */
 public class Gamma0Test {
 
-	private Character a = Character.from('a');
 	private Nonterminal S = Nonterminal.withName("S");
-	private Nonterminal A = Nonterminal.withName("A");
-	private Character d = Character.from('d');
+    private Nonterminal A = Nonterminal.withName("A");
+    private Terminal a = Terminal.from(Character.from('a'));
+    private Terminal d = Terminal.from(Character.from('d'));
 
 	private Grammar grammar;
 

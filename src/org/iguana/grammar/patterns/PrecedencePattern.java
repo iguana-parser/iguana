@@ -33,10 +33,9 @@ import java.util.List;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.util.generator.ConstructorCode;
 
 
-public class PrecedencePattern extends AbstractPattern implements Serializable, ConstructorCode {
+public class PrecedencePattern extends AbstractPattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -73,8 +72,4 @@ public class PrecedencePattern extends AbstractPattern implements Serializable, 
 		return position == parent.size() - 1;
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return "new " + PrecedencePattern.class.getSimpleName() + "(" + super.getConstructorCode() + ")";
-	}
 }

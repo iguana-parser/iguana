@@ -28,7 +28,7 @@
 package org.iguana.parser.datadependent.offside;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-import static org.iguana.util.CollectionsUtil.set;
+import static iguana.utils.collections.CollectionsUtil.set;
 
 import java.util.Arrays;
 
@@ -36,15 +36,9 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Associativity;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.PrecedenceLevel;
-import org.iguana.grammar.symbol.Recursion;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Character;
+import org.iguana.regex.CharacterRange;
 import org.iguana.grammar.transformation.DesugarAlignAndOffside;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -52,15 +46,12 @@ import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.regex.Alt;
-import org.iguana.regex.Plus;
 import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
 import iguana.utils.input.Input;
-import scala.collection.DebugUtils;
 
 @SuppressWarnings("unused")
 public class Test1_4 {
@@ -82,7 +73,7 @@ Grammar.builder()
 // Layout ::= WhiteSpace*  !>>  (\u0009-\\u000A | \u000C-\\u000D | \u0020)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("Layout").build()).addSymbol(Star.builder(Nonterminal.builder("WhiteSpace").build()).addPostConditions(set(new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(32, 32).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // WhiteSpace ::= (\u0009-\\u000A | \u000C-\\u000D | \u001A | \u0020)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("WhiteSpace").build()).addSymbol(Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(26, 26).build(), CharacterRange.builder(32, 32).build()).build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("WhiteSpace").build()).addSymbol(Terminal.from(Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(26, 26).build(), CharacterRange.builder(32, 32).build()).build())).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // S ::= offside Stat+  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Plus.builder(Offside.builder(Nonterminal.builder("Stat").build()).build()).addSeparators(Arrays.asList(Terminal.builder(Sequence.builder(Character.builder(59).build()).build()).build())).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 .build();

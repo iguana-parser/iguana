@@ -4,17 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.regex.*;
+import org.iguana.regex.Character;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonBuilder;
 import org.iguana.regex.automaton.State;
@@ -51,11 +42,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	public Automaton visit(Epsilon e) {
     	State state = new State(StateType.FINAL);
         return Automaton.builder(state).build();
-	}
-
-	@Override
-	public Automaton visit(Terminal t) {
-		return t.getRegularExpression().accept(this);
 	}
 
 	@Override
@@ -107,7 +93,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	}
 
 	@Override
-	public <E extends Symbol> Automaton visit(Alt<E> alt) {
+	public <E extends RegularExpression> Automaton visit(Alt<E> alt) {
 		List<E> symbols = alt.getSymbols();
 		
 		if (symbols.size() == 1)
@@ -115,7 +101,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 		
 		List<Automaton> automatons = new ArrayList<>();
 				
-		for (Symbol e : symbols) {
+		for (RegularExpression e : symbols) {
 			automatons.add(e.accept(this).copy());
 		}
 		
@@ -136,7 +122,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	}
 
 	@Override
-	public <E extends Symbol> Automaton visit(Sequence<E> seq) {
+	public <E extends RegularExpression> Automaton visit(Sequence<E> seq) {
 		List<Automaton> automatons = new ArrayList<>();
 		
 		List<E> symbols = seq.getSymbols();

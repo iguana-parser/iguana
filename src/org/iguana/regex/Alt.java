@@ -36,15 +36,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.iguana.grammar.symbol.AbstractRegularExpression;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Constants;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.SymbolBuilder;
-import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.traversal.RegularExpressionVisitor;
 
-public class Alt<T extends Symbol> extends AbstractRegularExpression implements Iterable<T> {
+public class Alt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,15 +51,15 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	}	
 	
 	@SafeVarargs
-	public static <T extends Symbol> Alt<T> from(T...symbols) {
+	public static <T extends RegularExpression> Alt<T> from(T...symbols) {
 		return from(Arrays.asList(symbols));
 	}
 	
-	public static <T extends Symbol> Alt<T> from(List<T> list) {
+	public static <T extends RegularExpression> Alt<T> from(List<T> list) {
 		return builder(list).build();
 	}
 	
-	private static <T extends Symbol> String getName(List<T> elements) {
+	private static <T extends RegularExpression> String getName(List<T> elements) {
 		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" | ")) + ")";
 	}
 
@@ -125,11 +120,6 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return Alt.class.getSimpleName() + ".builder(" + asArray(symbols) + ")" + super.getConstructorCode() + ".build()";
-	}
-	
-	@Override
 	public Builder<T> copyBuilder() {
 		return new Builder<T>(this);
 	}
@@ -178,20 +168,20 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 		return builder(newRanges).build();
 	}
 	
-	public static <T extends Symbol> Builder<T> builder(T t1, T t2) {
+	public static <T extends RegularExpression> Builder<T> builder(T t1, T t2) {
 		return builder(Arrays.asList(t1, t2));
 	}
 	
-	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
+	public static <T extends RegularExpression> Builder<T> builder(List<T> symbols) {
 		return new Builder<T>(symbols);
 	}
 	
 	@SafeVarargs
-	public static <T extends Symbol> Builder<T> builder(T...symbols) {
+	public static <T extends RegularExpression> Builder<T> builder(T...symbols) {
 		return new Builder<T>(Arrays.asList(symbols));
 	}
 	
-	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
+	public static class Builder<T extends RegularExpression> extends RegexBuilder<Alt<T>> {
 
 		List<T> symbols = new ArrayList<>();
 		
@@ -222,7 +212,7 @@ public class Alt<T extends Symbol> extends AbstractRegularExpression implements 
 	}
 
 	@Override
-	public <E> E accept(ISymbolVisitor<E> visitor) {
+	public <E> E accept(RegularExpressionVisitor<E> visitor) {
 		return visitor.visit(this);
 	}
 	

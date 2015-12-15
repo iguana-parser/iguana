@@ -46,9 +46,6 @@ public class RegularExpressionCondition extends Condition {
 	public RegularExpressionCondition(ConditionType type, RegularExpression regularExpression) {
 		super(type);
 		this.regularExpression = regularExpression;
-		
-		if (regularExpression.getPreConditions().size() != 0)
-			throw new IllegalArgumentException("RegularExpression conditions cannot have conditions themselves.");
 	}
 
 	@Override
@@ -79,11 +76,6 @@ public class RegularExpressionCondition extends Condition {
 		return type.hashCode() * 31 + regularExpression.hashCode();
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return "new " + RegularExpressionCondition.class.getSimpleName() + "(ConditionType." + type.name() + ", " + regularExpression.getConstructorCode() + ")";
-	}
-	
 	public static RegularExpressionCondition notMatch(RegularExpression regularExpression) {
 		return new RegularExpressionCondition(ConditionType.NOT_MATCH, regularExpression);
 	}

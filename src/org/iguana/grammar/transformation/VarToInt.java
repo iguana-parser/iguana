@@ -40,34 +40,11 @@ import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.exception.UndeclaredVariableException;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -167,15 +144,6 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 		throw new RuntimeException("Unsupported symbol: var-to-int!");
 	}
 
-	@Override
-	public Symbol visit(Character symbol) {
-		return symbol;
-	}
-
-	@Override
-	public Symbol visit(CharacterRange symbol) {
-		return symbol;
-	}
 
 	@Override
 	public Symbol visit(Code symbol) {
@@ -193,16 +161,6 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 	public Symbol visit(Conditional symbol) {
 		Symbol sym = visit(symbol.getSymbol());
 		return Conditional.when(sym, (org.iguana.datadependent.ast.Expression) symbol.getExpression().accept(this));
-	}
-
-	@Override
-	public Symbol visit(EOF symbol) {
-		return symbol;
-	}
-
-	@Override
-	public Symbol visit(Epsilon symbol) {
-		return symbol;
 	}
 
 	@Override
@@ -535,11 +493,6 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 	@Override
 	public AbstractAST visit(Expression statement) {
 		return AST.stat((org.iguana.datadependent.ast.Expression) statement.getExpression().accept(this));
-	}
-
-	@Override
-	public Condition visit(ContextFreeCondition condition) {
-		return condition;
 	}
 
 	@Override

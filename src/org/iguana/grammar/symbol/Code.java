@@ -57,20 +57,6 @@ public class Code extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		String[] stats = new String[statements.length];
-		
-		int j = 0;
-		for (Statement statement : statements) {
-			stats[j] = statement.getConstructorCode();
-		}
-		
-		return "Code.builder(" + symbol.getConstructorCode() + "," + GeneratorUtil.listToString(stats, ",") + ")" 
-							   + super.getConstructorCode()
-							   + ".build()";
-	}
-
-	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}

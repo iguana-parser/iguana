@@ -28,7 +28,7 @@
 package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
@@ -59,7 +59,7 @@ public class KeywordTest2 {
 	public void init() {
 		
 		Rule r1 = Rule.withHead(A).addSymbols(iff, B).build();
-		Rule r2 = Rule.withHead(B).addSymbol(Character.from('b')).build();
+		Rule r2 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
 		
 		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 	}
