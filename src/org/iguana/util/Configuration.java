@@ -142,7 +142,7 @@ public class Configuration {
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
         private LogLevel logLevel = LogLevel.None;
 		
-		private EnvironmentImpl envImpl = EnvironmentImpl.ARRAY;
+		private EnvironmentImpl envImpl = EnvironmentImpl.TRIE;
 				
 		public Configuration build() {
 			return new Configuration(this);
