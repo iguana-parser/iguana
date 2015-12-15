@@ -73,6 +73,11 @@ public class ParseSuccess extends AbstractParseResult {
 		return parseStatistics;
 	}
 
+
+    public Tree getTreeWithoutSharing() {
+        return TermBuilder.build_no_memo(sppfNode, TreeBuilderFactory.getDefault(input));
+    }
+
     public Tree getTree() {
         return TermBuilder.build(sppfNode, TreeBuilderFactory.getDefault(input));
     }
