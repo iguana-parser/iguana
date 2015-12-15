@@ -474,8 +474,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		
 		@Override
 		public Symbol visit(Return symbol) {
-			// TODO:
-			return null;
+			return symbol;
 		}
 
 		@Override

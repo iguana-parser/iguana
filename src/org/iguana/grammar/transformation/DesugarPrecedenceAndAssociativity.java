@@ -2341,7 +2341,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								iret = tuple(rets);
 						}	
 					}
-					
+
 					if (ret != null && xret != null)
 						symbols.add(Return.ret(tuple(ret,xret)));
 					else if (ret != null)
@@ -2962,8 +2962,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		@Override
 		public Symbol visit(Return symbol) {
-			// TODO: support for return
-			return null;
+			return symbol;
 		}
 
 		@Override
