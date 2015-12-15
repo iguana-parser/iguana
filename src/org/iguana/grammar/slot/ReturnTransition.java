@@ -44,7 +44,7 @@ public class ReturnTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u,NonPackedNode node) {
+	public void execute(Input input, GSSNode u, NonPackedNode node) {
 	   Object value = runtime.evaluate(expression, runtime.getEmptyEnvironment());
 	   ((EndGrammarSlot) dest).execute(input, u, node, value);
 	}

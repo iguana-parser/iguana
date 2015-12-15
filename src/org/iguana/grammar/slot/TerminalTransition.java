@@ -57,8 +57,10 @@ public class TerminalTransition extends AbstractTransition {
 	public void execute(Input input, GSSNode u, NonPackedNode node) {
 		int i = node.getRightExtent();
 
-		if (dest.getLabel() != null)
-			execute(input, u, node, runtime.getEmptyEnvironment());
+		if (dest.getLabel() != null) {
+            execute(input, u, node, runtime.getEmptyEnvironment());
+            return;
+        }
 		
 		if (preConditions.execute(input, u, i))
 			return;
@@ -132,7 +134,7 @@ public class TerminalTransition extends AbstractTransition {
 		
 		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
 				
-		dest.execute(input, u, n, env);
+		dest.execute(input, u, n, runtime.getEnvironment());
 	}
 	
 }
