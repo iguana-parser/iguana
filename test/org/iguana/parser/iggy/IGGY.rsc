@@ -60,7 +60,7 @@ syntax Sequence = MoreThanTwo: Symbol Symbol+ ReturnExpression? Attribute*
                 | Single: Symbol ReturnExpression? LAttribute?
                 ;
                 
-syntax RegexSequence = Regex+;
+syntax RegexSequence = Sequence: Regex+;
 
 syntax Parameters = "(" {VarName@0 ","}* ")"; 
 

@@ -177,7 +177,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
         public static org.iguana.grammar.symbol.Rule regex(Identifier name, List<org.iguana.grammar.symbol.Symbol> body) {
             return org.iguana.grammar.symbol.Rule.withHead(Nonterminal.withName(name.id))
                     .addSymbol(body.isEmpty()? Epsilon.getInstance()
-                                   : (body.size() == 1? body.get(0) : org.iguana.regex.Sequence.from(body)))
+                                   : (body.size() == 1? body.get(0) : org.iguana.regex.Alt.from(body)))
                     .addAttribute("regex", true)
                     .build();
         }
@@ -256,6 +256,15 @@ public class GrammarBuilder implements TermTraversal.Actions {
     }
 
     public static Sequence sequence() { return new Sequence(null, null, null); }
+
+    public static class RegexSequence {
+        public static org.iguana.grammar.symbol.Symbol sequence(List<org.iguana.grammar.symbol.Symbol> regexs) {
+            if (regexs.size() == 1) return regexs.get(0);
+            return org.iguana.regex.Sequence.from(regexs);
+        }
+    }
+
+    public static RegexSequence regexsequence() { return new RegexSequence(); }
 
     public static class Attribute {
         public final String attribute;
