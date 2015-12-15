@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
@@ -101,7 +102,10 @@ public class FirstFollowSets {
 	}
 	
 	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
-		return firstSets.get(nonterminal);
+        Set<CharacterRange> firstSet = new HashSet<>(firstSets.get(nonterminal));
+        if (isNullable(nonterminal))
+            firstSet.addAll(Epsilon.getInstance().getFirstSet());
+        return firstSet;
 	}
 	
 	public Set<CharacterRange> getFollowSet(Nonterminal nonterminal) {
@@ -232,11 +236,7 @@ public class FirstFollowSets {
 		}
 
 		for (Nonterminal head : nonterminals) {
-			// Remove the epsilon which may have been added from nullable
-			// nonterminals
-			followSets.get(head).removeAll(Epsilon.getInstance().getFirstSet());
-
-			// Add the EOF to all nonterminals as each nonterminal can be used
+            // Add the EOF to all nonterminals as each nonterminal can be used
 			// as the start symbol.
 			followSets.get(head).addAll(EOF.getInstance().getFirstSet());			
 		}

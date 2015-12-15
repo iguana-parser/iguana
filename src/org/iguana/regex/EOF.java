@@ -55,6 +55,10 @@ public class EOF extends AbstractRegularExpression {
 		}
 		return instance;
 	}
+
+    public static CharacterRange asCharacterRange() {
+        return CharacterRange.in(VALUE, VALUE);
+    }
 	
 	private EOF() {
 		super(new RegexBuilder<EOF>("$") {

@@ -45,7 +45,7 @@ public class Epsilon extends AbstractRegularExpression {
 	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
 	
 	private static Epsilon instance;
-	
+
 	public static Epsilon getInstance() {
 		if(instance == null)
 			instance = new Epsilon();
@@ -59,11 +59,16 @@ public class Epsilon extends AbstractRegularExpression {
 					public Epsilon build() {
 						return Epsilon.getInstance();
 					}};
+
+    public static CharacterRange asCharacterRange() {
+        return CharacterRange.in(VALUE, VALUE);
+    }
 	
 	private Epsilon() {
 		super(builder);
 	}
-	
+
+
 	private Object readResolve()  {
 	    return instance;
 	}
