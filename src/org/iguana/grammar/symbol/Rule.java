@@ -39,11 +39,8 @@ import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.tree.RuleType;
+import iguana.parsetrees.term.RuleType;
 import iguana.utils.collections.hash.MurmurHash3;
-
-import org.iguana.util.generator.GeneratorUtil;
 
 /**
  * 

@@ -31,7 +31,7 @@ import static iguana.utils.collections.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Terminal;
@@ -45,7 +45,7 @@ import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
 
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 
 import iguana.utils.input.Input;
 
@@ -93,31 +93,31 @@ public class LayoutTest3 {
         assertTrue(getTree(input).equals(result.asParseSuccess().getTree()));
 	}
 
-    private Tree getTree(Input input) {
-        Tree t0 = createTerminal(a, 0, 1, input);
-        Tree t1 = createRule(r2, list(t0), input);
-        Tree t2 = createTerminal(space, 1, 2, input);
-        Tree t3 = createRule(layout, list(t2), input);
-        Tree t4 = createTerminal(b, 2, 3, input);
-        Tree t5 = createRule(r3, list(t4), input);
-        Tree t6 = createTerminal(space, 3, 4, input);
-        Tree t7 = createRule(layout, list(t6), input);
-        Tree t8 = createTerminal(b, 4, 5, input);
-        Tree t9 = createRule(r3, list(t8), input);
-        Tree t10 = createTerminal(space, 5, 6, input);
-        Tree t11 = createRule(layout, list(t10), input);
-        Tree t12 = createTerminal(b, 6, 7, input);
-        Tree t13 = createRule(r3, list(t12), input);
-        Tree t14 = createTerminal(space, 7, 8, input);
-        Tree t15 = createRule(layout, list(t14), input);
-        Tree t16 = createTerminal(b, 8, 9, input);
-        Tree t17 = createRule(r3, list(t16), input);
-        Tree t18 = createPlus(list(t5, t7, t9, t11, t13, t15, t17));
-        Tree t19 = createTerminal(space, 9, 10, input);
-        Tree t20 = createRule(layout, list(t19), input);
-        Tree t21 = createTerminal(c, 10, 11, input);
-        Tree t22 = createRule(r4, list(t21), input);
-        Tree t23 = createRule(r1, list(t1, t3, t18, t20, t22), input);
+    private Term getTree(Input input) {
+        Term t0 = createTerminal(a, 0, 1, input);
+        Term t1 = createRule(r2, list(t0), input);
+        Term t2 = createTerminal(space, 1, 2, input);
+        Term t3 = createRule(layout, list(t2), input);
+        Term t4 = createTerminal(b, 2, 3, input);
+        Term t5 = createRule(r3, list(t4), input);
+        Term t6 = createTerminal(space, 3, 4, input);
+        Term t7 = createRule(layout, list(t6), input);
+        Term t8 = createTerminal(b, 4, 5, input);
+        Term t9 = createRule(r3, list(t8), input);
+        Term t10 = createTerminal(space, 5, 6, input);
+        Term t11 = createRule(layout, list(t10), input);
+        Term t12 = createTerminal(b, 6, 7, input);
+        Term t13 = createRule(r3, list(t12), input);
+        Term t14 = createTerminal(space, 7, 8, input);
+        Term t15 = createRule(layout, list(t14), input);
+        Term t16 = createTerminal(b, 8, 9, input);
+        Term t17 = createRule(r3, list(t16), input);
+        Term t18 = createPlus(list(t5, t7, t9, t11, t13, t15, t17));
+        Term t19 = createTerminal(space, 9, 10, input);
+        Term t20 = createRule(layout, list(t19), input);
+        Term t21 = createTerminal(c, 10, 11, input);
+        Term t22 = createRule(r4, list(t21), input);
+        Term t23 = createRule(r1, list(t1, t3, t18, t20, t22), input);
         return t23;
     }
 }

@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.ReachabilityGraph;
@@ -51,7 +51,7 @@ import org.junit.Test;
 import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 
 /**
  * S ::= A B C
@@ -136,11 +136,11 @@ public class Test10 {
         return node11;
     }
 
-    public static Tree getTree() {
-        Tree t1 = createRule(r3, list(createTerminal(a, 0, 1, input)), input); // A(a)
-        Tree t2 = createRule(r4, list(createTerminal(b, 1, 2, input)), input); // B(b)
-        Tree t3 = createRule(r5, list(createTerminal(c, 2, 3, input)), input); // C(c)
-        Tree t4 = createRule(r6, list(createTerminal(c, 2, 3, input)), input); // D(c)
+    public static Term getTree() {
+        Term t1 = createRule(r3, list(createTerminal(a, 0, 1, input)), input); // A(a)
+        Term t2 = createRule(r4, list(createTerminal(b, 1, 2, input)), input); // B(b)
+        Term t3 = createRule(r5, list(createTerminal(c, 2, 3, input)), input); // C(c)
+        Term t4 = createRule(r6, list(createTerminal(c, 2, 3, input)), input); // D(c)
         return createAmbiguity(list(list(t1, t2, t4), list(t1, t2, t3)));
     }
 }

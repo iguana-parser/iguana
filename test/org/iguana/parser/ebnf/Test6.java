@@ -3,7 +3,7 @@ package org.iguana.parser.ebnf;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -21,7 +21,7 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
@@ -104,11 +104,11 @@ public class Test6 {
         return node3;
     }
 
-    public static Tree getTree1() {
-        Tree t0 = createTerminal(a, 0, 1, input1);
-        Tree t1 = createRule(r2, list(t0), input1);
-        Tree t2 = createAlt(list(t1));
-        Tree t3 = createRule(r1, list(t2), input1);
+    public static Term getTree1() {
+        Term t0 = createTerminal(a, 0, 1, input1);
+        Term t1 = createRule(r2, list(t0), input1);
+        Term t2 = createAlt(list(t1));
+        Term t3 = createRule(r1, list(t2), input1);
         return t3;
     }
 
@@ -133,11 +133,11 @@ public class Test6 {
         return node3;
     }
 
-    public static Tree getTree2() {
-        Tree t0 = createTerminal(b, 0, 1, input2);
-        Tree t1 = createRule(r3, list(t0), input2);
-        Tree t2 = createAlt(list(t1));
-        Tree t3 = createRule(r1, list(t2), input2);
+    public static Term getTree2() {
+        Term t0 = createTerminal(b, 0, 1, input2);
+        Term t1 = createRule(r3, list(t0), input2);
+        Term t2 = createAlt(list(t1));
+        Term t3 = createRule(r1, list(t2), input2);
         return t3;
     }
 
@@ -162,11 +162,11 @@ public class Test6 {
         return node3;
     }
 
-    public static Tree getTree3() {
-        Tree t0 = createTerminal(c, 0, 1, input3);
-        Tree t1 = createRule(r4, list(t0), input3);
-        Tree t2 = createAlt(list(t1));
-        Tree t3 = createRule(r1, list(t2), input3);
+    public static Term getTree3() {
+        Term t0 = createTerminal(c, 0, 1, input3);
+        Term t1 = createRule(r4, list(t0), input3);
+        Term t2 = createAlt(list(t1));
+        Term t3 = createRule(r1, list(t2), input3);
         return t3;
     }
 }

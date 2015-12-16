@@ -28,7 +28,7 @@
 package org.iguana.grammar.symbol;
 
 import iguana.parsetrees.slot.TerminalNodeType;
-import iguana.parsetrees.tree.TerminalType;
+import iguana.parsetrees.term.TerminalType;
 import org.iguana.regex.Epsilon;
 import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;

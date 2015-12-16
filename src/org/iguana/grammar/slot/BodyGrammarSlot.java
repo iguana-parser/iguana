@@ -39,7 +39,7 @@ import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonPackedNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFNodeFactory;
-import iguana.parsetrees.tree.RuleType;
+import iguana.parsetrees.term.RuleType;
 import iguana.utils.collections.Keys;
 import iguana.utils.input.Input;
 

@@ -30,7 +30,7 @@ package org.iguana.grammar.slot;
 import iguana.parsetrees.slot.Action;
 import iguana.parsetrees.slot.PackedNodeSlot;
 import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.tree.RuleType;
+import iguana.parsetrees.term.RuleType;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;

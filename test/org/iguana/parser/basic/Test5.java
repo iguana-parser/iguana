@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -53,7 +53,7 @@ import org.junit.Test;
 import iguana.utils.input.Input;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 
 
@@ -133,9 +133,9 @@ public class Test5 {
         return node2;
 	}
 
-    public static Tree getTree() {
-        Tree t0 = createTerminal(b, 0, 1, input);
-        Tree t1 = createRule(r2, list(t0), input);
+    public static Term getTree() {
+        Term t0 = createTerminal(b, 0, 1, input);
+        Term t1 = createRule(r2, list(t0), input);
         return createRule(r1, list(t1), input);
     }
 }
