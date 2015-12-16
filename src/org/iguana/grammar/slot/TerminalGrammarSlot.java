@@ -32,10 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import iguana.parsetrees.slot.TerminalNodeType;
 import iguana.parsetrees.slot.TerminalSlot;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.TerminalType;
+import iguana.parsetrees.term.TerminalType;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;

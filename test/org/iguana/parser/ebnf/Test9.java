@@ -1,6 +1,6 @@
 package org.iguana.parser.ebnf;
 
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -41,7 +41,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input0);
         ParseResult result = Iguana.parse(input0, graph, S);
         assertTrue(result.isParseSuccess());
-        Tree tree = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTree();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input1);
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
-        Tree tree = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTree();
     }
 
     @Test
@@ -59,7 +59,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input2);
         ParseResult result = Iguana.parse(input2, graph, S);
         assertTrue(result.isParseSuccess());
-        Tree tree = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTree();
     }
 
     @Test
@@ -68,7 +68,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input3);
         ParseResult result = Iguana.parse(input3, graph, S);
         assertTrue(result.isParseSuccess());
-        Tree tree = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTree();
     }
 
     @Test
@@ -77,7 +77,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input4);
         ParseResult result = Iguana.parse(input4, graph, S);
         assertTrue(result.isParseSuccess());
-        Tree tree = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTree();
     }
 
 

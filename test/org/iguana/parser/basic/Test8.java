@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -51,7 +51,7 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 
 import iguana.utils.input.Input;
@@ -211,8 +211,8 @@ public class Test8 {
         return node6;
 	}
 
-    public static Tree getTree1() {
-        Tree t1 = createRule(r3, list(createTerminal(b, 1, 2, input1)), input1);
+    public static Term getTree1() {
+        Term t1 = createRule(r3, list(createTerminal(b, 1, 2, input1)), input1);
         return createRule(r1, list(createTerminal(a, 0, 1, input1), t1, createTerminal(c, 2, 3, input1)), input1);
     }
 
@@ -235,12 +235,12 @@ public class Test8 {
         return node14;
     }
 
-    public static Tree getTree2() {
-        Tree t1 = createRule(r5, list(createTerminal(c, 4, 5, input2)), input2);
-        Tree t2 = createRule(r4, list(createTerminal(a, 3, 4, input2), t1), input2);
-        Tree t3 = createRule(r4, list(createTerminal(a, 2, 3, input2), t2), input2);
-        Tree t4 = createRule(r4, list(createTerminal(a, 1, 2, input2), t3), input2);
-        Tree t5 = createRule(r4, list(createTerminal(a, 0, 1, input2), t4), input2);
+    public static Term getTree2() {
+        Term t1 = createRule(r5, list(createTerminal(c, 4, 5, input2)), input2);
+        Term t2 = createRule(r4, list(createTerminal(a, 3, 4, input2), t1), input2);
+        Term t3 = createRule(r4, list(createTerminal(a, 2, 3, input2), t2), input2);
+        Term t4 = createRule(r4, list(createTerminal(a, 1, 2, input2), t3), input2);
+        Term t5 = createRule(r4, list(createTerminal(a, 0, 1, input2), t4), input2);
         return createRule(r2, list(t5), input2);
     }
 	

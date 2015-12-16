@@ -30,7 +30,7 @@ package org.iguana.parser.basic;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -47,7 +47,7 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -154,22 +154,22 @@ public class Test12 {
         return node2;
 	}
 
-    private static Tree getTree1() {
-        Tree t0 = createTerminal(a, 0, 1, input1);
-        Tree t1 = createCycle("A");
-        Tree t2 = createEpsilon(0);
-        Tree t3 = createAmbiguity(list(list(t2), list(t1, t1)));
-        Tree t4 = createEpsilon(1);
-        Tree t5 = createAmbiguity(list(list(t4), list(t1, t1)));
-        Tree t6 = createAmbiguity(list(list(t1, t5), list(t3, t1)));
-        Tree t7 = createAmbiguity(list(list(t0), list(t6)));
+    private static Term getTree1() {
+        Term t0 = createTerminal(a, 0, 1, input1);
+        Term t1 = createCycle("A");
+        Term t2 = createEpsilon(0);
+        Term t3 = createAmbiguity(list(list(t2), list(t1, t1)));
+        Term t4 = createEpsilon(1);
+        Term t5 = createAmbiguity(list(list(t4), list(t1, t1)));
+        Term t6 = createAmbiguity(list(list(t1, t5), list(t3, t1)));
+        Term t7 = createAmbiguity(list(list(t0), list(t6)));
         return t7;
     }
 
-    private static Tree getTree2() {
-        Tree t0 = createCycle("A");
-        Tree t1 = createEpsilon(0);
-        Tree t2 = createAmbiguity(list(list(t1), list(t0, t0)));
+    private static Term getTree2() {
+        Term t0 = createCycle("A");
+        Term t1 = createEpsilon(0);
+        Term t2 = createAmbiguity(list(list(t1), list(t0, t0)));
         return t2;
     }
 

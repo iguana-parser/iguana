@@ -3,7 +3,7 @@ package org.iguana.parser.basic;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -19,7 +19,7 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
@@ -96,13 +96,13 @@ public class Test18 {
         return node7;
     }
 
-    private static Tree getTree1() {
-        Tree t0 = createTerminal(a, 0, 1, input1);
-        Tree t1 = createRule(r2, list(t0), input1);
-        Tree t2 = createTerminal(plus, 1, 2, input1);
-        Tree t3 = createTerminal(a, 2, 3, input1);
-        Tree t4 = createRule(r2, list(t3), input1);
-        Tree t5 = createRule(r1, list(t1, t2, t4), input1);
+    private static Term getTree1() {
+        Term t0 = createTerminal(a, 0, 1, input1);
+        Term t1 = createRule(r2, list(t0), input1);
+        Term t2 = createTerminal(plus, 1, 2, input1);
+        Term t3 = createTerminal(a, 2, 3, input1);
+        Term t4 = createRule(r2, list(t3), input1);
+        Term t5 = createRule(r1, list(t1, t2, t4), input1);
         return t5;
     }
 
@@ -141,19 +141,19 @@ public class Test18 {
         return node16;
     }
 
-    private static Tree getTree2() {
-        Tree t0 = createTerminal(a, 0, 1, input2);
-        Tree t1 = createRule(r2, list(t0), input2);
-        Tree t2 = createTerminal(plus, 1, 2, input2);
-        Tree t3 = createTerminal(a, 2, 3, input2);
-        Tree t4 = createRule(r2, list(t3), input2);
-        Tree t5 = createRule(r1, list(t1, t2, t4), input2);
-        Tree t6 = createTerminal(plus, 3, 4, input2);
-        Tree t7 = createTerminal(a, 4, 5, input2);
-        Tree t8 = createRule(r2, list(t7), input2);
-        Tree t9 = createRule(r1, list(t4, t6, t8), input2);
-        Tree t10 = createAmbiguity(list(list(t5, t6, t8), list(t1, t2, t9)));
-        Tree t11 = createRule(r1, list(t10), input2);
+    private static Term getTree2() {
+        Term t0 = createTerminal(a, 0, 1, input2);
+        Term t1 = createRule(r2, list(t0), input2);
+        Term t2 = createTerminal(plus, 1, 2, input2);
+        Term t3 = createTerminal(a, 2, 3, input2);
+        Term t4 = createRule(r2, list(t3), input2);
+        Term t5 = createRule(r1, list(t1, t2, t4), input2);
+        Term t6 = createTerminal(plus, 3, 4, input2);
+        Term t7 = createTerminal(a, 4, 5, input2);
+        Term t8 = createRule(r2, list(t7), input2);
+        Term t9 = createRule(r1, list(t4, t6, t8), input2);
+        Term t10 = createAmbiguity(list(list(t5, t6, t8), list(t1, t2, t9)));
+        Term t11 = createRule(r1, list(t10), input2);
         return t11;
     }
 
@@ -228,37 +228,37 @@ public class Test18 {
         return node43;
     }
 
-    private static Tree getTree3() {
-        Tree t0 = createTerminal(a, 0, 1, input3);
-        Tree t1 = createRule(r2, list(t0), input3);
-        Tree t2 = createTerminal(plus, 1, 2, input3);
-        Tree t3 = createTerminal(a, 2, 3, input3);
-        Tree t4 = createRule(r2, list(t3), input3);
-        Tree t5 = createRule(r1, list(t1, t2, t4), input3);
-        Tree t6 = createTerminal(plus, 3, 4, input3);
-        Tree t7 = createTerminal(a, 4, 5, input3);
-        Tree t8 = createRule(r2, list(t7), input3);
-        Tree t9 = createRule(r1, list(t4, t6, t8), input3);
-        Tree t10 = createAmbiguity(list(list(t5, t6, t8), list(t1, t2, t9)));
-        Tree t11 = createRule(r1, list(t10), input3);
-        Tree t12 = createTerminal(plus, 5, 6, input3);
-        Tree t13 = createTerminal(a, 6, 7, input3);
-        Tree t14 = createRule(r2, list(t13), input3);
-        Tree t15 = createRule(r1, list(t8, t12, t14), input3);
-        Tree t16 = createAmbiguity(list(list(t4, t6, t15), list(t9, t12, t14)));
-        Tree t17 = createRule(r1, list(t16), input3);
-        Tree t18 = createAmbiguity(list(list(t11, t12, t14), list(t5, t6, t15), list(t1, t2, t17)));
-        Tree t19 = createRule(r1, list(t18), input3);
-        Tree t20 = createTerminal(plus, 7, 8, input3);
-        Tree t21 = createTerminal(a, 8, 9, input3);
-        Tree t22 = createRule(r2, list(t21), input3);
-        Tree t23 = createRule(r1, list(t14, t20, t22), input3);
-        Tree t24 = createAmbiguity(list(list(t8, t12, t23), list(t15, t20, t22)));
-        Tree t25 = createRule(r1, list(t24), input3);
-        Tree t26 = createAmbiguity(list(list(t4, t6, t25), list(t17, t20, t22), list(t9, t12, t23)));
-        Tree t27 = createRule(r1, list(t26), input3);
-        Tree t28 = createAmbiguity(list(list(t19, t20, t22), list(t11, t12, t23), list(t5, t6, t25), list(t1, t2, t27)));
-        Tree t29 = createRule(r1, list(t28), input3);
+    private static Term getTree3() {
+        Term t0 = createTerminal(a, 0, 1, input3);
+        Term t1 = createRule(r2, list(t0), input3);
+        Term t2 = createTerminal(plus, 1, 2, input3);
+        Term t3 = createTerminal(a, 2, 3, input3);
+        Term t4 = createRule(r2, list(t3), input3);
+        Term t5 = createRule(r1, list(t1, t2, t4), input3);
+        Term t6 = createTerminal(plus, 3, 4, input3);
+        Term t7 = createTerminal(a, 4, 5, input3);
+        Term t8 = createRule(r2, list(t7), input3);
+        Term t9 = createRule(r1, list(t4, t6, t8), input3);
+        Term t10 = createAmbiguity(list(list(t5, t6, t8), list(t1, t2, t9)));
+        Term t11 = createRule(r1, list(t10), input3);
+        Term t12 = createTerminal(plus, 5, 6, input3);
+        Term t13 = createTerminal(a, 6, 7, input3);
+        Term t14 = createRule(r2, list(t13), input3);
+        Term t15 = createRule(r1, list(t8, t12, t14), input3);
+        Term t16 = createAmbiguity(list(list(t4, t6, t15), list(t9, t12, t14)));
+        Term t17 = createRule(r1, list(t16), input3);
+        Term t18 = createAmbiguity(list(list(t11, t12, t14), list(t5, t6, t15), list(t1, t2, t17)));
+        Term t19 = createRule(r1, list(t18), input3);
+        Term t20 = createTerminal(plus, 7, 8, input3);
+        Term t21 = createTerminal(a, 8, 9, input3);
+        Term t22 = createRule(r2, list(t21), input3);
+        Term t23 = createRule(r1, list(t14, t20, t22), input3);
+        Term t24 = createAmbiguity(list(list(t8, t12, t23), list(t15, t20, t22)));
+        Term t25 = createRule(r1, list(t24), input3);
+        Term t26 = createAmbiguity(list(list(t4, t6, t25), list(t17, t20, t22), list(t9, t12, t23)));
+        Term t27 = createRule(r1, list(t26), input3);
+        Term t28 = createAmbiguity(list(list(t19, t20, t22), list(t11, t12, t23), list(t5, t6, t25), list(t1, t2, t27)));
+        Term t29 = createRule(r1, list(t28), input3);
         return t29;
     }
 

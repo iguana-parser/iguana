@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.slot.NonterminalNodeType;
 import iguana.parsetrees.sppf.*;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Terminal;
@@ -48,7 +48,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 
 import static iguana.utils.collections.CollectionsUtil.*;
 
@@ -118,23 +118,23 @@ public class LayoutTest2 {
         return new ParseSuccess(getSPPFNode(graph, input), statistics, input);
     }
 
-    private Tree getTree(Input input) {
-        Tree t0 = createTerminal(a, 0, 1, input);
-        Tree t1 = createRule(r2, list(t0), input);
-        Tree t2 = createEpsilon(1);
-        Tree t3 = createRule(layout1, list(t2), input);
-        Tree t4 = createEpsilon(1);
-        Tree t5 = createRule(r3, list(t4), input);
-        Tree t6 = createTerminal(space, 1, 2, input);
-        Tree t7 = createRule(layout2, list(t6), input);
-        Tree t8 = createEpsilon(2);
-        Tree t9 = createRule(r3, list(t8), input);
-        Tree t10 = createEpsilon(2);
-        Tree t11 = createRule(layout2, list(t10), input);
-        Tree t12 = createAmbiguity(list(list(t1, t3, t5, t7), list(t1, t7, t9, t11)));
-        Tree t13 = createTerminal(c, 2, 3, input);
-        Tree t14 = createRule(r4, list(t13), input);
-        Tree t15 = createRule(r1, list(t12, t14), input);
+    private Term getTree(Input input) {
+        Term t0 = createTerminal(a, 0, 1, input);
+        Term t1 = createRule(r2, list(t0), input);
+        Term t2 = createEpsilon(1);
+        Term t3 = createRule(layout1, list(t2), input);
+        Term t4 = createEpsilon(1);
+        Term t5 = createRule(r3, list(t4), input);
+        Term t6 = createTerminal(space, 1, 2, input);
+        Term t7 = createRule(layout2, list(t6), input);
+        Term t8 = createEpsilon(2);
+        Term t9 = createRule(r3, list(t8), input);
+        Term t10 = createEpsilon(2);
+        Term t11 = createRule(layout2, list(t10), input);
+        Term t12 = createAmbiguity(list(list(t1, t3, t5, t7), list(t1, t7, t9, t11)));
+        Term t13 = createTerminal(c, 2, 3, input);
+        Term t14 = createRule(r4, list(t13), input);
+        Term t15 = createRule(r1, list(t12, t14), input);
         return t15;
     }
 

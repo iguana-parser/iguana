@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import iguana.parsetrees.sppf.*;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -45,7 +45,7 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 
 import iguana.utils.input.Input;
 import static iguana.utils.collections.CollectionsUtil.*;
@@ -109,8 +109,8 @@ public class Test1 {
 		return node1;
 	}
 
-    public static Tree getTree() {
-        Tree t0 = createEpsilon(0);
+    public static Term getTree() {
+        Term t0 = createEpsilon(0);
         return createRule(r1, list(t0), input);
     }
 

@@ -39,8 +39,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import iguana.parsetrees.tree.TreeBuilder;
-import iguana.parsetrees.tree.TreeBuilderFactory;
+import iguana.parsetrees.term.TermBuilder;
+import iguana.parsetrees.term.SPPFToTerms;
 import iguana.utils.input.Input;
 import iguana.utils.logging.IguanaLogger;
 import iguana.utils.logging.JavaUtilIguanaLogger;
@@ -65,7 +65,7 @@ public class IguanaRunner {
 	private final boolean runGCInBetween;
 	private final int timeout;
     private final boolean buildTrees;
-    private final TreeBuilder<?> treeBuilder;
+    private final TermBuilder<?> termBuilder;
 
     private final IguanaLogger logger;
 
@@ -79,7 +79,7 @@ public class IguanaRunner {
 		this.runGCInBetween = builder.runGCInBetween;
 		this.timeout = builder.timeout;
         this.buildTrees = builder.buildTrees;
-        this.treeBuilder = builder.treeBuilder;
+        this.termBuilder = builder.termBuilder;
         if (builder.log) {
             logger = new JavaUtilIguanaLogger("Iguana", builder.logLevel);
         } else {
@@ -109,7 +109,7 @@ public class IguanaRunner {
 						logger.log(result.asParseError());
 					} else {
                         if (buildTrees) {
-                            result.asParseSuccess().getTree(TreeBuilderFactory.getDefault(input));
+                            result.asParseSuccess().getTree();
                         }
                     }
 					logger.log((i + 1) + " ");
@@ -126,7 +126,7 @@ public class IguanaRunner {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
                         logger.log("  : Success");
                         if (buildTrees) {
-                            result.asParseSuccess().getTree(TreeBuilderFactory.getDefault(input));
+                            result.asParseSuccess().getTree();
 //                            TreeVisualization.generate(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
                         }
 					} else {
@@ -192,7 +192,7 @@ public class IguanaRunner {
 		private int timeout = 30;
 		private int limit = Integer.MAX_VALUE;
         private boolean buildTrees;
-        private TreeBuilder<?> treeBuilder;
+        private TermBuilder<?> termBuilder;
         private boolean log;
         private LogLevel logLevel= LogLevel.INFO;
 
@@ -263,8 +263,8 @@ public class IguanaRunner {
             return this;
         }
 
-        public Builder setTreeBuilder(TreeBuilder<?> treeBuilder) {
-            this.treeBuilder = treeBuilder;
+        public Builder setTermBuilder(TermBuilder<?> termBuilder) {
+            this.termBuilder = termBuilder;
             return this;
         }
 

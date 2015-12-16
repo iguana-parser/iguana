@@ -3,7 +3,7 @@ package org.iguana.parser.ebnf;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.tree.Tree;
+import iguana.parsetrees.term.Term;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.tree.TreeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 
 /**
@@ -129,14 +129,14 @@ public class Test7 {
         return node9;
     }
 
-    public static Tree getTree1() {
-        Tree t0 = createEpsilon(0);
-        Tree t1 = createOpt(t0);
-        Tree t2 = createTerminal(b, 0, 1, input1);
-        Tree t3 = createRule(r3, list(t2), input1);
-        Tree t4 = createPlus(list(t3));
-        Tree t6 = createStar(list());
-        Tree t7 = createRule(r1, list(t1, t4, t6), input1);
+    public static Term getTree1() {
+        Term t0 = createEpsilon(0);
+        Term t1 = createOpt(t0);
+        Term t2 = createTerminal(b, 0, 1, input1);
+        Term t3 = createRule(r3, list(t2), input1);
+        Term t4 = createPlus(list(t3));
+        Term t6 = createStar(list());
+        Term t7 = createRule(r1, list(t1, t4, t6), input1);
         return t7;
     }
 
@@ -168,15 +168,15 @@ public class Test7 {
         return node10;
     }
 
-    public static Tree getTree2() {
-        Tree t0 = createTerminal(a, 0, 1, input2);
-        Tree t1 = createRule(r2, list(t0), input2);
-        Tree t2 = createOpt(t1);
-        Tree t3 = createTerminal(b, 1, 2, input2);
-        Tree t4 = createRule(r3, list(t3), input2);
-        Tree t5 = createPlus(list(t4));
-        Tree t7 = createStar(list());
-        Tree t8 = createRule(r1, list(t2, t5, t7), input2);
+    public static Term getTree2() {
+        Term t0 = createTerminal(a, 0, 1, input2);
+        Term t1 = createRule(r2, list(t0), input2);
+        Term t2 = createOpt(t1);
+        Term t3 = createTerminal(b, 1, 2, input2);
+        Term t4 = createRule(r3, list(t3), input2);
+        Term t5 = createPlus(list(t4));
+        Term t7 = createStar(list());
+        Term t8 = createRule(r1, list(t2, t5, t7), input2);
         return t8;
     }
 
@@ -209,16 +209,16 @@ public class Test7 {
         return node11;
     }
 
-    public static Tree getTree3() {
-        Tree t0 = createEpsilon(0);
-        Tree t1 = createOpt(t0);
-        Tree t2 = createTerminal(b, 0, 1, input3);
-        Tree t3 = createRule(r3, list(t2), input3);
-        Tree t4 = createPlus(list(t3));
-        Tree t5 = createTerminal(c, 1, 2, input3);
-        Tree t6 = createRule(r4, list(t5), input3);
-        Tree t7 = createStar(list(t6));
-        Tree t8 = createRule(r1, list(t1, t4, t7), input3);
+    public static Term getTree3() {
+        Term t0 = createEpsilon(0);
+        Term t1 = createOpt(t0);
+        Term t2 = createTerminal(b, 0, 1, input3);
+        Term t3 = createRule(r3, list(t2), input3);
+        Term t4 = createPlus(list(t3));
+        Term t5 = createTerminal(c, 1, 2, input3);
+        Term t6 = createRule(r4, list(t5), input3);
+        Term t7 = createStar(list(t6));
+        Term t8 = createRule(r1, list(t1, t4, t7), input3);
         return t8;
     }
 
@@ -252,17 +252,17 @@ public class Test7 {
         return node12;
     }
 
-    public static Tree getTree4() {
-        Tree t0 = createTerminal(a, 0, 1, input4);
-        Tree t1 = createRule(r2, list(t0), input4);
-        Tree t2 = createOpt(t1);
-        Tree t3 = createTerminal(b, 1, 2, input4);
-        Tree t4 = createRule(r3, list(t3), input4);
-        Tree t5 = createPlus(list(t4));
-        Tree t6 = createTerminal(c, 2, 3, input4);
-        Tree t7 = createRule(r4, list(t6), input4);
-        Tree t8 = createStar(list(t7));
-        Tree t9 = createRule(r1, list(t2, t5, t8), input4);
+    public static Term getTree4() {
+        Term t0 = createTerminal(a, 0, 1, input4);
+        Term t1 = createRule(r2, list(t0), input4);
+        Term t2 = createOpt(t1);
+        Term t3 = createTerminal(b, 1, 2, input4);
+        Term t4 = createRule(r3, list(t3), input4);
+        Term t5 = createPlus(list(t4));
+        Term t6 = createTerminal(c, 2, 3, input4);
+        Term t7 = createRule(r4, list(t6), input4);
+        Term t8 = createStar(list(t7));
+        Term t9 = createRule(r1, list(t2, t5, t8), input4);
         return t9;
     }
 
@@ -324,31 +324,31 @@ public class Test7 {
         return node40;
     }
 
-    public static Tree getTree5() {
-        Tree t0 = createTerminal(a, 0, 1, input5);
-        Tree t1 = createRule(r2, list(t0), input5);
-        Tree t2 = createOpt(t1);
-        Tree t3 = createTerminal(b, 1, 2, input5);
-        Tree t4 = createRule(r3, list(t3), input5);
-        Tree t5 = createTerminal(b, 2, 3, input5);
-        Tree t6 = createRule(r3, list(t5), input5);
-        Tree t7 = createTerminal(b, 3, 4, input5);
-        Tree t8 = createRule(r3, list(t7), input5);
-        Tree t9 = createTerminal(b, 4, 5, input5);
-        Tree t10 = createRule(r3, list(t9), input5);
-        Tree t11 = createPlus(list(t4, t6, t8, t10));
-        Tree t12 = createTerminal(c, 5, 6, input5);
-        Tree t13 = createRule(r4, list(t12), input5);
-        Tree t14 = createTerminal(c, 6, 7, input5);
-        Tree t15 = createRule(r4, list(t14), input5);
-        Tree t16 = createTerminal(c, 7, 8, input5);
-        Tree t17 = createRule(r4, list(t16), input5);
-        Tree t18 = createTerminal(c, 8, 9, input5);
-        Tree t19 = createRule(r4, list(t18), input5);
-        Tree t20 = createTerminal(c, 9, 10, input5);
-        Tree t21 = createRule(r4, list(t20), input5);
-        Tree t22 = createStar(list(t13, t15, t17, t19, t21));
-        Tree t23 = createRule(r1, list(t2, t11, t22), input5);
+    public static Term getTree5() {
+        Term t0 = createTerminal(a, 0, 1, input5);
+        Term t1 = createRule(r2, list(t0), input5);
+        Term t2 = createOpt(t1);
+        Term t3 = createTerminal(b, 1, 2, input5);
+        Term t4 = createRule(r3, list(t3), input5);
+        Term t5 = createTerminal(b, 2, 3, input5);
+        Term t6 = createRule(r3, list(t5), input5);
+        Term t7 = createTerminal(b, 3, 4, input5);
+        Term t8 = createRule(r3, list(t7), input5);
+        Term t9 = createTerminal(b, 4, 5, input5);
+        Term t10 = createRule(r3, list(t9), input5);
+        Term t11 = createPlus(list(t4, t6, t8, t10));
+        Term t12 = createTerminal(c, 5, 6, input5);
+        Term t13 = createRule(r4, list(t12), input5);
+        Term t14 = createTerminal(c, 6, 7, input5);
+        Term t15 = createRule(r4, list(t14), input5);
+        Term t16 = createTerminal(c, 7, 8, input5);
+        Term t17 = createRule(r4, list(t16), input5);
+        Term t18 = createTerminal(c, 8, 9, input5);
+        Term t19 = createRule(r4, list(t18), input5);
+        Term t20 = createTerminal(c, 9, 10, input5);
+        Term t21 = createRule(r4, list(t20), input5);
+        Term t22 = createStar(list(t13, t15, t17, t19, t21));
+        Term t23 = createRule(r1, list(t2, t11, t22), input5);
         return t23;
     }
 

@@ -29,7 +29,7 @@ package org.iguana.parser;
 
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.SPPFToJavaCode;
-import iguana.parsetrees.tree.*;
+import iguana.parsetrees.term.*;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
@@ -74,16 +74,16 @@ public class ParseSuccess extends AbstractParseResult {
 	}
 
 
-    public Tree getTreeWithoutSharing() {
-        return TermBuilder.build_no_memo(sppfNode, TreeBuilderFactory.getDefault(input));
+    public Term getTreeWithoutSharing() {
+        return SPPFToTerms.convertNoSharing(sppfNode, new DefaultTermBuilder(input));
     }
 
-    public Tree getTree() {
-        return TermBuilder.build(sppfNode, TreeBuilderFactory.getDefault(input));
+    public Term getTree() {
+        return SPPFToTerms.convert(sppfNode, new DefaultTermBuilder(input));
     }
 
-    public <T> T getTree(TreeBuilder<T> builder) {
-        return TermBuilder.build(sppfNode, builder);
+    public <T> T getTree(TermBuilder<T> builder) {
+        return SPPFToTerms.convert(sppfNode, builder);
     }
 
     @Override

@@ -2,12 +2,8 @@ package org.iguana.parser.iggy.paper;
 
 import iguana.parsetrees.iggy.TermTraversal;
 import iguana.parsetrees.sppf.SPPFNode;
-import iguana.parsetrees.tree.TermBuilder;
-import iguana.parsetrees.tree.Tree;
-import static iguana.parsetrees.tree.TreeBuilderFactory.*;
+import iguana.parsetrees.term.*;
 
-import iguana.parsetrees.tree.TreeBuilderFactory;
-import iguana.parsetrees.tree.TreeVisualization;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -62,8 +58,8 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 
-        Tree term = TermBuilder.build_no_memo(result.asParseSuccess().getSPPFNode(), getDefault(input));
-        TreeVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_simple");
+        Term term = result.asParseSuccess().getTreeWithoutSharing();
+        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_simple");
     }
 
     public Grammar simpleGrammar() {
@@ -94,8 +90,8 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 
-        Tree term = TermBuilder.build_no_memo(result.asParseSuccess().getSPPFNode(), getDefault(input));
-        TreeVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_xml");
+        Term term = result.asParseSuccess().getTreeWithoutSharing();
+        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_xml");
 
         input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/BadXML.txt"));
         result = Iguana.parse(input, graph, start);
@@ -130,8 +126,8 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 
-        Tree term = TermBuilder.build_no_memo(result.asParseSuccess().getSPPFNode(), getDefault(input));
-        TreeVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_ocaml");
+        Term term = result.asParseSuccess().getTreeWithoutSharing();
+        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_ocaml");
     }
 
     public Grammar ocamlGrammar() {
@@ -162,8 +158,8 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 
-        Tree term = TermBuilder.build_no_memo(result.asParseSuccess().getSPPFNode(), getDefault(input));
-        TreeVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_haskell");
+        Term term = result.asParseSuccess().getTreeWithoutSharing();
+        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_haskell");
 
         input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/BadHaskell.txt"));
         result = Iguana.parse(input, graph, start);
@@ -185,7 +181,7 @@ public class Tests {
     }
 
     private static Grammar getGrammar(SPPFNode sppf, Input input) {
-        Tree term = TermBuilder.build_no_memo(sppf, getDefault(input));
+        Term term = SPPFToTerms.convertNoSharing(sppf, new DefaultTermBuilder(input));
         GrammarBuilder builder = new GrammarBuilder();
         List<Rule> rules = (List<Rule>)TermTraversal.build(term, builder);
         Nonterminal layout = null;

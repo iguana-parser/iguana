@@ -15,10 +15,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.tree.TermBuilder;
-import iguana.parsetrees.tree.Tree;
-import iguana.parsetrees.tree.TreeBuilderFactory;
-import iguana.parsetrees.tree.TreeVisualization;
+import iguana.parsetrees.term.TermBuilder;
+import iguana.parsetrees.term.Term;
+import iguana.parsetrees.term.SPPFToTerms;
 import iguana.utils.input.Input;
 
 public class IGGYTest {
@@ -48,7 +47,7 @@ public class IGGYTest {
 		
 		NonterminalNode sppf = result.asParseSuccess().getSPPFNode();
 		
-		Tree term = TermBuilder.build_no_memo(sppf, TreeBuilderFactory.getDefault(input));
+		Term term = result.asParseSuccess().getTreeWithoutSharing();
 		
 		// TreeVisualization.generate(term, "test/org/iguana/parser/idea/", "terms");
 	}
