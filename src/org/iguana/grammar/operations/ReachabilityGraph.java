@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
-;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class ReachabilityGraph {

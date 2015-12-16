@@ -19,7 +19,6 @@ Export-Package:
    org.iguana.datadependent.env,
    org.iguana.parser.gss",
  org.iguana.grammar.exception;uses:="org.iguana.grammar.symbol,org.iguana.datadependent.ast",
- org.iguana.grammar.leftfactorization,
  org.iguana.grammar.patterns;uses:="org.iguana.util.generator,org.iguana.grammar.symbol",
  org.iguana.grammar.precedence;uses:="org.iguana.grammar,org.iguana.grammar.symbol,org.iguana.grammar.patterns",
  org.iguana.grammar.slot;
@@ -87,7 +86,6 @@ Export-Package:
    org.iguana.grammar,
    org.iguana.parser,
    org.iguana.util",
- org.iguana.util.hashing.hashfunction,
  org.iguana.util.trie,
  org.iguana.util.unicode,
  org.iguana.util.visualization;
