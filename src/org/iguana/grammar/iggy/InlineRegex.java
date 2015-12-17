@@ -60,7 +60,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
             if (rule.getAttributes().containsKey("regex")) {
                 if (definitions.containsKey(rule.getHead().getName()))
                     throw new GrammarValidationException(new HashSet<>(Arrays.asList(new RuntimeException("Should not have happened."))));
-                definitions.put(rule.getHead().getName(), (RegularExpression) rule.getBody().get(0));
+                definitions.put(rule.getHead().getName(), ((Terminal) rule.getBody().get(0)).getRegex());
             } else
                 rules.add(rule);
         }
