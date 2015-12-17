@@ -27,8 +27,6 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.generator.GeneratorUtil.listToString;
-
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -48,8 +46,10 @@ import org.iguana.grammar.symbol.Recursion;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.regex.RegularExpression;
+import iguana.regex.RegularExpression;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
+
+import static iguana.utils.string.StringUtil.*;
 
 
 /**

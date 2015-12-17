@@ -38,7 +38,7 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;

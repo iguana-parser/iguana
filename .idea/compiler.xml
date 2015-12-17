@@ -23,7 +23,6 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="iguana" />
-        <module name="utils" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

@@ -4,7 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/iguana.iml" filepath="$PROJECT_DIR$/iguana.iml" />
       <module fileurl="file://$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees.iml" filepath="$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../utils/utils.iml" filepath="$PROJECT_DIR$/../utils/utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees-build.iml" filepath="$PROJECT_DIR$/../parse-trees/.idea/modules/parse-trees-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utils/project/.idea/modules/project.iml" filepath="$PROJECT_DIR$/../utils/project/.idea/modules/project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utils/project/.idea/modules/project-build.iml" filepath="$PROJECT_DIR$/../utils/project/.idea/modules/project-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../regex/.idea/modules/regex.iml" filepath="$PROJECT_DIR$/../regex/.idea/modules/regex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../regex/.idea/modules/regex-build.iml" filepath="$PROJECT_DIR$/../regex/.idea/modules/regex-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utils/.idea/modules/utils.iml" filepath="$PROJECT_DIR$/../utils/.idea/modules/utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utils/.idea/modules/utils-build.iml" filepath="$PROJECT_DIR$/../utils/.idea/modules/utils-build.iml" />
     </modules>
   </component>
 </project>

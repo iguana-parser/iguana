@@ -38,7 +38,7 @@ import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -130,13 +130,13 @@ public class Nonterminal extends AbstractSymbol {
 	@Override
 	public String toString() {
 		return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
-				+ (state != null && !state.isEmpty()? GeneratorUtil.listToString(state, ":") + "=" : "")
-				+ (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
+				+ (state != null && !state.isEmpty()? listToString(state, ":") + "=" : "")
+				+ (getPreConditions().isEmpty()? "" : listToString(getPreConditions(), ","))
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
-			    + (arguments == null && parameters != null? "(" + GeneratorUtil.listToString(parameters, ",") + ")" : "")
-		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "")
-		        + (getPostConditions().isEmpty()? "" : GeneratorUtil.listToString(getPostConditions(), ","));
+			    + (arguments == null && parameters != null? "(" + listToString(parameters, ",") + ")" : "")
+		        + (arguments != null? "(" + listToString(arguments, ",") + ")" : "")
+		        + (getPostConditions().isEmpty()? "" : listToString(getPostConditions(), ","));
 	}
 	
 	@Override

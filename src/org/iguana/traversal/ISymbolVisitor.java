@@ -28,11 +28,6 @@
 package org.iguana.traversal;
 
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.Character;
-import org.iguana.regex.CharacterRange;
-import org.iguana.regex.EOF;
-import org.iguana.regex.Epsilon;
-
 
 public interface ISymbolVisitor<T> {
 	

@@ -33,13 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.CharacterRange;
-import org.iguana.regex.EOF;
-import org.iguana.regex.Epsilon;
+import iguana.regex.CharacterRange;
+import iguana.regex.EOF;
+import iguana.regex.Epsilon;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
 

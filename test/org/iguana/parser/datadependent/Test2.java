@@ -35,7 +35,7 @@ import static org.iguana.datadependent.ast.AST.var;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;

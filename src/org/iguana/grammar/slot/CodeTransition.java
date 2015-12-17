@@ -33,7 +33,8 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.generator.GeneratorUtil;
+
+import static iguana.utils.string.StringUtil.*;
 
 public class CodeTransition extends AbstractTransition {
 	
@@ -66,7 +67,7 @@ public class CodeTransition extends AbstractTransition {
 
 	@Override
 	public String getLabel() {
-		return GeneratorUtil.listToString(statements, ";");
+		return listToString(statements, ";");
 	}
 	
 }

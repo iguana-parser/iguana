@@ -44,7 +44,7 @@ import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 /**
  * 
@@ -84,7 +84,7 @@ public class DesugarState implements GrammarTransformation {
 				visitor.compute(rule);
 			
 			if (!current_updates.isEmpty())
-				System.out.println("Updates: " + head + "    " + GeneratorUtil.listToString(current_updates, " , ") );
+				System.out.println("Updates: " + head + "    " + listToString(current_updates, " , ") );
 		}
 		
 		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();		
@@ -138,12 +138,12 @@ public class DesugarState implements GrammarTransformation {
 		
 		for (Map.Entry<Nonterminal, Set<String>> entry : uses.entrySet())
 			if (!entry.getValue().isEmpty()) {
-				System.out.println("Uses: " + entry.getKey() + "    " + GeneratorUtil.listToString(entry.getValue(), ";"));
+				System.out.println("Uses: " + entry.getKey() + "    " + listToString(entry.getValue(), ";"));
 			}
 		
 		for (Map.Entry<Nonterminal, Set<String>> entry : returns.entrySet())
 			if (!entry.getValue().isEmpty()) {
-				System.out.println("Returns: " + entry.getKey() + "    " + GeneratorUtil.listToString(entry.getValue(), ";"));
+				System.out.println("Returns: " + entry.getKey() + "    " + listToString(entry.getValue(), ";"));
 			}
 		
 		Set<Rule> newRules = new LinkedHashSet<>();

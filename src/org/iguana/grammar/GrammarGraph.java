@@ -27,7 +27,7 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.CharacterRanges.*;
+import static iguana.regex.CharacterRanges.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -71,11 +71,11 @@ import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.IntOpenAddressingMap;
 import org.iguana.parser.gss.lookup.JavaHashMapNodeLookup;
-import org.iguana.regex.CharacterRange;
-import org.iguana.regex.Epsilon;
-import org.iguana.regex.RegularExpression;
-import org.iguana.regex.matcher.DFAMatcherFactory;
-import org.iguana.regex.matcher.MatcherFactory;
+import iguana.regex.CharacterRange;
+import iguana.regex.Epsilon;
+import iguana.regex.RegularExpression;
+import iguana.regex.matcher.DFAMatcherFactory;
+import iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.Configuration.HashMapImpl;

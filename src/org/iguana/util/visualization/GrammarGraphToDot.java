@@ -27,7 +27,6 @@
 
 package org.iguana.util.visualization;
 
-import static org.iguana.util.generator.GeneratorUtil.*;
 import static iguana.utils.visualization.GraphVizUtil.*;
 
 import org.iguana.grammar.GrammarGraph;
@@ -36,7 +35,8 @@ import org.iguana.grammar.slot.ConditionalTransition;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.util.generator.GeneratorUtil;
+
+import static iguana.utils.string.StringUtil.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +57,7 @@ public class GrammarGraphToDot {
 	private static void toDot(NonterminalGrammarSlot slot, StringBuilder sb) {
 		sb.append("\"" + getId(slot) + "\"" + String.format(NONTERMINAL_SLOT,
 				escape(slot.getNonterminal().getParameters() != null? 
-						String.format("%s(%s)", slot.getNonterminal().getName(), GeneratorUtil.listToString(slot.getNonterminal().getParameters(), ",")) 
+						String.format("%s(%s)", slot.getNonterminal().getName(), listToString(slot.getNonterminal().getParameters(), ","))
 						: slot.getNonterminal().getName())) + "\n");
 		
 		slot.getFirstSlots().forEach(s -> sb.append(EPSILON_TRANSITION + "\"" + getId(slot) + "\"" + "->" + "{\"" + getId(s) + "\"}" + "\n"));

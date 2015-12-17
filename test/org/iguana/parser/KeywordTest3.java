@@ -30,11 +30,11 @@ package org.iguana.parser;
 import static org.junit.Assert.assertTrue;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.regex.Sequence;
+import iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;

@@ -37,8 +37,6 @@ public abstract class AbstractAST extends AbstractAttrs {
 
 	public abstract Object interpret(IEvaluatorContext ctx);
 	
-	public abstract String getConstructorCode();
-	
 	public abstract <T> T accept(IAbstractASTVisitor<T> visitor);
 
 }

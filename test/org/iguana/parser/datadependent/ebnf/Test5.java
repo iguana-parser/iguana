@@ -38,7 +38,7 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;

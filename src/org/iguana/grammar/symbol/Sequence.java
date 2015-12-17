@@ -28,12 +28,11 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.iguana.util.generator.GeneratorUtil.listToString;
+import static iguana.utils.string.StringUtil.*;
 
 public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
 
@@ -102,7 +101,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 	@Override
 	public String toString() {
 				
-		String body = "(" + GeneratorUtil.listToString(symbols, " ") + ")";
+		String body = "(" + listToString(symbols, " ") + ")";
 		
 		String s = label == null ? body : label + ":" + body;
 		if (!preConditions.isEmpty())

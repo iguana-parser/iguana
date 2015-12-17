@@ -37,7 +37,7 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;

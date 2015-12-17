@@ -38,8 +38,8 @@ import iguana.parsetrees.term.TerminalType;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.regex.matcher.Matcher;
-import org.iguana.regex.matcher.MatcherFactory;
+import iguana.regex.matcher.Matcher;
+import iguana.regex.matcher.MatcherFactory;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 

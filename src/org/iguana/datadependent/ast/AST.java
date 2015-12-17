@@ -37,11 +37,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import iguana.parsetrees.sppf.NonPackedNode;
-import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.values.Stack;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 public class AST {
 	
@@ -93,21 +92,8 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						java.lang.String[] codes = new java.lang.String[args.length];
-						
-						int j = 0;
-						for (Expression arg : args) {
-							codes[j] = arg.getConstructorCode();
-							j++;
-						}
-						
-						return "AST.println(" + GeneratorUtil.listToString(codes, ",") + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
-						return java.lang.String.format("%s(%s)", "println", GeneratorUtil.listToString(args, ","));
+						return java.lang.String.format("%s(%s)", "println", listToString(args, ","));
 					}
 		};
 	}
@@ -125,11 +111,6 @@ public class AST {
 						}
 						
 						return ctx.getInput().getColumnNumber((java.lang.Integer) value);
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.indent(" + arg.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -158,11 +139,6 @@ public class AST {
 								                  value.interpret(ctx));
 						
 						return null;
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.ppDeclare(" + variable.getConstructorCode() + ", " + value.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -198,11 +174,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.ppLookup(" + arg.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("ppLookup(%s)", arg);
 					}
@@ -231,11 +202,6 @@ public class AST {
 						
 						Object obj = ctx.getInput().subString(j - 1, j);
 						return obj.equals(c);
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.endsWith(" + index.getConstructorCode() + "," + character.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -277,16 +243,8 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						List<java.lang.String> code = new ArrayList<>();
-						for (Expression arg : args)
-							code.add(arg.getConstructorCode());
-						return "AST.startsWith(" + GeneratorUtil.listToString(code, ",") + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
-						return "startsWith(" + GeneratorUtil.listToString(args, ",") + ")";
+						return "startsWith(" + listToString(args, ",") + ")";
 					}
 		};
 	}
@@ -304,11 +262,6 @@ public class AST {
 						}
 						
 						return !((java.lang.Boolean) value);
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.not(" + arg.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -334,11 +287,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.neg(" + arg.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("-(%s)", arg);
 					}
@@ -360,11 +308,6 @@ public class AST {
 						NonPackedNode node = (NonPackedNode) value;
 						
 						return node.getRightExtent() - node.getLeftExtent();
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.len(" + arg.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -393,11 +336,6 @@ public class AST {
 							return curr;
 						
 						return 0;
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.pr1(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," + arg3.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -443,15 +381,8 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						GeneratorUtil.listToString(Arrays.stream(arg3).map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",");
-						return "AST.pr1(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," 
-										  + "new Expression[] {" + GeneratorUtil.listToString(Arrays.stream(arg3).map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",") + "}" + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
-						return java.lang.String.format("pr1(%s,%s,%s)", arg1, arg2, GeneratorUtil.listToString(arg3, ","));
+						return java.lang.String.format("pr1(%s,%s,%s)", arg1, arg2, listToString(arg3, ","));
 					}
 		};
 	}
@@ -477,11 +408,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.pr3(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("pr3(%s,%s)", arg1, arg2);
 					}
@@ -501,11 +427,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.min(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("min(%s,%s)", arg1, arg2);
 					}
@@ -520,11 +441,6 @@ public class AST {
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						return new HashMap<Object, Object>();
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.map()";
 					}
 					
 					@Override
@@ -558,11 +474,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.put(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("put(%s,%s)", arg1, arg2);
 					}
@@ -590,11 +501,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.put(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + "," + arg3.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("put(%s,%s,%s)", arg1, arg2, arg3);
 					}
@@ -618,11 +524,6 @@ public class AST {
 						value = arg2.interpret(ctx);
 						
 						return s.contains(value);
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.contains(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -654,11 +555,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.push(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("push(%s,%s)", arg1, arg2);
 					}
@@ -683,11 +579,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.pop(" + arg.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("pop(%s)", arg);
 					}
@@ -709,11 +600,6 @@ public class AST {
 						Stack<Object> s = (Stack<Object>) value;
 						
 						return s.top();
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.top(" + arg.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -751,11 +637,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.find(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("find(%s,%s)", arg1, arg2);
 					}
@@ -772,11 +653,6 @@ public class AST {
 						List<?> value = (List<?>) arg1.interpret(ctx);
 						int i = (java.lang.Integer) arg2.interpret(ctx);
 						return value.get(i);
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.get(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
 					}
 					
 					@Override
@@ -808,11 +684,6 @@ public class AST {
 					}
 					
 					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.shift(" + arg1.getConstructorCode() + "," + arg2.getConstructorCode() + ")";
-					}
-					
-					@Override
 					public java.lang.String toString() {
 						return java.lang.String.format("%s<<%s", arg1, arg2);
 					}
@@ -827,11 +698,6 @@ public class AST {
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
 						return UNDEF;
-					}
-					
-					@Override
-					public java.lang.String getConstructorCode() {
-						return "AST.undef()";
 					}
 					
 					@Override
@@ -912,7 +778,7 @@ public class AST {
 	static public Expression endOfFile(Expression index) {
 		return new Expression.EndOfFile(index);
 	}
-	
+
 	static public Expression ifThenElse(Expression condition, Expression thenPart, Expression elsePart) {
 		return new Expression.IfThenElse(condition, thenPart, elsePart);
 	}

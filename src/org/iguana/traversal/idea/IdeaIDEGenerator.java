@@ -1,5 +1,6 @@
 package org.iguana.traversal.idea;
 
+import iguana.regex.RegularExpressionVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -9,12 +10,10 @@ import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Star;
-import org.iguana.regex.*;
+import iguana.regex.*;
 import org.iguana.grammar.symbol.Terminal.Category;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.traversal.RegularExpressionVisitor;
-import org.iguana.util.unicode.UnicodeUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -521,22 +520,22 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public String visit(org.iguana.regex.Star s) {
+        public String visit(iguana.regex.Star s) {
             return s.getSymbol().accept(this) + "*";
         }
 
         @Override
-        public String visit(org.iguana.regex.Plus p) {
+        public String visit(iguana.regex.Plus p) {
             return p.getSymbol().accept(this) + "+";
         }
 
         @Override
-        public String visit(org.iguana.regex.Opt o) {
+        public String visit(iguana.regex.Opt o) {
             return o.getSymbol().accept(this) + "?";
         }
 
         @Override
-        public <E extends RegularExpression> String visit(org.iguana.regex.Alt<E> symbol) {
+        public <E extends RegularExpression> String visit(iguana.regex.Alt<E> symbol) {
             Map<Boolean, List<E>> parition = symbol.getSymbols().stream().collect(Collectors.partitioningBy(s -> isCharClass(s)));
             List<E> charClasses = parition.get(true);
             List<E> other = parition.get(false);
@@ -570,7 +569,7 @@ public class IdeaIDEGenerator {
         }
 
         @Override
-        public <E extends RegularExpression> String visit(org.iguana.regex.Sequence<E> symbol) {
+        public <E extends RegularExpression> String visit(iguana.regex.Sequence<E> symbol) {
 
             List<E> symbols = symbol.getSymbols();
 
@@ -656,7 +655,7 @@ public class IdeaIDEGenerator {
         }
 
         private String getChar(int c) {
-            if(UnicodeUtil.isPrintableAscii(c))
+            if(CharacterRanges.isPrintableAscii(c))
                 return escape((char) c + "");
             else
                 return escape(String.format("\\u%04X", c));
