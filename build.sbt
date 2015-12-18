@@ -18,3 +18,6 @@ libraryDependencies ++= Seq(
 )
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
+
+javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
+javacOptions in (Compile,doc) += "-Xdoclint:none"
