@@ -27,12 +27,10 @@
 
 package org.iguana.grammar.symbol;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.datadependent.ast.Expression;
