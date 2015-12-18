@@ -32,3 +32,10 @@ libraryDependencies ++= Seq(
   "junit" % "junit" % "4.11",
   "com.novocode" % "junit-interface" % "0.11" % "test"
 )
+
+
+javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
+javacOptions in (Compile,doc) += "-Xdoclint:none"
+
+compileOrder in Compile := CompileOrder.JavaThenScala
+
