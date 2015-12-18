@@ -180,12 +180,12 @@ public class MurmurHash2 {
     }
 
     public static IntFunctionAny hashN(int seed) {
-        return (Object[] elements) -> {
+        return (Integer...elements) -> {
 
             int h = seed ^ 4;
 
-            for (int i = 0; i < elements.length; i++) {
-                int k = elements[i].hashCode();
+            for (int element : elements) {
+                int k = element;
                 k = mixK(k);
                 h = mixH(h, k);
             }

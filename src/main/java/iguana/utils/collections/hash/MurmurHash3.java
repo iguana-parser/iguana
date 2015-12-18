@@ -181,13 +181,12 @@ public class MurmurHash3 {
     }
 
     public static IntFunctionAny fn(int seed) {
-        return (Object...elements) -> {
+        return (Integer...elements) -> {
             int h = seed;
 
             int k = 0;
-            for (int i = 0; i < elements.length; i++) {
-                Object element = elements[i];
-                k = element == null? 0 : element.hashCode();
+            for (int element : elements) {
+                k = element;
                 k = mixK(k);
                 h = mixH(h, k);
             }

@@ -9,28 +9,48 @@ import iguana.utils.function.IntFunction4;
 
 public class Keys {
 
-    public static Key from(int a, int b, IntFunction2 f) {
+    public static Key from(int a, int b) {
+        return from(MurmurHash3.f2(), a, b);
+    }
+
+    public static Key from(IntFunction2 f, int a, int b) {
         return new IntKey2(a, b, f.apply(a, b));
     }
 
-    public static Key from(int a, Object b) {
-        return new IntKey1PlusObject(a, b, MurmurHash3.f2().apply(a, b.hashCode()));
+    public static Key from(Object a, Object b) {
+        return new ObjectKey2(a, b, MurmurHash3.f2().apply(a, b));
     }
 
-    public static Key from(int a, int b, int c, IntFunction3 f) {
-        return new IntKey3(a, b, c, f);
+    public static Key from(int a, int b, int c) {
+        return from(MurmurHash3.f3(), a, b, c);
     }
 
-    public static Key from(int a, int b, Object o) {
-        return new IntKey2PlusObject(a, b, o, MurmurHash3.f3().apply(a, b, o.hashCode()));
+    public static Key from(IntFunction3 f, int a, int b, int c) {
+        return new IntKey3(a, b, c, f.apply(a, b, c));
     }
 
-    public static Key from(int a, int b, int c, int d, IntFunction4 f) {
-        return new IntKey4(a, b, c, d, f);
+    public static Key from(Object a, Object b, Object c) {
+        return from(MurmurHash3.f3(), a, b, c);
+    }
+
+    public static Key from(IntFunction3 f, Object a, Object b, Object c) {
+        return new ObjectKey3(a, b, c, f.apply(a, b, c));
+    }
+
+    public static Key from(int a, int b, int c, int d) {
+        return from(MurmurHash3.f4(), a, b, c, d);
+    }
+
+    public static Key from(IntFunction4 f, int a, int b, int c, int d) {
+        return new IntKey4(a, b, c, d, f.apply(a, b, c, d));
+    }
+
+    public static Key from(IntFunction4 f, Object a, Object b, Object c, Object d) {
+        return new ObjectKey4(a, b, c, d, f.apply(a, b, c, d));
     }
 
     public static Key from(Object...elements) {
-        return new GenericKey(MurmurHash3.fn(), elements);
+        return new ObjectKeyN(MurmurHash3.fn(), elements);
     }
 
 }

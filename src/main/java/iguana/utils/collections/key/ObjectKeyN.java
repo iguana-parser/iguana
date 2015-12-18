@@ -29,44 +29,37 @@ package iguana.utils.collections.key;
 
 import iguana.utils.function.IntFunctionAny;
 
-public class IntKey2 implements Key, Comparable<IntKey2> {
+import java.util.Arrays;
 
-    private final int k1;
-    private final int k2;
-    private final int hash;
+public class ObjectKeyN implements Key {
+	
+	private final Object[] elements;
 
-    public IntKey2(int k1, int k2, int hash) {
-        this.k1 = k1;
-        this.k2 = k2;
-        this.hash = hash;
-    }
+	private final int hash;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
+	public ObjectKeyN(IntFunctionAny f, Object... elements) {
+	    this.elements = elements;
+		this.hash = f.apply(elements);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) return true;
+		
+		if (!(other instanceof ObjectKeyN)) return false;
+		
+		ObjectKeyN that = (ObjectKeyN) other;
+		return hash == that.hash && Arrays.equals(elements, that.elements);
+	}
 
-        if (!(obj instanceof IntKey2))
-            return false;
+	@Override
+	public int hashCode() {
+		return hash;
+	}
 
-        IntKey2 other = (IntKey2) obj;
-        return hash == other.hash && k1 == other.k1 && k2 == other.k2;
-    }
-
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
-    public int compareTo(IntKey2 o) {
-        int r;
-        return (r = k1 - o.k1) != 0 ? r : k2 - o.k2;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("(%d, %d)", k1, k2);
-    }
+	@Override
+	public String toString() {
+		return String.format("(%s)", Arrays.toString(elements));
+	}
 
 }

@@ -40,12 +40,12 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
 	
 	private final int hash;
 
-	public IntKey4(int k1, int k2, int k3, int k4, IntFunction4 f) {
+	public IntKey4(int k1, int k2, int k3, int k4, int hash) {
 		this.k1 = k1;
 		this.k2 = k2;
 		this.k3 = k3;
 		this.k4 = k4;
-		this.hash = f.hash(k1, k2, k3, k4);
+		this.hash = hash;
 	}
 	
 	@Override
@@ -67,11 +67,6 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
 	public int hashCode() {
 		return hash;
 	}
-
-    @Override
-    public int hashCode(IntFunctionAny f) {
-        return f.apply(k1, k2, k3, k4);
-    }
 
     @Override
 	public int compareTo(IntKey4 o) {

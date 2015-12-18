@@ -25,48 +25,45 @@
  *
  */
 
-package iguana.utils.collections.key;
+package iguana.utils.string;
 
-import iguana.utils.function.IntFunctionAny;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-public class IntKey2 implements Key, Comparable<IntKey2> {
+public class StringUtil {
+	
+	public static final String NewLine = System.getProperty("line.separator"); 
+	
+	public static String escape(String s) {
+		if (s == null) return "";
+		return s.replace("\\", "\\\\").replace("\"", "\\\"");
+	}
+	
+	public static <T> String listToString(T[] elements) {
+		return listToString(elements, " ");
+	}
 
-    private final int k1;
-    private final int k2;
-    private final int hash;
-
-    public IntKey2(int k1, int k2, int hash) {
-        this.k1 = k1;
-        this.k2 = k2;
-        this.hash = hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof IntKey2))
-            return false;
-
-        IntKey2 other = (IntKey2) obj;
-        return hash == other.hash && k1 == other.k1 && k2 == other.k2;
-    }
-
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
-    public int compareTo(IntKey2 o) {
-        int r;
-        return (r = k1 - o.k1) != 0 ? r : k2 - o.k2;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("(%d, %d)", k1, k2);
-    }
-
+	public static <T> String listToString(T[] elements, String sep) {
+		return listToString(Arrays.asList(elements), sep);
+	}
+	
+	public static <T> String listToString(Iterable<T> elements) {
+		return listToString(elements, " ");
+	}
+	
+	public static <T> String listToString(Iterable<T> elements, String sep) {
+		
+		if(elements == null) throw new IllegalArgumentException("elements cannot be null.");
+		
+		Stream<T> stream = StreamSupport.stream(elements.spliterator(), false);
+		
+		return stream.map(a -> a.toString()).collect(Collectors.joining(sep));
+	}
+	
+	public static String repeat(String s, int count) {
+		return Stream.generate(() -> s).limit(count).collect(Collectors.joining());
+	}
+	
 }

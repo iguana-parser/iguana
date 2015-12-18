@@ -77,10 +77,10 @@ public class PrimeMultiplication {
 	}
 
 	public static IntFunctionAny fn() {
-        return (Object...objects) -> {
+        return (Integer...elements) -> {
             int result = P1;
-            for (Object o : objects) {
-                result = P2 * result + o.hashCode();
+            for (int k : elements) {
+                result = P2 * result + k;
             }
             return result;
         };

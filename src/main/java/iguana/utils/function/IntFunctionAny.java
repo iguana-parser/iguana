@@ -29,5 +29,14 @@ package iguana.utils.function;
 
 @FunctionalInterface
 public interface IntFunctionAny {
-	int apply(Object... elements);
+
+	int apply(Integer...elements);
+
+    default int apply(Object...elements) {
+        Integer[] res = new Integer[elements.length];
+        for (int i = 0; i < elements.length; i++) {
+            res[i] = elements[i].hashCode();
+        }
+        return apply(res);
+    }
 }

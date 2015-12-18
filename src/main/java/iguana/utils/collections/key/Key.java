@@ -27,9 +27,5 @@
 
 package iguana.utils.collections.key;
 
-import iguana.utils.function.IntFunctionAny;
-
-@FunctionalInterface
 public interface Key {
-	int hashCode(IntFunctionAny f);
 }

@@ -25,45 +25,28 @@
  *
  */
 
-package iguana.utils.collections.key;
+package iguana.utils.benchmark;
 
-import iguana.utils.function.IntFunctionAny;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 
-import java.util.Arrays;
-
-public class GenericKey implements Key {
+public class BenchmarkUtil {
 	
-	private final Object[] elements;
-
-	private final int hash;
-
-	public GenericKey(IntFunctionAny f, Object...elements) {
-	    this.elements = elements;
-		this.hash = f.apply(elements);
-	}
-	
-	@Override
-	public boolean equals(Object other) {
-		if (this == other) return true;
-		
-		if (!(other instanceof GenericKey)) return false;
-		
-		GenericKey that = (GenericKey) other;
-		return hash == that.hash && Arrays.equals(elements, that.elements);
+	public static int getMemoryUsed() {
+		int mb = 1024 * 1024;
+		Runtime runtime = Runtime.getRuntime();
+		int memoryUsed = (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
+		return memoryUsed;
 	}
 
-	@Override
-	public int hashCode() {
-		return hash;
+	public static long getUserTime() {
+		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+		return bean.isCurrentThreadCpuTimeSupported() ? bean.getCurrentThreadUserTime() : 0L;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("(%s)", Arrays.toString(elements));
+	public static long getSystemTime() {
+		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+		return bean.isCurrentThreadCpuTimeSupported() ? 
+				(bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
 	}
-
-    @Override
-    public int hashCode(IntFunctionAny f) {
-        return f.apply(elements);
-    }
 }

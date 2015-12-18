@@ -27,9 +27,6 @@
 
 package iguana.utils.collections.key;
 
-import iguana.utils.function.IntFunction3;
-import iguana.utils.function.IntFunctionAny;
-
 
 public class IntKey3 implements Key, Comparable<IntKey3> {
 	
@@ -38,11 +35,11 @@ public class IntKey3 implements Key, Comparable<IntKey3> {
 	private final int k3;
 	private final int hash;
 
-	public IntKey3(int k1, int k2, int k3, IntFunction3 f) {
+	public IntKey3(int k1, int k2, int k3, int hash) {
 		this.k1 = k1;
 		this.k2 = k2;
 		this.k3 = k3;
-		this.hash = f.apply(k1, k2, k3);
+		this.hash = hash;
 	}
 	
 	@Override
@@ -61,11 +58,6 @@ public class IntKey3 implements Key, Comparable<IntKey3> {
 	public int hashCode() {
 		return hash;
 	}
-
-    @Override
-    public int hashCode(IntFunctionAny f) {
-        return f.apply(k1, k2, k3);
-    }
 
 	@Override
 	public int compareTo(IntKey3 o) {

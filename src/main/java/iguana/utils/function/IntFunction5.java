@@ -29,5 +29,10 @@ package iguana.utils.function;
 
 @FunctionalInterface
 public interface IntFunction5 {
-	int hash(int x, int y, int z, int w, int v);
+
+    int hash(int x, int y, int z, int w, int v);
+
+    default int apply(Object x, Object y, Object z, Object w, Object u) {
+        return apply(x.hashCode(), y.hashCode(), z.hashCode(), w.hashCode(), u.hashCode());
+    }
 }

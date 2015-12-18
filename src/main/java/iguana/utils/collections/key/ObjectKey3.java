@@ -27,46 +27,43 @@
 
 package iguana.utils.collections.key;
 
-import iguana.utils.function.IntFunctionAny;
 
-public class IntKey2 implements Key, Comparable<IntKey2> {
+public class ObjectKey3 implements Key {
 
-    private final int k1;
-    private final int k2;
-    private final int hash;
+	private final Object o1;
+	private final Object o2;
+	private final Object o3;
+	private final int hash;
 
-    public IntKey2(int k1, int k2, int hash) {
-        this.k1 = k1;
-        this.k2 = k2;
-        this.hash = hash;
-    }
+	public ObjectKey3(Object o1, Object o2, Object o3, int hash) {
+		this.o1 = o1;
+		this.o2 = o2;
+		this.o3 = o3;
+		this.hash = hash;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		
+		if (!(obj instanceof ObjectKey3))
+			return false;
+		
+		ObjectKey3 other = (ObjectKey3) obj;
+		return o1.equals(other.o1) &&
+               o2.equals(other.o2) &&
+               o3.equals(other.o3);
+	}
+	
+	@Override
+	public int hashCode() {
+		return hash;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof IntKey2))
-            return false;
-
-        IntKey2 other = (IntKey2) obj;
-        return hash == other.hash && k1 == other.k1 && k2 == other.k2;
-    }
-
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
-    public int compareTo(IntKey2 o) {
-        int r;
-        return (r = k1 - o.k1) != 0 ? r : k2 - o.k2;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("(%d, %d)", k1, k2);
-    }
+	@Override
+	public String toString() {
+		return String.format("(%s, %s, %s)", o1, o2, o3);
+	}
 
 }
