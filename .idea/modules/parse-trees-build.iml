@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="parse-trees-build" external.linked.project.path="$MODULE_DIR$/../../../parse-trees/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" sbt.imports="sbt._, Keys._, dsl._, _root_.org.sbtidea.SbtIdeaPlugin._, _root_.com.typesafe.sbteclipse.plugin.EclipsePlugin.autoImport._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.com.typesafe.sbteclipse.plugin.EclipsePlugin, $449aca0f03a4974708fd.main" sbt.resolvers="https://repo1.maven.org/maven2/|maven|public, /Users/afroozeh/.ivy2/cache|ivy|Local cache" type="SBT_MODULE" version="4">
+<module external.linked.project.id="parse-trees-build" external.linked.project.path="$MODULE_DIR$/../../../parse-trees/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" sbt.imports="sbt._, Keys._, dsl._, _root_.org.sbtidea.SbtIdeaPlugin._, _root_.com.typesafe.sbteclipse.plugin.EclipsePlugin.autoImport._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.com.typesafe.sbteclipse.plugin.EclipsePlugin, $717e2de8b5e0d5789ff6.main" sbt.resolvers="https://repo1.maven.org/maven2/|maven|public, /Users/afroozeh/.ivy2/cache|ivy|Local cache" type="SBT_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/../../../parse-trees/project/target/idea-classes" />
     <output-test url="file://$MODULE_DIR$/../../../parse-trees/project/target/idea-test-classes" />
@@ -47,7 +47,6 @@
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/lib/jansi.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/logging-0.13.8.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/sbt-0.13.8.jar!/" />
-          <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.5/lib/scala-library.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/main-0.13.8.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/json4s-support_2.10-0.6.0.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/io-0.13.8.jar!/" />

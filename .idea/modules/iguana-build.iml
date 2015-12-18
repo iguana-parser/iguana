@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="iguana-build" external.linked.project.path="$MODULE_DIR$/../../project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" sbt.imports="sbt._, Keys._, dsl._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, $716b549a03882a67e7bb.main" sbt.resolvers="https://repo1.maven.org/maven2/|maven|public, /Users/afroozeh/.ivy2/cache|ivy|Local cache" type="SBT_MODULE" version="4">
+<module external.linked.project.id="iguana-build" external.linked.project.path="$MODULE_DIR$/../../project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" sbt.imports="sbt._, Keys._, dsl._, _root_.com.github.retronym.SbtOneJar._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, $58f1afe90fb510b05689.main" sbt.resolvers="https://repo1.maven.org/maven2/|maven|public, /Users/afroozeh/.ivy2/cache|ivy|Local cache" type="SBT_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/../../project/target/idea-classes" />
     <output-test url="file://$MODULE_DIR$/../../project/target/idea-test-classes" />
@@ -66,6 +66,7 @@
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/serialization_2.10-0.1.1.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/collections-0.13.8.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.10.4/org.scala-sbt/sbt/0.13.8/launcher-interface-0.13.8.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/scala_2.10/sbt_0.13/org.scala-sbt.plugins/sbt-onejar/jars/sbt-onejar-0.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -77,6 +78,7 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/logging/srcs/logging-0.13.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.spire-math/json4s-support_2.10/srcs/json4s-support_2.10-0.6.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/testing/srcs/testing-0.13.8-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/scala_2.10/sbt_0.13/org.scala-sbt.plugins/sbt-onejar/srcs/sbt-onejar-0.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/compiler-integration/srcs/compiler-integration-0.13.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/main-settings/srcs/main-settings-0.13.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.json4s/json4s-core_2.10/srcs/json4s-core_2.10-3.2.10-sources.jar!/" />
