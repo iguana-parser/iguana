@@ -20,3 +20,6 @@ libraryDependencies ++= Seq(
 lazy val utils = ProjectRef(file("../utils"), "utils")
 
 val main = Project(id = "regex", base = file(".")).dependsOn(utils)
+
+javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
+javacOptions in (Compile,doc) += "-Xdoclint:none"
