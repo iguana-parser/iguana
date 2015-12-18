@@ -56,7 +56,7 @@ public class GenerateParser {
             writer.println("import com.intellij.psi.impl.source.tree.Factory;");
             writer.println("import com.intellij.psi.tree.IElementType;");
             writer.println("import iguana.parsetrees.sppf.NonterminalNode;");
-            writer.println("import iguana.parsetrees.tree.TermBuilder;");
+            writer.println("import iguana.parsetrees.term.SPPFToTerms;");
             writer.println("import iguana.utils.input.Input;");
             writer.println("import org.iguana.grammar.Grammar;");
             writer.println("import org.iguana.grammar.GrammarGraph;");
@@ -89,7 +89,7 @@ public class GenerateParser {
             writer.println("        if (result.isParseSuccess()) {");
             writer.println("            System.out.println(\"Success...\");");
             writer.println("            NonterminalNode sppf = result.asParseSuccess().getSPPFNode();");
-            writer.println("            ASTNode ast = TermBuilder.build_no_memo(sppf, new " + language + "TreeBuilder());");
+            writer.println("            ASTNode ast = SPPFToTerms.convertNoSharing(sppf, new " + language + "TermBuilder());");
             writer.println("            return ast;");
             writer.println("        } else {");
             writer.println("            System.out.println(\"Parse error...\");");
