@@ -17,6 +17,6 @@ libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.11" % "test"
 )
 
-lazy val utils = RootProject(file("../utils"))
+lazy val utils = ProjectRef(file("../utils"), "utils")
 
 val main = Project(id = "regex", base = file(".")).dependsOn(utils)
