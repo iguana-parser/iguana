@@ -45,5 +45,8 @@
     <orderEntry type="library" name="SBT: com.google.truth:truth:0.23:jar" level="project" />
     <orderEntry type="library" name="SBT: commons-cli:commons-cli:1.2:jar" level="project" />
     <orderEntry type="library" name="SBT: commons-io:commons-io:2.4:jar" level="project" />
+    <orderEntry type="library" name="SBT: iguana:parse-trees_2.11:0.1.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: iguana:regex_2.11:0.1.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: iguana:utils_2.11:0.1.0:jar" level="project" />
   </component>
 </module>

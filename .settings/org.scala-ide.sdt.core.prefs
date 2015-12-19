@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+scala.compiler.additionalParams=
+scala.compiler.installation=1803185598
+scala.compiler.sourceLevel=2.11
+scala.compiler.useProjectSettings=true

@@ -6,3 +6,7 @@ target
 .idea/dictionaries
 project/target
 project/project
+.cache-tests
+.cache-main
+.classpath
+.project
