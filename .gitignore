@@ -10,3 +10,4 @@ project/project
 .cache-main
 .classpath
 .project
+.settings
