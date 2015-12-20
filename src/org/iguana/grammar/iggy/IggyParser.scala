@@ -6,7 +6,7 @@ import iguana.parsetrees.iggy.TermTraversal
 import iguana.parsetrees.term.Term
 import org.iguana.grammar.symbol.{Start, Nonterminal, Rule}
 import org.iguana.grammar.{GrammarGraph, Grammar}
-import org.iguana.grammar.transformation.{LayoutWeaver, EBNFToBNF, DesugarPrecedenceAndAssociativity}
+import org.iguana.grammar.transformation.{DesugarAlignAndOffside, LayoutWeaver, EBNFToBNF, DesugarPrecedenceAndAssociativity}
 import org.iguana.parser.Iguana
 import iguana.utils.input.Input
 import scala.collection.JavaConverters._
@@ -32,10 +32,25 @@ object IggyParser {
     val builder: GrammarBuilder = new GrammarBuilder
     val rules = TermTraversal.build(term, builder).asInstanceOf[java.util.List[Rule]]
 
-    rules.asScala.filter(r => r.getAttributes.containsKey("@Layout")).headOption match {
+    transform(rules.asScala.filter(r => r.getAttributes.containsKey("@Layout")).headOption match {
       case Some(l)      => Grammar.builder.addRules(rules).setLayout(l.getHead).build
       case None         => Grammar.builder.addRules(rules).build
-    }
+    })
+  }
+
+  private def transform(g: Grammar): Grammar = {
+    var grammar = new InlineRegex().transform(g)
+    val alignAndOffside: DesugarAlignAndOffside = new DesugarAlignAndOffside
+    val precedenceAndAssociativity: DesugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity
+    alignAndOffside.doAlign
+    precedenceAndAssociativity.setOP2
+    grammar = alignAndOffside.transform(grammar)
+    grammar = new EBNFToBNF().transform(grammar)
+    alignAndOffside.doOffside
+    grammar = alignAndOffside.transform(grammar)
+    grammar = precedenceAndAssociativity.transform(grammar)
+    grammar = new LayoutWeaver().transform(grammar)
+    grammar
   }
 
   private lazy val iggyGrammar = {
