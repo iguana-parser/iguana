@@ -17,6 +17,8 @@ javaSource in Compile := baseDirectory.value / "src"
 
 javaSource in Test := baseDirectory.value / "test"
 
+resourceDirectory in Compile := baseDirectory.value / "src" / "resources"
+
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
 
 libraryDependencies ++= Seq(
@@ -36,7 +38,9 @@ lazy val utils = ProjectRef(file("../utils"), "utils")
 lazy val parseTrees = ProjectRef(file("../parse-trees"), "parse-trees")
 lazy val regex = ProjectRef(file("../regex"), "regex")
 
-val main2 = Project("iguana", file(".")).aggregate(utils, parseTrees, regex)
-val main = Project("iguana", file(".")).dependsOn(utils, parseTrees, regex)
+// Uncomment the following line (and comment out the next one) when generating Eclipse projects using SBT
+// val main = Project("iguana", file(".")).dependsOn(utils, parseTrees, regex)
+
+val main = Project("iguana", file(".")).aggregate(utils, parseTrees, regex).dependsOn(utils, parseTrees, regex)
 
 

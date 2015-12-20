@@ -9,7 +9,7 @@
     </Parser>
 
     <Logging>
-        <LogLevel>NONE</LogLevel>
+        <LogLevel>None</LogLevel>
     </Logging>
 
 </Iguana>

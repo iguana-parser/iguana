@@ -112,7 +112,7 @@ public class GrammarGraph implements Serializable {
     private ParserRuntime runtime;
 
     public static GrammarGraph from(Grammar grammar, Input input) {
-        return from(grammar, input, Configuration.DEFAULT);
+        return from(grammar, input, Configuration.load());
     }
 
     public static GrammarGraph from(Grammar grammar, Input input, Configuration config) {

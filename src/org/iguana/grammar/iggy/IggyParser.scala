@@ -2,32 +2,52 @@ package org.iguana.grammar.iggy
 
 import java.io.File
 
-import org.iguana.grammar.symbol.Nonterminal
+import iguana.parsetrees.iggy.TermTraversal
+import iguana.parsetrees.term.Term
+import org.iguana.grammar.symbol.{Start, Nonterminal, Rule}
 import org.iguana.grammar.{GrammarGraph, Grammar}
 import org.iguana.grammar.transformation.{LayoutWeaver, EBNFToBNF, DesugarPrecedenceAndAssociativity}
-import org.iguana.parser.{Iguana, ParseResult}
+import org.iguana.parser.Iguana
 import iguana.utils.input.Input
+import scala.collection.JavaConverters._
 
 
-class IggyParser(f: String) {
+object IggyParser {
 
-  import IggyParser._
+  def getGrammar(s: String): Grammar = getGrammar(Input.fromString(s))
 
-  val graph = GrammarGraph.from(iggyGrammar, Input.fromFile(new File(f)))
+  def getGrammar(input: Input): Grammar = {
 
-  def parse(input: Input): ParseResult = {
-    Iguana.parse(input, graph, Nonterminal.withName("Definition"))
+    val result = Iguana.parse(input, GrammarGraph.from(iggyGrammar, input), start)
+
+    if (result.isParseError)
+      throw new RuntimeException(result.asParseError().toString)
+
+    getGrammar(result.asParseSuccess().getTree, input)
   }
 
-}
+  private val start = Start.from(Nonterminal.withName("Definition"))
 
-object IggyParser extends App {
+  private def getGrammar(term: Term, input: Input): Grammar = {
+    val builder: GrammarBuilder = new GrammarBuilder
+    val rules = TermTraversal.build(term, builder).asInstanceOf[java.util.List[Rule]]
 
-  private var iggyGrammar = Grammar.load(getClass.getResourceAsStream("/org/iguana/grammar/iggy/IGGY"))
-  private val precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity
-  precedenceAndAssociativity.setOP2
+    rules.asScala.filter(r => r.getAttributes.containsKey("@Layout")).headOption match {
+      case Some(l)      => Grammar.builder.addRules(rules).setLayout(l.getHead).build
+      case None         => Grammar.builder.addRules(rules).build
+    }
+  }
 
-  iggyGrammar = new EBNFToBNF().transform(iggyGrammar)
-  iggyGrammar = precedenceAndAssociativity.transform(iggyGrammar)
-  iggyGrammar = new LayoutWeaver().transform(iggyGrammar)
+  private lazy val iggyGrammar = {
+    var g = Grammar.load(getClass.getResourceAsStream("/Iggy"))
+    val precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity
+    precedenceAndAssociativity.setOP2
+
+    g = new EBNFToBNF().transform(g)
+    g = precedenceAndAssociativity.transform(g)
+    g = new LayoutWeaver().transform(g)
+    g.getStartSymbol(Nonterminal.withName("Definition"))
+    g
+  }
+
 }
