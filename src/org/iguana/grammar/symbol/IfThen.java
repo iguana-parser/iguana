@@ -28,7 +28,7 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.regex.Epsilon;
+import iguana.regex.Epsilon;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class IfThen extends AbstractSymbol {

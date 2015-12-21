@@ -29,7 +29,7 @@ package org.iguana.traversal.idea;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.RegularExpression;
+import iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Map;

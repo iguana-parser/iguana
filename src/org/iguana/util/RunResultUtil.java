@@ -1,7 +1,5 @@
 package org.iguana.util;
 
-import static org.iguana.util.generator.GeneratorUtil.*;
-
 import java.net.URI;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
@@ -16,6 +14,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static iguana.utils.string.StringUtil.*;
+
 
 public class RunResultUtil {
 	

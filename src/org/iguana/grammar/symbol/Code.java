@@ -29,7 +29,8 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+
+import static iguana.utils.string.StringUtil.*;
 
 public class Code extends AbstractSymbol {
 
@@ -63,7 +64,7 @@ public class Code extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("%s {%s}", symbol.toString(), GeneratorUtil.listToString(statements, ";"));
+		return String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
 	}
 		
 	public static Builder builder(Symbol symbol, org.iguana.datadependent.ast.Statement... statements) {
@@ -82,7 +83,7 @@ public class Code extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol, Statement... statements) {
-			super(String.format("%s {%s}", symbol.toString(), GeneratorUtil.listToString(statements, ";")));
+			super(String.format("%s {%s}", symbol.toString(), listToString(statements, ";")));
 			
 			assert statements.length != 0;
 			

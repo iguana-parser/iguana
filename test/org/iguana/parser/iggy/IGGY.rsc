@@ -20,7 +20,7 @@ token RangeChar = "\\" [\\ \[ \] \- t f r n \ ] | ![\\ \[ \] \- \ ];
 token Char = "\'" Character* "\'";
 token String = "\"" Character* "\"";
 
-lexical White SpaceOrComment = WhiteSpaces | Comment;
+lexical WhiteSpaceOrComment = WhiteSpaces | Comment;
 lexical Layout = WhiteSpaceOrComment* !>> [\ \t \f \r \n] !>> "/*" !>> "//";
 
 lexical Identifier = Ident: [$A-Z_a-z] !<< LetterOrDigits \ Keywords;

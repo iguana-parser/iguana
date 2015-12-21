@@ -82,13 +82,6 @@ public class VariableDeclaration extends AbstractAST {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "AST.varDecl(" + "\"" + name + "\""
-							  + (i != -1? "," + i : "")
-							  + (expression != null? "," + expression.getConstructorCode() : "") + ")";
-	}
-	
-	@Override
 	public String toString() {
 		return expression != null? (i != -1? String.format( "var %s:%s = %s", name, i, expression) : String.format( "var %s = %s", name, expression)) 
 								 : (i != -1? String.format("var %s:%s", name, i) : String.format("var %s", name));

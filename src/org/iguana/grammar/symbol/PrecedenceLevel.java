@@ -30,7 +30,7 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 public class PrecedenceLevel implements Serializable {
 	
@@ -208,8 +208,8 @@ public class PrecedenceLevel implements Serializable {
 		
 	public String getConstructorCode() {
 		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnary + "," + hasPostfixUnary + "," 
-												     + hasPrefixUnaryBelow + "," + "new Integer[]{" + GeneratorUtil.listToString(prefixUnaryBelow, ",") + "}" + "," 
-												     + hasPostfixUnaryBelow + "," + "new Integer[]{" + GeneratorUtil.listToString(postfixUnaryBelow, ",") + "}" + ")";
+												     + hasPrefixUnaryBelow + "," + "new Integer[]{" + listToString(prefixUnaryBelow, ",") + "}" + ","
+												     + hasPostfixUnaryBelow + "," + "new Integer[]{" + listToString(postfixUnaryBelow, ",") + "}" + ")";
 	}
 	
 	@Override

@@ -27,10 +27,10 @@
 
 package org.iguana.util.visualization;
 
-import org.iguana.regex.automaton.AutomatonVisitor;
-import org.iguana.regex.automaton.State;
-import org.iguana.regex.automaton.Transition;
-import org.iguana.regex.automaton.VisitAction;
+import iguana.regex.automaton.AutomatonVisitor;
+import iguana.regex.automaton.State;
+import iguana.regex.automaton.Transition;
+import iguana.regex.automaton.VisitAction;
 
 
 public class AutomatonToDot {

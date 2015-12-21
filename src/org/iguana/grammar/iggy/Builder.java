@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
-import org.iguana.regex.Character;
-import org.iguana.regex.Epsilon;
+import iguana.regex.Character;
+import iguana.regex.Epsilon;
 
 /**
  * @author Anastasia Izmaylova
@@ -218,10 +218,10 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 	}
 	
 	@Override
-	public org.iguana.regex.Sequence<Character> string(Object obj) {
+	public iguana.regex.Sequence<Character> string(Object obj) {
         String s = (String) obj;
         s = s.substring(1, s.length() - 1);
-        return org.iguana.regex.Sequence.from(s.chars().toArray());
+        return iguana.regex.Sequence.from(s.chars().toArray());
     }
 	
 	/*

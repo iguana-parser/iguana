@@ -3,19 +3,35 @@
   <component name="ScalaSbtSettings">
     <option name="linkedExternalProjectsSettings">
       <SbtProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/../parse-trees" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="jdk" value="1.8" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/project" />
             <option value="$PROJECT_DIR$/../parse-trees" />
             <option value="$PROJECT_DIR$/../parse-trees/project" />
+            <option value="$PROJECT_DIR$/../regex" />
+            <option value="$PROJECT_DIR$/../regex/project" />
+            <option value="$PROJECT_DIR$/../utils" />
+            <option value="$PROJECT_DIR$/../utils/project" />
           </set>
         </option>
-        <option name="sbtVersion" value="0.13.5" />
+        <option name="resolveClassifiers" value="true" />
+        <option name="resolveSbtClassifiers" value="true" />
+        <option name="sbtVersion" value="0.13.9" />
+        <option name="useAutoImport" value="true" />
+        <option name="useOurOwnAutoImport" value="true" />
         <option name="myModules">
           <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/project" />
             <option value="$PROJECT_DIR$/../parse-trees" />
             <option value="$PROJECT_DIR$/../parse-trees/project" />
+            <option value="$PROJECT_DIR$/../regex" />
+            <option value="$PROJECT_DIR$/../regex/project" />
+            <option value="$PROJECT_DIR$/../utils" />
+            <option value="$PROJECT_DIR$/../utils/project" />
           </set>
         </option>
       </SbtProjectSettings>

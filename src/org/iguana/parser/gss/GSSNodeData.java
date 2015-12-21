@@ -29,7 +29,7 @@ package org.iguana.parser.gss;
 
 import java.util.Iterator;
 
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 public class GSSNodeData<T> implements Iterable<T> {
 	
@@ -89,7 +89,7 @@ public class GSSNodeData<T> implements Iterable<T> {
 	
 	@Override
 	public String toString() {
-		return GeneratorUtil.listToString(elements, ",");
+		return listToString(elements, ",");
 	}
 	
 	static private class GSSNodeDataIterator<T> implements Iterator<T> {

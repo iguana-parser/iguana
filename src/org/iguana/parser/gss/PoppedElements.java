@@ -160,6 +160,25 @@ public class PoppedElements {
 		}
 		return poppedElements.get(Keys.from(j, input));
 	}
+
+    public NonterminalNode getNonterminalNode(Input input) {
+        int max = 0;
+        NonterminalNode node = null;
+        if (firstNode != null) {
+            node = firstNode;
+            max = firstNode.getRightExtent();
+        }
+        if (poppedElements != null) {
+            for (Map.Entry<Object, NonterminalNode> entry : poppedElements.entrySet()) {
+                int r = entry.getValue().getRightExtent();
+                if (r > max && entry.getKey().equals(Keys.from(r, input))) {
+                    max = r;
+                    node = entry.getValue();
+                }
+            }
+        }
+        return node;
+    }
 	
 	public int size() {
 		if (poppedElements == null) {

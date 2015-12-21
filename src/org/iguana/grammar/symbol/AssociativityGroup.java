@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 
 public class AssociativityGroup implements Serializable {
@@ -149,7 +149,7 @@ public class AssociativityGroup implements Serializable {
 					+ lhs + ","
 					+ rhs + ","
 					+ (precedence != -1? precedence + (map.keySet().isEmpty()? "" : ",") : "") 
-					+ GeneratorUtil.listToString(map.keySet(), ",") + ")";
+					+ listToString(map.keySet(), ",") + ")";
 	}
 
 }

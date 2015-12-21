@@ -30,8 +30,8 @@ package org.iguana.grammar.symbol;
 import iguana.parsetrees.slot.TerminalNodeType;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.term.TerminalType;
-import org.iguana.regex.Epsilon;
-import org.iguana.regex.RegularExpression;
+import iguana.regex.Epsilon;
+import iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractSymbol implements TerminalType{

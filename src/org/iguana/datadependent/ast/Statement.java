@@ -53,12 +53,7 @@ public abstract class Statement extends AbstractAST {
 			exp.interpret(ctx);
 			return null;
 		}
-		
-		@Override
-		public String getConstructorCode() {
-			return "AST.stat(" + exp.getConstructorCode() + ")";
-		}
-		
+
 		@Override
 		public String toString() {
 			return exp.toString();
@@ -89,11 +84,6 @@ public abstract class Statement extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx) {
 			decl.interpret(ctx);
 			return null;
-		}
-		
-		@Override
-		public String getConstructorCode() {
-			return "AST.varDeclStat(" + decl.getConstructorCode() + ")";
 		}
 		
 		@Override

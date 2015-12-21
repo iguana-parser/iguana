@@ -35,7 +35,9 @@ import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UndefinedRuntimeValueException;
-import org.iguana.util.generator.GeneratorUtil;
+
+import static iguana.utils.string.StringUtil.*;
+
 
 public class SimpleImmutableEnvironment implements Environment {
 	
@@ -168,7 +170,7 @@ public class SimpleImmutableEnvironment implements Environment {
 	@Override
 	public String toString() {
 		return (parent != null? parent.toString() + " -> " : "() -> ")
-				+ (bindings != null? GeneratorUtil.listToString(bindings.entrySet().stream().map(entry -> entry.getKey() + " : " + entry.getValue()).collect(Collectors.toList()), ";") 
+				+ (bindings != null? listToString(bindings.entrySet().stream().map(entry -> entry.getKey() + " : " + entry.getValue()).collect(Collectors.toList()), ";")
 								   : "()");
 	}
 

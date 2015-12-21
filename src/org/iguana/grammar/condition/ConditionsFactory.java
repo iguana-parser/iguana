@@ -36,9 +36,11 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.regex.matcher.MatcherFactory;
+import iguana.regex.matcher.MatcherFactory;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+
+import static iguana.utils.string.StringUtil.*;
+
 
 public class ConditionsFactory {
 	
@@ -91,7 +93,7 @@ public class ConditionsFactory {
 				
 				@Override
 				public String toString() {
-					return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+					return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
 				}
 				
 			};
@@ -112,7 +114,7 @@ public class ConditionsFactory {
 			
 			@Override
 			public String toString() {
-				return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+				return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
 			}
 		};
 

@@ -35,7 +35,8 @@ import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.generator.GeneratorUtil;
+
+import static iguana.utils.string.StringUtil.*;
 
 
 public class NonterminalTransition extends AbstractTransition {
@@ -105,7 +106,7 @@ public class NonterminalTransition extends AbstractTransition {
 	public String getLabel() {
 		return (dest.getVariable() != null? dest.getVariable() + "=" : "") 
 				+ (dest.getLabel() != null? dest.getLabel() + ":"  : "")
-				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), GeneratorUtil.listToString(arguments, ",")) : getSlot().toString());
+				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), listToString(arguments, ",")) : getSlot().toString());
 	}
 
 	/**

@@ -33,7 +33,7 @@ import iguana.parsetrees.slot.NonterminalNodeType;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.regex.Character;
+import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
@@ -76,7 +76,7 @@ public class LayoutTest1 {
 	public void test() {
 		Input input = Input.fromString("a b");
 		Grammar grammar = getGrammar();
-        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
     }
 }

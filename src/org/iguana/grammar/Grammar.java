@@ -27,8 +27,6 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.generator.GeneratorUtil.listToString;
-
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -48,8 +46,10 @@ import org.iguana.grammar.symbol.Recursion;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.regex.RegularExpression;
+import iguana.regex.RegularExpression;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
+
+import static iguana.utils.string.StringUtil.*;
 
 
 /**
@@ -108,7 +108,11 @@ public class Grammar implements Serializable {
 	public Map<String, Set<String>> getEBNFRights() {
 		return this.ebnfRights;
 	}
-	
+
+    public Start getStartSymbol(String nt) {
+        return getStartSymbol(Nonterminal.withName(nt));
+    }
+
 	public Start getStartSymbol(Nonterminal nt) {
 		Start start = Start.from(nt);
 		if (definitions.keySet().contains(start)) return start;
@@ -341,7 +345,7 @@ public class Grammar implements Serializable {
 		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
 			grammar = (Grammar) in.readObject();
 		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(e);
+            throw new RuntimeException(e);
 		}
 		return grammar;
 	}

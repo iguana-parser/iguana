@@ -2,7 +2,7 @@ package org.iguana.grammar.slot.lookahead;
 
 import java.util.Set;
 
-import org.iguana.regex.CharacterRange;
+import iguana.regex.CharacterRange;
 import iguana.utils.collections.rangemap.AVLIntRangeTree;
 import iguana.utils.collections.rangemap.ArrayIntRangeTree;
 import iguana.utils.collections.rangemap.IntRangeTree;

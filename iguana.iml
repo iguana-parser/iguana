@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -12,6 +12,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="parse-trees" />
+    <orderEntry type="module" module-name="utils" />
+    <orderEntry type="module" module-name="regex" />
     <orderEntry type="module-library">
       <library name="Maven: org.eclipse.imp:org.eclipse.imp.pdb.values:0.4.1.qualifier">
         <CLASSES>
@@ -29,7 +31,8 @@
     <orderEntry type="library" name="Maven: com.google.truth:truth:0.23" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Maven: iguana:parse-trees_2.11:0.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.11.7" level="project" />
-    <orderEntry type="module" module-name="utils" />
+    <orderEntry type="library" name="Maven: iguana:utils:0.1.0" level="project" />
   </component>
 </module>

@@ -31,13 +31,13 @@ import iguana.utils.input.Input;
 
 public interface IEvaluatorContext {
 	
-	public Input getInput();
+	Input getInput();
 	
-	public Environment getEnvironment();
+	Environment getEnvironment();
 	
-	public void setEnvironment(Environment env);
+	void setEnvironment(Environment env);
 	
-	public Environment getEmptyEnvironment();
+	Environment getEmptyEnvironment();
 	
 	
 	/**
@@ -45,35 +45,35 @@ public interface IEvaluatorContext {
 	 * Operations on environment
 	 * 
 	 */
-	public void popEnvironment();
+	void popEnvironment();
 	
-	public void pushEnvironment();
+	void pushEnvironment();
 	
-	public void declareVariable(String name, Object value);
+	void declareVariable(String name, Object value);
 	
-	public void declareVariables(String[] names, Object[] values);
+	void declareVariables(String[] names, Object[] values);
 	
-	public void storeVariable(String name, Object value);
+	void storeVariable(String name, Object value);
 	
-	public Object lookupVariable(String name);
+	Object lookupVariable(String name);
 	
-	public void declareVariable(Object value);
+	void declareVariable(Object value);
 	
-	public void declareVariables(Object[] values);
+	void declareVariables(Object[] values);
 	
-	public void storeVariable(int i, Object value);
+	void storeVariable(int i, Object value);
 	
-	public Object lookupVariable(int i);
+	Object lookupVariable(int i);
 	
 	/**
 	 * 
 	 * Global parser environment
 	 * 
 	 */
-	public void declareGlobalVariable(String name, Object value);
+	void declareGlobalVariable(String name, Object value);
 	
-	public void declareGlobalVariables(String[] names, Object[] values);
+	void declareGlobalVariables(String[] names, Object[] values);
 	
-	public Object lookupGlobalVariable(String name);
+	Object lookupGlobalVariable(String name);
 
 }

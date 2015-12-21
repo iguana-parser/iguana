@@ -29,10 +29,10 @@ package org.iguana.traversal.idea;
 
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.regex.*;
-import org.iguana.regex.Character;
-import org.iguana.traversal.RegularExpressionVisitor;
-import org.iguana.util.unicode.UnicodeUtil;
+import iguana.regex.*;
+import iguana.regex.Character;
+import iguana.regex.RegularExpressionVisitor;
+//import iguana.util.unicode.UnicodeUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -234,22 +234,22 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public String visit(org.iguana.regex.Star s) {
+    public String visit(iguana.regex.Star s) {
         return s.getSymbol().accept(this) + "*";
     }
 
     @Override
-    public String visit(org.iguana.regex.Plus p) {
+    public String visit(iguana.regex.Plus p) {
         return p.getSymbol().accept(this) + "+";
     }
 
     @Override
-    public String visit(org.iguana.regex.Opt o) {
+    public String visit(iguana.regex.Opt o) {
         return o.getSymbol().accept(this) + "?";
     }
 
     @Override
-    public <E extends RegularExpression> String visit(org.iguana.regex.Alt<E> symbol) {
+    public <E extends RegularExpression> String visit(iguana.regex.Alt<E> symbol) {
         Map<Boolean, List<E>> parition = symbol.getSymbols().stream().collect(Collectors.partitioningBy(s -> isCharClass(s)));
         List<E> charClasses = parition.get(true);
         List<E> other = parition.get(false);
@@ -283,7 +283,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public <E extends RegularExpression> String visit(org.iguana.regex.Sequence<E> symbol) {
+    public <E extends RegularExpression> String visit(iguana.regex.Sequence<E> symbol) {
 
         List<E> symbols = symbol.getSymbols();
 
@@ -364,7 +364,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     private String getChar(int c) {
-        if(UnicodeUtil.isPrintableAscii(c))
+        if(CharacterRanges.isPrintableAscii(c))
             return escape((char) c + "");
         else
             return escape(String.format("\\u%04X", c));

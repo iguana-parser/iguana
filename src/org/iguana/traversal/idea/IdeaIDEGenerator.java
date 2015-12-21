@@ -28,7 +28,7 @@
 package org.iguana.traversal.idea;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.regex.*;
+import iguana.regex.*;
 
 import java.util.*;
 

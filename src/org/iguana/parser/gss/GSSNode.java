@@ -105,6 +105,10 @@ public class GSSNode {
     public NonterminalNode getNonterminalNode(Input input, int j) {
 		return poppedElements.getNonterminalNode(input, j);
 	}
+
+    public NonterminalNode getNonterminalNode(Input input) {
+        return poppedElements.getNonterminalNode(input);
+    }
 	
 	public NonterminalGrammarSlot getGrammarSlot() {
 		return slot;

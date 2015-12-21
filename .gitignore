@@ -4,3 +4,10 @@ target
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
+project/target
+project/project
+.cache-tests
+.cache-main
+.classpath
+.project
+.settings

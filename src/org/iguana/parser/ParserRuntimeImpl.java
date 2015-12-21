@@ -62,7 +62,7 @@ public class ParserRuntimeImpl implements ParserRuntime {
         this.descriptorsStack = new ArrayDeque<>();
         this.ctx = ctx;
         this.config = config;
-        if (config.getLogLevel() == LogLevel.None)
+        if (config.getLogLevel() == LogLevel.NONE)
             logger = IguanaLogger.DEFAULT;
         else
             logger = new JavaUtilIguanaLogger("Iguana Logger", config.getLogLevel());

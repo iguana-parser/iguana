@@ -52,14 +52,15 @@ public class GenerateElements {
     public static void generate(List<Rule> rules, String language, String path) {
         Map<String, Set<String>> elements = new LinkedHashMap<>();
         for (Rule rule : rules) {
-            if (!rule.getHead().getName().equals("$default$")) {
-                Set<String> labels = elements.get(rule.getHead().getName());
-                if (labels == null) {
-                    labels = new HashSet<>();
-                    elements.put(rule.getHead().getName(), labels);
-                }
-                labels.add(rule.getLabel() == null ? "Impl" : rule.getLabel());
+
+            if (rule.getHead().getName().equals("$default$")) continue;
+
+            Set<String> labels = elements.get(rule.getHead().getName());
+            if (labels == null) {
+                labels = new HashSet<>();
+                elements.put(rule.getHead().getName(), labels);
             }
+            labels.add(rule.getLabel() == null ? "Impl" : rule.getLabel());
         }
         generateElementTypes(elements, language, path);
         generatePhiElements(rules, language, path);

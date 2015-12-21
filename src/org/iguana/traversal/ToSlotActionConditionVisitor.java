@@ -37,8 +37,8 @@ import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.condition.SlotAction;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.regex.matcher.Matcher;
-import org.iguana.regex.matcher.MatcherFactory;
+import iguana.regex.matcher.Matcher;
+import iguana.regex.matcher.MatcherFactory;
 
 public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotAction> {
 

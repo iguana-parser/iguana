@@ -59,6 +59,7 @@ public class Configuration {
             XMLConfigFileParser parser = XMLConfigFileParser.create("config.xml");
             configuration = parser.getConfiguration();
         } catch (Exception e) {
+            e.printStackTrace();
             configuration = Configuration.DEFAULT;
         }
         return configuration;
@@ -140,7 +141,7 @@ public class Configuration {
 		private MatcherType matcherType = MatcherType.JAVA_REGEX;
 		private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
 		private int lookaheadCount = DEFAULT_LOOKAHEAD;
-        private LogLevel logLevel = LogLevel.None;
+        private LogLevel logLevel = LogLevel.NONE;
 		
 		private EnvironmentImpl envImpl = EnvironmentImpl.TRIE;
 				

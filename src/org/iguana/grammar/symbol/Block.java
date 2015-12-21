@@ -28,7 +28,7 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.*;
 
 public class Block extends AbstractSymbol {
 
@@ -64,7 +64,7 @@ public class Block extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("{ %s }", GeneratorUtil.listToString(symbols, " "));
+		return String.format("{ %s }", listToString(symbols, " "));
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public class Block extends AbstractSymbol {
 			k++;
 		}
 		
-		return String.format("{ %s }", GeneratorUtil.listToString(strings, " "));
+		return String.format("{ %s }", listToString(strings, " "));
 	}
 	
 	public static Builder builder(Symbol... symbols) {
@@ -95,7 +95,7 @@ public class Block extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol... symbols) {
-			super(String.format("{ %s }", GeneratorUtil.listToString(symbols, " ")));
+			super(String.format("{ %s }", listToString(symbols, " ")));
 			
 			assert symbols.length != 0;
 			
