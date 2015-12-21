@@ -64,7 +64,7 @@ object IggyParser {
   }
 
   private lazy val iggyGrammar = {
-    var g = Grammar.load(getClass.getResourceAsStream("/Iggy"))
+    var g = Grammar.load(getClass.getResourceAsStream("/IggyGrammar"))
     val precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity
     precedenceAndAssociativity.setOP2
 
