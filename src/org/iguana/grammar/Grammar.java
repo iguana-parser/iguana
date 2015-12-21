@@ -108,7 +108,11 @@ public class Grammar implements Serializable {
 	public Map<String, Set<String>> getEBNFRights() {
 		return this.ebnfRights;
 	}
-	
+
+    public Start getStartSymbol(String nt) {
+        return getStartSymbol(Nonterminal.withName(nt));
+    }
+
 	public Start getStartSymbol(Nonterminal nt) {
 		Start start = Start.from(nt);
 		if (definitions.keySet().contains(start)) return start;
