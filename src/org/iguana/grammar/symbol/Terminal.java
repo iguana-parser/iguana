@@ -28,6 +28,7 @@
 package org.iguana.grammar.symbol;
 
 import iguana.parsetrees.slot.TerminalNodeType;
+import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.term.TerminalType;
 import org.iguana.regex.Epsilon;
 import org.iguana.regex.RegularExpression;
@@ -46,10 +47,13 @@ public class Terminal extends AbstractSymbol implements TerminalType{
 
     @Override
     public int nodeType() {
-        if (category == Category.Layout)
-            return TerminalNodeType.Layout();
-        else
-            return TerminalNodeType.Regular();
+        switch (category) {
+            case Layout: return TerminalNodeType.Layout();
+            case REGEX: return TerminalNodeType.Regex();
+            case TERMINAL: return TerminalNodeType.Literal();
+            case KEYWORD: return TerminalNodeType.Keyword();
+            default: throw new RuntimeException("No such case!");
+        }
     }
 
     public enum Category {
