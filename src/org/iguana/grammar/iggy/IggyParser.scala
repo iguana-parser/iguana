@@ -3,6 +3,7 @@ package org.iguana.grammar.iggy
 import java.io.File
 
 import iguana.parsetrees.iggy.TermTraversal
+import iguana.parsetrees.slot.NonterminalNodeType
 import iguana.parsetrees.term.Term
 import org.iguana.grammar.symbol.{Start, Nonterminal, Rule}
 import org.iguana.grammar.{GrammarGraph, Grammar}
@@ -32,10 +33,19 @@ object IggyParser {
     val builder: GrammarBuilder = new GrammarBuilder
     val rules = TermTraversal.build(term, builder).asInstanceOf[java.util.List[Rule]]
 
-    transform(rules.asScala.filter(r => r.getAttributes.containsKey("@Layout")).headOption match {
-      case Some(l)      => Grammar.builder.addRules(rules).setLayout(l.getHead).build
-      case None         => Grammar.builder.addRules(rules).build
-    })
+    val b = Grammar.builder()
+    var layout: Nonterminal = null
+    for (rule <- rules.asScala) {
+      if (rule.getAttributes.containsKey("@Layout")) {
+        layout = rule.getHead
+        b.addRule(rule.copyBuilderButWithHead(rule.getHead().copyBuilder().setType(NonterminalNodeType.Layout).build()).build())
+      } else {
+        b.addRule(rule)
+      }
+    }
+
+    b.setLayout(layout)
+    transform(b.build())
   }
 
   private def transform(g: Grammar): Grammar = {
