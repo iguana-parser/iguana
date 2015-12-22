@@ -19,7 +19,6 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.BenchmarkUtil;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 
@@ -269,7 +268,7 @@ public class ParserRuntimeImpl implements ParserRuntime {
                               .setNanoTime(timer.getNanoTime())
                               .setUserTime(timer.getUserTime())
                               .setSystemTime(timer.getSystemTime())
-                              .setMemoryUsed(BenchmarkUtil.getMemoryUsed())
+                              .setMemoryUsed(getMemoryUsed())
                               .setDescriptorsCount(descriptorsCount)
                               .setGSSNodesCount(countGSSNodes + 1) // + start gss node
                               .setGSSEdgesCount(countGSSEdges)
@@ -279,6 +278,13 @@ public class ParserRuntimeImpl implements ParserRuntime {
                               .setPackedNodesCount(countPackedNodes)
                               .setAmbiguousNodesCount(countAmbiguousNodes)
                               .build();
+    }
+
+    public static int getMemoryUsed() {
+        int mb = 1024 * 1024;
+        Runtime runtime = Runtime.getRuntime();
+        int memoryUsed = (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
+        return memoryUsed;
     }
 
     @Override

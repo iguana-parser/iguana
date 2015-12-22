@@ -1,7 +1,5 @@
 package org.iguana.grammar.iggy
 
-import java.io.File
-
 import iguana.parsetrees.iggy.TermTraversal
 import iguana.parsetrees.slot.NonterminalNodeType
 import iguana.parsetrees.term.Term
@@ -22,9 +20,9 @@ object IggyParser {
     val result = Iguana.parse(input, GrammarGraph.from(iggyGrammar, input), start)
 
     if (result.isParseError)
-      throw new RuntimeException(result.asParseError().toString)
+      throw new RuntimeException(result.asParseError.toString)
 
-    getGrammar(result.asParseSuccess().getTree, input)
+    getGrammar(result.asParseSuccess.getTree, input)
   }
 
   private val start = Start.from(Nonterminal.withName("Definition"))
