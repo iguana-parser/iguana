@@ -16,16 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>iguana</groupId>
-            <artifactId>regex</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>iguana</groupId>
-            <artifactId>utils</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>io.usethesource</groupId>
             <artifactId>capsule</artifactId>
             <version>0.6.3</version>
