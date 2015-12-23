@@ -25,7 +25,7 @@ object IggyParser {
     getGrammar(result.asParseSuccess.getTree, input)
   }
 
-  private val start = Start.from(Nonterminal.withName("Definition"))
+  private val start = Start.from("Definition")
 
   private def getGrammar(term: Term, input: Input): Grammar = {
     val builder: GrammarBuilder = new GrammarBuilder

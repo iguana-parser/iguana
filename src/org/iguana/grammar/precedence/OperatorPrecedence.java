@@ -106,8 +106,8 @@ public class OperatorPrecedence {
 			Nonterminal head = e.getKey();
 			for (int i = 0; i < e.getValue().size(); i++) {
 				List<Symbol> list = definitions.get(head).get(i);
-				Nonterminal layout = grammar.getDefinitions().get((Nonterminal) plain(head)).get(i).getLayout();
-				LayoutStrategy strategy = grammar.getDefinitions().get((Nonterminal) plain(head)).get(i).getLayoutStrategy();
+				Nonterminal layout = grammar.getDefinitions().get(plain(head)).get(i).getLayout();
+				LayoutStrategy strategy = grammar.getDefinitions().get(plain(head)).get(i).getLayoutStrategy();
 				Rule rule = Rule.withHead(head).addSymbols(list).setLayout(layout).setLayoutStrategy(strategy).build();
 				if (rule.getBody() != null)
 					builder.addRule(rule);
@@ -478,9 +478,6 @@ public class OperatorPrecedence {
 	 * Returns a list of all nonterminals with the given name which are
 	 * reachable from the given head and are on the left-most end.
 	 * 
-	 * @param head
-	 * @param directName
-	 * @param alternates
 	 */
 	private void getLeftEnds(Nonterminal head, Nonterminal nonterminal, Set<List<Symbol>> nonterminals) {
 		getLeftEnds(head, nonterminal, nonterminals, new HashSet<Nonterminal>());
@@ -674,7 +671,7 @@ public class OperatorPrecedence {
 					} else {
 						Nonterminal newNonterminal = createNewNonterminal(n);
 						map.put(n,  newNonterminal);
-						definitions.put(newNonterminal, deepCopy(definitions.get(n), nonterminal, map));
+                        definitions.put(newNonterminal, deepCopy(definitions.get(n), nonterminal, map));
 						copyAlt.add(newNonterminal);				
 					}
 					continue;

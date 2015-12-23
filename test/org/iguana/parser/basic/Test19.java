@@ -115,7 +115,7 @@ public class Test19 {
                 .setIntermediateNodesCount(7)
                 .setPackedNodesCount(14)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF2(registry), statistics, input1);
+        return new ParseSuccess(expectedSPPF2(registry), statistics, input2);
     }
 
     private NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -166,7 +166,7 @@ public class Test19 {
                 .setIntermediateNodesCount(26)
                 .setPackedNodesCount(51)
                 .setAmbiguousNodesCount(10).build();
-        return new ParseSuccess(expectedSPPF3(registry), statistics, input1);
+        return new ParseSuccess(expectedSPPF3(registry), statistics, input3);
     }
 
     private NonterminalNode expectedSPPF3(GrammarGraph registry) {

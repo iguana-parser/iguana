@@ -27,6 +27,7 @@
 package org.iguana.grammar.iggy;
 
 import iguana.parsetrees.iggy.TermTraversal;
+import iguana.regex.Character;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.condition.Condition;
@@ -111,6 +112,7 @@ public class GrammarBuilder implements TermTraversal.Actions {
                 level = level.getNext();
             }
             level.done();
+            Collections.reverse(rules);
             return rules;
 		}
 
@@ -390,7 +392,11 @@ public class GrammarBuilder implements TermTraversal.Actions {
             return Terminal.from(iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray())));
         }
         public static org.iguana.grammar.symbol.Symbol character(String s) {
-            return Terminal.from(iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray())));
+            int[] chars = getChars(s.substring(1, s.length() - 1).chars().toArray());
+            assert chars.length != 0;
+            if (chars.length == 1)
+                return Terminal.from(Character.from(chars[0]));
+            return Terminal.from(iguana.regex.Sequence.from(chars));
         }
     }
 
@@ -507,7 +513,11 @@ public class GrammarBuilder implements TermTraversal.Actions {
             return iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray()));
         }
         public static RegularExpression character(String s) {
-            return iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray()));
+            int[] chars = getChars(s.substring(1, s.length() - 1).chars().toArray());
+            assert chars.length != 0;
+            if (chars.length == 1)
+                return Character.from(chars[0]);
+            return iguana.regex.Sequence.from(chars);
         }
     }
 

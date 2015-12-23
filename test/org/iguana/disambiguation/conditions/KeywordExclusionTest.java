@@ -37,6 +37,7 @@ import iguana.regex.Character;
 import iguana.regex.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import iguana.regex.Alt;
@@ -73,33 +74,34 @@ public class KeywordExclusionTest {
 		
 		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		grammar = Grammar.builder().addRule(r1).build();
-	}
+        grammar = new EBNFToBNF().transform(grammar);
+    }
 	
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testIf() {
 		Input input = Input.fromString("if");		
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("Id"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Id"));
 		assertTrue(result.isParseError());
 	}
 

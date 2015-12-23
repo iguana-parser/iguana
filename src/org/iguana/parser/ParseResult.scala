@@ -60,7 +60,7 @@ case class ParseError (slot: GrammarSlot, input: Input, inputIndex: Int, gssNode
 
   override def asParseSuccess: ParseSuccess = throw new RuntimeException("Cannot call getParseSuccess on ParseError.")
 
-  override def toString = s"Parse error at ${inputIndex}, line: %${input.getLineNumber(inputIndex)}, column: %${input.getColumnNumber(inputIndex)}"
+  override def toString = s"Parse error at ${inputIndex}, line: ${input.getLineNumber(inputIndex)}, column: ${input.getColumnNumber(inputIndex)}"
 }
 
 //case class ParseStatistics(nanoTime: Long = 0,
