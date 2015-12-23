@@ -105,10 +105,10 @@ public class Test6 {
     }
 
     public static Term getTree1() {
-        Term t0 = createTerminal(a, 0, 1, input1);
-        Term t1 = createRule(r2, list(t0), input1);
+        Term t0 = createTerminalTerm(a, 0, 1, input1);
+        Term t1 = createNonterminalTerm(r2, list(t0), input1);
         Term t2 = createAlt(list(t1));
-        Term t3 = createRule(r1, list(t2), input1);
+        Term t3 = createNonterminalTerm(r1, list(t2), input1);
         return t3;
     }
 
@@ -134,10 +134,10 @@ public class Test6 {
     }
 
     public static Term getTree2() {
-        Term t0 = createTerminal(b, 0, 1, input2);
-        Term t1 = createRule(r3, list(t0), input2);
+        Term t0 = createTerminalTerm(b, 0, 1, input2);
+        Term t1 = createNonterminalTerm(r3, list(t0), input2);
         Term t2 = createAlt(list(t1));
-        Term t3 = createRule(r1, list(t2), input2);
+        Term t3 = createNonterminalTerm(r1, list(t2), input2);
         return t3;
     }
 
@@ -163,10 +163,10 @@ public class Test6 {
     }
 
     public static Term getTree3() {
-        Term t0 = createTerminal(c, 0, 1, input3);
-        Term t1 = createRule(r4, list(t0), input3);
+        Term t0 = createTerminalTerm(c, 0, 1, input3);
+        Term t1 = createNonterminalTerm(r4, list(t0), input3);
         Term t2 = createAlt(list(t1));
-        Term t3 = createRule(r1, list(t2), input3);
+        Term t3 = createNonterminalTerm(r1, list(t2), input3);
         return t3;
     }
 }

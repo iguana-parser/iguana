@@ -94,30 +94,30 @@ public class LayoutTest3 {
 	}
 
     private Term getTree(Input input) {
-        Term t0 = createTerminal(a, 0, 1, input);
-        Term t1 = createRule(r2, list(t0), input);
-        Term t2 = createTerminal(space, 1, 2, input);
-        Term t3 = createRule(layout, list(t2), input);
-        Term t4 = createTerminal(b, 2, 3, input);
-        Term t5 = createRule(r3, list(t4), input);
-        Term t6 = createTerminal(space, 3, 4, input);
-        Term t7 = createRule(layout, list(t6), input);
-        Term t8 = createTerminal(b, 4, 5, input);
-        Term t9 = createRule(r3, list(t8), input);
-        Term t10 = createTerminal(space, 5, 6, input);
-        Term t11 = createRule(layout, list(t10), input);
-        Term t12 = createTerminal(b, 6, 7, input);
-        Term t13 = createRule(r3, list(t12), input);
-        Term t14 = createTerminal(space, 7, 8, input);
-        Term t15 = createRule(layout, list(t14), input);
-        Term t16 = createTerminal(b, 8, 9, input);
-        Term t17 = createRule(r3, list(t16), input);
+        Term t0 = createTerminalTerm(a, 0, 1, input);
+        Term t1 = createNonterminalTerm(r2, list(t0), input);
+        Term t2 = createTerminalTerm(space, 1, 2, input);
+        Term t3 = createNonterminalTerm(layout, list(t2), input);
+        Term t4 = createTerminalTerm(b, 2, 3, input);
+        Term t5 = createNonterminalTerm(r3, list(t4), input);
+        Term t6 = createTerminalTerm(space, 3, 4, input);
+        Term t7 = createNonterminalTerm(layout, list(t6), input);
+        Term t8 = createTerminalTerm(b, 4, 5, input);
+        Term t9 = createNonterminalTerm(r3, list(t8), input);
+        Term t10 = createTerminalTerm(space, 5, 6, input);
+        Term t11 = createNonterminalTerm(layout, list(t10), input);
+        Term t12 = createTerminalTerm(b, 6, 7, input);
+        Term t13 = createNonterminalTerm(r3, list(t12), input);
+        Term t14 = createTerminalTerm(space, 7, 8, input);
+        Term t15 = createNonterminalTerm(layout, list(t14), input);
+        Term t16 = createTerminalTerm(b, 8, 9, input);
+        Term t17 = createNonterminalTerm(r3, list(t16), input);
         Term t18 = createPlus(list(t5, t7, t9, t11, t13, t15, t17));
-        Term t19 = createTerminal(space, 9, 10, input);
-        Term t20 = createRule(layout, list(t19), input);
-        Term t21 = createTerminal(c, 10, 11, input);
-        Term t22 = createRule(r4, list(t21), input);
-        Term t23 = createRule(r1, list(t1, t3, t18, t20, t22), input);
+        Term t19 = createTerminalTerm(space, 9, 10, input);
+        Term t20 = createNonterminalTerm(layout, list(t19), input);
+        Term t21 = createTerminalTerm(c, 10, 11, input);
+        Term t22 = createNonterminalTerm(r4, list(t21), input);
+        Term t23 = createNonterminalTerm(r1, list(t1, t3, t18, t20, t22), input);
         return t23;
     }
 }

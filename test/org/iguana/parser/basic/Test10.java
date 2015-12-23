@@ -137,11 +137,11 @@ public class Test10 {
     }
 
     public static Term getTree() {
-        Term t1 = createRule(r3, list(createTerminal(a, 0, 1, input)), input); // A(a)
-        Term t2 = createRule(r4, list(createTerminal(b, 1, 2, input)), input); // B(b)
-        Term t3 = createRule(r5, list(createTerminal(c, 2, 3, input)), input); // C(c)
-        Term t4 = createRule(r6, list(createTerminal(c, 2, 3, input)), input); // D(c)
-        return createAmbiguity(list(list(t1, t2, t4), list(t1, t2, t3)));
+        Term t1 = createNonterminalTerm(r3, list(createTerminalTerm(a, 0, 1, input)), input); // A(a)
+        Term t2 = createNonterminalTerm(r4, list(createTerminalTerm(b, 1, 2, input)), input); // B(b)
+        Term t3 = createNonterminalTerm(r5, list(createTerminalTerm(c, 2, 3, input)), input); // C(c)
+        Term t4 = createNonterminalTerm(r6, list(createTerminalTerm(c, 2, 3, input)), input); // D(c)
+        return createAmbiguityTerm(list(list(t1, t2, t4), list(t1, t2, t3)));
     }
 }
 	

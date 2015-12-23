@@ -117,9 +117,9 @@ public class Test13 {
     }
 
     private static Term getTree() {
-        Term t0 = createTerminal(a, 0, 1, input);
+        Term t0 = createTerminalTerm(a, 0, 1, input);
         Term t1 = createCycle("A");
-        Term t2 = createAmbiguity(list(list(t0), list(t1)));
+        Term t2 = createAmbiguityTerm(list(list(t0), list(t1)));
         return t2;
     }
 }

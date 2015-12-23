@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.disambiguation.precedence;
+package org.iguana.parser.recursion;
 
 import static org.junit.Assert.assertTrue;
 
@@ -44,53 +44,38 @@ import iguana.utils.input.Input;
 
 /**
  * 
- * E ::= E + T
- *     | T
+ * A ::= B A + A | a
  * 
- * T ::= T * F
- *     | F
- *     
- * F ::= a
+ * B ::= b | epsilon
+ * 
  * 
  * @author Ali Afroozeh
  *
  */
-public class ManualArithmeticExpressionsTest {
 
-	private Iguana parser;
+public class HiddenLeftRecursion {
+	
 	private Grammar grammar;
 
 	@Before
 	public void createGrammar() {
-		
-		Nonterminal E = Nonterminal.withName("E");
-		Nonterminal T = Nonterminal.withName("T");
-		Nonterminal F = Nonterminal.withName("F");
+		Nonterminal A = Nonterminal.withName("A");
+		Nonterminal B = Nonterminal.withName("B");
 
-		// E ::= E + T
-		Rule rule1 = Rule.withHead(E).addSymbols(E, Terminal.from(Character.from('+')), T).build();
+		Rule r1 = Rule.withHead(A).addSymbols(B, A, Terminal.from(Character.from('+')), A).build();
+		Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Character.from('a'))).build();
 		
-		// E ::= T
-		Rule rule2 = Rule.withHead(E).addSymbol(T).build();
+		Rule r3 = Rule.withHead(B).addSymbols(Terminal.from(Character.from('b'))).build();
+		Rule r4 = Rule.withHead(B).build();
 		
-		// T ::= T * F
-		Rule rule3 = Rule.withHead(T).addSymbols(T, Terminal.from(Character.from('*')), F).build();
-		
-		// T ::= F
-		Rule rule4 = Rule.withHead(T).addSymbol(F).build();
-		
-		// F ::= a
-		Rule rule5 = Rule.withHead(F).addSymbol(Terminal.from(Character.from('a'))).build();
-
-		grammar = Grammar.builder().addRules(rule1, rule2, rule3, rule4, rule5).build();
-	}
-
-	@Test
-	public void testParser() {
-		Input input = Input.fromString("a*a+a");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("E"));
-		assertTrue(result.isParseSuccess());
-		// TODO: add tree comparison text here.
+		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 	}
 	
+	@Test
+	public void test() {
+		Input input = Input.fromString("ba+a+a");
+		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		assertTrue(result.isParseSuccess());
+	}
+
 }
