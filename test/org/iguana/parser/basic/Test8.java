@@ -212,8 +212,8 @@ public class Test8 {
 	}
 
     public static Term getTree1() {
-        Term t1 = createRule(r3, list(createTerminal(b, 1, 2, input1)), input1);
-        return createRule(r1, list(createTerminal(a, 0, 1, input1), t1, createTerminal(c, 2, 3, input1)), input1);
+        Term t1 = createNonterminalTerm(r3, list(createTerminalTerm(b, 1, 2, input1)), input1);
+        return createNonterminalTerm(r1, list(createTerminalTerm(a, 0, 1, input1), t1, createTerminalTerm(c, 2, 3, input1)), input1);
     }
 
 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -236,12 +236,12 @@ public class Test8 {
     }
 
     public static Term getTree2() {
-        Term t1 = createRule(r5, list(createTerminal(c, 4, 5, input2)), input2);
-        Term t2 = createRule(r4, list(createTerminal(a, 3, 4, input2), t1), input2);
-        Term t3 = createRule(r4, list(createTerminal(a, 2, 3, input2), t2), input2);
-        Term t4 = createRule(r4, list(createTerminal(a, 1, 2, input2), t3), input2);
-        Term t5 = createRule(r4, list(createTerminal(a, 0, 1, input2), t4), input2);
-        return createRule(r2, list(t5), input2);
+        Term t1 = createNonterminalTerm(r5, list(createTerminalTerm(c, 4, 5, input2)), input2);
+        Term t2 = createNonterminalTerm(r4, list(createTerminalTerm(a, 3, 4, input2), t1), input2);
+        Term t3 = createNonterminalTerm(r4, list(createTerminalTerm(a, 2, 3, input2), t2), input2);
+        Term t4 = createNonterminalTerm(r4, list(createTerminalTerm(a, 1, 2, input2), t3), input2);
+        Term t5 = createNonterminalTerm(r4, list(createTerminalTerm(a, 0, 1, input2), t4), input2);
+        return createNonterminalTerm(r2, list(t5), input2);
     }
 	
 }

@@ -36,6 +36,7 @@ import org.iguana.grammar.symbol.Terminal;
 import iguana.regex.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import iguana.regex.Sequence;
@@ -57,7 +58,6 @@ import iguana.utils.input.Input;
  */
 public class FollowRestrictionTest2 {
 	
-	private Iguana parser;
 	private Grammar grammar;
 	
 	@Before
@@ -73,19 +73,20 @@ public class FollowRestrictionTest2 {
 		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 
 		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
-	}
+        grammar = new EBNFToBNF().transform(grammar);
+    }
 	
 	@Test
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 	
 	@Test
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 

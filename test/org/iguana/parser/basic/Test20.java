@@ -187,32 +187,32 @@ public class Test20 {
      *
      */
     private Term getTree(Input input) {
-        Term t0 = createTerminal(a, 0, 1, input);
-        Term t1 = createRule(r8, list(t0), input);
+        Term t0 = createTerminalTerm(a, 0, 1, input);
+        Term t1 = createNonterminalTerm(r8, list(t0), input);
         Term t2 = createEpsilon(1);
-        Term t3 = createRule(r6, list(t2), input);
-        Term t4 = createRule(r4, list(t1, t3), input);
-        Term t5 = createTerminal(plus, 1, 2, input);
-        Term t6 = createTerminal(a, 2, 3, input);
-        Term t7 = createRule(r8, list(t6), input);
-        Term t8 = createTerminal(star, 3, 4, input);
-        Term t9 = createTerminal(a, 4, 5, input);
-        Term t10 = createRule(r8, list(t9), input);
+        Term t3 = createNonterminalTerm(r6, list(t2), input);
+        Term t4 = createNonterminalTerm(r4, list(t1, t3), input);
+        Term t5 = createTerminalTerm(plus, 1, 2, input);
+        Term t6 = createTerminalTerm(a, 2, 3, input);
+        Term t7 = createNonterminalTerm(r8, list(t6), input);
+        Term t8 = createTerminalTerm(star, 3, 4, input);
+        Term t9 = createTerminalTerm(a, 4, 5, input);
+        Term t10 = createNonterminalTerm(r8, list(t9), input);
         Term t11 = createEpsilon(5);
-        Term t12 = createRule(r6, list(t11), input);
-        Term t13 = createRule(r5, list(t8, t10, t12), input);
-        Term t14 = createRule(r4, list(t7, t13), input);
-        Term t15 = createTerminal(plus, 5, 6, input);
-        Term t16 = createTerminal(a, 6, 7, input);
-        Term t17 = createRule(r8, list(t16), input);
+        Term t12 = createNonterminalTerm(r6, list(t11), input);
+        Term t13 = createNonterminalTerm(r5, list(t8, t10, t12), input);
+        Term t14 = createNonterminalTerm(r4, list(t7, t13), input);
+        Term t15 = createTerminalTerm(plus, 5, 6, input);
+        Term t16 = createTerminalTerm(a, 6, 7, input);
+        Term t17 = createNonterminalTerm(r8, list(t16), input);
         Term t18 = createEpsilon(7);
-        Term t19 = createRule(r6, list(t18), input);
-        Term t20 = createRule(r4, list(t17, t19), input);
+        Term t19 = createNonterminalTerm(r6, list(t18), input);
+        Term t20 = createNonterminalTerm(r4, list(t17, t19), input);
         Term t21 = createEpsilon(7);
-        Term t22 = createRule(r3, list(t21), input);
-        Term t23 = createRule(r2, list(t15, t20, t22), input);
-        Term t24 = createRule(r2, list(t5, t14, t23), input);
-        Term t25 = createRule(r1, list(t4, t24), input);
+        Term t22 = createNonterminalTerm(r3, list(t21), input);
+        Term t23 = createNonterminalTerm(r2, list(t15, t20, t22), input);
+        Term t24 = createNonterminalTerm(r2, list(t5, t14, t23), input);
+        Term t25 = createNonterminalTerm(r1, list(t4, t24), input);
         return t25;
     }
 

@@ -97,12 +97,12 @@ public class Test18 {
     }
 
     private static Term getTree1() {
-        Term t0 = createTerminal(a, 0, 1, input1);
-        Term t1 = createRule(r2, list(t0), input1);
-        Term t2 = createTerminal(plus, 1, 2, input1);
-        Term t3 = createTerminal(a, 2, 3, input1);
-        Term t4 = createRule(r2, list(t3), input1);
-        Term t5 = createRule(r1, list(t1, t2, t4), input1);
+        Term t0 = createTerminalTerm(a, 0, 1, input1);
+        Term t1 = createNonterminalTerm(r2, list(t0), input1);
+        Term t2 = createTerminalTerm(plus, 1, 2, input1);
+        Term t3 = createTerminalTerm(a, 2, 3, input1);
+        Term t4 = createNonterminalTerm(r2, list(t3), input1);
+        Term t5 = createNonterminalTerm(r1, list(t1, t2, t4), input1);
         return t5;
     }
 
@@ -116,7 +116,7 @@ public class Test18 {
                 .setIntermediateNodesCount(6)
                 .setPackedNodesCount(13)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF2(graph), statistics, input1);
+        return new ParseSuccess(expectedSPPF2(graph), statistics, input2);
     }
 
     private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
@@ -142,18 +142,18 @@ public class Test18 {
     }
 
     private static Term getTree2() {
-        Term t0 = createTerminal(a, 0, 1, input2);
-        Term t1 = createRule(r2, list(t0), input2);
-        Term t2 = createTerminal(plus, 1, 2, input2);
-        Term t3 = createTerminal(a, 2, 3, input2);
-        Term t4 = createRule(r2, list(t3), input2);
-        Term t5 = createRule(r1, list(t1, t2, t4), input2);
-        Term t6 = createTerminal(plus, 3, 4, input2);
-        Term t7 = createTerminal(a, 4, 5, input2);
-        Term t8 = createRule(r2, list(t7), input2);
-        Term t9 = createRule(r1, list(t4, t6, t8), input2);
-        Term t10 = createAmbiguity(list(list(t5, t6, t8), list(t1, t2, t9)));
-        Term t11 = createRule(r1, list(t10), input2);
+        Term t0 = createTerminalTerm(a, 0, 1, input2);
+        Term t1 = createNonterminalTerm(r2, list(t0), input2);
+        Term t2 = createTerminalTerm(plus, 1, 2, input2);
+        Term t3 = createTerminalTerm(a, 2, 3, input2);
+        Term t4 = createNonterminalTerm(r2, list(t3), input2);
+        Term t5 = createNonterminalTerm(r1, list(t1, t2, t4), input2);
+        Term t6 = createTerminalTerm(plus, 3, 4, input2);
+        Term t7 = createTerminalTerm(a, 4, 5, input2);
+        Term t8 = createNonterminalTerm(r2, list(t7), input2);
+        Term t9 = createNonterminalTerm(r1, list(t4, t6, t8), input2);
+        Term t10 = createAmbiguityTerm(list(list(t5, t6, t8), list(t1, t2, t9)));
+        Term t11 = createNonterminalTerm(r1, list(t10), input2);
         return t11;
     }
 
@@ -167,7 +167,7 @@ public class Test18 {
                 .setIntermediateNodesCount(20)
                 .setPackedNodesCount(45)
                 .setAmbiguousNodesCount(6).build();
-        return new ParseSuccess(expectedSPPF3(graph), statistics, input1);
+        return new ParseSuccess(expectedSPPF3(graph), statistics, input3);
     }
 
     private static NonterminalNode expectedSPPF3(GrammarGraph registry) {
@@ -229,36 +229,36 @@ public class Test18 {
     }
 
     private static Term getTree3() {
-        Term t0 = createTerminal(a, 0, 1, input3);
-        Term t1 = createRule(r2, list(t0), input3);
-        Term t2 = createTerminal(plus, 1, 2, input3);
-        Term t3 = createTerminal(a, 2, 3, input3);
-        Term t4 = createRule(r2, list(t3), input3);
-        Term t5 = createRule(r1, list(t1, t2, t4), input3);
-        Term t6 = createTerminal(plus, 3, 4, input3);
-        Term t7 = createTerminal(a, 4, 5, input3);
-        Term t8 = createRule(r2, list(t7), input3);
-        Term t9 = createRule(r1, list(t4, t6, t8), input3);
-        Term t10 = createAmbiguity(list(list(t5, t6, t8), list(t1, t2, t9)));
-        Term t11 = createRule(r1, list(t10), input3);
-        Term t12 = createTerminal(plus, 5, 6, input3);
-        Term t13 = createTerminal(a, 6, 7, input3);
-        Term t14 = createRule(r2, list(t13), input3);
-        Term t15 = createRule(r1, list(t8, t12, t14), input3);
-        Term t16 = createAmbiguity(list(list(t4, t6, t15), list(t9, t12, t14)));
-        Term t17 = createRule(r1, list(t16), input3);
-        Term t18 = createAmbiguity(list(list(t11, t12, t14), list(t5, t6, t15), list(t1, t2, t17)));
-        Term t19 = createRule(r1, list(t18), input3);
-        Term t20 = createTerminal(plus, 7, 8, input3);
-        Term t21 = createTerminal(a, 8, 9, input3);
-        Term t22 = createRule(r2, list(t21), input3);
-        Term t23 = createRule(r1, list(t14, t20, t22), input3);
-        Term t24 = createAmbiguity(list(list(t8, t12, t23), list(t15, t20, t22)));
-        Term t25 = createRule(r1, list(t24), input3);
-        Term t26 = createAmbiguity(list(list(t4, t6, t25), list(t17, t20, t22), list(t9, t12, t23)));
-        Term t27 = createRule(r1, list(t26), input3);
-        Term t28 = createAmbiguity(list(list(t19, t20, t22), list(t11, t12, t23), list(t5, t6, t25), list(t1, t2, t27)));
-        Term t29 = createRule(r1, list(t28), input3);
+        Term t0 = createTerminalTerm(a, 0, 1, input3);
+        Term t1 = createNonterminalTerm(r2, list(t0), input3);
+        Term t2 = createTerminalTerm(plus, 1, 2, input3);
+        Term t3 = createTerminalTerm(a, 2, 3, input3);
+        Term t4 = createNonterminalTerm(r2, list(t3), input3);
+        Term t5 = createNonterminalTerm(r1, list(t1, t2, t4), input3);
+        Term t6 = createTerminalTerm(plus, 3, 4, input3);
+        Term t7 = createTerminalTerm(a, 4, 5, input3);
+        Term t8 = createNonterminalTerm(r2, list(t7), input3);
+        Term t9 = createNonterminalTerm(r1, list(t4, t6, t8), input3);
+        Term t10 = createAmbiguityTerm(list(list(t5, t6, t8), list(t1, t2, t9)));
+        Term t11 = createNonterminalTerm(r1, list(t10), input3);
+        Term t12 = createTerminalTerm(plus, 5, 6, input3);
+        Term t13 = createTerminalTerm(a, 6, 7, input3);
+        Term t14 = createNonterminalTerm(r2, list(t13), input3);
+        Term t15 = createNonterminalTerm(r1, list(t8, t12, t14), input3);
+        Term t16 = createAmbiguityTerm(list(list(t4, t6, t15), list(t9, t12, t14)));
+        Term t17 = createNonterminalTerm(r1, list(t16), input3);
+        Term t18 = createAmbiguityTerm(list(list(t11, t12, t14), list(t5, t6, t15), list(t1, t2, t17)));
+        Term t19 = createNonterminalTerm(r1, list(t18), input3);
+        Term t20 = createTerminalTerm(plus, 7, 8, input3);
+        Term t21 = createTerminalTerm(a, 8, 9, input3);
+        Term t22 = createNonterminalTerm(r2, list(t21), input3);
+        Term t23 = createNonterminalTerm(r1, list(t14, t20, t22), input3);
+        Term t24 = createAmbiguityTerm(list(list(t8, t12, t23), list(t15, t20, t22)));
+        Term t25 = createNonterminalTerm(r1, list(t24), input3);
+        Term t26 = createAmbiguityTerm(list(list(t4, t6, t25), list(t17, t20, t22), list(t9, t12, t23)));
+        Term t27 = createNonterminalTerm(r1, list(t26), input3);
+        Term t28 = createAmbiguityTerm(list(list(t19, t20, t22), list(t11, t12, t23), list(t5, t6, t25), list(t1, t2, t27)));
+        Term t29 = createNonterminalTerm(r1, list(t28), input3);
         return t29;
     }
 

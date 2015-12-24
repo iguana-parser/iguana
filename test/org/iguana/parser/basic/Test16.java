@@ -156,23 +156,23 @@ public class Test16 {
     }
 
     private static Term getTree() {
-        Term t0 = createTerminal(a, 0, 1, input);
-        Term t1 = createRule(r2, list(t0), input);
+        Term t0 = createTerminalTerm(a, 0, 1, input);
+        Term t1 = createNonterminalTerm(r2, list(t0), input);
         Term t2 = createEpsilon(1);
-        Term t3 = createRule(r5, list(t2), input);
+        Term t3 = createNonterminalTerm(r5, list(t2), input);
         Term t4 = createEpsilon(0);
-        Term t5 = createRule(r3, list(t4), input);
-        Term t6 = createRule(r4, list(t0), input);
-        Term t7 = createAmbiguity(list(list(t5, t6), list(t1, t3)));
-        Term t8 = createRule(r7, list(t2), input);
-        Term t9 = createRule(r5, list(t4), input);
-        Term t10 = createRule(r6, list(t0), input);
-        Term t11 = createAmbiguity(list(list(t5, t9, t10), list(t7, t8)));
-        Term t12 = createRule(r9, list(t2), input);
-        Term t13 = createRule(r7, list(t4), input);
-        Term t14 = createRule(r8, list(t0), input);
-        Term t15 = createAmbiguity(list(list(t5, t9, t13, t14), list(t11, t12)));
-        Term t16 = createRule(r1, list(t15), input);
+        Term t5 = createNonterminalTerm(r3, list(t4), input);
+        Term t6 = createNonterminalTerm(r4, list(t0), input);
+        Term t7 = createAmbiguityTerm(list(list(t5, t6), list(t1, t3)));
+        Term t8 = createNonterminalTerm(r7, list(t2), input);
+        Term t9 = createNonterminalTerm(r5, list(t4), input);
+        Term t10 = createNonterminalTerm(r6, list(t0), input);
+        Term t11 = createAmbiguityTerm(list(list(t5, t9, t10), list(t7, t8)));
+        Term t12 = createNonterminalTerm(r9, list(t2), input);
+        Term t13 = createNonterminalTerm(r7, list(t4), input);
+        Term t14 = createNonterminalTerm(r8, list(t0), input);
+        Term t15 = createAmbiguityTerm(list(list(t5, t9, t13, t14), list(t11, t12)));
+        Term t16 = createNonterminalTerm(r1, list(t15), input);
         return t16;
     }
 }

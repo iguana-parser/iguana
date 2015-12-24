@@ -98,10 +98,10 @@ public class Test4 {
     }
 
     public static Term getTree1() {
-        Term t0 = createTerminal(a, 0, 1, input1);
-        Term t1 = createRule(r2, list(t0), input1);
+        Term t0 = createTerminalTerm(a, 0, 1, input1);
+        Term t1 = createNonterminalTerm(r2, list(t0), input1);
         Term t2 = createPlus(list(t1));
-        Term t3 = createRule(r1, list(t2), input1);
+        Term t3 = createNonterminalTerm(r1, list(t2), input1);
         return t3;
     }
 
@@ -131,12 +131,12 @@ public class Test4 {
     }
 
     public static Term getTree2() {
-        Term t0 = createTerminal(a, 0, 1, input2);
-        Term t1 = createRule(r2, list(t0), input2);
-        Term t2 = createTerminal(a, 1, 2, input2);
-        Term t3 = createRule(r2, list(t2), input2);
+        Term t0 = createTerminalTerm(a, 0, 1, input2);
+        Term t1 = createNonterminalTerm(r2, list(t0), input2);
+        Term t2 = createTerminalTerm(a, 1, 2, input2);
+        Term t3 = createNonterminalTerm(r2, list(t2), input2);
         Term t4 = createPlus(list(t1, t3));
-        Term t5 = createRule(r1, list(t4), input2);
+        Term t5 = createNonterminalTerm(r1, list(t4), input2);
         return t5;
     }
 
@@ -170,14 +170,14 @@ public class Test4 {
     }
 
     public static Term getTree3() {
-        Term t0 = createTerminal(a, 0, 1, input3);
-        Term t1 = createRule(r2, list(t0), input3);
-        Term t2 = createTerminal(a, 1, 2, input3);
-        Term t3 = createRule(r2, list(t2), input3);
-        Term t4 = createTerminal(a, 2, 3, input3);
-        Term t5 = createRule(r2, list(t4), input3);
+        Term t0 = createTerminalTerm(a, 0, 1, input3);
+        Term t1 = createNonterminalTerm(r2, list(t0), input3);
+        Term t2 = createTerminalTerm(a, 1, 2, input3);
+        Term t3 = createNonterminalTerm(r2, list(t2), input3);
+        Term t4 = createTerminalTerm(a, 2, 3, input3);
+        Term t5 = createNonterminalTerm(r2, list(t4), input3);
         Term t6 = createPlus(list(t1, t3, t5));
-        Term t7 = createRule(r1, list(t6), input3);
+        Term t7 = createNonterminalTerm(r1, list(t6), input3);
         return t7;
     }
 }

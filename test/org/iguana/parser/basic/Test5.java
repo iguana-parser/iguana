@@ -134,8 +134,8 @@ public class Test5 {
 	}
 
     public static Term getTree() {
-        Term t0 = createTerminal(b, 0, 1, input);
-        Term t1 = createRule(r2, list(t0), input);
-        return createRule(r1, list(t1), input);
+        Term t0 = createTerminalTerm(b, 0, 1, input);
+        Term t1 = createNonterminalTerm(r2, list(t0), input);
+        return createNonterminalTerm(r1, list(t1), input);
     }
 }

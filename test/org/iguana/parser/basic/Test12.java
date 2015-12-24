@@ -155,21 +155,21 @@ public class Test12 {
 	}
 
     private static Term getTree1() {
-        Term t0 = createTerminal(a, 0, 1, input1);
+        Term t0 = createTerminalTerm(a, 0, 1, input1);
         Term t1 = createCycle("A");
         Term t2 = createEpsilon(0);
-        Term t3 = createAmbiguity(list(list(t2), list(t1, t1)));
+        Term t3 = createAmbiguityTerm(list(list(t2), list(t1, t1)));
         Term t4 = createEpsilon(1);
-        Term t5 = createAmbiguity(list(list(t4), list(t1, t1)));
-        Term t6 = createAmbiguity(list(list(t1, t5), list(t3, t1)));
-        Term t7 = createAmbiguity(list(list(t0), list(t6)));
+        Term t5 = createAmbiguityTerm(list(list(t4), list(t1, t1)));
+        Term t6 = createAmbiguityTerm(list(list(t1, t5), list(t3, t1)));
+        Term t7 = createAmbiguityTerm(list(list(t0), list(t6)));
         return t7;
     }
 
     private static Term getTree2() {
         Term t0 = createCycle("A");
         Term t1 = createEpsilon(0);
-        Term t2 = createAmbiguity(list(list(t1), list(t0, t0)));
+        Term t2 = createAmbiguityTerm(list(list(t1), list(t0, t0)));
         return t2;
     }
 

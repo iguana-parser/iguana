@@ -34,6 +34,7 @@ import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import iguana.regex.Character;
 import iguana.regex.CharacterRange;
+import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import iguana.regex.Sequence;
@@ -75,24 +76,14 @@ public class PrecedeRestrictionTest2 {
 		Rule r4 = Rule.withHead(L).addSymbol(Terminal.from(ws)).build();
 
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
-	}
+        grammar = new EBNFToBNF().transform(grammar);
+    }
 
 	@Test
 	public void test() {
 		Input input = Input.fromString("forall");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
 	}
-
-//	private SPPFNode getExpectedSPPF(GrammarGraph graph) {
-//		SPPFNodeFactory factory = new SPPFNodeFactory(graph);
-//		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 6);
-//		PackedNode node2 = factory.createPackedNode("S ::= (f o r a l l) .", 6, node1);
-//		TerminalNode node3 = factory.createTerminalNode("(f o r a l l)", 0, 6);
-//		node2.addChild(node3);
-//		node1.addChild(node2);
-//		return node1;
-//	}
 
 }

@@ -128,14 +128,14 @@ public class Test11 {
 
     public static Term getTree() {
         Term t0 = createEpsilon(0);
-        Term t1 = createRule(r3, list(t0), input);
-        Term t2 = createTerminal(a, 0, 1, input);
-        Term t3 = createRule(r2, list(t2), input);
+        Term t1 = createNonterminalTerm(r3, list(t0), input);
+        Term t2 = createTerminalTerm(a, 0, 1, input);
+        Term t3 = createNonterminalTerm(r2, list(t2), input);
         Term t4 = createEpsilon(1);
-        Term t5 = createRule(r3, list(t4), input);
-        Term t6 = createAmbiguity(list(list(t1, t3), list(t3, t5)));
-        Term t7 = createTerminal(b, 1, 2, input);
-        Term t8 = createRule(r1, list(t6, t7), input);
+        Term t5 = createNonterminalTerm(r3, list(t4), input);
+        Term t6 = createAmbiguityTerm(list(list(t1, t3), list(t3, t5)));
+        Term t7 = createTerminalTerm(b, 1, 2, input);
+        Term t8 = createNonterminalTerm(r1, list(t6, t7), input);
         return t8;
     }
 }

@@ -108,8 +108,8 @@ public class Test2 {
 	}
 
     public static Term getTree() {
-        Term t0 = createTerminal(a, 0, 1, input);
-        return createRule(r1, list(t0), input);
+        Term t0 = createTerminalTerm(a, 0, 1, input);
+        return createNonterminalTerm(r1, list(t0), input);
     }
 
 }

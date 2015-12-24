@@ -85,7 +85,7 @@ public class Test3 {
     public static Term getTree0() {
         Term t0 = createEpsilon(0);
         Term t1 = createOpt(t0);
-        Term t2 = createRule(r1, list(t1), input0);
+        Term t2 = createNonterminalTerm(r1, list(t1), input0);
         return t2;
     }
 
@@ -111,10 +111,10 @@ public class Test3 {
     }
 
     public static Term getTree1() {
-        Term t0 = createTerminal(a, 0, 1, input1);
-        Term t1 = createRule(r2, list(t0), input1);
+        Term t0 = createTerminalTerm(a, 0, 1, input1);
+        Term t1 = createNonterminalTerm(r2, list(t0), input1);
         Term t2 = createOpt(t1);
-        Term t3 = createRule(r1, list(t2), input1);
+        Term t3 = createNonterminalTerm(r1, list(t2), input1);
         return t3;
     }
 }

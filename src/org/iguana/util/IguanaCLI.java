@@ -70,7 +70,7 @@ public class IguanaCLI {
 	        // Grammar
 	        if (line.hasOption("g")) {
 	        	String grammarPath = line.getOptionValue("g");
-				grammar = GrammarUtil.load(new File(grammarPath).toURI());
+				grammar = Grammar.load(new File(grammarPath).toURI());
 	        }
 	        
 	        // Start symbol

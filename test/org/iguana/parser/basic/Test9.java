@@ -152,8 +152,8 @@ public class Test9 {
 	}
 
     public static NonterminalTerm getTree() {
-        Term t1 = createRule(r3, list(createTerminal(a, 1, 2, input)), input);
-        return createRule(r2, list(createTerminal(a, 0, 1, input), t1, createTerminal(b, 2, 3, input)), input);
+        Term t1 = createNonterminalTerm(r3, list(createTerminalTerm(a, 1, 2, input)), input);
+        return createNonterminalTerm(r2, list(createTerminalTerm(a, 0, 1, input), t1, createTerminalTerm(b, 2, 3, input)), input);
     }
 }
 	

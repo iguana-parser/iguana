@@ -32,7 +32,11 @@ public class Start extends Nonterminal {
 	private static final long serialVersionUID = 1L;
 	
 	private final Nonterminal nonterminal;
-	
+
+    public static Start from(String s) {
+        return builder(Nonterminal.withName(s)).build();
+    }
+
 	public static Start from(Nonterminal nonterminal) {
 		return builder(nonterminal).build();
 	}

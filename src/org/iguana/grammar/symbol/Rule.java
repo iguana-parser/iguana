@@ -281,7 +281,8 @@ public class Rule implements Serializable, RuleType {
 		
 		Rule other = (Rule) obj;
 		
-		return head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
+		boolean r = head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
+        return r;
 	}
 	
 	@Override

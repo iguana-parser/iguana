@@ -111,7 +111,7 @@ public class Test1 {
 
     public static Term getTree() {
         Term t0 = createEpsilon(0);
-        return createRule(r1, list(t0), input);
+        return createNonterminalTerm(r1, list(t0), input);
     }
 
 }

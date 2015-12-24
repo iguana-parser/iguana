@@ -29,6 +29,7 @@ package org.iguana.disambiguation.conditions;
 
 import static org.junit.Assert.assertTrue;
 
+import iguana.regex.Character;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Plus;
@@ -36,6 +37,7 @@ import org.iguana.grammar.symbol.Terminal;
 import iguana.regex.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import iguana.regex.Sequence;
@@ -57,7 +59,6 @@ import iguana.utils.input.Input;
  */
 public class FollowRestrictionTest {
 	
-	private Iguana parser;
 	private Grammar grammar;
 	
 	@Before
@@ -72,15 +73,102 @@ public class FollowRestrictionTest {
 		Rule r1 = Rule.withHead(S).addSymbol(Label).build();		
 		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 		builder.addRule(r1).addRule(r2);
-		
+
 		grammar = builder.build();
+        grammar = new EBNFToBNF().transform(grammar);
 	}
 	
 	@Test
 	public void testParser() {
 		Input input = Input.fromString("abc:");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseError());
 	}
 
+
+    /**
+     *
+     * S ::= a S b
+     *     | a S
+     *     | s
+     *
+     * @author Ali Afroozeh
+     *
+     */
+    public static class DanglingElseGrammar4 {
+
+        Nonterminal S = Nonterminal.withName("S");
+        Terminal s = Terminal.from(Character.from('s'));
+        Terminal a = Terminal.from(Character.from('a'));
+        Terminal b = Terminal.from(Character.from('b'));
+        private Grammar grammar;
+
+        @Before
+        public void init() {
+
+            Grammar.Builder builder = new Grammar.Builder();
+
+            Rule rule1 = Rule.withHead(S).addSymbols(a, S, b).build();
+            builder.addRule(rule1);
+
+            Rule rule2 = Rule.withHead(S).addSymbols(a, S).build();
+            builder.addRule(rule2);
+
+            Rule rule3 = Rule.withHead(S).addSymbols(s).build();
+            builder.addRule(rule3);
+
+            grammar = builder.build();
+        }
+
+        @Test
+        public void test() {
+            Input input = Input.fromString("aasb");
+            ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+            assertTrue(result.isParseSuccess());
+    //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
+        }
+
+    //	private SPPFNode getExpectedSPPF(GrammarGraph registry) {
+    //		SPPFNodeFactory factory = new SPPFNodeFactory(registry);
+    //		NonterminalNode node1 = factory.createNonterminalNode("S", 0, 0, 4);
+    //		PackedNode node2 = factory.createPackedNode("S ::= a S b .", 3, node1);
+    //		IntermediateNode node3 = factory.createIntermediateNode("S ::= a S . b", 0, 3);
+    //		PackedNode node4 = factory.createPackedNode("S ::= a S . b", 1, node3);
+    //		TerminalNode node5 = factory.createTerminalNode("a", 0, 1);
+    //		NonterminalNode node6 = factory.createNonterminalNode("S", 0, 1, 3);
+    //		PackedNode node7 = factory.createPackedNode("S ::= a S .", 2, node6);
+    //		TerminalNode node8 = factory.createTerminalNode("a", 1, 2);
+    //		NonterminalNode node9 = factory.createNonterminalNode("S", 0, 2, 3);
+    //		PackedNode node10 = factory.createPackedNode("S ::= s .", 3, node9);
+    //		TerminalNode node11 = factory.createTerminalNode("s", 2, 3);
+    //		node10.addChild(node11);
+    //		node9.addChild(node10);
+    //		node7.addChild(node8);
+    //		node7.addChild(node9);
+    //		node6.addChild(node7);
+    //		node4.addChild(node5);
+    //		node4.addChild(node6);
+    //		node3.addChild(node4);
+    //		TerminalNode node12 = factory.createTerminalNode("b", 3, 4);
+    //		node2.addChild(node3);
+    //		node2.addChild(node12);
+    //		PackedNode node13 = factory.createPackedNode("S ::= a S .", 1, node1);
+    //		NonterminalNode node15 = factory.createNonterminalNode("S", 0, 1, 4);
+    //		PackedNode node16 = factory.createPackedNode("S ::= a S b .", 3, node15);
+    //		IntermediateNode node17 = factory.createIntermediateNode("S ::= a S . b", 1, 3);
+    //		PackedNode node18 = factory.createPackedNode("S ::= a S . b", 2, node17);
+    //		node18.addChild(node8);
+    //		node18.addChild(node9);
+    //		node17.addChild(node18);
+    //		node16.addChild(node17);
+    //		node16.addChild(node12);
+    //		node15.addChild(node16);
+    //		node13.addChild(node5);
+    //		node13.addChild(node15);
+    //		node1.addChild(node2);
+    //		node1.addChild(node13);
+    //		return node1;
+    //	}
+
+    }
 }

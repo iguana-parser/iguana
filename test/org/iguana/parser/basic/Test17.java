@@ -47,8 +47,7 @@ import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.createRule;
-import static iguana.parsetrees.term.TermFactory.createTerminal;
+import static iguana.parsetrees.term.TermFactory.*;
 import static iguana.utils.collections.CollectionsUtil.*;
 import static org.junit.Assert.*;
 
@@ -130,14 +129,14 @@ public class Test17 {
     }
 
     private static Term getTree() {
-        Term t0 = createTerminal(a, 0, 1, input);
-        Term t1 = createTerminal(a, 1, 2, input);
-        Term t2 = createTerminal(a, 2, 3, input);
-        Term t3 = createRule(r3, list(t2), input);
-        Term t4 = createTerminal(b, 3, 4, input);
-        Term t5 = createRule(r1, list(t1, t3, t4), input);
-        Term t6 = createTerminal(b, 4, 5, input);
-        Term t7 = createRule(r1, list(t0, t5, t6), input);
+        Term t0 = createTerminalTerm(a, 0, 1, input);
+        Term t1 = createTerminalTerm(a, 1, 2, input);
+        Term t2 = createTerminalTerm(a, 2, 3, input);
+        Term t3 = createNonterminalTerm(r3, list(t2), input);
+        Term t4 = createTerminalTerm(b, 3, 4, input);
+        Term t5 = createNonterminalTerm(r1, list(t1, t3, t4), input);
+        Term t6 = createTerminalTerm(b, 4, 5, input);
+        Term t7 = createNonterminalTerm(r1, list(t0, t5, t6), input);
         return t7;
     }
 }

@@ -32,10 +32,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
+
 import static iguana.utils.string.StringUtil.*;
 
 public class Nonterminal extends AbstractSymbol {
@@ -146,13 +146,17 @@ public class Nonterminal extends AbstractSymbol {
 			return false;
 		
 		Nonterminal other = (Nonterminal) obj;
-		
-		return name.equals(other.name) && index == other.index;
+
+		return getEffectiveName().equals(other.getEffectiveName());
 	}
-	
-	@Override
+
+    public String getEffectiveName() {
+        return name + (index > 0 ? index : "");
+    }
+
+    @Override
 	public int hashCode() {
-		return MurmurHash3.f2().apply(name.hashCode(), index);
+		return getEffectiveName().hashCode();
 	}
 	
 	public static Builder builder(String name) {
