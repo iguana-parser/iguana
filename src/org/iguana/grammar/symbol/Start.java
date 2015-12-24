@@ -60,7 +60,7 @@ public class Start extends Nonterminal {
 		private Nonterminal nonterminal;
 
 		public Builder(Nonterminal nonterminal) {
-			super("start[" + nonterminal.getName() + "]");
+			super("Start_" + nonterminal.getName());
 			this.nonterminal = nonterminal;
 		}
 
