@@ -5,8 +5,6 @@ organization := "iguana"
 
 version := "0.1.0"
 
-isSnapshot := true
-
 scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
