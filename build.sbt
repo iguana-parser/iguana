@@ -5,8 +5,6 @@ organization := "iguana"
 
 version := "0.1.0"
 
-isSnapshot := true
-
 scalaVersion := "2.11.7"
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
@@ -17,7 +15,7 @@ libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.11" % "test"
 )
 
-lazy val utils = ProjectRef(file("../utils"), "utils")
+lazy val utils = ProjectRef(uri("https://github.com/iguana-parser/utils.git"), "utils")
 
 val main = Project(id = "regex", base = file(".")).dependsOn(utils)
 
