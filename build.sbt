@@ -15,9 +15,10 @@ libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.11" % "test"
 )
 
-lazy val utils = ProjectRef(uri("https://github.com/iguana-parser/utils.git"), "utils")
+javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
+javacOptions in (Compile,doc) += "-Xdoclint:none"
 
 val main = Project(id = "regex", base = file(".")).dependsOn(utils)
 
-javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
-javacOptions in (Compile,doc) += "-Xdoclint:none"
+lazy val utils = if (file("../utils").exists) ProjectRef(file("../utils"), "utils")
+                 else ProjectRef(uri("https://github.com/iguana-parser/utils.git"), "utils")
