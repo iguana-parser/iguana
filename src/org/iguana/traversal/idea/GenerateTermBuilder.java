@@ -66,7 +66,7 @@ public class GenerateTermBuilder {
             writer.println("    @Override");
             writer.println("    public TreeElement terminalTerm(TerminalType type, int l, int r, Input input) {");
             writer.println("        if (type.nodeType() == TerminalNodeType.Regex()) {");
-            writer.println("            IElementType tokenType = IGGYTokenTypes.get(type.name());");
+            writer.println("            IElementType tokenType = IGGYTokenTypes.get(type.name().toUpperCase());");
             writer.println("            return ASTFactory.leaf(tokenType, input.subString(l, r));");
             writer.println("        }");
             writer.println("    return ASTFactory.leaf(IGGYTokenTypes.TERMINAL, input.subString(l, r));");
