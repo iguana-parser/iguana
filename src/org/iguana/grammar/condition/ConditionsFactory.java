@@ -85,6 +85,7 @@ public class ConditionsFactory {
 					for (SlotAction c : actions) {
 					    if (c.execute(input, u, i, ctx)) {
 //			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
+                            u.getGrammarSlot().getRuntime().recordParseError(input, i, u.getGrammarSlot(), u);
 			                return true;
 			            }
 			        }
@@ -106,6 +107,7 @@ public class ConditionsFactory {
 		        for (SlotAction c : actions) {
 		            if (c.execute(input, u, i)) {
 //		                log.trace("Condition %s executed", c);
+                        u.getGrammarSlot().getRuntime().recordParseError(input, i, u.getGrammarSlot(), u);
 		                return true;
 		            }
 		        }
