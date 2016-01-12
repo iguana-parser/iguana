@@ -5,8 +5,6 @@ organization := "iguana"
 
 version := "0.1.0"
 
-isSnapshot := true
-
 scalaVersion := "2.11.7"
 
 scalaSource in Compile := baseDirectory.value / "src"
@@ -31,12 +29,17 @@ libraryDependencies ++= Seq(
 javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
 javacOptions in (Compile,doc) += "-Xdoclint:none"
 
-compileOrder in Compile := CompileOrder.JavaThenScala
+compileOrder in Compile := CompileOrder.Mixed
 
 
-lazy val utils = ProjectRef(file("../utils"), "utils")
-lazy val parseTrees = ProjectRef(file("../parse-trees"), "parse-trees")
-lazy val regex = ProjectRef(file("../regex"), "regex")
+lazy val utils = if (file("../utils").exists) ProjectRef(file("../utils"), "utils")
+                 else ProjectRef(uri("https://github.com/iguana-parser/utils.git"), "utils")
+
+lazy val parseTrees = if (file("../parse-trees").exists) ProjectRef(file("../parse-trees"), "parse-trees")
+                      else ProjectRef(uri("https://github.com/iguana-parser/parse-trees.git"), "parse-trees")
+
+lazy val regex = if (file("../regex").exists) ProjectRef(file("../regex"), "regex")
+                 else ProjectRef(uri("https://github.com/iguana-parser/regex.git"), "regex")
 
 // Uncomment the following line (and comment out the next one) when generating Eclipse projects using SBT
 // val main = Project("iguana", file(".")).dependsOn(utils, parseTrees, regex)
