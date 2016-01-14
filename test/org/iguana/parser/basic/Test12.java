@@ -29,8 +29,12 @@ package org.iguana.parser.basic;
 
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.SPPFVisualization;
 import iguana.parsetrees.sppf.TerminalNode;
 import iguana.parsetrees.term.Term;
+import iguana.parsetrees.term.TermToJavaCode;
+import iguana.parsetrees.term.TermVisualization;
+import iguana.parsetrees.term.ToJavaCode;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -91,7 +95,7 @@ public class Test12 {
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
 	}
 	
 	private static ParseSuccess getParseResult1(GrammarGraph graph) {
@@ -113,7 +117,7 @@ public class Test12 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult2(GrammarGraph graph) {
@@ -128,7 +132,11 @@ public class Test12 {
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF2(graph), statistics, input2);
 	}
-		
+
+    static NonterminalNode A_0_1;
+    static NonterminalNode A_0_0;
+    static NonterminalNode A_1_1;
+
 	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
         TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
         TerminalNode node1 = createTerminalNode(registry.getSlot("epsilon"), 1, 1, input1);
@@ -143,12 +151,16 @@ public class Test12 {
         IntermediateNode node7 = createIntermediateNode(registry.getSlot("A ::= A A ."), node8, node3);
         node7.addPackedNode(registry.getSlot("A ::= A A ."), node6, node8);
         node8.addPackedNode(registry.getSlot("A ::= A A ."), node7);
+        A_0_0 = node6;
+        A_1_1 = node3;
+        A_0_1 = node8;
         return node8;
 	}
 
  	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
         TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input1);
         NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0, input1);
+        A_0_0 = node2;
         IntermediateNode node1 = createIntermediateNode(registry.getSlot("A ::= A A ."), node2, node2);
         node2.addPackedNode(registry.getSlot("A ::= A A ."), node1);
         return node2;
@@ -156,21 +168,22 @@ public class Test12 {
 
     private static Term getTree1() {
         Term t0 = createTerminalTerm(a, 0, 1, input1);
-        Term t1 = createCycle("A");
-        Term t2 = createEpsilon(0);
-        Term t3 = createAmbiguityTerm(list(list(t2), list(t1, t1)));
-        Term t4 = createEpsilon(1);
-        Term t5 = createAmbiguityTerm(list(list(t4), list(t1, t1)));
-        Term t6 = createAmbiguityTerm(list(list(t1, t5), list(t3, t1)));
-        Term t7 = createAmbiguityTerm(list(list(t0), list(t6)));
-        return t7;
+        Term t1 = createCycle(A_0_1);
+        Term t2 = createEpsilon(1);
+        Term t3 = createCycle(A_1_1);
+        Term t4 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r3, list(t2), input1), createNonterminalAmbiguityBranch(r1, list(t3, t3), input1)));
+        Term t5 = createEpsilon(0);
+        Term t6 = createCycle(A_0_0);
+        Term t7 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r3, list(t5), input1), createNonterminalAmbiguityBranch(r1, list(t6, t6), input1)));
+        Term t8 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t4)), createIntermediateAmbiguityBranch(list(t7, t1))));
+        Term t9 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t0), input1), createNonterminalAmbiguityBranch(r1, list(t8), input1)));
+        return t9;
     }
 
     private static Term getTree2() {
-        Term t0 = createCycle("A");
-        Term t1 = createEpsilon(0);
-        Term t2 = createAmbiguityTerm(list(list(t1), list(t0, t0)));
+        Term t0 = createEpsilon(0);
+        Term t1 = createCycle(A_0_0);
+        Term t2 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r3, list(t0), input1), createNonterminalAmbiguityBranch(r1, list(t1, t1), input1)));
         return t2;
     }
-
 }

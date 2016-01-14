@@ -40,7 +40,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import iguana.parsetrees.term.TermBuilder;
-import iguana.parsetrees.term.SPPFToTerms;
 import iguana.utils.input.Input;
 import iguana.utils.logging.IguanaLogger;
 import iguana.utils.logging.JavaUtilIguanaLogger;
@@ -109,7 +108,7 @@ public class IguanaRunner {
 						logger.log(result.asParseError());
 					} else {
                         if (buildTrees) {
-                            result.asParseSuccess().getTree();
+                            result.asParseSuccess().getTerm();
                         }
                     }
 					logger.log((i + 1) + " ");
@@ -126,7 +125,7 @@ public class IguanaRunner {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
                         logger.log("  : Success");
                         if (buildTrees) {
-                            result.asParseSuccess().getTree();
+                            result.asParseSuccess().getTerm();
 //                            TreeVisualization.generate(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
                         }
 					} else {

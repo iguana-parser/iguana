@@ -117,7 +117,7 @@ public class Test8 {
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead1(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class Test8 {
         ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead0(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class Test8 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead1(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class Test8 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead0(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 
 

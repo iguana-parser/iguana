@@ -19,15 +19,19 @@ trait ParseResult {
   def asParseSuccess: ParseSuccess
 
   def getInput: Input
+
+  def asTerm: Option[Term] = if (isParseSuccess) Some(this.asParseSuccess.getTerm) else None
+
+  def asTermWithoutSharing: Option[Term] = if (isParseSuccess) Some(this.asParseSuccess.getTreeWithoutSharing) else None
 }
 
 case class ParseSuccess(sppfNode: NonterminalNode, statistics: ParseStatistics, input: Input) extends ParseResult {
 
   def getTreeWithoutSharing: Term = SPPFToTerms.convertNoSharing(sppfNode, new DefaultTermBuilder(input))
 
-  def getTree: Term = SPPFToTerms.convert(sppfNode, new DefaultTermBuilder(input))
+  def getTerm: Term = SPPFToTerms.convert(sppfNode, new DefaultTermBuilder(input))
 
-  def getTree[T >: Any](builder: TermBuilder[T]): T = SPPFToTerms.convert(sppfNode, builder)
+  def getTerm[T >: Any](builder: TermBuilder[T]): T = SPPFToTerms.convert(sppfNode, builder)
 
   override def isParseError: Boolean = false
 

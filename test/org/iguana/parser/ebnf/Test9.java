@@ -41,7 +41,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input0);
         ParseResult result = Iguana.parse(input0, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input1);
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -59,7 +59,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input2);
         ParseResult result = Iguana.parse(input2, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -68,7 +68,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input3);
         ParseResult result = Iguana.parse(input3, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -77,7 +77,7 @@ public class Test9 {
         GrammarGraph graph = GrammarGraph.from(grammar, input4);
         ParseResult result = Iguana.parse(input4, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTree();
+        Term term = result.asParseSuccess().getTerm();
     }
 
 

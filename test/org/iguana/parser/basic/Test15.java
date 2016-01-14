@@ -95,7 +95,7 @@ public class Test15 {
         GrammarGraph graph = GrammarGraph.from(grammar, input);
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {

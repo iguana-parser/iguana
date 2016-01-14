@@ -72,9 +72,9 @@ public class Test17 {
     static Rule r2 = Rule.withHead(A).addSymbols(a, A, c).build();
     static Rule r3 = Rule.withHead(A).addSymbols(a).build();
 
-    public static Grammar grammar = Grammar.builder().addRules(r1, r2, r3).build();
-    private static Input input = Input.fromString("aaabb");
-    private static Nonterminal startSymbol = A;
+    static Grammar grammar = Grammar.builder().addRules(r1, r2, r3).build();
+    static Input input = Input.fromString("aaabb");
+    static Nonterminal startSymbol = A;
 
 
 	@Test
@@ -95,7 +95,7 @@ public class Test17 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 
     public static ParseSuccess getParseResult(GrammarGraph graph) {

@@ -67,13 +67,9 @@ public class Test13 {
 	
     private static Nonterminal startSymbol = A;
 
-    private static Grammar grammar;
-
-    static {
-        Rule r1 = Rule.withHead(A).addSymbols(A).build();
-        Rule r2 = Rule.withHead(A).addSymbol(a).build();
-        grammar = Grammar.builder().addRule(r1).addRule(r2).build();
-    }
+    static Rule r1 = Rule.withHead(A).addSymbols(A).build();
+    static Rule r2 = Rule.withHead(A).addSymbol(a).build();
+    static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();
 
 	@Test
 	public void testReachableNonterminals() {
@@ -92,8 +88,8 @@ public class Test13 {
 		GrammarGraph graph = GrammarGraph.from(grammar, input);
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
-		assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
+        assertEquals(getParseResult(graph), result);
+        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -108,18 +104,21 @@ public class Test13 {
 				.setAmbiguousNodesCount(1).build();
 		return new ParseSuccess(expectedSPPF(graph), statistics, input);
 	}
-		
+
+    static NonterminalNode A_0_1;
+
 	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
         TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
         NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input);
+        A_0_1 = node1;
         node1.addPackedNode(registry.getSlot("A ::= A ."), node1);
         return node1;
     }
 
     private static Term getTree() {
         Term t0 = createTerminalTerm(a, 0, 1, input);
-        Term t1 = createCycle("A");
-        Term t2 = createAmbiguityTerm(list(list(t0), list(t1)));
+        Term t1 = createCycle(A_0_1);
+        Term t2 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t0), input), createNonterminalAmbiguityBranch(r1, list(t1), input)));
         return t2;
     }
 }

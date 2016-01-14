@@ -47,7 +47,7 @@ public class Test5 {
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTree());
+        assertEquals(getTree1(), result.asParseSuccess().getTerm());
     }
 
     private static ParseResult getParseResult1(GrammarGraph graph) {

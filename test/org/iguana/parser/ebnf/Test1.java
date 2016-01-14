@@ -45,7 +45,7 @@ public class Test1 {
         ParseResult result = Iguana.parse(input0, graph, A);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult0(graph), result);
-        assertEquals(getTree0(), result.asParseSuccess().getTree());
+        assertEquals(getTree0(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class Test1 {
         ParseResult result = Iguana.parse(input1, graph, A);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTree());
+        assertEquals(getTree1(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class Test1 {
         ParseResult result = Iguana.parse(input2, graph, A);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertEquals(getTree2(), result.asParseSuccess().getTree());
+        assertEquals(getTree2(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class Test1 {
         ParseResult result = Iguana.parse(input3, graph, A);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
-        assertEquals(getTree3(), result.asParseSuccess().getTree());
+        assertEquals(getTree3(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class Test1 {
         ParseResult result = Iguana.parse(input4, graph, A);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult4(graph), result);
-        assertEquals(getTree4(), result.asParseSuccess().getTree());
+        assertEquals(getTree4(), result.asParseSuccess().getTerm());
     }
 
     private static ParseResult getParseResult0(GrammarGraph graph) {

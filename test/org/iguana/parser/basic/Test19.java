@@ -49,7 +49,7 @@ public class Test19 {
         ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class Test19 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class Test19 {
         ParseResult result = Iguana.parse(input3, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
-        assertTrue(getTree3().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree3().equals(result.asParseSuccess().getTerm()));
     }
 
     private ParseSuccess getParseResult1(GrammarGraph registry) {
@@ -152,7 +152,7 @@ public class Test19 {
         Term t7 = createNonterminalTerm(r3, list(t6), input2);
         Term t8 = createNonterminalTerm(r1, list(t4, t5, t7), input2);
         Term t9 = createNonterminalTerm(r2, list(t1, t2, t4), input2);
-        Term t10 = createAmbiguityTerm(list(list(t1, t2, t8), list(t9, t5, t7)));
+        Term t10 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t1, t2, t8), input2), createNonterminalAmbiguityBranch(r1, list(t9, t5, t7), input2)));
         return t10;
     }
 
@@ -247,21 +247,21 @@ public class Test19 {
         Term t10 = createTerminalTerm(a, 6, 7, input3);
         Term t11 = createNonterminalTerm(r3, list(t10), input3);
         Term t12 = createNonterminalTerm(r2, list(t7, t9, t11), input3);
-        Term t13 = createAmbiguityTerm(list(list(t8, t9, t11), list(t4, t5, t12)));
+        Term t13 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t8, t9, t11), input3), createNonterminalAmbiguityBranch(r1, list(t4, t5, t12), input3)));
         Term t14 = createTerminalTerm(star, 7, 8, input3);
         Term t15 = createTerminalTerm(a, 8, 9, input3);
         Term t16 = createNonterminalTerm(r3, list(t15), input3);
         Term t17 = createNonterminalTerm(r1, list(t11, t14, t16), input3);
-        Term t18 = createAmbiguityTerm(list(list(t7, t9, t17), list(t12, t14, t16)));
-        Term t19 = createAmbiguityTerm(list(list(t13, t14, t16), list(t4, t5, t18)));
-        Term t20 = createAmbiguityTerm(list(list(t19), list(t8, t9, t17)));
+        Term t18 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t7, t9, t17), input3), createNonterminalAmbiguityBranch(r1, list(t12, t14, t16), input3)));
+        Term t19 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t13, t14, t16)), createIntermediateAmbiguityBranch(list(t4, t5, t18))));
+        Term t20 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r1, list(t19), input3), createNonterminalAmbiguityBranch(r2, list(t8, t9, t17), input3)));
         Term t21 = createNonterminalTerm(r2, list(t1, t2, t4), input3);
-        Term t22 = createAmbiguityTerm(list(list(t1, t2, t8), list(t21, t5, t7)));
-        Term t23 = createAmbiguityTerm(list(list(t1, t2, t20), list(t22, t9, t17)));
-        Term t24 = createAmbiguityTerm(list(list(t1, t2, t13), list(t22, t9, t11)));
-        Term t25 = createAmbiguityTerm(list(list(t24), list(t21, t5, t12)));
-        Term t26 = createAmbiguityTerm(list(list(t25, t14, t16), list(t21, t5, t18)));
-        Term t27 = createAmbiguityTerm(list(list(t23), list(t26)));
+        Term t22 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t1, t2, t8), input3), createNonterminalAmbiguityBranch(r1, list(t21, t5, t7), input3)));
+        Term t23 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t2, t20)), createIntermediateAmbiguityBranch(list(t22, t9, t17))));
+        Term t24 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t2, t13)), createIntermediateAmbiguityBranch(list(t22, t9, t11))));
+        Term t25 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t24), input3), createNonterminalAmbiguityBranch(r1, list(t21, t5, t12), input3)));
+        Term t26 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t25, t14, t16)), createIntermediateAmbiguityBranch(list(t21, t5, t18))));
+        Term t27 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t23), input3), createNonterminalAmbiguityBranch(r1, list(t26), input3)));
         return t27;
     }
 

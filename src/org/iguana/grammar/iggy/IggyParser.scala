@@ -22,7 +22,7 @@ object IggyParser {
     if (result.isParseError)
       throw new RuntimeException(result.asParseError.toString)
 
-    getGrammar(result.asParseSuccess.getTree, input)
+    getGrammar(result.asParseSuccess.getTerm, input)
   }
 
   private val start = Start.from("Definition")

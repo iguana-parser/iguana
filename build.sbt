@@ -22,7 +22,8 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
 libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
   "junit" % "junit" % "4.11",
-  "com.novocode" % "junit-interface" % "0.11" % "test"
+  "com.novocode" % "junit-interface" % "0.11" % "test",
+  "com.googlecode.kiama" %% "kiama" % "1.8.0" % "test"
 )
 
 

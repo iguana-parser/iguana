@@ -54,6 +54,7 @@ import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 import static iguana.parsetrees.term.TermFactory.*;
 
 /**
+ *
  * S ::= A A b
  *     
  * A ::= 'a' | epsilon
@@ -94,8 +95,9 @@ public class Test11 {
     public void testParser() {
         GrammarGraph graph = GrammarGraph.from(grammar, input);
         ParseResult result = Iguana.parse(input, graph, startSymbol);
+        assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -133,7 +135,7 @@ public class Test11 {
         Term t3 = createNonterminalTerm(r2, list(t2), input);
         Term t4 = createEpsilon(1);
         Term t5 = createNonterminalTerm(r3, list(t4), input);
-        Term t6 = createAmbiguityTerm(list(list(t1, t3), list(t3, t5)));
+        Term t6 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t3)), createIntermediateAmbiguityBranch(list(t3, t5))));
         Term t7 = createTerminalTerm(b, 1, 2, input);
         Term t8 = createNonterminalTerm(r1, list(t6, t7), input);
         return t8;

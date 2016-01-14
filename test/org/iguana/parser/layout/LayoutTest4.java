@@ -91,7 +91,7 @@ public class LayoutTest4 {
 		Grammar grammar = getGrammar();
 		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-        assertTrue(getTree(input).equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree(input).equals(result.asParseSuccess().getTerm()));
 	}
 
     private Term getTree(Input input) {

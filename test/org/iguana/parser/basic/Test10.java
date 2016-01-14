@@ -103,7 +103,7 @@ public class Test10 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseResult getParseResult(GrammarGraph graph) {
@@ -137,11 +137,15 @@ public class Test10 {
     }
 
     public static Term getTree() {
-        Term t1 = createNonterminalTerm(r3, list(createTerminalTerm(a, 0, 1, input)), input); // A(a)
-        Term t2 = createNonterminalTerm(r4, list(createTerminalTerm(b, 1, 2, input)), input); // B(b)
-        Term t3 = createNonterminalTerm(r5, list(createTerminalTerm(c, 2, 3, input)), input); // C(c)
-        Term t4 = createNonterminalTerm(r6, list(createTerminalTerm(c, 2, 3, input)), input); // D(c)
-        return createAmbiguityTerm(list(list(t1, t2, t4), list(t1, t2, t3)));
+        Term t0 = createTerminalTerm(a, 0, 1, input);
+        Term t1 = createNonterminalTerm(r3, list(t0), input);
+        Term t2 = createTerminalTerm(b, 1, 2, input);
+        Term t3 = createNonterminalTerm(r4, list(t2), input);
+        Term t4 = createTerminalTerm(c, 2, 3, input);
+        Term t5 = createNonterminalTerm(r6, list(t4), input);
+        Term t6 = createNonterminalTerm(r5, list(t4), input);
+        Term t7 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t1, t3, t5), input), createNonterminalAmbiguityBranch(r1, list(t1, t3, t6), input)));
+        return t7;
     }
 }
 	

@@ -102,7 +102,7 @@ public class LayoutTest2 {
         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph, input), result);
-        assertTrue(getTree(input).equals(result.asParseSuccess().getTree()));
+        assertTrue(getTree(input).equals(result.asParseSuccess().getTerm()));
     }
 
     public ParseSuccess getParseResult(GrammarGraph graph, Input input) {
@@ -119,23 +119,23 @@ public class LayoutTest2 {
     }
 
     private Term getTree(Input input) {
-        Term t0 = createTerminalTerm(a, 0, 1, input);
-        Term t1 = createNonterminalTerm(r2, list(t0), input);
-        Term t2 = createEpsilon(1);
-        Term t3 = createNonterminalTerm(layout1, list(t2), input);
-        Term t4 = createEpsilon(1);
-        Term t5 = createNonterminalTerm(r3, list(t4), input);
-        Term t6 = createTerminalTerm(space, 1, 2, input);
-        Term t7 = createNonterminalTerm(layout2, list(t6), input);
-        Term t8 = createEpsilon(2);
-        Term t9 = createNonterminalTerm(r3, list(t8), input);
-        Term t10 = createEpsilon(2);
-        Term t11 = createNonterminalTerm(layout2, list(t10), input);
-        Term t12 = createAmbiguityTerm(list(list(t1, t3, t5, t7), list(t1, t7, t9, t11)));
-        Term t13 = createTerminalTerm(c, 2, 3, input);
-        Term t14 = createNonterminalTerm(r4, list(t13), input);
-        Term t15 = createNonterminalTerm(r1, list(t12, t14), input);
-        return t15;
+//        Term t0 = createTerminalTerm(a, 0, 1, input);
+//        Term t1 = createNonterminalTerm(r2, list(t0), input);
+//        Term t2 = createEpsilon(1);
+//        Term t3 = createNonterminalTerm(layout1, list(t2), input);
+//        Term t4 = createEpsilon(1);
+//        Term t5 = createNonterminalTerm(r3, list(t4), input);
+//        Term t6 = createTerminalTerm(space, 1, 2, input);
+//        Term t7 = createNonterminalTerm(layout2, list(t6), input);
+//        Term t8 = createEpsilon(2);
+//        Term t9 = createNonterminalTerm(r3, list(t8), input);
+//        Term t10 = createEpsilon(2);
+//        Term t11 = createNonterminalTerm(layout2, list(t10), input);
+//        Term t12 = createAmbiguityTerm(list(list(t1, t3, t5, t7), list(t1, t7, t9, t11)));
+//        Term t13 = createTerminalTerm(c, 2, 3, input);
+//        Term t14 = createNonterminalTerm(r4, list(t13), input);
+//        Term t15 = createNonterminalTerm(r1, list(t12, t14), input);
+        return null;
     }
 
     private NonterminalNode getSPPFNode(GrammarGraph registry, Input input) {
