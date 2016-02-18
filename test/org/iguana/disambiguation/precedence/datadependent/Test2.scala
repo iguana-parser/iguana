@@ -24,6 +24,9 @@ class Test2 extends FunSuite {
     IggyParser.getGrammar(s)
   }
 
+  val start = Nonterminal.withName("S")
+
+  // TODO: Extend syntax of IGGY
   val desugaredGrammar = {
     @IGGY
     val s =
@@ -33,32 +36,27 @@ class Test2 extends FunSuite {
         |        | '-' E(0) {1}
         |        | 'a' {0}
       """.stripMargin
+    IggyParser.getGrammar(s)
   }
 
-  test("Parser1") {
-    val input = Input.fromString("a+a+a")
-    val result = Iguana.parse(input, originalGrammar, Nonterminal.withName("S"))
+  test("Parser1") { runOriginal(Input.fromString("a+a+a")) }
+  test("Parser2") { runOriginal(Input.fromString("-a+a")) }
+  test("Parser3") { runOriginal(Input.fromString("a+-a")) }
+  test("Parser4") { runOriginal(Input.fromString("a+-a+a")) }
+
+//  test("DDParser1") { runDesugared(Input.fromString("a+a+a")) }
+//  test("DDParser2") { runDesugared(Input.fromString("-a+a")) }
+//  test("DDParser3") { runDesugared(Input.fromString("a+-a")) }
+//  test("DDParser4") { runDesugared(Input.fromString("a+-a+a")) }
+
+  private def runOriginal(input: Input) = {
+    val result = Iguana.parse(input, originalGrammar, start)
     assert(result.isParseSuccess)
     assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
   }
 
-  test("Parser2") {
-    val input = Input.fromString("-a+a")
-    val result = Iguana.parse(input, originalGrammar, Nonterminal.withName("S"))
-    assert(result.isParseSuccess)
-    assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
-  }
-
-  test("Parser3") {
-    val input = Input.fromString("a+-a")
-    val result = Iguana.parse(input, originalGrammar, Nonterminal.withName("S"))
-    assert(result.isParseSuccess)
-    assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
-  }
-
-  test("Parser4") {
-    val input = Input.fromString("a+-a+a")
-    val result = Iguana.parse(input, originalGrammar, Nonterminal.withName("S"))
+  private def runDesugared(input: Input) = {
+    val result = Iguana.parse(input, desugaredGrammar, start)
     assert(result.isParseSuccess)
     assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
   }
