@@ -36,7 +36,7 @@ public class Tests {
 
     @Before
     public void init() {
-        IGGY = Grammar.load(new File("test/org/iguana/parser/iggy/IGGY"));
+        IGGY = Grammar.load(getClass().getResourceAsStream("/IggyGrammar"));
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
         IGGY = new EBNFToBNF().transform(IGGY);
