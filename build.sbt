@@ -1,4 +1,3 @@
-
 name := "iguana"
 
 organization := "iguana"
@@ -23,7 +22,8 @@ libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
   "junit" % "junit" % "4.11",
   "com.novocode" % "junit-interface" % "0.11" % "test",
-  "com.googlecode.kiama" %% "kiama" % "1.8.0" % "test"
+  "com.googlecode.kiama" %% "kiama" % "1.8.0" % "test",
+  "commons-cli" % "commons-cli" % "1.2"
 )
 
 
@@ -31,7 +31,6 @@ javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
 javacOptions in (Compile,doc) += "-Xdoclint:none"
 
 compileOrder in Compile := CompileOrder.Mixed
-
 
 lazy val utils = if (file("../utils").exists) ProjectRef(file("../utils"), "utils")
                  else ProjectRef(uri("https://github.com/iguana-parser/utils.git"), "utils")
@@ -46,5 +45,3 @@ lazy val regex = if (file("../regex").exists) ProjectRef(file("../regex"), "rege
 // val main = Project("iguana", file(".")).dependsOn(utils, parseTrees, regex)
 
 val main = Project("iguana", file(".")).aggregate(utils, parseTrees, regex).dependsOn(utils, parseTrees, regex)
-
-
