@@ -24,7 +24,6 @@ libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.11" % "test",
   "com.googlecode.kiama" %% "kiama" % "1.8.0" % "test",
   "commons-cli" % "commons-cli" % "1.2"
-
 )
 
 
@@ -32,7 +31,6 @@ javacOptions in (Compile, doc) ++= Seq("-source", "1.8")
 javacOptions in (Compile,doc) += "-Xdoclint:none"
 
 compileOrder in Compile := CompileOrder.Mixed
-
 
 lazy val utils = if (file("../utils").exists) ProjectRef(file("../utils"), "utils")
                  else ProjectRef(uri("https://github.com/iguana-parser/utils.git"), "utils")
