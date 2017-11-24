@@ -27,31 +27,30 @@
 
 package org.iguana.parser.basic;
 
-import static iguana.utils.collections.CollectionsUtil.*;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createIntermediateNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createNonterminalNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createTerminalNode;
+import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
+import iguana.parsetrees.sppf.IntermediateNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.TerminalNode;
+import iguana.regex.Character;
 import iguana.utils.input.Input;
-
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
 
 /**
  * S ::= A B C
@@ -103,7 +102,6 @@ public class Test10 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseResult getParseResult(GrammarGraph graph) {
@@ -136,16 +134,5 @@ public class Test10 {
         return node11;
     }
 
-    public static Term getTree() {
-        Term t0 = createTerminalTerm(a, 0, 1, input);
-        Term t1 = createNonterminalTerm(r3, list(t0), input);
-        Term t2 = createTerminalTerm(b, 1, 2, input);
-        Term t3 = createNonterminalTerm(r4, list(t2), input);
-        Term t4 = createTerminalTerm(c, 2, 3, input);
-        Term t5 = createNonterminalTerm(r6, list(t4), input);
-        Term t6 = createNonterminalTerm(r5, list(t4), input);
-        Term t7 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t1, t3, t5), input), createNonterminalAmbiguityBranch(r1, list(t1, t3, t6), input)));
-        return t7;
-    }
 }
 	

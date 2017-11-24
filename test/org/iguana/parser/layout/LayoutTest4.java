@@ -27,26 +27,22 @@
 
 package org.iguana.parser.layout;
 
-import static iguana.utils.collections.CollectionsUtil.list;
 import static org.junit.Assert.assertTrue;
 
-import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.transformation.LayoutWeaver;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
 
-import static iguana.parsetrees.term.TermFactory.*;
-
+import iguana.parsetrees.slot.NonterminalNodeType;
+import iguana.regex.Character;
 import iguana.utils.input.Input;
 
 /**
@@ -91,43 +87,6 @@ public class LayoutTest4 {
 		Grammar grammar = getGrammar();
 		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
-        assertTrue(getTree(input).equals(result.asParseSuccess().getTerm()));
 	}
 
-    private Term getTree(Input input) {
-        Term t0 = createTerminalTerm(a, 0, 1, input);
-        Term t1 = createNonterminalTerm(r2, list(t0), input);
-        Term t2 = createTerminalTerm(space, 1, 2, input);
-        Term t3 = createNonterminalTerm(layout, list(t2), input);
-        Term t4 = createTerminalTerm(b, 2, 3, input);
-        Term t5 = createNonterminalTerm(r3, list(t4), input);
-        Term t6 = createTerminalTerm(space, 3, 4, input);
-        Term t7 = createNonterminalTerm(layout, list(t6), input);
-        Term t8 = createTerminalTerm(comma, 4, 5, input);
-        Term t9 = createTerminalTerm(space, 5, 6, input);
-        Term t10 = createNonterminalTerm(layout, list(t9), input);
-        Term t11 = createTerminalTerm(b, 6, 7, input);
-        Term t12 = createNonterminalTerm(r3, list(t11), input);
-        Term t13 = createTerminalTerm(space, 7, 8, input);
-        Term t14 = createNonterminalTerm(layout, list(t13), input);
-        Term t15 = createTerminalTerm(comma, 8, 9, input);
-        Term t16 = createTerminalTerm(space, 9, 10, input);
-        Term t17 = createNonterminalTerm(layout, list(t16), input);
-        Term t18 = createTerminalTerm(b, 10, 11, input);
-        Term t19 = createNonterminalTerm(r3, list(t18), input);
-        Term t20 = createTerminalTerm(space, 11, 12, input);
-        Term t21 = createNonterminalTerm(layout, list(t20), input);
-        Term t22 = createTerminalTerm(comma, 12, 13, input);
-        Term t23 = createTerminalTerm(space, 13, 14, input);
-        Term t24 = createNonterminalTerm(layout, list(t23), input);
-        Term t25 = createTerminalTerm(b, 14, 15, input);
-        Term t26 = createNonterminalTerm(r3, list(t25), input);
-        Term t27 = createPlus(list(t5, t7, t8, t10, t12, t14, t15, t17, t19, t21, t22, t24, t26));
-        Term t28 = createTerminalTerm(space, 15, 16, input);
-        Term t29 = createNonterminalTerm(layout , list(t28), input);
-        Term t30 = createTerminalTerm(c, 16, 17, input);
-        Term t31 = createNonterminalTerm(r4, list(t30), input);
-        Term t32 = createNonterminalTerm(r1, list(t1, t3, t27, t29, t31), input);
-        return t32;
-    }
 }

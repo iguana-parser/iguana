@@ -89,7 +89,6 @@ public class Test13 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -115,10 +114,4 @@ public class Test13 {
         return node1;
     }
 
-    private static Term getTree() {
-        Term t0 = createTerminalTerm(a, 0, 1, input);
-        Term t1 = createCycle(A_0_1);
-        Term t2 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t0), input), createNonterminalAmbiguityBranch(r1, list(t1), input)));
-        return t2;
-    }
 }

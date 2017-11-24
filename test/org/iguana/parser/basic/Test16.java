@@ -27,29 +27,31 @@
 
 package org.iguana.parser.basic;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.Term;
-import iguana.utils.input.Input;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createIntermediateNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createNonterminalNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createTerminalNode;
+import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-import static iguana.utils.collections.CollectionsUtil.*;
-import static org.junit.Assert.*;
+import iguana.parsetrees.sppf.IntermediateNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.TerminalNode;
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 
 /**
  * 
@@ -113,7 +115,6 @@ public class Test16 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 
     private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -155,42 +156,4 @@ public class Test16 {
         return node18;
     }
 
-    /**
-     *
-     * S ::= A B C D  r1
-     * A ::= 'a'      r2
-     * A ::= epsilon  r3
-     * B ::= 'a'      r4
-     * B ::= epsilon  r5
-     * C ::= 'a'      r6
-     * C ::= epsilon  r7
-     * D ::= 'a'      r8
-     * D ::= epsilon  r9
-     *
-     * @author Ali Afroozeh
-     */
-    private static Term getTree() {
-        Term t0 = createEpsilon(0);
-        Term t1 = createNonterminalTerm(r3, list(t0), input);
-        Term t2 = createEpsilon(0);
-        Term t3 = createNonterminalTerm(r5, list(t2), input);
-        Term t4 = createEpsilon(0);
-        Term t5 = createNonterminalTerm(r7, list(t4), input);
-        Term t6 = createTerminalTerm(a, 0, 1, input);
-        Term t7 = createNonterminalTerm(r8, list(t6), input);
-        Term t8 = createNonterminalTerm(r6, list(t6), input);
-        Term t9 = createNonterminalTerm(r4, list(t6), input);
-        Term t10 = createNonterminalTerm(r2, list(t6), input);
-        Term t11 = createEpsilon(1);
-        Term t12 = createNonterminalTerm(r5, list(t11), input);
-        Term t13 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t9)), createIntermediateAmbiguityBranch(list(t10, t12))));
-        Term t14 = createEpsilon(1);
-        Term t15 = createNonterminalTerm(r7, list(t14), input);
-        Term t16 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t3, t8)), createIntermediateAmbiguityBranch(list(t13, t15))));
-        Term t17 = createEpsilon(1);
-        Term t18 = createNonterminalTerm(r9, list(t17), input);
-        Term t19 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t3, t5, t7)), createIntermediateAmbiguityBranch(list(t16, t18))));
-        Term t20 = createNonterminalTerm(r1, list(t19), input);
-        return t20;
-    }
 }

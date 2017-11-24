@@ -85,7 +85,6 @@ public class Test8 {
     private static Input input2 = Input.fromString("aaaac");
     private static Nonterminal startSymbol = A;
     private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).build();
-    private static Terminal t0;
 
 
     @Test
@@ -117,7 +116,6 @@ public class Test8 {
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead1(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -126,7 +124,6 @@ public class Test8 {
         ParseResult result = Iguana.parse(input1, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1_Lookahead0(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -135,7 +132,6 @@ public class Test8 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead1(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 
     @Test
@@ -144,7 +140,6 @@ public class Test8 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2_Lookahead0(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 
 
@@ -211,11 +206,6 @@ public class Test8 {
         return node6;
 	}
 
-    public static Term getTree1() {
-        Term t1 = createNonterminalTerm(r3, list(createTerminalTerm(b, 1, 2, input1)), input1);
-        return createNonterminalTerm(r1, list(createTerminalTerm(a, 0, 1, input1), t1, createTerminalTerm(c, 2, 3, input1)), input1);
-    }
-
 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
         TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
         TerminalNode node1 = createTerminalNode(registry.getSlot("a"), 1, 2, input1);
@@ -233,15 +223,6 @@ public class Test8 {
         NonterminalNode node13 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= a C ."), node12, input1);
         NonterminalNode node14 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= C ."), node13, input1);
         return node14;
-    }
-
-    public static Term getTree2() {
-        Term t1 = createNonterminalTerm(r5, list(createTerminalTerm(c, 4, 5, input2)), input2);
-        Term t2 = createNonterminalTerm(r4, list(createTerminalTerm(a, 3, 4, input2), t1), input2);
-        Term t3 = createNonterminalTerm(r4, list(createTerminalTerm(a, 2, 3, input2), t2), input2);
-        Term t4 = createNonterminalTerm(r4, list(createTerminalTerm(a, 1, 2, input2), t3), input2);
-        Term t5 = createNonterminalTerm(r4, list(createTerminalTerm(a, 0, 1, input2), t4), input2);
-        return createNonterminalTerm(r2, list(t5), input2);
     }
 	
 }

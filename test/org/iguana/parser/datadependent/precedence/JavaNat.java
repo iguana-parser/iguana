@@ -28,7 +28,7 @@ public class JavaNat {
 
     @Test
     public void test() {
-         Grammar grammar = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/JavaNatChar"));
+         Grammar grammar = Grammar.load(this.getClass().getResourceAsStream("./JavaNatChar"));
          
          grammar = new EBNFToBNF().transform(grammar);
          

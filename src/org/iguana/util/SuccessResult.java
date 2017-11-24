@@ -8,7 +8,7 @@ public class SuccessResult implements RunResult {
 	
 	int inputSize = -1;
 	
-	ParseStatistics statistics = new ParseStatistics();;
+	ParseStatistics statistics = new ParseStatistics();
 	
 	URI inputURI;
 
@@ -33,5 +33,9 @@ public class SuccessResult implements RunResult {
 	@Override
 	public boolean isSuccess() {
 		return true;
+	}
+
+	public ParseStatistics getStatistics() {
+		return statistics;
 	}
 }

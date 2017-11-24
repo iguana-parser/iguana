@@ -49,7 +49,6 @@ public class Test3 {
         GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input0, graph, S);
         assertEquals(getParseResult0(graph), result);
-        assertEquals(getTree0(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -59,7 +58,6 @@ public class Test3 {
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTerm());
     }
 
     private static ParseResult getParseResult0(GrammarGraph graph) {
@@ -80,13 +78,6 @@ public class Test3 {
         NonterminalNode node1 = createNonterminalNode(registry.getSlot("A?"), registry.getSlot("A? ::= ."), node0, input0);
         NonterminalNode node2 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? ."), node1, input0);
         return node2;
-    }
-
-    public static Term getTree0() {
-        Term t0 = createEpsilon(0);
-        Term t1 = createOpt(t0);
-        Term t2 = createNonterminalTerm(r1, list(t1), input0);
-        return t2;
     }
 
     private static ParseResult getParseResult1(GrammarGraph graph) {
@@ -110,11 +101,4 @@ public class Test3 {
         return node3;
     }
 
-    public static Term getTree1() {
-        Term t0 = createTerminalTerm(a, 0, 1, input1);
-        Term t1 = createNonterminalTerm(r2, list(t0), input1);
-        Term t2 = createOpt(t1);
-        Term t3 = createNonterminalTerm(r1, list(t2), input1);
-        return t3;
-    }
 }

@@ -83,9 +83,6 @@ public class Test7 {
     private static Input input = Input.fromString("bcd");
     private static Nonterminal startSymbol = A;
 	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
-    private static Terminal t2;
-    private static Terminal t1;
-    private static Terminal t0;
 
     @Test
 	public void testNullable() {
@@ -111,7 +108,6 @@ public class Test7 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 
 	@Test
@@ -146,16 +142,5 @@ public class Test7 {
 		NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B C D ."), node7, input);
 		return node8;
 	}
-
-    public static Term getTree() {
-        Term t0 = createTerminalTerm(b, 0, 1, input);
-        Term t1 = createTerminalTerm(c, 1, 2, input);
-        Term t2 = createTerminalTerm(d, 2, 3, input);
-        Term t3 = createNonterminalTerm(r2, list(t0), input);
-        Term t4 = createNonterminalTerm(r3, list(t1), input);
-        Term t5 = createNonterminalTerm(r4, list(t2), input);
-        return createNonterminalTerm(r1, list(t3, t4, t5), input);
-    }
-
 
 }

@@ -111,7 +111,6 @@ public class Test9 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult1(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
 	}
 
 	private static ParseSuccess getParseResult0(GrammarGraph graph) {
@@ -151,9 +150,5 @@ public class Test9 {
 		return node6;
 	}
 
-    public static NonterminalTerm getTree() {
-        Term t1 = createNonterminalTerm(r3, list(createTerminalTerm(a, 1, 2, input)), input);
-        return createNonterminalTerm(r2, list(createTerminalTerm(a, 0, 1, input), t1, createTerminalTerm(b, 2, 3, input)), input);
-    }
 }
 	

@@ -4,7 +4,7 @@ import java.net.URI;
 
 public interface RunResult {
 	
-	public boolean isSuccess();
+	boolean isSuccess();
 	
 	default SuccessResult asSuccess() { return (SuccessResult) this; }
 	
@@ -12,5 +12,5 @@ public interface RunResult {
 	
 	default FailureResult asFailure() { return (FailureResult) this; }
 
-	public URI getInput(); 
+	URI getInput();
 }

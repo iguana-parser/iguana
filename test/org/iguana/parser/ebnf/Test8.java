@@ -1,17 +1,20 @@
 package org.iguana.parser.ebnf;
 
-import iguana.parsetrees.term.Term;
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertTrue;
+
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.*;
-import iguana.regex.Character;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 
 /**
  *
@@ -41,7 +44,6 @@ public class Test8 {
         GrammarGraph graph = GrammarGraph.from(grammar, input0);
         ParseResult result = Iguana.parse(input0, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -50,7 +52,6 @@ public class Test8 {
         GrammarGraph graph = GrammarGraph.from(grammar, input1);
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -59,7 +60,6 @@ public class Test8 {
         GrammarGraph graph = GrammarGraph.from(grammar, input2);
         ParseResult result = Iguana.parse(input2, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -68,7 +68,6 @@ public class Test8 {
         GrammarGraph graph = GrammarGraph.from(grammar, input3);
         ParseResult result = Iguana.parse(input3, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTerm();
     }
 
     @Test
@@ -77,7 +76,6 @@ public class Test8 {
         GrammarGraph graph = GrammarGraph.from(grammar, input4);
         ParseResult result = Iguana.parse(input4, graph, S);
         assertTrue(result.isParseSuccess());
-        Term term = result.asParseSuccess().getTerm();
     }
 
 

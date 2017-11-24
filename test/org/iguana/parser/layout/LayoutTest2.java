@@ -27,31 +27,30 @@
 
 package org.iguana.parser.layout;
 
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createIntermediateNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createNonterminalNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createTerminalNode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.parsetrees.sppf.*;
-import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.ParseSuccess;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParseSuccess;
 import org.iguana.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-
-import static iguana.utils.collections.CollectionsUtil.*;
-
+import iguana.parsetrees.slot.NonterminalNodeType;
+import iguana.parsetrees.sppf.IntermediateNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.TerminalNode;
+import iguana.regex.Character;
 import iguana.utils.input.Input;
 
 /**
@@ -102,7 +101,6 @@ public class LayoutTest2 {
         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph, input), result);
-        assertTrue(getTree(input).equals(result.asParseSuccess().getTerm()));
     }
 
     public ParseSuccess getParseResult(GrammarGraph graph, Input input) {
@@ -118,25 +116,6 @@ public class LayoutTest2 {
         return new ParseSuccess(getSPPFNode(graph, input), statistics, input);
     }
 
-    private Term getTree(Input input) {
-//        Term t0 = createTerminalTerm(a, 0, 1, input);
-//        Term t1 = createNonterminalTerm(r2, list(t0), input);
-//        Term t2 = createEpsilon(1);
-//        Term t3 = createNonterminalTerm(layout1, list(t2), input);
-//        Term t4 = createEpsilon(1);
-//        Term t5 = createNonterminalTerm(r3, list(t4), input);
-//        Term t6 = createTerminalTerm(space, 1, 2, input);
-//        Term t7 = createNonterminalTerm(layout2, list(t6), input);
-//        Term t8 = createEpsilon(2);
-//        Term t9 = createNonterminalTerm(r3, list(t8), input);
-//        Term t10 = createEpsilon(2);
-//        Term t11 = createNonterminalTerm(layout2, list(t10), input);
-//        Term t12 = createAmbiguityTerm(list(list(t1, t3, t5, t7), list(t1, t7, t9, t11)));
-//        Term t13 = createTerminalTerm(c, 2, 3, input);
-//        Term t14 = createNonterminalTerm(r4, list(t13), input);
-//        Term t15 = createNonterminalTerm(r1, list(t12, t14), input);
-        return null;
-    }
 
     private NonterminalNode getSPPFNode(GrammarGraph registry, Input input) {
         TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);

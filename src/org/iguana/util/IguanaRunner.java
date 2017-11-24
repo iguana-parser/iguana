@@ -27,7 +27,8 @@
 
 package org.iguana.util;
 
-import static java.util.stream.Stream.*;
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.empty;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,11 +40,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import iguana.parsetrees.term.TermBuilder;
-import iguana.utils.input.Input;
-import iguana.utils.logging.IguanaLogger;
-import iguana.utils.logging.JavaUtilIguanaLogger;
-import iguana.utils.logging.LogLevel;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -52,6 +48,12 @@ import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 
 import com.google.common.testing.GcFinalization;
+
+import iguana.parsetrees.term.TermBuilder;
+import iguana.utils.input.Input;
+import iguana.utils.logging.IguanaLogger;
+import iguana.utils.logging.JavaUtilIguanaLogger;
+import iguana.utils.logging.LogLevel;
 
 public class IguanaRunner {
 	
@@ -63,8 +65,6 @@ public class IguanaRunner {
 	private final Nonterminal start;
 	private final boolean runGCInBetween;
 	private final int timeout;
-    private final boolean buildTrees;
-    private final TermBuilder<?> termBuilder;
 
     private final IguanaLogger logger;
 
@@ -77,8 +77,6 @@ public class IguanaRunner {
 		this.runCount = builder.runCount;
 		this.runGCInBetween = builder.runGCInBetween;
 		this.timeout = builder.timeout;
-        this.buildTrees = builder.buildTrees;
-        this.termBuilder = builder.termBuilder;
         if (builder.log) {
             logger = new JavaUtilIguanaLogger("Iguana", builder.logLevel);
         } else {
@@ -107,9 +105,9 @@ public class IguanaRunner {
                     if (result.isParseError()) {
 						logger.log(result.asParseError());
 					} else {
-                        if (buildTrees) {
-                            result.asParseSuccess().getTerm();
-                        }
+//                        if (buildTrees) {
+//                            result.asParseSuccess().getTerm();
+//                        }
                     }
 					logger.log((i + 1) + " ");
 				} catch (Exception e) {
@@ -124,10 +122,10 @@ public class IguanaRunner {
 					if (result.isParseSuccess()) {
 						results.add(new SuccessResult(input.length(), input.getURI(), result.asParseSuccess().getStatistics()));
                         logger.log("  : Success");
-                        if (buildTrees) {
-                            result.asParseSuccess().getTerm();
+//                        if (buildTrees) {
+//                            result.asParseSuccess().getTerm();
 //                            TreeVisualization.generate(result.asParseSuccess().getTree(), "/Users/afroozeh/output", "tree", input);
-                        }
+//                        }
 					} else {
 						results.add(new FailureResult(input.getURI(), result.asParseError().toString()));
                         logger.log("  : Error");
@@ -190,8 +188,6 @@ public class IguanaRunner {
 		private boolean runGCInBetween = false;
 		private int timeout = 30;
 		private int limit = Integer.MAX_VALUE;
-        private boolean buildTrees;
-        private TermBuilder<?> termBuilder;
         private boolean log;
         private LogLevel logLevel= LogLevel.INFO;
 
@@ -257,15 +253,6 @@ public class IguanaRunner {
 			return this;
 		}
 
-        public Builder setBuildTrees(boolean buildTrees) {
-            this.buildTrees = buildTrees;
-            return this;
-        }
-
-        public Builder setTermBuilder(TermBuilder<?> termBuilder) {
-            this.termBuilder = termBuilder;
-            return this;
-        }
 
         public Builder log() {
             this.log = true;
@@ -289,7 +276,7 @@ public class IguanaRunner {
 			while(it.hasNext()) {
 				File f = (File) it.next();
 				if (!ignoreSet.contains(f.getAbsolutePath()))
-					inputs.add(f);							
+					inputs.add(f);
 			}
 			return inputs;
 		}	

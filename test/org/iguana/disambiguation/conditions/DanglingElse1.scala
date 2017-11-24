@@ -32,7 +32,7 @@ class DanglingElse1 extends FunSuite {
     val input: Input = Input.fromString("aasbs")
     val result: ParseResult = Iguana.parse(input, grammar, Nonterminal.withName("S"))
     assertTrue(result.isParseSuccess)
-    println(TermToScalaCode.get(result.asParseSuccess.getTerm))
+//    println(TermToScalaCode.get(result.asParseSuccess.getTerm))
   }
 
 }

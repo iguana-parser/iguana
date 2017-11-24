@@ -100,7 +100,6 @@ public class Test6 {
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -131,14 +130,6 @@ public class Test6 {
         IntermediateNode node4 = createIntermediateNode(registry.getSlot("A ::= B C ."), node1, node3);
         NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= B C ."), node4, input);
         return node5;
-    }
-
-    public static Term getTree() {
-        Term t0 = createTerminalTerm(b, 0, 1, input);
-        Term t2 = createNonterminalTerm(r2, list(t0), input);
-        Term t1 = createTerminalTerm(c, 1, 2, input);
-        Term t3 = createNonterminalTerm(r3, list(t1), input);
-        return createNonterminalTerm(r1, list(t2, t3), input);
     }
 
 }

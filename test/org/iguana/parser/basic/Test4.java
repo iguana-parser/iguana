@@ -73,9 +73,6 @@ public class Test4 {
     private static Input input = Input.fromString("abc");
     private static Nonterminal startSymbol = Nonterminal.withName("A");
     private static Grammar grammar = Grammar.builder().addRule(r1).build();
-    private static iguana.parsetrees.term.TerminalTerm t0;
-    private static iguana.parsetrees.term.TerminalTerm t1;
-    private static iguana.parsetrees.term.TerminalTerm t2;
 
     @Test
 	public void testNullable() {
@@ -95,7 +92,6 @@ public class Test4 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -119,13 +115,6 @@ public class Test4 {
         IntermediateNode node4 = createIntermediateNode(registry.getSlot("A ::= a b c ."), node2, node3);
         NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a b c ."), node4, input);
         return node5;
-    }
-
-    public static Term getTree() {
-        Term t0 = createTerminalTerm(a, 0, 1, input);
-        Term t1 = createTerminalTerm(b, 1, 2, input);
-        Term t2 = createTerminalTerm(c, 2, 3, input);
-        return createNonterminalTerm(r1, list(t0, t1, t2), input);
     }
 
 }

@@ -43,8 +43,8 @@ lazy val regex = if (file("../regex").exists) ProjectRef(file("../regex"), "rege
                  else ProjectRef(uri("https://github.com/iguana-parser/regex.git"), "regex")
 
 // Uncomment the following line (and comment out the next one) when generating Eclipse projects using SBT
-// val main = Project("iguana", file(".")).dependsOn(utils, parseTrees, regex)
+val main = Project("iguana", file(".")).dependsOn(utils, parseTrees, regex)
 
-val main = Project("iguana", file(".")).aggregate(utils, parseTrees, regex).dependsOn(utils, parseTrees, regex)
+//val main = Project("iguana", file(".")).aggregate(utils, parseTrees, regex).dependsOn(utils, parseTrees, regex)
 
 

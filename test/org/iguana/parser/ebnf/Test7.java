@@ -3,7 +3,6 @@ package org.iguana.parser.ebnf;
 import iguana.parsetrees.sppf.IntermediateNode;
 import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.Term;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -19,8 +18,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-import static iguana.utils.collections.CollectionsUtil.*;
 
 /**
  *
@@ -59,7 +56,6 @@ public class Test7 {
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -69,7 +65,6 @@ public class Test7 {
         ParseResult result = Iguana.parse(input2, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertEquals(getTree2(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -79,7 +74,6 @@ public class Test7 {
         ParseResult result = Iguana.parse(input3, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
-        assertEquals(getTree3(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -89,7 +83,6 @@ public class Test7 {
         ParseResult result = Iguana.parse(input4, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult4(graph), result);
-        assertEquals(getTree4(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -99,7 +92,6 @@ public class Test7 {
         ParseResult result = Iguana.parse(input5, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult5(graph), result);
-        assertEquals(getTree5(), result.asParseSuccess().getTerm());
     }
 
     private static ParseResult getParseResult1(GrammarGraph graph) {
@@ -129,17 +121,6 @@ public class Test7 {
         return node9;
     }
 
-    public static Term getTree1() {
-        Term t0 = createEpsilon(0);
-        Term t1 = createOpt(t0);
-        Term t2 = createTerminalTerm(b, 0, 1, input1);
-        Term t3 = createNonterminalTerm(r3, list(t2), input1);
-        Term t4 = createPlus(list(t3));
-        Term t6 = createStar(list());
-        Term t7 = createNonterminalTerm(r1, list(t1, t4, t6), input1);
-        return t7;
-    }
-
     private static ParseResult getParseResult2(GrammarGraph graph) {
         ParseStatistics statistics = ParseStatistics.builder()
                 .setDescriptorsCount(12)
@@ -166,18 +147,6 @@ public class Test7 {
         IntermediateNode node9 = createIntermediateNode(registry.getSlot("S ::= A? B+ C* ."), node6, node8);
         NonterminalNode node10 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? B+ C* ."), node9, input2);
         return node10;
-    }
-
-    public static Term getTree2() {
-        Term t0 = createTerminalTerm(a, 0, 1, input2);
-        Term t1 = createNonterminalTerm(r2, list(t0), input2);
-        Term t2 = createOpt(t1);
-        Term t3 = createTerminalTerm(b, 1, 2, input2);
-        Term t4 = createNonterminalTerm(r3, list(t3), input2);
-        Term t5 = createPlus(list(t4));
-        Term t7 = createStar(list());
-        Term t8 = createNonterminalTerm(r1, list(t2, t5, t7), input2);
-        return t8;
     }
 
     private static ParseResult getParseResult3(GrammarGraph graph) {
@@ -209,19 +178,6 @@ public class Test7 {
         return node11;
     }
 
-    public static Term getTree3() {
-        Term t0 = createEpsilon(0);
-        Term t1 = createOpt(t0);
-        Term t2 = createTerminalTerm(b, 0, 1, input3);
-        Term t3 = createNonterminalTerm(r3, list(t2), input3);
-        Term t4 = createPlus(list(t3));
-        Term t5 = createTerminalTerm(c, 1, 2, input3);
-        Term t6 = createNonterminalTerm(r4, list(t5), input3);
-        Term t7 = createStar(list(t6));
-        Term t8 = createNonterminalTerm(r1, list(t1, t4, t7), input3);
-        return t8;
-    }
-
     private static ParseResult getParseResult4(GrammarGraph graph) {
         ParseStatistics statistics = ParseStatistics.builder()
                 .setDescriptorsCount(17)
@@ -250,20 +206,6 @@ public class Test7 {
         IntermediateNode node11 = createIntermediateNode(registry.getSlot("S ::= A? B+ C* ."), node6, node10);
         NonterminalNode node12 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? B+ C* ."), node11, input4);
         return node12;
-    }
-
-    public static Term getTree4() {
-        Term t0 = createTerminalTerm(a, 0, 1, input4);
-        Term t1 = createNonterminalTerm(r2, list(t0), input4);
-        Term t2 = createOpt(t1);
-        Term t3 = createTerminalTerm(b, 1, 2, input4);
-        Term t4 = createNonterminalTerm(r3, list(t3), input4);
-        Term t5 = createPlus(list(t4));
-        Term t6 = createTerminalTerm(c, 2, 3, input4);
-        Term t7 = createNonterminalTerm(r4, list(t6), input4);
-        Term t8 = createStar(list(t7));
-        Term t9 = createNonterminalTerm(r1, list(t2, t5, t8), input4);
-        return t9;
     }
 
     private static ParseResult getParseResult5(GrammarGraph graph) {
@@ -322,34 +264,6 @@ public class Test7 {
         IntermediateNode node39 = createIntermediateNode(registry.getSlot("S ::= A? B+ C* ."), node18, node38);
         NonterminalNode node40 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A? B+ C* ."), node39, input5);
         return node40;
-    }
-
-    public static Term getTree5() {
-        Term t0 = createTerminalTerm(a, 0, 1, input5);
-        Term t1 = createNonterminalTerm(r2, list(t0), input5);
-        Term t2 = createOpt(t1);
-        Term t3 = createTerminalTerm(b, 1, 2, input5);
-        Term t4 = createNonterminalTerm(r3, list(t3), input5);
-        Term t5 = createTerminalTerm(b, 2, 3, input5);
-        Term t6 = createNonterminalTerm(r3, list(t5), input5);
-        Term t7 = createTerminalTerm(b, 3, 4, input5);
-        Term t8 = createNonterminalTerm(r3, list(t7), input5);
-        Term t9 = createTerminalTerm(b, 4, 5, input5);
-        Term t10 = createNonterminalTerm(r3, list(t9), input5);
-        Term t11 = createPlus(list(t4, t6, t8, t10));
-        Term t12 = createTerminalTerm(c, 5, 6, input5);
-        Term t13 = createNonterminalTerm(r4, list(t12), input5);
-        Term t14 = createTerminalTerm(c, 6, 7, input5);
-        Term t15 = createNonterminalTerm(r4, list(t14), input5);
-        Term t16 = createTerminalTerm(c, 7, 8, input5);
-        Term t17 = createNonterminalTerm(r4, list(t16), input5);
-        Term t18 = createTerminalTerm(c, 8, 9, input5);
-        Term t19 = createNonterminalTerm(r4, list(t18), input5);
-        Term t20 = createTerminalTerm(c, 9, 10, input5);
-        Term t21 = createNonterminalTerm(r4, list(t20), input5);
-        Term t22 = createStar(list(t13, t15, t17, t19, t21));
-        Term t23 = createNonterminalTerm(r1, list(t2, t11, t22), input5);
-        return t23;
     }
 
 }

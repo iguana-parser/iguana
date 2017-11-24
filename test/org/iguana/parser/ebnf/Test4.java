@@ -53,7 +53,6 @@ public class Test4 {
         ParseResult result = Iguana.parse(input1, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertEquals(getTree1(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -63,7 +62,6 @@ public class Test4 {
         ParseResult result = Iguana.parse(input2, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertEquals(getTree2(), result.asParseSuccess().getTerm());
     }
 
     @Test
@@ -73,7 +71,6 @@ public class Test4 {
         ParseResult result = Iguana.parse(input3, graph, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult3(graph), result);
-        assertEquals(getTree3(), result.asParseSuccess().getTerm());
     }
 
     private static ParseResult getParseResult1(GrammarGraph graph) {
@@ -95,14 +92,6 @@ public class Test4 {
         NonterminalNode node2 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A ."), node1, input1);
         NonterminalNode node3 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node2, input1);
         return node3;
-    }
-
-    public static Term getTree1() {
-        Term t0 = createTerminalTerm(a, 0, 1, input1);
-        Term t1 = createNonterminalTerm(r2, list(t0), input1);
-        Term t2 = createPlus(list(t1));
-        Term t3 = createNonterminalTerm(r1, list(t2), input1);
-        return t3;
     }
 
     private static ParseResult getParseResult2(GrammarGraph graph) {
@@ -128,16 +117,6 @@ public class Test4 {
         NonterminalNode node6 = createNonterminalNode(registry.getSlot("A+"), registry.getSlot("A+ ::= A+ A ."), node5, input2);
         NonterminalNode node7 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A+ ."), node6, input2);
         return node7;
-    }
-
-    public static Term getTree2() {
-        Term t0 = createTerminalTerm(a, 0, 1, input2);
-        Term t1 = createNonterminalTerm(r2, list(t0), input2);
-        Term t2 = createTerminalTerm(a, 1, 2, input2);
-        Term t3 = createNonterminalTerm(r2, list(t2), input2);
-        Term t4 = createPlus(list(t1, t3));
-        Term t5 = createNonterminalTerm(r1, list(t4), input2);
-        return t5;
     }
 
     private static ParseResult getParseResult3(GrammarGraph graph) {
@@ -169,15 +148,4 @@ public class Test4 {
         return node11;
     }
 
-    public static Term getTree3() {
-        Term t0 = createTerminalTerm(a, 0, 1, input3);
-        Term t1 = createNonterminalTerm(r2, list(t0), input3);
-        Term t2 = createTerminalTerm(a, 1, 2, input3);
-        Term t3 = createNonterminalTerm(r2, list(t2), input3);
-        Term t4 = createTerminalTerm(a, 2, 3, input3);
-        Term t5 = createNonterminalTerm(r2, list(t4), input3);
-        Term t6 = createPlus(list(t1, t3, t5));
-        Term t7 = createNonterminalTerm(r1, list(t6), input3);
-        return t7;
-    }
 }

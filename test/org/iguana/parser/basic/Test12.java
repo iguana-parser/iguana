@@ -27,34 +27,30 @@
 
 package org.iguana.parser.basic;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.SPPFVisualization;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.Term;
-import iguana.parsetrees.term.TermToJavaCode;
-import iguana.parsetrees.term.TermVisualization;
-import iguana.parsetrees.term.ToJavaCode;
-import iguana.utils.input.Input;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
+import static iguana.parsetrees.term.TermFactory.*;
+import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-import static iguana.utils.collections.CollectionsUtil.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import iguana.parsetrees.sppf.IntermediateNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.TerminalNode;
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 
 
 /**
@@ -95,7 +91,6 @@ public class Test12 {
 		ParseResult result = Iguana.parse(input1, graph, startSymbol);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
-        assertTrue(getTree1().equals(result.asParseSuccess().getTerm()));
 	}
 	
 	private static ParseSuccess getParseResult1(GrammarGraph graph) {
@@ -117,7 +112,6 @@ public class Test12 {
         ParseResult result = Iguana.parse(input2, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
-        assertTrue(getTree2().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult2(GrammarGraph graph) {
@@ -165,25 +159,4 @@ public class Test12 {
         node2.addPackedNode(registry.getSlot("A ::= A A ."), node1);
         return node2;
 	}
-
-    private static Term getTree1() {
-        Term t0 = createTerminalTerm(a, 0, 1, input1);
-        Term t1 = createCycle(A_0_1);
-        Term t2 = createEpsilon(1);
-        Term t3 = createCycle(A_1_1);
-        Term t4 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r3, list(t2), input1), createNonterminalAmbiguityBranch(r1, list(t3, t3), input1)));
-        Term t5 = createEpsilon(0);
-        Term t6 = createCycle(A_0_0);
-        Term t7 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r3, list(t5), input1), createNonterminalAmbiguityBranch(r1, list(t6, t6), input1)));
-        Term t8 = createAmbiguityTerm(list(createIntermediateAmbiguityBranch(list(t1, t4)), createIntermediateAmbiguityBranch(list(t7, t1))));
-        Term t9 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r2, list(t0), input1), createNonterminalAmbiguityBranch(r1, list(t8), input1)));
-        return t9;
-    }
-
-    private static Term getTree2() {
-        Term t0 = createEpsilon(0);
-        Term t1 = createCycle(A_0_0);
-        Term t2 = createAmbiguityTerm(list(createNonterminalAmbiguityBranch(r3, list(t0), input1), createNonterminalAmbiguityBranch(r1, list(t1, t1), input1)));
-        return t2;
-    }
 }

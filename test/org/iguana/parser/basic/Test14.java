@@ -27,34 +27,32 @@
 
 package org.iguana.parser.basic;
 
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createIntermediateNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createNonterminalNode;
+import static iguana.parsetrees.sppf.SPPFNodeFactory.createTerminalNode;
+import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.Term;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
+import iguana.parsetrees.sppf.IntermediateNode;
+import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.parsetrees.sppf.TerminalNode;
+import iguana.regex.Character;
 import iguana.utils.input.Input;
-
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-import static iguana.utils.collections.CollectionsUtil.*;
-
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -102,7 +100,6 @@ public class Test14 {
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-        assertTrue(getTree().equals(result.asParseSuccess().getTerm()));
     }
 	
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
@@ -129,12 +126,4 @@ public class Test14 {
         return node6;
 	}
 
-    private static Term getTree() {
-        Term t0 = createTerminalTerm(b, 0, 1, input);
-        Term t1 = createNonterminalTerm(r2, list(t0), input);
-        Term t2 = createTerminalTerm(a, 1, 2, input);
-        Term t3 = createTerminalTerm(c, 2, 3, input);
-        Term t4 = createNonterminalTerm(r1, list(t1, t2, t3), input);
-        return t4;
-    }
 }
