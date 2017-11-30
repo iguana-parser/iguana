@@ -2,8 +2,7 @@
 bin/
 target/
 .idea/
-project/target/
-project/project/
+project/
 .cache-tests
 .cache-main
 .classpath
