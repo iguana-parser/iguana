@@ -43,7 +43,7 @@ import org.iguana.parser.ParserRuntime;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot extends Slot {
+public interface GrammarSlot {
 
 	/**
 	 * Corresponds to a grammar position A ::= B . \alpha 

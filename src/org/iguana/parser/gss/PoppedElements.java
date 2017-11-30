@@ -27,20 +27,21 @@
 
 package org.iguana.parser.gss;
 
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.key.Key;
+import iguana.utils.input.Input;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.parser.ParserRuntime;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalNodeWithValue;
+import org.iguana.sppf.PackedNode;
+import org.iguana.util.Holder;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import iguana.parsetrees.sppf.*;
-import iguana.utils.collections.Keys;
-import iguana.utils.input.Input;
-import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.util.Holder;
-import iguana.utils.collections.key.Key;
-
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
 
 public class PoppedElements {
 
@@ -60,14 +61,14 @@ public class PoppedElements {
 
 		// No node added yet
 		if (firstNode == null) {
-			firstNode = createNonterminalNode(slot.getNonterminal(), slot, child, input);
+			firstNode = new NonterminalNode(slot.getNonterminal(), new PackedNode(slot, child), input);
             firstInput = input;
             runtime.packedNodeAdded(slot, child.getRightExtent());
 			runtime.nonterminalNodeAdded(firstNode);
 			return firstNode;
 		// Only one node is added and there is an ambiguity
 		} else if (poppedElements == null && firstNode.getRightExtent() == child.getRightExtent() && firstInput.equals(input)) {
-            boolean ambiguous = firstNode.addPackedNode(slot, child);
+            boolean ambiguous = firstNode.addPackedNode(new PackedNode(slot, child));
             runtime.packedNodeAdded(slot, child.getRightExtent());
             if (ambiguous) runtime.ambiguousNodeAdded(firstNode);
 			return null;
@@ -82,13 +83,13 @@ public class PoppedElements {
 			Holder<NonterminalNode> holder = new Holder<>();
 			poppedElements.compute(Keys.from(child.getRightExtent(), input), (k, v) -> {
                 if (v == null) {
-                    NonterminalNode node = createNonterminalNode(slot.getNonterminal(), slot, child, input);
+                    NonterminalNode node = new NonterminalNode(slot.getNonterminal(), new PackedNode(slot, child), input);
                     runtime.nonterminalNodeAdded(node);
                     runtime.packedNodeAdded(slot, child.getRightExtent());
                     holder.set(node);
                     return node;
                 } else {
-                    boolean ambiguous = v.addPackedNode(slot, child);
+                    boolean ambiguous = v.addPackedNode(new PackedNode(slot, child));
                     runtime.packedNodeAdded(slot, child.getRightExtent());
                     if (ambiguous) runtime.ambiguousNodeAdded(v);
                     return v;
@@ -102,7 +103,7 @@ public class PoppedElements {
 	public NonterminalNode add(Input input, EndGrammarSlot slot, NonPackedNode child, Object value) {
 		// No node added yet
 		if (firstNode == null) {
-            firstNode = createNonterminalNode(slot.getNonterminal(), slot, child, value, input);
+            firstNode = new NonterminalNodeWithValue(slot.getNonterminal(), new PackedNode(slot, child), value, input);
             firstInput = input;
             runtime.nonterminalNodeAdded(firstNode);
             runtime.packedNodeAdded(slot, child.getRightExtent());
@@ -110,8 +111,8 @@ public class PoppedElements {
         } else {
             Key key = Keys.from(child.getRightExtent(), value, input);
             // Only one node is added and there is an ambiguity
-            if (poppedElements == null && Keys.from(firstNode.getRightExtent(), firstNode.getValue(), firstInput).equals(key)) {
-            boolean ambiguous = firstNode.addPackedNode(slot, child);
+            if (poppedElements == null && Keys.from(firstNode.getRightExtent(), ((NonterminalNodeWithValue) firstNode).getValue(), firstInput).equals(key)) {
+            boolean ambiguous = firstNode.addPackedNode(new PackedNode(slot, child));
             runtime.packedNodeAdded(slot, child.getRightExtent());
             if (ambiguous) runtime.ambiguousNodeAdded(firstNode);
             return null;
@@ -119,20 +120,20 @@ public class PoppedElements {
             // Initialize the map and put the firstNode element there
             if (poppedElements == null) {
                 poppedElements = new HashMap<>();
-                poppedElements.put(Keys.from(firstNode.getRightExtent(), firstNode.getValue(), firstInput), firstNode);
+                poppedElements.put(Keys.from(firstNode.getRightExtent(), ((NonterminalNodeWithValue) firstNode).getValue(), firstInput), firstNode);
             }
 
             Holder<NonterminalNode> holder = new Holder<>();
             poppedElements.compute(key, (k, v) -> {
                 if (v == null) {
-                    NonterminalNode node = createNonterminalNode(slot.getNonterminal(), slot, child, value, input);
+                    NonterminalNode node = new NonterminalNodeWithValue(slot.getNonterminal(), new PackedNode(slot, child), value, input);
                     runtime.nonterminalNodeAdded(node);
                     runtime.packedNodeAdded(slot, child.getLeftExtent());
                     holder.set(node);
                     return node;
                 }
                 else {
-                    boolean ambiguous = v.addPackedNode(slot, child);
+                    boolean ambiguous = v.addPackedNode(new PackedNode(slot, child));
                     runtime.packedNodeAdded(slot, child.getRightExtent());
                     if (ambiguous) runtime.ambiguousNodeAdded(v);
                     return v;

@@ -1,9 +1,9 @@
 package org.iguana.parser;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.NonterminalOrIntermediateNode;
-import iguana.parsetrees.sppf.TerminalNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalOrIntermediateNode;
+import org.iguana.sppf.TerminalNode;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;

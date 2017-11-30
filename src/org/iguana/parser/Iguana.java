@@ -27,8 +27,6 @@
 
 package org.iguana.parser;
 
-import iguana.parsetrees.sppf.DummyNode;
-import iguana.parsetrees.sppf.NonterminalNode;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
@@ -41,6 +39,8 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.sppf.DummyNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 

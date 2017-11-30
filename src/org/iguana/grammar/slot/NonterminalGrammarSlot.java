@@ -27,15 +27,7 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import iguana.parsetrees.slot.NonterminalSlot;
-import iguana.parsetrees.sppf.DummyNode;
-import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.sppf.NonterminalNode;
+import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
@@ -48,8 +40,15 @@ import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup.GSSNodeCreator;
+import org.iguana.sppf.DummyNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration.EnvironmentImpl;
-import iguana.utils.collections.key.Key;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
 /**
@@ -57,7 +56,7 @@ import iguana.utils.collections.key.Key;
  * @author Ali Afroozeh
  *
  */
-public class NonterminalGrammarSlot extends AbstractGrammarSlot implements NonterminalSlot {
+public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Nonterminal nonterminal;
 	
@@ -69,9 +68,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 	
 	private FollowTest followTest;
 
-	private final int nodeType;
+	private final NonterminalNodeType nodeType;
 
-	public NonterminalGrammarSlot(Nonterminal nonterminal, GSSNodeLookup nodeLookup, int nodeType, ParserRuntime runtime) {
+	public NonterminalGrammarSlot(Nonterminal nonterminal, GSSNodeLookup nodeLookup, NonterminalNodeType nodeType, ParserRuntime runtime) {
 		super(runtime);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
@@ -111,7 +110,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 		return nonterminal;
 	}
 
-	public int getNodeType() {
+	public NonterminalNodeType getNodeType() {
 		return nodeType;
 	}
 
@@ -272,8 +271,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot implements Nonte
 		return nodeLookup.get(this, i, data);
 	}
 
-    @Override
-    public int nodeType() {
+    public NonterminalNodeType nodeType() {
         return nodeType;
     }
 }

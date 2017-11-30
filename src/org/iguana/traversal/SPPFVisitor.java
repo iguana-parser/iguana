@@ -25,27 +25,30 @@
  *
  */
 
-package org.iguana.datadependent.descriptor;
+package org.iguana.traversal;
 
-import org.iguana.sppf.NonPackedNode;
-import iguana.utils.input.Input;
-import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 
-public class Descriptor extends org.iguana.parser.descriptor.Descriptor {
+/**
+ * Provides a standard interface based on the command pattern for
+ * executing actions in visitors of an SPPF.
+ * 
+ * @author Ali Afroozeh
+ *
+ * @see org.jgll.visitor.Visitor
+ *
+ */
+public interface SPPFVisitor {
+
+	public void visit(TerminalNode node);
+
+	public void visit(NonterminalNode node);
 	
-	private final Environment env;
+	public void visit(IntermediateNode node);
 	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, NonPackedNode sppfNode, Input input, Environment env) {
-		super(slot, gssNode, sppfNode, input);
-		
-		assert env != null;
-		this.env = env;
-	}
-
-	@Override
-	public void execute() {
-		getGrammarSlot().execute(input, getGSSNode(), getSPPFNode(), env);
-	}
+	public void visit(PackedNode node);
+	
 }

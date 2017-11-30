@@ -27,7 +27,7 @@
 
 package org.iguana.parser.gss;
 
-import iguana.parsetrees.sppf.NonPackedNode;
+import org.iguana.sppf.NonPackedNode;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;

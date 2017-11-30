@@ -27,14 +27,11 @@
 
 package org.iguana.parser.layout;
 
-import static iguana.parsetrees.sppf.SPPFNodeFactory.createIntermediateNode;
-import static iguana.parsetrees.sppf.SPPFNodeFactory.createNonterminalNode;
-import static iguana.parsetrees.sppf.SPPFNodeFactory.createTerminalNode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
@@ -42,16 +39,16 @@ import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
-import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.regex.Character;
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -75,7 +72,7 @@ public class LayoutTest2 {
     Nonterminal B = Nonterminal.withName("B");
     Nonterminal C = Nonterminal.withName("C");
 
-    Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout()).build();
+    Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
 
     Rule r1 = Rule.withHead(S).addSymbols(A, B, C).setLayout(L).build();
     Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
@@ -113,31 +110,31 @@ public class LayoutTest2 {
                 .setIntermediateNodesCount(6)
                 .setPackedNodesCount(15)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(getSPPFNode(graph, input), statistics, input);
+        return new ParseSuccess(getSPPFNode(new SPPFNodeFactory(graph), input), statistics, input);
     }
 
 
-    private NonterminalNode getSPPFNode(GrammarGraph registry, Input input) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input);
-        TerminalNode node2 = createTerminalNode(registry.getSlot("epsilon"), 1, 1, input);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("L"), registry.getSlot("L ::= ."), node2, input);
-        IntermediateNode node4 = createIntermediateNode(registry.getSlot("S ::= A L . B L C"), node1, node3);
-        NonterminalNode node5 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= ."), node2, input);
-        IntermediateNode node6 = createIntermediateNode(registry.getSlot("S ::= A L B . L C"), node4, node5);
-        TerminalNode node7 = createTerminalNode(registry.getSlot("\\u0020"), 1, 2, input);
-        NonterminalNode node8 = createNonterminalNode(registry.getSlot("L"), registry.getSlot("L ::= \\u0020 ."), node7, input);
-        IntermediateNode node9 = createIntermediateNode(registry.getSlot("S ::= A L . B L C"), node1, node8);
-        TerminalNode node10 = createTerminalNode(registry.getSlot("epsilon"), 2, 2, input);
-        NonterminalNode node11 = createNonterminalNode(registry.getSlot("B"), registry.getSlot("B ::= ."), node10, input);
-        IntermediateNode node12 = createIntermediateNode(registry.getSlot("S ::= A L B . L C"), node9, node11);
-        NonterminalNode node13 = createNonterminalNode(registry.getSlot("L"), registry.getSlot("L ::= ."), node10, input);
-        IntermediateNode node14 = createIntermediateNode(registry.getSlot("S ::= A L B L . C"), node6, node8);
-        node14.addPackedNode(registry.getSlot("S ::= A L B L . C"), node12, node13);
-        TerminalNode node15 = createTerminalNode(registry.getSlot("c"), 2, 3, input);
-        NonterminalNode node16 = createNonterminalNode(registry.getSlot("C"), registry.getSlot("C ::= c ."), node15, input);
-        IntermediateNode node17 = createIntermediateNode(registry.getSlot("S ::= A L B L C ."), node14, node16);
-        NonterminalNode node18 = createNonterminalNode(registry.getSlot("S"), registry.getSlot("S ::= A L B L C ."), node17, input);
+    private NonterminalNode getSPPFNode(SPPFNodeFactory factory, Input input) {
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input);
+        TerminalNode node2 = factory.createTerminalNode("epsilon", 1, 1, input);
+        NonterminalNode node3 = factory.createNonterminalNode("L", "L ::= .", node2, input);
+        IntermediateNode node4 = factory.createIntermediateNode("S ::= A L . B L C", node1, node3);
+        NonterminalNode node5 = factory.createNonterminalNode("B", "B ::= .", node2, input);
+        IntermediateNode node6 = factory.createIntermediateNode("S ::= A L B . L C", node4, node5);
+        TerminalNode node7 = factory.createTerminalNode("\\u0020", 1, 2, input);
+        NonterminalNode node8 = factory.createNonterminalNode("L", "L ::= \\u0020 .", node7, input);
+        IntermediateNode node9 = factory.createIntermediateNode("S ::= A L . B L C", node1, node8);
+        TerminalNode node10 = factory.createTerminalNode("epsilon", 2, 2, input);
+        NonterminalNode node11 = factory.createNonterminalNode("B", "B ::= .", node10, input);
+        IntermediateNode node12 = factory.createIntermediateNode("S ::= A L B . L C", node9, node11);
+        NonterminalNode node13 = factory.createNonterminalNode("L", "L ::= .", node10, input);
+        IntermediateNode node14 = factory.createIntermediateNode("S ::= A L B L . C", node6, node8);
+        node14.addPackedNode(factory.createPackedNode("S ::= A L B L . C", node12, node13));
+        TerminalNode node15 = factory.createTerminalNode("c", 2, 3, input);
+        NonterminalNode node16 = factory.createNonterminalNode("C", "C ::= c .", node15, input);
+        IntermediateNode node17 = factory.createIntermediateNode("S ::= A L B L C .", node14, node16);
+        NonterminalNode node18 = factory.createNonterminalNode("S", "S ::= A L B L C .", node17, input);
         return node18;
     }
 }

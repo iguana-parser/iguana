@@ -27,14 +27,14 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.sppf.TerminalNode;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.TerminalNode;
 
 
 public class TerminalTransition extends AbstractTransition {

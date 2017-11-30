@@ -27,16 +27,17 @@
 
 package org.iguana.grammar.symbol;
 
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.traversal.ISymbolVisitor;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.condition.Condition;
-import org.iguana.traversal.ISymbolVisitor;
-
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -62,7 +63,7 @@ public class Nonterminal extends AbstractSymbol {
 	 * The type of this nonterminal. This field is used to track EBNF to BNF conversion
 	 * information for each nonterminal. See NonterminalNodeType.
 	 */
-	private final int nodeType;
+	private final NonterminalNodeType nodeType;
 	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
@@ -117,7 +118,7 @@ public class Nonterminal extends AbstractSymbol {
 		return excepts;
 	}
 
-	public int getNodeType() {
+	public NonterminalNodeType getNodeType() {
 		return nodeType;
 	}
 
@@ -188,7 +189,7 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private Set<String> excepts;
 
-		public int nodeType;
+		public NonterminalNodeType nodeType;
 		
 		private Map<String, Object> attributes = new HashMap<>();
 
@@ -324,7 +325,7 @@ public class Nonterminal extends AbstractSymbol {
 			return this;
 		}
 
-		public Builder setType(int nodeType) {
+		public Builder setType(NonterminalNodeType nodeType) {
 			this.nodeType = nodeType;
 			return this;
 		}

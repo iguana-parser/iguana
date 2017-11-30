@@ -1,16 +1,10 @@
 package org.iguana.parser.iggy.paper;
 
-import iguana.parsetrees.iggy.TermTraversal;
-import iguana.parsetrees.sppf.SPPFNode;
-import iguana.parsetrees.term.*;
-
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.iggy.GrammarBuilder;
 import org.iguana.grammar.iggy.InlineRegex;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.DesugarAlignAndOffside;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
@@ -18,13 +12,13 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * @author Anastasia Izmaylova
@@ -57,9 +51,6 @@ public class Tests {
 
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-
-        Term term = result.asParseSuccess().getTreeWithoutSharing();
-        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_simple");
     }
 
     public Grammar simpleGrammar() {
@@ -89,9 +80,6 @@ public class Tests {
 
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-
-        Term term = result.asParseSuccess().getTreeWithoutSharing();
-        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_xml");
 
         input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/BadXML.txt"));
         result = Iguana.parse(input, graph, start);
@@ -125,9 +113,6 @@ public class Tests {
 
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-
-        Term term = result.asParseSuccess().getTreeWithoutSharing();
-        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_ocaml");
     }
 
     public Grammar ocamlGrammar() {
@@ -158,9 +143,6 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 
-        Term term = result.asParseSuccess().getTreeWithoutSharing();
-        TermVisualization.generate(term, "test/org/iguana/parser/iggy/paper/graphs", "terms_haskell");
-
         input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/BadHaskell.txt"));
         result = Iguana.parse(input, graph, start);
         Assert.assertTrue(result.isParseError());
@@ -180,18 +162,19 @@ public class Tests {
         return getGrammar(result.asParseSuccess().getSPPFNode(), input);
     }
 
-    private static Grammar getGrammar(SPPFNode sppf, Input input) {
-        Term term = SPPFToTerms.convertNoSharing(sppf, new DefaultTermBuilder(input));
-        GrammarBuilder builder = new GrammarBuilder();
-        List<Rule> rules = (List<Rule>)TermTraversal.build(term, builder);
-        Nonterminal layout = null;
-        for (Rule rule : rules) {
-            if (rule.getAttributes().containsKey("@Layout")) {
-                layout = rule.getHead();
-                break;
-            }
-        }
-        return Grammar.builder().addRules(rules).setLayout(layout).build();
+    private static Grammar getGrammar(NonterminalNode sppf, Input input) {
+//        Term term = SPPFToTerms.convertNoSharing(sppf, new DefaultTermBuilder(input));
+//        GrammarBuilder builder = new GrammarBuilder();
+//        List<Rule> rules = (List<Rule>)TermTraversal.build(term, builder);
+//        Nonterminal layout = null;
+//        for (Rule rule : rules) {
+//            if (rule.getAttributes().containsKey("@Layout")) {
+//                layout = rule.getHead();
+//                break;
+//            }
+//        }
+//        return Grammar.builder().addRules(rules).setLayout(layout).build();
+        return null;
     }
 
     private static Grammar transform(Grammar grammar) {

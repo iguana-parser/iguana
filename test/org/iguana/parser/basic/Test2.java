@@ -27,13 +27,8 @@
 
 package org.iguana.parser.basic;
 
-import static iguana.parsetrees.sppf.SPPFNodeFactory.createNonterminalNode;
-import static iguana.parsetrees.sppf.SPPFNodeFactory.createTerminalNode;
-import static iguana.utils.collections.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -44,13 +39,14 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.regex.Character;
-import iguana.utils.input.Input;
+import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -99,12 +95,12 @@ public class Test2 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 	
-	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
-        NonterminalNode node1 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input);
+	private static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input);
         return node1;
 	}
 

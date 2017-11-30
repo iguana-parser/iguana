@@ -27,39 +27,31 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.parsetrees.slot.Action;
-import iguana.parsetrees.slot.PackedNodeSlot;
-import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.term.RuleType;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
 
 import java.util.Collections;
 import java.util.Set;
 
-public class EndGrammarSlot extends BodyGrammarSlot implements PackedNodeSlot {
+public class EndGrammarSlot extends BodyGrammarSlot {
 
 	protected final NonterminalGrammarSlot nonterminal;
-	protected final Action action;
-	protected final RuleType ruleType;
 
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, Action action,
-                          RuleType ruleType, ParserRuntime runtime) {
-		this(position, nonterminal, label, -1, variable, -1, state, conditions, action, ruleType, runtime);
+			              String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
+		this(position, nonterminal, label, -1, variable, -1, state, conditions, runtime);
 	}
 	
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
             			  String variable, int i2, Set<String> state, Conditions conditions,
-                          Action action, RuleType ruleType, ParserRuntime runtime) {
+                          ParserRuntime runtime) {
 		super(position, label, i1, variable, i2, state, conditions, runtime);
 		this.nonterminal = nonterminal;
-		this.action = action;
-        this.ruleType = ruleType;
     }
 	
 	public NonterminalGrammarSlot getNonterminal() {
@@ -90,11 +82,6 @@ public class EndGrammarSlot extends BodyGrammarSlot implements PackedNodeSlot {
 	public boolean addTransition(Transition transition) {
 		return false;
 	}
-
-    @Override
-    public RuleType ruleType() {
-        return ruleType;
-    }
 
     /**
 	 *

@@ -30,8 +30,8 @@ package org.iguana.parser.gss;
 import java.util.ArrayList;
 import java.util.List;
 
-import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.sppf.NonterminalNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;

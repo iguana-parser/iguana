@@ -27,12 +27,8 @@
 
 package org.iguana.parser.basic;
 
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-import static iguana.utils.collections.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -43,14 +39,16 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.regex.Character;
-import iguana.utils.input.Input;
+import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -103,7 +101,7 @@ public class Test12 {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(4).build();
-		return new ParseSuccess(expectedSPPF1(graph), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
 	}
 
     @Test
@@ -124,39 +122,39 @@ public class Test12 {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF2(graph), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
 	}
 
     static NonterminalNode A_0_1;
     static NonterminalNode A_0_0;
     static NonterminalNode A_1_1;
 
-	private static NonterminalNode expectedSPPF1(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input1);
-        TerminalNode node1 = createTerminalNode(registry.getSlot("epsilon"), 1, 1, input1);
-        NonterminalNode node3 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node1, input1);
-        IntermediateNode node2 = createIntermediateNode(registry.getSlot("A ::= A A ."), node3, node3);
-        node3.addPackedNode(registry.getSlot("A ::= A A ."), node2);
-        TerminalNode node4 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input1);
-        NonterminalNode node6 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node4, input1);
-        IntermediateNode node5 = createIntermediateNode(registry.getSlot("A ::= A A ."), node6, node6);
-        node6.addPackedNode(registry.getSlot("A ::= A A ."), node5);
-        NonterminalNode node8 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a ."), node0, input1);
-        IntermediateNode node7 = createIntermediateNode(registry.getSlot("A ::= A A ."), node8, node3);
-        node7.addPackedNode(registry.getSlot("A ::= A A ."), node6, node8);
-        node8.addPackedNode(registry.getSlot("A ::= A A ."), node7);
+	private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input1);
+        TerminalNode node1 = factory.createTerminalNode("epsilon", 1, 1, input1);
+        NonterminalNode node3 = factory.createNonterminalNode("A", "A ::= .", node1, input1);
+        IntermediateNode node2 = factory.createIntermediateNode("A ::= A A .", node3, node3);
+        node3.addPackedNode(factory.createPackedNode("A ::= A A .", node2));
+        TerminalNode node4 = factory.createTerminalNode("epsilon", 0, 0, input1);
+        NonterminalNode node6 = factory.createNonterminalNode("A", "A ::= .", node4, input1);
+        IntermediateNode node5 = factory.createIntermediateNode("A ::= A A .", node6, node6);
+        node6.addPackedNode(factory.createPackedNode("A ::= A A .", node5));
+        NonterminalNode node8 = factory.createNonterminalNode("A", "A ::= a .", node0, input1);
+        IntermediateNode node7 = factory.createIntermediateNode("A ::= A A .", node8, node3);
+        node7.addPackedNode(factory.createPackedNode("A ::= A A .", node6, node8));
+        node8.addPackedNode(factory.createPackedNode("A ::= A A .", node7));
         A_0_0 = node6;
         A_1_1 = node3;
         A_0_1 = node8;
         return node8;
 	}
 
- 	private static NonterminalNode expectedSPPF2(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("epsilon"), 0, 0, input1);
-        NonterminalNode node2 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= ."), node0, input1);
+ 	private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
+        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0, input1);
+        NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= .", node0, input1);
         A_0_0 = node2;
-        IntermediateNode node1 = createIntermediateNode(registry.getSlot("A ::= A A ."), node2, node2);
-        node2.addPackedNode(registry.getSlot("A ::= A A ."), node1);
+        IntermediateNode node1 = factory.createIntermediateNode("A ::= A A .", node2, node2);
+        node2.addPackedNode(factory.createPackedNode("A ::= A A .", node1));
         return node2;
 	}
 }

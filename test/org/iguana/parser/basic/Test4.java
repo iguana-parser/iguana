@@ -27,33 +27,27 @@
 
 package org.iguana.parser.basic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.Term;
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
-
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-import static iguana.parsetrees.term.TermFactory.*;
-import static iguana.utils.collections.CollectionsUtil.*;
+import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -104,16 +98,16 @@ public class Test4 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(graph), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 	
-	private static NonterminalNode expectedSPPF(GrammarGraph registry) {
-        TerminalNode node0 = createTerminalNode(registry.getSlot("a"), 0, 1, input);
-        TerminalNode node1 = createTerminalNode(registry.getSlot("b"), 1, 2, input);
-        IntermediateNode node2 = createIntermediateNode(registry.getSlot("A ::= a b . c"), node0, node1);
-        TerminalNode node3 = createTerminalNode(registry.getSlot("c"), 2, 3, input);
-        IntermediateNode node4 = createIntermediateNode(registry.getSlot("A ::= a b c ."), node2, node3);
-        NonterminalNode node5 = createNonterminalNode(registry.getSlot("A"), registry.getSlot("A ::= a b c ."), node4, input);
+	private static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
+        TerminalNode node1 = factory.createTerminalNode("b", 1, 2, input);
+        IntermediateNode node2 = factory.createIntermediateNode("A ::= a b . c", node0, node1);
+        TerminalNode node3 = factory.createTerminalNode("c", 2, 3, input);
+        IntermediateNode node4 = factory.createIntermediateNode("A ::= a b c .", node2, node3);
+        NonterminalNode node5 = factory.createNonterminalNode("A", "A ::= a b c .", node4, input);
         return node5;
     }
 

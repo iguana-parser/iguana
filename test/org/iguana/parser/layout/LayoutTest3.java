@@ -27,9 +27,10 @@
 
 package org.iguana.parser.layout;
 
-import static org.junit.Assert.assertTrue;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
@@ -41,9 +42,7 @@ import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
 
-import iguana.parsetrees.slot.NonterminalNodeType;
-import iguana.regex.Character;
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -65,7 +64,7 @@ public class LayoutTest3 {
     static Nonterminal A = Nonterminal.withName("A");
     static Nonterminal B = Nonterminal.withName("B");
     static Nonterminal C = Nonterminal.withName("C");
-    static Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout()).build();
+    static Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
 
     static Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
     static Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();

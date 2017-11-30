@@ -1,7 +1,6 @@
 package org.iguana.parser.iggy;
 
-import java.io.File;
-
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -10,15 +9,12 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.term.TermBuilder;
-import iguana.parsetrees.term.Term;
-import iguana.parsetrees.term.SPPFToTerms;
-import iguana.utils.input.Input;
+import java.io.File;
 
 public class IGGYTest {
 	
@@ -46,8 +42,6 @@ public class IGGYTest {
 		Assert.assertTrue(result.isParseSuccess());
 		
 		NonterminalNode sppf = result.asParseSuccess().getSPPFNode();
-		
-		Term term = result.asParseSuccess().getTreeWithoutSharing();
 		
 		// TreeVisualization.generate(term, "test/org/iguana/parser/idea/", "terms");
 	}

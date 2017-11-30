@@ -27,22 +27,19 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.parsetrees.slot.TerminalSlot;
+import iguana.parsetrees.term.TerminalType;
+import iguana.regex.matcher.Matcher;
+import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.parser.ParserRuntime;
+import org.iguana.sppf.TerminalNode;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import iguana.parsetrees.slot.TerminalSlot;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.TerminalType;
-import iguana.utils.input.Input;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.ParserRuntime;
-import iguana.regex.matcher.Matcher;
-import iguana.regex.matcher.MatcherFactory;
-
-import static iguana.parsetrees.sppf.SPPFNodeFactory.*;
-
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot implements TerminalSlot {
 	
@@ -69,7 +66,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
 			if (length < 0) {
 				return null;
 			} else {
-				TerminalNode t = createTerminalNode(this, i, i + length, input);
+				TerminalNode t = new TerminalNode(this, i, i + length, input);
 				runtime.terminalNodeAdded(t);
 				return t;
 			}

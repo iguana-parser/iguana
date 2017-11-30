@@ -38,9 +38,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import iguana.parsetrees.slot.Action;
-import iguana.parsetrees.slot.NonterminalNodeType;
 import iguana.parsetrees.term.RuleType;
 import iguana.utils.collections.hash.MurmurHash3;
+import org.iguana.grammar.slot.NonterminalNodeType;
 
 /**
  * 
@@ -352,7 +352,7 @@ public class Rule implements Serializable, RuleType {
 
     @Override
     public boolean layout() {
-        return head.getNodeType() == NonterminalNodeType.Layout();
+        return head.getNodeType() == NonterminalNodeType.Layout;
     }
 
     public static class Builder {

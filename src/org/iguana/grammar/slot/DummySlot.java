@@ -25,27 +25,44 @@
  *
  */
 
-package org.iguana.datadependent.descriptor;
+package org.iguana.grammar.slot;
 
-import org.iguana.sppf.NonPackedNode;
+import java.util.Collections;
+import java.util.Set;
+
 import iguana.utils.input.Input;
-import org.iguana.datadependent.env.Environment;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.grammar.condition.ConditionsFactory;
 
-public class Descriptor extends org.iguana.parser.descriptor.Descriptor {
+
+public class DummySlot extends BodyGrammarSlot {
+
+	private static final DummySlot instance = new DummySlot();
 	
-	private final Environment env;
+	public static DummySlot getInstance() {
+		return instance;
+	}
 	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, NonPackedNode sppfNode, Input input, Environment env) {
-		super(slot, gssNode, sppfNode, input);
-		
-		assert env != null;
-		this.env = env;
+	private DummySlot() {
+		super(null, null, null, null, null, null);
 	}
 
 	@Override
-	public void execute() {
-		getGrammarSlot().execute(input, getGSSNode(), getSPPFNode(), env);
+	public void reset(Input input) {
 	}
+
+	@Override
+	public boolean addTransition(Transition transition) {
+		return false;
+	}
+
+	@Override
+	public Set<Transition> getTransitions() {
+		return Collections.emptySet();
+	}
+	
+	@Override
+	public String toString() {
+		return "$";
+	}
+	
 }

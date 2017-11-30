@@ -1,9 +1,5 @@
 package org.iguana.parser;
 
-import iguana.parsetrees.sppf.IntermediateNode;
-import iguana.parsetrees.sppf.NonterminalNode;
-import iguana.parsetrees.sppf.NonterminalOrIntermediateNode;
-import iguana.parsetrees.sppf.TerminalNode;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import iguana.utils.logging.IguanaLogger;
@@ -19,6 +15,10 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalOrIntermediateNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 

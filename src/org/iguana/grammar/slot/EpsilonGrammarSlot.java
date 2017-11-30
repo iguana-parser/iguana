@@ -27,23 +27,21 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.parsetrees.slot.Action;
-import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.term.RuleType;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot,
-			                  Conditions conditions, Action action, RuleType ruleType, ParserRuntime runtime) {
-		super(position, nonterminal, null, null, null, conditions, action, ruleType, runtime);
+			                  Conditions conditions, ParserRuntime runtime) {
+		super(position, nonterminal, null, null, null, conditions, runtime);
 		this.epsilonSlot = epsilonSlot;
 	}
 	
