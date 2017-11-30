@@ -27,10 +27,7 @@ public class TestIntHashMap {
 			keys.forEach(k -> imap.put(k, k + ""));
 
 			keys.forEach(k -> Assert.assertTrue(map.containsKey(k) && imap.containsKey(k) && map.get(k).equals(imap.get(k))));
-
 		}
-
-		
 	}
 
 }

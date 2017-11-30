@@ -74,7 +74,7 @@ public class Tuple<T, K> implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return (t == null ? 0 : t.hashCode()) + (k == null ? 0 : k.hashCode());
+		return (t == null ? 0 : t.hashCode()) + 31 * (k == null ? 0 : k.hashCode());
 	}
 	
 	@Override

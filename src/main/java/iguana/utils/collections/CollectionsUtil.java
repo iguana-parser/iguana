@@ -27,6 +27,8 @@
 
 package iguana.utils.collections;
 
+import iguana.utils.collections.primitive.IntIterable;
+import iguana.utils.collections.primitive.IntIterator;
 import iguana.utils.collections.tuple.Tuple;
 
 import java.util.*;
@@ -97,6 +99,30 @@ public class CollectionsUtil {
 		set.addAll(set2);
 		return set;
 	}
+
+    public static boolean isEqual(IntIterable iterables1, IntIterable iterables2) {
+        IntIterator it1 = iterables1.iterator();
+        IntIterator it2 = iterables2.iterator();
+        while (it1.hasNext()) {
+            if (!it2.hasNext()) return false;
+            int t1 = it1.next();
+            int t2 = it2.next();
+            if (t1 != t2) return false;
+        }
+        return true;
+    }
+
+	public static <T> boolean isEqual(Iterable<T> iterables1, Iterable<T> iterables2) {
+		Iterator<T> it1 = iterables1.iterator();
+		Iterator<T> it2 = iterables2.iterator();
+		while (it1.hasNext()) {
+			if (!it2.hasNext()) return false;
+			T t1 = it1.next();
+			T t2 = it2.next();
+			if (!t1.equals(t2)) return false;
+		}
+		return true;
+	}
 	
 	public static <T> Iterable<T> concat(Iterable<T> first, Iterable<T> second) {
 		
@@ -162,5 +188,13 @@ public class CollectionsUtil {
 	public static <T> List<T> toList(Iterable<T> it) {
 		return StreamSupport.stream(it.spliterator(), false).collect(Collectors.toList());
 	}
+
+	public static int max(int[] a) {
+	    int max = Integer.MIN_VALUE;
+	    for (int i = 0; i < a.length; i++)
+	        if (a[i] > max)
+	            max = a[i];
+	    return max;
+    }
 
 }

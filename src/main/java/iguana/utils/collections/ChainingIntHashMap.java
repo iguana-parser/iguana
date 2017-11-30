@@ -30,7 +30,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 		
 	/**
 	 * capacity - 1
-	 * The bitMask is used to get the p most-significant bytes of the multiplicaiton.
+	 * The bitMask is used to adj the p most-significant bytes of the multiplicaiton.
 	 */
 	private int bitMask;
 	

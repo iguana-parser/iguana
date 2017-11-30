@@ -3,17 +3,13 @@ package iguana.utils.collections;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 
  * @author Ali Afroozeh
  *
  */
-public class IntHashSet implements Set<Integer>, Serializable {
+public class IntHashSet implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -36,7 +32,7 @@ public class IntHashSet implements Set<Integer>, Serializable {
 		
 	/**
 	 * capacity - 1
-	 * The bitMask is used to get the p most-significant bytes of the multiplicaiton.
+	 * The bitMask is used to adj the p most-significant bytes of the multiplicaiton.
 	 */
 	private int bitMask;
 	
@@ -179,74 +175,16 @@ public class IntHashSet implements Set<Integer>, Serializable {
 	}
 	
 	public String toString() {
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		
-		for(int t : table) {
-			if(t != -1) { 
+		for(int t : table)
+			if(t != -1)
 				sb.append(t).append(", ");
-			}
-		}
-		
-		if(sb.length() > 2) {
+
+		if(sb.length() > 2)
 			sb.delete(sb.length() - 2, sb.length());
-		}
-		
+
 		sb.append("}");
 		return sb.toString();
 	}
-
-	@Override
-	public boolean contains(Object o) {
-		return contains((int) o);
-	}
-
-	@Override
-	public Iterator<Integer> iterator() {
-		return Arrays.stream(table).boxed().iterator();
-	}
-
-	@Override
-	public Object[] toArray() {
-		return stream().collect(Collectors.toList()).toArray();
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean add(Integer e) {
-		return add((int) e) != -1;
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		int v = table[hash((int)o)];
-		table[hash((int)o)] = -1;  
-		return v != -1;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends Integer> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
-	}
-	
 }
