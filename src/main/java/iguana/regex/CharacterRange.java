@@ -30,7 +30,6 @@ package iguana.regex;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.collections.rangemap.Range;
 
-import iguana.regex.Character;
 import java.util.Collections;
 import java.util.Set;
 
