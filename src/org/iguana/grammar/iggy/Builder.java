@@ -26,33 +26,31 @@
  */
 package org.iguana.grammar.iggy;
 
+import iguana.regex.Character;
+import iguana.regex.Epsilon;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.*;
-import iguana.regex.Character;
-import iguana.regex.Epsilon;
-
 /**
  * @author Anastasia Izmaylova
  */
-public abstract class Builder implements iguana.parsetrees.iggy.Builder {
+public abstract class Builder {
 
     private Map<String, Rule> regexs = new HashMap<>();
 	
-	@Override
 	public Grammar grammar(List<Object> rules) {
 		org.iguana.grammar.Grammar.Builder builder = Grammar.builder();
 		rules.forEach(rule -> builder.addRule((Rule) rule));
 		return builder.build();
 	}
 	
-	@Override
 	public List<Rule> rule(List<Object> tag, Object name, List<Object> params, List<Object> body) { // TODO: Add the logic of handling precedence
 		List<Rule> rules = new ArrayList<>();
 		body.forEach(elem -> {
@@ -77,7 +75,6 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 		return rules;
 	}
 	
-	@Override
 	public Object rule(Object name, Object body) {
         Rule.Builder builder = Rule.withHead(Nonterminal.withName((String)name));
         builder.addSymbol((Symbol)body);
@@ -86,12 +83,10 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
         return rule;
 	}
 	
-	@Override
 	public Object precGroup(List<Object> alts) {
 		return new PrecGroup(alts);
 	}
 	
-	@Override
 	public Object assocGroup(List<Object> elems) {
 		List<Sequence> seqs = new ArrayList<>();
 		List<String> assoc = new ArrayList<>();
@@ -104,7 +99,6 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 		return new AssocGroup(seqs, assoc.get(0));
 	}
 	
-	@Override
 	public Sequence body(List<Object> elems) {
 		List<Symbol> syms = new ArrayList<>();
 		List<String> attrs = new ArrayList<>();
@@ -119,27 +113,22 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 		return new Sequence(syms, attrs);
 	}
 	
-	@Override
 	public Object star(Object sym) {
         return Star.from((Symbol)sym);
 	}
 	
-	@Override
 	public Object plus(Object sym) {
 		return Plus.from((Symbol)sym);
 	}
 	
-	@Override
 	public Object opt(Object sym) {
 		return Opt.from((Symbol)sym);
 	}
 	
-	@Override
 	public Object seqGroup(List<Object> syms) {
         return org.iguana.grammar.symbol.Sequence.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
 	}
 	
-	@Override
 	public Object altGroup(List<Object> elems) {
         List<Symbol> syms = new ArrayList<>();
         for (Object elem : elems) {
@@ -151,7 +140,6 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 		return Alt.from(syms);
 	}
 
-    @Override
     public Object syms(List<Object> syms) {
         if (syms.isEmpty())
             return Epsilon.getInstance();
@@ -162,37 +150,30 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
         return new Sequence(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()), null);
     }
 
-    @Override
     public Object regStar(Object s) {
         return star(s);
     }
 
-    @Override
     public Object regPlus(Object s) {
         return plus(s);
     }
 
-    @Override
     public Object regOpt(Object s) {
         return opt(s);
     }
 
-    @Override
     public Object regSeqGroup(List<Object> ss) {
         return seqGroup(ss);
     }
 
-    @Override
     public Object regAltGroup(List<Object> ss) {
         return altGroup(ss);
     }
 
-    @Override
     public Object regs(List<Object> ss) {
         return syms(ss);
     }
 
-    @Override
 	public Nonterminal nontCall(Object sym, List<Object> args) {
 		org.iguana.grammar.symbol.Nonterminal.Builder builder = Nonterminal.builder((Nonterminal) sym);
 		if (args.isEmpty()) 
@@ -202,22 +183,18 @@ public abstract class Builder implements iguana.parsetrees.iggy.Builder {
 						.toArray(Expression[]::new)).build();
 	}
 	
-	@Override
 	public Nonterminal variable(Object name, Object sym) {
 		return Nonterminal.builder(((Nonterminal)sym)).setVariable((String) name).build();
 	}
 	
-	@Override
 	public Symbol label(Object name, Object sym) {
 		return ((Symbol)sym).copyBuilder().setLabel((String)name).build();
 	}
 	
-	@Override
 	public Nonterminal nont(Object name) {
 		return Nonterminal.withName((String)name);
 	}
 	
-	@Override
 	public iguana.regex.Sequence<Character> string(Object obj) {
         String s = (String) obj;
         s = s.substring(1, s.length() - 1);

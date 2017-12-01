@@ -27,7 +27,6 @@
 
 package org.iguana.parser;
 
-import iguana.parsetrees.sppf.SPPFToJavaCode;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.sppf.NonterminalNode;

@@ -27,27 +27,19 @@
 
 package org.iguana.grammar.symbol;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import iguana.parsetrees.slot.Action;
-import iguana.parsetrees.term.RuleType;
 import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.slot.NonterminalNodeType;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 
  * @authors Ali Afroozeh, Anastasia Izmaylova
  *
  */
-public class Rule implements Serializable, RuleType {
+public class Rule implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -83,11 +75,6 @@ public class Rule implements Serializable, RuleType {
 	
 	private final String label;
 	
-	
-	private transient final Action action;
-    private final RuleType ruleType;
-    private final boolean hasRuleType;
-    
     private final Map<String, Object> attributes;
 
     public Rule(Builder builder) {
@@ -110,14 +97,6 @@ public class Rule implements Serializable, RuleType {
 
         this.label = builder.label;
 
-        this.action = builder.action;
-        this.hasRuleType = builder.hasRuleType;
-        if (hasRuleType) {
-            this.ruleType = builder.ruleType == null ? this : builder.ruleType;
-        } else {
-            this.ruleType = null;
-        }
-        
         this.attributes = builder.attributes;
     }
 
@@ -228,18 +207,6 @@ public class Rule implements Serializable, RuleType {
 		return layout != null;
 	}
 	
-	public Action getAction() {
-		return action;
-	}
-
-    public boolean hasRuleType() {
-        return hasRuleType;
-    }
-
-    public RuleType getRuleType() {
-        return ruleType;
-    }
-
     public Map<String, Object> getAttributes() {
         return attributes;
     }
@@ -324,33 +291,23 @@ public class Rule implements Serializable, RuleType {
 		return new Builder(nonterminal);
 	}
 
-    @Override
     public String head() {
         return head.getName();
     }
 
-    @Override
     public List<String> body() {
         return body.stream().map(s -> s.getName()).collect(Collectors.toList());
     }
     
-    @Override
     public String label() {
     	return label;
     }
         
 
-    @Override
-    public Action action() {
-        return action;
-    }
-
-    @Override
     public int position() {
         return size();
     }
 
-    @Override
     public boolean layout() {
         return head.getNodeType() == NonterminalNodeType.Layout;
     }
@@ -379,10 +336,6 @@ public class Rule implements Serializable, RuleType {
 
         private String label;
 
-        private Action action = null;
-        private RuleType ruleType = null;
-        private boolean hasRuleType = true;
-
         private Map<String, Object> attributes = new HashMap<>();
 
         public Builder(Nonterminal head) {
@@ -409,10 +362,6 @@ public class Rule implements Serializable, RuleType {
             this.precedenceLevel = rule.precedenceLevel;
 
             this.label = rule.label;
-
-            this.action = rule.action;
-            this.ruleType = rule.ruleType;
-            this.hasRuleType = rule.hasRuleType;
 
             this.attributes = rule.attributes;
         }
@@ -511,26 +460,6 @@ public class Rule implements Serializable, RuleType {
 
         public Builder setLabel(String label) {
             this.label = label;
-            return this;
-        }
-
-        public Builder setAction(Action action) {
-            this.action = action;
-            return this;
-        }
-
-        public Builder setRuleType(RuleType ruleType) {
-            this.ruleType = ruleType;
-            return this;
-        }
-
-        public Builder withRuleType() {
-            this.hasRuleType = true;
-            return this;
-        }
-
-        public Builder setHasRuleType(boolean hasRuleType) {
-            this.hasRuleType = hasRuleType;
             return this;
         }
 

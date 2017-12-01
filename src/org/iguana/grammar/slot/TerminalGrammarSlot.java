@@ -27,8 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.parsetrees.slot.TerminalSlot;
-import iguana.parsetrees.term.TerminalType;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
@@ -41,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class TerminalGrammarSlot extends AbstractGrammarSlot implements TerminalSlot {
+public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Terminal terminal;
     private final Matcher matcher;
@@ -97,8 +95,4 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot implements Terminal
 		terminalNodes.clear();
 	}
 
-    @Override
-    public TerminalType terminalType() {
-        return terminal;
-    }
 }

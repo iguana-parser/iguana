@@ -27,19 +27,11 @@
 
 package org.iguana.util;
 
-import static java.util.stream.Stream.concat;
-import static java.util.stream.Stream.empty;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
+import iguana.utils.benchmark.BenchmarkUtil;
+import iguana.utils.input.Input;
+import iguana.utils.logging.IguanaLogger;
+import iguana.utils.logging.JavaUtilIguanaLogger;
+import iguana.utils.logging.LogLevel;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -47,13 +39,13 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 
-import com.google.common.testing.GcFinalization;
+import java.io.File;
+import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import iguana.parsetrees.term.TermBuilder;
-import iguana.utils.input.Input;
-import iguana.utils.logging.IguanaLogger;
-import iguana.utils.logging.JavaUtilIguanaLogger;
-import iguana.utils.logging.LogLevel;
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.empty;
 
 public class IguanaRunner {
 	
@@ -149,7 +141,7 @@ public class IguanaRunner {
 	private ParseResult run(GrammarGraph grammarGraph, Input input, Nonterminal start) throws Exception {
 		ParseResult result = Iguana.parse(input, grammarGraph, start);
 		if (runGCInBetween)
-			GcFinalization.awaitFullGc();
+			BenchmarkUtil.awaitFullGC();
 		
 		return result;
 		

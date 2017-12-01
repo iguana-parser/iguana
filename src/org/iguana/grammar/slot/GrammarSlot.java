@@ -27,7 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.parsetrees.slot.Slot;
 import iguana.utils.input.Input;
 import org.iguana.parser.ParserRuntime;
 

@@ -43,7 +43,7 @@ import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Test;
 
-import iguana.parsetrees.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalNode;
 import iguana.utils.input.Input;
 
 public class TestCSharp {

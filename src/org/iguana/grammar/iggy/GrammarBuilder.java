@@ -26,7 +26,6 @@
  */
 package org.iguana.grammar.iggy;
 
-import iguana.parsetrees.iggy.TermTraversal;
 import iguana.regex.Character;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
 /**
  * @author Anastasia Izmaylova
  */
-public class GrammarBuilder implements TermTraversal.Actions {
+public class GrammarBuilder {
 
     public static class Identifier {
         public final String id;

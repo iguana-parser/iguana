@@ -32,12 +32,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import iguana.parsetrees.sppf.NonPackedNode;
-import iguana.parsetrees.sppf.NonterminalNode;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalNodeWithValue;
 
 import static iguana.utils.string.StringUtil.*;
 
@@ -1084,11 +1085,11 @@ public abstract class Expression extends AbstractAST {
 				throw new UndeclaredVariableException(label);
 			}
 			
-			if (!(value instanceof NonterminalNode)) {
+			if (!(value instanceof NonterminalNodeWithValue)) {
 				throw new UnexpectedTypeOfArgumentException(this);
 			}
-			
-			NonterminalNode node = (NonterminalNode) value;
+
+			NonterminalNodeWithValue node = (NonterminalNodeWithValue) value;
 			
 			return node.getValue();
 		}

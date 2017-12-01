@@ -27,33 +27,18 @@
 
 package org.iguana.grammar.symbol;
 
-import iguana.parsetrees.slot.TerminalNodeType;
-import iguana.parsetrees.sppf.TerminalNode;
-import iguana.parsetrees.term.TerminalType;
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;
 
-public class Terminal extends AbstractSymbol implements TerminalType{
+public class Terminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final RegularExpression regex;
 
-    @Override
     public String name() {
         return name;
-    }
-
-    @Override
-    public int nodeType() {
-        switch (category) {
-            case Layout: return TerminalNodeType.Layout();
-            case REGEX: return TerminalNodeType.Regex();
-            case TERMINAL: return TerminalNodeType.Literal();
-            case KEYWORD: return TerminalNodeType.Keyword();
-            default: throw new RuntimeException("No such case!");
-        }
     }
 
     public enum Category {

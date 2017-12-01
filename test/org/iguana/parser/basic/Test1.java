@@ -61,7 +61,7 @@ public class Test1 {
 	private static Nonterminal A = Nonterminal.withName("A");
 
     private static Nonterminal startSymbol = A;
-    private static Rule r1 = Rule.withHead(A).withRuleType().build();
+    private static Rule r1 = Rule.withHead(A).build();
     private static Grammar grammar = Grammar.builder().addRule(r1).build();
     private static Input input = Input.empty();
 
