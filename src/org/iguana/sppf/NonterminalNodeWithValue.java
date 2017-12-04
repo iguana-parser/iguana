@@ -12,6 +12,7 @@ public class NonterminalNodeWithValue extends NonterminalNode {
         this.value = value;
     }
 
+    @Override
     public Object getValue() {
         return value;
     }

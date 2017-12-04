@@ -28,7 +28,6 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 

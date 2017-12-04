@@ -68,4 +68,8 @@ public class NonterminalNode extends NonterminalOrIntermediateNode<NonterminalGr
 		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
 	}
 
+	public Object getValue() {
+		return null;
+	}
+
 }
