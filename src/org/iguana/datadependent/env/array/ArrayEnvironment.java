@@ -1,8 +1,8 @@
 package org.iguana.datadependent.env.array;
 
-import java.util.Arrays;
-
 import org.iguana.datadependent.env.Environment;
+
+import java.util.Arrays;
 
 public class ArrayEnvironment implements Environment {
 	

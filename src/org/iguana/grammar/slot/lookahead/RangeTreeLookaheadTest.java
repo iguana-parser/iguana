@@ -1,12 +1,12 @@
 package org.iguana.grammar.slot.lookahead;
 
+import iguana.regex.CharacterRange;
+import iguana.utils.collections.rangemap.RangeTree;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import iguana.regex.CharacterRange;
-import iguana.utils.collections.rangemap.RangeTree;
 
 public class RangeTreeLookaheadTest implements LookAheadTest {
 	

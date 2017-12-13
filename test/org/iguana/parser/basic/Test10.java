@@ -100,7 +100,7 @@ public class Test10 {
 		System.out.println(result);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-    }
+	}
 	
 	private static ParseResult getParseResult(GrammarGraph graph) {
         ParseStatistics statistics = ParseStatistics.builder()

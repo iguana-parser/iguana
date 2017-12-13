@@ -2,7 +2,7 @@ package org.iguana.parsetree;
 
 public interface ParseTreeBuilder {
     Object visit(TerminalNode node);
-    Object visit(RuleNode node);
+    Object visit(NonterminalNode node);
     Object visit(AmbiguityNode node);
     Object visit(StarNode node);
     Object visit(PlusNode node);

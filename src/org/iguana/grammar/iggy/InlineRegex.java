@@ -26,7 +26,8 @@
  */
 package org.iguana.grammar.iggy;
 
-import iguana.regex.RegularExpressionVisitor;
+import iguana.regex.Character;
+import iguana.regex.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.symbol.*;
@@ -36,8 +37,6 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.transformation.GrammarTransformation;
-import iguana.regex.*;
-import iguana.regex.Character;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;

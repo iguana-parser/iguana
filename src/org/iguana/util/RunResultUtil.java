@@ -15,7 +15,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.NewLine;
 
 
 public class RunResultUtil {

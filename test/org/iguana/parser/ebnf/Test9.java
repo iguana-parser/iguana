@@ -1,7 +1,7 @@
 package org.iguana.parser.ebnf;
 
-import static org.junit.Assert.assertTrue;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -13,8 +13,7 @@ import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.junit.Test;
 
-import iguana.regex.Character;
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertTrue;
 
 /**
  *

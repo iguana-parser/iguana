@@ -27,29 +27,22 @@
 
 package org.iguana.grammar;
 
+import iguana.regex.RegularExpression;
+import iguana.utils.collections.CollectionsUtil;
+import org.iguana.grammar.exception.GrammarValidationException;
+import org.iguana.grammar.exception.NonterminalNotDefinedException;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.symbol.*;
+import org.iguana.traversal.idea.IdeaIDEGenerator;
+
 import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-
-import iguana.utils.collections.CollectionsUtil;
-import org.iguana.grammar.exception.GrammarValidationException;
-import org.iguana.grammar.exception.NonterminalNotDefinedException;
-import org.iguana.grammar.patterns.ExceptPattern;
-import org.iguana.grammar.patterns.PrecedencePattern;
-import org.iguana.grammar.symbol.Associativity;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.PrecedenceLevel;
-import org.iguana.grammar.symbol.Recursion;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Start;
-import org.iguana.grammar.symbol.Symbol;
-import iguana.regex.RegularExpression;
-import org.iguana.traversal.idea.IdeaIDEGenerator;
-
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 
 /**

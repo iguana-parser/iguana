@@ -27,25 +27,21 @@
 
 package org.iguana.parser.datadependent;
 
-import static org.iguana.datadependent.ast.AST.integer;
-import static org.iguana.datadependent.ast.AST.println;
-import static org.iguana.datadependent.ast.AST.stat;
-import static org.iguana.datadependent.ast.AST.var;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.Character;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import static org.iguana.datadependent.ast.AST.*;
 
 /**
  * 

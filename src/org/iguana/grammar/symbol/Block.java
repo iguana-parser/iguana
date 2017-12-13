@@ -28,7 +28,8 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
-import static iguana.utils.string.StringUtil.*;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 public class Block extends AbstractSymbol {
 

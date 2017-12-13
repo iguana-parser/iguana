@@ -27,18 +27,11 @@
 
 package org.iguana.parser.datadependent.ebnf;
 
-import static org.iguana.datadependent.ast.AST.greaterEq;
-import static org.iguana.datadependent.ast.AST.lExt;
-import static org.iguana.datadependent.ast.AST.println;
-import static org.iguana.datadependent.ast.AST.rExt;
-import static org.iguana.datadependent.ast.AST.stat;
-import static org.iguana.datadependent.ast.AST.var;
-import static org.iguana.grammar.condition.DataDependentCondition.predicate;
-
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
@@ -47,7 +40,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 /**
  * 

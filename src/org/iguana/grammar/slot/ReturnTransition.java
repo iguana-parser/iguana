@@ -27,12 +27,12 @@
 
 package org.iguana.grammar.slot;
 
-import org.iguana.sppf.NonPackedNode;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
 
 public class ReturnTransition extends AbstractTransition {
 	

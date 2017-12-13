@@ -28,7 +28,6 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
 /**
@@ -43,8 +42,8 @@ public class IntermediateNode extends NonterminalOrIntermediateNode<BodyGrammarS
     }
 
     @Override
-    public void accept(SPPFVisitor visitAction) {
-        visitAction.visit(this);
+    public <R> R accept(SPPFVisitor<R> visitAction) {
+        return visitAction.visit(this);
     }
 
     @Override

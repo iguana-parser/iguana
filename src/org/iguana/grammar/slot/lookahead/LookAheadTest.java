@@ -1,8 +1,8 @@
 package org.iguana.grammar.slot.lookahead;
 
-import java.util.List;
-
 import org.iguana.grammar.slot.BodyGrammarSlot;
+
+import java.util.List;
 
 @FunctionalInterface
 public interface LookAheadTest {

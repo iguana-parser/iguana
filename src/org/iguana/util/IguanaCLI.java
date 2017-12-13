@@ -27,6 +27,14 @@
 
 package org.iguana.util;
 
+import iguana.utils.input.Input;
+import org.apache.commons.cli.*;
+import org.apache.commons.io.FileUtils;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.parser.Iguana;
+import org.iguana.parser.ParseResult;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -35,19 +43,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import iguana.utils.input.Input;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
 
 public class IguanaCLI {
 

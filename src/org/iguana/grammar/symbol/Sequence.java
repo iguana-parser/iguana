@@ -29,10 +29,13 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
 

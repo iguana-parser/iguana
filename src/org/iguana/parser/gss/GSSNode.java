@@ -27,11 +27,6 @@
 
 package org.iguana.parser.gss;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
@@ -39,6 +34,11 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

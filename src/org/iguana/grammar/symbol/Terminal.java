@@ -42,11 +42,18 @@ public class Terminal extends AbstractSymbol {
     }
 
     public enum Category {
-		REGEX, KEYWORD, TERMINAL, Layout;
+    	// TODO: figure it out what is the terminal category. Also rename this field
+		REGEX("Regex"), KEYWORD("Keyword"), TERMINAL("Terminal"), Layout("Layout");
+
+		private String value;
+
+		Category(String value) {
+			this.value = value;
+		}
 		
 		@Override
 		public String toString() {
-			return this.name();
+			return value;
 		}
 	}
 	

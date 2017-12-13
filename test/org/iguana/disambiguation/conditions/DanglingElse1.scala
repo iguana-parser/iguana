@@ -1,14 +1,12 @@
 package org.iguana.disambiguation.conditions
 
-import iguana.parsetrees.term.{TermToScalaCode, TermToJavaCode}
 import iguana.regex.Character
 import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
 import org.iguana.grammar.condition.RegularExpressionCondition
-import org.iguana.grammar.symbol.{Rule, Terminal, Nonterminal}
+import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
 import org.iguana.parser.{Iguana, ParseResult}
 import org.junit.Assert._
-import org.scalatest.FunSuite
 
 class DanglingElse1 extends FunSuite {
 

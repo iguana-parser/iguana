@@ -1,13 +1,13 @@
 package org.iguana.grammar.transformation;
 
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.*;
+import org.iguana.traversal.ISymbolVisitor;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.*;
-import org.iguana.traversal.ISymbolVisitor;
 
 public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	

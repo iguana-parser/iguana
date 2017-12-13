@@ -244,4 +244,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return env;
 	}
 
+	public Position getPosition() {
+		return position;
+	}
 }

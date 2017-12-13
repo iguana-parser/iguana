@@ -27,14 +27,14 @@
 
 package org.iguana.util.visualization;
 
-import static iguana.utils.visualization.GraphVizUtil.*;
-
 import iguana.utils.collections.rangemap.AVLIntRangeTree;
-import iguana.utils.collections.rangemap.RangeTree;
 import iguana.utils.collections.rangemap.AVLIntRangeTree.IntNode;
+import iguana.utils.collections.rangemap.RangeTree;
 import iguana.utils.collections.rangemap.RangeTree.Node;
 
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.escape;
+import static iguana.utils.visualization.GraphVizUtil.EDGE;
+import static iguana.utils.visualization.GraphVizUtil.NODE;
 
 public class RangeTreeToDot {
 		

@@ -27,13 +27,13 @@
 
 package org.iguana.grammar.symbol;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.condition.Condition;
 
-import static iguana.utils.string.StringUtil.*;
+import java.util.Collections;
+import java.util.Set;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 

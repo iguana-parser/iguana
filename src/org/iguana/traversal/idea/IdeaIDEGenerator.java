@@ -27,10 +27,13 @@
 
 package org.iguana.traversal.idea;
 
+import iguana.regex.RegularExpression;
 import org.iguana.grammar.Grammar;
-import iguana.regex.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Anastasia Izmaylova on 28/09/15.

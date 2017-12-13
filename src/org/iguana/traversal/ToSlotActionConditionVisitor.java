@@ -27,9 +27,8 @@
 
 package org.iguana.traversal;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import iguana.regex.matcher.Matcher;
+import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -37,8 +36,9 @@ import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.condition.SlotAction;
 import org.iguana.parser.gss.GSSNode;
-import iguana.regex.matcher.Matcher;
-import iguana.regex.matcher.MatcherFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotAction> {
 

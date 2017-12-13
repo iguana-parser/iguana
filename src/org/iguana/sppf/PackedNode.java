@@ -83,12 +83,20 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode<? ext
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-		visitAction.visit(this);
+	public <R> R accept(SPPFVisitor<R> visitAction) {
+		return visitAction.visit(this);
+	}
+
+	public NonPackedNode<BodyGrammarSlot> getLeftChild() {
+		return leftChild;
+	}
+
+	public NonPackedNode<BodyGrammarSlot> getRightChild() {
+		return rightChild;
 	}
 
 	@Override
-	public NonPackedNode getChildAt(int index) {
+	public NonPackedNode<BodyGrammarSlot> getChildAt(int index) {
 		if (index == 0)
 			return leftChild;
 		else if (index == 1)

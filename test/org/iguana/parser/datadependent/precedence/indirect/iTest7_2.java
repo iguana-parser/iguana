@@ -1,24 +1,23 @@
 package org.iguana.parser.datadependent.precedence.indirect;
 
-import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-
-import java.util.Arrays;
-import java.util.HashSet;
-
+import iguana.regex.Character;
+import iguana.regex.Sequence;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import iguana.regex.Character;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import java.util.Arrays;
+import java.util.HashSet;
+
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
 @SuppressWarnings("unused")
 public class iTest7_2 {

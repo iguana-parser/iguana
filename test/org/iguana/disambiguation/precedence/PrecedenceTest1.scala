@@ -36,7 +36,6 @@ import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
 import org.iguana.parser.Iguana
-import org.scalatest.FunSuite
 
 /**
   *

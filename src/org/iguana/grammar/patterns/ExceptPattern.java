@@ -27,11 +27,11 @@
 
 package org.iguana.grammar.patterns;
 
-import java.util.List;
-
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
+
+import java.util.List;
 
 public class ExceptPattern extends AbstractPattern {
 

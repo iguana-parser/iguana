@@ -27,12 +27,12 @@
 
 package org.iguana.util.visualization;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iguana.util.trie.Edge;
 import org.iguana.util.trie.Node;
 import org.iguana.util.trie.Trie;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TrieToDot<T> {

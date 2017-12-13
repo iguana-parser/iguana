@@ -27,14 +27,15 @@
 
 package org.iguana.parser.gss.lookup;
 
-import java.util.HashMap;
-//import java.util.HashMap;
-import java.util.Map;
-
 import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
+
+import java.util.HashMap;
+import java.util.Map;
+
+//import java.util.HashMap;
 
 public class JavaHashMapNodeLookup extends AbstractNodeLookup {
 

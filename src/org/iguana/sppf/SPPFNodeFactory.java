@@ -29,7 +29,9 @@ package org.iguana.sppf;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.*;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.slot.TerminalGrammarSlot;
 
 public class SPPFNodeFactory {
 

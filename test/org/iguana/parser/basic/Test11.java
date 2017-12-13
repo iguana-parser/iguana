@@ -27,6 +27,7 @@
 
 package org.iguana.parser.basic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import iguana.regex.Character;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
@@ -88,12 +89,12 @@ public class Test11 {
 	}
 
     @Test
-    public void testParser() {
+    public void testParser() throws JsonProcessingException {
         GrammarGraph graph = GrammarGraph.from(grammar, input);
         ParseResult result = Iguana.parse(input, graph, startSymbol);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
-    }
+	}
 
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()

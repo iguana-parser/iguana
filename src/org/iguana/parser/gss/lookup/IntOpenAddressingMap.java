@@ -1,11 +1,11 @@
 package org.iguana.parser.gss.lookup;
 
 import iguana.utils.collections.CollectionsUtil;
+import iguana.utils.collections.IntHashMap;
+import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
-import iguana.utils.collections.IntHashMap;
-import iguana.utils.collections.OpenAddressingIntHashMap;
 
 public class IntOpenAddressingMap extends AbstractNodeLookup {
 

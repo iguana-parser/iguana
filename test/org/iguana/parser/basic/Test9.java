@@ -40,7 +40,6 @@ import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
 import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
@@ -132,14 +131,14 @@ public class Test9 {
 		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 	
-	private static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
+	private static org.iguana.sppf.NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
 		TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
 		TerminalNode node1 = factory.createTerminalNode("a", 1, 2, input);
-		NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= a .", node1, input);
+		org.iguana.sppf.NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= a .", node1, input);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= a A . b", node0, node2);
 		TerminalNode node4 = factory.createTerminalNode("b", 2, 3, input);
 		IntermediateNode node5 = factory.createIntermediateNode("S ::= a A b .", node3, node4);
-		NonterminalNode node6 = factory.createNonterminalNode("S", "S ::= a A b .", node5, input);
+		org.iguana.sppf.NonterminalNode node6 = factory.createNonterminalNode("S", "S ::= a A b .", node5, input);
 		return node6;
 	}
 

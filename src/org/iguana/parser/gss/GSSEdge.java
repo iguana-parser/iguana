@@ -27,10 +27,10 @@
 
 package org.iguana.parser.gss;
 
-import org.iguana.sppf.NonPackedNode;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.sppf.NonPackedNode;
 
 public interface GSSEdge {
 

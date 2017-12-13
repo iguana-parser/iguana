@@ -27,47 +27,28 @@
 
 package org.iguana.datadependent.traversal;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.eclipse.imp.pdb.facts.util.TrieSet;
-import org.iguana.datadependent.ast.Statement;
-import org.iguana.datadependent.ast.VariableDeclaration;
-import org.iguana.datadependent.ast.Expression.And;
-import org.iguana.datadependent.ast.Expression.AndIndent;
-import org.iguana.datadependent.ast.Expression.Assignment;
+import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Expression.Boolean;
-import org.iguana.datadependent.ast.Expression.Call;
-import org.iguana.datadependent.ast.Expression.EndOfFile;
-import org.iguana.datadependent.ast.Expression.Equal;
-import org.iguana.datadependent.ast.Expression.Greater;
-import org.iguana.datadependent.ast.Expression.GreaterThanEqual;
 import org.iguana.datadependent.ast.Expression.Integer;
-import org.iguana.datadependent.ast.Expression.LShiftANDEqZero;
-import org.iguana.datadependent.ast.Expression.LeftExtent;
-import org.iguana.datadependent.ast.Expression.Less;
-import org.iguana.datadependent.ast.Expression.LessThanEqual;
-import org.iguana.datadependent.ast.Expression.Name;
-import org.iguana.datadependent.ast.Expression.NotEqual;
-import org.iguana.datadependent.ast.Expression.Or;
-import org.iguana.datadependent.ast.Expression.OrIndent;
-import org.iguana.datadependent.ast.Expression.Real;
-import org.iguana.datadependent.ast.Expression.RightExtent;
 import org.iguana.datadependent.ast.Expression.String;
-import org.iguana.datadependent.ast.Expression.Tuple;
-import org.iguana.datadependent.ast.Expression.Val;
-import org.iguana.datadependent.ast.Expression.Yield;
+import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
+import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {

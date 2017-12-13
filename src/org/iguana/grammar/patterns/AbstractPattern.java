@@ -27,13 +27,13 @@
 
 package org.iguana.grammar.patterns;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbstractPattern implements Serializable {
 	

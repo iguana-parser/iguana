@@ -27,12 +27,12 @@
 
 package org.iguana.grammar.patterns;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
+
+import java.io.Serializable;
+import java.util.List;
 
 
 public class PrecedencePattern extends AbstractPattern implements Serializable {

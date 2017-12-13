@@ -1,25 +1,19 @@
 package org.iguana.parser.datadependent.precedence;
 
-import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-
+import iguana.regex.Character;
+import iguana.regex.Sequence;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Associativity;
-import iguana.regex.Character;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.PrecedenceLevel;
-import org.iguana.grammar.symbol.Recursion;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import iguana.regex.Sequence;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
 @SuppressWarnings("unused")
 public class Test5Paper_b {

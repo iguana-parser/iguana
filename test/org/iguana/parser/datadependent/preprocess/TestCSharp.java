@@ -27,12 +27,7 @@
 
 package org.iguana.parser.datadependent.preprocess;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
@@ -40,11 +35,15 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.junit.Test;
 
-import org.iguana.sppf.NonterminalNode;
-import iguana.utils.input.Input;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
 
 public class TestCSharp {
 	

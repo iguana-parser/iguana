@@ -26,26 +26,14 @@
  */
 package org.iguana.disambiguation.precedence
 
-import org.iguana.grammar.iggy.IggyParser
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import java.util.ArrayList
-import java.util.List
-import org.iguana.grammar.Grammar
-import org.iguana.grammar.patterns.ExceptPattern
-import org.iguana.grammar.patterns.PrecedencePattern
-import org.iguana.grammar.precedence.OperatorPrecedence
-import org.iguana.grammar.symbol.Terminal
 import iguana.regex.Character
-import org.iguana.grammar.symbol.Nonterminal
-import org.iguana.grammar.symbol.Rule
-import org.iguana.parser.Iguana
-import org.iguana.parser.ParseResult
-import org.iguana.util.Configuration
-import org.junit.Before
-import org.junit.Test
 import iguana.utils.input.Input
-import org.scalatest.FunSuite
+import org.iguana.grammar.Grammar
+import org.iguana.grammar.iggy.IggyParser
+import org.iguana.grammar.patterns.{ExceptPattern, PrecedencePattern}
+import org.iguana.grammar.precedence.OperatorPrecedence
+import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
+import org.iguana.parser.{Iguana, ParseResult}
 
 /**
   *

@@ -27,10 +27,10 @@
 
 package org.iguana.grammar.condition;
 
-import java.io.Serializable;
-
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.traversal.IConditionVisitor;
+
+import java.io.Serializable;
 
 
 public abstract class Condition extends AbstractAttrs implements Serializable {

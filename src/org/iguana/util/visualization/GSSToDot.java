@@ -27,10 +27,11 @@
 
 package org.iguana.util.visualization;
 
-import static iguana.utils.visualization.GraphVizUtil.*;
-
 import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
+
+import static iguana.utils.visualization.GraphVizUtil.GSS_EDGE;
+import static iguana.utils.visualization.GraphVizUtil.GSS_NODE;
 
 public class GSSToDot {
 	

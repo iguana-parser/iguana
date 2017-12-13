@@ -1,31 +1,23 @@
 package org.iguana.parser.datadependent.precedence.indirect;
 
-import java.io.File;
-import java.util.List;
-
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.iguana.util.IguanaRunner;
 import org.iguana.util.RunResult;
 import org.iguana.util.RunResultUtil;
-import org.junit.Assert;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import java.util.List;
 
 public class OCaml {
 	
 	@Test
     public void test() {
 
-        Grammar grammar = Grammar.load(new File("/Users/afroozeh/OCaml1"));
+		Grammar grammar = Grammar.load(this.getClass().getResourceAsStream("/OCaml"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
 		

@@ -1,8 +1,6 @@
 package org.iguana.parser.datadependent.precedence;
 
-import java.io.File;
-import java.util.List;
-
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.patterns.ExceptPattern;
@@ -19,7 +17,8 @@ import org.iguana.util.Configuration.EnvironmentImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import java.io.File;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class JavaNat {

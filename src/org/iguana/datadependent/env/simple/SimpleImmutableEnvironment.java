@@ -27,16 +27,16 @@
 
 package org.iguana.datadependent.env.simple;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UndefinedRuntimeValueException;
 
-import static iguana.utils.string.StringUtil.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 
 public class SimpleImmutableEnvironment implements Environment {

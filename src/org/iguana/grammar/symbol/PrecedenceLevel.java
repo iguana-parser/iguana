@@ -30,7 +30,7 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 public class PrecedenceLevel implements Serializable {
 	

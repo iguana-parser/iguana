@@ -29,7 +29,7 @@ package org.iguana.parser.gss;
 
 import java.util.Iterator;
 
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 public class GSSNodeData<T> implements Iterable<T> {
 	

@@ -27,24 +27,22 @@
 
 package org.iguana.disambiguation.conditions;
 
-import static org.junit.Assert.assertTrue;
-
+import iguana.regex.CharacterRange;
+import iguana.regex.Sequence;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import iguana.regex.Sequence;
-import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 

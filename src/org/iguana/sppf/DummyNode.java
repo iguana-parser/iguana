@@ -76,8 +76,8 @@ public class DummyNode extends NonPackedNode<DummySlot> {
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-
+	public <R> R accept(SPPFVisitor<R> visitAction) {
+		return null;
 	}
 
 	@Override

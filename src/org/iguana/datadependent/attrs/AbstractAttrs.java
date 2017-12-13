@@ -27,10 +27,10 @@
 
 package org.iguana.datadependent.attrs;
 
-import java.io.Serializable;
-
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.eclipse.imp.pdb.facts.util.TrieSet;
+
+import java.io.Serializable;
 
 public abstract class AbstractAttrs implements Attr, Serializable {
 	

@@ -27,20 +27,16 @@
 
 package org.iguana.grammar.operations;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.*;
 import iguana.regex.CharacterRange;
 import iguana.regex.EOF;
 import iguana.regex.Epsilon;
+import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
+
+import java.util.*;
 
 /**
  * 

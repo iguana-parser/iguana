@@ -27,9 +27,9 @@
 
 package org.iguana.parser.datadependent.haskell;
 
-import static iguana.utils.collections.CollectionsUtil.immutableSet;
-
 import java.util.Set;
+
+import static iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class SelectedFiles {
 	

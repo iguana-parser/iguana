@@ -27,11 +27,11 @@
 
 package org.iguana.grammar.symbol;
 
+import org.iguana.grammar.condition.Condition;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.iguana.grammar.condition.Condition;
 
 public abstract class SymbolBuilder<T extends Symbol> {
 	

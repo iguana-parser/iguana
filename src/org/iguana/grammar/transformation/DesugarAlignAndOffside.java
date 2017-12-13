@@ -27,22 +27,17 @@
 
 package org.iguana.grammar.transformation;
 
-import static org.iguana.datadependent.ast.AST.*;
-import static org.iguana.grammar.condition.DataDependentCondition.*;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
+
+import java.util.*;
+
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 public class DesugarAlignAndOffside implements GrammarTransformation {
 	

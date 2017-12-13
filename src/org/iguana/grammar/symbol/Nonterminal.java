@@ -189,7 +189,7 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private Set<String> excepts;
 
-		public NonterminalNodeType nodeType;
+		private NonterminalNodeType nodeType = NonterminalNodeType.Basic;
 		
 		private Map<String, Object> attributes = new HashMap<>();
 

@@ -27,23 +27,22 @@
 
 package org.iguana.parser.gamma;
 
+import iguana.regex.Character;
+import iguana.utils.input.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.parser.ParseResult;
+import org.iguana.parser.ParseSuccess;
+import org.iguana.util.ParseStatistics;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Terminal;
-import iguana.regex.Character;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParseSuccess;
-import org.iguana.util.ParseStatistics;
-
-import iguana.utils.input.Input;
 
 public class Gamma2TestLargeInput {
 	

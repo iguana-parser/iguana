@@ -27,19 +27,15 @@
 
 package org.iguana.util.visualization;
 
-import static iguana.utils.visualization.GraphVizUtil.*;
-
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.ConditionalTransition;
-import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-
-import static iguana.utils.string.StringUtil.*;
+import org.iguana.grammar.slot.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static iguana.utils.string.StringUtil.escape;
+import static iguana.utils.string.StringUtil.listToString;
+import static iguana.utils.visualization.GraphVizUtil.*;
 
 public class GrammarGraphToDot {
 

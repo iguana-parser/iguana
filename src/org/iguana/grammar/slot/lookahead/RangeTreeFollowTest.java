@@ -1,11 +1,11 @@
 package org.iguana.grammar.slot.lookahead;
 
-import java.util.Set;
-
 import iguana.regex.CharacterRange;
 import iguana.utils.collections.rangemap.AVLIntRangeTree;
 import iguana.utils.collections.rangemap.ArrayIntRangeTree;
 import iguana.utils.collections.rangemap.IntRangeTree;
+
+import java.util.Set;
 
 public class RangeTreeFollowTest implements FollowTest {
 

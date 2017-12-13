@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 
 public class AssociativityGroup implements Serializable {

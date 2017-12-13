@@ -27,13 +27,10 @@
 
 package org.iguana.sppf;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
+
+import java.util.List;
 
 /**
  * 
@@ -54,7 +51,7 @@ public interface SPPFNode<T extends GrammarSlot, U extends SPPFNode> {
 
 	int getRightExtent();
 
-	void accept(SPPFVisitor visitAction);
+	<R> R accept(SPPFVisitor<R> visitAction);
 	
 	/**
 	 * Compares this SPPFNode with the given node and their 

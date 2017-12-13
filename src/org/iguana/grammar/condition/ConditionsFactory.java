@@ -27,19 +27,19 @@
 
 package org.iguana.grammar.condition;
 
+import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
+import org.iguana.datadependent.env.GLLEvaluator;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.parser.gss.GSSNode;
+import org.iguana.traversal.ToSlotActionConditionVisitor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import iguana.utils.input.Input;
-import org.iguana.datadependent.env.GLLEvaluator;
-import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.parser.gss.GSSNode;
-import iguana.regex.matcher.MatcherFactory;
-import org.iguana.traversal.ToSlotActionConditionVisitor;
-
-import static iguana.utils.string.StringUtil.*;
+import static iguana.utils.string.StringUtil.listToString;
 
 
 public class ConditionsFactory {

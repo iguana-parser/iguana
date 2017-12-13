@@ -31,10 +31,6 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-import java.util.List;
-
-import static iguana.utils.string.StringUtil.listToString;
-
 /**
  *
  * @author Ali Afroozeh
@@ -55,8 +51,8 @@ public class NonterminalNode extends NonterminalOrIntermediateNode<NonterminalGr
 	}
 
 	@Override
-	public void accept(SPPFVisitor visitAction) {
-		visitAction.visit(this);
+	public <R> R accept(SPPFVisitor<R> visitAction) {
+		return visitAction.visit(this);
 	}
 
 	public boolean isListNode() {

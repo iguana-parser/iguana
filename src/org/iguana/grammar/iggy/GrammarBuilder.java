@@ -27,15 +27,15 @@
 package org.iguana.grammar.iggy;
 
 import iguana.regex.Character;
+import iguana.regex.CharacterRange;
+import iguana.regex.Epsilon;
+import iguana.regex.RegularExpression;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
-import iguana.regex.CharacterRange;
-import iguana.regex.Epsilon;
-import iguana.regex.RegularExpression;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;

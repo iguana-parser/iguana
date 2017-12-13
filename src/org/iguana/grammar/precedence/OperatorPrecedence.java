@@ -27,18 +27,6 @@
 
 package org.iguana.grammar.precedence;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.patterns.AbstractPattern;
 import org.iguana.grammar.patterns.ExceptPattern;
@@ -48,6 +36,10 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class OperatorPrecedence {
 	

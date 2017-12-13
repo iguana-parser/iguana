@@ -28,21 +28,20 @@
 package org.iguana.parser.gamma;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Terminal;
 import iguana.regex.Character;
+import iguana.utils.input.Input;
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *	S ::= a S 

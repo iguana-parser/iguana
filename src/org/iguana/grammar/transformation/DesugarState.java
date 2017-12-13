@@ -27,14 +27,6 @@
 
 package org.iguana.grammar.transformation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
@@ -44,7 +36,10 @@ import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
 import org.iguana.traversal.ISymbolVisitor;
-import static iguana.utils.string.StringUtil.*;
+
+import java.util.*;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 /**
  * 

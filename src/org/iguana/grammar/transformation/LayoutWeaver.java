@@ -27,15 +27,15 @@
 
 package org.iguana.grammar.transformation;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LayoutWeaver implements GrammarTransformation {
 

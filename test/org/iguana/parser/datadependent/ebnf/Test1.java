@@ -27,10 +27,11 @@
 
 package org.iguana.parser.datadependent.ebnf;
 
+import iguana.regex.Character;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
-import iguana.regex.Character;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
@@ -38,8 +39,6 @@ import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import iguana.utils.input.Input;
 
 /**
  * 

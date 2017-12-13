@@ -5,7 +5,6 @@ import org.iguana.IGGY
 import org.iguana.grammar.iggy.IggyParser
 import org.iguana.grammar.symbol.Nonterminal
 import org.iguana.parser.Iguana
-import org.scalatest.FunSuite
 
 /**
   * Created by Anastasia Izmaylova
