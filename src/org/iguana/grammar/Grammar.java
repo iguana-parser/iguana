@@ -345,7 +345,6 @@ public class Grammar implements Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		
 		if (this == obj)
 			return true;
 		
@@ -356,7 +355,12 @@ public class Grammar implements Serializable {
 		
 		return definitions.equals(other.definitions);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return definitions.hashCode();
+	}
+
 	/**
 	 * Returns the size of this grammar, which is equal to the number of nonterminals +
 	 * number of terminals + grammar slots.

@@ -30,8 +30,6 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import static iguana.utils.string.StringUtil.listToString;
-
 public class PrecedenceLevel implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -204,12 +202,6 @@ public class PrecedenceLevel implements Serializable {
 		this.containsAssociativityGroup = true;
 		this.assoc_lhs = l;
 		this.assoc_rhs = r;
-	}
-		
-	public String getConstructorCode() {
-		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnary + "," + hasPostfixUnary + "," 
-												     + hasPrefixUnaryBelow + "," + "new Integer[]{" + listToString(prefixUnaryBelow, ",") + "}" + ","
-												     + hasPostfixUnaryBelow + "," + "new Integer[]{" + listToString(postfixUnaryBelow, ",") + "}" + ")";
 	}
 	
 	@Override

@@ -40,7 +40,7 @@ import org.iguana.grammar.slot.GrammarSlot;
  *
  */
 
-public abstract class NonPackedNode<T extends GrammarSlot> implements SPPFNode<T, PackedNode> {
+public abstract class NonPackedNode implements SPPFNode<GrammarSlot, PackedNode> {
 
     @Override
     public String toString() {

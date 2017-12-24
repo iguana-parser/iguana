@@ -88,7 +88,7 @@ public class ParseTreeToDot {
         }
 
         private void addEdgesToChildren(ParseTreeNode<?> node) {
-            for (ParseTreeNode child : node.children()) {
+            for (ParseTreeNode<?> child : node.children()) {
                 addEdgeToChild(getId(node), getId(child));
             }
         }
@@ -98,7 +98,7 @@ public class ParseTreeToDot {
         }
 
         public void visitChildren(ParseTreeNode<?> node) {
-            for (ParseTreeNode child : node.children()) {
+            for (ParseTreeNode<?> child : node.children()) {
                 child.accept(this);
             }
         }

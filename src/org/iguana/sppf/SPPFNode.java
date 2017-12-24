@@ -37,7 +37,7 @@ import java.util.List;
  * @author Ali Afroozeh
  * 
  */
-public interface SPPFNode<T extends GrammarSlot, U extends SPPFNode> {
+public interface SPPFNode<T extends GrammarSlot, U extends SPPFNode<?, ?>> {
 	
 	U getChildAt(int index);
 

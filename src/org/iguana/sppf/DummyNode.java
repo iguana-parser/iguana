@@ -37,7 +37,7 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public class DummyNode extends NonPackedNode<DummySlot> {
+public class DummyNode extends NonPackedNode {
 
 	private int rightExtent;
 

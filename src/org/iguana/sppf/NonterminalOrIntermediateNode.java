@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> extends NonPackedNode<T> {
+public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> extends NonPackedNode {
 
 	protected PackedNode child;
 	protected List<PackedNode> rest;

@@ -39,7 +39,7 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public class TerminalNode extends NonPackedNode<TerminalGrammarSlot> {
+public class TerminalNode extends NonPackedNode {
 
 	private TerminalGrammarSlot slot;
 	private int leftExtent;

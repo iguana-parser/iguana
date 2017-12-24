@@ -27,6 +27,8 @@
 
 package org.iguana.grammar.symbol;
 
+import java.util.Objects;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -77,7 +79,12 @@ public class Position {
 		
 		return rule.equals(other.rule) && posInRule == other.posInRule && posInSymbol == other.posInSymbol;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(rule, posInRule, posInSymbol);
+	}
+
 	@Override
 	public String toString() {
 		

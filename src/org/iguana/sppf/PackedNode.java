@@ -28,93 +28,89 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- *
- *
  * @author Ali Afroozeh
- *
  */
-public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode<? extends GrammarSlot>> {
+public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
 
-	private final BodyGrammarSlot slot;
+    private final BodyGrammarSlot slot;
 
-	private NonPackedNode leftChild;
+    private NonPackedNode leftChild;
 
-	private NonPackedNode rightChild;
+    private NonPackedNode rightChild;
 
-	public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild) {
-		this(slot, leftChild, null);
-	}
+    public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild) {
+        this(slot, leftChild, null);
+    }
 
-	public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		this.slot = slot;
-		this.leftChild = leftChild;
-		this.rightChild = rightChild;
-	}
+    public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+        this.slot = slot;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
+    }
 
-	public int getPivot() {
-		return leftChild.getRightExtent();
-	}
+    public int getPivot() {
+        return leftChild.getRightExtent();
+    }
 
-	@Override
-	public BodyGrammarSlot getGrammarSlot() {
-		return slot;
-	}
+    @Override
+    public BodyGrammarSlot getGrammarSlot() {
+        return slot;
+    }
 
-	@Override
-	public int getLeftExtent() {
-		return leftChild.getLeftExtent();
-	}
+    @Override
+    public int getLeftExtent() {
+        return leftChild.getLeftExtent();
+    }
 
-	@Override
-	public int getRightExtent() {
-		return (rightChild != null) ? rightChild.getRightExtent() : leftChild.getRightExtent();
-	}
+    @Override
+    public int getRightExtent() {
+        return (rightChild != null) ? rightChild.getRightExtent() : leftChild.getRightExtent();
+    }
 
-	@Override
-	public String toString() {
-		return String.format("(%s, %d)", slot, getPivot());
-	}
+    @Override
+    public String toString() {
+        return String.format("(%s, %d)", slot, getPivot());
+    }
 
-	@Override
-	public <R> R accept(SPPFVisitor<R> visitAction) {
-		return visitAction.visit(this);
-	}
+    @Override
+    public <R> R accept(SPPFVisitor<R> visitAction) {
+        return visitAction.visit(this);
+    }
 
-	public NonPackedNode<BodyGrammarSlot> getLeftChild() {
-		return leftChild;
-	}
+    public NonPackedNode getLeftChild() {
+        return leftChild;
+    }
 
-	public NonPackedNode<BodyGrammarSlot> getRightChild() {
-		return rightChild;
-	}
+    public NonPackedNode getRightChild() {
+        return rightChild;
+    }
 
-	@Override
-	public NonPackedNode<BodyGrammarSlot> getChildAt(int index) {
-		if (index == 0)
-			return leftChild;
-		else if (index == 1)
-			return rightChild;
-		else
-			throw new RuntimeException("index should be only 0 or 1.");
-	}
+    @Override
+    public NonPackedNode getChildAt(int index) {
+        if (index == 0)
+            return leftChild;
+        else if (index == 1)
+            return rightChild;
+        else
+            throw new RuntimeException("index should be only 0 or 1.");
+    }
 
-	@Override
-	public int childrenCount() {
-		return (rightChild == null) ? 1 : 2;
-	}
+    @Override
+    public int childrenCount() {
+        return (rightChild == null) ? 1 : 2;
+    }
 
-	@Override
-	public List<NonPackedNode<? extends GrammarSlot>> getChildren() {
-		if (rightChild == null)
-			return Arrays.asList(leftChild);
-		else
-			return Arrays.asList(leftChild, rightChild);
-	}
+    @Override
+    public List<NonPackedNode> getChildren() {
+        if (rightChild == null)
+            return Arrays.asList(leftChild);
+        else
+            return Arrays.asList(leftChild, rightChild);
+    }
 }

@@ -31,11 +31,7 @@ public enum Recursion {
 	
 	LEFT_REC, RIGHT_REC, LEFT_RIGHT_REC, NON_REC, UNDEFINED,
 	iLEFT_REC, iRIGHT_REC, iLEFT_RIGHT_REC;
-	
-	public String getConstructorCode() {
-		return this.getClass().getSimpleName() + "." + this.name();
-	}
-	
+
 	@Override
 	public String toString() {
 		return this.name();

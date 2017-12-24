@@ -48,6 +48,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 	}
 	
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public static <T extends Symbol> Sequence<T> from(T...elements) {
 		return from(Arrays.asList(elements));
 	}
@@ -123,6 +124,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 	}
 	
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public static <T extends Symbol> Builder<T> builder(T...symbols) {
 		return builder(Arrays.asList(symbols));
 	}

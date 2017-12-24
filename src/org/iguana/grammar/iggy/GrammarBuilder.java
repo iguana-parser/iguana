@@ -550,7 +550,7 @@ public class GrammarBuilder {
 
     public static class Regexs {
         public static iguana.regex.Sequence<iguana.regex.RegularExpression> sequence(List<RegularExpression> regexs) {
-            return iguana.regex.Sequence.from(regexs.stream().map(regex -> (iguana.regex.RegularExpression)regex).collect(Collectors.toList()));
+            return iguana.regex.Sequence.from(regexs.stream().collect(Collectors.toList()));
         }
     }
 
@@ -604,6 +604,8 @@ public class GrammarBuilder {
 
     // TODO: this should be a temporary trick!
     private static class CodeHolder implements org.iguana.grammar.symbol.Symbol {
+
+        private static final long serialVersionUID = 1L;
 
         public final List<org.iguana.datadependent.ast.Statement> statements;
         public final List<org.iguana.datadependent.ast.Expression> expressions;

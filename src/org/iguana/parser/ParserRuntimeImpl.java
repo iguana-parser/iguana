@@ -201,7 +201,7 @@ public class ParserRuntimeImpl implements ParserRuntime {
     }
 
     @Override
-    public void ambiguousNodeAdded(NonterminalOrIntermediateNode node) {
+    public void ambiguousNodeAdded(NonterminalOrIntermediateNode<?> node) {
         countAmbiguousNodes++;
         logger.log("Ambiguous node added: %s", node);
 //		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));

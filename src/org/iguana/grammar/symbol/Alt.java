@@ -44,13 +44,14 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 	public Alt(Builder<T> builder) {
 		super(builder);
 		this.symbols = builder.symbols;
-	}	
-	
+	}
+
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public static <T extends Symbol> Alt<T> from(T...symbols) {
 		return from(Arrays.asList(symbols));
 	}
-	
+
 	public static <T extends Symbol> Alt<T> from(List<T> list) {
 		return builder(list).build();
 	}
@@ -109,6 +110,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 	}
 	
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public static <T extends Symbol> Builder<T> builder(T...symbols) {
 		return new Builder<T>(Arrays.asList(symbols));
 	}

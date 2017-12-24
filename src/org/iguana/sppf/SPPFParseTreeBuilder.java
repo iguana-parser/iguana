@@ -1,6 +1,8 @@
 package org.iguana.sppf;
 
 import iguana.utils.input.Input;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.grammar.symbol.Rule;
 import org.iguana.parsetree.AmbiguityNode;
 import org.iguana.parsetree.ListNode;
 import org.iguana.parsetree.NonterminalNode;
@@ -33,9 +35,10 @@ public class SPPFParseTreeBuilder implements SPPFVisitor<List<ParseTreeNode<?>>>
         if (node.isAmbiguous()) {
             Set<NonterminalNode> children = new HashSet<>();
             for (PackedNode packedNode : node.getChildren()) {
+                Rule rule = ((EndGrammarSlot)packedNode.getChildAt(0).getGrammarSlot()).getPosition().getRule();
                 children.add(new NonterminalNode(
                         input,
-                        packedNode.getChildAt(0).getGrammarSlot().getPosition().getRule(),
+                        rule,
                         packedNode.accept(this),
                         node.getLeftExtent(),
                         node.getRightExtent()

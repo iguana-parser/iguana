@@ -130,19 +130,6 @@ public class AssociativityGroup implements Serializable {
 		rhs = precedenceLevel.getCurrent();
 	}
 	
-	public String getConstructorCode() {
-		String elements = "";
-		
-		for (Map.Entry<Integer, Associativity> entry : map.entrySet())
-			elements += ".add(" + entry.getKey() + "," + entry.getValue().getConstructorCode() + ")";
-		
-		return "new " + getClass().getSimpleName() + "(" + associativity.getConstructorCode() + "," 
-														 + precedenceLevel.getConstructorCode() + ","
-														 + lhs + ","
-														 + rhs + ","
-														 + precedence + ")" + elements;
-	}
-	
 	@Override
 	public String toString() {
 		return associativity.name() + "(" 

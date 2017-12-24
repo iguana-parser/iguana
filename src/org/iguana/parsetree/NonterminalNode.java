@@ -22,11 +22,11 @@ public class NonterminalNode implements ParseTreeNode<Rule> {
         this.end = end;
     }
 
-    ParseTreeNode childAt(int i) {
+    ParseTreeNode<?> childAt(int i) {
         return children.get(i);
     }
 
-    ParseTreeNode childWithName(String name) {
+    ParseTreeNode<?> childWithName(String name) {
         throw new UnsupportedOperationException();
     }
 

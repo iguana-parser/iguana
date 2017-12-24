@@ -58,6 +58,8 @@ import java.util.Set;
  *
  */
 public interface Symbol extends Serializable, Attr {
+
+	long serialVersionUID = 1L;
 	
 	String getName();
 	

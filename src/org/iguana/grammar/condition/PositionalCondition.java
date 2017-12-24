@@ -58,7 +58,12 @@ public class PositionalCondition extends Condition {
 		
 		return type == other.type;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return type.hashCode();
+	}
+
 	@Override
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);

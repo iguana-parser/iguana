@@ -62,7 +62,7 @@ public interface ParserRuntime {
 
     void packedNodeAdded(Object slot, int pivot);
 
-    void ambiguousNodeAdded(NonterminalOrIntermediateNode node);
+    void ambiguousNodeAdded(NonterminalOrIntermediateNode<?> node);
 
     void gssNodeAdded(GSSNode node);
 

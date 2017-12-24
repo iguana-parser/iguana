@@ -60,6 +60,9 @@ public class JsonSerializer {
 
 
     static class CustomTypeResolverBuilder extends ObjectMapper.DefaultTypeResolverBuilder {
+
+        private static final long serialVersionUID = 1L;
+
         public CustomTypeResolverBuilder() {
             super(ObjectMapper.DefaultTyping.NON_FINAL);
         }
@@ -126,6 +129,11 @@ public class JsonSerializer {
         public boolean equals(Object obj) {
             return obj == LayoutStrategy.INHERITED;
         }
+
+        @Override
+        public int hashCode() {
+            return LayoutStrategy.INHERITED.hashCode();
+        }
     }
 
     static class RecursionFilter {
@@ -133,6 +141,12 @@ public class JsonSerializer {
         public boolean equals(Object obj) {
             return obj == Recursion.UNDEFINED;
         }
+
+        @Override
+        public int hashCode() {
+            return Recursion.UNDEFINED.hashCode();
+        }
+
     }
 
     static class AssociativityFilter {
@@ -140,6 +154,12 @@ public class JsonSerializer {
         public boolean equals(Object obj) {
             return obj == Associativity.UNDEFINED;
         }
+
+        @Override
+        public int hashCode() {
+            return Associativity.UNDEFINED.hashCode();
+        }
+
     }
 }
 
