@@ -48,8 +48,6 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	
 	private final int end;
 	
-	private final Set<CharacterRange> firstSet;
-	
 	public static CharacterRange from(int c) {
 		return in(c, c);
 	}
@@ -66,8 +64,6 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 		
 		this.start = builder.start;
 		this.end = builder.end;
-		
-		firstSet = immutableSet(this);
 	}
 
 	public static String getName(int start, int end) {
@@ -113,7 +109,7 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		return firstSet;
+		return immutableSet(this);
 	}
 	
 	@Override
@@ -162,5 +158,5 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	public <T> T accept(RegularExpressionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-	
+
 }

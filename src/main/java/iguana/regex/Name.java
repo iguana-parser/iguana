@@ -4,6 +4,8 @@ import java.util.Set;
 
 public class Name extends AbstractRegularExpression {
 
+    private static final long serialVersionUID = 1L;
+
     private final String regexName;
 
     public static Name from(String regexName) {

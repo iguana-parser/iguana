@@ -35,6 +35,8 @@ import java.util.Set;
 
 public interface RegularExpression extends Serializable {
 
+	long serialVersionUID = 1L;
+
     String getName();
 
     Object getObject();
@@ -61,11 +63,11 @@ public interface RegularExpression extends Serializable {
 	}
 
     RegexBuilder<? extends RegularExpression> copyBuilder();
-	
+
 	static <T> Comparator<T> lengthComparator() {
 		return (T o1, T o2) -> {
 			if (!(o1 instanceof RegularExpression) || !(o2 instanceof RegularExpression)) { return 0; }
-			
+
 			RegularExpression r1 = (RegularExpression) o1;
 			RegularExpression r2 = (RegularExpression) o2;
 			return r2.length() - r1.length();

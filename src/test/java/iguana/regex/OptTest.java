@@ -27,16 +27,19 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.matcher.DFAMatcher;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import iguana.utils.input.Input;
 
 public class OptTest {
 	

@@ -4,6 +4,8 @@ import java.util.Set;
 
 public abstract class AbstractRegularExpression implements RegularExpression {
 
+    private static final long serialVersionUID = 1L;
+
     private final String name;
 
     private final Object object;

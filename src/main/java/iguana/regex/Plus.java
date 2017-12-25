@@ -53,22 +53,22 @@ public class Plus extends AbstractRegularExpression {
 	
 	@Override
 	public int length() {
-		return ((RegularExpression) s).length();
+		return s.length();
 	}
 	
 	@Override
 	public boolean isNullable() {
-		return ((RegularExpression) s).isNullable();
+		return s.isNullable();
 	}
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		return ((RegularExpression) s).getFirstSet();
+		return s.getFirstSet();
 	}
 	
 	@Override
 	public Set<CharacterRange> getNotFollowSet() {
-		return ((RegularExpression) s).getFirstSet();
+		return s.getFirstSet();
 	}
 	
 	public List<RegularExpression> getSeparators() {

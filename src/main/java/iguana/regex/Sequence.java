@@ -53,6 +53,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public static <T extends RegularExpression> Sequence<T> from(T...elements) {
 		return from(Arrays.asList(elements));
 	}
@@ -63,6 +64,8 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	private static <T extends RegularExpression> String getName(List<T> elements) {
+		if (elements.stream().allMatch(c -> c instanceof Character))
+			return "'" + elements.stream().map(a -> a.getName()).collect(Collectors.joining("")) + "'";
 		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" ")) + ")";
 	}
 	
@@ -148,6 +151,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public static <T extends RegularExpression> Builder<T> builder(T...symbols) {
 		return builder(Arrays.asList(symbols));
 	}

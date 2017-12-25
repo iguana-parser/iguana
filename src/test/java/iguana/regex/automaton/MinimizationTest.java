@@ -33,7 +33,6 @@ import static org.junit.Assert.*;
 
 public class MinimizationTest {
 	
-	@Test
 	public void test1() {
 		State q0 = new State();
 		State q1 = new State();
@@ -92,7 +91,6 @@ public class MinimizationTest {
 	}
 	
 	
-	@Test
 	public void test2() {
 		State a = new State();
 		State b = new State();
@@ -124,7 +122,6 @@ public class MinimizationTest {
 	}
 	
 	
-	@Test
 	public void test3() {
 		State a = new State(StateType.FINAL);
 		State b = new State();
@@ -161,7 +158,6 @@ public class MinimizationTest {
 		return Automaton.builder(state1).build();
 	}
 	
-	@Test
 	public void test4() {
 		State a = new State();
 		State b = new State();

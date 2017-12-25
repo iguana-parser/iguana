@@ -55,7 +55,7 @@ public class Opt extends AbstractRegularExpression {
 	
 	@Override
 	public int length() {
-		return ((RegularExpression) s).length();
+		return s.length();
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class Opt extends AbstractRegularExpression {
 	
 	@Override
 	public Set<CharacterRange> getFirstSet() {
-		return ((RegularExpression) s).getFirstSet();
+		return s.getFirstSet();
 	}
 	
 	@Override

@@ -33,8 +33,6 @@ import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
 import org.junit.Test;
 
-import java.lang.*;
-
 import static org.junit.Assert.*;
 
 public class PlusTest {
