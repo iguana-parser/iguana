@@ -27,6 +27,8 @@
 
 package iguana.utils.benchmark;
 
+import com.google.common.testing.GcFinalization;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
@@ -48,5 +50,9 @@ public class BenchmarkUtil {
 		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
 		return bean.isCurrentThreadCpuTimeSupported() ? 
 				(bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
+	}
+
+	public static void awaitFullGC() {
+		GcFinalization.awaitFullGc();
 	}
 }
