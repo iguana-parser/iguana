@@ -75,21 +75,21 @@
         </plugins>
         <extensions>
             <extension>
-                <groupId>org.kuali.maven.wagons</groupId>
-                <artifactId>maven-s3-wagon</artifactId>
-                <version>1.2.1</version>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>5.0.0.RELEASE</version>
             </extension>
         </extensions>
     </build>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>iguana-parser</id>
-            <url>s3://iguana-parser/snapshot</url>
+            <id>iguana-parser-repository</id>
+            <url>s3://iguana-parser-repository/snapshot</url>
         </snapshotRepository>
         <repository>
-            <id>iguana-parser</id>
-            <url>s3://iguana-parser/release</url>
+            <id>iguana-parser-repository</id>
+            <url>s3://iguana-parser-repository/release</url>
         </repository>
     </distributionManagement>
 
