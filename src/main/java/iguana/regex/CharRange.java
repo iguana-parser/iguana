@@ -40,7 +40,7 @@ import static iguana.utils.collections.CollectionsUtil.immutableSet;
  * @author Ali Afroozeh
  *
  */
-public class CharacterRange extends AbstractRegularExpression implements Range {
+public class CharRange extends AbstractRegularExpression implements Range {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -48,15 +48,15 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	
 	private final int end;
 	
-	public static CharacterRange from(int c) {
+	public static CharRange from(int c) {
 		return in(c, c);
 	}
 	
-	public static CharacterRange in(int start, int end) {
+	public static CharRange in(int start, int end) {
 		return new Builder(start, end).build();
 	}
 		
-	private CharacterRange(Builder builder) {
+	private CharRange(Builder builder) {
 		super(builder);
 		
 		if (builder.end < builder.start) 
@@ -68,9 +68,9 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 
 	public static String getName(int start, int end) {
 		if (start == end) {
-			return Character.getName(start);
+			return Char.getName(start);
 		} else {
-			return Character.getName(start) + "-" + Character.getName(end);
+			return Char.getName(start) + "-" + Char.getName(end);
 		}
 	}
 
@@ -94,12 +94,17 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 		if (this == obj)
 			return true;
 
-		if (!(obj instanceof CharacterRange))
+		if (!(obj instanceof CharRange))
 			return false;
 		
-		CharacterRange other = (CharacterRange) obj;
+		CharRange other = (CharRange) obj;
 		
 		return start == other.start && end == other.end;
+	}
+
+	@Override
+	public String toString() {
+		return getName(start, end);
 	}
 
 	@Override
@@ -108,12 +113,12 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
 	}
 	
 	@Override
-	public Set<CharacterRange> getFirstSet() {
+	public Set<CharRange> getFirstSet() {
 		return immutableSet(this);
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
+	public Set<CharRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 
@@ -131,26 +136,27 @@ public class CharacterRange extends AbstractRegularExpression implements Range {
         return new Builder(this);
     }
     
-	public static class Builder extends RegexBuilder<CharacterRange> {
+	public static class Builder extends RegexBuilder<CharRange> {
 
 		private int start;
 		private int end;
 
+		private Builder() {}
+
 		public Builder(int start, int end) {
-			super(getName(start, end));
 			this.start = start;
 			this.end = end;
 		}
 		
-		public Builder(CharacterRange range) {
+		public Builder(CharRange range) {
 			super(range);
 			this.start = range.start;
 			this.end = range.end;
 		}
 		
 		@Override
-		public CharacterRange build() {
-			return new CharacterRange(this);
+		public CharRange build() {
+			return new CharRange(this);
 		}
 	}
 

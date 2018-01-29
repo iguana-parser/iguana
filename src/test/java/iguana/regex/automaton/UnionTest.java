@@ -28,8 +28,8 @@
 package iguana.regex.automaton;
 
 import iguana.utils.input.Input;
-import iguana.regex.Sequence;
-import iguana.regex.Character;
+import iguana.regex.Seq;
+import iguana.regex.Char;
 import iguana.regex.matcher.DFAMatcher;
 import org.junit.Test;
 
@@ -38,9 +38,9 @@ import static org.junit.Assert.*;
 
 public class UnionTest {
 	
-	private Sequence<Character> k1 = Sequence.from("if");
-	private Sequence<Character> k2 = Sequence.from("when");
-	private Sequence<Character> k3 = Sequence.from("new");
+	private Seq<Char> k1 = Seq.from("if");
+	private Seq<Char> k2 = Seq.from("when");
+	private Seq<Char> k3 = Seq.from("new");
 
 	@Test
 	public void test1() {

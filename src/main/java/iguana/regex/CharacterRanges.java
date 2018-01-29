@@ -34,7 +34,7 @@ import static iguana.utils.collections.CollectionsUtil.toList;
 
 public class CharacterRanges {
 
-	public static Set<CharacterRange> toNonOverlappingSet(Iterable<CharacterRange> ranges) {
+	public static Set<CharRange> toNonOverlappingSet(Iterable<CharRange> ranges) {
 		return toNonOverlapping(toList(ranges)).values().stream().flatMap(l -> l.stream()).collect(Collectors.toSet());
 	}
 
@@ -42,46 +42,46 @@ public class CharacterRanges {
 	 * 
 	 * @return a map from the new, non-overlapping ranges to original ranges
 	 */
-	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping2(Iterable<CharacterRange> ranges) {
-		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(toList(ranges));
-		Map<CharacterRange, List<CharacterRange>> map = new HashMap<>();
+	public static Map<CharRange, List<CharRange>> toNonOverlapping2(Iterable<CharRange> ranges) {
+		Map<CharRange, List<CharRange>> nonOverlapping = toNonOverlapping(toList(ranges));
+		Map<CharRange, List<CharRange>> map = new HashMap<>();
 		nonOverlapping.forEach((k, v) -> v.forEach(r -> map.computeIfAbsent(r, key -> new ArrayList<>()).add(k)));
 		return map;
 	}
 
 	
-	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(Iterable<CharacterRange> ranges) {
+	public static Map<CharRange, List<CharRange>> toNonOverlapping(Iterable<CharRange> ranges) {
 		return toNonOverlapping(toList(ranges));
 	}
 	
-	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(CharacterRange...ranges) {
+	public static Map<CharRange, List<CharRange>> toNonOverlapping(CharRange...ranges) {
 		return toNonOverlapping(Arrays.asList(ranges));
 	}
 	
-	public static Map<CharacterRange, List<CharacterRange>> toNonOverlapping(List<CharacterRange> ranges) {
+	public static Map<CharRange, List<CharRange>> toNonOverlapping(List<CharRange> ranges) {
 		
 		if (ranges.size() == 0)
 			return Collections.emptyMap();
 		
 		if (ranges.size() == 1) {
-			Map<CharacterRange, List<CharacterRange>> map = new HashMap<>();
+			Map<CharRange, List<CharRange>> map = new HashMap<>();
 			map.computeIfAbsent(ranges.get(0), k -> new ArrayList<>()).add(ranges.get(0));
 			return map;
 		}
 		
 		Collections.sort(ranges);
 
-		Map<CharacterRange, List<CharacterRange>> result = new HashMap<>();
+		Map<CharRange, List<CharRange>> result = new HashMap<>();
 		
-		Set<CharacterRange> overlapping = new HashSet<>();
+		Set<CharRange> overlapping = new HashSet<>();
 		
 		for (int i = 0; i < ranges.size(); i++) {
 			
-			CharacterRange current = ranges.get(i);
+			CharRange current = ranges.get(i);
 			overlapping.add(current);
 
 			if (i + 1 < ranges.size()) {
-				CharacterRange next = ranges.get(i + 1);
+				CharRange next = ranges.get(i + 1);
 				if (!overlaps(overlapping, next)) {
 					result.putAll(convertOverlapping(overlapping));
 					overlapping.clear();
@@ -94,8 +94,8 @@ public class CharacterRanges {
 		return result;
 	}
 	
-	private static boolean overlaps(Set<CharacterRange> set, CharacterRange r) {
-		for (CharacterRange c : set) {
+	private static boolean overlaps(Set<CharRange> set, CharRange r) {
+		for (CharRange c : set) {
 			if (c.overlaps(r)) {
 				return true;
 			}
@@ -103,30 +103,30 @@ public class CharacterRanges {
 		return false;
 	}
 	
-	private static Map<CharacterRange, List<CharacterRange>> convertOverlapping(Set<CharacterRange> ranges) {
+	private static Map<CharRange, List<CharRange>> convertOverlapping(Set<CharRange> ranges) {
 		
 		if (ranges.isEmpty())
 			return Collections.emptyMap();
 		
 		Set<Integer> set = new HashSet<>();
-		for (CharacterRange r : ranges) {
+		for (CharRange r : ranges) {
 			set.add(r.getStart() - 1);
 			set.add(r.getEnd());
 		}
 		List<Integer> l = new ArrayList<>(set);
 		Collections.sort(l);
 		
-		List<CharacterRange> result = new ArrayList<>();
+		List<CharRange> result = new ArrayList<>();
 		
 		int start = l.get(0) + 1;
 		for (int i = 1; i < l.size(); i++) {
-			result.add(CharacterRange.in(start, l.get(i)));
+			result.add(CharRange.in(start, l.get(i)));
 			start = l.get(i) + 1;
 		}
 		
-		Map<CharacterRange, List<CharacterRange>> rangesMap = new HashMap<>();
-		for (CharacterRange r1 : ranges) {
-			for (CharacterRange r2 : result) {
+		Map<CharRange, List<CharRange>> rangesMap = new HashMap<>();
+		for (CharRange r1 : ranges) {
+			for (CharRange r2 : result) {
 				if (r1.contains(r2))
 					rangesMap.computeIfAbsent(r1, k -> new ArrayList<>()).add(r2);
 			}
@@ -145,18 +145,18 @@ public class CharacterRanges {
         return categoriesMap.get(categoryName);
     }
 
-    public static Alt<CharacterRange> getCharacterClassInCategory(String categoryName) {
+    public static Alt<CharRange> getCharacterClassInCategory(String categoryName) {
         List<Integer> vals = new ArrayList<>(categoriesMap.get(categoryName));
         Collections.sort(vals);
 
-        List<CharacterRange> ranges = new ArrayList<>();
+        List<CharRange> ranges = new ArrayList<>();
 
         int start = vals.get(0);
         int end = vals.get(0);
 
         for (int i = 1; i < vals.size(); i++) {
             if (vals.get(i) - end > 1) {
-                ranges.add(CharacterRange.in(start, end));
+                ranges.add(CharRange.in(start, end));
                 start = vals.get(i);
             }
             end = vals.get(i);
@@ -169,13 +169,13 @@ public class CharacterRanges {
         return '\u0020' < codePoint && codePoint < '\u007f';
     }
 
-    public static Alt<CharacterRange> reverse(CharacterRange range) {
-        List<CharacterRange> ranges = new ArrayList<>();
+    public static Alt<CharRange> reverse(CharRange range) {
+        List<CharRange> ranges = new ArrayList<>();
         if(range.getStart() >= 1) {
-            ranges.add(CharacterRange.in(1, range.getStart() - 1));
+            ranges.add(CharRange.in(1, range.getStart() - 1));
         }
         if(range.getEnd() < MAX_UTF32_VAL) {
-            ranges.add(CharacterRange.in(range.getEnd() + 1, MAX_UTF32_VAL));
+            ranges.add(CharRange.in(range.getEnd() + 1, MAX_UTF32_VAL));
         }
         return Alt.from(ranges);
     }

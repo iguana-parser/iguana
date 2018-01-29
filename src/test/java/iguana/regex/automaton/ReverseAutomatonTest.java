@@ -28,11 +28,11 @@
 package iguana.regex.automaton;
 
 import iguana.utils.input.Input;
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.regex.Alt;
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.RegularExpression;
-import iguana.regex.Sequence;
+import iguana.regex.Seq;
 import iguana.regex.matcher.DFAMatcher;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ public class ReverseAutomatonTest {
 	
 	@Test
 	public void test1() {
-		Sequence<Character> r = Sequence.from("test");
+		Seq<Char> r = Seq.from("test");
 		Automaton a = AutomatonOperations.reverse(r.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("tset")));
@@ -50,7 +50,7 @@ public class ReverseAutomatonTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression r = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('A', 'Z'), CharacterRange.in('0', '9'), Character.from('_'));
+		RegularExpression r = Alt.from(CharRange.in('a', 'z'), CharRange.in('A', 'Z'), CharRange.in('0', '9'), Char.from('_'));
 		Automaton a = AutomatonOperations.reverse(r.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromChar('a')));

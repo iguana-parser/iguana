@@ -46,8 +46,8 @@ public class AltTest {
 	
 	@Test
 	public void test1() {
-		Character a = Character.from('a');
-		Character b = Character.from('b');
+		Char a = Char.from('a');
+		Char b = Char.from('b');
 		
 		RegularExpression regex = Alt.from(a, b);
 		
@@ -64,7 +64,7 @@ public class AltTest {
 	
 	@Test
 	public void test2() {
-		Alt<Sequence<Character>> alt = Alt.from(Sequence.from("for"), Sequence.from("forall"));
+		Alt<Seq<Char>> alt = Alt.from(Seq.from("for"), Seq.from("forall"));
 		Matcher matcher = factory.getMatcher(alt);
 		assertEquals(3, matcher.match(Input.fromString("for"), 0));
 		assertEquals(6, matcher.match(Input.fromString("forall"), 0));
@@ -72,7 +72,7 @@ public class AltTest {
 	
 	@Test
 	public void test3() {
-		RegularExpression regex = Alt.from(Sequence.from("when"), Sequence.from("if"));
+		RegularExpression regex = Alt.from(Seq.from("when"), Seq.from("if"));
 		Matcher matcher = factory.getMatcher(regex);
 		
 		assertEquals(4, matcher.match(Input.fromString("when"), 0));

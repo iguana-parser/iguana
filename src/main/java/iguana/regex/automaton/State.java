@@ -27,7 +27,7 @@
 
 package iguana.regex.automaton;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.RegularExpression;
 
 import java.io.Serializable;
@@ -39,7 +39,7 @@ public class State implements Serializable {
 
 	private final Set<Transition> transitions;
 	
-	private final Map<CharacterRange, State> reachableStates;
+	private final Map<CharRange, State> reachableStates;
 	
 	private final Set<State> epsilonSates;
 			
@@ -68,11 +68,11 @@ public class State implements Serializable {
 		return transitions;
 	}
 	
-	public State getState(CharacterRange r) {
+	public State getState(CharRange r) {
 		return reachableStates.get(r);
 	}
 
-	public boolean hasTransition(CharacterRange r) {
+	public boolean hasTransition(CharRange r) {
 		return reachableStates.get(r) != null;
 	}
 

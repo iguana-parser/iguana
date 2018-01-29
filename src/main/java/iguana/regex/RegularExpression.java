@@ -37,22 +37,18 @@ public interface RegularExpression extends Serializable {
 
 	long serialVersionUID = 1L;
 
-    String getName();
-
-    Object getObject();
-
 	boolean isNullable();
 
-    Set<CharacterRange> getLookaheads();
+    Set<CharRange> getLookaheads();
 
-    Set<CharacterRange> getLookbehinds();
+    Set<CharRange> getLookbehinds();
 	
-	Set<CharacterRange> getFirstSet();
+	Set<CharRange> getFirstSet();
 	
 	/**
 	 * The set of characters (ranges) that cannot follow this regular expressions. 
 	 */
-	Set<CharacterRange> getNotFollowSet();
+	Set<CharRange> getNotFollowSet();
 		
 	int length();
 

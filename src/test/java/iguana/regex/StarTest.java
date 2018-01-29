@@ -40,7 +40,7 @@ public class StarTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regex = Star.from(Character.from('a'));
+		RegularExpression regex = Star.from(Char.from('a'));
 
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(4, automaton.getCountStates());
@@ -62,7 +62,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		RegularExpression regex = Star.from(Sequence.from(Plus.from(Alt.from(CharacterRange.in('a', 'a')))));
+		RegularExpression regex = Star.from(Seq.from(Plus.from(Alt.from(CharRange.in('a', 'a')))));
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(7, automaton.getCountStates());
 		
@@ -80,9 +80,9 @@ public class StarTest {
 	@Test
 	public void test3() {
 		// ([a-z]+ | [(-)] | "*")*
-		RegularExpression r1 = Plus.from(Alt.from(CharacterRange.in('a', 'z')));
-		RegularExpression r2 = Plus.from(Alt.from(CharacterRange.in('(', ')')));
-		RegularExpression r3 = Character.from('*');
+		RegularExpression r1 = Plus.from(Alt.from(CharRange.in('a', 'z')));
+		RegularExpression r2 = Plus.from(Alt.from(CharRange.in('(', ')')));
+		RegularExpression r3 = Char.from('*');
 		
 		Automaton automaton = Star.from(Alt.from(r1, r2, r3)).getAutomaton();
 		assertEquals(16, automaton.getCountStates());

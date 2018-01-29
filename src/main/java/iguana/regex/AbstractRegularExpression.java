@@ -6,38 +6,22 @@ public abstract class AbstractRegularExpression implements RegularExpression {
 
     private static final long serialVersionUID = 1L;
 
-    private final String name;
+    private final Set<CharRange> lookaheads;
 
-    private final Object object;
-
-    private final Set<CharacterRange> lookaheads;
-
-    private final Set<CharacterRange> lookbehinds;
+    private final Set<CharRange> lookbehinds;
 
     public AbstractRegularExpression(RegexBuilder<? extends  RegularExpression> builder ) {
-        this.name = builder.name;
-        this.object = builder.object;
         this.lookaheads = builder.lookaheads;
         this.lookbehinds = builder.lookbehinds;
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Object getObject() {
-        return object;
-    }
-
-    @Override
-    public Set<CharacterRange> getLookaheads() {
+    public Set<CharRange> getLookaheads() {
         return lookaheads;
     }
 
     @Override
-    public Set<CharacterRange> getLookbehinds() {
+    public Set<CharRange> getLookbehinds() {
         return lookbehinds;
     }
 

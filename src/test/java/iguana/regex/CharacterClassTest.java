@@ -43,7 +43,7 @@ public class CharacterClassTest {
 
 	@Test
 	public void test1() {
-		RegularExpression regex = Alt.from(CharacterRange.in('a', 'z'), CharacterRange.in('1', '8'));
+		RegularExpression regex = Alt.from(CharRange.in('a', 'z'), CharRange.in('1', '8'));
 
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(6, automaton.getCountStates());
@@ -67,7 +67,7 @@ public class CharacterClassTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regex = Alt.from(CharacterRange.in('1', '5'), CharacterRange.in('1', '7'), CharacterRange.in('3', '8'));
+		RegularExpression regex = Alt.from(CharRange.in('1', '5'), CharRange.in('1', '7'), CharRange.in('3', '8'));
 
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(8, automaton.getCountStates());
@@ -91,10 +91,10 @@ public class CharacterClassTest {
 	}
 	
 	public void notTest() {
-		Alt<CharacterRange> c = Alt.from(CharacterRange.in('0', '9'), CharacterRange.in('a', 'z'));
-		Alt<CharacterRange> expected = Alt.from(CharacterRange.in(1, '0' - 1), 
-													  CharacterRange.in('9' + 1, 'a' - 1), 
-													  CharacterRange.in('z' + 1, CharacterRanges.MAX_UTF32_VAL));
+		Alt<CharRange> c = Alt.from(CharRange.in('0', '9'), CharRange.in('a', 'z'));
+		Alt<CharRange> expected = Alt.from(CharRange.in(1, '0' - 1),
+													  CharRange.in('9' + 1, 'a' - 1),
+													  CharRange.in('z' + 1, CharacterRanges.MAX_UTF32_VAL));
 		
 		assertEquals(expected, Alt.not(c));
 	}

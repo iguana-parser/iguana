@@ -47,7 +47,7 @@ public class OptTest {
 	
 	@Test
 	public void test1() {
-		RegularExpression regex = Opt.from(Character.from('a'));
+		RegularExpression regex = Opt.from(Char.from('a'));
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(4, automaton.getCountStates());
 		
@@ -61,7 +61,7 @@ public class OptTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regex = Opt.from(Sequence.from("integer"));
+		RegularExpression regex = Opt.from(Seq.from("integer"));
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(10, automaton.getCountStates());
 		

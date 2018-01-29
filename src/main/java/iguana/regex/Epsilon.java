@@ -32,7 +32,6 @@ import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.Set;
 
-import static iguana.utils.collections.CollectionsUtil.*;
 import static iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class Epsilon extends AbstractRegularExpression {
@@ -41,7 +40,7 @@ public class Epsilon extends AbstractRegularExpression {
 	
 	public static int VALUE = -2;
 	
-	private static final Set<CharacterRange> firstSet = immutableSet(CharacterRange.in(VALUE, VALUE));
+	private static final Set<CharRange> firstSet = immutableSet(CharRange.in(VALUE, VALUE));
 	
 	private static Epsilon instance;
 
@@ -53,20 +52,19 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 	
 	private static RegexBuilder<Epsilon> builder =
-			new RegexBuilder<Epsilon>("epsilon") {
+			new RegexBuilder<Epsilon>() {
 					@Override
 					public Epsilon build() {
 						return Epsilon.getInstance();
 					}};
 
-    public static CharacterRange asCharacterRange() {
-        return CharacterRange.in(VALUE, VALUE);
+    public static CharRange asCharRange() {
+        return CharRange.in(VALUE, VALUE);
     }
 	
 	private Epsilon() {
 		super(builder);
 	}
-
 
 	private Object readResolve()  {
 	    return instance;
@@ -77,8 +75,9 @@ public class Epsilon extends AbstractRegularExpression {
 	    instance = this;
 	}
 
-    public String toString(int j) {
-        return this.toString() + (j == 1? " . " : "");
+    @Override
+    public String toString() {
+        return "epsilon";
     }
 
 	@Override
@@ -87,12 +86,12 @@ public class Epsilon extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Set<CharacterRange> getFirstSet() {
+	public Set<CharRange> getFirstSet() {
 		return firstSet;
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
+	public Set<CharRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 

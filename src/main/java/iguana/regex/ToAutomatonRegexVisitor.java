@@ -9,7 +9,7 @@ import java.util.Set;
 public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automaton> {
 
 	@Override
-	public Automaton visit(Character c) {
+	public Automaton visit(Char c) {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
 		startState.addTransition(new Transition(c.getValue(), finalState));
@@ -17,7 +17,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	}
 
 	@Override
-	public Automaton visit(CharacterRange r) {
+	public Automaton visit(CharRange r) {
 		State startState = new State();
 		State finalState = new State(StateType.FINAL);
 		startState.addTransition(new Transition(r.getStart(), r.getEnd(), finalState));
@@ -63,7 +63,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
 	@Override
 	public Automaton visit(Plus p) {
-		return Sequence.from(p.getSymbol(), Star.from(p.getSymbol())).accept(this);
+		return Seq.from(p.getSymbol(), Star.from(p.getSymbol())).accept(this);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	}
 
 	@Override
-	public <E extends RegularExpression> Automaton visit(Sequence<E> seq) {
+	public <E extends RegularExpression> Automaton visit(Seq<E> seq) {
 		List<Automaton> automatons = new ArrayList<>();
 		
 		List<E> symbols = seq.getSymbols();

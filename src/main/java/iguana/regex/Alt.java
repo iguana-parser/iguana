@@ -51,10 +51,6 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 		return builder(list).build();
 	}
 	
-	private static <T extends RegularExpression> String getName(List<T> elements) {
-		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" | ")) + ")";
-	}
-
 	@Override
 	public boolean isNullable() {
 		return symbols.stream().anyMatch(e -> ((RegularExpression)e).isNullable()); 
@@ -102,12 +98,17 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	}
 
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return symbols.stream().flatMap(x -> ((RegularExpression)x).getFirstSet().stream()).collect(Collectors.toSet());
+	public String toString() {
+		return "(" + symbols.stream().map(a -> a.toString()).collect(Collectors.joining(" | ")) + ")";
+	}
+
+	@Override
+	public Set<CharRange> getFirstSet() {
+		return symbols.stream().flatMap(x -> x.getFirstSet().stream()).collect(Collectors.toSet());
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
+	public Set<CharRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 
@@ -120,41 +121,41 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 		return symbols;
 	}
 	
-	public static Alt<CharacterRange> not(Character...chars) {
-		List<CharacterRange> ranges = Arrays.stream(chars).map(c -> CharacterRange.in(c.getValue(), c.getValue())).collect(Collectors.toList());
+	public static Alt<CharRange> not(Char...chars) {
+		List<CharRange> ranges = Arrays.stream(chars).map(c -> CharRange.in(c.getValue(), c.getValue())).collect(Collectors.toList());
 		return not(ranges);
 	}
 	
-	public static Alt<CharacterRange> not(CharacterRange...ranges) {
+	public static Alt<CharRange> not(CharRange...ranges) {
 		return not(Arrays.asList(ranges));
 	}
 	
-	public static Alt<CharacterRange> not(Alt<CharacterRange> alt) {
+	public static Alt<CharRange> not(Alt<CharRange> alt) {
 		return not(alt.symbols);
 	}
 	
-	public static Alt<CharacterRange> not(List<CharacterRange> ranges) {
-		List<CharacterRange> newRanges = new ArrayList<>();
+	public static Alt<CharRange> not(List<CharRange> ranges) {
+		List<CharRange> newRanges = new ArrayList<>();
 		
 		int i = 0;
 		
 		Collections.sort(ranges);
 		
 		if(ranges.get(i).getStart() >= 1) {
-			newRanges.add(CharacterRange.in(1, ranges.get(i).getStart() - 1));
+			newRanges.add(CharRange.in(1, ranges.get(i).getStart() - 1));
 		}
 		
 		for (; i < ranges.size() - 1; i++) {
-			CharacterRange r1 = ranges.get(i);
-			CharacterRange r2 = ranges.get(i + i);
+			CharRange r1 = ranges.get(i);
+			CharRange r2 = ranges.get(i + i);
 			
 			if(r2.getStart() > r1.getEnd() + 1) {
-				newRanges.add(CharacterRange.in(r1.getEnd() + 1, r2.getStart() - 1));
+				newRanges.add(CharRange.in(r1.getEnd() + 1, r2.getStart() - 1));
 			}
 		}
 		
 		if(ranges.get(i).getEnd() < CharacterRanges.MAX_UTF32_VAL) {
-			newRanges.add(CharacterRange.in(ranges.get(i).getEnd() + 1, CharacterRanges.MAX_UTF32_VAL));
+			newRanges.add(CharRange.in(ranges.get(i).getEnd() + 1, CharacterRanges.MAX_UTF32_VAL));
 		}
 		
 		return builder(newRanges).build();
@@ -176,25 +177,29 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	
 	public static class Builder<T extends RegularExpression> extends RegexBuilder<Alt<T>> {
 
-		List<T> symbols;
+		private final List<T> symbols = new ArrayList<>();
+
+		private Builder() {}
 		
 		public Builder(List<T> symbols) {
-			super(getName(symbols));
-			this.symbols = symbols;
+			if (symbols.size() == 1) {
+				System.out.print("WTF");
+			}
+			this.addAll(symbols);
 		}
-		
+
 		public Builder(Alt<T> alt) {
 			super(alt);
-			this.symbols = alt.getSymbols();
+			this.addAll(alt.getSymbols());
 		}
-		
+
 		public Builder<T> add(T symbol) {
 			symbols.add(symbol);
 			return this;
 		}
-				
-		public Builder<T> add(List<T> l) {
-			symbols.addAll(l);
+
+		public Builder<T> addAll(List<T> symbols) {
+			this.symbols.addAll(symbols);
 			return this;
 		}
 
@@ -202,7 +207,8 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 		public Alt<T> build() {
 			return new Alt<>(this);
 		}
-	}
+
+    }
 
 	@Override
 	public <E> E accept(RegularExpressionVisitor<E> visitor) {

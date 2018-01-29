@@ -27,8 +27,8 @@
 
 package iguana.regex.matcher;
 
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
 
@@ -44,39 +44,39 @@ public class DFAMatcherFactory implements MatcherFactory {
     	if (regex == Epsilon.getInstance())
     		return epsilonMatcher();
         
-        if (regex instanceof Character)
-            return characterMatcher((Character) regex);
+        if (regex instanceof Char)
+            return characterMatcher((Char) regex);
         
-        if (regex instanceof CharacterRange)
-            return characterRangeMatcher((CharacterRange) regex);
+        if (regex instanceof CharRange)
+            return characterRangeMatcher((CharRange) regex);
             
         return cache.computeIfAbsent(regex, DFAMatcher::new);
     }
     
     public Matcher getBackwardsMatcher(RegularExpression regex) {
         
-        if (regex instanceof Character)
-            return characterBackwardsMatcher((Character) regex);
+        if (regex instanceof Char)
+            return characterBackwardsMatcher((Char) regex);
         
-        if (regex instanceof CharacterRange)
-            return characterRangeBackwardsMatcher((CharacterRange) regex);
+        if (regex instanceof CharRange)
+            return characterRangeBackwardsMatcher((CharRange) regex);
         
         return cache.computeIfAbsent(regex, DFABackwardsMatcher::new);
     }
     
-    public static Matcher characterMatcher(Character c) {
+    public static Matcher characterMatcher(Char c) {
         return (input, i) -> input.charAt(i) == c.getValue() ? 1 : -1;
     }
     
-    public static Matcher characterBackwardsMatcher(Character c) {
+    public static Matcher characterBackwardsMatcher(Char c) {
         return (input, i) ->  i == 0 ? -1 : ( input.charAt(i - 1) == c.getValue() ? 1 : -1 );
     }
     
-    public static Matcher characterRangeMatcher(CharacterRange range) {
+    public static Matcher characterRangeMatcher(CharRange range) {
         return (input, i) -> input.charAt(i) >= range.getStart() && input.charAt(i) <= range.getEnd() ? 1 : -1;
     }
     
-    public static Matcher characterRangeBackwardsMatcher(CharacterRange range) {
+    public static Matcher characterRangeBackwardsMatcher(CharRange range) {
         return (input, i) -> i == 0 ? -1 : ( input.charAt(i - 1) >= range.getStart() && input.charAt(i - 1) <= range.getEnd() ? 1 : -1 );
     }
     

@@ -33,7 +33,7 @@ public class Star extends AbstractRegularExpression {
 
     private static final long serialVersionUID = 1L;
 
-    private final RegularExpression s;
+    private final RegularExpression regex;
 
     private final List<RegularExpression> separators;
 
@@ -43,17 +43,13 @@ public class Star extends AbstractRegularExpression {
 
     private Star(Builder builder) {
         super(builder);
-        this.s = builder.s;
+        this.regex = builder.regex;
         this.separators = Collections.unmodifiableList(builder.separators);
-    }
-
-    private static String getName(RegularExpression s) {
-        return s + "*";
     }
 
     @Override
     public int length() {
-        return s.length();
+        return regex.length();
     }
 
     @Override
@@ -67,13 +63,13 @@ public class Star extends AbstractRegularExpression {
     }
 
     @Override
-    public Set<CharacterRange> getFirstSet() {
-        return s.getFirstSet();
+    public Set<CharRange> getFirstSet() {
+        return regex.getFirstSet();
     }
 
     @Override
-    public Set<CharacterRange> getNotFollowSet() {
-        return s.getFirstSet();
+    public Set<CharRange> getNotFollowSet() {
+        return regex.getFirstSet();
     }
 
     public List<RegularExpression> getSeparators() {
@@ -86,7 +82,7 @@ public class Star extends AbstractRegularExpression {
     }
 
     public RegularExpression getSymbol() {
-        return s;
+        return regex;
     }
 
     @Override
@@ -98,12 +94,17 @@ public class Star extends AbstractRegularExpression {
             return false;
 
         Star other = (Star) obj;
-        return s.equals(other.s) && separators.equals(other.separators);
+        return regex.equals(other.regex) && separators.equals(other.separators);
     }
 
     @Override
     public int hashCode() {
-        return s.hashCode();
+        return regex.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return regex.toString() + "*";
     }
 
     public static Builder builder(RegularExpression s) {
@@ -112,17 +113,21 @@ public class Star extends AbstractRegularExpression {
 
     public static class Builder extends RegexBuilder<Star> {
 
-        private RegularExpression s;
-        private List<RegularExpression> separators = new ArrayList<>();
+        private final RegularExpression regex;
 
-        public Builder(RegularExpression s) {
-            super(getName(s));
-            this.s = s;
+        private final List<RegularExpression> separators = new ArrayList<>();
+
+        private Builder() {
+            regex = null;
+        }
+
+        public Builder(RegularExpression regex) {
+            this.regex = regex;
         }
 
         public Builder(Star star) {
             super(star);
-            this.s = star.s;
+            this.regex = star.regex;
             this.addSeparators(star.getSeparators());
         }
 
@@ -136,7 +141,7 @@ public class Star extends AbstractRegularExpression {
             return this;
         }
 
-        public Builder addSeparators(RegularExpression... symbols) {
+        public Builder addSeparators(RegularExpression...symbols) {
             separators.addAll(Arrays.asList(symbols));
             return this;
         }

@@ -29,44 +29,36 @@ package iguana.regex;
 
 import iguana.utils.input.Input;
 
-import static iguana.utils.string.StringUtil.*;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Sequence<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
+public class Seq<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	private final List<T> symbols;
 	
-	public static Sequence<Character> from(String s) {
+	public static Seq<Char> from(String s) {
 		return from(Input.toIntArray(s));
 	}
 	
-	public static Sequence<Character> from(int[] chars) {
-		return builder(Arrays.stream(chars).mapToObj(Character::from).collect(Collectors.toList())).build();
+	public static Seq<Char> from(int[] chars) {
+		return builder(Arrays.stream(chars).mapToObj(Char::from).collect(Collectors.toList())).build();
 	}
 	
-	public static <T extends RegularExpression> Sequence<T> from(List<T> symbols) {
+	public static <T extends RegularExpression> Seq<T> from(List<T> symbols) {
 		return builder(symbols).build();
 	}
 	
 	@SafeVarargs
 	@SuppressWarnings("varargs")
-	public static <T extends RegularExpression> Sequence<T> from(T...elements) {
+	public static <T extends RegularExpression> Seq<T> from(T...elements) {
 		return from(Arrays.asList(elements));
 	}
-	
-	private Sequence(Builder<T> builder) {
+
+	private Seq(Builder<T> builder) {
 		super(builder);
 		this.symbols = builder.symbols;
-	}
-	
-	private static <T extends RegularExpression> String getName(List<T> elements) {
-		if (elements.stream().allMatch(c -> c instanceof Character))
-			return "'" + elements.stream().map(a -> a.getName()).collect(Collectors.joining("")) + "'";
-		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" ")) + ")";
 	}
 	
 	@Override
@@ -92,27 +84,34 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		if(obj == this)
 			return true;
 		
-		if(!(obj instanceof Sequence))
+		if(!(obj instanceof Seq))
 			return false;
 		
-		Sequence<?> other = (Sequence<?>) obj;
+		Seq<?> other = (Seq<?>) obj;
 		
 		return symbols.equals(other.symbols);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return symbols.hashCode();
 	}
 
-	@Override
+    @Override
+    public String toString() {
+        if (symbols.stream().allMatch(c -> c instanceof Char))
+            return symbols.stream().map(a -> a.toString()).collect(Collectors.joining(""));
+        return "(" + symbols.stream().map(a -> a.toString()).collect(Collectors.joining(" ")) + ")";
+    }
+
+    @Override
 	public Iterator<T> iterator() {
 		return symbols.iterator();
 	}
 	
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		Set<CharacterRange> firstSet = new HashSet<>();
+	public Set<CharRange> getFirstSet() {
+		Set<CharRange> firstSet = new HashSet<>();
 		for(RegularExpression regex : symbols) {
 			firstSet.addAll(regex.getFirstSet());
 			if(!regex.isNullable()) {
@@ -123,7 +122,7 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
+	public Set<CharRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 
@@ -137,17 +136,12 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		return symbols;
 	}
 	
-	@Override
-	public String toString() {
-		return "(" + listToString(symbols, " ") + ")";
-	}
-	
 	public static <T extends RegularExpression> Builder<T> builder(T s) {
 		return builder(Arrays.asList(s));
 	}
 	
 	public static <T extends RegularExpression> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>(symbols);
+		return new Builder<T>().setSymbols(symbols);
 	}
 	
 	@SafeVarargs
@@ -156,34 +150,37 @@ public class Sequence<T extends RegularExpression> extends AbstractRegularExpres
 		return builder(Arrays.asList(symbols));
 	}
 	
-	public static class Builder<T extends RegularExpression> extends RegexBuilder<Sequence<T>> {
+	public static class Builder<T extends RegularExpression> extends RegexBuilder<Seq<T>> {
 
 		private List<T> symbols = new ArrayList<>();
-		
-		public Builder(List<T> symbols) {
-			super(getName(symbols));
-			this.symbols = symbols;
-		}
-		
-		public Builder(Sequence<T> seq) {
+
+		public Builder(Seq<T> seq) {
 			super(seq);
 			this.symbols = seq.symbols;
 		}
+
+		public Builder() {}
 		
 		public Builder<T> add(T s) {
 			symbols.add(s);
 			return this;
 		}
 		
-		public Builder<T> add(List<T> symbols) {
+		public Builder<T> addAll(List<T> symbols) {
 			this.symbols.addAll(symbols);
+			return this;
+		}
+
+		public Builder<T> setSymbols(List<T> symbols) {
+			this.symbols = symbols;
 			return this;
 		}
 		
 		@Override
-		public Sequence<T> build() {
-			return new Sequence<>(this);
+		public Seq<T> build() {
+			return new Seq<>(this);
 		}
+
 	}
 
 	@Override

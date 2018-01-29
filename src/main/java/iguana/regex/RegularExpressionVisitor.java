@@ -2,9 +2,9 @@ package iguana.regex;
 
 public interface RegularExpressionVisitor<T> {
 	
-	T visit(Character c);
+	T visit(Char c);
 	
-    T visit(CharacterRange r);
+    T visit(CharRange r);
 	
 	T visit(EOF eof);
 	
@@ -18,6 +18,6 @@ public interface RegularExpressionVisitor<T> {
 	
 	<E extends RegularExpression> T visit(Alt<E> alt);
 	
-    <E extends RegularExpression> T visit(Sequence<E> seq);
+    <E extends RegularExpression> T visit(Seq<E> seq);
 
 }

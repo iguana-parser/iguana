@@ -37,16 +37,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CharacterTest {
+public class CharTest {
 	
 	MatcherFactory factory = new DFAMatcherFactory();
 
-	Character c = Character.from('a');
+	Char c = Char.from('a');
 	
 	@Test
 	public void testAutomaton() {
 		Automaton a = c.getAutomaton();
-		assertArrayEquals(new CharacterRange[] {CharacterRange.in('a', 'a')}, a.getAlphabet());
+		assertArrayEquals(new CharRange[] {CharRange.in('a', 'a')}, a.getAlphabet());
 		assertEquals(2, a.getCountStates());
 	}
 

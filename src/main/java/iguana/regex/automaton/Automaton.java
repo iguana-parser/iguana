@@ -27,7 +27,7 @@
 
 package iguana.regex.automaton;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.RegularExpression;
 
 import java.io.Serializable;
@@ -55,7 +55,7 @@ public class Automaton implements Serializable {
 	
 	private final boolean deterministic;
 	
-	private final CharacterRange[] alphabet;
+	private final CharRange[] alphabet;
 	
 	public Automaton(AutomatonBuilder builder) {
 		this.startState = builder.getStartState();
@@ -86,7 +86,7 @@ public class Automaton implements Serializable {
 		return states[id];
 	}
 	
-	public CharacterRange[] getAlphabet() {
+	public CharRange[] getAlphabet() {
 		return alphabet;
 	}
 	

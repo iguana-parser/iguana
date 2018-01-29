@@ -64,7 +64,7 @@ public class ExamplesTest {
 	@Test
 	public void testIntersectionKeywordId() {
 		Automaton a1 = RegularExpressionExamples.getId().getAutomaton();
-		Automaton a2 = Sequence.from("for").getAutomaton();
+		Automaton a2 = Seq.from("for").getAutomaton();
 		
 		Automaton intersect = AutomatonOperations.intersect(a1, a2);		
 		assertFalse(intersect.isLanguageEmpty());

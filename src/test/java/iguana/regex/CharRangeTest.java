@@ -42,22 +42,22 @@ import static iguana.regex.CharacterRanges.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CharacterRangeTest {
+public class CharRangeTest {
 	
 	MatcherFactory factory = new DFAMatcherFactory();
 	
 	@Test
 	public void overlappingTest1() {
-		CharacterRange r1 = CharacterRange.in('a', 'f');
-		CharacterRange r2 = CharacterRange.in('d', 'k');
+		CharRange r1 = CharRange.in('a', 'f');
+		CharRange r2 = CharRange.in('d', 'k');
 		assertTrue(r1.overlaps(r2));
 		assertTrue(r2.overlaps(r1));
 	}
 	
 	@Test
 	public void overlappingTest2() {
-		CharacterRange r1 = CharacterRange.in('a', 'z');
-		CharacterRange r2 = CharacterRange.in('s', 'u');
+		CharRange r1 = CharRange.in('a', 'z');
+		CharRange r2 = CharRange.in('s', 'u');
 		assertTrue(r1.overlaps(r2));
 		assertTrue(r2.overlaps(r1));
 	}
@@ -65,16 +65,16 @@ public class CharacterRangeTest {
 	@Test
 	public void overlappingToNonOverlapping1() {
 		// 1-5 3-7
-		CharacterRange r1 = CharacterRange.in(1, 5);
-		CharacterRange r2 = CharacterRange.in(3, 7);
-		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2);
+		CharRange r1 = CharRange.in(1, 5);
+		CharRange r2 = CharRange.in(3, 7);
+		Map<CharRange, List<CharRange>> nonOverlapping = toNonOverlapping(r1, r2);
 		
 		// 1-2 3-5 6-7
-		CharacterRange t1 = CharacterRange.in(1, 2);
-		CharacterRange t2 = CharacterRange.in(3, 5);
-		CharacterRange t3 = CharacterRange.in(6, 7);
+		CharRange t1 = CharRange.in(1, 2);
+		CharRange t2 = CharRange.in(3, 5);
+		CharRange t3 = CharRange.in(6, 7);
 		
-		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t1, t2)), 
+		Map<CharRange, List<CharRange>> expected = map(list(tuple(r1, list(t1, t2)),
 				                                                      tuple(r2, list(t2, t3)))); 
 				
 		assertEquals(expected, nonOverlapping);
@@ -83,21 +83,21 @@ public class CharacterRangeTest {
 	@Test
 	public void overlappingToNonOverlapping2() {
 		// 1-7 5-13 6-12 17-21
-		CharacterRange r2 = CharacterRange.in(5, 13);
-		CharacterRange r4 = CharacterRange.in(17, 21);
-		CharacterRange r1 = CharacterRange.in(1, 7);
-		CharacterRange r3 = CharacterRange.in(6, 12);
-		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3, r4);
+		CharRange r2 = CharRange.in(5, 13);
+		CharRange r4 = CharRange.in(17, 21);
+		CharRange r1 = CharRange.in(1, 7);
+		CharRange r3 = CharRange.in(6, 12);
+		Map<CharRange, List<CharRange>> nonOverlapping = toNonOverlapping(r1, r2, r3, r4);
 		
 		// 1-4 5-5 6-7 8-12 13-13 17-21
-		CharacterRange t1 = CharacterRange.in(1, 4);
-		CharacterRange t2 = CharacterRange.in(5, 5);
-		CharacterRange t3 = CharacterRange.in(6, 7);
-		CharacterRange t4 = CharacterRange.in(8, 12);
-		CharacterRange t5 = CharacterRange.in(13, 13);
-		CharacterRange t6 = CharacterRange.in(17, 21);
+		CharRange t1 = CharRange.in(1, 4);
+		CharRange t2 = CharRange.in(5, 5);
+		CharRange t3 = CharRange.in(6, 7);
+		CharRange t4 = CharRange.in(8, 12);
+		CharRange t5 = CharRange.in(13, 13);
+		CharRange t6 = CharRange.in(17, 21);
 		
-		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t1, t2, t3)),
+		Map<CharRange, List<CharRange>> expected = map(list(tuple(r1, list(t1, t2, t3)),
 				                                                      tuple(r2, list(t2, t3, t4, t5)),
 				                                                      tuple(r3, list(t3, t4)),
 				                                                      tuple(r4, list(t6))));
@@ -108,19 +108,19 @@ public class CharacterRangeTest {
 	@Test
 	public void overlappingToNonOverlapping3() {
 		// 1-7 3-5 4-4
-		CharacterRange r1 = CharacterRange.in(1, 7);
-		CharacterRange r2 = CharacterRange.in(3, 5);
-		CharacterRange r3 = CharacterRange.in(4, 4);
-		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3);
+		CharRange r1 = CharRange.in(1, 7);
+		CharRange r2 = CharRange.in(3, 5);
+		CharRange r3 = CharRange.in(4, 4);
+		Map<CharRange, List<CharRange>> nonOverlapping = toNonOverlapping(r1, r2, r3);
 		
 		// 1-2 3-3 4-4 5-5 6-7
-		CharacterRange t1 = CharacterRange.in(1, 2);
-		CharacterRange t2 = CharacterRange.in(3, 3);
-		CharacterRange t3 = CharacterRange.in(4, 4);
-		CharacterRange t4 = CharacterRange.in(5, 5);
-		CharacterRange t5 = CharacterRange.in(6, 7);
+		CharRange t1 = CharRange.in(1, 2);
+		CharRange t2 = CharRange.in(3, 3);
+		CharRange t3 = CharRange.in(4, 4);
+		CharRange t4 = CharRange.in(5, 5);
+		CharRange t5 = CharRange.in(6, 7);
 		
-		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t1, t2, t3, t4, t5)),
+		Map<CharRange, List<CharRange>> expected = map(list(tuple(r1, list(t1, t2, t3, t4, t5)),
 				                                                      tuple(r2, list(t2, t3, t4)),
 				                                                      tuple(r3, list(t3))));
 		
@@ -130,17 +130,17 @@ public class CharacterRangeTest {
 	@Test
 	public void overlappingToNonOverlapping4() {
 		// 11-12 1-3 5-7
-		CharacterRange r1 = CharacterRange.in(11, 12);
-		CharacterRange r2 = CharacterRange.in(1, 3);
-		CharacterRange r3 = CharacterRange.in(5, 7);
-		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3);
+		CharRange r1 = CharRange.in(11, 12);
+		CharRange r2 = CharRange.in(1, 3);
+		CharRange r3 = CharRange.in(5, 7);
+		Map<CharRange, List<CharRange>> nonOverlapping = toNonOverlapping(r1, r2, r3);
 		
 		// 1-3 5-7 11-12
-		CharacterRange t1 = CharacterRange.in(1, 3);
-		CharacterRange t2 = CharacterRange.in(5, 7); 
-		CharacterRange t3 = CharacterRange.in(11, 12);
+		CharRange t1 = CharRange.in(1, 3);
+		CharRange t2 = CharRange.in(5, 7);
+		CharRange t3 = CharRange.in(11, 12);
 		
-		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t3)),
+		Map<CharRange, List<CharRange>> expected = map(list(tuple(r1, list(t3)),
 				                                                      tuple(r2, list(t1)),
 				                                                      tuple(r3, list(t2))));
 		
@@ -150,24 +150,24 @@ public class CharacterRangeTest {
 	@Test
 	public void overlappingToNonOverlapping5() {
 		// 7-9 4-11 4-10 1-12 3-6 1-2
-		CharacterRange r1 = CharacterRange.in(7, 9);
-		CharacterRange r2 = CharacterRange.in(4, 11);
-		CharacterRange r3 = CharacterRange.in(4, 10);
-		CharacterRange r4 = CharacterRange.in(1, 12);
-		CharacterRange r5 = CharacterRange.in(3, 6);
-		CharacterRange r6 = CharacterRange.in(1, 2);
-		Map<CharacterRange, List<CharacterRange>> nonOverlapping = toNonOverlapping(r1, r2, r3, r4, r5, r6);
+		CharRange r1 = CharRange.in(7, 9);
+		CharRange r2 = CharRange.in(4, 11);
+		CharRange r3 = CharRange.in(4, 10);
+		CharRange r4 = CharRange.in(1, 12);
+		CharRange r5 = CharRange.in(3, 6);
+		CharRange r6 = CharRange.in(1, 2);
+		Map<CharRange, List<CharRange>> nonOverlapping = toNonOverlapping(r1, r2, r3, r4, r5, r6);
 		
 		// 1-2 3-3 4-6 7-9 10-10 11-11 12-12
-		CharacterRange t1 = CharacterRange.in(1, 2);
-		CharacterRange t2 = CharacterRange.in(3, 3);
-		CharacterRange t3 = CharacterRange.in(4, 6);
-		CharacterRange t4 = CharacterRange.in(7, 9);
-		CharacterRange t5 = CharacterRange.in(10, 10);
-		CharacterRange t6 = CharacterRange.in(11, 11);
-		CharacterRange t7 = CharacterRange.in(12, 12);
+		CharRange t1 = CharRange.in(1, 2);
+		CharRange t2 = CharRange.in(3, 3);
+		CharRange t3 = CharRange.in(4, 6);
+		CharRange t4 = CharRange.in(7, 9);
+		CharRange t5 = CharRange.in(10, 10);
+		CharRange t6 = CharRange.in(11, 11);
+		CharRange t7 = CharRange.in(12, 12);
 		
-		Map<CharacterRange, List<CharacterRange>> expected = map(list(tuple(r1, list(t4)),
+		Map<CharRange, List<CharRange>> expected = map(list(tuple(r1, list(t4)),
 				                                                      tuple(r2, list(t3, t4, t5, t6)),
 				                                                      tuple(r3, list(t3, t4, t5)),
 				                                                      tuple(r4, list(t1, t2, t3, t4, t5, t6, t7)),
@@ -180,7 +180,7 @@ public class CharacterRangeTest {
 	
 	@Test
 	public void test() {
-		CharacterRange range = CharacterRange.in('0', '9');
+		CharRange range = CharRange.in('0', '9');
 		Automaton automaton = range.getAutomaton();
 		assertEquals(2, automaton.getCountStates());
 		Matcher dfa = factory.getMatcher(range);

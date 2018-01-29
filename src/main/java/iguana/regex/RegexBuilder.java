@@ -33,73 +33,57 @@ import java.util.Set;
 
 public abstract class RegexBuilder<T extends RegularExpression> {
 
-	protected String name;
+    protected Set<CharRange> lookaheads = new HashSet<>();
 
-	protected Object object;
-
-    protected Set<CharacterRange> lookaheads = new HashSet<>();
-
-    protected Set<CharacterRange> lookbehinds = new HashSet<>();
+    protected Set<CharRange> lookbehinds = new HashSet<>();
 
 	public RegexBuilder(T symbol) {
-		this.name = symbol.getName();
-		this.object = symbol.getObject();
         this.lookaheads = symbol.getLookaheads();
         this.lookbehinds = symbol.getLookbehinds();
-	}
-
-	public RegexBuilder(String name) {
-		this.name = name;
 	}
 
     public RegexBuilder() {}
 	
 	public RegexBuilder<T> setName(String name) {
-		this.name = name;
 		return this;
 	}
 
-    public RegexBuilder<T> addLookbehind(Character c) {
-        lookbehinds.add(CharacterRange.from(c.getValue()));
+    public RegexBuilder<T> addLookbehind(Char c) {
+        lookbehinds.add(CharRange.from(c.getValue()));
         return this;
     }
 
-	public RegexBuilder<T> addLookbehind(CharacterRange range) {
+	public RegexBuilder<T> addLookbehind(CharRange range) {
 		lookbehinds.add(range);
 		return this;
 	}
 
-    public RegexBuilder<T> addLookahead(Character c) {
-        lookaheads.add(CharacterRange.from(c.getValue()));
+    public RegexBuilder<T> addLookahead(Char c) {
+        lookaheads.add(CharRange.from(c.getValue()));
         return this;
     }
 
-    public RegexBuilder<T> addLookahead(CharacterRange range) {
+    public RegexBuilder<T> addLookahead(CharRange range) {
 		lookaheads.add(range);
 		return this;
 	}	
-	
-	public RegexBuilder<T> setObject(Object object) {
-		this.object = object;
-		return this;
-	}
 
- 	public RegexBuilder<T> addLookbehinds(Iterable<CharacterRange> it) {
+ 	public RegexBuilder<T> addLookbehinds(Iterable<CharRange> it) {
  		it.forEach(c -> lookbehinds.add(c));
 		return this;
 	}
 
- 	public RegexBuilder<T> addLookaheads(Iterable<CharacterRange> it) {
+ 	public RegexBuilder<T> addLookaheads(Iterable<CharRange> it) {
  		it.forEach(c -> lookaheads.add(c));
 		return this;
 	}
 
- 	public RegexBuilder<T> removeLookbehinds(Collection<CharacterRange> c) {
+ 	public RegexBuilder<T> removeLookbehinds(Collection<CharRange> c) {
  		lookbehinds.removeAll(c);
  		return this;
  	}
  	
- 	public RegexBuilder<T> removeLookaheads(Collection<CharacterRange> c) {
+ 	public RegexBuilder<T> removeLookaheads(Collection<CharRange> c) {
  		lookaheads.removeAll(c);
  		return this;
  	} 	

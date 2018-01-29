@@ -34,11 +34,11 @@ public class Opt extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RegularExpression s;
+	private final RegularExpression regex;
 	
 	private Opt(Builder builder) {
 		super(builder);
-		this.s = builder.s;
+		this.regex = builder.regex;
 	}
 
 	public static Opt from(RegularExpression s) {
@@ -46,16 +46,12 @@ public class Opt extends AbstractRegularExpression {
 	}
 	
 	public RegularExpression getSymbol() {
-		return s;
+		return regex;
 	}
 
-	private static String getName(RegularExpression s) {
-		return s.getName() + "?";
-	}
-	
 	@Override
 	public int length() {
-		return s.length();
+		return regex.length();
 	}
 	
 	@Override
@@ -64,18 +60,18 @@ public class Opt extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return s.getFirstSet();
+	public Set<CharRange> getFirstSet() {
+		return regex.getFirstSet();
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
+	public Set<CharRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 
 	@Override
 	public RegexBuilder<Opt> copyBuilder() {
-		return new Builder(s);
+		return new Builder(regex);
 	}
 	
 	@Override
@@ -87,30 +83,36 @@ public class Opt extends AbstractRegularExpression {
 			return false;
 		
 		Opt other = (Opt) obj;
-		return s.equals(other.s);
+		return regex.equals(other.regex);
 	}
 	
 	@Override
 	public int hashCode() {
-		return s.hashCode();
+		return regex.hashCode();
 	}
-	
-	public static Builder builder(RegularExpression s) {
+
+    @Override
+    public String toString() {
+        return regex.toString() + "?";
+    }
+
+    public static Builder builder(RegularExpression s) {
 		return new Builder(s);
 	}
 	
 	public static class Builder extends RegexBuilder<Opt> {
 
-		private RegularExpression s;
+		private RegularExpression regex;
 
-		public Builder(RegularExpression s) {
-			super(getName(s));
-			this.s = s;
+		private Builder() {}
+
+		public Builder(RegularExpression regex) {
+			this.regex = regex;
 		}
 		
 		public Builder(Opt opt) {
 			super(opt);
-			this.s = opt.s;
+			this.regex = opt.regex;
 		}
 		
 		@Override

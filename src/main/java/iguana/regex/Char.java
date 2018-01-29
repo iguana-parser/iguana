@@ -36,28 +36,28 @@ import java.util.Set;
  * @author Ali Afroozeh
  *
  */
-public class Character extends AbstractRegularExpression {
+public class Char extends AbstractRegularExpression {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final int c;
+	private final int val;
 
-	private Character(Builder builder) {
+	private Char(Builder builder) {
 		super(builder);
-		this.c = builder.c;
+		this.val = builder.val;
 	}	
 	
-	public static Character from(int c) {
-		return new Builder(c).build();
+	public static Char from(int val) {
+		return new Builder(val).build();
 	}
 	
 	public int getValue() {
-		return c;
+		return val;
 	}
 
 	@Override
 	public int hashCode() {
-		return c;
+		return val;
 	}
 
 	@Override
@@ -66,38 +66,43 @@ public class Character extends AbstractRegularExpression {
 		if (this == obj)
 			return true;
 
-		if (!(obj instanceof Character))
+		if (!(obj instanceof Char))
 			return false;
 		
-		Character other = (Character) obj;
+		Char other = (Char) obj;
 		
-		return c == other.c;
+		return val == other.val;
 	}
 
 	public static String getName(int c) {
 		if(CharacterRanges.isPrintableAscii(c)) {
-			return (char) c + "";			
+			return (char) c + "";
 		} else {
 			String s = "\\u" + String.format("%04X", c);
 			// Escape newline inside strings
 			return s.equals("\\u000D") || s.equals("\\u000A") ? "\\" + s  : s;
 		}
 	}
-	
+
+	@Override
+	public String toString() {
+		return getName(val);
+	}
+
 	@Override
 	public boolean isNullable() {
 		return false;
 	}
 	
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		Set<CharacterRange> firstSet = new HashSet<>();
-		firstSet.add(CharacterRange.in(c, c));
+	public Set<CharRange> getFirstSet() {
+		Set<CharRange> firstSet = new HashSet<>();
+		firstSet.add(CharRange.in(val, val));
 		return firstSet;
 	}
 	
 	@Override
-	public Set<CharacterRange> getNotFollowSet() {
+	public Set<CharRange> getNotFollowSet() {
 		return Collections.emptySet();
 	}
 
@@ -111,27 +116,28 @@ public class Character extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public RegexBuilder<Character> copyBuilder() {
+	public RegexBuilder<Char> copyBuilder() {
 		return new Builder(this);
 	}
 
-	public static class Builder extends RegexBuilder<Character> {
+	public static class Builder extends RegexBuilder<Char> {
 		
-		private int c;
+		private int val;
+
+		private Builder() {}
 		
-		public Builder(int c) {
-			super(getName(c));
-			this.c = c; 
+		public Builder(int val) {
+			this.val = val;
 		}
 
-		public Builder(Character character) {
+		public Builder(Char character) {
 			super(character);
-			this.c = character.c;
+			this.val = character.val;
 		}
 		
 		@Override
-		public Character build() {
-			return new Character(this);
+		public Char build() {
+			return new Char(this);
 		}
 	}
 	

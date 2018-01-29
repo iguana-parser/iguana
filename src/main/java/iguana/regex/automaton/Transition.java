@@ -28,7 +28,7 @@
 package iguana.regex.automaton;
 
 import iguana.utils.collections.hash.MurmurHash3;
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.EOF;
 
 import java.io.Serializable;
@@ -37,21 +37,21 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private CharacterRange range;
+	private CharRange range;
 	
 	private State destination;
 	
 	private int id;
 	
 	public Transition(int start, int end, State destination) {
-		this(CharacterRange.in(start, end), destination);
+		this(CharRange.in(start, end), destination);
 	}
 	
 	public Transition(int c, State destination) {
 		this(c, c, destination);
 	}
 	
-	public Transition(CharacterRange range, State destination) {
+	public Transition(CharRange range, State destination) {
 		if (range.getEnd() < range.getStart())
 			throw new IllegalArgumentException("start cannot be less than end.");
 		
@@ -74,7 +74,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 		return range.getEnd();
 	}
 	
-	public CharacterRange getRange() {
+	public CharRange getRange() {
 		return range;
 	}
 	

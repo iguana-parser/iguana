@@ -27,7 +27,7 @@
 
 package iguana.regex.automaton;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.CharacterRanges;
 
 import java.util.*;
@@ -43,7 +43,7 @@ public class AutomatonOperations {
 		return makeDeterministic(automaton.getStartState(), automaton.getAlphabet());
 	}
 
-	public static Automaton makeDeterministic(State start, CharacterRange[] alphabet) {
+	public static Automaton makeDeterministic(State start, CharRange[] alphabet) {
 		
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
@@ -67,7 +67,7 @@ public class AutomatonOperations {
 		while (!processList.isEmpty()) {
 			Set<State> stateSet = processList.poll();
 
-			for (CharacterRange r : alphabet) {
+			for (CharRange r : alphabet) {
 				Set<State> destState = move(stateSet, r);
 				
 				if (destState.isEmpty())
@@ -115,11 +115,11 @@ public class AutomatonOperations {
 		a1 = makeDeterministic(a1);
 		a2 = makeDeterministic(a2);
 		
-		Map<CharacterRange, List<CharacterRange>> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
+		Map<CharRange, List<CharRange>> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
 		convertToNonOverlapping(a1, rangeMap);
 		convertToNonOverlapping(a2, rangeMap);
 		
-		Set<CharacterRange> values = rangeMap.values().stream()
+		Set<CharRange> values = rangeMap.values().stream()
 				                                      .flatMap(List::stream)
 				                                      .collect(Collectors.toSet());
 		
@@ -132,7 +132,7 @@ public class AutomatonOperations {
 	/**
 	 * Produces the Cartesian product of the states of an automata.
 	 */
-	private static Automaton product(Automaton a1, Automaton a2, Set<CharacterRange> values, Op op) {
+	private static Automaton product(Automaton a1, Automaton a2, Set<CharRange> values, Op op) {
 		
 		State[] states1 = a1.getStates();
 		State[] states2 = a2.getStates();
@@ -148,7 +148,7 @@ public class AutomatonOperations {
 				State state1 = states1[i];
 				State state2 = states2[j];
 				
-				for (CharacterRange r : values) {
+				for (CharRange r : values) {
 					State dest1 = state1.getState(r);
 					State dest2 = state2.getState(r);
 					if (dest1 != null && dest2 != null) {
@@ -179,14 +179,14 @@ public class AutomatonOperations {
 		return state;
 	}
 	
-	public static void convertToNonOverlapping(Automaton a, Map<CharacterRange, List<CharacterRange>> rangeMap) {
+	public static void convertToNonOverlapping(Automaton a, Map<CharRange, List<CharRange>> rangeMap) {
 		for (State state : a.getStates()) {
 			List<Transition> removeList = new ArrayList<>();
 			List<Transition> addList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					removeList.add(transition);
-					for (CharacterRange range : rangeMap.get(transition.getRange())) {
+					for (CharRange range : rangeMap.get(transition.getRange())) {
 						addList.add(new Transition(range, transition.getDestination()));
 					}					
 				}
@@ -197,13 +197,13 @@ public class AutomatonOperations {
 	}
 	
 	
-	public static Automaton makeComplete(Automaton automaton, Iterable<CharacterRange> alphabet) {
+	public static Automaton makeComplete(Automaton automaton, Iterable<CharRange> alphabet) {
 		
 		State dummyState = new State();
 		alphabet.forEach(r -> dummyState.addTransition(new Transition(r, dummyState)));
 		
 		for (State state : automaton.getStates()) {
-			for (CharacterRange r : alphabet) {
+			for (CharRange r : alphabet) {
 				if (!state.hasTransition(r)) {
 					state.addTransition(new Transition(r, dummyState));
 				}
@@ -213,10 +213,10 @@ public class AutomatonOperations {
 		return Automaton.builder(automaton.getStartState()).build();
 	}
 	
-	private static Map<CharacterRange, List<CharacterRange>> merge(CharacterRange[] alphabet1, CharacterRange[] alphabet2) {
-		List<CharacterRange> alphabets = new ArrayList<>();
-		for (CharacterRange r : alphabet1) { alphabets.add(r); }
-		for (CharacterRange r : alphabet2) { alphabets.add(r); }
+	private static Map<CharRange, List<CharRange>> merge(CharRange[] alphabet1, CharRange[] alphabet2) {
+		List<CharRange> alphabets = new ArrayList<>();
+		for (CharRange r : alphabet1) { alphabets.add(r); }
+		for (CharRange r : alphabet2) { alphabets.add(r); }
 		
 		return CharacterRanges.toNonOverlapping(alphabets);
 	}
@@ -275,7 +275,7 @@ public class AutomatonOperations {
 	 * 
 	 * @return
 	 */
-	public static Automaton minimize(CharacterRange[] alphabet, State[] states) {
+	public static Automaton minimize(CharRange[] alphabet, State[] states) {
 		
 		int size = states.length;
 		int[][] table = new int[size][size];
@@ -447,7 +447,7 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Set<State> move(Set<State> state, CharacterRange r) {
+	private static Set<State> move(Set<State> state, CharRange r) {
 		Set<State> result = new HashSet<>();
 		for (State s: state) {
 			State dest = s.getState(r);

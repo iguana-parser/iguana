@@ -27,7 +27,7 @@
 
 package iguana.regex.automaton;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.CharacterRanges;
 
 import java.util.*;
@@ -41,7 +41,7 @@ public class AutomatonBuilder {
 	
 	private boolean minimized;
 	
-	private CharacterRange[] alphabet;
+	private CharRange[] alphabet;
 	
 	private State[] states;
 	
@@ -50,7 +50,7 @@ public class AutomatonBuilder {
 	/**
 	 * From transitions to non-overlapping transitions
 	 */
-	private Map<CharacterRange, List<CharacterRange>> rangeMap;
+	private Map<CharRange, List<CharRange>> rangeMap;
 	
 	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
@@ -77,7 +77,7 @@ public class AutomatonBuilder {
 		return new Automaton(this);
 	}
 	 
-	public CharacterRange[] getAlphabet() {
+	public CharRange[] getAlphabet() {
 		return alphabet;
 	}
 	
@@ -101,18 +101,18 @@ public class AutomatonBuilder {
 		return deterministic;
 	}
 	
-	private static Map<CharacterRange, List<CharacterRange>> getRangeMap(State startState) {
+	private static Map<CharRange, List<CharRange>> getRangeMap(State startState) {
 		return CharacterRanges.toNonOverlapping(getAllRanges(startState));
 	}
 	
-	private static CharacterRange[] getAlphabet(State startState, Map<CharacterRange, List<CharacterRange>> rangeMap) {
-		Set<CharacterRange> values = rangeMap.values().stream()
+	private static CharRange[] getAlphabet(State startState, Map<CharRange, List<CharRange>> rangeMap) {
+		Set<CharRange> values = rangeMap.values().stream()
 				                                      .flatMap(l -> l.stream())
 				                                      .collect(Collectors.toCollection(LinkedHashSet::new));
 		
-		CharacterRange[] alphabet = new CharacterRange[values.size()];
+		CharRange[] alphabet = new CharRange[values.size()];
 		int i = 0;
-		for (CharacterRange r : values) {
+		for (CharRange r : values) {
 			alphabet[i++] = r;
 		}
 		return alphabet;
@@ -244,7 +244,7 @@ public class AutomatonBuilder {
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					removeList.add(transition);
-					for (CharacterRange range : rangeMap.get(transition.getRange())) {
+					for (CharRange range : rangeMap.get(transition.getRange())) {
 						addList.add(new Transition(range, transition.getDestination()));
 					}					
 				}
@@ -255,8 +255,8 @@ public class AutomatonBuilder {
 		this.alphabet = getAlphabet(startState, rangeMap);
 	}
 		
-	private static List<CharacterRange> getAllRanges(State startState) {
-		final Set<CharacterRange> ranges = new HashSet<>();
+	private static List<CharRange> getAllRanges(State startState) {
+		final Set<CharRange> ranges = new HashSet<>();
 
 		AutomatonVisitor.visit(startState, state -> {
 			for (Transition transition : state.getTransitions()) {
@@ -324,7 +324,7 @@ public class AutomatonBuilder {
 		State dummyState = new State();
 		
 		AutomatonVisitor.visit(startState, s -> {
-			for (CharacterRange r : alphabet) {
+			for (CharRange r : alphabet) {
 				if (!s.hasTransition(r)) {
 					s.addTransition(new Transition(r, dummyState));
 				}

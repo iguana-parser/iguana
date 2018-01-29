@@ -30,9 +30,9 @@ package iguana.regex.automaton;
 import iguana.utils.input.Input;
 import iguana.regex.Alt;
 import iguana.regex.RegularExpression;
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.regex.RegularExpressionExamples;
-import iguana.regex.Sequence;
+import iguana.regex.Seq;
 import iguana.regex.matcher.DFAMatcher;
 import org.junit.Test;
 
@@ -43,9 +43,9 @@ import static org.junit.Assert.assertTrue;
 public class DiffernceTest {
 	
 	private RegularExpression id = RegularExpressionExamples.getId();
-	private Sequence<Character> k1 = Sequence.from("if");
-	private Sequence<Character> k2 = Sequence.from("when");
-	private Sequence<Character> k3 = Sequence.from("new");
+	private Seq<Char> k1 = Seq.from("if");
+	private Seq<Char> k2 = Seq.from("when");
+	private Seq<Char> k3 = Seq.from("new");
 
 	@Test
 	public void test1() {
@@ -75,7 +75,7 @@ public class DiffernceTest {
 	
 	@Test
 	public void test3() {
-		Alt<Sequence<Character>> alt = Alt.from(k1, k2, k3);
+		Alt<Seq<Char>> alt = Alt.from(k1, k2, k3);
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), alt.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("first")));

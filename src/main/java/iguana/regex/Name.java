@@ -23,12 +23,12 @@ public class Name extends AbstractRegularExpression {
     }
 
     @Override
-    public Set<CharacterRange> getFirstSet() {
+    public Set<CharRange> getFirstSet() {
         throw new RuntimeException("Names should be first inlined.");
     }
 
     @Override
-    public Set<CharacterRange> getNotFollowSet() {
+    public Set<CharRange> getNotFollowSet() {
         throw new RuntimeException("Names should be first inlined.");
     }
 

@@ -41,7 +41,7 @@ public class PlusTest {
 	
 	@Test
 	public void testAutomaton() {
-		RegularExpression regex = Plus.from(Character.from('a'));
+		RegularExpression regex = Plus.from(Char.from('a'));
 		assertEquals(5, regex.getAutomaton().getCountStates());
 		
 		Matcher matcher = factory.getMatcher(regex);
