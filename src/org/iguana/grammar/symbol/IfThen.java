@@ -76,10 +76,14 @@ public class IfThen extends AbstractSymbol {
 		return String.format("if (%s) { %s } else %s", 
 								expression.toString(), 
 								thenPart.toString(j), 
-								j - thenPart.size() <= 1? Epsilon.getInstance().toString(j - thenPart.size())
+								j - thenPart.size() <= 1? epsilonToString(j - thenPart.size())
 														  : Epsilon.getInstance().toString());
 	}
-	
+
+	public String epsilonToString(int j) {
+		return Epsilon.getInstance().toString() + (j == 1? " . " : "");
+	}
+
 	public static Builder builder(Expression expression, Symbol symbol) {
 		return new Builder(expression, symbol);
 	}

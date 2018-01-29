@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -83,15 +83,15 @@ public class Test5 {
 					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
 							.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
-					.addSymbol(Terminal.from(Character.from('+')))
+					.addSymbol(Terminal.from(Char.from('+')))
 					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		Rule r1_2 = Rule.withHead(E)
-				.addSymbol(Terminal.builder(Character.from('-'))
+				.addSymbol(Terminal.builder(Char.from('-'))
 					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
 				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_3 = Rule.withHead(E).addSymbol(Terminal.from(Character.from('a'))).build();
+		Rule r1_3 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3).build();
 		

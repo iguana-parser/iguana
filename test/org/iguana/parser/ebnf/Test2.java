@@ -1,6 +1,6 @@
 package org.iguana.parser.ebnf;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -31,10 +31,10 @@ public class Test2 {
 
     static Nonterminal S = Nonterminal.withName("S");
     static Nonterminal A = Nonterminal.withName("A");
-    static Terminal a = Terminal.from(Character.from('a'));
+    static Terminal a = Terminal.from(Char.from('a'));
 
     static Rule r1 = Rule.withHead(S).addSymbols(Star.from(A)).build();
-    static Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Character.from('a'))).build();
+    static Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Char.from('a'))).build();
 
     private static Grammar grammar = Grammar.builder().addRules(r1, r2).build();
 

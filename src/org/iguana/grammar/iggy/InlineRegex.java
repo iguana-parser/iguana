@@ -26,7 +26,7 @@
  */
 package org.iguana.grammar.iggy;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.regex.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.GrammarValidationException;
@@ -59,7 +59,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
             if (rule.getAttributes().containsKey("regex")) {
                 if (definitions.containsKey(rule.getHead().getName()))
                     throw new GrammarValidationException(new HashSet<>(Arrays.asList(new RuntimeException("Should not have happened."))));
-                definitions.put(rule.getHead().getName(), ((Terminal) rule.getBody().get(0)).getRegex());
+                definitions.put(rule.getHead().getName(), ((Terminal) rule.getBody().get(0)).getRegularExpression());
             } else
                 rules.add(rule);
         }
@@ -101,12 +101,12 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public RegularExpression visit(Character symbol) {
+    public RegularExpression visit(Char symbol) {
         return symbol;
     }
 
     @Override
-    public RegularExpression visit(CharacterRange symbol) {
+    public RegularExpression visit(CharRange symbol) {
         return symbol;
     }
 
@@ -167,7 +167,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
             throw new GrammarValidationException(new HashSet<>(Arrays.asList(new RuntimeException("Regex definitions must not be recursive: " + symbol.getName()))));
         if (definitions.containsKey(symbol.getName())) {
             return Terminal.builder(definitions.get(symbol.getName()))
-                    .setCategory(Terminal.Category.REGEX)
+                    .setCategory(Terminal.Category.Regex)
                     .setName(symbol.getName())
                     .build();
         }
@@ -288,7 +288,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public <E extends RegularExpression> RegularExpression visit(iguana.regex.Sequence<E> seq) {
+    public <E extends RegularExpression> RegularExpression visit(iguana.regex.Seq<E> seq) {
         boolean changed = false;
         List<RegularExpression> syms = new ArrayList<>();
         for (RegularExpression s : seq.getSymbols()) {
@@ -298,7 +298,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         }
         if (!changed)
             return seq;
-        return iguana.regex.Sequence.from(syms);
+        return iguana.regex.Seq.from(syms);
     }
 
     private Symbol visitSym(Symbol symbol) {

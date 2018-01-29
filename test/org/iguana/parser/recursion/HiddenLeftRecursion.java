@@ -27,7 +27,7 @@
 
 package org.iguana.parser.recursion;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -61,10 +61,10 @@ public class HiddenLeftRecursion {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 
-		Rule r1 = Rule.withHead(A).addSymbols(B, A, Terminal.from(Character.from('+')), A).build();
-		Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Character.from('a'))).build();
+		Rule r1 = Rule.withHead(A).addSymbols(B, A, Terminal.from(Char.from('+')), A).build();
+		Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Char.from('a'))).build();
 		
-		Rule r3 = Rule.withHead(B).addSymbols(Terminal.from(Character.from('b'))).build();
+		Rule r3 = Rule.withHead(B).addSymbols(Terminal.from(Char.from('b'))).build();
 		Rule r4 = Rule.withHead(B).build();
 		
 		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();

@@ -27,7 +27,7 @@
 
 package org.iguana.parser.basic;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -68,7 +68,7 @@ public class Test16 {
 	static Nonterminal C = Nonterminal.withName("C");
 	static Nonterminal D = Nonterminal.withName("D");
 
-    static Terminal a = Terminal.from(Character.from('a'));
+    static Terminal a = Terminal.from(Char.from('a'));
     static Rule r1 = Rule.withHead(S).addSymbols(A, B, C, D).build();
     static Rule r2 = Rule.withHead(A).addSymbol(a).build();
     static Rule r3 = Rule.withHead(A).build();

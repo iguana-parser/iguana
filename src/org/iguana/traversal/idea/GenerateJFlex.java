@@ -27,7 +27,7 @@
 
 package org.iguana.traversal.idea;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.regex.*;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -95,15 +95,15 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
         rules.append("%%").append("\n").append("\n");
         rules.append("<YYINITIAL> {").append("\n");
 
-        seenTokenTypes.add("KEYWORD");
-        tokens.append("    IElementType KEYWORD = new " + language + "TokenType(\"KEYWORD\");")
+        seenTokenTypes.add("Keyword");
+        tokens.append("    IElementType Keyword = new " + language + "TokenType(\"Keyword\");")
                 .append("\n");
         regularExpressions.entrySet().stream()
             .filter(entry -> entry.getKey().startsWith("|keyword|:"))
             .forEach(entry -> {
                 String regex = entry.getValue().accept(this);
                 rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
-                        .append("\t{ return " + language + "TokenTypes.KEYWORD; }").append("\n");
+                        .append("\t{ return " + language + "TokenTypes.Keyword; }").append("\n");
             });
 
         regularExpressions.entrySet().stream()
@@ -224,12 +224,12 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public String visit(Character c) {
+    public String visit(Char c) {
         return getChar(c.getValue());
     }
 
     @Override
-    public String visit(CharacterRange r) {
+    public String visit(CharRange r) {
         return "[" +  getRange(r) + "]";
     }
 
@@ -283,7 +283,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public <E extends RegularExpression> String visit(iguana.regex.Sequence<E> symbol) {
+    public <E extends RegularExpression> String visit(iguana.regex.Seq<E> symbol) {
 
         List<E> symbols = symbol.getSymbols();
 
@@ -295,16 +295,16 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
 
     private boolean isCharClass(RegularExpression s) {
         if (!s.getLookaheads().isEmpty()) return false;
-        return s instanceof Character || s instanceof CharacterRange;
+        return s instanceof Char || s instanceof CharRange;
     }
 
     private String asCharClass(RegularExpression s) {
-        if (s instanceof Character) {
-            Character c = (Character) s;
+        if (s instanceof Char) {
+            Char c = (Char) s;
             return getChar(c.getValue());
         }
-        else if (s instanceof CharacterRange) {
-            CharacterRange r = (CharacterRange) s;
+        else if (s instanceof CharRange) {
+            CharRange r = (CharRange) s;
             return getRange(r);
         }
 
@@ -338,11 +338,11 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
         return code.toString();
     }
 
-    private String getLookaheads(Set<CharacterRange> lookaheads) {
+    private String getLookaheads(Set<CharRange> lookaheads) {
         return "";
     }
 
-    private String getLookbehinds(Set<CharacterRange> lookbehinds) {
+    private String getLookbehinds(Set<CharRange> lookbehinds) {
         return "";
     }
 
@@ -370,7 +370,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
             return escape(String.format("\\u%04X", c));
     }
 
-    private String getRange(CharacterRange r) {
+    private String getRange(CharRange r) {
         return getChar(r.getStart()) + "-" + getChar(r.getEnd());
     }
 

@@ -27,8 +27,9 @@
 
 package org.iguana.disambiguation.conditions;
 
-import iguana.regex.CharacterRange;
-import iguana.regex.Sequence;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
+import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -62,9 +63,9 @@ public class FollowRestrictionTest2 {
 	public void init() {
 		
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Sequence.from("8"))).build();
-		CharacterRange az = CharacterRange.in('a', 'z');
-		CharacterRange zero_nine = CharacterRange.in('0', '9');
+		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from("8"))).build();
+		CharRange az = CharRange.in('a', 'z');
+		CharRange zero_nine = CharRange.in('0', '9');
 		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
 		Rule r1 = Rule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();

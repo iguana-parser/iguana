@@ -36,60 +36,60 @@ import org.iguana.datadependent.ast.VariableDeclaration;
 
 public interface IAbstractASTVisitor<T> {
 	
-	public T visit(Boolean expression);
+	T visit(Boolean expression);
 	
-	public T visit(Integer expression);
+	T visit(Integer expression);
 	
-	public T visit(Real expression);
+	T visit(Real expression);
 	
-	public T visit(String expression);
+	T visit(String expression);
 	
-	public T visit(Tuple expression);
+	T visit(Tuple expression);
 	
-	public T visit(Name expression);
+	T visit(Name expression);
 	
-	public T visit(Call expression);
+	T visit(Call expression);
 	
-	public T visit(Assignment expression);
+	T visit(Assignment expression);
 	
-	public T visit(LShiftANDEqZero expression);
+	T visit(LShiftANDEqZero expression);
 	
-	public T visit(OrIndent expression);
+	T visit(OrIndent expression);
 	
-	public T visit(AndIndent expression);
+	T visit(AndIndent expression);
 	
-	public T visit(Or expression);
+	T visit(Or expression);
 	
-	public T visit(And expression);
+	T visit(And expression);
 	
-	public T visit(Less expression);
+	T visit(Less expression);
 	
-	public T visit(LessThanEqual expression);
+	T visit(LessThanEqual expression);
 	
-	public T visit(Greater expression);
+	T visit(Greater expression);
 	
-	public T visit(GreaterThanEqual expression);
+	T visit(GreaterThanEqual expression);
 	
-	public T visit(Equal expression);
+	T visit(Equal expression);
 	
-	public T visit(NotEqual expression);
+	T visit(NotEqual expression);
 	
-	public T visit(LeftExtent expression);
+	T visit(LeftExtent expression);
 	
-	public T visit(RightExtent expression);
+	T visit(RightExtent expression);
 	
-	public T visit(Yield expression);
+	T visit(Yield expression);
 	
-	public T visit(Val expression);
+	T visit(Val expression);
 	
-	public T visit(EndOfFile expression);
+	T visit(EndOfFile expression);
 	
-	public T visit(IfThenElse expression);
+	T visit(IfThenElse expression);
 	
-	public T visit(VariableDeclaration declaration);
+	T visit(VariableDeclaration declaration);
 	
-	public T visit(Statement.Expression statement);
+	T visit(Statement.Expression statement);
 	
-	public T visit(Statement.VariableDeclaration statement);
+	T visit(Statement.VariableDeclaration statement);
 
 }

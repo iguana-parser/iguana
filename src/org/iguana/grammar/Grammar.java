@@ -203,11 +203,7 @@ public class Grammar implements Serializable {
 		
 		return sb.toString();
 	}
-	
-	public Object getObject(Nonterminal nonterminal, int alternateIndex) {
-		return definitions.get(nonterminal).get(alternateIndex).getObject();
-	}
-	
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -300,11 +296,11 @@ public class Grammar implements Serializable {
 			return this;
 		}
 	}
-	
+
 	public void save(URI uri) {
 		save(new File(uri));
 	}
-	
+
 	public void save(File file) {
 		if (!file.exists()) {
 			try {
@@ -313,14 +309,14 @@ public class Grammar implements Serializable {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
-			out.writeObject(this);			
+			out.writeObject(this);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static Grammar load(URI uri) {
 		return load(new File(uri));
 	}
@@ -332,7 +328,7 @@ public class Grammar implements Serializable {
             throw new RuntimeException(e);
         }
     }
-	
+
 	public static Grammar load(InputStream inputStream) {
 		Grammar grammar;
 		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
@@ -352,7 +348,7 @@ public class Grammar implements Serializable {
 			return false;
 		
 		Grammar other = (Grammar) obj;
-		
+
 		return definitions.equals(other.definitions);
 	}
 

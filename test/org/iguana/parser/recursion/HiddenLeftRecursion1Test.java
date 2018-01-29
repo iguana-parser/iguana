@@ -27,7 +27,7 @@
 
 package org.iguana.parser.recursion;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -63,11 +63,11 @@ public class HiddenLeftRecursion1Test {
 	private Nonterminal B = Nonterminal.withName("B");
 	private Nonterminal D = Nonterminal.withName("D");
 	
-	private Terminal a = Terminal.from(Character.from('a'));
-	private Terminal b = Terminal.from(Character.from('b'));
-	private Terminal c = Terminal.from(Character.from('c'));
-	private Terminal x = Terminal.from(Character.from('x'));
-	private Terminal y = Terminal.from(Character.from('y'));
+	private Terminal a = Terminal.from(Char.from('a'));
+	private Terminal b = Terminal.from(Char.from('b'));
+	private Terminal c = Terminal.from(Char.from('c'));
+	private Terminal x = Terminal.from(Char.from('x'));
+	private Terminal y = Terminal.from(Char.from('y'));
 
 	@Before
 	public void init() {		

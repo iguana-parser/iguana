@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.operations;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.EOF;
 import iguana.regex.Epsilon;
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
@@ -47,15 +47,15 @@ public class FirstFollowSets {
 	
 	private final Map<Nonterminal, List<Rule>> definitions;
 
-	private final Map<Nonterminal, Set<CharacterRange>> firstSets;
+	private final Map<Nonterminal, Set<CharRange>> firstSets;
 	
-	private final Map<Nonterminal, Set<CharacterRange>> followSets;
+	private final Map<Nonterminal, Set<CharRange>> followSets;
 	
-	private final Map<Tuple<Rule, Integer>, Set<CharacterRange>> predictionSets;
+	private final Map<Tuple<Rule, Integer>, Set<CharRange>> predictionSets;
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
-	private final ISymbolVisitor<Set<CharacterRange>> firstSetVisitor;
+	private final ISymbolVisitor<Set<CharRange>> firstSetVisitor;
 	
 	private final ISymbolVisitor<Boolean> nullableVisitor;
 	
@@ -80,15 +80,15 @@ public class FirstFollowSets {
 		calcualtePredictionSets();
 	}
 	
-	public Map<Nonterminal, Set<CharacterRange>> getFirstSets() {
+	public Map<Nonterminal, Set<CharRange>> getFirstSets() {
 		return firstSets;
 	}
 	
-	public Map<Nonterminal, Set<CharacterRange>> getFollowSets() {
+	public Map<Nonterminal, Set<CharRange>> getFollowSets() {
 		return followSets;
 	}
 	
-	public Map<Tuple<Rule, Integer>, Set<CharacterRange>> getPredictionSets() {
+	public Map<Tuple<Rule, Integer>, Set<CharRange>> getPredictionSets() {
 		return predictionSets;
 	}
 	
@@ -96,18 +96,18 @@ public class FirstFollowSets {
 		return nullableNonterminals;
 	}
 	
-	public Set<CharacterRange> getFirstSet(Nonterminal nonterminal) {
-        Set<CharacterRange> firstSet = new HashSet<>(firstSets.get(nonterminal));
+	public Set<CharRange> getFirstSet(Nonterminal nonterminal) {
+        Set<CharRange> firstSet = new HashSet<>(firstSets.get(nonterminal));
         if (isNullable(nonterminal))
             firstSet.addAll(Epsilon.getInstance().getFirstSet());
         return firstSet;
 	}
 	
-	public Set<CharacterRange> getFollowSet(Nonterminal nonterminal) {
+	public Set<CharRange> getFollowSet(Nonterminal nonterminal) {
 		return followSets.get(nonterminal);
 	}
 	
-	public Set<CharacterRange> getPredictionSet(Rule rule, int index) {
+	public Set<CharRange> getPredictionSet(Rule rule, int index) {
 		return predictionSets.get(Tuple.of(rule, index));
 	}
 	
@@ -122,7 +122,7 @@ public class FirstFollowSets {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
-				Set<CharacterRange> firstSet = firstSets.get(head);
+				Set<CharRange> firstSet = firstSets.get(head);
 				for (Rule alternate : definitions.get(head)) {
 					changed |= addFirstSet(firstSet, alternate.getBody(), 0);
 				}
@@ -154,7 +154,7 @@ public class FirstFollowSets {
 	 * 
 	 * @return true if adding any new terminals are added to the first set.
 	 */
-	private boolean addFirstSet(Set<CharacterRange> firstSet, List<Symbol> alternative, int index) {
+	private boolean addFirstSet(Set<CharRange> firstSet, List<Symbol> alternative, int index) {
 
 		boolean changed = false;
 		
@@ -216,7 +216,7 @@ public class FirstFollowSets {
 						if (nonterminal != null) {
 							// For rules of the form X ::= alpha B beta, add the
 							// first set of beta to the follow set of B.
-							Set<CharacterRange> followSet = followSets.get(nonterminal);
+							Set<CharRange> followSet = followSets.get(nonterminal);
 							changed |= addFirstSet(followSet, alternative, i + 1);
 							
 							// If beta is nullable, then add the follow set of X
@@ -263,7 +263,7 @@ public class FirstFollowSets {
 			
 			Symbol symbol = alternate.get(i);
 
-			Set<CharacterRange> firstSet = symbol.accept(firstSetVisitor);			
+			Set<CharRange> firstSet = symbol.accept(firstSetVisitor);
 			predictionSets.computeIfAbsent(position, k -> new HashSet<>()).addAll(firstSet);
 			if (!isNullable(symbol)) break;			
 		}
@@ -359,30 +359,30 @@ public class FirstFollowSets {
         return true;
     }
     
-    private static class FirstSymbolVisitor extends AbstractGrammarGraphSymbolVisitor<Set<CharacterRange>> {
+    private static class FirstSymbolVisitor extends AbstractGrammarGraphSymbolVisitor<Set<CharRange>> {
 
-    	private final Map<Nonterminal, Set<CharacterRange>> firstSets;
+    	private final Map<Nonterminal, Set<CharRange>> firstSets;
     	
-    	public FirstSymbolVisitor(Map<Nonterminal, Set<CharacterRange>> firstSets) {
+    	public FirstSymbolVisitor(Map<Nonterminal, Set<CharRange>> firstSets) {
     		this.firstSets = firstSets;
     	}
     	
 		@Override
-		public Set<CharacterRange> visit(Code symbol) { return symbol.getSymbol().accept(this); }
+		public Set<CharRange> visit(Code symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
-		public Set<CharacterRange> visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
+		public Set<CharRange> visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
-		public Set<CharacterRange> visit(Nonterminal symbol) { return new HashSet<>(firstSets.get(symbol)); }
+		public Set<CharRange> visit(Nonterminal symbol) { return new HashSet<>(firstSets.get(symbol)); }
 
         @Override
-        public Set<CharacterRange> visit(Terminal symbol) {
+        public Set<CharRange> visit(Terminal symbol) {
             return symbol.getRegularExpression().getFirstSet();
         }
 
         @Override
-		public Set<CharacterRange> visit(Return symbol) { return new HashSet<>(); }
+		public Set<CharRange> visit(Return symbol) { return new HashSet<>(); }
 
     }
 

@@ -58,14 +58,29 @@ public class Return extends AbstractSymbol {
 	public String toString() {
 		return String.format("{%s}", expression.toString());
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof Return)) return false;
+		Return other = (Return) obj;
+		return this.expression.equals(other.expression);
+	}
+
+	@Override
+	public int hashCode() {
+		return this.expression.hashCode();
+	}
+
 	public static Builder builder(Expression expression) {
 		return new Builder(expression);
 	}
 	
 	public static class Builder extends SymbolBuilder<Return> {
 		
-		private final Expression expression;
+		private Expression expression;
+
+		private Builder() {}
 
 		public Builder(Return ret) {
 			super(ret);

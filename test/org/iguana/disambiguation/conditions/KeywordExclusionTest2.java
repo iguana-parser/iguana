@@ -28,9 +28,9 @@
 package org.iguana.disambiguation.conditions;
 
 import iguana.regex.Alt;
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
-import iguana.regex.Sequence;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
+import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -62,12 +62,12 @@ public class KeywordExclusionTest2 {
 	public void init() {
 		
 		Nonterminal Id = Nonterminal.withName("Id");
-		CharacterRange az = CharacterRange.in('a', 'z');
+		CharRange az = CharRange.in('a', 'z');
 		
-		Sequence<Character> iff = Sequence.from("if");
-		Sequence<Character> when = Sequence.from("when");
-		Sequence<Character> doo = Sequence.from("do");
-		Sequence<Character> whilee = Sequence.from("while");
+		Seq<Char> iff = Seq.from("if");
+		Seq<Char> when = Seq.from("when");
+		Seq<Char> doo = Seq.from("do");
+		Seq<Char> whilee = Seq.from("while");
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);		
 		Plus AZPlus = Plus.builder(Terminal.from(az)).addPostCondition(RegularExpressionCondition.notFollow(az))
 									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();

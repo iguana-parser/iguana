@@ -75,8 +75,6 @@ public interface Symbol extends Serializable, Attr {
 		return !getConditions().isEmpty();
 	}
 	
-	Object getObject();
-	
 	String getLabel();
 	
 	SymbolBuilder<? extends Symbol> copyBuilder();

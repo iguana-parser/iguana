@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent.ebnf;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -78,10 +78,10 @@ public class Test2 {
 																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
 									.setLabel("s").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Character.from('c'))).build();
-		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Character.from('d'))).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
+		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('d'))).build();
 		
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4, r5).build();
 		

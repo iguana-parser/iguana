@@ -28,7 +28,7 @@
 package org.iguana.parser.gamma;
 
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -52,10 +52,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class Gamma1Test {
 	
-	private Terminal a = Terminal.from(Character.from('a'));
-	private Terminal b = Terminal.from(Character.from('b'));
-	private Terminal c = Terminal.from(Character.from('c'));
-	private Terminal d = Terminal.from(Character.from('d'));
+	private Terminal a = Terminal.from(Char.from('a'));
+	private Terminal b = Terminal.from(Char.from('b'));
+	private Terminal c = Terminal.from(Char.from('c'));
+	private Terminal d = Terminal.from(Char.from('d'));
 	private Nonterminal S = Nonterminal.withName("S");
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");

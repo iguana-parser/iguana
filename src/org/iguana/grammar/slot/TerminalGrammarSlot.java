@@ -49,7 +49,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
 		super(runtime, Collections.emptyList());
 		this.terminal = terminal;
-        this.matcher = factory.getMatcher(terminal.getRegex());
+        this.matcher = factory.getMatcher(terminal.getRegularExpression());
         this.terminalNodes = new HashMap<>();
         this.terminalName = terminalName;
     }

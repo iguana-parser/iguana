@@ -27,9 +27,9 @@
 
 package org.iguana.disambiguation.conditions;
 
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
-import iguana.regex.Sequence;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
+import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -63,8 +63,8 @@ public class FollowRestrictionTest {
 	@Before
 	public void init() {
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Sequence.from(":"))).build();
-		CharacterRange az = CharacterRange.in('a', 'z');
+		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from(":"))).build();
+		CharRange az = CharRange.in('a', 'z');
 		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 
 		Grammar.Builder builder = new Grammar.Builder();
@@ -97,9 +97,9 @@ public class FollowRestrictionTest {
     public static class DanglingElseGrammar4 {
 
         Nonterminal S = Nonterminal.withName("S");
-        Terminal s = Terminal.from(Character.from('s'));
-        Terminal a = Terminal.from(Character.from('a'));
-        Terminal b = Terminal.from(Character.from('b'));
+        Terminal s = Terminal.from(Char.from('s'));
+        Terminal a = Terminal.from(Char.from('a'));
+        Terminal b = Terminal.from(Char.from('b'));
         private Grammar grammar;
 
         @Before

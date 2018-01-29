@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -86,13 +86,13 @@ public class Test2 {
 									 stat(println(string("PRINT2: "), var("l1"), var("l2"), var("a"), var("b")))))
 				.addSymbol(D).build();
 		
-		Rule r2_1 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).addSymbol(Terminal.from(Character.from('a'))).build();
-		Rule r2_2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
-		Rule r3_1 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
-		Rule r3_2 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('a'))).addSymbol(Terminal.from(Character.from('b'))).build();
+		Rule r2_1 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r2_2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r3_1 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		Rule r3_2 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Character.from('a'))).build();
-		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Character.from('b'))).build();
+		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('b'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r2_1, r2_2, r3_1, r3_2, r4, r5).build();
 		

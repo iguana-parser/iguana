@@ -27,7 +27,7 @@
 
 package org.iguana.parser.layout;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
@@ -56,15 +56,15 @@ import static org.junit.Assert.assertTrue;
  */
 public class LayoutTest4 {
 
-    static Terminal a = Terminal.from(Character.from('a'));
-    static Terminal b = Terminal.from(Character.from('b'));
-    static Terminal c = Terminal.from(Character.from('c'));
+    static Terminal a = Terminal.from(Char.from('a'));
+    static Terminal b = Terminal.from(Char.from('b'));
+    static Terminal c = Terminal.from(Char.from('c'));
     static Nonterminal S = Nonterminal.withName("S");
     static Nonterminal A = Nonterminal.withName("A");
     static Nonterminal B = Nonterminal.withName("B");
     static Nonterminal C = Nonterminal.withName("C");
-    static Terminal space = Terminal.from(Character.from(' '));
-    static Terminal comma = Terminal.from(Character.from(','));
+    static Terminal space = Terminal.from(Char.from(' '));
+    static Terminal comma = Terminal.from(Char.from(','));
 
     static Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
 

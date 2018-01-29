@@ -111,9 +111,9 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     public Void visit(Terminal symbol) {
         RegularExpression regex = symbol.getRegularExpression();
 
-        if (symbol.category() == Terminal.Category.REGEX) {
+        if (symbol.getCategory() == Terminal.Category.Regex) {
             terminals.put("|regex|:" + symbol.getName(), regex);
-        } else if (symbol.category() == Terminal.Category.KEYWORD)
+        } else if (symbol.getCategory() == Terminal.Category.Keyword)
             terminals.put("|keyword|:" + symbol.getName(), regex);
         else
             terminals.put(symbol.getName(), regex);

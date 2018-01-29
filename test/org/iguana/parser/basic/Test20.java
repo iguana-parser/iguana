@@ -27,8 +27,8 @@
 
 package org.iguana.parser.basic;
 
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
 import iguana.regex.EOF;
 import iguana.regex.Epsilon;
 import iguana.utils.input.Input;
@@ -71,11 +71,11 @@ public class Test20 {
 	private Nonterminal E1 = Nonterminal.withName("E1");
 	private Nonterminal F = Nonterminal.withName("F");
 	private Nonterminal T1 = Nonterminal.withName("T1");
-	private Terminal plus = Terminal.from(Character.from('+'));
-	private Terminal star = Terminal.from(Character.from('*'));
-	private Terminal a = Terminal.from(Character.from('a'));
-	private Terminal openPar = Terminal.from(Character.from('('));
-	private Terminal closePar = Terminal.from(Character.from(')'));
+	private Terminal plus = Terminal.from(Char.from('+'));
+	private Terminal star = Terminal.from(Char.from('*'));
+	private Terminal a = Terminal.from(Char.from('a'));
+	private Terminal openPar = Terminal.from(Char.from('('));
+	private Terminal closePar = Terminal.from(Char.from(')'));
 
     Rule r1 = Rule.withHead(E).addSymbols(T, E1).build();
     Rule r2 = Rule.withHead(E1).addSymbols(plus, T, E1).build();
@@ -95,21 +95,21 @@ public class Test20 {
 	@Test
 	public void testFirstSets() {
         FirstFollowSets ff = new FirstFollowSets(grammar);
-		assertEquals(set(CharacterRange.from('('), CharacterRange.from('a')), ff.getFirstSet(E));
-		assertEquals(set(CharacterRange.from('+'), Epsilon.asCharacterRange()), ff.getFirstSet(E1));
-		assertEquals(set(CharacterRange.from('*'), Epsilon.asCharacterRange()), ff.getFirstSet(T1));
-		assertEquals(set(CharacterRange.from('('), CharacterRange.from('a')), ff.getFirstSet(T));
-		assertEquals(set(CharacterRange.from('('), CharacterRange.from('a')), ff.getFirstSet(F));
+		assertEquals(set(CharRange.from('('), CharRange.from('a')), ff.getFirstSet(E));
+		assertEquals(set(CharRange.from('+'), Epsilon.asCharRange()), ff.getFirstSet(E1));
+		assertEquals(set(CharRange.from('*'), Epsilon.asCharRange()), ff.getFirstSet(T1));
+		assertEquals(set(CharRange.from('('), CharRange.from('a')), ff.getFirstSet(T));
+		assertEquals(set(CharRange.from('('), CharRange.from('a')), ff.getFirstSet(F));
 	}
 
     @Test
 	public void testFollowSets() {
         FirstFollowSets ff = new FirstFollowSets(grammar);
-		assertEquals(set(CharacterRange.from(')'), EOF.asCharacterRange()), ff.getFollowSet(E));
-		assertEquals(set(CharacterRange.from(')'), EOF.asCharacterRange()), ff.getFollowSet(E1));
-		assertEquals(set(CharacterRange.from('+'), CharacterRange.from(')'), EOF.asCharacterRange()), ff.getFollowSet(T1));
-		assertEquals(set(CharacterRange.from('+'), CharacterRange.from(')'), EOF.asCharacterRange()), ff.getFollowSet(T));
-		assertEquals(set(CharacterRange.from('+'), CharacterRange.from('*'), CharacterRange.from(')'), EOF.asCharacterRange()), ff.getFollowSet(F));
+		assertEquals(set(CharRange.from(')'), EOF.asCharRange()), ff.getFollowSet(E));
+		assertEquals(set(CharRange.from(')'), EOF.asCharRange()), ff.getFollowSet(E1));
+		assertEquals(set(CharRange.from('+'), CharRange.from(')'), EOF.asCharRange()), ff.getFollowSet(T1));
+		assertEquals(set(CharRange.from('+'), CharRange.from(')'), EOF.asCharRange()), ff.getFollowSet(T));
+		assertEquals(set(CharRange.from('+'), CharRange.from('*'), CharRange.from(')'), EOF.asCharRange()), ff.getFollowSet(F));
 	}
 	
 	@Test

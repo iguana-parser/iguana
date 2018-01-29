@@ -69,7 +69,7 @@ public class AST {
 		return new Expression.Name(name, i);
 	}
 	
-	static public Expression println(Expression... args) {
+	static public Expression.Call println(Expression... args) {
 		return new Expression.Call("println", args) {
 					
 			private static final long serialVersionUID = 1L;
@@ -92,7 +92,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression indent(Expression arg) {
+	static public Expression.Call indent(Expression arg) {
 		return new Expression.Call("indent", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -114,7 +114,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression ppDeclare(Expression variable, Expression value) {
+	static public Expression.Call ppDeclare(Expression variable, Expression value) {
 		return new Expression.Call("ppDeclare", variable, value) {
 			
 			private static final long serialVersionUID = 1L;
@@ -142,7 +142,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression ppLookup(Expression arg) {
+	static public Expression.Call ppLookup(Expression arg) {
 		return new Expression.Call("ppLookup", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -174,7 +174,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression endsWith(Expression index, Expression character) {
+	static public Expression.Call endsWith(Expression index, Expression character) {
 		return new Expression.Call("endsWith", index, character) {
 			
 					private static final long serialVersionUID = 1L;
@@ -205,7 +205,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression startsWith(Expression... args) {
+	static public Expression.Call startsWith(Expression... args) {
 		return new Expression.Call("startsWith", args) {
 			
 					private static final long serialVersionUID = 1L;
@@ -243,7 +243,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression not(Expression arg) {
+	static public Expression.Call not(Expression arg) {
 		return new Expression.Call("not", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -265,7 +265,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression neg(Expression arg) {
+	static public Expression.Call neg(Expression arg) {
 		return new Expression.Call("neg", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -287,7 +287,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression len(Expression arg) {
+	static public Expression.Call len(Expression arg) {
 		return new Expression.Call("len", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -311,7 +311,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression pr1(Expression arg1, Expression arg2, Expression arg3) {
+	static public Expression.Call pr1(Expression arg1, Expression arg2, Expression arg3) {
 		return new Expression.Call("pr1", arg1, arg2, arg3) {
 			
 			private static final long serialVersionUID = 1L;
@@ -339,7 +339,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression pr2(Expression arg1, Expression arg2, Expression[] arg3) {
+	static public Expression.Call pr2(Expression arg1, Expression arg2, Expression[] arg3) {
 		Expression[] args = new Expression[arg3.length + 2];
 		args[0] = arg1; args[1] = arg2;
 		int i = 2;
@@ -381,7 +381,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression pr3(Expression arg1, Expression arg2) {
+	static public Expression.Call pr3(Expression arg1, Expression arg2) {
 		return new Expression.Call("pr3", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -408,7 +408,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression min(Expression arg1, Expression arg2) {
+	static public Expression.Call min(Expression arg1, Expression arg2) {
 		return new Expression.Call("min", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -427,7 +427,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression map() {
+	static public Expression.Call map() {
 		return new Expression.Call("map") {
 			
 			private static final long serialVersionUID = 1L;
@@ -444,7 +444,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression put(Expression arg1, Expression arg2) {
+	static public Expression.Call put(Expression arg1, Expression arg2) {
 		return new Expression.Call("put", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -474,7 +474,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression put(Expression arg1, Expression arg2, Expression arg3) {
+	static public Expression.Call put(Expression arg1, Expression arg2, Expression arg3) {
 		return new Expression.Call("put", arg1, arg2, arg3) {
 			
 			private static final long serialVersionUID = 1L;
@@ -501,7 +501,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression contains(Expression arg1, Expression arg2) {
+	static public Expression.Call contains(Expression arg1, Expression arg2) {
 		return new Expression.Call("contains", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -527,7 +527,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression push(Expression arg1, Expression arg2) {
+	static public Expression.Call push(Expression arg1, Expression arg2) {
 		return new Expression.Call("push", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -555,7 +555,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression pop(Expression arg) {
+	static public Expression.Call pop(Expression arg) {
 		return new Expression.Call("pop", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -579,7 +579,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression top(Expression arg) {
+	static public Expression.Call top(Expression arg) {
 		return new Expression.Call("top", arg) {
 			
 			private static final long serialVersionUID = 1L;
@@ -603,7 +603,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression find(Expression arg1, Expression arg2) {
+	static public Expression.Call find(Expression arg1, Expression arg2) {
 		return new Expression.Call("find", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -637,7 +637,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression get(Expression arg1, Expression arg2) {
+	static public Expression.Call get(Expression arg1, Expression arg2) {
 		return new Expression.Call("get", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -662,7 +662,7 @@ public class AST {
 		}
 	};
 	
-	static public Expression shift(Expression arg1, Expression arg2) {
+	static public Expression.Call shift(Expression arg1, Expression arg2) {
 		return new Expression.Call("shift", arg1, arg2) {
 			
 			private static final long serialVersionUID = 1L;
@@ -684,7 +684,7 @@ public class AST {
 		};
 	}
 	
-	static public Expression undef() {
+	static public Expression.Call undef() {
 		return new Expression.Call("undef") {
 			
 			private static final long serialVersionUID = 1L;

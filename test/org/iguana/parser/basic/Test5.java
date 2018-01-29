@@ -27,8 +27,8 @@
 
 package org.iguana.parser.basic;
 
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
 import iguana.regex.EOF;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
@@ -62,7 +62,7 @@ public class Test5 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
-	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal b = Terminal.from(Char.from('b'));
 	static Rule r1 = Rule.withHead(A).addSymbols(B).build();
 	static Rule r2 = Rule.withHead(B).addSymbol(b).build();
 	static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();
@@ -77,11 +77,11 @@ public class Test5 {
 		assertFalse(firstFollowSets.isNullable(A));
 		assertFalse(firstFollowSets.isNullable(B));
 		
-		assertEquals(set(CharacterRange.from('b')), firstFollowSets.getFirstSet(A));
-		assertEquals(set(CharacterRange.from('b')), firstFollowSets.getFirstSet(B));
+		assertEquals(set(CharRange.from('b')), firstFollowSets.getFirstSet(A));
+		assertEquals(set(CharRange.from('b')), firstFollowSets.getFirstSet(B));
 		
-		assertEquals(set(CharacterRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(A));
-		assertEquals(set(CharacterRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(B));
+		assertEquals(set(CharRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(A));
+		assertEquals(set(CharRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(B));
 	}
 		
 	@Test

@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -76,8 +76,8 @@ public class Test1 {
 											stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Character.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Character.from('b'))).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1, r2, r3).build();
 		

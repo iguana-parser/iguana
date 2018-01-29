@@ -27,9 +27,9 @@
 
 package org.iguana.disambiguation.conditions;
 
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
-import iguana.regex.Sequence;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
+import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -56,15 +56,15 @@ import static org.junit.Assert.assertTrue;
 public class PrecedeRestrictionTest2 {
 	
 	private Nonterminal S = Nonterminal.withName("S");
-	private Terminal forr = Terminal.from(Sequence.from("for"));
-	private Terminal forall = Terminal.from(Sequence.from("forall"));
+	private Terminal forr = Terminal.from(Seq.from("for"));
+	private Terminal forall = Terminal.from(Seq.from("forall"));
 	private Nonterminal L = Nonterminal.withName("L");
 	private Nonterminal Id = Nonterminal.withName("Id");
-	private Character ws = Character.from(' ');
-	private CharacterRange az = CharacterRange.in('a', 'z');
+	private Char ws = Char.from(' ');
+	private CharRange az = CharRange.in('a', 'z');
 	private Grammar grammar;
 	private Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
-			                              .addPostCondition(RegularExpressionCondition.notPrecede(Sequence.from("for"))).build();
+			                              .addPostCondition(RegularExpressionCondition.notPrecede(Seq.from("for"))).build();
 
 	@Before
 	public void createGrammar() {

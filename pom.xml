@@ -51,6 +51,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -59,6 +64,26 @@
             <name>Repository in project's lib dir</name>
             <layout>default</layout>
             <url>file:///${project.basedir}/lib</url>
+        </repository>
+        <repository>
+            <id>iguana-releases</id>
+            <url>s3://iguana-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>iguana-snapshots</id>
+            <url>s3://iguana-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
 
@@ -122,5 +147,16 @@
         <connection>scm:git:git://github.com/iguana-parser/iguana.git</connection>
         <developerConnection>scm:git:git@github.com:iguana-parser/iguana.git</developerConnection>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>iguana-snapshots</id>
+            <url>s3://iguana-snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>iguana-releases</id>
+            <url>s3://iguana-releases</url>
+        </repository>
+    </distributionManagement>
 
 </project>

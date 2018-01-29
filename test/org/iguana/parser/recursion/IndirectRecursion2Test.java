@@ -27,7 +27,7 @@
 
 package org.iguana.parser.recursion;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -57,9 +57,9 @@ public class IndirectRecursion2Test {
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
-	private Terminal a = Terminal.from(Character.from('a'));
-	private Terminal b = Terminal.from(Character.from('b'));
-	private Terminal d = Terminal.from(Character.from('d'));
+	private Terminal a = Terminal.from(Char.from('a'));
+	private Terminal b = Terminal.from(Char.from('b'));
+	private Terminal d = Terminal.from(Char.from('d'));
 
 	@Before
 	public void init() {

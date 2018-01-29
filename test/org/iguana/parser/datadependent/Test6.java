@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -72,9 +72,9 @@ public class Test6 {
 		
 		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
 		
-		Terminal hat = Terminal.from(Character.from('^'));
-        Terminal star = Terminal.from(Character.from('*'));
-        Terminal plus = Terminal.from(Character.from('+'));
+		Terminal hat = Terminal.from(Char.from('^'));
+        Terminal star = Terminal.from(Char.from('*'));
+        Terminal plus = Terminal.from(Char.from('+'));
 		
 		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
 		
@@ -96,7 +96,7 @@ public class Test6 {
 				.addSymbol(plus)
 				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Character.from('a'))).build();
+		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
 		

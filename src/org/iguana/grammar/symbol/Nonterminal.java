@@ -68,7 +68,7 @@ public class Nonterminal extends AbstractSymbol {
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
 	}
-	
+
 	protected Nonterminal(Builder builder) {
 		super(builder);
 		this.ebnfList = builder.ebnfList;
@@ -208,6 +208,10 @@ public class Nonterminal extends AbstractSymbol {
 
 		public Builder(String name) {
 			super(name);
+		}
+
+		public Builder() {
+			super();
 		}
 		
 		public Builder setIndex(int index) {

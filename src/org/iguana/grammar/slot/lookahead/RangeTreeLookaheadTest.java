@@ -1,6 +1,6 @@
 package org.iguana.grammar.slot.lookahead;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.utils.collections.rangemap.RangeTree;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 
@@ -12,7 +12,7 @@ public class RangeTreeLookaheadTest implements LookAheadTest {
 	
 	private final RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
 
-	public RangeTreeLookaheadTest(Map<CharacterRange, List<BodyGrammarSlot>> nonOverlappingMap) {
+	public RangeTreeLookaheadTest(Map<CharRange, List<BodyGrammarSlot>> nonOverlappingMap) {
 		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue().isEmpty() ? Collections.emptyList() : e.getValue()));
 	}
 	

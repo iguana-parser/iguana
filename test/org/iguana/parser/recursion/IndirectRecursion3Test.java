@@ -27,7 +27,7 @@
 
 package org.iguana.parser.recursion;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -61,11 +61,11 @@ public class IndirectRecursion3Test {
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
 	private Nonterminal C = Nonterminal.withName("C");
-	private Terminal c = Terminal.from(Character.from('c'));
-	private Terminal d = Terminal.from(Character.from('d'));
-	private Terminal e = Terminal.from(Character.from('e'));
-	private Terminal f = Terminal.from(Character.from('f'));
-	private Terminal g = Terminal.from(Character.from('g'));
+	private Terminal c = Terminal.from(Char.from('c'));
+	private Terminal d = Terminal.from(Char.from('d'));
+	private Terminal e = Terminal.from(Char.from('e'));
+	private Terminal f = Terminal.from(Char.from('f'));
+	private Terminal g = Terminal.from(Char.from('g'));
 
 	@Before
 	public void init() {

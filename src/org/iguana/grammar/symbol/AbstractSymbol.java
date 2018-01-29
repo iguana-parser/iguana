@@ -38,21 +38,18 @@ import static iguana.utils.string.StringUtil.listToString;
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
 	private static final long serialVersionUID = 1L;
-	
-	protected final Set<Condition> preConditions;
-	
-	protected final Set<Condition> postConditions;
-	
+
 	protected final String name;
-	
-	protected final Object object;
-	
+
 	protected final String label;
-	
+
+	protected final Set<Condition> preConditions;
+
+	protected final Set<Condition> postConditions;
+
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
 		this.name = builder.name;
 		this.label = builder.label;
-		this.object = builder.object;
 		this.preConditions = builder.preConditions; // TODO: Dangerous move: ImmutableSet.copyOf(builder.preConditions);
 		this.postConditions = Collections.unmodifiableSet(builder.postConditions);
 	}
@@ -70,11 +67,6 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	@Override
 	public String getName() {
 		return name;
-	}
-	
-	@Override
-	public Object getObject() {
-		return object;
 	}
 	
 	@Override

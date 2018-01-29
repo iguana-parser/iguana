@@ -27,7 +27,7 @@
 
 package org.iguana.parser.gamma;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -59,7 +59,7 @@ public class Gamma2WithEpsilonTest {
     private Grammar grammar;
     
     private Nonterminal S = Nonterminal.withName("S");
-    private Terminal b = Terminal.from(Character.from('b'));
+    private Terminal b = Terminal.from(Char.from('b'));
     
     @Before
     public void init() {

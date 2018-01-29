@@ -1,32 +1,54 @@
 package org.iguana.util;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
+import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import iguana.regex.RegularExpression;
 import iguana.utils.input.Input;
+import org.eclipse.imp.pdb.facts.util.ImmutableSet;
+import org.iguana.datadependent.ast.AST;
+import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.attrs.AbstractAttrs;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
-import org.iguana.parsetree.*;
+import org.iguana.parsetree.AmbiguityNode;
+import org.iguana.parsetree.ListNode;
+import org.iguana.parsetree.NonterminalNode;
+import org.iguana.parsetree.TerminalNode;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class JsonSerializer {
 
-    public static String serialize(ParseTreeNode<?> node) {
-        ObjectMapper mapper = new ObjectMapper();
+    private final static ObjectMapper mapper = new ObjectMapper();
+
+    static {
         mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
 
         TypeResolverBuilder<?> typeResolverBuilder = new CustomTypeResolverBuilder();
-        typeResolverBuilder.init(JsonTypeInfo.Id.NAME, null);
+        typeResolverBuilder.init(JsonTypeInfo.Id.CUSTOM, new MyTypeIdResolver());
         typeResolverBuilder.inclusion(JsonTypeInfo.As.PROPERTY);
         typeResolverBuilder.typeProperty("kind");
         mapper.setDefaultTyping(typeResolverBuilder);
@@ -34,30 +56,109 @@ public class JsonSerializer {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
-        mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
+        mapper.addMixIn(Grammar.class, GrammarMixIn.class);
         mapper.addMixIn(Rule.class, RuleMixIn.class);
+        mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
+        mapper.addMixIn(Terminal.class,TerminalMixIn.class);
+        mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
+        mapper.addMixIn(Return.class, ReturnMixIn.class);
+
+        mapper.addMixIn(RegularExpressionCondition.class, RegularExpressionConditionMixIn.class);
+        mapper.addMixIn(DataDependentCondition.class, DataDependentConditionMixIn.class);
+
+        // Expression
+        mapper.addMixIn(Expression.Integer.class, ExpressionMixIn.IntegerMixIn.class);
+        mapper.addMixIn(Expression.Real.class, ExpressionMixIn.RealMixIn.class);
+        mapper.addMixIn(Expression.String.class, ExpressionMixIn.StringMixIn.class);
+        mapper.addMixIn(Expression.Tuple.class, ExpressionMixIn.TupleMixIn.class);
+        mapper.addMixIn(Expression.Name.class, ExpressionMixIn.NameMixIn.class);
+        mapper.addMixIn(Expression.Assignment.class, ExpressionMixIn.AssignmentMixIn.class);
+        mapper.addMixIn(Expression.LShiftANDEqZero.class, ExpressionMixIn.LShiftANDEqZeroMixIn.class);
+        mapper.addMixIn(Expression.OrIndent.class, ExpressionMixIn.OrIndentMixIn.class);
+        mapper.addMixIn(Expression.AndIndent.class, ExpressionMixIn.AndIndentMixIn.class);
+        mapper.addMixIn(Expression.Or.class, ExpressionMixIn.OrMixIn.class);
+        mapper.addMixIn(Expression.And.class, ExpressionMixIn.AndMixIn.class);
+        mapper.addMixIn(Expression.Less.class, ExpressionMixIn.LessMixIn.class);
+        mapper.addMixIn(Expression.LessThanEqual.class, ExpressionMixIn.LessThanEqualMixIn.class);
+        mapper.addMixIn(Expression.Greater.class, ExpressionMixIn.GreaterMixIn.class);
+        mapper.addMixIn(Expression.GreaterThanEqual.class, ExpressionMixIn.GreaterThanEqualMixIn.class);
+        mapper.addMixIn(Expression.Equal.class, ExpressionMixIn.EqualMixIn.class);
+        mapper.addMixIn(Expression.NotEqual.class, ExpressionMixIn.NotEqualMixIn.class);
+        mapper.addMixIn(Expression.LeftExtent.class, ExpressionMixIn.LeftExtentMixIn.class);
+        mapper.addMixIn(Expression.RightExtent.class, ExpressionMixIn.RightExtentMixIn.class);
+        mapper.addMixIn(Expression.Yield.class, ExpressionMixIn.YieldMixIn.class);
+        mapper.addMixIn(Expression.Val.class, ExpressionMixIn.ValMixIn.class);
+        mapper.addMixIn(Expression.EndOfFile.class, ExpressionMixIn.EndOfFileMixIn.class);
+        mapper.addMixIn(Expression.IfThenElse.class, ExpressionMixIn.IfThenElseMixIn.class);
+
+        // Regex
+        mapper.addMixIn(iguana.regex.Seq.class, SeqMixIn.class);
+        mapper.addMixIn(iguana.regex.Alt.class, AltMixIn.class);
+        mapper.addMixIn(iguana.regex.Star.class, StarMixIn.class);
+        mapper.addMixIn(iguana.regex.Plus.class, PlusMixIn.class);
+        mapper.addMixIn(iguana.regex.Opt.class, OptMixIn.class);
+        mapper.addMixIn(iguana.regex.Char.class, CharMixIn.class);
+        mapper.addMixIn(iguana.regex.CharRange.class, CharRangeMixIn.class);
+
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
         mapper.addMixIn(ListNode.class, ListNode.class);
 
-        mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(Grammar.class, new GrammarDeserializer());
+        module.addDeserializer(Expression.Call.class, new CallDeserializer());
+        mapper.registerModule(module);
+    }
 
+    public static String toJSON(Grammar grammar) {
+        return serialize(grammar);
+    }
+
+    public static void serialize(Grammar grammar, String path) throws IOException {
+        serialize(grammar, path, false);
+    }
+
+    public static void serialize(Grammar grammar, String path, boolean gzip) throws IOException {
+        OutputStream out = new FileOutputStream(path);
+        if (gzip) {
+            out = new GZIPOutputStream(out);
+        }
+        try (Writer writer = new OutputStreamWriter(out)){
+            writer.write(toJSON(grammar));
+        }
+    }
+
+    private static String serialize(Object obj) {
         DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
         pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
-
         try {
-            return mapper.writer(pp).writeValueAsString(node);
+            return mapper.writer(pp).writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static NonterminalNode deserialize(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, NonterminalNode.class);
+    public static <T> T deserialize(String path, Class<T> clazz) throws IOException {
+        InputStream in = getInputStream(new FileInputStream(path));
+        return deserialize(in, clazz);
     }
 
+    public static <T> T deserialize(InputStream in, Class<T> clazz) throws IOException {
+        return mapper.readValue(in, clazz);
+    }
+
+    private static InputStream getInputStream(InputStream in) throws IOException {
+        PushbackInputStream pb = new PushbackInputStream(in, 2);
+        byte[] signature = new byte[2];
+        int length = pb.read(signature);
+        pb.unread(signature, 0, length);
+
+        if (signature[0] == 0x1f && signature[1] == (byte) 0x8b)
+            return new GZIPInputStream(pb);
+
+        return pb;
+    }
 
     static class CustomTypeResolverBuilder extends ObjectMapper.DefaultTypeResolverBuilder {
 
@@ -69,14 +170,287 @@ public class JsonSerializer {
 
         @Override
         public boolean useForType(JavaType t) {
-            if (!t.isEnumType() && t.getRawClass().getName().startsWith("org.iguana")) {
-                return true;
-            }
-
-            return false;
+            return !t.isEnumType() &&
+                    (t.getRawClass().getName().startsWith("org.iguana") || t.getRawClass().getName().startsWith("iguana"));
         }
     }
 
+    public static class MyTypeIdResolver extends TypeIdResolverBase {
+
+        @Override
+        public String idFromValue(Object value) {
+            return getId(value);
+        }
+
+        @Override
+        public String idFromValueAndType(Object value, Class<?> suggestedType) {
+            return getId(value);
+        }
+
+        @Override
+        public JsonTypeInfo.Id getMechanism() {
+            return JsonTypeInfo.Id.CUSTOM;
+        }
+
+        private String getId(Object value) {
+            String id = value.getClass().getSimpleName();
+            if (id.equals("")) { // For anonymous inner classes, use their super class name
+                id = value.getClass().getSuperclass().getSimpleName();
+            }
+            return id;
+        }
+
+        @Override
+        public JavaType typeFromId(DatabindContext context, String id) {
+            String[] packages = {
+                    "org.iguana.grammar.",
+                    "org.iguana.grammar.symbol.",
+                    "org.iguana.grammar.condition.",
+                    "iguana.regex.",
+                    "org.iguana.datadependent.ast.Expression$"
+            };
+
+            JavaType javaType = null;
+            for (String packageName : packages) {
+                try {
+                    Class<?> clazz = Class.forName(packageName + id);
+                    javaType = context.constructType(clazz);
+                } catch (ClassNotFoundException e) {
+                    // skip
+                }
+            }
+
+            if (javaType == null)
+                throw new RuntimeException("No JavaType for the given id (" + id + ") found.");
+
+            return javaType;
+        }
+    }
+
+    static class GrammarDeserializer extends JsonDeserializer<Grammar> {
+
+        @Override
+        public Grammar deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+            ObjectCodec codec = parser.getCodec();
+            JsonNode node = codec.readTree(parser);
+
+            Grammar.Builder builder = Grammar.builder();
+
+            builder.setLayout(getLayout(node));
+
+            JsonNode rulesNode = node.get("rules");
+
+            if (rulesNode.isArray()) {
+                for (JsonNode ruleNode : rulesNode) {
+                    Rule rule = mapper.readValue(ruleNode.toString(), Rule.class);
+                    builder.addRule(rule);
+                }
+            }
+
+            return builder.build();
+        }
+    }
+
+    static Symbol getLayout(JsonNode node) throws IOException {
+        JsonNode layoutNode = node.get("layout");
+        String layoutKind = layoutNode.get("kind").asText();
+        if (layoutKind.equals("Nonterminal"))
+            return mapper.readValue(layoutNode.toString(), Nonterminal.class);
+        else if (layoutKind.equals("Terminal"))
+            return mapper.readValue(layoutNode.toString(), Terminal.class);
+        else
+            throw new RuntimeException("Unknown layout kind '" + layoutKind + "'");
+    }
+
+    static class CallDeserializer extends JsonDeserializer<Expression.Call> {
+
+        @Override
+        public Expression.Call deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+            ObjectCodec codec = parser.getCodec();
+            JsonNode node = codec.readTree(parser);
+
+            String fun = node.get("fun").asText();
+            JsonNode arguments = node.get("arguments");
+
+            Expression[] expressions = new Expression[0];
+            if (arguments != null && arguments.isArray()) {
+                expressions = new Expression[arguments.size()];
+                int i = 0;
+                for (JsonNode child : arguments) {
+                    Expression expression = mapper.readValue(child.toString(), Expression.class);
+                    expressions[i++] = expression;
+                }
+            }
+
+            switch (fun) {
+                case "println":
+                    return AST.println(expressions);
+
+                case "indent":
+                    assertSize(1, expressions.length);
+                    return AST.indent(expressions[0]);
+
+                case "ppDeclare":
+                    assertSize(2, expressions.length);
+                    return AST.ppDeclare(expressions[0], expressions[1]);
+
+                case "ppLookup":
+                    assertSize(2, expressions.length);
+                    return AST.ppDeclare(expressions[0], expressions[1]);
+
+                case "endsWith":
+                    assertSize(1, expressions.length);
+                    return AST.endsWith(expressions[0], expressions[1]);
+
+                case "startsWith":
+                    assertSize(2, expressions.length);
+                    return AST.startsWith(expressions[0], expressions[1]);
+
+                case "not":
+                    assertSize(1, expressions.length);
+                    return AST.not(expressions[0]);
+
+                case "neg":
+                    assertSize(1, expressions.length);
+                    return AST.neg(expressions[0]);
+
+                case "len":
+                    assertSize(1, expressions.length);
+                    return AST.len(expressions[0]);
+
+                case "pr1":
+                    assertSize(2, expressions.length);
+                    return AST.pr1(expressions[0], expressions[1], expressions[2]);
+
+                case "pr2":
+                    assertMinSize(2, expressions.length);
+                    return AST.pr2(expressions[0], expressions[1], Arrays.copyOfRange(expressions, 2, expressions.length));
+
+                case "pr3":
+                    assertSize(2, expressions.length);
+                    return AST.pr3(expressions[0], expressions[1]);
+
+                case "min":
+                    assertSize(2, expressions.length);
+                    return AST.min(expressions[0], expressions[1]);
+
+                case "map":
+                    assertSize(0, expressions.length);
+                    return AST.map();
+
+                case "put":
+                    assertMinSize(2, expressions.length);
+                    if (expressions.length == 2)
+                        return AST.put(expressions[0], expressions[1]);
+                    else
+                        return AST.put(expressions[0], expressions[1], expressions[2]);
+
+                case "contains":
+                    assertMinSize(2, expressions.length);
+                    return AST.contains(expressions[0], expressions[1]);
+
+                case "push":
+                    assertMinSize(2, expressions.length);
+                    return AST.push(expressions[0], expressions[1]);
+
+                case "pop":
+                    assertMinSize(1, expressions.length);
+                    return AST.pop(expressions[0]);
+
+                case "top":
+                    assertMinSize(1, expressions.length);
+                    return AST.top(expressions[0]);
+
+                case "find":
+                    assertMinSize(2, expressions.length);
+                    return AST.find(expressions[0], expressions[1]);
+
+                case "get":
+                    assertMinSize(2, expressions.length);
+                    return AST.get(expressions[0], expressions[1]);
+
+                case "shift":
+                    assertMinSize(2, expressions.length);
+                    return AST.shift(expressions[0], expressions[1]);
+
+                case "undef":
+                    assertMinSize(0, expressions.length);
+                    return AST.undef();
+
+                default:
+                    throw new RuntimeException("Unsupported call type: " + fun);
+            }
+        }
+    }
+
+    private static void assertMinSize(int min, int actual) {
+        if (min > actual)
+            throw new RuntimeException("Expected min: " + min + ", actual: " + actual);
+    }
+
+    private static void assertSize(int expected, int actual) {
+        if (expected != actual)
+            throw new RuntimeException("Expected: " + expected + ", Actual: " + actual);
+    }
+
+    abstract static class GrammarMixIn {
+        @JsonIgnore
+        Map<Nonterminal, List<Rule>> definitions;
+
+        @JsonIgnore
+        List<PrecedencePattern> precedencePatterns;
+
+        @JsonIgnore
+        List<ExceptPattern> exceptPatterns;
+
+        @JsonIgnore
+        Map<String, Set<String>> ebnfLefts;
+
+        @JsonIgnore
+        Map<String, Set<String>> ebnfRights;
+    }
+
+    @JsonDeserialize(builder = Rule.Builder.class)
+    abstract static class RuleMixIn {
+        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LayoutStrategyFilter.class)
+        LayoutStrategy layoutStrategy;
+        @JsonIgnore
+        Recursion recursion;
+        @JsonIgnore
+        Recursion irecursion;
+        @JsonIgnore
+        String leftEnd;
+        @JsonIgnore
+        String rightEnd;
+        @JsonIgnore
+        Set<String> leftEnds;
+        @JsonIgnore
+        Set<String> rightEnds;
+        @JsonIgnore
+        Associativity associativity;
+        @JsonIgnore
+        AssociativityGroup associativityGroup;
+        @JsonIgnore
+        int precedence;
+        @JsonIgnore
+        PrecedenceLevel precedenceLevel;
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
+
+    static class LayoutStrategyFilter {
+        @Override
+        public boolean equals(Object obj) {
+            return obj == LayoutStrategy.INHERITED;
+        }
+
+        @Override
+        public int hashCode() {
+            return LayoutStrategy.INHERITED.hashCode();
+        }
+    }
+
+    @JsonDeserialize(builder = Nonterminal.Builder.class)
     abstract static class NonterminalMixIn {
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -84,23 +458,191 @@ public class JsonSerializer {
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         boolean ebnfList;
+
+        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NonterminalNodeTypeFilter.class)
+        NonterminalNodeType nodeType;
+
+        @JsonIgnore
+        Map<String, Object> attributes;
+
+        private static class NonterminalNodeTypeFilter {
+            @Override
+            public boolean equals(Object obj) {
+                return obj == NonterminalNodeType.Basic;
+            }
+        }
     }
 
-    abstract static class RuleMixIn {
-        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        int precedence;
+    @JsonDeserialize(builder = Terminal.Builder.class)
+    abstract static class TerminalMixIn {
+        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = CategoryFilter.class)
+        Terminal.Category category;
 
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LayoutStrategyFilter.class)
-        LayoutStrategy layoutStrategy;
+        static class CategoryFilter {
+            @Override
+            public boolean equals(Object obj) {
+                return obj == Terminal.Category.Regex;
+            }
+        }
+    }
 
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = RecursionFilter.class)
-        Recursion recursion;
+    @JsonDeserialize(builder = Return.Builder.class)
+    abstract static class ReturnMixIn {}
 
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = RecursionFilter.class)
-        Recursion irecursion;
+    @JsonDeserialize(builder = iguana.regex.Seq.Builder.class)
+    abstract static class SeqMixIn {}
 
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
-        Associativity associativity;
+    @JsonDeserialize(builder = iguana.regex.Alt.Builder.class)
+    abstract static class AltMixIn {}
+
+    @JsonDeserialize(builder = iguana.regex.Star.Builder.class)
+    abstract static class StarMixIn {}
+
+    @JsonDeserialize(builder = iguana.regex.Plus.Builder.class)
+    abstract static class PlusMixIn {}
+
+    @JsonDeserialize(builder = iguana.regex.Opt.Builder.class)
+    abstract static class OptMixIn {}
+
+    @JsonDeserialize(builder = iguana.regex.Char.Builder.class)
+    abstract static class CharMixIn {}
+
+    @JsonDeserialize(builder = iguana.regex.CharRange.Builder.class)
+    abstract static class CharRangeMixIn {}
+
+    abstract static class ExpressionMixIn {
+
+        abstract static class IntegerMixIn {
+            @JsonCreator
+            IntegerMixIn(@JsonProperty("value") Integer value) {}
+        }
+
+        public class RealMixIn {
+            @JsonCreator
+            RealMixIn(@JsonProperty("value") Float value) {}
+        }
+
+        public class StringMixIn {
+            @JsonCreator
+            StringMixIn(@JsonProperty("value") String value) {}
+        }
+
+        abstract static class NameMixIn {
+            @JsonCreator
+            NameMixIn(@JsonProperty("name") String name) {}
+        }
+
+        public class AssignmentMixIn {
+            @JsonCreator
+            AssignmentMixIn(@JsonProperty("id") String id, @JsonProperty("exp") Expression exp) {}
+        }
+
+        abstract static class TupleMixIn {
+            @JsonCreator
+            TupleMixIn(@JsonProperty("elements") Expression... elements) {}
+        }
+
+        abstract static class GreaterThanEqualMixIn {
+            @JsonCreator
+            GreaterThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class LShiftANDEqZeroMixIn {
+            @JsonCreator
+            LShiftANDEqZeroMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class GreaterMixIn {
+            @JsonCreator
+            GreaterMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class OrMixIn {
+            @JsonCreator
+            OrMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class LessThanEqualMixIn {
+            @JsonCreator
+            LessThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class LessMixIn {
+            @JsonCreator
+            LessMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class IfThenElseMixIn {
+            @JsonCreator
+            IfThenElseMixIn(@JsonProperty("condition") Expression condition,
+                            @JsonProperty("thenPart") Expression thenPart,
+                            @JsonProperty("elsePart") Expression elsePart) {}
+        }
+
+        abstract static class EqualMixIn {
+            @JsonCreator
+            EqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class NotEqualMixIn {
+            @JsonCreator
+            NotEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class OrIndentMixIn {
+            @JsonCreator
+            OrIndentMixIn(@JsonProperty("index") Expression index,
+                          @JsonProperty("ind") Expression ind,
+                          @JsonProperty("first") Expression first,
+                          @JsonProperty("lExt") Expression lExt) {}
+        }
+
+        abstract static class AndIndentMixIn {
+            @JsonCreator
+            AndIndentMixIn(@JsonProperty("index") Expression index,
+                           @JsonProperty("first") Expression first,
+                           @JsonProperty("lExt") Expression lExt) {}
+        }
+
+        abstract static class AndMixIn {
+            @JsonCreator
+            AndMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+        }
+
+        abstract static class LeftExtentMixIn {
+            @JsonCreator
+            LeftExtentMixIn(@JsonProperty("label") String label) {}
+        }
+
+        abstract static class RightExtentMixIn {
+            @JsonCreator
+            RightExtentMixIn(@JsonProperty("label") String label) {}
+        }
+
+        abstract static class YieldMixIn {
+            @JsonCreator
+            YieldMixIn(@JsonProperty("label") String label) {}
+        }
+
+        abstract static class ValMixIn {
+            @JsonCreator
+            ValMixIn(@JsonProperty("label") String label) {}
+        }
+
+        abstract static class EndOfFileMixIn {
+            @JsonCreator
+            EndOfFileMixIn(@JsonProperty("index") Expression index) {}
+        }
+    }
+
+    abstract static class RegularExpressionConditionMixIn {
+        @JsonCreator
+        RegularExpressionConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("regularExpression") RegularExpression regularExpression) {}
+    }
+
+    abstract static class DataDependentConditionMixIn {
+        @JsonCreator
+        DataDependentConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("expression") Expression expression) {}
     }
 
     abstract class TerminalNodeMixIn {
@@ -123,44 +665,11 @@ public class JsonSerializer {
         Input input;
     }
 
-    static class LayoutStrategyFilter {
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj == LayoutStrategy.INHERITED;
-        }
-
-        @Override
-        public int hashCode() {
-            return LayoutStrategy.INHERITED.hashCode();
-        }
+    abstract class AbstractAttrsMixIn {
+        @JsonIgnore
+        ImmutableSet<String> env;
     }
 
-    static class RecursionFilter {
-        @Override
-        public boolean equals(Object obj) {
-            return obj == Recursion.UNDEFINED;
-        }
-
-        @Override
-        public int hashCode() {
-            return Recursion.UNDEFINED.hashCode();
-        }
-
-    }
-
-    static class AssociativityFilter {
-        @Override
-        public boolean equals(Object obj) {
-            return obj == Associativity.UNDEFINED;
-        }
-
-        @Override
-        public int hashCode() {
-            return Associativity.UNDEFINED.hashCode();
-        }
-
-    }
 }
 
 

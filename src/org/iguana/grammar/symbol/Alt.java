@@ -117,7 +117,9 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 	
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
 
-		List<T> symbols = new ArrayList<>();
+		List<T> symbols;
+
+		private Builder() {}
 		
 		public Builder(List<T> symbols) {
 			super(getName(symbols));

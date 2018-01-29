@@ -27,7 +27,7 @@
 
 package org.iguana.grammar;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
 import iguana.regex.matcher.DFAMatcherFactory;
@@ -187,25 +187,25 @@ public class GrammarGraph implements Serializable {
 		if (config.getLookAheadCount() == 0)
 			return i -> nonterminalSlot.getFirstSlots();
 		
-		Map<CharacterRange, List<BodyGrammarSlot>> map = new HashMap<>();
+		Map<CharRange, List<BodyGrammarSlot>> map = new HashMap<>();
 		
 		List<Rule> alternatives = grammar.getAlternatives(nonterminal);
 		
 		for (int i = 0; i < alternatives.size(); i++) {
 			Rule rule = alternatives.get(i);
 			BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);
-			Set<CharacterRange> set = firstFollow.getPredictionSet(rule, 0);
+			Set<CharRange> set = firstFollow.getPredictionSet(rule, 0);
 			set.forEach(cr -> map.computeIfAbsent(cr, k -> new ArrayList<>()).add(firstSlot));			
 		}
 		
 		// A map from non-overlapping ranges to a list of original ranges
-		Map<CharacterRange, List<CharacterRange>> rangeMap = toNonOverlapping2(map.keySet());
+		Map<CharRange, List<CharRange>> rangeMap = toNonOverlapping2(map.keySet());
 		
 		// A map from non-overlapping ranges to a list associated body grammar slots
-		Map<CharacterRange, List<BodyGrammarSlot>> nonOverlappingMap = new HashMap<>();
+		Map<CharRange, List<BodyGrammarSlot>> nonOverlappingMap = new HashMap<>();
 		
 		// compute a list of body grammar slots from a non-overlapping range
-		Function<CharacterRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toCollection(LinkedHashSet::new));
+		Function<CharRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(f.apply(r))); 
 		
@@ -218,7 +218,7 @@ public class GrammarGraph implements Serializable {
 			return FollowTest.DEFAULT;
 		
 		// TODO: move toNonOverlapping to first follow itself
-		Set<CharacterRange> followSet = toNonOverlappingSet(firstFollow.getFollowSet(nonterminal));
+		Set<CharRange> followSet = toNonOverlappingSet(firstFollow.getFollowSet(nonterminal));
 		
 		return new RangeTreeFollowTest(followSet);
 	}
@@ -227,7 +227,7 @@ public class GrammarGraph implements Serializable {
 		if (config.getLookAheadCount() == 0)
 			return FollowTest.DEFAULT;
 
-		Set<CharacterRange> set = toNonOverlappingSet(firstFollow.getPredictionSet(rule, i));
+		Set<CharRange> set = toNonOverlappingSet(firstFollow.getPredictionSet(rule, i));
 		
 		return new RangeTreeFollowTest(set);
 	}
@@ -346,7 +346,7 @@ public class GrammarGraph implements Serializable {
         public Void visit(Terminal symbol) {
             TerminalGrammarSlot terminalSlot;
 
-            if (symbol.category() == Category.REGEX) {
+            if (symbol.getCategory() == Category.Regex) {
                 terminalSlot = getTerminalGrammarSlot(symbol, symbol.getName());
             } else {
                 terminalSlot = getTerminalGrammarSlot(symbol, null);

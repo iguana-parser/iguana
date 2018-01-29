@@ -27,7 +27,7 @@
 
 package org.iguana.parser.layout;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -65,8 +65,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class LayoutTest2 {
 
-    Terminal a = Terminal.from(Character.from('a'));
-    Terminal c = Terminal.from(Character.from('c'));
+    Terminal a = Terminal.from(Char.from('a'));
+    Terminal c = Terminal.from(Char.from('c'));
     Nonterminal S = Nonterminal.withName("S");
     Nonterminal A = Nonterminal.withName("A");
     Nonterminal B = Nonterminal.withName("B");
@@ -79,7 +79,7 @@ public class LayoutTest2 {
     Rule r3 = Rule.withHead(B).setLayout(L).build();
     Rule r4 = Rule.withHead(C).setLayout(L).addSymbol(c).build();
 
-    Terminal space = Terminal.from(Character.from(' '));
+    Terminal space = Terminal.from(Char.from(' '));
     Rule layout1 = Rule.withHead(L).addSymbol(space).build();
     Rule layout2 = Rule.withHead(L).build();
 

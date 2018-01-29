@@ -1,6 +1,6 @@
 package org.iguana.parser.basic;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -28,8 +28,8 @@ import static org.junit.Assert.assertTrue;
 public class Test18 {
 
     static Nonterminal E = Nonterminal.withName("E");
-    static Terminal a = Terminal.from(Character.from('a'));
-    static Terminal plus = Terminal.from(Character.from('+'));
+    static Terminal a = Terminal.from(Char.from('a'));
+    static Terminal plus = Terminal.from(Char.from('+'));
 
     static Rule r1 = Rule.withHead(E).addSymbols(E, plus, E).build();
     static Rule r2 = Rule.withHead(E).addSymbols(a).build();

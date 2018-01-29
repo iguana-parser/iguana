@@ -27,7 +27,7 @@
 
 package org.iguana.parser.datadependent;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -67,8 +67,8 @@ public class Test8 {
 		
 		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
 		
-		Terminal z = Terminal.from(Character.from('z'));
-        Terminal w = Terminal.from(Character.from('w'));
+		Terminal z = Terminal.from(Char.from('z'));
+        Terminal w = Terminal.from(Char.from('w'));
 		
 		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
@@ -78,7 +78,7 @@ public class Test8 {
 					.addSymbol(z).build();
 		
 		Rule r1_2 = Rule.withHead(E)
-					.addSymbol(Terminal.builder(Character.from('x'))
+					.addSymbol(Terminal.builder(Char.from('x'))
 							.addPreCondition(predicate(greaterEq(integer(3), var("l")))).build())
 					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(3)).build()).build();
 		
@@ -87,7 +87,7 @@ public class Test8 {
 						.addPreCondition(predicate(greaterEq(integer(2), var("r")))).build())
 					.addSymbol(w).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Character.from('a'))).build();
+		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
 		

@@ -48,7 +48,6 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	public SymbolBuilder(T symbol) {
 		this.name = symbol.getName();
 		this.label = symbol.getLabel();
-		this.object = symbol.getObject();
 		this.preConditions = new HashSet<>(symbol.getPreConditions());
 		this.postConditions = new HashSet<>(symbol.getPostConditions());
 	}
@@ -56,6 +55,8 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	public SymbolBuilder(String name) {
 		this.name = name;
 	}
+
+	public SymbolBuilder() { }
 	
 	public SymbolBuilder<T> setLabel(String label) {
 		this.label = label;

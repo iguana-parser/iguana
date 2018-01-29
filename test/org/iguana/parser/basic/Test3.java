@@ -27,7 +27,7 @@
 
 package org.iguana.parser.basic;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -58,8 +58,8 @@ import static org.junit.Assert.*;
 public class Test3 {
 	
 	static Nonterminal A = Nonterminal.withName("A");
-	static Terminal a = Terminal.from(Character.from('a'));
-	static Terminal b = Terminal.from(Character.from('b'));
+	static Terminal a = Terminal.from(Char.from('a'));
+	static Terminal b = Terminal.from(Char.from('b'));
 	static Rule r1 = Rule.withHead(A).addSymbols(a, b).build();
 
 	private static Input input = Input.fromString("ab");

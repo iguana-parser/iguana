@@ -41,7 +41,7 @@ public class RegularExpressionCondition extends Condition {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private RegularExpression regularExpression;
+	private final RegularExpression regularExpression;
 	
 	public RegularExpressionCondition(ConditionType type, RegularExpression regularExpression) {
 		super(type);

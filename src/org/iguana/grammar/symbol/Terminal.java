@@ -34,16 +34,13 @@ import org.iguana.traversal.ISymbolVisitor;
 public class Terminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private final Category category;
+
 	private final RegularExpression regex;
 
-    public String name() {
-        return name;
-    }
-
     public enum Category {
-    	// TODO: figure it out what is the terminal category. Also rename this field
-		REGEX("Regex"), KEYWORD("Keyword"), TERMINAL("Terminal"), Layout("Layout");
+		Regex("Regex"), Keyword("Keyword"), Layout("Layout");
 
 		private String value;
 
@@ -57,8 +54,6 @@ public class Terminal extends AbstractSymbol {
 		}
 	}
 	
-	private final Category category;
-
     private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
 
     public static Terminal epsilon() {
@@ -75,10 +70,6 @@ public class Terminal extends AbstractSymbol {
 		this.category = builder.category;
 	}
 
-    public RegularExpression getRegex() {
-        return regex;
-    }
-
     @Override
 	public Builder copyBuilder() {
 		return new Builder(this);
@@ -88,7 +79,7 @@ public class Terminal extends AbstractSymbol {
 		return regex;
 	}
 	
-	public Category category() {
+	public Category getCategory() {
 		return category;
 	}
 	
@@ -118,28 +109,32 @@ public class Terminal extends AbstractSymbol {
 	public static class Builder extends SymbolBuilder<Terminal> {
 		
 		private RegularExpression regex;
-		private Category category = Category.TERMINAL;
+
+		private Category category = Category.Regex;
 
 		public Builder(RegularExpression regex) {
-			super(regex.getName());
 			this.regex = regex;
 		}
+
+		public Builder() {}
 		
 		public Builder(Terminal terminal) {
 			super(terminal);
 			this.regex = terminal.regex;
-            this.category = terminal.category();
-		}
-		
-		@Override
-		public Terminal build() {
-			return new Terminal(this);
+            this.category = terminal.getCategory();
 		}
 		
 		public Builder setCategory(Category category) {
             this.category = category;
             return this;
         }
+
+		@Override
+		public Terminal build() {
+			if (name == null)
+				name = regex.toString();
+			return new Terminal(this);
+		}
 	}
 
 	public boolean isNullable() {

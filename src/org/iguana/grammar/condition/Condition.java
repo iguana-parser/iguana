@@ -37,7 +37,7 @@ public abstract class Condition extends AbstractAttrs implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected ConditionType type;
+	protected final ConditionType type;
 
 	public Condition (ConditionType type) {
 		this.type = type;

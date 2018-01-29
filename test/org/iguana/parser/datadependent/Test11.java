@@ -28,7 +28,7 @@
 package org.iguana.parser.datadependent;
 
 import iguana.regex.Alt;
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -71,20 +71,20 @@ public class Test11 {
 		Rule r0 = Rule.withHead(X).addSymbol(S).build();
 		
 		Rule r1 = Rule.withHead(S)
-					.addSymbol(Code.code(Terminal.builder(Character.from('a')).setLabel("a")
+					.addSymbol(Code.code(Terminal.builder(Char.from('a')).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
 										 stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(NoNL) // TODO: Should be removed
-					.addSymbol(Code.code(Terminal.builder(Character.from('b')).setLabel("b")
+					.addSymbol(Code.code(Terminal.builder(Char.from('b')).setLabel("b")
 												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
 		Rule r2 = Rule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Terminal.from(Alt.from(Character.from(' '), Character.from('\t'))))
-								.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
-								.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build();
+						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
+								.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
+								.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1, r2).build();
 		

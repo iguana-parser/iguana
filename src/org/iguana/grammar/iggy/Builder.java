@@ -26,7 +26,7 @@
  */
 package org.iguana.grammar.iggy;
 
-import iguana.regex.Character;
+import iguana.regex.Char;
 import iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.Grammar;
@@ -195,10 +195,10 @@ public abstract class Builder {
 		return Nonterminal.withName((String)name);
 	}
 	
-	public iguana.regex.Sequence<Character> string(Object obj) {
+	public iguana.regex.Seq<Char> string(Object obj) {
         String s = (String) obj;
         s = s.substring(1, s.length() - 1);
-        return iguana.regex.Sequence.from(s.chars().toArray());
+        return iguana.regex.Seq.from(s.chars().toArray());
     }
 	
 	/*

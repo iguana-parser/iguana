@@ -1,6 +1,6 @@
 package org.iguana.grammar.slot.lookahead;
 
-import iguana.regex.CharacterRange;
+import iguana.regex.CharRange;
 import iguana.utils.collections.rangemap.AVLIntRangeTree;
 import iguana.utils.collections.rangemap.ArrayIntRangeTree;
 import iguana.utils.collections.rangemap.IntRangeTree;
@@ -11,7 +11,7 @@ public class RangeTreeFollowTest implements FollowTest {
 
 	private IntRangeTree rangeTree;
 	
-	public RangeTreeFollowTest(Set<CharacterRange> set) {
+	public RangeTreeFollowTest(Set<CharRange> set) {
 		rangeTree = new AVLIntRangeTree();
 		set.forEach(r -> rangeTree.insert(r, 1));
 		rangeTree = new ArrayIntRangeTree(rangeTree);

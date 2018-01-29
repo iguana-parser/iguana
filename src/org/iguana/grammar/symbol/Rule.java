@@ -42,18 +42,11 @@ import java.util.stream.Collectors;
 public class Rule implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	
-	private final List<Symbol> body;
-	
-	private final Nonterminal head;
-	
-	/**
-	 * An arbitrary data object that can be put in this grammar slot and
-	 * retrieved later when traversing the parse tree.
-	 * This object can be accessed via the getObject() method of a nonterminal symbol node.
-	 */
-	private final Serializable object;
-	
+
+    private final Nonterminal head;
+
+    private final List<Symbol> body;
+
 	private final Nonterminal layout;
 	
 	private final LayoutStrategy layoutStrategy;
@@ -80,7 +73,6 @@ public class Rule implements Serializable {
     public Rule(Builder builder) {
         this.body = builder.body;
         this.head = builder.head;
-        this.object = builder.object;
         this.layout = builder.layout;
         this.layoutStrategy = builder.layoutStrategy;
         this.recursion = builder.recursion;
@@ -117,10 +109,6 @@ public class Rule implements Serializable {
 			throw new IllegalArgumentException(i + " cannot be greater than " + body.size());
 		
 		return body.get(i);
-	}
-	
-	public Serializable getObject() {
-		return object;
 	}
 	
 	public Nonterminal getLayout() {
@@ -227,7 +215,7 @@ public class Rule implements Serializable {
         if (associativity != Associativity.UNDEFINED && precedence != 0) {
             sb.append(" {").append(associativity.name());
             if (precedence != 0) sb.append(", " + precedence);
-            if (recursion != Recursion.UNDEFINED) sb.append(", " + recursion);
+            if (recursion != Recursion.NON_REC) sb.append(", " + recursion);
             sb.append(" }");
         }
 
@@ -239,17 +227,18 @@ public class Rule implements Serializable {
 	}
 	
 	public boolean equals(Object obj) {
-		
-		if(this == obj)
-			return true;
-		
-		if(!(obj instanceof Rule))
-			return false;
+		if (this == obj) return true;
+		if (!(obj instanceof Rule)) return false;
 		
 		Rule other = (Rule) obj;
-		
-		boolean r = head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
-        return r;
+
+		if (body == null && other.body != null) {
+            System.out.println("Hi!!!");
+        }
+		if (body != null && !body.equals(other.body)) {
+            System.out.println("fuck!");
+        }
+		return head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
 	}
 	
 	@Override
@@ -295,10 +284,6 @@ public class Rule implements Serializable {
         return head.getName();
     }
 
-    public List<String> body() {
-        return body.stream().map(s -> s.getName()).collect(Collectors.toList());
-    }
-    
     public String label() {
     	return label;
     }
@@ -308,7 +293,7 @@ public class Rule implements Serializable {
         return size();
     }
 
-    public boolean layout() {
+    public boolean isLayout() {
         return head.getNodeType() == NonterminalNodeType.Layout;
     }
 
@@ -320,8 +305,8 @@ public class Rule implements Serializable {
         private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
         private Nonterminal layout;
 
-        private Recursion recursion = Recursion.UNDEFINED;
-        private Recursion irecursion = Recursion.UNDEFINED;
+        private Recursion recursion = Recursion.NON_REC;
+        private Recursion irecursion = Recursion.NON_REC;
 
         private String leftEnd = "";
         private String rightEnd = "";
@@ -343,10 +328,11 @@ public class Rule implements Serializable {
             this.body = new ArrayList<>();
         }
 
+        public Builder() {}
+
         public Builder(Rule rule) {
             this.head = rule.head;
             this.body = rule.body;
-            this.object = rule.object;
             this.layoutStrategy = rule.layoutStrategy;
             this.layout = rule.layout;
             this.recursion = rule.recursion;
@@ -377,11 +363,7 @@ public class Rule implements Serializable {
         }
 
         public Builder addSymbols(List<Symbol> symbols) {
-            if (symbols == null) {
-                body = null;
-            } else {
-                body.addAll(symbols);
-            }
+            body.addAll(symbols);
             return this;
         }
 
@@ -479,6 +461,7 @@ public class Rule implements Serializable {
         }
 
         public Rule build() {
+            if (body == null) body = Collections.emptyList();
             return new Rule(this);
         }
     }

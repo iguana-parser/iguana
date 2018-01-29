@@ -26,8 +26,8 @@
  */
 package org.iguana.grammar.iggy;
 
-import iguana.regex.Character;
-import iguana.regex.CharacterRange;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
@@ -263,7 +263,7 @@ public class GrammarBuilder {
     public static class RegexSequence {
         public static iguana.regex.RegularExpression sequence(List<iguana.regex.RegularExpression> regexs) {
             if (regexs.size() == 1) return regexs.get(0);
-            return iguana.regex.Sequence.from(regexs);
+            return iguana.regex.Seq.from(regexs);
         }
     }
 
@@ -388,14 +388,14 @@ public class GrammarBuilder {
             return Nonterminal.withName(name.id);
         }
         public static org.iguana.grammar.symbol.Symbol string(String s) {
-            return Terminal.from(iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray())));
+            return Terminal.from(iguana.regex.Seq.from(getChars(s.substring(1,s.length() - 1).chars().toArray())));
         }
         public static org.iguana.grammar.symbol.Symbol character(String s) {
             int[] chars = getChars(s.substring(1, s.length() - 1).chars().toArray());
             assert chars.length != 0;
             if (chars.length == 1)
-                return Terminal.from(Character.from(chars[0]));
-            return Terminal.from(iguana.regex.Sequence.from(chars));
+                return Terminal.from(Char.from(chars[0]));
+            return Terminal.from(iguana.regex.Seq.from(chars));
         }
     }
 
@@ -486,9 +486,9 @@ public class GrammarBuilder {
             List<iguana.regex.RegularExpression> l = new ArrayList<>();
             l.add(regex);
             l.addAll(regexs);
-            return iguana.regex.Sequence.from(l);
+            return iguana.regex.Seq.from(l);
         }
-        public static RegularExpression alternation(iguana.regex.Sequence<iguana.regex.RegularExpression> sequence, List<iguana.regex.Sequence<iguana.regex.RegularExpression>> sequences) {
+        public static RegularExpression alternation(iguana.regex.Seq<iguana.regex.RegularExpression> sequence, List<iguana.regex.Seq<iguana.regex.RegularExpression>> sequences) {
             List<iguana.regex.RegularExpression> l = new ArrayList<>();
             if (sequence.getSymbols().isEmpty())
                 l.add(Epsilon.getInstance());
@@ -509,14 +509,14 @@ public class GrammarBuilder {
         // public static RegularExpression nont(Identifier name) { return Nonterminal.withName(name.id); }
         public static RegularExpression charclass(RegularExpression regex) { return regex; }
         public static RegularExpression string(String s) {
-            return iguana.regex.Sequence.from(getChars(s.substring(1,s.length() - 1).chars().toArray()));
+            return iguana.regex.Seq.from(getChars(s.substring(1,s.length() - 1).chars().toArray()));
         }
         public static RegularExpression character(String s) {
             int[] chars = getChars(s.substring(1, s.length() - 1).chars().toArray());
             assert chars.length != 0;
             if (chars.length == 1)
-                return Character.from(chars[0]);
-            return iguana.regex.Sequence.from(chars);
+                return Char.from(chars[0]);
+            return iguana.regex.Seq.from(chars);
         }
     }
 
@@ -549,18 +549,18 @@ public class GrammarBuilder {
     public static Regex regex() { return new Regex(); }
 
     public static class Regexs {
-        public static iguana.regex.Sequence<iguana.regex.RegularExpression> sequence(List<RegularExpression> regexs) {
-            return iguana.regex.Sequence.from(regexs.stream().collect(Collectors.toList()));
+        public static iguana.regex.Seq<iguana.regex.RegularExpression> sequence(List<RegularExpression> regexs) {
+            return iguana.regex.Seq.from(regexs.stream().collect(Collectors.toList()));
         }
     }
 
     public static Regexs regexs() { return new Regexs(); }
 
     public static class CharClass {
-        public static RegularExpression chars(List<CharacterRange> ranges) {
+        public static RegularExpression chars(List<CharRange> ranges) {
             return iguana.regex.Alt.from(ranges);
         }
-        public static RegularExpression notchars(List<CharacterRange> ranges) {
+        public static RegularExpression notchars(List<CharRange> ranges) {
             return null;
         }
     }
@@ -568,11 +568,11 @@ public class GrammarBuilder {
     public static CharClass charclass() { return new CharClass(); }
 
     public static class Range {
-        public static CharacterRange range(String from, String delimiter, String to) {
-            return CharacterRange.in(getChar(from), getChar(to));
+        public static CharRange range(String from, String delimiter, String to) {
+            return CharRange.in(getChar(from), getChar(to));
         }
-        public static CharacterRange character(String s) {
-            return CharacterRange.from(getChar(s));
+        public static CharRange character(String s) {
+            return CharRange.from(getChar(s));
         }
 
         private static int getChar(String s) {
@@ -627,11 +627,6 @@ public class GrammarBuilder {
 
         @Override
         public Set<Condition> getPostConditions() {
-            return null;
-        }
-
-        @Override
-        public Object getObject() {
             return null;
         }
 
