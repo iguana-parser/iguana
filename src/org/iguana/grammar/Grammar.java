@@ -357,10 +357,9 @@ public class Grammar implements Serializable {
 		return definitions.hashCode();
 	}
 
-	/**
+	/*
 	 * Returns the size of this grammar, which is equal to the number of nonterminals +
 	 * number of terminals + grammar slots.
-	 * 
 	 */
 	public int size() {
 		int heads = definitions.size();

@@ -42,8 +42,8 @@ public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> exten
 		this.child = child;
 	}
 
-	/**
-	 * @return true if the second packed node of this nonterminal node is added.
+	/*
+	 * returns true if the second packed node of this nonterminal node is added.
 	 *         This is useful for counting the number of ambigous nodes.
 	 */
 	public boolean addPackedNode(PackedNode node) {

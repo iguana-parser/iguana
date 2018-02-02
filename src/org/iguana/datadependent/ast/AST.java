@@ -784,12 +784,10 @@ public class AST {
 	static public Expression assign(java.lang.String id, int i, Expression exp) {
 		return new Expression.Assignment(id, i, exp);
 	}
-	
-	/**
-	 * 
-	 * 		Statements
-	 */
-	
+
+	//
+	// Statements
+	//
 	static public Statement stat(Expression exp) {
 		return new Statement.Expression(exp);
 	}

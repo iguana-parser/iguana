@@ -43,7 +43,7 @@ public interface Transition {
 
 	String getLabel();
 	
-	/**
+	/*
 	 * 
 	 * Data-dependent GLL parsing
 	 * 

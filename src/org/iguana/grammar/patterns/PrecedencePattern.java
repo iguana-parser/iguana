@@ -47,7 +47,7 @@ public class PrecedencePattern extends AbstractPattern implements Serializable {
 		return new PrecedencePattern(parent.getHead(), parent.getBody(), position, child.getBody());
 	}
 
-	/**
+	/*
 	 * A direct filter is of the form (E, alpha .E beta, gamma).
 	 * In other words, the filtered nonterminal is the same
 	 * as the filter's nonterminal.

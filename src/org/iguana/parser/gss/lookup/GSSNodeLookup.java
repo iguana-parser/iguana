@@ -47,7 +47,7 @@ public interface GSSNodeLookup {
 	
 	Iterable<GSSNode> getNodes();
 	
-	/**
+	/*
 	 * 
 	 * Data-dependent GLL parsing
 	 * 

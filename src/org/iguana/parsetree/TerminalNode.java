@@ -5,18 +5,18 @@ import org.iguana.grammar.symbol.Terminal;
 
 import java.util.Collections;
 
-public class TerminalNode implements ParseTreeNode<Terminal> {
+public class TerminalNode implements ParseTreeNode {
 
     private final Input input;
     private final int start;
     private final int end;
     private final Terminal terminal;
 
-    public TerminalNode(Input input, int start, int end, Terminal terminal) {
-        this.input = input;
+    public TerminalNode(Terminal terminal, int start, int end, Input input) {
+        this.terminal = terminal;
         this.start = start;
         this.end = end;
-        this.terminal = terminal;
+        this.input = input;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TerminalNode implements ParseTreeNode<Terminal> {
     }
 
     @Override
-    public Iterable<ParseTreeNode<?>> children() {
+    public Iterable<ParseTreeNode> children() {
         return Collections.emptyList();
     }
 

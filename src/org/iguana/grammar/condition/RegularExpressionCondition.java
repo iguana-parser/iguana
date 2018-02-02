@@ -32,7 +32,7 @@ import org.iguana.traversal.IConditionVisitor;
 
 /**
  * Conditions relating to the keyword exclusions or follow restrictions. 
- * For example, Id !>> "[]" or Id \ "if"
+ * For example, Id !&gt;&gt; "[]" or Id \ "if"
  * 
  * @author Ali Afroozeh
  *

@@ -44,8 +44,8 @@ import org.iguana.parser.ParserRuntime;
  */
 public interface GrammarSlot {
 
-	/**
-	 * Corresponds to a grammar position A ::= B . \alpha 
+	/*
+	 * Corresponds to a grammar position A ::= B . \alpha
 	 */
 	default boolean isFirst() { return false; }
 	

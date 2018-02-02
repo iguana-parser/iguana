@@ -156,7 +156,7 @@ public class GSSNode {
 		return gssEdges.size();
 	}
 	
-	/**
+	/*
 	 * 
 	 * Data-dependent GLL parsing
 	 * 

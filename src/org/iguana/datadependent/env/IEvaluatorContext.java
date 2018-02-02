@@ -40,11 +40,8 @@ public interface IEvaluatorContext {
 	Environment getEmptyEnvironment();
 	
 	
-	/**
-	 * 
-	 * Operations on environment
-	 * 
-	 */
+	// Operations on environment
+
 	void popEnvironment();
 	
 	void pushEnvironment();
@@ -65,11 +62,8 @@ public interface IEvaluatorContext {
 	
 	Object lookupVariable(int i);
 	
-	/**
-	 * 
-	 * Global parser environment
-	 * 
-	 */
+	// Global parser environment
+
 	void declareGlobalVariable(String name, Object value);
 	
 	void declareGlobalVariables(String[] names, Object[] values);

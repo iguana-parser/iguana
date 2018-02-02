@@ -46,7 +46,7 @@ import java.util.Set;
 
 public class IguanaCLI {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         Configuration config = Configuration.DEFAULT;
         Grammar grammar = null;

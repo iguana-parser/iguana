@@ -762,10 +762,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		return null;
 	}
 	
-	/**
-	 * 
-	 * Accounts for optional label and optional preconditions and postconditions
-	 */
+	// Accounts for optional label and optional preconditions and postconditions
 	public Void visitSymbol(Symbol symbol) {
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();

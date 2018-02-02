@@ -31,7 +31,7 @@ public interface ParserRuntime {
 
     Iterable<GSSNode> getGSSNodes();
 
-    /**
+    /*
      *
      * Data-dependent GLL parsing
      *

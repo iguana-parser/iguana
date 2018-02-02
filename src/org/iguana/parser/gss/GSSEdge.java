@@ -40,7 +40,7 @@ public interface GSSEdge {
 
 	GSSNode getDestination();
 	
-	/**
+	/*
 	 * 
 	 * Does the following:
 	 * (1) checks conditions associated with the return slot

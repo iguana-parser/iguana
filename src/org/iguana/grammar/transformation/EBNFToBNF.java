@@ -43,7 +43,8 @@ import java.util.stream.Collectors;
 /**
  * 
  * 
- * @authors Ali Afroozeh, Anastasia Izmaylova
+ * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
  *
  */
 public class EBNFToBNF implements GrammarTransformation {

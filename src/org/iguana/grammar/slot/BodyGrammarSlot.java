@@ -175,7 +175,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		getTransitions().forEach(t -> t.execute(input, u, node));
 	}
 	
-	/**
+	/*
 	 * 
 	 * Data-dependent GLL parsing
 	 * 

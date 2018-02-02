@@ -38,10 +38,8 @@ import java.util.*;
  * Created by Anastasia Izmaylova on 20/10/15.
  */
 
-/**
- * <Name>@0 => <Name>$Declaration ::= Name
- * <Name>@1 => <Name>$Reference ::= Name
- */
+// <Name>@0 => <Name>$Declaration ::= Name
+// <Name>@1 => <Name>$Reference ::= Name
 public class Names implements GrammarTransformation {
 
     @Override

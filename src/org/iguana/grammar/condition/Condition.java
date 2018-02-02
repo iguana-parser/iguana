@@ -49,10 +49,10 @@ public abstract class Condition extends AbstractAttrs implements Serializable {
 
 	public abstract <T> T accept(IConditionVisitor<T> visitor);
 	
-	/**
-	 * 
+	/*
+	 *
 	 * Data-dependent GLL parsing
-	 * 
+	 *
 	 */
 	public boolean isDataDependent() {
 		return false;

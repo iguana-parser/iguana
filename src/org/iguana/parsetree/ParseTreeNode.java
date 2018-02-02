@@ -1,10 +1,10 @@
 package org.iguana.parsetree;
 
-public interface ParseTreeNode<T> {
+public interface ParseTreeNode{
     int start();
     int end();
     String text();
-    Iterable<? extends ParseTreeNode<?>> children();
+    Iterable<ParseTreeNode> children();
     <R> R accept(ParseTreeVisitor<R> visitor);
-    T definition();
+    Object definition();
 }

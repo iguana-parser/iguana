@@ -40,21 +40,20 @@ import java.util.Set;
  * 
  * @author Ali Afroozeh
  * @author Anastasia Izmaylova
- * 
+ *
+ * <pre>
  * Symbol ::= Label ':' Symbol
  *          | Nonterminal '(' {Expression ','}+ ')'
- *          
  *          | ...
- *          
  *          | '{' Symbol+ '}'
- *          > "align" Symbol
- *          | "offside" Symbol 
- *          > Symbol "do" Statement
+ *       &gt; "align" Symbol
+ *          | "offside" Symbol
+ *       &gt; Symbol "do" Statement
  *          | Symbol "when" Expression
- *          > "if" '(' Expression ')' Symbol
+ *       &gt; "if" '(' Expression ')' Symbol
  *          | "if" '(' Expression ')' Symbol "else" Symbol
  *          | "while" '(' Expression ')' Symbol
- *          
+ * </pre>
  *
  */
 public interface Symbol extends Serializable, Attr {

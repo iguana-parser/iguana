@@ -13,7 +13,7 @@ public class ParseTreeToDot {
 
     private Map<Object, Integer> ids = new HashMap<>();
 
-    public String toDot(ParseTreeNode<?> node) {
+    public String toDot(ParseTreeNode node) {
         node.accept(new ToDotParseTreeVisitor());
         return sb.toString();
     }
@@ -39,43 +39,10 @@ public class ParseTreeToDot {
         }
 
         @Override
-        public Void visit(ListNode node) {
-            sb.append("\"" + getId(node) + "\"" + String.format(RECTANGLE, "black", "") + "\n");
-            addEdgesToChildren(node);
-            visitChildren(node);
-            return null;
-        }
-
-        @Override
         public Void visit(TerminalNode node) {
             String color = "black";
             String label = String.format("(%s, %d, %d): \"%s\"", node.definition().getName(), node.start(), node.end(), node.text());
             sb.append("\"" + getId(node) + "\"" + String.format(ROUNDED_RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
-            return null;
-        }
-
-        @Override
-        public Void visit(StarNode node) {
-            return null;
-        }
-
-        @Override
-        public Void visit(PlusNode node) {
-            return null;
-        }
-
-        @Override
-        public Void visit(AltNode node) {
-            return null;
-        }
-
-        @Override
-        public Void visit(SequenceNode node) {
-            return null;
-        }
-
-        @Override
-        public Void visit(OptionNode node) {
             return null;
         }
 
@@ -87,8 +54,8 @@ public class ParseTreeToDot {
             return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
         }
 
-        private void addEdgesToChildren(ParseTreeNode<?> node) {
-            for (ParseTreeNode<?> child : node.children()) {
+        private void addEdgesToChildren(ParseTreeNode node) {
+            for (ParseTreeNode child : node.children()) {
                 addEdgeToChild(getId(node), getId(child));
             }
         }
@@ -97,8 +64,8 @@ public class ParseTreeToDot {
             sb.append(EDGE + "\"" + parentNodeId + "\"" + "->" + "{\"" + childNodeId + "\"}" + "\n");
         }
 
-        public void visitChildren(ParseTreeNode<?> node) {
-            for (ParseTreeNode<?> child : node.children()) {
+        public void visitChildren(ParseTreeNode node) {
+            for (ParseTreeNode child : node.children()) {
                 child.accept(this);
             }
         }

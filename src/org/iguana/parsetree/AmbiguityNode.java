@@ -5,12 +5,12 @@ import org.iguana.grammar.symbol.Rule;
 
 import java.util.Set;
 
-public class AmbiguityNode implements ParseTreeNode<Object> {
+public class AmbiguityNode implements ParseTreeNode {
 
     private final Input input;
-    private final Set<? extends ParseTreeNode<?>> alternatives;
+    private final Set<ParseTreeNode> alternatives;
 
-    public AmbiguityNode(Input input, Set<? extends ParseTreeNode<?>> alternatives) {
+    public AmbiguityNode(Input input, Set<ParseTreeNode> alternatives) {
         this.input = input;
         this.alternatives = alternatives;
     }
@@ -31,7 +31,7 @@ public class AmbiguityNode implements ParseTreeNode<Object> {
     }
 
     @Override
-    public Iterable<? extends ParseTreeNode<?>> children() {
+    public Iterable<ParseTreeNode> children() {
         return alternatives;
     }
 

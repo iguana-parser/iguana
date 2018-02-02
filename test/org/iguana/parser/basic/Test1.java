@@ -28,6 +28,7 @@
 package org.iguana.parser.basic;
 
 import iguana.utils.input.Input;
+import iguana.utils.visualization.GraphVizUtil;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -37,9 +38,14 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.parsetree.DefaultParseTreeBuilder;
+import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
+import org.iguana.sppf.SPPFParseTreeVisitor;
 import org.iguana.sppf.TerminalNode;
+import org.iguana.util.JsonSerializer;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
 
@@ -55,7 +61,6 @@ import static org.junit.Assert.assertTrue;
  * @author Ali Afroozeh
  *
  */
-
 public class Test1 {
 	
 	private static Nonterminal A = Nonterminal.withName("A");
@@ -64,7 +69,6 @@ public class Test1 {
     private static Rule r1 = Rule.withHead(A).build();
     private static Grammar grammar = Grammar.builder().addRule(r1).build();
     private static Input input = Input.empty();
-
 
 	@Test
 	public void testNullable() {
@@ -102,6 +106,7 @@ public class Test1 {
 	public static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
         TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0, input);
         NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= .", node0, input);
+		ParseTreeNode tree = SPPFToParseTree.toParseTree(node1, input, new DefaultParseTreeBuilder());
 		return node1;
 	}
 

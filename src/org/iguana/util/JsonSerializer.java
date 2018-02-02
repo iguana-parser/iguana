@@ -25,8 +25,8 @@ import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.AmbiguityNode;
-import org.iguana.parsetree.ListNode;
 import org.iguana.parsetree.NonterminalNode;
+import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.TerminalNode;
 
 import java.io.*;
@@ -103,7 +103,6 @@ public class JsonSerializer {
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
-        mapper.addMixIn(ListNode.class, ListNode.class);
 
         SimpleModule module = new SimpleModule();
         module.addDeserializer(Grammar.class, new GrammarDeserializer());
@@ -113,6 +112,10 @@ public class JsonSerializer {
 
     public static String toJSON(Grammar grammar) {
         return serialize(grammar);
+    }
+
+    public static String toJSON(ParseTreeNode node) {
+        return serialize(node);
     }
 
     public static void serialize(Grammar grammar, String path) throws IOException {

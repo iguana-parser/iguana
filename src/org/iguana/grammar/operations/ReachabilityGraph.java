@@ -68,12 +68,12 @@ public class ReachabilityGraph {
 	public Set<Nonterminal> getReachableNonterminals(Nonterminal nt) {
 		return reachabilityGraph.get(nt);
 	}
-	
-	/**
+
+	/*
 	 * 
 	 * Calculate the set of nonterminals that are reachable via the alternates of A.
 	 * In other words, if A is a nonterminal, reachable nonterminals are all the B's such as
-	 * A =>* alpha B gamma. Note that this method does not calculate direct-nullable reachable
+	 * A =&gt;* alpha B gamma. Note that this method does not calculate direct-nullable reachable
 	 * nonterminals.
 	 * 
 	 */

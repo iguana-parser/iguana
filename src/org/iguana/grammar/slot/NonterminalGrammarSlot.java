@@ -181,7 +181,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		nodeLookup.reset(input);
 	}
 	
-	/**
+	/*
 	 * 
 	 * Data-dependent GLL parsing
 	 * 

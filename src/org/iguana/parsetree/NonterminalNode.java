@@ -6,15 +6,15 @@ import org.iguana.grammar.symbol.Rule;
 
 import java.util.List;
 
-public class NonterminalNode implements ParseTreeNode<Rule> {
+public class NonterminalNode implements ParseTreeNode {
 
     private final Input input;
     private final Rule rule;
-    private List<ParseTreeNode<?>> children;
     private final int start;
     private final int end;
+    private List<ParseTreeNode> children;
 
-    public NonterminalNode(Input input, Rule rule, List<ParseTreeNode<?>> children, int start, int end) {
+    public NonterminalNode(Rule rule, List<ParseTreeNode> children, int start, int end, Input input) {
         this.input = input;
         this.rule = rule;
         this.children = children;
@@ -22,11 +22,11 @@ public class NonterminalNode implements ParseTreeNode<Rule> {
         this.end = end;
     }
 
-    ParseTreeNode<?> childAt(int i) {
+    ParseTreeNode childAt(int i) {
         return children.get(i);
     }
 
-    ParseTreeNode<?> childWithName(String name) {
+    ParseTreeNode childWithName(String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -46,7 +46,7 @@ public class NonterminalNode implements ParseTreeNode<Rule> {
     }
 
     @Override
-    public Iterable<ParseTreeNode<?>> children() {
+    public Iterable<ParseTreeNode> children() {
         return children;
     }
 

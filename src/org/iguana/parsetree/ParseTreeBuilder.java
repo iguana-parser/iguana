@@ -1,12 +1,13 @@
 package org.iguana.parsetree;
 
-public interface ParseTreeBuilder {
-    Object visit(TerminalNode node);
-    Object visit(NonterminalNode node);
-    Object visit(AmbiguityNode node);
-    Object visit(StarNode node);
-    Object visit(PlusNode node);
-    Object visit(AltNode node);
-    Object visit(SequenceNode node);
-    Object visit(OptionNode node);
+import iguana.utils.input.Input;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Terminal;
+
+import java.util.List;
+
+public interface ParseTreeBuilder<T> {
+    T terminalNode(Terminal terminal, int leftExtent, int rightExtent, Input input);
+    T nonterminalNode(Rule rule, List<T> children, int leftExtent, int rightExtent, Input input);
+    T visit(AmbiguityNode node);
 }
