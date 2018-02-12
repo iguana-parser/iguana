@@ -30,23 +30,16 @@ package org.iguana.util.cli;
 import iguana.utils.input.Input;
 import iguana.utils.visualization.GraphVizUtil;
 import org.apache.commons.cli.*;
-import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.grammar.GrammarGraph;
 import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.JsonSerializer;
+import org.iguana.util.SPPFJsonSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
+import org.iguana.util.visualization.SPPFToDot;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.io.*;
 
 public class IguanaCLI {
 
@@ -54,12 +47,13 @@ public class IguanaCLI {
 
         CommandLineParser commandLineParser = new DefaultParser();
         Input input = null;
+        Grammar grammar = null;
 
         try {
             CommandLine line = commandLineParser.parse(getOptions(), args);
 
-            if (line.hasOption("help")) {
-                help();
+            if (line.hasOption("printHelp")) {
+                printHelp();
                 return;
             }
 
@@ -67,27 +61,54 @@ public class IguanaCLI {
                 input = Input.fromPath(line.getOptionValue("input"));
             }
 
-            if (line.hasOption("visualize")) {
+            if (line.hasOption("grammar")) {
+                String grammarPath = line.getOptionValue("grammar");
+                try {
+                    grammar = JsonSerializer.deserialize(grammarPath, Grammar.class);
+                } catch (IOException e) {
+                    System.out.println("Could not load the grammar from " + grammarPath);
+                    return;
+                }
+            }
+
+            if (line.hasOption("visTree")) {
                 if (input == null) throw new RuntimeException("Input is not specified");
 
-                String[] values = line.getOptionValues("visualize");
+                String[] values = line.getOptionValues("visTree");
                 try {
-                    ParseTreeNode node = JsonSerializer.deserialize(values[0], ParseTreeNode.class);
-                    System.out.println(JsonSerializer.toJSON(node));
+                    String contentPath = values[0];
+                    String outputFile = values[1];
+
+                    ParseTreeNode node = JsonSerializer.deserialize(contentPath, ParseTreeNode.class);
                     String dot = new ParseTreeToDot().toDot(node, input);
-                    GraphVizUtil.generateGraph(dot, values[1]);
+                    GraphVizUtil.generateGraph(dot, outputFile);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return;
             }
 
-//            // Grammar
-//            if (line.hasOption("g")) {
-//                String grammarPath = line.getOptionValue("g");
-//                grammar = Grammar.load(new File(grammarPath).toURI());
-//            }
-//
+            if (line.hasOption("visSPPF")) {
+                if (input == null) throw new RuntimeException("Input is not specified");
+                if (grammar == null) throw new RuntimeException("Grammar is not specified");
+
+                String[] values = line.getOptionValues("visSPPF");
+                try {
+                    String contentPath = values[0];
+                    String outputFile = values[1];
+
+                    NonterminalNode sppf = SPPFJsonSerializer.deserialize(new FileInputStream(contentPath), GrammarGraph.from(grammar, input));
+                    SPPFToDot toDot = new SPPFToDot(input);
+                    toDot.visit(sppf);
+                    GraphVizUtil.generateGraph(toDot.getString(), outputFile);
+                    System.out.println("SPPF is successfully visualized in " + outputFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
+
 //            // Start symbol
 //            if (line.hasOption("s")) {
 //                startSymbol = Nonterminal.withName(line.getOptionValue("s"));
@@ -137,21 +158,22 @@ public class IguanaCLI {
 //                }
 //            }
 
-            help();
+            printHelp();
         } catch (ParseException e) {
             System.err.println("Invalid argument: " + e.getMessage());
         }
     }
 
-    private static void help() {
+    private static void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
+        formatter.setWidth(80);
         formatter.printHelp("iguana", getOptions());
         System.exit(0);
     }
 
     private static Options getOptions() {
 
-        Option help = Option.builder("h").longOpt("help")
+        Option help = Option.builder("h").longOpt("printHelp")
                 .desc("print this message")
                 .build();
 
@@ -160,23 +182,20 @@ public class IguanaCLI {
                 .build();
 
         Option grammar = Option.builder("g").longOpt("grammar")
-                .desc("specify the grammar in .iggy format")
+                .desc("the input grammar (in .iggy or .json format)")
+                .argName("grammar")
                 .hasArg()
                 .build();
 
         Option startSymbol = Option.builder("s").longOpt("start")
                 .desc("The start symbol")
-                .hasArg()
-                .build();
-
-        Option ddgrammar = Option.builder().longOpt("ddgrammar")
-                .desc("specify the data-dependent grammar in .json format")
+                .argName("start")
                 .hasArg()
                 .build();
 
         Option convert = Option.builder().longOpt("convert")
-                .desc("convert the .iggy grammar to a data-dependent format")
-                .hasArgs()
+                .desc("convert the .iggy grammar to json format")
+                .numberOfArgs(2)
                 .build();
 
         Option input = Option.builder("i").longOpt("input")
@@ -184,9 +203,16 @@ public class IguanaCLI {
                 .hasArg()
                 .build();
 
-        Option visualize = Option.builder("vis").longOpt("visualize")
-                .desc("visualizes the parse tree, sppf, etc.")
+        Option visualizeTree = Option.builder("visTree")
+                .desc("visualizes the parse tree")
                 .numberOfArgs(2)
+                .argName("content> <output")
+                .build();
+
+        Option visualizeSPPF = Option.builder("visSPPF")
+                .desc("visualizes the SPPF")
+                .numberOfArgs(2)
+                .argName("content> <output")
                 .build();
 
         Option benchmark = Option.builder().longOpt("benchmark")
@@ -199,10 +225,10 @@ public class IguanaCLI {
         options.addOption(version);
         options.addOption(grammar);
         options.addOption(startSymbol);
-        options.addOption(ddgrammar);
         options.addOption(convert);
         options.addOption(input);
-        options.addOption(visualize);
+        options.addOption(visualizeTree);
+        options.addOption(visualizeSPPF);
         options.addOption(benchmark);
 
         return options;

@@ -144,15 +144,14 @@ public class JsonSerializer {
     }
 
     public static <T> T deserialize(String path, Class<T> clazz) throws IOException {
-        InputStream in = getInputStream(new FileInputStream(path));
-        return deserialize(in, clazz);
+        return deserialize(getInputStream(new FileInputStream(path)), clazz);
     }
 
     public static <T> T deserialize(InputStream in, Class<T> clazz) throws IOException {
         return mapper.readValue(in, clazz);
     }
 
-    private static InputStream getInputStream(InputStream in) throws IOException {
+    public static InputStream getInputStream(InputStream in) throws IOException {
         PushbackInputStream pb = new PushbackInputStream(in, 2);
         byte[] signature = new byte[2];
         int length = pb.read(signature);
@@ -256,6 +255,9 @@ public class JsonSerializer {
 
     static Symbol getLayout(JsonNode node) throws IOException {
         JsonNode layoutNode = node.get("layout");
+        if (layoutNode == null)
+            return null;
+
         String layoutKind = layoutNode.get("kind").asText();
         if (layoutKind.equals("Nonterminal"))
             return mapper.readValue(layoutNode.toString(), Nonterminal.class);

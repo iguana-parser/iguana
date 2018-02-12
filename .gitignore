@@ -9,3 +9,4 @@ project/
 .project
 .settings/
 iguana.iml
+*.pdf
