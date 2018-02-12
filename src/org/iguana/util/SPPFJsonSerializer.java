@@ -20,6 +20,7 @@ import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class SPPFJsonSerializer {
@@ -34,6 +35,18 @@ public class SPPFJsonSerializer {
         try {
             return mapper.writer(pp).writeValueAsString(node);
         } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static NonterminalNode deserialize(InputStream in, GrammarGraph graph) {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(NonterminalNode.class, new NonterminalDeserializer(graph, NonterminalNode.class));
+        mapper.registerModule(module);
+        try {
+            return mapper.readValue(in, NonterminalNode.class);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -80,30 +93,37 @@ public class SPPFJsonSerializer {
             JsonNode node = codec.readTree(parser);
 
             Map<Integer, SPPFNode<?,?>> idToNodeMap = new HashMap<>();
-            Map<Integer, List<Integer>> children = new HashMap<>();
+            Map<Integer, List<Integer>> childrenMap = new HashMap<>();
 
             for (JsonNode child : node) {
                 String kind = child.get("kind").asText();
                 int id = child.get("id").asInt();
                 int leftExtent = child.get("leftExtent").asInt();
-                int rightExtent = child.get("leftExtent").asInt();
+                int rightExtent = child.get("rightExtent").asInt();
                 SPPFNode<?,?> sppfNode;
+
                 switch (kind) {
+                    case "NonterminalNode":
+                        sppfNode = new NonterminalNode(getGrammarSlot(child));
+                        idToNodeMap.put(id, sppfNode);
+                        addChildren(child, childrenMap);
+                        break;
+
+                    case "IntermediateNode":
+                        sppfNode = new IntermediateNode();
+                        idToNodeMap.put(id, sppfNode);
+                        addChildren(child, childrenMap);
+                        break;
+
                     case "TerminalNode":
                         sppfNode = new TerminalNode(getGrammarSlot(child), leftExtent, rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         break;
 
-                    case "NonterminalNode":
-                        sppfNode = new NonterminalNode(getGrammarSlot(child));
-                        idToNodeMap.put(id, sppfNode);
-                        addChildren(child, children);
-                        break;
-
                     case "PackedNode":
                         sppfNode = new PackedNode(getGrammarSlot(child));
                         idToNodeMap.put(id, sppfNode);
-                        addChildren(child, children);
+                        addChildren(child, childrenMap);
                         break;
                 }
             }
@@ -112,14 +132,14 @@ public class SPPFJsonSerializer {
                 int id = entry.getKey();
                 SPPFNode<?,?> sppfNode = entry.getValue();
                 if (sppfNode instanceof NonterminalOrIntermediateNode) {
-                    for (int childId : children.get(id)) {
+                    for (int childId : childrenMap.get(id)) {
                         ((NonterminalOrIntermediateNode) sppfNode).addPackedNode((PackedNode) idToNodeMap.get(childId));
                     }
                 } else if (sppfNode instanceof PackedNode) {
-                    NonPackedNode leftChild = (NonPackedNode) idToNodeMap.get(children.get(id).get(0));
+                    NonPackedNode leftChild = (NonPackedNode) idToNodeMap.get(childrenMap.get(id).get(0));
                     NonPackedNode rightChild = null;
-                    if (children.get(id).size() > 1) {
-                        rightChild = (NonPackedNode) idToNodeMap.get(children.get(id).get(0));
+                    if (childrenMap.get(id).size() > 1) {
+                        rightChild = (NonPackedNode) idToNodeMap.get(childrenMap.get(id).get(1));
                     }
                     ((PackedNode) sppfNode).setLeftChild(leftChild);
                     ((PackedNode) sppfNode).setRightChild(rightChild);

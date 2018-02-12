@@ -30,7 +30,9 @@ package org.iguana.parser;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.JsonSerializer;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.SPPFJsonSerializer;
 
 public class ParseSuccess extends AbstractParseResult {
 
@@ -85,7 +87,8 @@ public class ParseSuccess extends AbstractParseResult {
 			return false;
 		
 		ParseSuccess other = (ParseSuccess) obj;
-		return parseStatistics.equals(other.parseStatistics); //&& sppfNode.deepEquals(other.sppfNode);
+		return parseStatistics.equals(other.parseStatistics) &&
+			   SPPFJsonSerializer.serialize(sppfNode).equals(SPPFJsonSerializer.serialize(other.sppfNode));
 	}
 	
 	@Override

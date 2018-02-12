@@ -1,9 +1,0 @@
-digraph sppf {
-layout=dot
-nodesep=.6
-ranksep=.4
-ordering=out
-forcelabels=true
-"1"[shape=box, style=rounded, height=0.1, width=0.1, color=black, fontcolor=black, label="(A ::= , 0, 0)", fontsize=10];
-
-}

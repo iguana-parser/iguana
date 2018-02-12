@@ -66,8 +66,7 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
     }
 
     @Override
-    public int getLeftExtent() {
-        return leftChild.getLeftExtent();
+    public int getLeftExtent() { return leftChild.getLeftExtent();
     }
 
     @Override

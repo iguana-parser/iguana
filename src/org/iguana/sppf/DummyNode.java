@@ -81,11 +81,6 @@ public class DummyNode extends NonPackedNode {
 	}
 
 	@Override
-	public boolean isDummy() {
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "$";
 	}
