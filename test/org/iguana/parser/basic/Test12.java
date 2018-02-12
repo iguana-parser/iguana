@@ -130,16 +130,16 @@ public class Test12 {
     static NonterminalNode A_1_1;
 
 	private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input1);
-        TerminalNode node1 = factory.createTerminalNode("epsilon", 1, 1, input1);
-        NonterminalNode node3 = factory.createNonterminalNode("A", "A ::= .", node1, input1);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        TerminalNode node1 = factory.createTerminalNode("epsilon", 1, 1);
+        NonterminalNode node3 = factory.createNonterminalNode("A", "A ::= .", node1);
         IntermediateNode node2 = factory.createIntermediateNode("A ::= A A .", node3, node3);
         node3.addPackedNode(factory.createPackedNode("A ::= A A .", node2));
-        TerminalNode node4 = factory.createTerminalNode("epsilon", 0, 0, input1);
-        NonterminalNode node6 = factory.createNonterminalNode("A", "A ::= .", node4, input1);
+        TerminalNode node4 = factory.createTerminalNode("epsilon", 0, 0);
+        NonterminalNode node6 = factory.createNonterminalNode("A", "A ::= .", node4);
         IntermediateNode node5 = factory.createIntermediateNode("A ::= A A .", node6, node6);
         node6.addPackedNode(factory.createPackedNode("A ::= A A .", node5));
-        NonterminalNode node8 = factory.createNonterminalNode("A", "A ::= a .", node0, input1);
+        NonterminalNode node8 = factory.createNonterminalNode("A", "A ::= a .", node0);
         IntermediateNode node7 = factory.createIntermediateNode("A ::= A A .", node8, node3);
         node7.addPackedNode(factory.createPackedNode("A ::= A A .", node6, node8));
         node8.addPackedNode(factory.createPackedNode("A ::= A A .", node7));
@@ -150,8 +150,8 @@ public class Test12 {
 	}
 
  	private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0, input1);
-        NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= .", node0, input1);
+        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0);
+        NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= .", node0);
         A_0_0 = node2;
         IntermediateNode node1 = factory.createIntermediateNode("A ::= A A .", node2, node2);
         node2.addPackedNode(factory.createPackedNode("A ::= A A .", node1));

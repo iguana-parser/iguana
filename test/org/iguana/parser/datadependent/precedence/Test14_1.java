@@ -62,8 +62,8 @@ Grammar.builder()
 //         NonterminalNode node = result.asParseSuccess().getSPPFNode();
 //         boolean hasAmbiguousIntermediateNode = false;
 //         for (PackedNode pnode : node.getChildren().get(0).getChildAt(0).getChildren()) {
-//        	 NonPackedNode child = pnode.getChildAt(0);
-//			 if (child instanceof IntermediateNode && child.isAmbiguous())
+//        	 NonPackedNode first = pnode.getChildAt(0);
+//			 if (first instanceof IntermediateNode && first.isAmbiguous())
 //				 hasAmbiguousIntermediateNode = true;
 //         }
          

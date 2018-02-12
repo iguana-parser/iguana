@@ -28,7 +28,6 @@
 package org.iguana.parser.basic;
 
 import iguana.utils.input.Input;
-import iguana.utils.visualization.GraphVizUtil;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
@@ -43,10 +42,9 @@ import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
-import org.iguana.sppf.SPPFParseTreeVisitor;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.util.JsonSerializer;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.SPPFJsonSerializer;
 import org.junit.Test;
 
 import static iguana.utils.collections.CollectionsUtil.set;
@@ -100,13 +98,25 @@ public class Test1 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
+
+		NonterminalNode sppf = expectedSPPF(new SPPFNodeFactory(graph));
+		String json = SPPFJsonSerializer.serialize(sppf);
+		System.out.println(json);
+		System.out.println(">>>>>>>>>");
+		String expectedJson = SPPFJsonSerializer.serialize(expectedSPPF(new SPPFNodeFactory(graph)));
+		System.out.println(expectedJson);
+		NonterminalNode node = SPPFJsonSerializer.deserialize(json, graph);
+		System.out.println(">>>>>>>>" + node);
+		assertEquals(expectedJson, json);
+		ParseTreeNode tree = SPPFToParseTree.toParseTree(sppf, input, new DefaultParseTreeBuilder());
+//		System.out.println(JsonSerializer.toJSON(tree));
+
 		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 
 	public static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0, input);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= .", node0, input);
-		ParseTreeNode tree = SPPFToParseTree.toParseTree(node1, input, new DefaultParseTreeBuilder());
+        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= .", node0);
 		return node1;
 	}
 

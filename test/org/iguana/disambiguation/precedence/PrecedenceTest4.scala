@@ -26,7 +26,6 @@
  */
 package org.iguana.disambiguation.precedence
 
-import iguana.regex.Character
 import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
 import org.iguana.grammar.iggy.IggyParser

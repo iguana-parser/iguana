@@ -7,10 +7,9 @@ import org.iguana.parsetree.*;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.traversal.SPPFVisitor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
@@ -63,29 +62,31 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
     @Override
     public List<Object> visit(IntermediateNode node) {
-//        if (node.isAmbiguous()) {
-//            List<Object> result = new ArrayList<>();
-//            Set<ListNode> children = new HashSet<>();
-//            for (PackedNode packedNode : node.getChildren()) {
-//                children.add(new ListNode(input, packedNode.accept(this)));
-//            }
-//            result.add(new AmbiguityNode(input, children));
-//            return result;
-//        } else {
-        return node.getChildAt(0).accept(this);
-//        }
+        Stream<Object> left = node.getChildAt(0).accept(this).stream();
+        Stream<Object> children;
+        if (node.childrenCount() == 2) {
+            Stream<Object> right = node.getChildAt(2).accept(this).stream();
+            children = Stream.concat(left, right);
+        } else {
+            children = left;
+        }
+        return children.filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     @Override
     public List<Object> visit(PackedNode node) {
         List<Object> left = node.getLeftChild().accept(this);
-        if (node.getRightChild() != null) {
-            List<Object> right = node.getRightChild().accept(this);
-            left.addAll(right);
-        }
-        return left;
+        List<Object> right;
+        if (node.getRightChild() != null)
+            right = node.getRightChild().accept(this);
+        else
+            right = Collections.emptyList();
+        return merge(left, right);
+    }
+
+    private static List<Object> merge(List<Object> list1, List<Object> list2) {
+        if (list1 == null || list2 == null) throw new IllegalArgumentException("list1 or list2 cannot be empty");
+        return Stream.concat(list1.stream(), list2.stream()).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 }
-
-

@@ -104,8 +104,8 @@ public class Test13 {
     static NonterminalNode A_0_1;
 
 	private static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
         A_0_1 = node1;
         node1.addPackedNode(factory.createPackedNode("A ::= A .", node1));
         return node1;

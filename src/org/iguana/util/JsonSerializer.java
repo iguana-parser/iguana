@@ -100,6 +100,7 @@ public class JsonSerializer {
         mapper.addMixIn(iguana.regex.Char.class, CharMixIn.class);
         mapper.addMixIn(iguana.regex.CharRange.class, CharRangeMixIn.class);
 
+        // Parse tree
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
@@ -165,8 +166,6 @@ public class JsonSerializer {
 
     static class CustomTypeResolverBuilder extends ObjectMapper.DefaultTypeResolverBuilder {
 
-        private static final long serialVersionUID = 1L;
-
         public CustomTypeResolverBuilder() {
             super(ObjectMapper.DefaultTyping.NON_FINAL);
         }
@@ -207,6 +206,7 @@ public class JsonSerializer {
         public JavaType typeFromId(DatabindContext context, String id) {
             String[] packages = {
                     "org.iguana.grammar.",
+                    "org.iguana.parsetree.",
                     "org.iguana.grammar.symbol.",
                     "org.iguana.grammar.condition.",
                     "iguana.regex.",
@@ -648,14 +648,19 @@ public class JsonSerializer {
         DataDependentConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("expression") Expression expression) {}
     }
 
-    abstract class TerminalNodeMixIn {
-        @JsonIgnore
-        Input input;
+    abstract static class TerminalNodeMixIn {
+        TerminalNodeMixIn(
+                @JsonProperty("terminal") Terminal terminal,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
-    abstract class NonterminalNodeMixIn {
-        @JsonIgnore
-        Input input;
+    abstract static class NonterminalNodeMixIn {
+        NonterminalNodeMixIn(
+                @JsonProperty("rule") Rule rule,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract class AmbiguityNodeMixIn {

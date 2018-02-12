@@ -44,13 +44,15 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
 
     private NonPackedNode rightChild;
 
-    public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild) {
-        this(slot, leftChild, null);
+    public PackedNode(BodyGrammarSlot slot) {
+        this.slot = slot;
     }
 
-    public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-        this.slot = slot;
+    public void setLeftChild(NonPackedNode leftChild) {
         this.leftChild = leftChild;
+    }
+
+    public void setRightChild(NonPackedNode rightChild) {
         this.rightChild = rightChild;
     }
 

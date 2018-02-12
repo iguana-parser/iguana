@@ -47,7 +47,7 @@ public class AbstractPattern implements Serializable {
 	public AbstractPattern(Nonterminal nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
 		
 		if(parent == null || child == null) {
-			throw new IllegalArgumentException("parent or child alternates cannot be null.");
+			throw new IllegalArgumentException("parent or first alternates cannot be null.");
 		}
 		
 		this.parent = new ArrayList<>(parent);

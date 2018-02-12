@@ -132,13 +132,13 @@ public class Test9 {
 	}
 	
 	private static org.iguana.sppf.NonterminalNode expectedSPPF(SPPFNodeFactory factory) {
-		TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
-		TerminalNode node1 = factory.createTerminalNode("a", 1, 2, input);
-		org.iguana.sppf.NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= a .", node1, input);
+		TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+		TerminalNode node1 = factory.createTerminalNode("a", 1, 2);
+		org.iguana.sppf.NonterminalNode node2 = factory.createNonterminalNode("A", "A ::= a .", node1);
 		IntermediateNode node3 = factory.createIntermediateNode("S ::= a A . b", node0, node2);
-		TerminalNode node4 = factory.createTerminalNode("b", 2, 3, input);
+		TerminalNode node4 = factory.createTerminalNode("b", 2, 3);
 		IntermediateNode node5 = factory.createIntermediateNode("S ::= a A b .", node3, node4);
-		org.iguana.sppf.NonterminalNode node6 = factory.createNonterminalNode("S", "S ::= a A b .", node5, input);
+		org.iguana.sppf.NonterminalNode node6 = factory.createNonterminalNode("S", "S ::= a A b .", node5);
 		return node6;
 	}
 

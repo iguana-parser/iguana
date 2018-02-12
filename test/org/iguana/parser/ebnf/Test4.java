@@ -85,10 +85,10 @@ public class Test4 {
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input1);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input1);
-        NonterminalNode node2 = factory.createNonterminalNode("A+", "A+ ::= A .", node1, input1);
-        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= A+ .", node2, input1);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("A+", "A+ ::= A .", node1);
+        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= A+ .", node2);
         return node3;
     }
 
@@ -106,14 +106,14 @@ public class Test4 {
     }
 
     private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input2);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input2);
-        NonterminalNode node2 = factory.createNonterminalNode("A+", "A+ ::= A .", node1, input2);
-        TerminalNode node3 = factory.createTerminalNode("a", 1, 2, input2);
-        NonterminalNode node4 = factory.createNonterminalNode("A", "A ::= a .", node3, input2);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("A+", "A+ ::= A .", node1);
+        TerminalNode node3 = factory.createTerminalNode("a", 1, 2);
+        NonterminalNode node4 = factory.createNonterminalNode("A", "A ::= a .", node3);
         IntermediateNode node5 = factory.createIntermediateNode("A+ ::= A+ A .", node2, node4);
-        NonterminalNode node6 = factory.createNonterminalNode("A+", "A+ ::= A+ A .", node5, input2);
-        NonterminalNode node7 = factory.createNonterminalNode("S", "S ::= A+ .", node6, input2);
+        NonterminalNode node6 = factory.createNonterminalNode("A+", "A+ ::= A+ A .", node5);
+        NonterminalNode node7 = factory.createNonterminalNode("S", "S ::= A+ .", node6);
         return node7;
     }
 
@@ -131,18 +131,18 @@ public class Test4 {
     }
 
     private static NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input3);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input3);
-        NonterminalNode node2 = factory.createNonterminalNode("A+", "A+ ::= A .", node1, input3);
-        TerminalNode node3 = factory.createTerminalNode("a", 1, 2, input3);
-        NonterminalNode node4 = factory.createNonterminalNode("A", "A ::= a .", node3, input3);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("A+", "A+ ::= A .", node1);
+        TerminalNode node3 = factory.createTerminalNode("a", 1, 2);
+        NonterminalNode node4 = factory.createNonterminalNode("A", "A ::= a .", node3);
         IntermediateNode node5 = factory.createIntermediateNode("A+ ::= A+ A .", node2, node4);
-        NonterminalNode node6 = factory.createNonterminalNode("A+", "A+ ::= A+ A .", node5, input3);
-        TerminalNode node7 = factory.createTerminalNode("a", 2, 3, input3);
-        NonterminalNode node8 = factory.createNonterminalNode("A", "A ::= a .", node7, input3);
+        NonterminalNode node6 = factory.createNonterminalNode("A+", "A+ ::= A+ A .", node5);
+        TerminalNode node7 = factory.createTerminalNode("a", 2, 3);
+        NonterminalNode node8 = factory.createNonterminalNode("A", "A ::= a .", node7);
         IntermediateNode node9 = factory.createIntermediateNode("A+ ::= A+ A .", node6, node8);
-        NonterminalNode node10 = factory.createNonterminalNode("A+", "A+ ::= A+ A .", node9, input3);
-        NonterminalNode node11 = factory.createNonterminalNode("S", "S ::= A+ .", node10, input3);
+        NonterminalNode node10 = factory.createNonterminalNode("A+", "A+ ::= A+ A .", node9);
+        NonterminalNode node11 = factory.createNonterminalNode("S", "S ::= A+ .", node10);
         return node11;
     }
 

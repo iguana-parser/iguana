@@ -1,0 +1,12 @@
+{
+  "kind" : "NonterminalNode",
+  "rule" : {
+    "kind" : "Rule",
+    "head" : {
+      "kind" : "Nonterminal",
+      "name" : "A"
+    }
+  },
+  "start" : 0,
+  "end" : 0
+}

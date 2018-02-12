@@ -7,16 +7,14 @@ import java.util.Collections;
 
 public class TerminalNode implements ParseTreeNode {
 
-    private final Input input;
+    private final Terminal terminal;
     private final int start;
     private final int end;
-    private final Terminal terminal;
 
-    public TerminalNode(Terminal terminal, int start, int end, Input input) {
+    public TerminalNode(Terminal terminal, int start, int end) {
         this.terminal = terminal;
         this.start = start;
         this.end = end;
-        this.input = input;
     }
 
     @Override
@@ -30,7 +28,7 @@ public class TerminalNode implements ParseTreeNode {
     }
 
     @Override
-    public String text() {
+    public String text(Input input) {
         return input.subString(start, end);
     }
 

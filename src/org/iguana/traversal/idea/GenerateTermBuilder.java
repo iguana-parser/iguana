@@ -100,9 +100,9 @@ public class GenerateTermBuilder {
             writer.println("    public TreeElement plus(Seq<TreeElement> children) { return star(children); }");
             writer.println();
             writer.println("    @Override");
-            writer.println("    public TreeElement opt(TreeElement child) {");
+            writer.println("    public TreeElement opt(TreeElement first) {");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.OPT);");
-            writer.println("        node.rawAddChildrenWithoutNotifications(child);");
+            writer.println("        node.rawAddChildrenWithoutNotifications(first);");
             writer.println("        return node;");
             writer.println("    }");
             writer.println();

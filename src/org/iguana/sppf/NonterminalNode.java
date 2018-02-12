@@ -40,8 +40,7 @@ public class NonterminalNode extends NonterminalOrIntermediateNode<NonterminalGr
 
 	private NonterminalGrammarSlot slot;
 
-	public NonterminalNode(NonterminalGrammarSlot slot, PackedNode child, Input input) {
-		super(child);
+	public NonterminalNode(NonterminalGrammarSlot slot) {
 		this.slot = slot;
 	}
 

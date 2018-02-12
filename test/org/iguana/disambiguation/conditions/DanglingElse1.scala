@@ -1,6 +1,5 @@
 package org.iguana.disambiguation.conditions
 
-import iguana.regex.Character
 import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
 import org.iguana.grammar.condition.RegularExpressionCondition

@@ -115,26 +115,26 @@ public class LayoutTest2 {
 
 
     private NonterminalNode getSPPFNode(SPPFNodeFactory factory, Input input) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input);
-        TerminalNode node2 = factory.createTerminalNode("epsilon", 1, 1, input);
-        NonterminalNode node3 = factory.createNonterminalNode("L", "L ::= .", node2, input);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        TerminalNode node2 = factory.createTerminalNode("epsilon", 1, 1);
+        NonterminalNode node3 = factory.createNonterminalNode("L", "L ::= .", node2);
         IntermediateNode node4 = factory.createIntermediateNode("S ::= A L . B L C", node1, node3);
-        NonterminalNode node5 = factory.createNonterminalNode("B", "B ::= .", node2, input);
+        NonterminalNode node5 = factory.createNonterminalNode("B", "B ::= .", node2);
         IntermediateNode node6 = factory.createIntermediateNode("S ::= A L B . L C", node4, node5);
-        TerminalNode node7 = factory.createTerminalNode("\\u0020", 1, 2, input);
-        NonterminalNode node8 = factory.createNonterminalNode("L", "L ::= \\u0020 .", node7, input);
+        TerminalNode node7 = factory.createTerminalNode("\\u0020", 1, 2);
+        NonterminalNode node8 = factory.createNonterminalNode("L", "L ::= \\u0020 .", node7);
         IntermediateNode node9 = factory.createIntermediateNode("S ::= A L . B L C", node1, node8);
-        TerminalNode node10 = factory.createTerminalNode("epsilon", 2, 2, input);
-        NonterminalNode node11 = factory.createNonterminalNode("B", "B ::= .", node10, input);
+        TerminalNode node10 = factory.createTerminalNode("epsilon", 2, 2);
+        NonterminalNode node11 = factory.createNonterminalNode("B", "B ::= .", node10);
         IntermediateNode node12 = factory.createIntermediateNode("S ::= A L B . L C", node9, node11);
-        NonterminalNode node13 = factory.createNonterminalNode("L", "L ::= .", node10, input);
+        NonterminalNode node13 = factory.createNonterminalNode("L", "L ::= .", node10);
         IntermediateNode node14 = factory.createIntermediateNode("S ::= A L B L . C", node6, node8);
         node14.addPackedNode(factory.createPackedNode("S ::= A L B L . C", node12, node13));
-        TerminalNode node15 = factory.createTerminalNode("c", 2, 3, input);
-        NonterminalNode node16 = factory.createNonterminalNode("C", "C ::= c .", node15, input);
+        TerminalNode node15 = factory.createTerminalNode("c", 2, 3);
+        NonterminalNode node16 = factory.createNonterminalNode("C", "C ::= c .", node15);
         IntermediateNode node17 = factory.createIntermediateNode("S ::= A L B L C .", node14, node16);
-        NonterminalNode node18 = factory.createNonterminalNode("S", "S ::= A L B L C .", node17, input);
+        NonterminalNode node18 = factory.createNonterminalNode("S", "S ::= A L B L C .", node17);
         return node18;
     }
 }

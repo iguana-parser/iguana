@@ -26,7 +26,7 @@ public class AmbiguityNode implements ParseTreeNode {
     }
 
     @Override
-    public String text() {
+    public String text(Input input) {
         return input.subString(start(), end());
     }
 

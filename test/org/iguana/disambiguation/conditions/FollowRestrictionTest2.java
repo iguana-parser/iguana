@@ -27,7 +27,6 @@
 
 package org.iguana.disambiguation.conditions;
 
-import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;

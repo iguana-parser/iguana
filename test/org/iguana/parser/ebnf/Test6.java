@@ -92,10 +92,10 @@ public class Test6 {
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input1);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input1);
-        NonterminalNode node2 = factory.createNonterminalNode("(A | B | C)", "(A | B | C) ::= A .", node1, input1);
-        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A | B | C) .", node2, input1);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("(A | B | C)", "(A | B | C) ::= A .", node1);
+        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A | B | C) .", node2);
         return node3;
     }
 
@@ -113,10 +113,10 @@ public class Test6 {
     }
 
     private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("b", 0, 1, input2);
-        NonterminalNode node1 = factory.createNonterminalNode("B", "B ::= b .", node0, input2);
-        NonterminalNode node2 = factory.createNonterminalNode("(A | B | C)", "(A | B | C) ::= B .", node1, input2);
-        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A | B | C) .", node2, input2);
+        TerminalNode node0 = factory.createTerminalNode("b", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("B", "B ::= b .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("(A | B | C)", "(A | B | C) ::= B .", node1);
+        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A | B | C) .", node2);
         return node3;
     }
 
@@ -134,10 +134,10 @@ public class Test6 {
     }
 
     private static NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("c", 0, 1, input3);
-        NonterminalNode node1 = factory.createNonterminalNode("C", "C ::= c .", node0, input3);
-        NonterminalNode node2 = factory.createNonterminalNode("(A | B | C)", "(A | B | C) ::= C .", node1, input3);
-        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A | B | C) .", node2, input3);
+        TerminalNode node0 = factory.createTerminalNode("c", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("C", "C ::= c .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("(A | B | C)", "(A | B | C) ::= C .", node1);
+        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A | B | C) .", node2);
         return node3;
     }
 

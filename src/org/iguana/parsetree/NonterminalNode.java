@@ -4,20 +4,19 @@ package org.iguana.parsetree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Rule;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NonterminalNode implements ParseTreeNode {
 
-    private final Input input;
     private final Rule rule;
     private final int start;
     private final int end;
-    private List<ParseTreeNode> children;
+    private final List<ParseTreeNode> children;
 
-    public NonterminalNode(Rule rule, List<ParseTreeNode> children, int start, int end, Input input) {
-        this.input = input;
+    public NonterminalNode(Rule rule, List<ParseTreeNode> children, int start, int end) {
         this.rule = rule;
-        this.children = children;
+        this.children = children == null ? Collections.emptyList() : children;
         this.start = start;
         this.end = end;
     }
@@ -41,7 +40,7 @@ public class NonterminalNode implements ParseTreeNode {
     }
 
     @Override
-    public String text() {
+    public String text(Input input) {
         return input.subString(start, end);
     }
 

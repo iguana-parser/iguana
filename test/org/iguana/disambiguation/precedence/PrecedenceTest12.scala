@@ -28,7 +28,6 @@ package org.iguana.disambiguation.precedence
 
 import java.util.Arrays
 
-import iguana.regex.Character
 import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
 import org.iguana.grammar.iggy.IggyParser

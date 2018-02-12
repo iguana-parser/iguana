@@ -109,16 +109,16 @@ public class Test7 {
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0, input1);
-        NonterminalNode node1 = factory.createNonterminalNode("A?", "A? ::= .", node0, input1);
-        TerminalNode node2 = factory.createTerminalNode("b", 0, 1, input1);
-        NonterminalNode node3 = factory.createNonterminalNode("B", "B ::= b .", node2, input1);
-        NonterminalNode node4 = factory.createNonterminalNode("B+", "B+ ::= B .", node3, input1);
+        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0);
+        NonterminalNode node1 = factory.createNonterminalNode("A?", "A? ::= .", node0);
+        TerminalNode node2 = factory.createTerminalNode("b", 0, 1);
+        NonterminalNode node3 = factory.createNonterminalNode("B", "B ::= b .", node2);
+        NonterminalNode node4 = factory.createNonterminalNode("B+", "B+ ::= B .", node3);
         IntermediateNode node5 = factory.createIntermediateNode("S ::= A? B+ . C*", node1, node4);
-        TerminalNode node6 = factory.createTerminalNode("epsilon", 1, 1, input1);
-        NonterminalNode node7 = factory.createNonterminalNode("C*", "C* ::= .", node6, input1);
+        TerminalNode node6 = factory.createTerminalNode("epsilon", 1, 1);
+        NonterminalNode node7 = factory.createNonterminalNode("C*", "C* ::= .", node6);
         IntermediateNode node8 = factory.createIntermediateNode("S ::= A? B+ C* .", node5, node7);
-        NonterminalNode node9 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node8, input1);
+        NonterminalNode node9 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node8);
         return node9;
     }
 
@@ -136,17 +136,17 @@ public class Test7 {
     }
 
     private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input2);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input2);
-        NonterminalNode node2 = factory.createNonterminalNode("A?", "A? ::= A .", node1, input2);
-        TerminalNode node3 = factory.createTerminalNode("b", 1, 2, input2);
-        NonterminalNode node4 = factory.createNonterminalNode("B", "B ::= b .", node3, input2);
-        NonterminalNode node5 = factory.createNonterminalNode("B+", "B+ ::= B .", node4, input2);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("A?", "A? ::= A .", node1);
+        TerminalNode node3 = factory.createTerminalNode("b", 1, 2);
+        NonterminalNode node4 = factory.createNonterminalNode("B", "B ::= b .", node3);
+        NonterminalNode node5 = factory.createNonterminalNode("B+", "B+ ::= B .", node4);
         IntermediateNode node6 = factory.createIntermediateNode("S ::= A? B+ . C*", node2, node5);
-        TerminalNode node7 = factory.createTerminalNode("epsilon", 2, 2, input2);
-        NonterminalNode node8 = factory.createNonterminalNode("C*", "C* ::= .", node7, input2);
+        TerminalNode node7 = factory.createTerminalNode("epsilon", 2, 2);
+        NonterminalNode node8 = factory.createNonterminalNode("C*", "C* ::= .", node7);
         IntermediateNode node9 = factory.createIntermediateNode("S ::= A? B+ C* .", node6, node8);
-        NonterminalNode node10 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node9, input2);
+        NonterminalNode node10 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node9);
         return node10;
     }
 
@@ -164,18 +164,18 @@ public class Test7 {
     }
 
     private static NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0, input3);
-        NonterminalNode node1 = factory.createNonterminalNode("A?", "A? ::= .", node0, input3);
-        TerminalNode node2 = factory.createTerminalNode("b", 0, 1, input3);
-        NonterminalNode node3 = factory.createNonterminalNode("B", "B ::= b .", node2, input3);
-        NonterminalNode node4 = factory.createNonterminalNode("B+", "B+ ::= B .", node3, input3);
+        TerminalNode node0 = factory.createTerminalNode("epsilon", 0, 0);
+        NonterminalNode node1 = factory.createNonterminalNode("A?", "A? ::= .", node0);
+        TerminalNode node2 = factory.createTerminalNode("b", 0, 1);
+        NonterminalNode node3 = factory.createNonterminalNode("B", "B ::= b .", node2);
+        NonterminalNode node4 = factory.createNonterminalNode("B+", "B+ ::= B .", node3);
         IntermediateNode node5 = factory.createIntermediateNode("S ::= A? B+ . C*", node1, node4);
-        TerminalNode node6 = factory.createTerminalNode("c", 1, 2, input3);
-        NonterminalNode node7 = factory.createNonterminalNode("C", "C ::= c .", node6, input3);
-        NonterminalNode node8 = factory.createNonterminalNode("C+", "C+ ::= C .", node7, input3);
-        NonterminalNode node9 = factory.createNonterminalNode("C*", "C* ::= C+ .", node8, input3);
+        TerminalNode node6 = factory.createTerminalNode("c", 1, 2);
+        NonterminalNode node7 = factory.createNonterminalNode("C", "C ::= c .", node6);
+        NonterminalNode node8 = factory.createNonterminalNode("C+", "C+ ::= C .", node7);
+        NonterminalNode node9 = factory.createNonterminalNode("C*", "C* ::= C+ .", node8);
         IntermediateNode node10 = factory.createIntermediateNode("S ::= A? B+ C* .", node5, node9);
-        NonterminalNode node11 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node10, input3);
+        NonterminalNode node11 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node10);
         return node11;
     }
 
@@ -193,19 +193,19 @@ public class Test7 {
     }
 
     private static NonterminalNode expectedSPPF4(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input4);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input4);
-        NonterminalNode node2 = factory.createNonterminalNode("A?", "A? ::= A .", node1, input4);
-        TerminalNode node3 = factory.createTerminalNode("b", 1, 2, input4);
-        NonterminalNode node4 = factory.createNonterminalNode("B", "B ::= b .", node3, input4);
-        NonterminalNode node5 = factory.createNonterminalNode("B+", "B+ ::= B .", node4, input4);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("A?", "A? ::= A .", node1);
+        TerminalNode node3 = factory.createTerminalNode("b", 1, 2);
+        NonterminalNode node4 = factory.createNonterminalNode("B", "B ::= b .", node3);
+        NonterminalNode node5 = factory.createNonterminalNode("B+", "B+ ::= B .", node4);
         IntermediateNode node6 = factory.createIntermediateNode("S ::= A? B+ . C*", node2, node5);
-        TerminalNode node7 = factory.createTerminalNode("c", 2, 3, input4);
-        NonterminalNode node8 = factory.createNonterminalNode("C", "C ::= c .", node7, input4);
-        NonterminalNode node9 = factory.createNonterminalNode("C+", "C+ ::= C .", node8, input4);
-        NonterminalNode node10 = factory.createNonterminalNode("C*", "C* ::= C+ .", node9, input4);
+        TerminalNode node7 = factory.createTerminalNode("c", 2, 3);
+        NonterminalNode node8 = factory.createNonterminalNode("C", "C ::= c .", node7);
+        NonterminalNode node9 = factory.createNonterminalNode("C+", "C+ ::= C .", node8);
+        NonterminalNode node10 = factory.createNonterminalNode("C*", "C* ::= C+ .", node9);
         IntermediateNode node11 = factory.createIntermediateNode("S ::= A? B+ C* .", node6, node10);
-        NonterminalNode node12 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node11, input4);
+        NonterminalNode node12 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node11);
         return node12;
     }
 
@@ -223,47 +223,47 @@ public class Test7 {
     }
 
     private static NonterminalNode expectedSPPF5(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input5);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input5);
-        NonterminalNode node2 = factory.createNonterminalNode("A?", "A? ::= A .", node1, input5);
-        TerminalNode node3 = factory.createTerminalNode("b", 1, 2, input5);
-        NonterminalNode node4 = factory.createNonterminalNode("B", "B ::= b .", node3, input5);
-        NonterminalNode node5 = factory.createNonterminalNode("B+", "B+ ::= B .", node4, input5);
-        TerminalNode node6 = factory.createTerminalNode("b", 2, 3, input5);
-        NonterminalNode node7 = factory.createNonterminalNode("B", "B ::= b .", node6, input5);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("A?", "A? ::= A .", node1);
+        TerminalNode node3 = factory.createTerminalNode("b", 1, 2);
+        NonterminalNode node4 = factory.createNonterminalNode("B", "B ::= b .", node3);
+        NonterminalNode node5 = factory.createNonterminalNode("B+", "B+ ::= B .", node4);
+        TerminalNode node6 = factory.createTerminalNode("b", 2, 3);
+        NonterminalNode node7 = factory.createNonterminalNode("B", "B ::= b .", node6);
         IntermediateNode node8 = factory.createIntermediateNode("B+ ::= B+ B .", node5, node7);
-        NonterminalNode node9 = factory.createNonterminalNode("B+", "B+ ::= B+ B .", node8, input5);
-        TerminalNode node10 = factory.createTerminalNode("b", 3, 4, input5);
-        NonterminalNode node11 = factory.createNonterminalNode("B", "B ::= b .", node10, input5);
+        NonterminalNode node9 = factory.createNonterminalNode("B+", "B+ ::= B+ B .", node8);
+        TerminalNode node10 = factory.createTerminalNode("b", 3, 4);
+        NonterminalNode node11 = factory.createNonterminalNode("B", "B ::= b .", node10);
         IntermediateNode node12 = factory.createIntermediateNode("B+ ::= B+ B .", node9, node11);
-        NonterminalNode node13 = factory.createNonterminalNode("B+", "B+ ::= B+ B .", node12, input5);
-        TerminalNode node14 = factory.createTerminalNode("b", 4, 5, input5);
-        NonterminalNode node15 = factory.createNonterminalNode("B", "B ::= b .", node14, input5);
+        NonterminalNode node13 = factory.createNonterminalNode("B+", "B+ ::= B+ B .", node12);
+        TerminalNode node14 = factory.createTerminalNode("b", 4, 5);
+        NonterminalNode node15 = factory.createNonterminalNode("B", "B ::= b .", node14);
         IntermediateNode node16 = factory.createIntermediateNode("B+ ::= B+ B .", node13, node15);
-        NonterminalNode node17 = factory.createNonterminalNode("B+", "B+ ::= B+ B .", node16, input5);
+        NonterminalNode node17 = factory.createNonterminalNode("B+", "B+ ::= B+ B .", node16);
         IntermediateNode node18 = factory.createIntermediateNode("S ::= A? B+ . C*", node2, node17);
-        TerminalNode node19 = factory.createTerminalNode("c", 5, 6, input5);
-        NonterminalNode node20 = factory.createNonterminalNode("C", "C ::= c .", node19, input5);
-        NonterminalNode node21 = factory.createNonterminalNode("C+", "C+ ::= C .", node20, input5);
-        TerminalNode node22 = factory.createTerminalNode("c", 6, 7, input5);
-        NonterminalNode node23 = factory.createNonterminalNode("C", "C ::= c .", node22, input5);
+        TerminalNode node19 = factory.createTerminalNode("c", 5, 6);
+        NonterminalNode node20 = factory.createNonterminalNode("C", "C ::= c .", node19);
+        NonterminalNode node21 = factory.createNonterminalNode("C+", "C+ ::= C .", node20);
+        TerminalNode node22 = factory.createTerminalNode("c", 6, 7);
+        NonterminalNode node23 = factory.createNonterminalNode("C", "C ::= c .", node22);
         IntermediateNode node24 = factory.createIntermediateNode("C+ ::= C+ C .", node21, node23);
-        NonterminalNode node25 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node24, input5);
-        TerminalNode node26 = factory.createTerminalNode("c", 7, 8, input5);
-        NonterminalNode node27 = factory.createNonterminalNode("C", "C ::= c .", node26, input5);
+        NonterminalNode node25 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node24);
+        TerminalNode node26 = factory.createTerminalNode("c", 7, 8);
+        NonterminalNode node27 = factory.createNonterminalNode("C", "C ::= c .", node26);
         IntermediateNode node28 = factory.createIntermediateNode("C+ ::= C+ C .", node25, node27);
-        NonterminalNode node29 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node28, input5);
-        TerminalNode node30 = factory.createTerminalNode("c", 8, 9, input5);
-        NonterminalNode node31 = factory.createNonterminalNode("C", "C ::= c .", node30, input5);
+        NonterminalNode node29 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node28);
+        TerminalNode node30 = factory.createTerminalNode("c", 8, 9);
+        NonterminalNode node31 = factory.createNonterminalNode("C", "C ::= c .", node30);
         IntermediateNode node32 = factory.createIntermediateNode("C+ ::= C+ C .", node29, node31);
-        NonterminalNode node33 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node32, input5);
-        TerminalNode node34 = factory.createTerminalNode("c", 9, 10, input5);
-        NonterminalNode node35 = factory.createNonterminalNode("C", "C ::= c .", node34, input5);
+        NonterminalNode node33 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node32);
+        TerminalNode node34 = factory.createTerminalNode("c", 9, 10);
+        NonterminalNode node35 = factory.createNonterminalNode("C", "C ::= c .", node34);
         IntermediateNode node36 = factory.createIntermediateNode("C+ ::= C+ C .", node33, node35);
-        NonterminalNode node37 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node36, input5);
-        NonterminalNode node38 = factory.createNonterminalNode("C*", "C* ::= C+ .", node37, input5);
+        NonterminalNode node37 = factory.createNonterminalNode("C+", "C+ ::= C+ C .", node36);
+        NonterminalNode node38 = factory.createNonterminalNode("C*", "C* ::= C+ .", node37);
         IntermediateNode node39 = factory.createIntermediateNode("S ::= A? B+ C* .", node18, node38);
-        NonterminalNode node40 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node39, input5);
+        NonterminalNode node40 = factory.createNonterminalNode("S", "S ::= A? B+ C* .", node39);
         return node40;
     }
 

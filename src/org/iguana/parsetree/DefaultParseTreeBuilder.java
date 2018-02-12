@@ -10,12 +10,13 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
 
     @Override
     public ParseTreeNode terminalNode(Terminal terminal, int leftExtent, int rightExtent, Input input) {
-        return new TerminalNode(terminal, leftExtent, rightExtent, input);
+        if (leftExtent == rightExtent) return null;
+        return new TerminalNode(terminal, leftExtent, rightExtent);
     }
 
     @Override
     public ParseTreeNode nonterminalNode(Rule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent, Input input) {
-        return new NonterminalNode(rule, children, leftExtent, rightExtent, input);
+        return new NonterminalNode(rule, children, leftExtent, rightExtent);
     }
 
     @Override

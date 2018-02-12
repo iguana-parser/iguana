@@ -104,7 +104,11 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public IntermediateNode createIntermediateNode(NonPackedNode leftChild, NonPackedNode rightChild) {
-		IntermediateNode newNode = new IntermediateNode(new PackedNode(this, leftChild, rightChild));
+		IntermediateNode newNode = new IntermediateNode();
+		PackedNode packedNode = new PackedNode(this);
+		packedNode.setLeftChild(leftChild);
+		packedNode.setRightChild(rightChild);
+		newNode.addPackedNode(packedNode);
 		runtime.intermediateNodeAdded(newNode);
         runtime.packedNodeAdded(this, leftChild.getRightExtent());
 		return newNode;
@@ -119,7 +123,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		
 		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
 			if (value != null) {
-				boolean ambiguous = value.addPackedNode(new PackedNode(this, leftChild, rightChild));
+				PackedNode packedNode = new PackedNode(this);
+				packedNode.setLeftChild(leftChild);
+				packedNode.setRightChild(rightChild);
+				boolean ambiguous = value.addPackedNode(packedNode);
                 runtime.packedNodeAdded(this, leftChild.getRightExtent());
                 if (ambiguous) runtime.ambiguousNodeAdded(value);
 				return value;
@@ -145,7 +152,10 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		Holder<IntermediateNode> holder = new Holder<>();
 		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
 			if (value != null) {
-                boolean ambiguous = value.addPackedNode(new PackedNode(this, leftChild, rightChild));
+				PackedNode packedNode = new PackedNode(this);
+				packedNode.setLeftChild(leftChild);
+				packedNode.setRightChild(rightChild);
+                boolean ambiguous = value.addPackedNode(packedNode);
                 runtime.packedNodeAdded(this, leftChild.getRightExtent());
                 if (ambiguous) runtime.ambiguousNodeAdded(value);
 				return value;

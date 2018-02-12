@@ -64,10 +64,10 @@ public class Test5 {
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
-        TerminalNode node0 = factory.createTerminalNode("a", 0, 1, input1);
-        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0, input1);
-        NonterminalNode node2 = factory.createNonterminalNode("(A)", "(A) ::= A .", node1, input1);
-        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A) .", node2, input1);
+        TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
+        NonterminalNode node1 = factory.createNonterminalNode("A", "A ::= a .", node0);
+        NonterminalNode node2 = factory.createNonterminalNode("(A)", "(A) ::= A .", node1);
+        NonterminalNode node3 = factory.createNonterminalNode("S", "S ::= (A) .", node2);
         return node3;
     }
 

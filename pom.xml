@@ -62,7 +62,7 @@
         </repository>
         <repository>
             <id>iguana-releases</id>
-            <url>s3://iguana-releases</url>
+            <url>https://s3.amazonaws.com/iguana-releases/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -72,7 +72,7 @@
         </repository>
         <repository>
             <id>iguana-snapshots</id>
-            <url>s3://iguana-snapshots</url>
+            <url>https://s3.amazonaws.com/iguana-snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -130,6 +130,30 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>org.iguana.util.cli.IguanaCLI</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>

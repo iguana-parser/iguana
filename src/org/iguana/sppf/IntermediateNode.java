@@ -37,10 +37,6 @@ import org.iguana.traversal.SPPFVisitor;
  */
 public class IntermediateNode extends NonterminalOrIntermediateNode<BodyGrammarSlot> {
 
-    public IntermediateNode(PackedNode child) {
-        super(child);
-    }
-
     @Override
     public <R> R accept(SPPFVisitor<R> visitAction) {
         return visitAction.visit(this);
@@ -48,6 +44,6 @@ public class IntermediateNode extends NonterminalOrIntermediateNode<BodyGrammarS
 
     @Override
     public BodyGrammarSlot getGrammarSlot() {
-        return child.getGrammarSlot();
+        return first.getGrammarSlot();
     }
 }

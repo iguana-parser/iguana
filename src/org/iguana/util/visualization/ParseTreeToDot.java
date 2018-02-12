@@ -1,5 +1,6 @@
 package org.iguana.util.visualization;
 
+import iguana.utils.input.Input;
 import org.iguana.parsetree.*;
 
 import java.util.HashMap;
@@ -12,8 +13,10 @@ public class ParseTreeToDot {
     private StringBuilder sb = new StringBuilder();
 
     private Map<Object, Integer> ids = new HashMap<>();
+    private Input input;
 
-    public String toDot(ParseTreeNode node) {
+    public String toDot(ParseTreeNode node, Input input) {
+        this.input = input;
         node.accept(new ToDotParseTreeVisitor());
         return sb.toString();
     }
@@ -41,7 +44,7 @@ public class ParseTreeToDot {
         @Override
         public Void visit(TerminalNode node) {
             String color = "black";
-            String label = String.format("(%s, %d, %d): \"%s\"", node.definition().getName(), node.start(), node.end(), node.text());
+            String label = String.format("(%s, %d, %d): \"%s\"", node.definition().getName(), node.start(), node.end(), node.text(input));
             sb.append("\"" + getId(node) + "\"" + String.format(ROUNDED_RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
             return null;
         }

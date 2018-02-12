@@ -29,6 +29,7 @@ package org.iguana.parser;
 
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
+import iguana.utils.visualization.GraphVizUtil;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
@@ -43,6 +44,7 @@ import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.visualization.GSSToDot;
 
 import java.util.Collections;
 import java.util.Map;

@@ -208,8 +208,8 @@ public class ParserRuntimeImpl implements ParserRuntime {
 //		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
 //		for (PackedNode packedNode : node.getChildren()) {
 //			System.out.println("   Packed node: " + packedNode.toString());
-//			for (org.iguana.sppf.NonPackedNode child : packedNode.getChildren()) {
-//				System.out.println(String.format("       %s %s", child, input.getNodeInfo(child)));
+//			for (org.iguana.sppf.NonPackedNode first : packedNode.getChildren()) {
+//				System.out.println(String.format("       %s %s", first, input.getNodeInfo(first)));
 //			}
 //		}
 //		System.exit(0);

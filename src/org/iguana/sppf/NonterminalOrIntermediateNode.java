@@ -35,19 +35,19 @@ import java.util.List;
 
 public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> extends NonPackedNode {
 
-	protected PackedNode child;
+	protected PackedNode first;
 	protected List<PackedNode> rest;
-
-	public NonterminalOrIntermediateNode(PackedNode child) {
-		this.child = child;
-	}
 
 	/*
 	 * returns true if the second packed node of this nonterminal node is added.
-	 *         This is useful for counting the number of ambigous nodes.
+	 *         This is useful for counting the number of ambiguous nodes.
 	 */
 	public boolean addPackedNode(PackedNode node) {
-		if (rest == null) {
+		if (first == null) {
+			first = node;
+			return false;
+		}
+		else if (rest == null) {
 			rest = new ArrayList<>();
 			rest.add(node);
 			return true;
@@ -59,32 +59,32 @@ public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> exten
 
 	@Override
 	public int getLeftExtent() {
-		return child.getLeftExtent();
+		return first.getLeftExtent();
 	}
 
 	@Override
 	public int getRightExtent() {
-		return child.getRightExtent();
+		return first.getRightExtent();
 	}
 
 	@Override
 	public PackedNode getChildAt(int index) {
 		if (index ==  0)
-			return child;
+			return first;
 		return index < rest.size() ? rest.get(index - 1) : null;
 	}
 
 	@Override
 	public List<PackedNode> getChildren() {
 		List<PackedNode> children = new ArrayList<>();
-		if (child != null) children.add(child);
+		if (first != null) children.add(first);
 		if (rest != null) children.addAll(rest);
 		return children;
 	}
 
 	@Override
 	public int childrenCount() {
-		return (child == null ? 0 : 1) + (rest == null ? 0 : rest.size());
+		return (first == null ? 0 : 1) + (rest == null ? 0 : rest.size());
 	}
 
 	public boolean isAmbiguous() {
