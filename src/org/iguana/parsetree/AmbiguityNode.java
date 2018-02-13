@@ -7,11 +7,9 @@ import java.util.Set;
 
 public class AmbiguityNode implements ParseTreeNode {
 
-    private final Input input;
     private final Set<ParseTreeNode> alternatives;
 
-    public AmbiguityNode(Input input, Set<ParseTreeNode> alternatives) {
-        this.input = input;
+    public AmbiguityNode(Set<ParseTreeNode> alternatives) {
         this.alternatives = alternatives;
     }
 

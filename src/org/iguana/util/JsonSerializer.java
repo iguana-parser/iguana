@@ -665,14 +665,8 @@ public class JsonSerializer {
                 @JsonProperty("end") int end) {}
     }
 
-    abstract class AmbiguityNodeMixIn {
-        @JsonIgnore
-        Input input;
-    }
-
-    abstract class ListNodeMixIn {
-        @JsonIgnore
-        Input input;
+    abstract static class AmbiguityNodeMixIn {
+        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) {}
     }
 
     abstract class AbstractAttrsMixIn {
