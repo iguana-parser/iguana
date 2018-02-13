@@ -97,7 +97,6 @@ public class Test10 {
 	public void testParser() {
 		GrammarGraph graph = GrammarGraph.from(grammar, input);
 		ParseResult result = Iguana.parse(input, graph, startSymbol);
-		System.out.println(result);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult(graph), result);
 	}

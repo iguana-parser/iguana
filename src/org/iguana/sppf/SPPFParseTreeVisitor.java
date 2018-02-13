@@ -24,14 +24,25 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
     @Override
     public List<Object> visit(TerminalNode node) {
         List<Object> list = new ArrayList<>();
-        list.add(parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent(), input));
+        list.add(parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent()));
         return list;
     }
 
     @Override
     public List<Object> visit(org.iguana.sppf.NonterminalNode node) {
         List<Object> result = new ArrayList<>();
-//        if (node.isAmbiguous()) {
+        if (node.isAmbiguous()) {
+            Set<Object> ambiguities = new HashSet<>();
+            for (PackedNode packedNode : node.getChildren()) {
+                List<Object> children = new ArrayList<>(packedNode.accept(this));
+                Object nonterminalNode = parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(),
+                        children, node.getLeftExtent(), node.getRightExtent());
+                ambiguities.add(nonterminalNode);
+            }
+
+            Object ambiguityNode = parseTreeBuilder.ambiguityNode(ambiguities);
+            result.add(ambiguityNode);
+//            parseTreeBuilder.nonterminalNode()
 //            Set<NonterminalNode> children = new HashSet<>();
 //            for (PackedNode packedNode : node.getChildren()) {
 //                Rule rule = ((EndGrammarSlot)packedNode.getChildAt(0).getGrammarSlot()).getPosition().getRule();
@@ -44,19 +55,17 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 //                ));
 //            }
 //            result.add(new AmbiguityNode(input, children));
-//        } else {
+        } else {
             switch (node.getGrammarSlot().getNodeType()) {
                 case Basic:
-                    List<Object> children = new ArrayList<>();
-                    for (PackedNode packedNode : node.getChildren()) {
-                        children.addAll(packedNode.accept(this));
-                    }
+                    PackedNode packedNode = node.getChildAt(0);
+                    List<Object> children = new ArrayList<>(packedNode.accept(this));
 
-                    Object nonterminalNode = parseTreeBuilder.nonterminalNode(node.getChildAt(0).getGrammarSlot().getPosition().getRule(),
-                            children, node.getLeftExtent(), node.getRightExtent(), input);
+                    Object nonterminalNode = parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(),
+                            children, node.getLeftExtent(), node.getRightExtent());
                     result.add(nonterminalNode);
             }
-//        }
+        }
         return result;
     }
 
