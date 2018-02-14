@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SPPFToParseTree {
 
-    public static <T> T toParseTree(NonterminalNode root, Input input, ParseTreeBuilder<T> parseTreeBuilder) {
-        SPPFParseTreeVisitor sppfVisitor = new SPPFParseTreeVisitor(input, parseTreeBuilder);
+    public static <T> T toParseTree(NonterminalNode root, ParseTreeBuilder<T> parseTreeBuilder) {
+        SPPFParseTreeVisitor sppfVisitor = new SPPFParseTreeVisitor(parseTreeBuilder);
         List<Object> result = root.accept(sppfVisitor);
         return (T) result.get(0);
     }
