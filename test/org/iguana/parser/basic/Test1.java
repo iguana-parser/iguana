@@ -98,19 +98,6 @@ public class Test1 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(1)
 				.setAmbiguousNodesCount(0).build();
-
-		NonterminalNode sppf = expectedSPPF(new SPPFNodeFactory(graph));
-		String json = SPPFJsonSerializer.serialize(sppf);
-		System.out.println(json);
-		System.out.println(">>>>>>>>>");
-		String expectedJson = SPPFJsonSerializer.serialize(expectedSPPF(new SPPFNodeFactory(graph)));
-		System.out.println(expectedJson);
-		NonterminalNode node = SPPFJsonSerializer.deserialize(json, graph);
-		System.out.println(">>>>>>>>" + node);
-		assertEquals(expectedJson, json);
-		ParseTreeNode tree = SPPFToParseTree.toParseTree(sppf, input, new DefaultParseTreeBuilder());
-//		System.out.println(JsonSerializer.toJSON(tree));
-
 		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 

@@ -1,0 +1,43 @@
+{
+  "kind" : "Grammar",
+  "rules" : [
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ]
+    }
+  ]
+}
