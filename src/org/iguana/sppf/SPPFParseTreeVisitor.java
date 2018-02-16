@@ -83,12 +83,19 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
             if (node.isAmbiguous()) {
                 List<Object> ambiguities = new ArrayList<>();
                 for (PackedNode packedNode : node.getChildren()) {
-                    ambiguities.add(new ArrayList<>(packedNode.accept(this)));
+                    List<Object> visitResult = packedNode.accept(this);
+                    // This happens when visiting nested ambiguities under intermediate nodes
+                    // The results should be flattened and a single list should be returned.
+                    if (isListOfList(visitResult)) {
+                        ambiguities.addAll(asListOfList(visitResult));
+                    } else {
+                        ambiguities.add(visitResult);
+                    }
                 }
                 return ambiguities;
             } else {
                 PackedNode packedNode = node.getChildAt(0);
-                return new ArrayList<>(packedNode.accept(this));
+                return packedNode.accept(this);
             }
         });
     }
@@ -152,6 +159,10 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
     private static boolean isListOfList(List<Object> list) {
         return list.size() > 0 && list.get(0) instanceof List<?>;
+    }
+
+    public static List<List<Object>> asListOfList(Object o) {
+        return (List<List<Object>>) o;
     }
 
     private static <T> void addAllNonNull(List<T> to, List<T> from) {
