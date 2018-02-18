@@ -116,6 +116,14 @@ public class Test5 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(2)
 				.setAmbiguousNodesCount(0).build();
+		System.out.println(org.iguana.util.JsonSerializer.toJSON(grammar));
+		System.out.println("------------------------------");
+		String json = org.iguana.util.SPPFJsonSerializer.serialize(expectedSPPF(new SPPFNodeFactory(graph)));
+		System.out.println(json);
+		org.iguana.sppf.NonterminalNode node = org.iguana.util.SPPFJsonSerializer.deserialize(json, graph);
+		org.iguana.parsetree.ParseTreeNode parseTreeNode = org.iguana.parsetree.SPPFToParseTree.toParseTree(node, new org.iguana.parsetree.DefaultParseTreeBuilder());
+		System.out.println("------------------------------");
+		System.out.println(org.iguana.util.JsonSerializer.toJSON(parseTreeNode));
 		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 	
