@@ -100,6 +100,18 @@ public class CollectionsUtil {
 		return set;
 	}
 
+	public static <T> T first(List<T> list) {
+		if (list == null || list.isEmpty())
+			throw new IllegalArgumentException("List is empty");
+		return list.get(0);
+	}
+
+	public static <T> T last(List<T> list) {
+		if (list == null || list.isEmpty())
+			throw new IllegalArgumentException("List is empty");
+		return list.get(list.size() - 1);
+	}
+
     public static boolean isEqual(IntIterable iterables1, IntIterable iterables2) {
         IntIterator it1 = iterables1.iterator();
         IntIterator it2 = iterables2.iterator();
