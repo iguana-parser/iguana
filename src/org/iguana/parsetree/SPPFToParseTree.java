@@ -1,9 +1,7 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFParseTreeVisitor;
-import org.iguana.traversal.SPPFVisitor;
 
 import java.util.List;
 

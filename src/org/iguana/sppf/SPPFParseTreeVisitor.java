@@ -4,17 +4,18 @@ import org.iguana.parsetree.*;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
     private final ParseTreeBuilder parseTreeBuilder;
-    private final Set<NonPackedNode> visitedNodes;
+    private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, List<Object>> convertedNodes;
 
     public SPPFParseTreeVisitor(ParseTreeBuilder parseTreeBuilder) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.convertedNodes = new HashMap<>();
-        this.visitedNodes = new HashSet<>();
+        this.visitedNodes = new LinkedHashSet<>();
     }
 
     @Override
@@ -28,53 +29,80 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
     @Override
     public List<Object> visit(org.iguana.sppf.NonterminalNode node) {
+        List<Object> result = convertedNodes.get(node);
+        if (result != null) return result;
+
+        // To guard for cyclic SPPFs
         if (visitedNodes.contains(node)) {
-            if (!convertedNodes.containsKey(node))
-            throw new RuntimeException("The SPPF is cyclic, no parse tree can be produced");
+            StringBuilder sb = new StringBuilder();
+            boolean seen = false;
+            for (NonterminalNode n : visitedNodes) {
+                if (seen) {
+                    sb.append(n.getGrammarSlot().getNonterminal().getName()).append(" -> ");
+                } else {
+                    if (n == node) {
+                        sb.append(n.getGrammarSlot().getNonterminal().getName()).append(" -> ");
+                        seen = true;
+                    }
+                }
+            }
+            sb.append(node.getGrammarSlot().getNonterminal().getName());
+            throw new RuntimeException("The SPPF is cyclic, no parse tree can be produced. Cyclic chain: " + sb.toString());
         } else {
             visitedNodes.add(node);
         }
-        return convertedNodes.computeIfAbsent(node, key -> {
-            List<Object> result = new ArrayList<>();
-            if (node.isAmbiguous()) {
-                Set<Object> ambiguities = new HashSet<>();
-                for (PackedNode packedNode : node.getChildren()) {
-                    List<Object> children = new ArrayList<>(packedNode.accept(this));
+
+        result = new ArrayList<>();
+        if (node.isAmbiguous()) {
+            Set<Object> ambiguities = new HashSet<>();
+            for (PackedNode packedNode : node.getChildren()) {
+                List<Object> children = packedNode.accept(this);
+
+                if (isListOfList(children)) {
+                    ambiguities.addAll(
+                        children.stream().map(child -> parseTreeBuilder.nonterminalNode(
+                            packedNode.getGrammarSlot().getPosition().getRule(),
+                            (List<?>) child,
+                            node.getLeftExtent(),
+                            node.getRightExtent()
+                    )).collect(Collectors.toSet()));
+                } else {
                     Object nonterminalNode = parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(),
                             children, node.getLeftExtent(), node.getRightExtent());
                     ambiguities.add(nonterminalNode);
                 }
-
-                Object ambiguityNode = parseTreeBuilder.ambiguityNode(ambiguities);
-                result.add(ambiguityNode);
-            } else {
-                switch (node.getGrammarSlot().getNodeType()) {
-                    case Basic:
-                        PackedNode packedNode = node.getChildAt(0);
-                        List<Object> children = new ArrayList<>(packedNode.accept(this));
-
-                        // An ambiguity under intermediate node has propagated upwards
-                        if (isListOfList(children)) {
-                            Set<Object> ambiguties = new HashSet<>();
-                            for (Object object : children) {
-                                Object nonterminalNode = parseTreeBuilder.nonterminalNode(
-                                        packedNode.getGrammarSlot().getPosition().getRule(),
-                                        (List<?>) object,
-                                        node.getLeftExtent(),
-                                        node.getRightExtent()
-                                );
-                                ambiguties.add(nonterminalNode);
-                            }
-                            result.add(parseTreeBuilder.ambiguityNode(ambiguties));
-                        } else {
-                            Object nonterminalNode = parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(),
-                                    children, node.getLeftExtent(), node.getRightExtent());
-                            result.add(nonterminalNode);
-                        }
-                }
             }
-            return result;
-        });
+
+            result.add(parseTreeBuilder.ambiguityNode(ambiguities));
+        } else {
+            switch (node.getGrammarSlot().getNodeType()) {
+                case Basic:
+                    PackedNode packedNode = node.getChildAt(0);
+                    List<Object> children = packedNode.accept(this);
+
+                    // An ambiguity under intermediate node has propagated upwards
+                    if (isListOfList(children)) {
+                        Set<Object> ambiguties = new HashSet<>();
+                        for (Object object : children) {
+                            Object nonterminalNode = parseTreeBuilder.nonterminalNode(
+                                    packedNode.getGrammarSlot().getPosition().getRule(),
+                                    (List<?>) object,
+                                    node.getLeftExtent(),
+                                    node.getRightExtent()
+                            );
+                            ambiguties.add(nonterminalNode);
+                        }
+                        result.add(parseTreeBuilder.ambiguityNode(ambiguties));
+                    } else {
+                        Object nonterminalNode = parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(),
+                                children, node.getLeftExtent(), node.getRightExtent());
+                        result.add(nonterminalNode);
+                    }
+            }
+        }
+        visitedNodes.remove(node);
+        convertedNodes.put(node, result);
+        return result;
     }
 
     @Override
