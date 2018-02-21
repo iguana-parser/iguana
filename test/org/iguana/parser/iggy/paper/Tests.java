@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Anastasia Izmaylova
@@ -40,7 +41,7 @@ public class Tests {
     }
 
     @Test
-    public void simple() {
+    public void simple() throws IOException {
         Grammar grammar = simpleGrammar();
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/Simple.txt"));
         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
@@ -53,7 +54,7 @@ public class Tests {
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
     }
 
-    public Grammar simpleGrammar() {
+    public Grammar simpleGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/Simple.iggy"));
         GrammarGraph graph = GrammarGraph.from(IGGY, input, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input, graph, start);
@@ -68,7 +69,7 @@ public class Tests {
     }
 
     @Test
-    public void xml() {
+    public void xml() throws IOException {
         Grammar grammar = transform(xmlGrammar());
         Start start = grammar.getStartSymbol(Nonterminal.withName("Start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/XML.txt"));
@@ -86,7 +87,7 @@ public class Tests {
         Assert.assertTrue(result.isParseError());
     }
 
-    public Grammar xmlGrammar() {
+    public Grammar xmlGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/XML.iggy"));
         GrammarGraph graph = GrammarGraph.from(IGGY, input, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input, graph, start);
@@ -101,7 +102,7 @@ public class Tests {
     }
 
     @Test
-    public void ocaml() {
+    public void ocaml() throws IOException {
         Grammar grammar = transform(ocamlGrammar());
         Start start = grammar.getStartSymbol(Nonterminal.withName("start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/OCaml.txt"));
@@ -115,7 +116,7 @@ public class Tests {
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
     }
 
-    public Grammar ocamlGrammar() {
+    public Grammar ocamlGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/OCaml.iggy"));
         GrammarGraph graph = GrammarGraph.from(IGGY, input, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input, graph, start);
@@ -130,7 +131,7 @@ public class Tests {
     }
 
     @Test
-    public void haskell() {
+    public void haskell() throws IOException {
         Grammar grammar = transform(haskellGrammar());
         Start start = grammar.getStartSymbol(Nonterminal.withName("Start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/Haskell.txt"));
@@ -148,7 +149,7 @@ public class Tests {
         Assert.assertTrue(result.isParseError());
     }
 
-    public Grammar haskellGrammar() {
+    public Grammar haskellGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/Haskell.iggy"));
         GrammarGraph graph = GrammarGraph.from(IGGY, input, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input, graph, start);

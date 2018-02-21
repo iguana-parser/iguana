@@ -40,6 +40,7 @@ import org.iguana.util.Configuration;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +48,16 @@ import static org.junit.Assert.assertTrue;
 
 public class TestCSharp {
 	
-	private static Grammar originalGrammar = Grammar.load(new File("grammars/csharp/csharp"));
+	private static Grammar originalGrammar;
+
+	static {
+		try {
+			originalGrammar = Grammar.load(new File("grammars/csharp/csharp"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
 	private static Start start = Start.from(Nonterminal.withName("CompilationUnit"));
 	

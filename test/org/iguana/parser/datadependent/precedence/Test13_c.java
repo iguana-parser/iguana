@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
@@ -23,7 +24,7 @@ import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 public class Test13_c {
 
     @Test
-    public void test() {
+    public void test() throws FileNotFoundException {
          Grammar grammar =
 
 Grammar.builder()

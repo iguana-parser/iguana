@@ -58,7 +58,11 @@ public class IguanaCLI {
             }
 
             if (line.hasOption("input")) {
-                input = Input.fromPath(line.getOptionValue("input"));
+                try {
+                    input = Input.fromPath(line.getOptionValue("input"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (line.hasOption("grammar")) {

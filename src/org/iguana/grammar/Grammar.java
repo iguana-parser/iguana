@@ -35,6 +35,7 @@ import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
+import org.iguana.util.JsonSerializer;
 
 import java.io.*;
 import java.net.URI;
@@ -317,24 +318,47 @@ public class Grammar implements Serializable {
 		}
 	}
 
-	public static Grammar load(URI uri) {
-		return load(new File(uri));
+	public static Grammar load(URI uri, String format) throws FileNotFoundException {
+		return load(new File(uri), format);
 	}
 
-    public static Grammar load(File file) {
-        try {
-            return load(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+	public static Grammar load(String path, String format) throws FileNotFoundException {
+		return load(new File(path), format);
+	}
+
+	public static Grammar load(File file) throws FileNotFoundException {
+		return load(new FileInputStream(file), "binary");
+	}
+
+    public static Grammar load(File file, String format) throws FileNotFoundException {
+		return load(new FileInputStream(file), format);
     }
 
 	public static Grammar load(InputStream inputStream) {
+		return load(inputStream, "binary");
+	}
+
+	public static Grammar load(InputStream inputStream, String format) {
 		Grammar grammar;
-		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
-			grammar = (Grammar) in.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+		switch (format) {
+			case "binary":
+				try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
+					grammar = (Grammar) in.readObject();
+				} catch (IOException | ClassNotFoundException e) {
+					throw new RuntimeException(e);
+				}
+				break;
+
+			case "json":
+				try {
+					grammar = JsonSerializer.deserialize(inputStream, Grammar.class);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+				break;
+
+			default:
+				throw new RuntimeException("Unsupported format exception");
 		}
 		return grammar;
 	}

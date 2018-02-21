@@ -18,6 +18,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -26,7 +28,7 @@ public class JavaNat {
 	DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
 
     @Test
-    public void test() {
+    public void test() throws IOException {
          Grammar grammar = Grammar.load(this.getClass().getResourceAsStream("./JavaNatChar"));
          
          grammar = new EBNFToBNF().transform(grammar);

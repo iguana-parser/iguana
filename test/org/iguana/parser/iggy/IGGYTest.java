@@ -15,11 +15,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 public class IGGYTest {
 	
 	@Test
-	public void test() {
+	public void test() throws IOException {
 		
 		Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/examples/Example1.iggy"));
 		
