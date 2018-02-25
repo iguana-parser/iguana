@@ -1,11 +1,13 @@
 package org.iguana.parsetree;
 
-
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Rule;
 
 import java.util.Collections;
 import java.util.List;
+
+import static java.util.Objects.*;
+import static iguana.utils.Assert.*;
 
 public class NonterminalNode implements ParseTreeNode {
 
@@ -15,10 +17,10 @@ public class NonterminalNode implements ParseTreeNode {
     private final List<ParseTreeNode> children;
 
     public NonterminalNode(Rule rule, List<ParseTreeNode> children, int start, int end) {
-        this.rule = rule;
+        this.rule = requireNonNull(rule);
         this.children = children == null ? Collections.emptyList() : children;
-        this.start = start;
-        this.end = end;
+        this.start = requireNonNegative(start);
+        this.end = requireNonNegative(end);
     }
 
     ParseTreeNode childAt(int i) {
@@ -57,5 +59,21 @@ public class NonterminalNode implements ParseTreeNode {
     @Override
     public Rule definition() {
         return rule;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof NonterminalNode)) return false;
+        NonterminalNode other = (NonterminalNode) obj;
+        return this.start == other.start &&
+               this.end == other.end &&
+               this.rule.equals(other.rule) &&
+               this.children.equals(other.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return hash(start, end, rule, children);
     }
 }

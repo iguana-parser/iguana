@@ -2,7 +2,7 @@ package org.iguana.parsetree;
 
 import iguana.utils.input.Input;
 
-public interface ParseTreeNode{
+public interface ParseTreeNode {
     int start();
     int end();
     String text(Input input);
