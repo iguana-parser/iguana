@@ -9,33 +9,37 @@ import org.iguana.parser.ParseResult;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
+import org.iguana.sppf.CyclicGrammarException;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.SPPFNode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TestRunner {
 
     public static void main(String[] args) {
-        Iterable<String> tests = getTests("/Users/Ali/workspace-thesis/iguana/test/grammars");
-        System.out.println(tests);
-        run("/Users/Ali/workspace-thesis/iguana/test/grammars/basic/Test1");
+        run("/Users/afroozeh/workspace/iguana");
     }
 
-    public static void run(String testPath) {
+    public static void run(String rootDir) {
+        Iterable<String> tests = getTests(rootDir);
+        for (String testDir : tests)
+            runTest(testDir);
+    }
+
+    public static void runTest(String testPath) {
         Path path = Paths.get(testPath);
         Path testName = path.getFileName();
+        System.out.println("Running " + testName);
 
         String grammarPath = testPath + "/grammar.json";
 
@@ -51,6 +55,7 @@ public class TestRunner {
         int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
 
         for (int i = 1; i <= size; i++) {
+            System.out.print("Input" + i);
             String inputPath = testPath + "/input" + i + ".txt";
             Input input;
             try {
@@ -63,10 +68,11 @@ public class TestRunner {
                 continue;
             }
 
+            Nonterminal start = grammar.getRules().get(0).getHead();
             GrammarGraph grammarGraph = GrammarGraph.from(grammar, input);
-            ParseResult result = Iguana.parse(input, grammarGraph, Nonterminal.withName("A"));
+            ParseResult result = Iguana.parse(input, grammarGraph, start);
             if (result.isParseError()) {
-                System.out.println("Parse error: " + result.asParseError());
+                error(result.asParseError().toString());
                 continue;
             }
 
@@ -75,12 +81,20 @@ public class TestRunner {
             try {
                 expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), grammarGraph);
             } catch (IOException e) {
-                System.out.println("Cannot deserialize SPPF");
+                error("Cannot deserialize SPPF");
                 continue;
             }
 
             if (!equals(expectedSPPFNode, result.asParseSuccess().getSPPFNode())) {
-                System.out.println("SPPF nodes do not match");
+                error("SPPF nodes do not match");
+                continue;
+            }
+
+            ParseTreeNode actualParseTree;
+            try {
+                actualParseTree = SPPFToParseTree.toParseTree(result.asParseSuccess().getSPPFNode(), new DefaultParseTreeBuilder());
+            } catch (CyclicGrammarException e) {
+                success();
                 continue;
             }
 
@@ -89,16 +103,25 @@ public class TestRunner {
             try {
                 expectedParseTree = JsonSerializer.deserialize(readFile(parseTreePath), ParseTreeNode.class);
             } catch (IOException e) {
-                System.out.println("Cannot deserialize parse trees");
+                error("Cannot deserialize parse trees");
                 continue;
             }
 
-            if (!expectedParseTree.equals(SPPFToParseTree.toParseTree(result.asParseSuccess().getSPPFNode(), new DefaultParseTreeBuilder()))) {
-                System.out.println("Parse trees do not match");
+            if (!expectedParseTree.equals(actualParseTree)) {
+                error("Parse trees do not match");
                 continue;
             }
-            System.out.println("Success for input" + i);
+            success();
         }
+        System.out.println();
+    }
+
+    private static void error(String message) {
+        System.out.println("\t\t\tError: " + message);
+    }
+
+    private static void success() {
+        System.out.println("\t\t\tSuccess");
     }
 
     private static boolean equals(NonterminalNode expected, NonterminalNode actual) {
@@ -117,16 +140,16 @@ public class TestRunner {
     }
 
     private static List<String> sort(List<String> filePaths) {
-        Pattern pattern = Pattern.compile("(.*)(\\d*)");
+        Pattern pattern = Pattern.compile("(.*?)(\\d*)");
         filePaths.sort((path1, path2) -> {
             Matcher matcher1 = pattern.matcher(path1);
             Matcher matcher2 = pattern.matcher(path2);
             if (matcher1.matches() && matcher2.matches()) {
                 String path1NamePart = matcher1.group(1);
-                int path1NumericPart = Integer.parseInt(matcher1.group(2));
+                int path1NumericPart = matcher1.group(2).equals("") ? 0 : Integer.parseInt(matcher1.group(2));
 
                 String path2NamePart = matcher2.group(1);
-                int path2NumericPart = Integer.parseInt(matcher2.group(2));
+                int path2NumericPart = matcher2.group(2).equals("") ? 0 : Integer.parseInt(matcher2.group(2));
 
                 int diff = path1NamePart.compareTo(path2NamePart);
                 if (diff != 0) return diff;
@@ -137,18 +160,10 @@ public class TestRunner {
         return filePaths;
     }
 
-    private static int getNumericPart(String path) {
-        Pattern pattern = Pattern.compile(".*(\\d*)");
-        Matcher matcher = pattern.matcher(path);
-        if (matcher.find())
-            return Integer.parseInt(matcher.group(1));
-        throw new RuntimeException("Invalid file path");
-    }
-
     private static void getTests(String currentDirPath, List<String> tests) {
         File currentDir = new File(currentDirPath);
         if (!currentDir.isDirectory()) return;
-        if (currentDir.getName().matches("Test\\d*")) {
+        if (currentDir.getName().matches("Test.*\\d*")) {
             tests.add(currentDirPath);
         } else {
             for (String childDir: currentDir.list()) {

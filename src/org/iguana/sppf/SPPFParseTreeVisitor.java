@@ -1,5 +1,6 @@
 package org.iguana.sppf;
 
+import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parsetree.*;
 import org.iguana.traversal.SPPFVisitor;
 
@@ -34,20 +35,20 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
         // To guard for cyclic SPPFs
         if (visitedNodes.contains(node)) {
-            StringBuilder sb = new StringBuilder();
+            List<Nonterminal> cycle = new ArrayList<>();
             boolean seen = false;
             for (NonterminalNode n : visitedNodes) {
                 if (seen) {
-                    sb.append(n.getGrammarSlot().getNonterminal().getName()).append(" -> ");
+                    cycle.add(n.getGrammarSlot().getNonterminal());
                 } else {
                     if (n == node) {
-                        sb.append(n.getGrammarSlot().getNonterminal().getName()).append(" -> ");
+                        cycle.add(n.getGrammarSlot().getNonterminal());
                         seen = true;
                     }
                 }
             }
-            sb.append(node.getGrammarSlot().getNonterminal().getName());
-            throw new RuntimeException("The SPPF is cyclic, no parse tree can be produced. Cyclic chain: " + sb.toString());
+            cycle.add(node.getGrammarSlot().getNonterminal());
+            throw new CyclicGrammarException(cycle);
         } else {
             visitedNodes.add(node);
         }
@@ -107,25 +108,29 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
     @Override
     public List<Object> visit(IntermediateNode node) {
-        return convertedNodes.computeIfAbsent(node, key -> {
-            if (node.isAmbiguous()) {
-                List<Object> ambiguities = new ArrayList<>();
-                for (PackedNode packedNode : node.getChildren()) {
-                    List<Object> visitResult = packedNode.accept(this);
-                    // This happens when visiting nested ambiguities under intermediate nodes
-                    // The results should be flattened and a single list should be returned.
-                    if (isListOfList(visitResult)) {
-                        ambiguities.addAll(asListOfList(visitResult));
-                    } else {
-                        ambiguities.add(visitResult);
-                    }
+        List<Object> ambiguities = convertedNodes.get(node);
+        if (ambiguities != null) {
+            return ambiguities;
+        }
+        if (node.isAmbiguous()) {
+            ambiguities = new ArrayList<>();
+            for (PackedNode packedNode : node.getChildren()) {
+                List<Object> visitResult = packedNode.accept(this);
+                // This happens when visiting nested ambiguities under intermediate nodes
+                // The results should be flattened and a single list should be returned.
+                if (isListOfList(visitResult)) {
+                    ambiguities.addAll(asListOfList(visitResult));
+                } else {
+                    ambiguities.add(visitResult);
                 }
-                return ambiguities;
-            } else {
-                PackedNode packedNode = node.getChildAt(0);
-                return packedNode.accept(this);
             }
-        });
+            return ambiguities;
+        } else {
+            PackedNode packedNode = node.getChildAt(0);
+            ambiguities = packedNode.accept(this);
+        }
+        convertedNodes.put(node, ambiguities);
+        return ambiguities;
     }
 
     @Override
