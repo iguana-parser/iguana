@@ -28,10 +28,10 @@ package org.iguana.disambiguation.precedence
 
 import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
-import org.iguana.grammar.iggy.IggyParser
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
+import org.iguana.iggy.IggyParser
 import org.iguana.parser.Iguana
 
 /**
