@@ -1,4 +1,4 @@
-package org.iguana.grammar.iggy;
+package org.iguana.iggy;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
@@ -10,6 +10,10 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.util.JsonSerializer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class IggyParser {
 
@@ -30,7 +34,13 @@ public class IggyParser {
     private static Start start = Start.from("Definition");
 
     private static Grammar iggyGrammar() {
-        Grammar g = Grammar.load(IggyParser.class.getResourceAsStream("/IggyGrammar"));
+        Grammar g = null;
+        try {
+            g = Grammar.load(new File("/Users/afroozeh/iggy"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
 
@@ -38,7 +48,13 @@ public class IggyParser {
         g = precedenceAndAssociativity.transform(g);
         g = new LayoutWeaver().transform(g);
         g.getStartSymbol(Nonterminal.withName("Definition"));
+
+        System.out.println(JsonSerializer.serialize(g));
         return g;
+    }
+
+    public static void main(String[] args) {
+        iggyGrammar();
     }
 
 }

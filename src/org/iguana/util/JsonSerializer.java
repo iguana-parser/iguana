@@ -133,7 +133,7 @@ public class JsonSerializer {
         }
     }
 
-    private static String serialize(Object obj) {
+    public static String serialize(Object obj) {
         DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
         pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
         try {

@@ -3,7 +3,7 @@ package org.iguana.parser.iggy.paper;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.iggy.InlineRegex;
+import org.iguana.iggy.InlineRegex;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.DesugarAlignAndOffside;

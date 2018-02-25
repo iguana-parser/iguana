@@ -24,7 +24,7 @@
  * OF SUCH DAMAGE.
  *
  */
-package org.iguana.grammar.iggy;
+package org.iguana.iggy;
 
 import iguana.regex.Char;
 import iguana.regex.CharRange;
