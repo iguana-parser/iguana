@@ -143,8 +143,8 @@ public class JsonSerializer {
         }
     }
 
-    public static <T> T deserialize(String path, Class<T> clazz) throws IOException {
-        return deserialize(getInputStream(new FileInputStream(path)), clazz);
+    public static <T> T deserialize(String jsonContent, Class<T> clazz) throws IOException {
+        return mapper.readValue(jsonContent, clazz);
     }
 
     public static <T> T deserialize(InputStream in, Class<T> clazz) throws IOException {

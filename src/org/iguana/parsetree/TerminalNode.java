@@ -4,6 +4,8 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 
 import java.util.Collections;
+import static java.util.Objects.*;
+import static iguana.utils.Assert.*;
 
 public class TerminalNode implements ParseTreeNode {
 
@@ -12,9 +14,9 @@ public class TerminalNode implements ParseTreeNode {
     private final int end;
 
     public TerminalNode(Terminal terminal, int start, int end) {
-        this.terminal = terminal;
-        this.start = start;
-        this.end = end;
+        this.terminal = requireNonNull(terminal);
+        this.start = requireNonNegative(start);
+        this.end = requireNonNegative(end);
     }
 
     @Override
@@ -45,5 +47,18 @@ public class TerminalNode implements ParseTreeNode {
     @Override
     public Terminal definition() {
         return terminal;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof TerminalNode)) return false;
+        TerminalNode other = (TerminalNode) obj;
+        return terminal.equals(other.terminal) && start == other.start && end == other.end;
+    }
+
+    @Override
+    public int hashCode() {
+        return hash(terminal, start, end);
     }
 }
