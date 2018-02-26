@@ -15,14 +15,14 @@ import org.iguana.sppf.NonterminalNode;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static iguana.utils.io.FileUtils.readFile;
 
 public class TestRunner {
 
@@ -126,11 +126,6 @@ public class TestRunner {
 
     private static boolean equals(NonterminalNode expected, NonterminalNode actual) {
         return SPPFJsonSerializer.serialize(expected).equals(SPPFJsonSerializer.serialize(actual));
-    }
-
-    private static String readFile(String path) throws IOException {
-        byte[] content = Files.readAllBytes(Paths.get(path));
-        return new String(content, StandardCharsets.UTF_8);
     }
 
     private static Iterable<String> getTests(String rootPath) {

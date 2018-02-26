@@ -7792,32 +7792,6 @@
         }
       ],
       "label" : "Declare"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Start",
-        "name" : "Start_Definition",
-        "nonterminal" : {
-          "kind" : "Nonterminal",
-          "name" : "Definition"
-        }
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Definition"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout"
-        }
-      ],
-      "label" : "Start"
     }
   ]
 }
