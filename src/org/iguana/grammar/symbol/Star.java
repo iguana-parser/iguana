@@ -94,7 +94,9 @@ public class Star extends AbstractSymbol {
 
 		private Symbol s;
 		private List<Symbol> separators = new ArrayList<>();
-		
+
+		private Builder() {}
+
 		public Builder(Symbol s) {
 			super(getName(s));
 			this.s = s;

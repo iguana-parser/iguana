@@ -6252,7 +6252,8 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Layout"
+        "name" : "Layout",
+        "nodeType" : "Layout"
       },
       "body" : [
         {

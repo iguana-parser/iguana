@@ -1,6 +1,7 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.parsetree.*;
 import org.iguana.traversal.SPPFVisitor;
 
@@ -76,9 +77,10 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
             result.add(parseTreeBuilder.ambiguityNode(ambiguities));
         } else {
+            PackedNode packedNode = node.getChildAt(0);
             switch (node.getGrammarSlot().getNodeType()) {
                 case Basic:
-                    PackedNode packedNode = node.getChildAt(0);
+                case Layout:
                     List<Object> children = packedNode.accept(this);
 
                     // An ambiguity under intermediate node has propagated upwards
@@ -95,10 +97,23 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
                         }
                         result.add(parseTreeBuilder.ambiguityNode(ambiguties));
                     } else {
-                        Object nonterminalNode = parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(),
-                                children, node.getLeftExtent(), node.getRightExtent());
+                        Object nonterminalNode = parseTreeBuilder.nonterminalNode(
+                                packedNode.getGrammarSlot().getPosition().getRule(),
+                                children,
+                                node.getLeftExtent(),
+                                node.getRightExtent());
                         result.add(nonterminalNode);
                     }
+                    break;
+
+                case Star:
+                    Object starNode = parseTreeBuilder.starNode(
+                            (Star) packedNode.getGrammarSlot().getPosition().getRule().getDefinition(),
+                            packedNode.accept(this),
+                            node.getLeftExtent(),
+                            node.getRightExtent());
+                    result.add(starNode);
+                    break;
             }
         }
         visitedNodes.remove(node);

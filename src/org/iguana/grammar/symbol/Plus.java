@@ -96,6 +96,8 @@ public class Plus extends AbstractSymbol {
 		
 		private final List<Symbol> separators = new ArrayList<>();
 
+		private Builder() {}
+
 		public Builder(Symbol s) {
 			super(getName(s));
 			this.s = s;

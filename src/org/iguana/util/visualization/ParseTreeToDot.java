@@ -34,6 +34,14 @@ public class ParseTreeToDot {
         }
 
         @Override
+        public Void visit(StarNode node) {
+            String color = "black";
+            String label = String.format("%s", node.getStar());
+            sb.append("\"" + getId(node) + "\"" + String.format(RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
+            return null;
+        }
+
+        @Override
         public Void visit(AmbiguityNode node) {
             sb.append("\"" + getId(node) + "\"" + String.format(DIAMOND, "red", ""));
             addEdgesToChildren(node);
