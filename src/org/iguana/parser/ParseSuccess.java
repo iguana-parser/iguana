@@ -29,8 +29,11 @@ package org.iguana.parser;
 
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
+import org.iguana.parsetree.DefaultParseTreeBuilder;
+import org.iguana.parsetree.ParseTreeBuilder;
+import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.JsonSerializer;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.SPPFJsonSerializer;
 
@@ -68,6 +71,14 @@ public class ParseSuccess extends AbstractParseResult {
 	public NonterminalNode getSPPFNode() {
 		return sppfNode;
 	}
+
+	public <T> T getParseTree(ParseTreeBuilder<T> parseTreeBuilder) {
+		return SPPFToParseTree.toParseTree(sppfNode, parseTreeBuilder);
+	}
+
+	public ParseTreeNode getParseTree() {
+		return getParseTree(new DefaultParseTreeBuilder());
+	}
 	
 	public ParseStatistics getStatistics() {
 		return parseStatistics;
@@ -79,7 +90,7 @@ public class ParseSuccess extends AbstractParseResult {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(java.lang.Object obj) {
 		if (this == obj)
 			return true;
 		
