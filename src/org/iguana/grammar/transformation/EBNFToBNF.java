@@ -191,7 +191,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy)
 														.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-														.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build()));
+														.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+														.setDefinition(symbol)
+														.build()));
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -223,10 +225,14 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setDefinition(symbol)
+									.build());
 			addedRules.add(Rule.withHead(newNt)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setDefinition(symbol)
+									.build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
@@ -274,6 +280,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRightEnd(S.getName())
 									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()) : new HashSet<>())
 									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
+									.setDefinition(symbol)
 									.build());
 			addedRules.add(Rule.withHead(newNt).addSymbol(S)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
@@ -282,6 +289,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRightEnd(S.getName())
 									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()) : new HashSet<>())
 									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
+									.setDefinition(symbol)
 									.build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
@@ -317,6 +325,7 @@ public class EBNFToBNF implements GrammarTransformation {
 								.setRightEnd(symbols.get(symbols.size() - 1).getName())
 								.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()) : new HashSet<>())
 								.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
+								.setDefinition(symbol)
 								.build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
@@ -357,12 +366,14 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRightEnd(S.getName())
 									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()): new HashSet<>())
 									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()): new HashSet<>())
+									.setDefinition(symbol)
 									.build());
 			addedRules.add(Rule.withHead(newNt)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()): new HashSet<>())
 									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()): new HashSet<>())
+									.setDefinition(symbol)
 									.build());
 			
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
@@ -414,7 +425,9 @@ public class EBNFToBNF implements GrammarTransformation {
 			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setDefinition(symbol)
+									.build());
 			
 			// FIXME: epsilon rule can have a condition
 			addedRules.add(Rule.withHead(newNt)
@@ -436,8 +449,8 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol elsePart = symbol.getElsePart().accept(this);
 			
 			init();
-			String[] parameters = null;
-			Expression[] arguments = null;
+			String[] parameters;
+			Expression[] arguments;
 			
 			thenPart.setEmpty();
 			elsePart.setEmpty();
@@ -472,12 +485,16 @@ public class EBNFToBNF implements GrammarTransformation {
 			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setDefinition(symbol)
+									.build());
 			
 			addedRules.add(Rule.withHead(newNt).addSymbol(elsePart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
+									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
+									.setDefinition(symbol)
+									.build());
 			
 			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}

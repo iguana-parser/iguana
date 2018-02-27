@@ -71,6 +71,8 @@ public class Rule implements Serializable {
 	
     private final Map<String, Object> attributes;
 
+    private final Symbol definition; // Used for converted EBNF nodes
+
     public Rule(Builder builder) {
         this.body = builder.body;
         this.head = builder.head;
@@ -91,6 +93,8 @@ public class Rule implements Serializable {
         this.label = builder.label;
 
         this.attributes = builder.attributes;
+
+        this.definition = builder.definition;
     }
 
     public Nonterminal getHead() {
@@ -198,6 +202,10 @@ public class Rule implements Serializable {
 	
     public Map<String, Object> getAttributes() {
         return attributes;
+    }
+
+    public Symbol getDefinition() {
+        return definition;
     }
 
     @Override
@@ -323,6 +331,7 @@ public class Rule implements Serializable {
         private String label;
 
         private Map<String, Object> attributes = new HashMap<>();
+        private Symbol definition;
 
         public Builder(Nonterminal head) {
             this.head = head;
@@ -351,6 +360,7 @@ public class Rule implements Serializable {
             this.label = rule.label;
 
             this.attributes = rule.attributes;
+            this.definition = rule.definition;
         }
 
         public Builder addSymbol(Symbol symbol) {
@@ -458,6 +468,11 @@ public class Rule implements Serializable {
 
         public Builder addAttributes(Map<String, Object> attributes) {
             this.attributes.putAll(attributes);
+            return this;
+        }
+
+        public Builder setDefinition(Symbol definition) {
+            this.definition = definition;
             return this;
         }
 

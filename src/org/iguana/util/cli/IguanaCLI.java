@@ -28,6 +28,7 @@
 package org.iguana.util.cli;
 
 import iguana.utils.input.Input;
+import iguana.utils.io.FileUtils;
 import iguana.utils.visualization.GraphVizUtil;
 import org.apache.commons.cli.*;
 import org.iguana.grammar.Grammar;
@@ -75,9 +76,11 @@ public class IguanaCLI {
             if (line.hasOption("grammar")) {
                 String grammarPath = line.getOptionValue("grammar");
                 try {
-                    grammar = JsonSerializer.deserialize(grammarPath, Grammar.class);
+                    String jsonContent = FileUtils.readFile(grammarPath);
+                    grammar = JsonSerializer.deserialize(jsonContent, Grammar.class);
                 } catch (IOException e) {
                     System.out.println("Could not load the grammar from " + grammarPath);
+                    e.printStackTrace();
                     return;
                 }
             }
@@ -90,7 +93,7 @@ public class IguanaCLI {
                     String contentPath = values[0];
                     String outputFile = values[1];
 
-                    ParseTreeNode node = JsonSerializer.deserialize(contentPath, ParseTreeNode.class);
+                    ParseTreeNode node = JsonSerializer.deserialize(FileUtils.readFile(contentPath), ParseTreeNode.class);
                     String dot = new ParseTreeToDot().toDot(node, input);
                     GraphVizUtil.generateGraph(dot, outputFile);
 

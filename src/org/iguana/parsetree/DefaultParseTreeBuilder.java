@@ -2,6 +2,7 @@ package org.iguana.parsetree;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.Terminal;
 
 import java.util.List;
@@ -23,5 +24,10 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     @Override
     public ParseTreeNode ambiguityNode(Set<ParseTreeNode> ambiguities) {
         return new AmbiguityNode(ambiguities);
+    }
+
+    @Override
+    public ParseTreeNode starNode(Star star, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
+        return new StarNode(star, children, leftExtent, rightExtent);
     }
 }

@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
-import iguana.utils.input.Input;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
@@ -24,10 +23,7 @@ import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
-import org.iguana.parsetree.AmbiguityNode;
-import org.iguana.parsetree.NonterminalNode;
-import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.parsetree.TerminalNode;
+import org.iguana.parsetree.*;
 
 import java.io.*;
 import java.util.Arrays;
@@ -59,7 +55,9 @@ public class JsonSerializer {
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
         mapper.addMixIn(Rule.class, RuleMixIn.class);
         mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
-        mapper.addMixIn(Terminal.class,TerminalMixIn.class);
+        mapper.addMixIn(Star.class, StarMixIn.class);
+        mapper.addMixIn(Plus.class, PlusMixIn.class);
+        mapper.addMixIn(Terminal.class, TerminalMixIn.class);
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
         mapper.addMixIn(Return.class, ReturnMixIn.class);
 
@@ -94,8 +92,8 @@ public class JsonSerializer {
         // Regex
         mapper.addMixIn(iguana.regex.Seq.class, SeqMixIn.class);
         mapper.addMixIn(iguana.regex.Alt.class, AltMixIn.class);
-        mapper.addMixIn(iguana.regex.Star.class, StarMixIn.class);
-        mapper.addMixIn(iguana.regex.Plus.class, PlusMixIn.class);
+        mapper.addMixIn(iguana.regex.Star.class, RegexStarMixIn.class);
+        mapper.addMixIn(iguana.regex.Plus.class, RegexPlusMixIn.class);
         mapper.addMixIn(iguana.regex.Opt.class, OptMixIn.class);
         mapper.addMixIn(iguana.regex.Char.class, CharMixIn.class);
         mapper.addMixIn(iguana.regex.CharRange.class, CharRangeMixIn.class);
@@ -103,6 +101,7 @@ public class JsonSerializer {
         // Parse tree
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
+        mapper.addMixIn(StarNode.class, StarNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
 
         SimpleModule module = new SimpleModule();
@@ -194,6 +193,10 @@ public class JsonSerializer {
         }
 
         private String getId(Object value) {
+            if (value.getClass() == iguana.regex.Star.class) return "regex.Star";
+            if (value.getClass() == iguana.regex.Plus.class) return "regex.Plus";
+            if (value.getClass() == iguana.regex.Alt.class) return "regex.Alt";
+
             String id = value.getClass().getSimpleName();
             if (id.equals("")) { // For anonymous inner classes, use their super class name
                 id = value.getClass().getSuperclass().getSimpleName();
@@ -203,6 +206,12 @@ public class JsonSerializer {
 
         @Override
         public JavaType typeFromId(DatabindContext context, String id) {
+            switch (id) {
+                case "regex.Star": return context.constructType(iguana.regex.Star.class);
+                case "regex.Plus": return context.constructType(iguana.regex.Plus.class);
+                case "regex.Alt": return context.constructType(iguana.regex.Alt.class);
+            }
+
             String[] packages = {
                     "org.iguana.grammar.",
                     "org.iguana.parsetree.",
@@ -217,6 +226,7 @@ public class JsonSerializer {
                 try {
                     Class<?> clazz = Class.forName(packageName + id);
                     javaType = context.constructType(clazz);
+                    break;
                 } catch (ClassNotFoundException e) {
                     // skip
                 }
@@ -478,6 +488,12 @@ public class JsonSerializer {
         }
     }
 
+    @JsonDeserialize(builder = Star.Builder.class)
+    abstract static class StarMixIn {}
+
+    @JsonDeserialize(builder = Plus.Builder.class)
+    abstract static class PlusMixIn {}
+
     @JsonDeserialize(builder = Terminal.Builder.class)
     abstract static class TerminalMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = CategoryFilter.class)
@@ -501,10 +517,10 @@ public class JsonSerializer {
     abstract static class AltMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Star.Builder.class)
-    abstract static class StarMixIn {}
+    abstract static class RegexStarMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Plus.Builder.class)
-    abstract static class PlusMixIn {}
+    abstract static class RegexPlusMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Opt.Builder.class)
     abstract static class OptMixIn {}
@@ -661,6 +677,14 @@ public class JsonSerializer {
         NonterminalNodeMixIn(
                 @JsonProperty("rule") Rule rule,
                 @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
+    }
+
+    abstract static class StarNodeMixIn {
+        StarNodeMixIn(
+                @JsonProperty("star") Star star,
+                @JsonProperty("symbols") List<ParseTreeNode> symbols,
                 @JsonProperty("start") int start,
                 @JsonProperty("end") int end) {}
     }
