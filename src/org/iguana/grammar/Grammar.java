@@ -148,12 +148,17 @@ public class Grammar implements Serializable {
 	}
 	
 	private static Set<RuntimeException> validate(List<Rule> rules, Map<Nonterminal, List<Rule>> definitions) {
-		return rules.stream().filter(r -> r.getBody() != null)
-		   .<RuntimeException>flatMap(r -> r.getBody().stream()
-                   .filter(s -> !definitions.containsKey(s))
-                   .filter(s -> s instanceof Nonterminal)
-                   .map(s -> new NonterminalNotDefinedException((Nonterminal) s)))
-						     .collect(Collectors.toSet());		
+	    Set<RuntimeException> exceptions = new HashSet<>();
+        for (Rule rule : rules) {
+            if (rule.getBody() != null) {
+                for (Symbol s : rule.getBody()) {
+                    if (s instanceof Nonterminal && !definitions.containsKey(s)) {
+                        exceptions.add(new NonterminalNotDefinedException((Nonterminal) s));
+                    }
+                }
+            }
+        }
+        return exceptions;
 	}
 	
 	public Symbol getLayout() {
