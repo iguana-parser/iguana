@@ -82,7 +82,7 @@ public class IggyParser {
                 }
 
                 @Override
-                public Object starNode(Star star, List<Object> children, int leftExtent, int rightExtent) {
+                public Object metaSymbolNode(Symbol symbol, List<Object> children, int leftExtent, int rightExtent) {
                     return null;
                 }
             });

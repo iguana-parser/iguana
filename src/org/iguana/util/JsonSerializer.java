@@ -101,7 +101,7 @@ public class JsonSerializer {
         // Parse tree
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
-        mapper.addMixIn(StarNode.class, StarNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.class, StarNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
 
         SimpleModule module = new SimpleModule();

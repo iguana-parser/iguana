@@ -1,28 +1,28 @@
 package org.iguana.parsetree;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Symbol;
 
 import java.util.List;
 
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 
-public class StarNode implements ParseTreeNode {
+public class MetaSymbolNode implements ParseTreeNode {
 
-    private final Star star;
+    private final Symbol star;
     private final List<ParseTreeNode> symbols;
     private final int start;
     private final int end;
 
-    public StarNode(Star star, List<ParseTreeNode> symbols, int start, int end) {
-        this.star = requireNonNull(star);
+    public MetaSymbolNode(Symbol symbol, List<ParseTreeNode> symbols, int start, int end) {
+        this.star = requireNonNull(symbol);
         this.symbols = symbols;
         this.start = start;
         this.end = end;
     }
 
-    public Star getStar() {
+    public Symbol getStar() {
         return star;
     }
 
@@ -33,8 +33,8 @@ public class StarNode implements ParseTreeNode {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof StarNode)) return false;
-        StarNode other = (StarNode) obj;
+        if (!(obj instanceof MetaSymbolNode)) return false;
+        MetaSymbolNode other = (MetaSymbolNode) obj;
         return star.equals(other.star) && symbols.equals(other.symbols);
     }
 
