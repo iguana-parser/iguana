@@ -10,20 +10,20 @@ import static java.util.Objects.requireNonNull;
 
 public class MetaSymbolNode implements ParseTreeNode {
 
-    private final Symbol star;
+    private final Symbol symbol;
     private final List<ParseTreeNode> symbols;
     private final int start;
     private final int end;
 
     public MetaSymbolNode(Symbol symbol, List<ParseTreeNode> symbols, int start, int end) {
-        this.star = requireNonNull(symbol);
+        this.symbol = requireNonNull(symbol);
         this.symbols = symbols;
         this.start = start;
         this.end = end;
     }
 
-    public Symbol getStar() {
-        return star;
+    public Symbol getSymbol() {
+        return symbol;
     }
 
     public List<ParseTreeNode> getSymbols() {
@@ -35,12 +35,12 @@ public class MetaSymbolNode implements ParseTreeNode {
         if (this == obj) return true;
         if (!(obj instanceof MetaSymbolNode)) return false;
         MetaSymbolNode other = (MetaSymbolNode) obj;
-        return star.equals(other.star) && symbols.equals(other.symbols);
+        return symbol.equals(other.symbol) && symbols.equals(other.symbols);
     }
 
     @Override
     public int hashCode() {
-        return hash(star, symbols);
+        return hash(symbol, symbols);
     }
 
     @Override
@@ -70,6 +70,6 @@ public class MetaSymbolNode implements ParseTreeNode {
 
     @Override
     public Object definition() {
-        return star;
+        return symbol;
     }
 }
