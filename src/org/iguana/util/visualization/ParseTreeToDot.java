@@ -36,8 +36,10 @@ public class ParseTreeToDot {
         @Override
         public Void visit(MetaSymbolNode node) {
             String color = "black";
-            String label = String.format("%s", node.getStar());
+            String label = String.format("%s", node.getSymbol());
             sb.append("\"" + getId(node) + "\"" + String.format(RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
+            addEdgesToChildren(node);
+            visitChildren(node);
             return null;
         }
 

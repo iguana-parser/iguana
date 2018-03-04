@@ -101,7 +101,7 @@ public class JsonSerializer {
         // Parse tree
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
-        mapper.addMixIn(MetaSymbolNode.class, StarNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.class, MetaSymbolNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
 
         SimpleModule module = new SimpleModule();
@@ -210,6 +210,7 @@ public class JsonSerializer {
                 case "regex.Star": return context.constructType(iguana.regex.Star.class);
                 case "regex.Plus": return context.constructType(iguana.regex.Plus.class);
                 case "regex.Alt": return context.constructType(iguana.regex.Alt.class);
+                case "regex.Opt": return context.constructType(iguana.regex.Opt.class);
             }
 
             String[] packages = {
@@ -681,9 +682,9 @@ public class JsonSerializer {
                 @JsonProperty("end") int end) {}
     }
 
-    abstract static class StarNodeMixIn {
-        StarNodeMixIn(
-                @JsonProperty("star") Star star,
+    abstract static class MetaSymbolNodeMixIn {
+        MetaSymbolNodeMixIn(
+                @JsonProperty("symbol") Symbol symbol,
                 @JsonProperty("symbols") List<ParseTreeNode> symbols,
                 @JsonProperty("start") int start,
                 @JsonProperty("end") int end) {}

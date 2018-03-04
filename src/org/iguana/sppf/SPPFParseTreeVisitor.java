@@ -108,12 +108,12 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<List<Object>> {
 
                 case Star:
                 case Plus:
-                    Object starNode = parseTreeBuilder.metaSymbolNode(
+                    Object ebnfNode = parseTreeBuilder.metaSymbolNode(
                             packedNode.getGrammarSlot().getPosition().getRule().getDefinition(),
                             packedNode.accept(this),
                             node.getLeftExtent(),
                             node.getRightExtent());
-                    result.add(starNode);
+                    result.add(ebnfNode);
                     break;
             }
         }
