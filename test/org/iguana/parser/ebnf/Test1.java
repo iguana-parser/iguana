@@ -32,7 +32,7 @@ public class Test1 {
     static Terminal a = Terminal.from(Char.from('a'));
     static Rule r1 = Rule.withHead(A).addSymbols(Star.from(a)).build();
 
-    private static Grammar grammar = Grammar.builder().addRule(r1).build();
+    private static Grammar grammar = EBNFToBNF.convert(Grammar.builder().addRule(r1).build());
     private static Input input0 = Input.fromString("");
     private static Input input1 = Input.fromString("a");
     private static Input input2 = Input.fromString("aa");
@@ -41,7 +41,6 @@ public class Test1 {
 
     @Test
     public void testParser0() {
-        grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input0, graph, A);
         assertTrue(result.isParseSuccess());
@@ -50,7 +49,6 @@ public class Test1 {
 
     @Test
     public void testParser1() {
-        grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input1, graph, A);
         assertTrue(result.isParseSuccess());
@@ -59,7 +57,6 @@ public class Test1 {
 
     @Test
     public void testParser2() {
-        grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input2, graph, A);
         assertTrue(result.isParseSuccess());
@@ -68,7 +65,6 @@ public class Test1 {
 
     @Test
     public void testParser3() {
-        grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input3, graph, A);
         assertTrue(result.isParseSuccess());
@@ -77,7 +73,6 @@ public class Test1 {
 
     @Test
     public void testParser4() {
-        grammar = EBNFToBNF.convert(grammar);
         GrammarGraph graph = GrammarGraph.from(grammar, input4, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input4, graph, A);
         assertTrue(result.isParseSuccess());
