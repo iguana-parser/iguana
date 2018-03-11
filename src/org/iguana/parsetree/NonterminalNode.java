@@ -76,4 +76,9 @@ public class NonterminalNode implements ParseTreeNode {
     public int hashCode() {
         return hash(start, end, rule, children);
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %d, %d)", rule, start, end);
+    }
 }
