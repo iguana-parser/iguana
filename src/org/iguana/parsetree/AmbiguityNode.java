@@ -60,4 +60,9 @@ public class AmbiguityNode implements ParseTreeNode {
     public int hashCode() {
         return hash(alternatives);
     }
+
+    @Override
+    public String toString() {
+        return "{" + alternatives.toString() + "}";
+    }
 }

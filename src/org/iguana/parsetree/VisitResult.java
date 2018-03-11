@@ -3,11 +3,66 @@ package org.iguana.parsetree;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class VisitResult {
 
-    public abstract ResultVisitor visitor();
+    private Object object;
+
+    public abstract ResultVisitor<VisitResult> visitor();
     public abstract VisitResult merge(VisitResult other);
+    public abstract java.util.List<Object> getValues();
+
+    public static Empty empty() {
+        return new VisitResult.Empty();
+    }
+
+    public static Single single(Object value) {
+        return new VisitResult.Single(value);
+    }
+
+    public static List list(java.util.List<Object> values) {
+        return new VisitResult.List(values);
+    }
+
+    public static ListOfResult listOfResult(java.util.List<VisitResult> values) {
+        return new ListOfResult(values);
+    }
+
+    public static EBNF ebnf(java.util.List<Object> values, Symbol symbol) {
+        return new EBNF(values, symbol);
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public static class Empty extends VisitResult {
+
+        @Override
+        public ResultVisitor visitor() {
+            return new EmptyVisitor();
+        }
+
+        @Override
+        public VisitResult merge(VisitResult other) {
+            return other;
+        }
+
+        @Override
+        public java.util.List<Object> getValues() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public String toString() {
+            return "[]";
+        }
+    }
 
     public static class Single extends VisitResult {
 
@@ -25,6 +80,13 @@ public abstract class VisitResult {
             return other.visitor().visit(this);
         }
 
+        @Override
+        public java.util.List<Object> getValues() {
+            java.util.List<Object> list = new ArrayList<>(1);
+            list.add(value);
+            return list;
+        }
+
         public ResultVisitor visitor() {
             return new SingleVisitor(this);
         }
@@ -39,7 +101,7 @@ public abstract class VisitResult {
 
         @Override
         public String toString() {
-            return value.toString();
+            return "[" + value.toString() + "]";
         }
     }
 
@@ -78,18 +140,23 @@ public abstract class VisitResult {
         }
     }
 
-    public static class EBNFResult extends VisitResult {
+    public static class EBNF extends VisitResult {
 
         private final java.util.List<Object> values;
         private final Symbol symbol;
 
-        EBNFResult(java.util.List<Object> values, Symbol symbol) {
+        EBNF(java.util.List<Object> values, Symbol symbol) {
             this.values = values;
             this.symbol = symbol;
         }
 
         public VisitResult merge(VisitResult other) {
             return other.visitor().visit(this);
+        }
+
+        @Override
+        public java.util.List<Object> getValues() {
+            return null;
         }
 
         @Override
@@ -100,8 +167,8 @@ public abstract class VisitResult {
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof EBNFResult)) return false;
-            EBNFResult other = (EBNFResult) obj;
+            if (!(obj instanceof EBNF)) return false;
+            EBNF other = (EBNF) obj;
             return values.equals(other.values);
         }
 
@@ -111,17 +178,17 @@ public abstract class VisitResult {
         }
     }
 
-    public static class ListOfList extends VisitResult {
+    public static class ListOfResult extends VisitResult {
 
-        private final java.util.List<java.util.List<Object>> values;
+        private final java.util.List<VisitResult> values;
 
-        public ListOfList(java.util.List<java.util.List<Object>> values) {
+        public ListOfResult(java.util.List<VisitResult> values) {
             this.values = values;
         }
 
         @Override
         public ResultVisitor visitor() {
-            return new ListOfListVisitor(this);
+            return new ListOfResultVisitor(this);
         }
 
         @Override
@@ -130,10 +197,15 @@ public abstract class VisitResult {
         }
 
         @Override
+        public java.util.List<Object> getValues() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof ListOfList)) return false;
-            ListOfList other = (ListOfList) obj;
+            if (!(obj instanceof ListOfResult)) return false;
+            ListOfResult other = (ListOfResult) obj;
             return values.equals(other.values);
         }
 
@@ -143,14 +215,14 @@ public abstract class VisitResult {
         }
     }
 
-    interface ResultVisitor {
-        VisitResult visit(Single other);
-        VisitResult visit(List other);
-        VisitResult visit(EBNFResult other);
-        VisitResult visit(ListOfList other);
+    interface ResultVisitor<T> {
+        T visit(Single other);
+        T visit(List other);
+        T visit(EBNF other);
+        T visit(ListOfResult other);
     }
 
-    class SingleVisitor implements ResultVisitor {
+    class SingleVisitor implements ResultVisitor<VisitResult> {
 
         private Single result;
 
@@ -175,24 +247,24 @@ public abstract class VisitResult {
         }
 
         @Override
-        public VisitResult visit(EBNFResult other) {
+        public VisitResult visit(EBNF other) {
             throw new RuntimeException("Combination is not possible");
         }
 
         @Override
-        public VisitResult visit(ListOfList other) {
-            java.util.List<java.util.List<Object>> values = new ArrayList<>();
-            for (java.util.List<Object> otherValues : other.values) {
-                java.util.List<Object> list = new ArrayList<>();
-                list.addAll(otherValues);
-                list.add(result.value);
-                values.add(list);
+        public VisitResult visit(ListOfResult other) {
+            java.util.List<VisitResult> visitResults = new ArrayList<>();
+            for (VisitResult otherValue : other.values) {
+                java.util.List<Object> values = new ArrayList<>();
+                values.addAll(otherValue.getValues());
+                values.add(result.value);
+                visitResults.add(new List(values));
             }
-            return new ListOfList(values);
+            return new ListOfResult(visitResults);
         }
     }
 
-    class ListVisitor implements ResultVisitor {
+    class ListVisitor implements ResultVisitor<VisitResult> {
 
         private List result;
 
@@ -201,7 +273,7 @@ public abstract class VisitResult {
         }
 
         @Override
-        public VisitResult visit(Single other) {
+        public List visit(Single other) {
             java.util.List<Object> values = new ArrayList<>();
             values.add(other.value);
             values.addAll(result.values);
@@ -209,36 +281,29 @@ public abstract class VisitResult {
         }
 
         @Override
-        public VisitResult visit(List other) {
-            java.util.List<java.util.List<Object>> values = new ArrayList<>();
-            values.add(other.values);
-            values.add(result.values);
-            return new ListOfList(values);
+        public ListOfResult visit(List other) {
+            return new ListOfResult(iguana.utils.collections.CollectionsUtil.list(other, result));
         }
 
         @Override
-        public VisitResult visit(EBNFResult result) {
+        public VisitResult visit(EBNF result) {
             throw new RuntimeException("Combination is not possible");
         }
 
         @Override
-        public VisitResult visit(ListOfList other) {
-            java.util.List<java.util.List<Object>> values = new ArrayList<>();
-            for (java.util.List<Object> otherValues : other.values) {
-                java.util.List<Object> list = new ArrayList<>();
-                list.addAll(otherValues);
-                list.addAll(result.values);
-                values.add(list);
-            }
-            return new ListOfList(values);
+        public ListOfResult visit(ListOfResult other) {
+            java.util.List<VisitResult> visitResults = new ArrayList<>();
+            visitResults.addAll(other.values);
+            visitResults.add(result);
+            return new ListOfResult(visitResults);
         }
     }
 
-    class EBNFResultVisitor implements ResultVisitor {
+    class EBNFResultVisitor implements ResultVisitor<VisitResult> {
 
-        private EBNFResult result;
+        private EBNF result;
 
-        EBNFResultVisitor(EBNFResult result) {
+        EBNFResultVisitor(EBNF result) {
             this.result = result;
         }
 
@@ -253,65 +318,87 @@ public abstract class VisitResult {
         }
 
         @Override
-        public VisitResult visit(EBNFResult other) {
+        public VisitResult visit(EBNF other) {
             throw new RuntimeException("Combination is not possible");
         }
 
         @Override
-        public VisitResult visit(ListOfList other) {
+        public VisitResult visit(ListOfResult other) {
             throw new RuntimeException("Combination is not possible");
         }
     }
 
-    class ListOfListVisitor implements ResultVisitor {
+    class ListOfResultVisitor implements ResultVisitor<VisitResult> {
 
-        private ListOfList result;
+        private ListOfResult result;
 
-        ListOfListVisitor(ListOfList result) {
+        ListOfResultVisitor(ListOfResult result) {
             this.result = result;
         }
 
         @Override
         public VisitResult visit(Single other) {
-            java.util.List<java.util.List<Object>> values = new ArrayList<>();
-            for (java.util.List<Object> thisValues : result.values) {
-                java.util.List<Object> list = new ArrayList<>();
-                list.add(other.value);
-                list.addAll(thisValues);
-                values.add(list);
+            java.util.List<VisitResult> visitResults = new ArrayList<>();
+            for (VisitResult otherValue : result.values) {
+                java.util.List<Object> values = new ArrayList<>();
+                values.add(other.value);
+                values.addAll(otherValue.getValues());
+                visitResults.add(new List(values));
             }
-            return new ListOfList(values);
+            return new ListOfResult(visitResults);
         }
 
         @Override
         public VisitResult visit(List other) {
-            java.util.List<java.util.List<Object>> values = new ArrayList<>();
-            for (java.util.List<Object> thisValues : result.values) {
-                java.util.List<Object> list = new ArrayList<>();
-                list.addAll(other.values);
-                list.addAll(thisValues);
-                values.add(list);
-            }
-            return new ListOfList(values);
+            java.util.List<VisitResult> visitResults = new ArrayList<>();
+            visitResults.add(other);
+            visitResults.addAll(result.values);
+            return new ListOfResult(visitResults);
         }
 
         @Override
-        public VisitResult visit(EBNFResult other) {
+        public VisitResult visit(EBNF other) {
             throw new RuntimeException("Combination is not possible");
         }
 
         @Override
-        public VisitResult visit(ListOfList other) {
-            java.util.List<java.util.List<Object>> values = new ArrayList<>();
-            for (java.util.List<Object> otherValues : other.values) {
-                for (java.util.List<Object> thisValues : result.values) {
-                    java.util.List<Object> list = new ArrayList<>();
-                    list.addAll(otherValues);
-                    list.addAll(thisValues);
-                    values.add(list);
+        public VisitResult visit(ListOfResult other) {
+            java.util.List<VisitResult> visitResults = new ArrayList<>();
+            for (VisitResult otherValue : other.values) {
+                for (VisitResult thisValue : result.values) {
+                    java.util.List<Object> values = new ArrayList<>();
+                    values.addAll(otherValue.getValues());
+                    values.addAll(thisValue.getValues());
+                    if (values.size() > 1)
+                        visitResults.add(new List(values));
+                    else
+                        visitResults.add(new Single(values.get(0)));
                 }
             }
-            return new ListOfList(values);
+            return new ListOfResult(visitResults);
+        }
+    }
+
+    class EmptyVisitor implements ResultVisitor<VisitResult> {
+
+        @Override
+        public VisitResult visit(Single other) {
+            return other;
+        }
+
+        @Override
+        public VisitResult visit(List other) {
+            return other;
+        }
+
+        @Override
+        public VisitResult visit(EBNF other) {
+            return other;
+        }
+
+        @Override
+        public VisitResult visit(ListOfResult other) {
+            return other;
         }
     }
 

@@ -9,7 +9,7 @@ public class SPPFToParseTree {
 
     public static <T> T toParseTree(NonterminalNode root, ParseTreeBuilder<T> parseTreeBuilder) {
         SPPFParseTreeVisitor sppfVisitor = new SPPFParseTreeVisitor(parseTreeBuilder);
-        List<Object> result = root.accept(sppfVisitor);
-        return (T) result.get(0);
+        VisitResult result = root.accept(sppfVisitor);
+        return (T) ((VisitResult.Single) result).getValue();
     }
 }

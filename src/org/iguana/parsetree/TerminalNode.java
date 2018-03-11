@@ -61,4 +61,9 @@ public class TerminalNode implements ParseTreeNode {
     public int hashCode() {
         return hash(terminal, start, end);
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %d, %d)", terminal.getName(), start, end);
+    }
 }
