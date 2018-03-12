@@ -7,8 +7,6 @@ import java.util.Collections;
 
 public abstract class VisitResult {
 
-    private Object object;
-
     public abstract ResultVisitor<VisitResult> visitor();
     public abstract VisitResult merge(VisitResult other);
     public abstract java.util.List<Object> getValues();
@@ -31,14 +29,6 @@ public abstract class VisitResult {
 
     public static EBNF ebnf(java.util.List<Object> values, Symbol symbol) {
         return new EBNF(values, symbol);
-    }
-
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    public Object getObject() {
-        return object;
     }
 
     public static class Empty extends VisitResult {

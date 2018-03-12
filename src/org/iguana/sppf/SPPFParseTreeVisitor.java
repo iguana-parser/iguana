@@ -1,12 +1,11 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.parsetree.*;
+import org.iguana.parsetree.ParseTreeBuilder;
+import org.iguana.parsetree.VisitResult;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.iguana.parsetree.VisitResult.empty;
 import static org.iguana.parsetree.VisitResult.single;
@@ -59,27 +58,22 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
         }
 
         if (node.isAmbiguous()) {
-            Set<Object> children = node.getChildren().stream().map(
-                    packedNode -> parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), packedNode.accept(this).getValues(), node.getLeftExtent(), node.getRightExtent()))
-                    .collect(Collectors.toSet());
-            return single(parseTreeBuilder.ambiguityNode(children));
+            Set<Object> children = new HashSet<>();
+            for (PackedNode packedNode : node.getChildren()) {
+                children.addAll(create(packedNode));
+            }
+            result = single(parseTreeBuilder.ambiguityNode(children));
         } else {
             PackedNode packedNode = node.getChildAt(0);
             switch (node.getGrammarSlot().getNodeType()) {
                 case Basic:
                 case Layout:
-                    VisitResult visitResult = packedNode.accept(this);
-                    if (visitResult instanceof VisitResult.ListOfResult) {
-                        Set<Object> ambiguities = new HashSet<>();
-                        for (VisitResult vResult : ((VisitResult.ListOfResult) visitResult).getVisitResults()) {
-                            ambiguities.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), vResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
-                        }
-                        result = single(parseTreeBuilder.ambiguityNode(ambiguities));
-
+                    List<Object> children = create(packedNode);
+                    if (children.size() > 1) {
+                        result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
                     } else {
-                        result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                        result = single(children.get(0));
                     }
-                    break;
 
                 case Star:
                 case Plus:
@@ -112,7 +106,6 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
             result = packedNode.accept(this);
         }
         convertedNodes.put(node, result);
-        result.setObject(node.getGrammarSlot());
         return result;
     }
 
@@ -126,6 +119,19 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
             right = empty();
 
         return left.merge(right);
+    }
+
+    List<Object> create(PackedNode packedNode) {
+        List<Object> result = new ArrayList<>();
+        VisitResult visitResult = packedNode.accept(this);
+        if (visitResult instanceof VisitResult.ListOfResult) {
+            for (VisitResult vResult : ((VisitResult.ListOfResult) visitResult).getVisitResults()) {
+                result.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+            }
+        } else {
+            result.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), visitResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+        }
+        return result;
     }
 
 }
