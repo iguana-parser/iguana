@@ -201,6 +201,10 @@ public abstract class VisitResult {
             throw new UnsupportedOperationException();
         }
 
+        public java.util.List<VisitResult> getVisitResults() {
+            return values;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;

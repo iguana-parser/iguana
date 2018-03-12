@@ -59,7 +59,9 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
         }
 
         if (node.isAmbiguous()) {
-            Set<Object> children = node.getChildren().stream().flatMap(packedNode -> packedNode.accept(this).getValues().stream()).collect(Collectors.toSet());
+            Set<Object> children = node.getChildren().stream().map(
+                    packedNode -> parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), packedNode.accept(this).getValues(), node.getLeftExtent(), node.getRightExtent()))
+                    .collect(Collectors.toSet());
             return single(parseTreeBuilder.ambiguityNode(children));
         } else {
             PackedNode packedNode = node.getChildAt(0);
@@ -67,7 +69,13 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
                 case Basic:
                 case Layout:
                     VisitResult visitResult = packedNode.accept(this);
-                    if (visitResult instanceof VisitResult) {
+                    if (visitResult instanceof VisitResult.ListOfResult) {
+                        Set<Object> ambiguities = new HashSet<>();
+                        for (VisitResult vResult : ((VisitResult.ListOfResult) visitResult).getVisitResults()) {
+                            ambiguities.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), vResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                        }
+                        result = single(parseTreeBuilder.ambiguityNode(ambiguities));
+
                     } else {
                         result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
                     }
@@ -118,11 +126,6 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
             right = empty();
 
         return left.merge(right);
-//        if (node.getGrammarSlot().isEnd()) {
-//            return convert(result, node.getGrammarSlot().getPosition().getRule(), node.getLeftExtent(), node.getRightExtent());
-//        } else {
-//            return result;
-//        }
     }
 
 }
