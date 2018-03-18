@@ -1,9 +1,10 @@
 package org.iguana.util;
 
 import iguana.utils.input.Input;
+import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
@@ -11,6 +12,9 @@ import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.CyclicGrammarException;
 import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.serialization.JsonSerializer;
+import org.iguana.util.serialization.ParseStatisticsSerializer;
+import org.iguana.util.serialization.SPPFJsonSerializer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,13 +31,45 @@ import static iguana.utils.io.FileUtils.readFile;
 public class TestRunner {
 
     public static void main(String[] args) {
-        run("/Users/afroozeh/workspace/iguana");
+        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
+        run(path);
     }
 
     public static void run(String rootDir) {
         Iterable<String> tests = getTests(rootDir);
         for (String testDir : tests)
             runTest(testDir);
+    }
+
+    public static void record(Grammar grammar, Input input, int number, String dir) {
+        if (new File(dir).exists()) return;
+
+        boolean dirCreated = new File(dir).mkdir();
+        if (!dirCreated) throw new RuntimeException("Could not create the directory");
+
+        ParseResult result = Iguana.parse(input, grammar);
+        if (result.isParseError()) {
+            throw new RuntimeException("Parse Error");
+        }
+
+        try {
+            String jsonGrammar = JsonSerializer.toJSON(grammar);
+            FileUtils.writeFile(jsonGrammar, dir + "/grammar.json");
+
+            FileUtils.writeFile(input.toString(), dir + "/input" + number + ".txt");
+
+            ParseStatistics statistics = result.asParseSuccess().getStatistics();
+            String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
+            FileUtils.writeFile(jsonStatistics, dir + "/statistics" + number + ".json");
+
+            String jsonSPPF = SPPFJsonSerializer.serialize(result.asParseSuccess().getSPPFNode());
+            FileUtils.writeFile(jsonSPPF, dir + "/sppf" + number + ".json");
+
+            String jsonTree = JsonSerializer.toJSON(result.asParseSuccess().getParseTree());
+            FileUtils.writeFile(jsonTree, dir + "/parsetree" + number + ".json");
+        } catch (IOException | CyclicGrammarException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void runTest(String testPath) {
@@ -68,17 +104,31 @@ public class TestRunner {
                 continue;
             }
 
-            Nonterminal start = grammar.getRules().get(0).getHead();
-            GrammarGraph grammarGraph = GrammarGraph.from(grammar, input);
-            ParseResult result = Iguana.parse(input, grammarGraph, start);
+            Start start = grammar.getStartSymbol();
+            ParseResult result = Iguana.parse(input, grammar, start);
             if (result.isParseError()) {
                 error(result.asParseError().toString());
+                continue;
+            }
+
+            ParseStatistics statistics = result.asParseSuccess().getStatistics();
+            String statisticsPath = testPath + "/statistics" + i + ".json";
+            try {
+                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
+                if (!expectedStatistics.equals(statistics)) {
+                    error("Parse results do not match");
+                    continue;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("An error occurred while reading from " + statisticsPath);
                 continue;
             }
 
             String sppfPath = testPath + "/sppf" + i + ".json";
             NonterminalNode expectedSPPFNode;
             try {
+                GrammarGraph grammarGraph = GrammarGraph.from(grammar, input);
                 expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), grammarGraph);
             } catch (IOException e) {
                 error("Cannot deserialize SPPF");

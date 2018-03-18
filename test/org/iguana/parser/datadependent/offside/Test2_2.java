@@ -111,7 +111,7 @@ Grammar.builder()
 
          // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 
-         ParseResult result = Iguana.parse(input, graph, Start.from(Nonterminal.withName("S")));
+         ParseResult result = Iguana.parse(input, grammar, Start.from(Nonterminal.withName("S")));
 
          Assert.assertTrue(result.isParseError());
 

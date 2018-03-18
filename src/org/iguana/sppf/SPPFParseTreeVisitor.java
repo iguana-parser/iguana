@@ -1,12 +1,15 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.*;
 
+import static org.iguana.parsetree.VisitResult.ebnf;
 import static org.iguana.parsetree.VisitResult.empty;
 import static org.iguana.parsetree.VisitResult.single;
 
@@ -25,10 +28,10 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
     @Override
     public VisitResult visit(TerminalNode node) {
         return convertedNodes.computeIfAbsent(node, key -> {
-                Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
-                if (terminalNode == null) return empty();
-                return single(terminalNode);
-            }
+                    Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
+                    if (terminalNode == null) return empty();
+                    return single(terminalNode);
+                }
         );
     }
 
@@ -68,22 +71,29 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
             switch (node.getGrammarSlot().getNodeType()) {
                 case Basic:
                 case Layout:
+                case Start: {
                     List<Object> children = create(packedNode);
                     if (children.size() > 1) {
                         result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
                     } else {
                         result = single(children.get(0));
                     }
-
-                case Star:
-                case Plus:
-//                    Object ebnfNode = parseTreeBuilder.metaSymbolNode(
-//                            packedNode.getGrammarSlot().getPosition().getRule().getDefinition(),
-//                            packedNode.accept(this),
-//                            node.getLeftExtent(),
-//                            node.getRightExtent());
-//                    result.add(ebnfNode);
                     break;
+                }
+
+                case Star: {
+                    Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
+                    VisitResult visitResult = packedNode.accept(this);
+                    result = single(parseTreeBuilder.metaSymbolNode(symbol, visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                    break;
+                }
+
+                case Plus: {
+                    Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
+                    VisitResult visitResult = packedNode.accept(this);
+                    result = ebnf(visitResult.getValues(), symbol);
+                    break;
+                }
             }
         }
         visitedNodes.remove(node);
@@ -98,7 +108,7 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
 
         if (node.isAmbiguous()) {
             result = empty();
-            for (PackedNode packedNode: node.getChildren()) {
+            for (PackedNode packedNode : node.getChildren()) {
                 result = result.merge(packedNode.accept(this));
             }
         } else {
@@ -129,7 +139,19 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
                 result.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
             }
         } else {
-            result.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), visitResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            switch (rule.getHead().getNodeType()) {
+                case Start:
+                    result.add(parseTreeBuilder.metaSymbolNode(rule.getHead(), visitResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                    break;
+
+                case Basic:
+                    result.add(parseTreeBuilder.nonterminalNode(rule, visitResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                    break;
+
+                default:
+                    throw new RuntimeException("Unexpected nonterminal type");
+            }
         }
         return result;
     }

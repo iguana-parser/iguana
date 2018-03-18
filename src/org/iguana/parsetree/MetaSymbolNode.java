@@ -3,6 +3,7 @@ package org.iguana.parsetree;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Symbol;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Objects.hash;
@@ -11,13 +12,13 @@ import static java.util.Objects.requireNonNull;
 public class MetaSymbolNode implements ParseTreeNode {
 
     private final Symbol symbol;
-    private final List<ParseTreeNode> symbols;
+    private final List<ParseTreeNode> children;
     private final int start;
     private final int end;
 
-    public MetaSymbolNode(Symbol symbol, List<ParseTreeNode> symbols, int start, int end) {
+    public MetaSymbolNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
         this.symbol = requireNonNull(symbol);
-        this.symbols = symbols;
+        this.children = children != null ? children : Collections.emptyList();
         this.start = start;
         this.end = end;
     }
@@ -26,8 +27,8 @@ public class MetaSymbolNode implements ParseTreeNode {
         return symbol;
     }
 
-    public List<ParseTreeNode> getSymbols() {
-        return symbols;
+    public List<ParseTreeNode> getChildren() {
+        return children;
     }
 
     @Override
@@ -35,12 +36,12 @@ public class MetaSymbolNode implements ParseTreeNode {
         if (this == obj) return true;
         if (!(obj instanceof MetaSymbolNode)) return false;
         MetaSymbolNode other = (MetaSymbolNode) obj;
-        return symbol.equals(other.symbol) && symbols.equals(other.symbols);
+        return symbol.equals(other.symbol) && children.equals(other.children);
     }
 
     @Override
     public int hashCode() {
-        return hash(symbol, symbols);
+        return hash(symbol, children);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class MetaSymbolNode implements ParseTreeNode {
 
     @Override
     public Iterable<ParseTreeNode> children() {
-        return symbols;
+        return children;
     }
 
     @Override

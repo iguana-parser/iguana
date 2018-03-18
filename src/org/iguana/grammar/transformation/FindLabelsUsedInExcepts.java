@@ -130,4 +130,9 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 
+    @Override
+    public Void visit(Start symbol) {
+        throw new RuntimeException("Unexpected symbol: " + symbol);
+    }
+
 }

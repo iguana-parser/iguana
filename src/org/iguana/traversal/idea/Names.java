@@ -202,5 +202,10 @@ public class Names implements GrammarTransformation {
         public Symbol visit(Star symbol) {
             return Star.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
+
+        @Override
+        public Symbol visit(Start start) {
+            return Start.from((Nonterminal) start.getNonterminal().accept(this));
+        }
     }
 }

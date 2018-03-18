@@ -78,6 +78,6 @@ Grammar.builder()
 
          Assert.assertTrue(result.isParseSuccess());
 
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
     }
 }

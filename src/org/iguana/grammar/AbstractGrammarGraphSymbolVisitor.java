@@ -93,4 +93,8 @@ public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVis
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 
+    @Override
+    public T visit(Start symbol) {
+        throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+    }
 }

@@ -496,8 +496,13 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			return modified? Star.builder(sym).addSeparators(seps).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					       : symbol;
 		}
-		
-		private String getLabel(Align align, Symbol symbol) {
+
+        @Override
+        public Symbol visit(Start start) {
+            return null;
+        }
+
+        private String getLabel(Align align, Symbol symbol) {
 			String label = null;
 			
 			if (align.getLabel() != null && symbol.getLabel() != null) {
@@ -665,7 +670,13 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				sym.accept(this);
 			return symbol.getSymbol().accept(this);
 		}
-		
-	}
+
+        @Override
+        public Void visit(Start start) {
+		    start.getNonterminal().accept(this);
+            return null;
+        }
+
+    }
 
 }

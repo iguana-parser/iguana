@@ -356,7 +356,12 @@ public class DesugarState implements GrammarTransformation {
 		public Symbol visit(Star symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
-		
-	}
+
+        @Override
+        public Symbol visit(Start symbol) {
+            throw new UnexpectedSymbol(symbol, "desugar-state");
+        }
+
+    }
 
 }

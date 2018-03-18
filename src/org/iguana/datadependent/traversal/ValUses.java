@@ -134,8 +134,13 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	public Void visit(Star symbol) {
 		throw new UnexpectedSymbol(symbol, "val-uses traversal");
 	}
-	
-	private void visitSymbol(Symbol symbol) {
+
+    @Override
+    public Void visit(Start symbol) {
+        throw new UnexpectedSymbol(symbol, "val-uses traversal");
+    }
+
+    private void visitSymbol(Symbol symbol) {
 		for (Condition cond: symbol.getPreConditions())
 			cond.accept(this);
 		

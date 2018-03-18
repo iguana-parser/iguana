@@ -29,7 +29,6 @@ package org.iguana.parser;
 
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
-import iguana.utils.visualization.GraphVizUtil;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
@@ -37,6 +36,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
@@ -44,7 +44,6 @@ import org.iguana.sppf.DummyNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.visualization.GSSToDot;
 
 import java.util.Collections;
 import java.util.Map;
@@ -136,8 +135,28 @@ public class Iguana {
     public static ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
         return parse(input, GrammarGraph.from(grammar, input, Configuration.load()), startSymbol);
     }
-	
-	public static ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol) {
+
+    public static ParseResult parse(Input input, Grammar grammar) {
+	    if (grammar.getStartSymbol() == null)
+	        throw new IllegalArgumentException("No start symbol defined in the grammar");
+
+        return parse(input, GrammarGraph.from(grammar, input, Configuration.load()), Nonterminal.withName(grammar.getStartSymbol().getName()));
+    }
+
+    public static ParseResult parse(Input input, Grammar grammar, Start startSymbol) {
+	    return parse(input, grammar, Configuration.DEFAULT, startSymbol);
+    }
+
+    public static ParseResult parse(Input input, Grammar grammar, Configuration config, Start startSymbol) {
+	    if (!startSymbol.equals(grammar.getStartSymbol())) {
+            Grammar.Builder builder = new Grammar.Builder(grammar);
+            builder.setStartSymbol(startSymbol);
+            grammar = builder.build();
+        }
+        return parse(input, GrammarGraph.from(grammar, input, config), Nonterminal.withName(startSymbol.getName()));
+    }
+
+    public static ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol) {
 		return parse(input, GrammarGraph.from(grammar, input, config), startSymbol);
 	}
 	

@@ -61,7 +61,7 @@ Grammar.builder()
          // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
          //                   result.asParseSuccess().getSPPFNode(), input);
 
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
          
          System.out.println(result.asParseSuccess().getStatistics());
     }

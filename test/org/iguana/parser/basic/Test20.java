@@ -37,7 +37,9 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
@@ -46,8 +48,11 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
-import org.junit.Before;
+import org.iguana.util.TestRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.nio.file.Paths;
 
 import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
@@ -64,35 +69,38 @@ import static org.junit.Assert.assertTrue;
  */
 public class Test20 {
 
-	private Grammar grammar;
-	
-	private Nonterminal E = Nonterminal.withName("E");
-	private Nonterminal T = Nonterminal.withName("T");
-	private Nonterminal E1 = Nonterminal.withName("E1");
-	private Nonterminal F = Nonterminal.withName("F");
-	private Nonterminal T1 = Nonterminal.withName("T1");
-	private Terminal plus = Terminal.from(Char.from('+'));
-	private Terminal star = Terminal.from(Char.from('*'));
-	private Terminal a = Terminal.from(Char.from('a'));
-	private Terminal openPar = Terminal.from(Char.from('('));
-	private Terminal closePar = Terminal.from(Char.from(')'));
+	static Nonterminal E = Nonterminal.withName("E");
+	static Nonterminal T = Nonterminal.withName("T");
+	static Nonterminal E1 = Nonterminal.withName("E1");
+	static Nonterminal F = Nonterminal.withName("F");
+	static Nonterminal T1 = Nonterminal.withName("T1");
+	static Terminal plus = Terminal.from(Char.from('+'));
+	static Terminal star = Terminal.from(Char.from('*'));
+	static Terminal a = Terminal.from(Char.from('a'));
+	static Terminal openPar = Terminal.from(Char.from('('));
+	static Terminal closePar = Terminal.from(Char.from(')'));
 
-    Rule r1 = Rule.withHead(E).addSymbols(T, E1).build();
-    Rule r2 = Rule.withHead(E1).addSymbols(plus, T, E1).build();
-    Rule r3 = Rule.withHead(E1).build();
-    Rule r4 = Rule.withHead(T).addSymbols(F, T1).build();
-    Rule r5 = Rule.withHead(T1).addSymbols(star, F, T1).build();
-    Rule r6 = Rule.withHead(T1).build();
-    Rule r7 = Rule.withHead(F).addSymbols(openPar, E, closePar).build();
-    Rule r8 = Rule.withHead(F).addSymbol(a).build();
+    static Rule r1 = Rule.withHead(E).addSymbols(T, E1).build();
+    static Rule r2 = Rule.withHead(E1).addSymbols(plus, T, E1).build();
+    static Rule r3 = Rule.withHead(E1).build();
+    static Rule r4 = Rule.withHead(T).addSymbols(F, T1).build();
+    static Rule r5 = Rule.withHead(T1).addSymbols(star, F, T1).build();
+    static Rule r6 = Rule.withHead(T1).build();
+    static Rule r7 = Rule.withHead(F).addSymbols(openPar, E, closePar).build();
+    static Rule r8 = Rule.withHead(F).addSymbol(a).build();
 
-	@Before
-	public void createGrammar() {
-		Grammar.Builder builder = new Grammar.Builder();
-		grammar = builder.addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8).build();
-	}
-	
-	@Test
+    static Start startSymbol = Start.from(E);
+    static Input input = Input.fromString("a+a*a+a");
+
+    static Grammar grammar = new DesugarStartSymbol().transform(new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).addRule(r5).addRule(r6).addRule(r7).addRule(r8).setStartSymbol(startSymbol).build());
+
+    @BeforeClass
+    public static void record() {
+        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
+        TestRunner.record(grammar, input, 1, path + "/Test20");
+    }
+
+    @Test
 	public void testFirstSets() {
         FirstFollowSets ff = new FirstFollowSets(grammar);
 		assertEquals(set(CharRange.from('('), CharRange.from('a')), ff.getFirstSet(E));
@@ -114,7 +122,6 @@ public class Test20 {
 	
 	@Test
 	public void testParser() {
-        Input input = Input.fromString("a+a*a+a");
         GrammarGraph graph = GrammarGraph.from(grammar, input);
 		ParseResult result = Iguana.parse(input, graph, E);
 		assertTrue(result.isParseSuccess());
@@ -131,10 +138,10 @@ public class Test20 {
                 .setIntermediateNodesCount(10)
                 .setPackedNodesCount(25)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(getSPPF(new SPPFNodeFactory(graph), input), statistics, input);
+        return new ParseSuccess(getSPPF(new SPPFNodeFactory(graph)), statistics, input);
     }
 	
-	private NonterminalNode getSPPF(SPPFNodeFactory factory, Input input) {
+	private NonterminalNode getSPPF(SPPFNodeFactory factory) {
         TerminalNode node0 = factory.createTerminalNode("a", 0, 1);
         NonterminalNode node1 = factory.createNonterminalNode("F", "F ::= a .", node0);
         TerminalNode node2 = factory.createTerminalNode("epsilon", 1, 1);
