@@ -65,4 +65,6 @@ public interface ISymbolVisitor<T> {
 	
 	T visit(Star symbol);
 
+	T visit(Start start);
+
 }

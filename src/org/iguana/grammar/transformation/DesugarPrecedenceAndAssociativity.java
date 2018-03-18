@@ -2934,6 +2934,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Symbol visit(Star symbol) {
 			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
-		
-	}
+
+        @Override
+        public Symbol visit(Start start) {
+            return start.getNonterminal().accept(this);
+        }
+
+    }
 }

@@ -51,6 +51,6 @@ Grammar.builder()
 //         Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/",
 //                           result.asParseSuccess().getSPPFNode(), input);
 
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+         Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
     }
 }

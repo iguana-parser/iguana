@@ -35,7 +35,9 @@ import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
@@ -44,7 +46,11 @@ import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.TestRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.nio.file.Paths;
 
 import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.*;
@@ -69,12 +75,17 @@ public class Test9 {
     static Rule r1 = Rule.withHead(S).addSymbols(a, A, c).build();
     static Rule r2 = Rule.withHead(S).addSymbols(a, A, b).build();
     static Rule r3 = Rule.withHead(A).addSymbol(a).build();
-	
+
+    private static Start startSymbol = Start.from(S);
+    private static Grammar grammar = new DesugarStartSymbol().transform(Grammar.builder().addRule(r1).addRule(r2).addRule(r3).setStartSymbol(startSymbol).build());
+
     private static Input input = Input.fromString("aab");
 
-    private static Nonterminal startSymbol = S;
-
-	private static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).addRule(r3).build();
+    @BeforeClass
+    public static void record() {
+        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
+        TestRunner.record(grammar, input, 1, path + "/Test9");
+    }
 
 	@Test
 	public void testReachableNonterminals() {
@@ -91,17 +102,17 @@ public class Test9 {
 
 	@Test
 	public void testParser0() {
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.builder().setLookaheadCount(0).build());
-		ParseResult result = Iguana.parse(input, graph, startSymbol);
-		assertTrue(result.isParseSuccess());
+		ParseResult result = Iguana.parse(input, grammar);
+        GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.builder().setLookaheadCount(0).build());
+        assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult0(graph), result);
 	}
 
 	@Test
 	public void testParser1() {
-		GrammarGraph graph = GrammarGraph.from(grammar, input);
-		ParseResult result = Iguana.parse(input, graph, startSymbol);
-		assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar, input);
+        ParseResult result = Iguana.parse(input, grammar);
+        assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult1(graph), result);
 	}
 

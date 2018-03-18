@@ -96,16 +96,11 @@ public class Test5 {
 		Input input = Input.fromString("abcbcbc");
 		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 		
-		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
 		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());
 		
-		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-		// 		result.asParseSuccess().getSPPFNode(), input);
-		
-		Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+		Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
 	}
 
 }

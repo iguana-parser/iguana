@@ -1,0 +1,10 @@
+{
+  "descriptorsCount" : 7,
+  "gssNodesCount" : 5,
+  "gssEdgesCount" : 4,
+  "nonterminalNodesCount" : 3,
+  "terminalNodesCount" : 3,
+  "intermediateNodesCount" : 2,
+  "packedNodesCount" : 5,
+  "ambiguousNodesCount" : 0
+}

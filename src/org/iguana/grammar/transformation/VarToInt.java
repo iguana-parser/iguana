@@ -223,7 +223,12 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 		throw new RuntimeException("Unsupported symbol: var-to-int!");
 	}
 
-	@Override
+    @Override
+    public Symbol visit(Start start) {
+        throw new RuntimeException("Unsupported symbol: var-to-int!");
+    }
+
+    @Override
 	public AbstractAST visit(Boolean expression) {
 		return expression;
 	}

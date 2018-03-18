@@ -69,6 +69,6 @@ Grammar.builder()
 //
 //         Assert.assertTrue(hasAmbiguousIntermediateNode);
 
-         Assert.assertEquals(4, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(4, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }
 }

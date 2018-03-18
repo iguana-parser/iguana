@@ -35,7 +35,7 @@ import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.SPPFJsonSerializer;
+import org.iguana.util.serialization.SPPFJsonSerializer;
 
 public class ParseSuccess extends AbstractParseResult {
 

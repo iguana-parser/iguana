@@ -32,19 +32,19 @@ import iguana.utils.collections.hash.MurmurHash3;
 
 public class ParseStatistics {
 
-	long nanoTime;
-	long systemTime;
-	long userTime;
-	int memoryUsed;
+	private final long nanoTime;
+	private final long systemTime;
+	private final long userTime;
+	private final int memoryUsed;
 	
-	int descriptorsCount = -1;
-	int gssNodesCount = -1;
-	int gssEdgesCount = -1;
-	int nonterminalNodesCount = -1;
-	int terminalNodesCount = -1;
-	int intermediateNodesCount = -1;
-	int packedNodesCount = -1;
-	int ambiguousNodesCount = -1;
+	private final int descriptorsCount;
+	private final int gssNodesCount;
+    private final int gssEdgesCount;
+    private final int nonterminalNodesCount;
+    private final int terminalNodesCount;
+    private final int intermediateNodesCount;
+    private final int packedNodesCount;
+    private final int ambiguousNodesCount;
 	
     public ParseStatistics(long nanoTime, long systemTime, long userTime, int memoryUsed,
             int descriptorsCount, int gssNodesCount, int gssEdgesCount, 
@@ -64,8 +64,6 @@ public class ParseStatistics {
         this.ambiguousNodesCount = ambiguousNodesCount;
     }
     
-    public ParseStatistics() {}
-	
 	public ParseStatistics(Builder builder) {
 		this.nanoTime = builder.nanoTime;
 		this.systemTime = builder.systemTime;
@@ -124,12 +122,12 @@ public class ParseStatistics {
 	public int getPackedNodesCount() {
 		return packedNodesCount;
 	}
-	
-	public int getCountAmbiguousNodes() {
-		return ambiguousNodesCount;
-	}
-	
-	public static Builder builder() {
+
+    public int getAmbiguousNodesCount() {
+        return ambiguousNodesCount;
+    }
+
+    public static Builder builder() {
 		return new Builder();
 	}
 	

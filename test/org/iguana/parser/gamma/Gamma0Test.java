@@ -91,7 +91,7 @@ public class Gamma0Test {
 	public void test() {
 		Input input = Input.fromString("aad");
 		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
-		assertEquals(1, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+		assertEquals(1, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}

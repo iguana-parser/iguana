@@ -7,9 +7,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parsetree.ParseTreeBuilder;
-import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.util.JsonSerializer;
-import org.iguana.util.visualization.ParseTreeToDot;
+import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.visualization.SPPFToDot;
 
 import java.io.IOException;
@@ -41,9 +39,8 @@ public class IggyParser {
 //        System.out.println(JsonSerializer.toJSON(g));
 
         Grammar iggyGrammar = iggyGrammar();
-        Start start = iggyGrammar.getStartSymbol(Nonterminal.withName("Definition"));
         Input input = Input.fromPath("/Users/Ali/workspace-thesis/iguana/test/grammars/basic/Test1/grammar.iggy");
-        ParseResult result = Iguana.parse(input, iggyGrammar, start);
+        ParseResult result = Iguana.parse(input, iggyGrammar);
         if (result.isParseSuccess()) {
             SPPFToDot toDot = new SPPFToDot(input);
             toDot.visit(result.asParseSuccess().getSPPFNode());

@@ -233,7 +233,12 @@ public class ReachabilityGraph {
 			return changed;
 		}
 
-	}
+        @Override
+        public Boolean visit(Start start) {
+            return start.getNonterminal().accept(this);
+        }
+
+    }
 	
 	private static boolean add(Nonterminal a, Nonterminal nonterminal, Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
 		boolean changed = false;

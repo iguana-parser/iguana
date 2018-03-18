@@ -99,10 +99,10 @@ Grammar.builder()
          // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
          //                   result1.asParseSuccess().getSPPFNode(), input);
 
-         Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-         Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-         Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-         Assert.assertEquals(0, result4.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(0, result4.asParseSuccess().getStatistics().getAmbiguousNodesCount());
          
          System.out.println("OP scheme 1:");
          System.out.println(result1.asParseSuccess().getStatistics());

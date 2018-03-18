@@ -347,6 +347,14 @@ public class GenerateElements {
             return type + "$Ebnf";
         }
 
+        @Override
+        public String visit(Start start) {
+            String type = typer.visit(start);
+            if (type == null) return null;
+            if (type.equals("PsiElement")) return "Element$Ebnf";
+            return type + "$Ebnf";
+        }
+
         public static void generate(Map<String, Map<String, Map<String, NUM>>> elements, String language, String path) {
 
             File file = new File(path + language.toLowerCase() + "/gen/psi/IEbnfElement.java");
@@ -811,6 +819,11 @@ public class GenerateElements {
                 if (sep.accept(this) != null)
                     return "PsiElement";
             return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Start start) {
+            return start.getNonterminal().accept(this);
         }
     }
 }

@@ -146,7 +146,7 @@ public abstract class VisitResult {
 
         @Override
         public java.util.List<Object> getValues() {
-            return null;
+            return values;
         }
 
         @Override
@@ -241,8 +241,10 @@ public abstract class VisitResult {
         }
 
         @Override
-        public VisitResult visit(EBNF other) {
-            throw new RuntimeException("Combination is not possible");
+        public EBNF visit(EBNF other) {
+            java.util.List<Object> values = new ArrayList<>(other.values);
+            values.add(result.value);
+            return new EBNF(values, other.symbol);
         }
 
         @Override

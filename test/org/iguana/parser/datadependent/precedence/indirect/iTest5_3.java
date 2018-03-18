@@ -61,7 +61,7 @@ Grammar.builder()
 
          Assert.assertTrue(result.isParseSuccess());
 
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }
 
 

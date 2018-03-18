@@ -250,6 +250,14 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
+    public Symbol visit(Start start) {
+        Symbol sym = visitSym(start.getNonterminal());
+        if (sym == start.getNonterminal())
+            return start;
+        return Start.from((Nonterminal) sym);
+    }
+
+    @Override
     public RegularExpression visit(iguana.regex.Star s) {
         RegularExpression sym = s.getSymbol().accept(this);
         if (sym == s.getSymbol())

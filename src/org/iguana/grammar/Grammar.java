@@ -33,9 +33,10 @@ import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
-import org.iguana.util.JsonSerializer;
+import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.*;
 import java.net.URI;
@@ -68,12 +69,15 @@ public class Grammar implements Serializable {
 	
 	private final Map<String, Set<String>> ebnfLefts;
 	private final Map<String, Set<String>> ebnfRights;
+
+	private final Start startSymbol;
 		
 	public Grammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.precedencePatterns = builder.precedencePatterns;
 		this.exceptPatterns = builder.exceptPatterns;
 		this.layout = builder.layout;
+		this.startSymbol = builder.startSymbol;
 		this.rules = builder.rules;
 		this.ebnfLefts = builder.ebnfLefts;
 		this.ebnfRights = builder.ebnfRights;
@@ -103,29 +107,9 @@ public class Grammar implements Serializable {
 		return this.ebnfRights;
 	}
 
-    public Start getStartSymbol(String nt) {
-        return getStartSymbol(Nonterminal.withName(nt));
+    public Start getStartSymbol() {
+        return startSymbol;
     }
-
-	public Start getStartSymbol(Nonterminal nt) {
-		Start start = Start.from(nt);
-		if (definitions.keySet().contains(start)) return start;
-		
-		Rule startRule;
-		if (layout != null)
-			startRule = Rule.withHead(start).setLabel("Start").addSymbol(layout).addSymbol(nt).addSymbol(layout)
-								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
-		else 
-			startRule = Rule.withHead(start).addSymbol(nt)
-								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
-		
-		definitions.put(start, CollectionsUtil.list(startRule));
-		rules.add(startRule);
-		
-		return start;
-	}
 	
 	public int sizeRules() {
 		int num = 0;
@@ -221,22 +205,35 @@ public class Grammar implements Serializable {
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
 		private List<Rule> rules = new ArrayList<>();
 		private Symbol layout;
+		private Start startSymbol;
 		
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
+
+        public Builder() { }
+
+        public Builder(Grammar grammar) {
+            definitions.putAll(grammar.definitions);
+            precedencePatterns.addAll(grammar.precedencePatterns);
+            exceptPatterns.addAll(grammar.exceptPatterns);
+            rules.addAll(grammar.rules);
+            layout = grammar.layout;
+            ebnfLefts.putAll(grammar.ebnfLefts);
+            ebnfRights.putAll(grammar.ebnfRights);
+            startSymbol = grammar.startSymbol;
+        }
 		
 		public Grammar build() {
-			
 			Set<RuntimeException> exceptions = validate(rules, definitions);
 			
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
-			
-			return new Grammar(this);
+
+            return new Grammar(this);
 		}
-		
-		public Builder addRule(Rule rule) {
+
+        public Builder addRule(Rule rule) {
 			List<Rule> rules = definitions.get(rule.getHead());
 			if (rules == null) {
 				rules = new ArrayList<>();
@@ -261,6 +258,11 @@ public class Grammar implements Serializable {
 			this.layout = layout;
 			return this;
 		}
+
+		public Builder setStartSymbol(Start startSymbol) {
+		    this.startSymbol = startSymbol;
+		    return this;
+        }
 		
 		public Builder addPrecedencePattern(PrecedencePattern pattern) {
 			precedencePatterns.add(pattern);
@@ -427,5 +429,5 @@ public class Grammar implements Serializable {
 	public void generate_idea_ide(String language, String extendsion, String path) {
         new IdeaIDEGenerator().generate(this, language, "iggy", path);
     }
-	
+
 }

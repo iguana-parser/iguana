@@ -80,10 +80,10 @@ public class JavaNat {
          Assert.assertTrue(result3.isParseSuccess());
          Assert.assertTrue(result4.isParseSuccess());
          
-         Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-         Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-         Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getCountAmbiguousNodes());
-         Assert.assertEquals(0, result4.asParseSuccess().getStatistics().getCountAmbiguousNodes());
+         Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(0, result4.asParseSuccess().getStatistics().getAmbiguousNodesCount());
          
          System.out.println("OP scheme 1:");
          System.out.println(result1.asParseSuccess().getStatistics());

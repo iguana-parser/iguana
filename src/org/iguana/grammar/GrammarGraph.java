@@ -147,6 +147,7 @@ public class GrammarGraph implements Serializable {
 			this.grammar = grammar;
 			this.mapping = new HashMap<>();
 		}
+
 		this.input = input;
 		this.config = config;
 		this.nonterminalsMap = new LinkedHashMap<>();
@@ -170,7 +171,7 @@ public class GrammarGraph implements Serializable {
 	public Collection<NonterminalGrammarSlot> getNonterminals() {
 		return nonterminalsMap.values();
 	}
-	
+
 	private void convert(Rule rule) {
 		Nonterminal nonterminal = rule.getHead();
 		NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(nonterminal);

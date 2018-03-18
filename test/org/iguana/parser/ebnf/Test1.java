@@ -12,6 +12,7 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -77,6 +78,8 @@ public class Test1 {
         ParseResult result = Iguana.parse(input4, graph, A);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult4(graph), result);
+        ParseTreeNode parseTree = result.asParseSuccess().getParseTree();
+        System.out.println(parseTree);
     }
 
     private static ParseResult getParseResult0(GrammarGraph graph) {

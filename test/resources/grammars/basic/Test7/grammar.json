@@ -1,0 +1,99 @@
+{
+  "kind" : "Grammar",
+  "rules" : [
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "D"
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "c",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 99
+          }
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "D"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "d",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 100
+          }
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(A)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(A)",
+    "nonterminal" : {
+      "kind" : "Nonterminal",
+      "name" : "A"
+    }
+  }
+}

@@ -379,8 +379,13 @@ public class EBNFToBNF implements GrammarTransformation {
 			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
-		
-		/**
+
+        @Override
+        public Symbol visit(Start start) {
+            return start.getNonterminal().accept(this);
+        }
+
+        /**
 		 * S_IF(cond) ::= [ cond] S 
 		 *              | [!cond] epsilon 
 		 */

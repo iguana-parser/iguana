@@ -37,7 +37,9 @@ import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
@@ -45,7 +47,11 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.TestRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.nio.file.Paths;
 
 import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.*;
@@ -54,43 +60,50 @@ import static org.junit.Assert.*;
 /**
  * A ::= B
  * B ::= 'b'
- * 
+ *
  * @author Ali Afroozeh
  *
  */
 public class Test5 {
-	
+
 	static Nonterminal A = Nonterminal.withName("A");
 	static Nonterminal B = Nonterminal.withName("B");
 	static Terminal b = Terminal.from(Char.from('b'));
 	static Rule r1 = Rule.withHead(A).addSymbols(B).build();
 	static Rule r2 = Rule.withHead(B).addSymbol(b).build();
-	static Grammar grammar = Grammar.builder().addRule(r1).addRule(r2).build();
+
+	private static Start startSymbol = Start.from(A);
+    static Grammar grammar = new DesugarStartSymbol().transform(Grammar.builder().addRule(r1).addRule(r2).setStartSymbol(startSymbol).build());
 
     private static Input input = Input.fromString("b");
-    private static Nonterminal startSymbol = A;
+
+    @BeforeClass
+    public static void record() {
+        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
+        TestRunner.record(grammar, input, 1, path + "/Test5");
+    }
 
     @Test
 	public void testNullable() {
 		FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
-		
+
 		assertFalse(firstFollowSets.isNullable(A));
 		assertFalse(firstFollowSets.isNullable(B));
-		
+
 		assertEquals(set(CharRange.from('b')), firstFollowSets.getFirstSet(A));
 		assertEquals(set(CharRange.from('b')), firstFollowSets.getFirstSet(B));
-		
+
 		assertEquals(set(CharRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(A));
 		assertEquals(set(CharRange.from(EOF.VALUE)), firstFollowSets.getFollowSet(B));
 	}
-		
+
 	@Test
 	public void testReachableNonterminals() {
 		ReachabilityGraph reachabilityGraph = new ReachabilityGraph(grammar);
 		assertEquals(set(B), reachabilityGraph.getReachableNonterminals(A));
 		assertEquals(set(), reachabilityGraph.getReachableNonterminals(B));
 	}
-	
+
 	@Test
 	public void testLL1() {
 //		assertTrue(grammarGraph.isLL1SubGrammar(A));
@@ -100,12 +113,12 @@ public class Test5 {
 
 	@Test
 	public void testParser() {
-		GrammarGraph graph = GrammarGraph.from(grammar, input);
-		ParseResult result = Iguana.parse(input, graph, startSymbol);
-		assertTrue(result.isParseSuccess());
+		ParseResult result = Iguana.parse(input, grammar);
+        GrammarGraph graph = GrammarGraph.from(grammar, input);
+        assertTrue(result.isParseSuccess());
 		assertEquals(getParseResult(graph), result);
     }
-	
+
 	private static ParseSuccess getParseResult(GrammarGraph graph) {
 		ParseStatistics statistics = ParseStatistics.builder()
 				.setDescriptorsCount(3)
@@ -116,14 +129,6 @@ public class Test5 {
 				.setIntermediateNodesCount(0)
 				.setPackedNodesCount(2)
 				.setAmbiguousNodesCount(0).build();
-		System.out.println(org.iguana.util.JsonSerializer.toJSON(grammar));
-		System.out.println("------------------------------");
-		String json = org.iguana.util.SPPFJsonSerializer.serialize(expectedSPPF(new SPPFNodeFactory(graph)));
-		System.out.println(json);
-		org.iguana.sppf.NonterminalNode node = org.iguana.util.SPPFJsonSerializer.deserialize(json, graph);
-		org.iguana.parsetree.ParseTreeNode parseTreeNode = org.iguana.parsetree.SPPFToParseTree.toParseTree(node, new org.iguana.parsetree.DefaultParseTreeBuilder());
-		System.out.println("------------------------------");
-		System.out.println(org.iguana.util.JsonSerializer.toJSON(parseTreeNode));
 		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
 	}
 	
