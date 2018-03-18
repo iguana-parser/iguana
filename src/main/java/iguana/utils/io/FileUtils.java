@@ -1,7 +1,6 @@
 package iguana.utils.io;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,6 +16,12 @@ public class FileUtils {
         byte[] content = new byte[in.available()];
         in.read(content);
         return new String(content, StandardCharsets.UTF_8);
+    }
+
+    public static void writeFile(String content, String path) throws IOException {
+        try (Writer out = new FileWriter(path)) {
+            out.write(content);
+        }
     }
 
 }
