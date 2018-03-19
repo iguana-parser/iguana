@@ -5,7 +5,7 @@ import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 
 public class DesugarStartSymbol implements GrammarTransformation {
-
+    
     @Override
     public Grammar transform(Grammar grammar) {
         Start startSymbol = grammar.getStartSymbol();

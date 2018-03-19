@@ -132,7 +132,9 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Sequence<T>> {
 
 		private List<T> symbols = new ArrayList<>();
-		
+
+		private Builder() {}
+
 		public Builder(List<T> symbols) {
 			super(getName(symbols));
 			this.symbols = symbols;

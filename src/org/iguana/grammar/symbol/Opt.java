@@ -82,6 +82,8 @@ public class Opt extends AbstractSymbol {
 
 		private Symbol s;
 
+		private Builder() {}
+
 		public Builder(Symbol s) {
 			super(getName(s));
 			this.s = s;

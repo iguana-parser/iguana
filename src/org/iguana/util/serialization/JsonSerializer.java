@@ -59,6 +59,9 @@ public class JsonSerializer {
         mapper.addMixIn(Terminal.class, TerminalMixIn.class);
         mapper.addMixIn(Star.class, StarMixIn.class);
         mapper.addMixIn(Plus.class, PlusMixIn.class);
+        mapper.addMixIn(Opt.class, OptMixIn.class);
+        mapper.addMixIn(Alt.class, AltMixIn.class);
+        mapper.addMixIn(Sequence.class, SequenceMixIn.class);
         mapper.addMixIn(Start.class, StartMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
@@ -510,6 +513,15 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Plus.Builder.class)
     abstract static class PlusMixIn {}
 
+    @JsonDeserialize(builder = Opt.Builder.class)
+    abstract static class OptMixIn {}
+
+    @JsonDeserialize(builder = Alt.Builder.class)
+    abstract static class AltMixIn {}
+
+    @JsonDeserialize(builder = Sequence.Builder.class)
+    abstract static class SequenceMixIn {}
+
     @JsonDeserialize(builder = Terminal.Builder.class)
     abstract static class TerminalMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = CategoryFilter.class)
@@ -530,7 +542,7 @@ public class JsonSerializer {
     abstract static class SeqMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Alt.Builder.class)
-    abstract static class AltMixIn {}
+    abstract static class RegexAltMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Star.Builder.class)
     abstract static class RegexStarMixIn {}
@@ -539,7 +551,7 @@ public class JsonSerializer {
     abstract static class RegexPlusMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Opt.Builder.class)
-    abstract static class OptMixIn {}
+    abstract static class RegexOptMixIn {}
 
     @JsonDeserialize(builder = iguana.regex.Char.Builder.class)
     abstract static class CharMixIn {}

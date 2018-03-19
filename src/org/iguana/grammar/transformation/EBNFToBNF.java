@@ -66,7 +66,8 @@ public class EBNFToBNF implements GrammarTransformation {
 		return Grammar.builder().addRules(newRules)
 				.addEBNFl(grammar.getEBNFLefts())
 				.addEBNFr(grammar.getEBNFRights())
-				.setLayout(grammar.getLayout()).build();
+				.setLayout(grammar.getLayout())
+				.setStartSymbol(grammar.getStartSymbol()).build();
 	}
 	
 	private Set<Rule> transform(Rule rule) {
