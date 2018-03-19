@@ -4,10 +4,8 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Star;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
@@ -18,7 +16,11 @@ import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.TestRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,14 +36,24 @@ public class Test2 {
     static Terminal a = Terminal.from(Char.from('a'));
 
     static Rule r1 = Rule.withHead(S).addSymbols(Star.from(A)).build();
-    static Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Char.from('a'))).build();
+    static Rule r2 = Rule.withHead(A).addSymbols(a).build();
 
-    private static Grammar grammar = Grammar.builder().addRules(r1, r2).build();
+    static Start start = Start.from(S);
+    private static Grammar grammar = new DesugarStartSymbol().transform(EBNFToBNF.convert(Grammar.builder().addRules(r1, r2).setStartSymbol(start).build()));
 
     private static Input input0 = Input.fromString("");
     private static Input input1 = Input.fromString("a");
     private static Input input2 = Input.fromString("aa");
     private static Input input3 = Input.fromString("aaaaaaaaaaa");
+
+    @BeforeClass
+    public static void record() {
+        String path = Paths.get("test", "resources", "grammars", "ebnf").toAbsolutePath().toString();
+        TestRunner.record(grammar, input0, 1, path + "/Test2");
+        TestRunner.record(grammar, input1, 2, path + "/Test2");
+        TestRunner.record(grammar, input2, 3, path + "/Test2");
+        TestRunner.record(grammar, input3, 4, path + "/Test2");
+    }
 
     @Test
     public void testParser0() {

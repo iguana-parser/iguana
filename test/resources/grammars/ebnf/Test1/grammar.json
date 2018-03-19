@@ -126,6 +126,28 @@
           "nodeType" : "Star"
         }
       ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(A)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      ]
     }
-  ]
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(A)",
+    "nonterminal" : {
+      "kind" : "Nonterminal",
+      "name" : "A"
+    }
+  }
 }

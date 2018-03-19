@@ -94,6 +94,15 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
                     result = ebnf(visitResult.getValues(), symbol);
                     break;
                 }
+
+                case Seq:
+                case Alt:
+                case Opt: {
+                    Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
+                    VisitResult visitResult = packedNode.accept(this);
+                    result = single(parseTreeBuilder.metaSymbolNode(symbol, visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                    break;
+                }
             }
         }
         visitedNodes.remove(node);

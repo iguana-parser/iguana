@@ -5,10 +5,8 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Alt;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
@@ -18,7 +16,11 @@ import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.TestRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -45,11 +47,20 @@ public class Test6 {
     static Rule r2 = Rule.withHead(A).addSymbol(a).build();
     static Rule r3 = Rule.withHead(B).addSymbol(b).build();
     static Rule r4 = Rule.withHead(C).addSymbol(c).build();
-    private static Grammar grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+    static Start start = Start.from(S);
+    private static Grammar grammar = new DesugarStartSymbol().transform(EBNFToBNF.convert(Grammar.builder().addRules(r1, r2, r3, r4).setStartSymbol(start).build()));
 
     private static Input input1 = Input.fromString("a");
     private static Input input2 = Input.fromString("b");
     private static Input input3 = Input.fromString("c");
+
+    @BeforeClass
+    public static void record() {
+        String path = Paths.get("test", "resources", "grammars", "ebnf").toAbsolutePath().toString();
+        TestRunner.record(grammar, input1, 1, path + "/Test6");
+        TestRunner.record(grammar, input2, 2, path + "/Test6");
+        TestRunner.record(grammar, input3, 3, path + "/Test6");
+    }
 
     @Test
     public void testParse1() {

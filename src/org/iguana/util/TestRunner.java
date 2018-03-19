@@ -42,10 +42,13 @@ public class TestRunner {
     }
 
     public static void record(Grammar grammar, Input input, int number, String dir) {
-        if (new File(dir).exists()) return;
+        String inputPath = dir + "/input" + number + ".txt";
+        if (new File(inputPath).exists()) return;
 
-        boolean dirCreated = new File(dir).mkdir();
-        if (!dirCreated) throw new RuntimeException("Could not create the directory");
+        if (!new File(dir).exists()) {
+            boolean dirCreated = new File(dir).mkdir();
+            if (!dirCreated) throw new RuntimeException("Could not create the directory");
+        }
 
         ParseResult result = Iguana.parse(input, grammar);
         if (result.isParseError()) {
@@ -56,7 +59,7 @@ public class TestRunner {
             String jsonGrammar = JsonSerializer.toJSON(grammar);
             FileUtils.writeFile(jsonGrammar, dir + "/grammar.json");
 
-            FileUtils.writeFile(input.toString(), dir + "/input" + number + ".txt");
+            FileUtils.writeFile(input.toString(), inputPath);
 
             ParseStatistics statistics = result.asParseSuccess().getStatistics();
             String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
