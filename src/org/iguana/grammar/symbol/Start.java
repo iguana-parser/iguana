@@ -62,7 +62,20 @@ public class Start extends AbstractSymbol {
     public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+    	if (this == obj) return true;
+    	if (!(obj instanceof Start)) return false;
+    	Start other = (Start) obj;
+    	return this.nonterminal.equals(other.nonterminal);
+	}
+
+	@Override
+	public int hashCode() {
+		return nonterminal.hashCode();
+	}
+
 	public static Builder builder(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}

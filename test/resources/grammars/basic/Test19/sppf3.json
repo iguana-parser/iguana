@@ -1,0 +1,1045 @@
+[
+  {
+    "id" : 0,
+    "kind" : "NonterminalNode",
+    "label" : "Start(E)",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      1
+    ]
+  },
+  {
+    "id" : 1,
+    "kind" : "PackedNode",
+    "label" : "Start(E) ::= E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      2
+    ]
+  },
+  {
+    "id" : 2,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      3,
+      4
+    ]
+  },
+  {
+    "id" : 3,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      5
+    ]
+  },
+  {
+    "id" : 5,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      6,
+      7
+    ]
+  },
+  {
+    "id" : 6,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      8,
+      9
+    ]
+  },
+  {
+    "id" : 8,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
+    "children" : [
+      10
+    ]
+  },
+  {
+    "id" : 10,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
+    "children" : [
+      11,
+      12
+    ]
+  },
+  {
+    "id" : 11,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 0,
+    "rightExtent" : 1,
+    "children" : [
+      13
+    ]
+  },
+  {
+    "id" : 13,
+    "kind" : "PackedNode",
+    "label" : "E ::= a .",
+    "leftExtent" : 0,
+    "rightExtent" : 1,
+    "children" : [
+      14
+    ]
+  },
+  {
+    "id" : 14,
+    "kind" : "TerminalNode",
+    "label" : "a",
+    "leftExtent" : 0,
+    "rightExtent" : 1
+  },
+  {
+    "id" : 12,
+    "kind" : "TerminalNode",
+    "label" : "+",
+    "leftExtent" : 1,
+    "rightExtent" : 2
+  },
+  {
+    "id" : 9,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      15,
+      16
+    ]
+  },
+  {
+    "id" : 15,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      17
+    ]
+  },
+  {
+    "id" : 17,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      18,
+      19
+    ]
+  },
+  {
+    "id" : 18,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      20,
+      21
+    ]
+  },
+  {
+    "id" : 20,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      22
+    ]
+  },
+  {
+    "id" : 22,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      23,
+      24
+    ]
+  },
+  {
+    "id" : 23,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      25,
+      26
+    ]
+  },
+  {
+    "id" : 25,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      27
+    ]
+  },
+  {
+    "id" : 27,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      28
+    ]
+  },
+  {
+    "id" : 28,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      29,
+      30
+    ]
+  },
+  {
+    "id" : 29,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      31
+    ]
+  },
+  {
+    "id" : 31,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      32,
+      33
+    ]
+  },
+  {
+    "id" : 32,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      34
+    ]
+  },
+  {
+    "id" : 34,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      35
+    ]
+  },
+  {
+    "id" : 35,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      36
+    ]
+  },
+  {
+    "id" : 36,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      37,
+      38
+    ]
+  },
+  {
+    "id" : 37,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
+    "children" : [
+      39
+    ]
+  },
+  {
+    "id" : 39,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
+    "children" : [
+      40,
+      41
+    ]
+  },
+  {
+    "id" : 40,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      42
+    ]
+  },
+  {
+    "id" : 42,
+    "kind" : "PackedNode",
+    "label" : "E ::= a .",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      43
+    ]
+  },
+  {
+    "id" : 43,
+    "kind" : "TerminalNode",
+    "label" : "a",
+    "leftExtent" : 2,
+    "rightExtent" : 3
+  },
+  {
+    "id" : 41,
+    "kind" : "TerminalNode",
+    "label" : "*",
+    "leftExtent" : 3,
+    "rightExtent" : 4
+  },
+  {
+    "id" : 38,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
+    "children" : [
+      44
+    ]
+  },
+  {
+    "id" : 44,
+    "kind" : "PackedNode",
+    "label" : "E ::= a .",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
+    "children" : [
+      45
+    ]
+  },
+  {
+    "id" : 45,
+    "kind" : "TerminalNode",
+    "label" : "a",
+    "leftExtent" : 4,
+    "rightExtent" : 5
+  },
+  {
+    "id" : 33,
+    "kind" : "TerminalNode",
+    "label" : "+",
+    "leftExtent" : 5,
+    "rightExtent" : 6
+  },
+  {
+    "id" : 30,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      46
+    ]
+  },
+  {
+    "id" : 46,
+    "kind" : "PackedNode",
+    "label" : "E ::= a .",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      47
+    ]
+  },
+  {
+    "id" : 47,
+    "kind" : "TerminalNode",
+    "label" : "a",
+    "leftExtent" : 6,
+    "rightExtent" : 7
+  },
+  {
+    "id" : 26,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      48
+    ]
+  },
+  {
+    "id" : 48,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      49
+    ]
+  },
+  {
+    "id" : 49,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      37,
+      50
+    ]
+  },
+  {
+    "id" : 50,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      51
+    ]
+  },
+  {
+    "id" : 51,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      52
+    ]
+  },
+  {
+    "id" : 52,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      53
+    ]
+  },
+  {
+    "id" : 53,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      54,
+      30
+    ]
+  },
+  {
+    "id" : 54,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      55
+    ]
+  },
+  {
+    "id" : 55,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      38,
+      33
+    ]
+  },
+  {
+    "id" : 24,
+    "kind" : "TerminalNode",
+    "label" : "*",
+    "leftExtent" : 7,
+    "rightExtent" : 8
+  },
+  {
+    "id" : 21,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
+    "children" : [
+      56
+    ]
+  },
+  {
+    "id" : 56,
+    "kind" : "PackedNode",
+    "label" : "E ::= a .",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
+    "children" : [
+      57
+    ]
+  },
+  {
+    "id" : 57,
+    "kind" : "TerminalNode",
+    "label" : "a",
+    "leftExtent" : 8,
+    "rightExtent" : 9
+  },
+  {
+    "id" : 19,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      37,
+      58
+    ]
+  },
+  {
+    "id" : 58,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      59,
+      60
+    ]
+  },
+  {
+    "id" : 59,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      61
+    ]
+  },
+  {
+    "id" : 61,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      62
+    ]
+  },
+  {
+    "id" : 62,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      54,
+      63
+    ]
+  },
+  {
+    "id" : 63,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 6,
+    "rightExtent" : 9,
+    "children" : [
+      64
+    ]
+  },
+  {
+    "id" : 64,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 6,
+    "rightExtent" : 9,
+    "children" : [
+      65
+    ]
+  },
+  {
+    "id" : 65,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 6,
+    "rightExtent" : 9,
+    "children" : [
+      66
+    ]
+  },
+  {
+    "id" : 66,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 6,
+    "rightExtent" : 9,
+    "children" : [
+      67,
+      21
+    ]
+  },
+  {
+    "id" : 67,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      68
+    ]
+  },
+  {
+    "id" : 68,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      30,
+      24
+    ]
+  },
+  {
+    "id" : 60,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      69
+    ]
+  },
+  {
+    "id" : 69,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      70
+    ]
+  },
+  {
+    "id" : 70,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
+    "children" : [
+      71,
+      21
+    ]
+  },
+  {
+    "id" : 71,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 4,
+    "rightExtent" : 8,
+    "children" : [
+      72
+    ]
+  },
+  {
+    "id" : 72,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 4,
+    "rightExtent" : 8,
+    "children" : [
+      50,
+      24
+    ]
+  },
+  {
+    "id" : 16,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      73
+    ]
+  },
+  {
+    "id" : 73,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      74
+    ]
+  },
+  {
+    "id" : 74,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
+    "children" : [
+      29,
+      63
+    ]
+  },
+  {
+    "id" : 7,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      75,
+      63
+    ]
+  },
+  {
+    "id" : 75,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      76
+    ]
+  },
+  {
+    "id" : 76,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + . E",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      77,
+      33
+    ]
+  },
+  {
+    "id" : 77,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      78,
+      79
+    ]
+  },
+  {
+    "id" : 78,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      80
+    ]
+  },
+  {
+    "id" : 80,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      81
+    ]
+  },
+  {
+    "id" : 81,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      8,
+      32
+    ]
+  },
+  {
+    "id" : 79,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      82
+    ]
+  },
+  {
+    "id" : 82,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      83
+    ]
+  },
+  {
+    "id" : 83,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      84,
+      38
+    ]
+  },
+  {
+    "id" : 84,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 0,
+    "rightExtent" : 4,
+    "children" : [
+      85
+    ]
+  },
+  {
+    "id" : 85,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 0,
+    "rightExtent" : 4,
+    "children" : [
+      86,
+      41
+    ]
+  },
+  {
+    "id" : 86,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
+    "children" : [
+      87
+    ]
+  },
+  {
+    "id" : 87,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
+    "children" : [
+      88
+    ]
+  },
+  {
+    "id" : 88,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
+    "children" : [
+      89
+    ]
+  },
+  {
+    "id" : 89,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
+    "children" : [
+      8,
+      40
+    ]
+  },
+  {
+    "id" : 4,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      90
+    ]
+  },
+  {
+    "id" : 90,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      91,
+      92
+    ]
+  },
+  {
+    "id" : 91,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      93,
+      21
+    ]
+  },
+  {
+    "id" : 93,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      94
+    ]
+  },
+  {
+    "id" : 94,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * . E",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      95,
+      24
+    ]
+  },
+  {
+    "id" : 95,
+    "kind" : "NonterminalNode",
+    "label" : "E",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      96,
+      97
+    ]
+  },
+  {
+    "id" : 96,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      98
+    ]
+  },
+  {
+    "id" : 98,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      99,
+      100
+    ]
+  },
+  {
+    "id" : 99,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      8,
+      23
+    ]
+  },
+  {
+    "id" : 100,
+    "kind" : "PackedNode",
+    "label" : "E ::= E + E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      75,
+      30
+    ]
+  },
+  {
+    "id" : 97,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      101
+    ]
+  },
+  {
+    "id" : 101,
+    "kind" : "IntermediateNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      102
+    ]
+  },
+  {
+    "id" : 102,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      84,
+      50
+    ]
+  },
+  {
+    "id" : 92,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      84,
+      58
+    ]
+  }
+]

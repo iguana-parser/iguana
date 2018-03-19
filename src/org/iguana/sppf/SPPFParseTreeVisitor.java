@@ -1,7 +1,6 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
@@ -13,16 +12,19 @@ import static org.iguana.parsetree.VisitResult.ebnf;
 import static org.iguana.parsetree.VisitResult.empty;
 import static org.iguana.parsetree.VisitResult.single;
 
-public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
+public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
-    private final ParseTreeBuilder parseTreeBuilder;
+    private final ParseTreeBuilder<T> parseTreeBuilder;
     private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, VisitResult> convertedNodes;
 
-    public SPPFParseTreeVisitor(ParseTreeBuilder parseTreeBuilder) {
+    private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
+
+    public SPPFParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.convertedNodes = new HashMap<>();
         this.visitedNodes = new LinkedHashSet<>();
+        this.createNodeVisitor = new VisitResult.CreateParseTreeVisitor(parseTreeBuilder);
     }
 
     @Override
@@ -61,30 +63,23 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
         }
 
         if (node.isAmbiguous()) {
-            Set<Object> children = new HashSet<>();
+            Set<T> children = new HashSet<>();
             for (PackedNode packedNode : node.getChildren()) {
-                children.addAll(create(packedNode));
+                VisitResult visitResult = packedNode.accept(this);
+                children.addAll(visitResult.accept(createNodeVisitor, packedNode));
             }
             result = single(parseTreeBuilder.ambiguityNode(children));
         } else {
             PackedNode packedNode = node.getChildAt(0);
             switch (node.getGrammarSlot().getNodeType()) {
                 case Basic:
-                case Layout:
-                case Start: {
-                    List<Object> children = create(packedNode);
+                case Layout: {
+                    List<T> children = packedNode.accept(this).accept(createNodeVisitor, packedNode);
                     if (children.size() > 1) {
                         result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
                     } else {
                         result = single(children.get(0));
                     }
-                    break;
-                }
-
-                case Star: {
-                    Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
-                    VisitResult visitResult = packedNode.accept(this);
-                    result = single(parseTreeBuilder.metaSymbolNode(symbol, visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
                     break;
                 }
 
@@ -95,12 +90,14 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
                     break;
                 }
 
+                case Star:
                 case Seq:
                 case Alt:
-                case Opt: {
+                case Opt:
+                case Start: {
                     Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
                     VisitResult visitResult = packedNode.accept(this);
-                    result = single(parseTreeBuilder.metaSymbolNode(symbol, visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                    result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
                     break;
                 }
             }
@@ -138,31 +135,6 @@ public class SPPFParseTreeVisitor implements SPPFVisitor<VisitResult> {
             right = empty();
 
         return left.merge(right);
-    }
-
-    List<Object> create(PackedNode packedNode) {
-        List<Object> result = new ArrayList<>();
-        VisitResult visitResult = packedNode.accept(this);
-        if (visitResult instanceof VisitResult.ListOfResult) {
-            for (VisitResult vResult : ((VisitResult.ListOfResult) visitResult).getVisitResults()) {
-                result.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
-            }
-        } else {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
-            switch (rule.getHead().getNodeType()) {
-                case Start:
-                    result.add(parseTreeBuilder.metaSymbolNode(rule.getHead(), visitResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
-                    break;
-
-                case Basic:
-                    result.add(parseTreeBuilder.nonterminalNode(rule, visitResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
-                    break;
-
-                default:
-                    throw new RuntimeException("Unexpected nonterminal type");
-            }
-        }
-        return result;
     }
 
 }

@@ -88,7 +88,15 @@
           "kind" : "Nonterminal",
           "name" : "S"
         }
-      ]
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "nonterminal" : {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      }
     }
   ],
   "startSymbol" : {

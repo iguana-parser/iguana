@@ -1,14 +1,17 @@
 package org.iguana.parsetree;
 
+import iguana.utils.collections.CollectionsUtil;
+import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.sppf.PackedNode;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public abstract class VisitResult {
 
-    public abstract ResultVisitor<VisitResult> visitor();
+    public abstract MergeResultVisitor<VisitResult> visitor();
     public abstract VisitResult merge(VisitResult other);
+    public abstract <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode);
     public abstract java.util.List<Object> getValues();
 
     public static Empty empty() {
@@ -34,13 +37,18 @@ public abstract class VisitResult {
     public static class Empty extends VisitResult {
 
         @Override
-        public ResultVisitor visitor() {
+        public MergeResultVisitor visitor() {
             return new EmptyVisitor();
         }
 
         @Override
         public VisitResult merge(VisitResult other) {
             return other;
+        }
+
+        @Override
+        public <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode) {
+            return visitor.visit(this, packedNode);
         }
 
         @Override
@@ -71,13 +79,18 @@ public abstract class VisitResult {
         }
 
         @Override
+        public <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode) {
+            return visitor.visit(this, packedNode);
+        }
+
+        @Override
         public java.util.List<Object> getValues() {
             java.util.List<Object> list = new ArrayList<>(1);
             list.add(value);
             return list;
         }
 
-        public ResultVisitor visitor() {
+        public MergeResultVisitor visitor() {
             return new SingleVisitor(this);
         }
 
@@ -112,7 +125,12 @@ public abstract class VisitResult {
         }
 
         @Override
-        public ResultVisitor visitor() {
+        public <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode) {
+            return visitor.visit(this, packedNode);
+        }
+
+        @Override
+        public MergeResultVisitor visitor() {
             return new ListVisitor(this);
         }
 
@@ -145,13 +163,22 @@ public abstract class VisitResult {
         }
 
         @Override
+        public <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode) {
+            return visitor.visit(this, packedNode);
+        }
+
+        @Override
         public java.util.List<Object> getValues() {
             return values;
         }
 
         @Override
-        public ResultVisitor visitor() {
+        public MergeResultVisitor visitor() {
             return new EBNFResultVisitor(this);
+        }
+
+        public Symbol getSymbol() {
+            return symbol;
         }
 
         @Override
@@ -177,13 +204,18 @@ public abstract class VisitResult {
         }
 
         @Override
-        public ResultVisitor visitor() {
+        public MergeResultVisitor visitor() {
             return new ListOfResultVisitor(this);
         }
 
         @Override
         public VisitResult merge(VisitResult other) {
             return other.visitor().visit(this);
+        }
+
+        @Override
+        public <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode) {
+            return visitor.visit(this, packedNode);
         }
 
         @Override
@@ -209,19 +241,25 @@ public abstract class VisitResult {
         }
     }
 
-    interface ResultVisitor<T> {
+    interface MergeResultVisitor<T> {
+        T visit(Empty other);
         T visit(Single other);
         T visit(List other);
         T visit(EBNF other);
         T visit(ListOfResult other);
     }
 
-    class SingleVisitor implements ResultVisitor<VisitResult> {
+    class SingleVisitor implements MergeResultVisitor<VisitResult> {
 
         private Single result;
 
         public SingleVisitor(Single result) {
             this.result = result;
+        }
+
+        @Override
+        public VisitResult visit(Empty empty) {
+            return result;
         }
 
         @Override
@@ -260,12 +298,17 @@ public abstract class VisitResult {
         }
     }
 
-    class ListVisitor implements ResultVisitor<VisitResult> {
+    class ListVisitor implements MergeResultVisitor<VisitResult> {
 
         private List result;
 
         ListVisitor(List result) {
             this.result = result;
+        }
+
+        @Override
+        public List visit(Empty empty) {
+            return result;
         }
 
         @Override
@@ -295,7 +338,7 @@ public abstract class VisitResult {
         }
     }
 
-    class EBNFResultVisitor implements ResultVisitor<VisitResult> {
+    class EBNFResultVisitor implements MergeResultVisitor<VisitResult> {
 
         private EBNF result;
 
@@ -304,8 +347,16 @@ public abstract class VisitResult {
         }
 
         @Override
-        public VisitResult visit(Single other) {
-            throw new RuntimeException("Combination is not possible");
+        public EBNF visit(Empty empty) {
+            return result;
+        }
+
+        @Override
+        public List visit(Single other) {
+            java.util.List<Object> values = new ArrayList<>();
+            values.add(other.value);
+            values.add(result);
+            return new List(values);
         }
 
         @Override
@@ -324,12 +375,17 @@ public abstract class VisitResult {
         }
     }
 
-    class ListOfResultVisitor implements ResultVisitor<VisitResult> {
+    class ListOfResultVisitor implements MergeResultVisitor<VisitResult> {
 
         private ListOfResult result;
 
         ListOfResultVisitor(ListOfResult result) {
             this.result = result;
+        }
+
+        @Override
+        public ListOfResult visit(Empty empty) {
+            return result;
         }
 
         @Override
@@ -375,7 +431,12 @@ public abstract class VisitResult {
         }
     }
 
-    class EmptyVisitor implements ResultVisitor<VisitResult> {
+    class EmptyVisitor implements MergeResultVisitor<VisitResult> {
+
+        @Override
+        public VisitResult visit(Empty other) {
+            return other;
+        }
 
         @Override
         public VisitResult visit(Single other) {
@@ -395,6 +456,67 @@ public abstract class VisitResult {
         @Override
         public VisitResult visit(ListOfResult other) {
             return other;
+        }
+    }
+
+    public interface CreateNodeVisitor<T> {
+        T visit(Empty result, PackedNode packedNode);
+        T visit(Single result, PackedNode packedNode);
+        T visit(List result, PackedNode packedNode);
+        T visit(EBNF result, PackedNode packedNode);
+        T visit(ListOfResult result, PackedNode packedNode);
+    }
+
+
+    public static class CreateParseTreeVisitor<T> implements CreateNodeVisitor<java.util.List<T>> {
+
+        private ParseTreeBuilder<T> parseTreeBuilder;
+
+        public CreateParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
+            this.parseTreeBuilder = parseTreeBuilder;
+        }
+
+        @Override
+        public java.util.List<T> visit(Empty result, PackedNode packedNode) {
+            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+        }
+
+        @Override
+        public java.util.List<T> visit(Single result, PackedNode packedNode) {
+            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            return CollectionsUtil.list((parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent())));
+        }
+
+        @Override
+        public java.util.List<T> visit(List result, PackedNode packedNode) {
+            java.util.List<T> values = new ArrayList<>();
+            for (Object o : result.getValues()) {
+                if (o instanceof VisitResult) {
+                    values.addAll(((VisitResult) o).accept(this, packedNode));
+                } else {
+                    values.add((T) o);
+                }
+            }
+            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, values, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+        }
+
+        @Override
+        public java.util.List<T> visit(EBNF result, PackedNode packedNode) {
+            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            Object ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent());
+            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, Arrays.asList((T) ebnfNode), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+
+        }
+
+        @Override
+        public java.util.List<T> visit(ListOfResult result, PackedNode packedNode) {
+            Set<T> set = new HashSet<>();
+            for (VisitResult vResult :result.getVisitResults()) {
+                set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+            }
+            return CollectionsUtil.list(parseTreeBuilder.ambiguityNode(set));
         }
     }
 
