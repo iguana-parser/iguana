@@ -91,9 +91,10 @@ public class Test1 {
 	@Test
 	public void testParser() {
 		ParseResult result = Iguana.parse(input, grammar);
-        assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input);
-        assertEquals(getParseResult(graph), result);
+		assertTrue(result.isParseSuccess());
+		result.asParseSuccess().getParseTree();
+		GrammarGraph graph = GrammarGraph.from(grammar, input);
+		assertEquals(getParseResult(graph), result);
     }
 		
 	public static ParseSuccess getParseResult(GrammarGraph graph) {
