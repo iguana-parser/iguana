@@ -72,7 +72,6 @@ Require-Bundle: com.google.guava,
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.imp.pdb.values;bundle-version="0.4.1",
  utils;bundle-version="1.0.0",
- parse-trees;bundle-version="1.0.0",
  org.scala-lang.scala-library,
  regex;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

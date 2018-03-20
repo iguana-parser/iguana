@@ -30,8 +30,8 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
     @Override
     public VisitResult visit(TerminalNode node) {
         return convertedNodes.computeIfAbsent(node, key -> {
+                    if (node.getLeftExtent() == node.getRightExtent()) return empty();
                     Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
-                    if (terminalNode == null) return empty();
                     return single(terminalNode);
                 }
         );

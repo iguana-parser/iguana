@@ -56,7 +56,7 @@ public class Tests {
 
     public Grammar simpleGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/Simple.iggy"));
-        ParseResult result = Iguana.parse(input, IGGY, start);
+        ParseResult result = Iguana.parse(input, IGGY);
 
         if (result.isParseError())
             System.out.println("Could not read a Simple grammar: " + result.asParseError());
@@ -72,7 +72,7 @@ public class Tests {
         Grammar grammar = transform(xmlGrammar());
         Start start = Start.from(Nonterminal.withName("Start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/XML.txt"));
-        ParseResult result = Iguana.parse(input, grammar, start);
+        ParseResult result = Iguana.parse(input, grammar);
 
         if (result.isParseError())
             System.out.println(result.asParseError());
@@ -81,13 +81,13 @@ public class Tests {
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 
         input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/BadXML.txt"));
-        result = Iguana.parse(input, grammar, start);
+        result = Iguana.parse(input, grammar);
         Assert.assertTrue(result.isParseError());
     }
 
     public Grammar xmlGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/XML.iggy"));
-        ParseResult result = Iguana.parse(input, IGGY, start);
+        ParseResult result = Iguana.parse(input, IGGY);
 
         if (result.isParseError())
             System.out.println("Could not read an XML grammar: " + result.asParseError());
@@ -104,7 +104,7 @@ public class Tests {
         Start start = Start.from(Nonterminal.withName("start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/OCaml.txt"));
         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-        ParseResult result = Iguana.parse(input, grammar, start);
+        ParseResult result = Iguana.parse(input, grammar);
 
         if (result.isParseError())
             System.out.println(result.asParseError());
@@ -115,7 +115,7 @@ public class Tests {
 
     public Grammar ocamlGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/OCaml.iggy"));
-        ParseResult result = Iguana.parse(input, IGGY, start);
+        ParseResult result = Iguana.parse(input, IGGY);
 
         if (result.isParseError())
             System.out.println("Could not read an OCaml grammar: " + result.asParseError());
@@ -131,7 +131,7 @@ public class Tests {
         Grammar grammar = transform(haskellGrammar());
         Start start = Start.from(Nonterminal.withName("Start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/Haskell.txt"));
-        ParseResult result = Iguana.parse(input, grammar, start);
+        ParseResult result = Iguana.parse(input, grammar);
 
         if (result.isParseError())
             System.out.println(result.asParseError());
@@ -140,13 +140,13 @@ public class Tests {
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 
         input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/BadHaskell.txt"));
-        result = Iguana.parse(input, grammar, start);
+        result = Iguana.parse(input, grammar);
         Assert.assertTrue(result.isParseError());
     }
 
     public Grammar haskellGrammar() throws IOException {
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/grammars/Haskell.iggy"));
-        ParseResult result = Iguana.parse(input, IGGY, start);
+        ParseResult result = Iguana.parse(input, IGGY);
 
         if (result.isParseError())
             System.out.println("Could not read a Haskell grammar: " + result.asParseError());

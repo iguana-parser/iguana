@@ -75,6 +75,7 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("WhiteSpace").build()).addSymbol(Terminal.from(Alt.builder(CharRange.builder(9, 10).build(), CharRange.builder(12, 13).build(), CharRange.builder(26, 26).build(), CharRange.builder(32, 32).build()).build())).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // S ::= align offside Stat+  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Align.builder(Plus.builder(Offside.builder(Nonterminal.builder("Stat").build()).build()).addSeparators(Arrays.asList(Terminal.builder(Seq.builder(Char.builder(59).build()).build()).build())).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.setStartSymbol(Start.from(Nonterminal.withName("S")))
 .build();
 
          DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
@@ -107,7 +108,7 @@ Grammar.builder()
 						                 + "      +              \n"
 						                 + "     a               \n");
 
-         ParseResult result = Iguana.parse(input, grammar, Start.from(Nonterminal.withName("S")));
+         ParseResult result = Iguana.parse(input, grammar);
 
          Assert.assertTrue(result.isParseError());
 

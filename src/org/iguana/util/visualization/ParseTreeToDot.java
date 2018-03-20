@@ -74,8 +74,10 @@ public class ParseTreeToDot {
 
         private void visitChildren(ParseTreeNode node, int nodeId) {
             for (ParseTreeNode child : node.children()) {
-                int childId = child.accept(this);
-                addEdgeToChild(nodeId, childId);
+                if (child != null) {
+                    int childId = child.accept(this);
+                    addEdgeToChild(nodeId, childId);
+                }
             }
         }
     }

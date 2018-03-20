@@ -97,10 +97,10 @@ public class JsonSerializer {
 
         // Regex
         mapper.addMixIn(iguana.regex.Seq.class, SeqMixIn.class);
-        mapper.addMixIn(iguana.regex.Alt.class, AltMixIn.class);
+        mapper.addMixIn(iguana.regex.Alt.class, RegexAltMixIn.class);
         mapper.addMixIn(iguana.regex.Star.class, RegexStarMixIn.class);
         mapper.addMixIn(iguana.regex.Plus.class, RegexPlusMixIn.class);
-        mapper.addMixIn(iguana.regex.Opt.class, OptMixIn.class);
+        mapper.addMixIn(iguana.regex.Opt.class, RegexOptMixIn.class);
         mapper.addMixIn(iguana.regex.Char.class, CharMixIn.class);
         mapper.addMixIn(iguana.regex.CharRange.class, CharRangeMixIn.class);
 
@@ -201,7 +201,8 @@ public class JsonSerializer {
         private String getId(Object value) {
             if (value.getClass() == iguana.regex.Star.class) return "regex.Star";
             if (value.getClass() == iguana.regex.Plus.class) return "regex.Plus";
-            if (value.getClass() == iguana.regex.Alt.class) return "regex.Alt";
+            if (value.getClass() == iguana.regex.Alt.class)  return "regex.Alt";
+            if (value.getClass() == Expression.IfThenElse.class) return "IfThenElseExpr";
 
             String id = value.getClass().getSimpleName();
             if (id.equals("")) { // For anonymous inner classes, use their super class name
@@ -213,10 +214,11 @@ public class JsonSerializer {
         @Override
         public JavaType typeFromId(DatabindContext context, String id) {
             switch (id) {
-                case "regex.Star": return context.constructType(iguana.regex.Star.class);
-                case "regex.Plus": return context.constructType(iguana.regex.Plus.class);
-                case "regex.Alt": return context.constructType(iguana.regex.Alt.class);
-                case "regex.Opt": return context.constructType(iguana.regex.Opt.class);
+                case "regex.Star":      return context.constructType(iguana.regex.Star.class);
+                case "regex.Plus":      return context.constructType(iguana.regex.Plus.class);
+                case "regex.Alt":       return context.constructType(iguana.regex.Alt.class);
+                case "regex.Opt":       return context.constructType(iguana.regex.Opt.class);
+                case "IfThenElseExpr":  return context.constructType(Expression.IfThenElse.class);
             }
 
             String[] packages = {
