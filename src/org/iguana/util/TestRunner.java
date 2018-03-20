@@ -1,10 +1,15 @@
 package org.iguana.util;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.iggy.IggyParser;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
@@ -90,6 +95,20 @@ public class TestRunner {
             return;
         }
 
+        String iggyPath = testPath + "/grammar.iggy";
+        if (new File(iggyPath).exists()) {
+            try {
+                Grammar iggyGrammar = IggyParser.getGrammar(iggyPath);
+
+                if (!iggyGrammar.equals(grammar)) {
+                    error("Grammars do not match");
+                }
+            } catch (IOException e) {
+                System.out.println("Problem parsing grammar.iggy");
+                return;
+            }
+        }
+
         File testDir = new File(testPath);
         int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
 
@@ -107,8 +126,7 @@ public class TestRunner {
                 continue;
             }
 
-            Start start = grammar.getStartSymbol();
-            ParseResult result = Iguana.parse(input, grammar, start);
+            ParseResult result = Iguana.parse(input, grammar);
             if (result.isParseError()) {
                 error(result.asParseError().toString());
                 continue;

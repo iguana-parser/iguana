@@ -1,17 +1,20 @@
 package org.iguana.iggy;
 
 import iguana.utils.input.Input;
-import iguana.utils.visualization.GraphVizUtil;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.util.serialization.JsonSerializer;
-import org.iguana.util.visualization.SPPFToDot;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static iguana.utils.io.FileUtils.readFile;
@@ -28,63 +31,110 @@ public class IggyParser {
     }
 
     public static void main(String[] args) throws IOException {
-//        Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
-//        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-//        precedenceAndAssociativity.setOP2();
-//
-//        g = new EBNFToBNF().transform(g);
-//        g = precedenceAndAssociativity.transform(g);
-//        g = new LayoutWeaver().transform(g);
-//        g.getStartSymbol(Nonterminal.withName("Definition"));
-//        System.out.println(JsonSerializer.toJSON(g));
+        Grammar g = Grammar.load(new java.io.File("/Users/afroozeh/iggy"));
+        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
+        precedenceAndAssociativity.setOP2();
 
-        Grammar iggyGrammar = iggyGrammar();
-        Input input = Input.fromPath("/Users/Ali/workspace-thesis/iguana/test/grammars/basic/Test1/grammar.iggy");
-        ParseResult result = Iguana.parse(input, iggyGrammar);
-        if (result.isParseSuccess()) {
-            SPPFToDot toDot = new SPPFToDot(input);
-            toDot.visit(result.asParseSuccess().getSPPFNode());
-            GraphVizUtil.generateGraph(toDot.getString(), "/Users/Ali/workspace-thesis/sppf.pdf");
-            Grammar grammar = (Grammar) result.asParseSuccess().getParseTree(new ParseTreeBuilder<Object>() {
+        g = new EBNFToBNF().transform(g);
+        g = precedenceAndAssociativity.transform(g);
+        g = new LayoutWeaver().transform(g);
+        g = new DesugarStartSymbol().transform(g);
+        System.out.println(JsonSerializer.toJSON(g));
+    }
 
+    public static Grammar getGrammar(String path) throws IOException {
+        Input input = Input.fromPath(path);
+        ParseResult result = Iguana.parse(input, iggyGrammar());
 
-                @Override
-                public Object terminalNode(Terminal terminal, int leftExtent, int rightExtent) {
-                    return null;
-                }
-
-                @Override
-                public Object nonterminalNode(Rule rule, List<Object> children, int leftExtent, int rightExtent) {
-                    if (rule.isLayout()) return null;
-
-                    switch (rule.getHead().getName()) {
-                        case "Start_Definition":
-                            return children.get(0);
-
-                        case "Definition":
-                            Grammar.Builder builder = Grammar.builder();
-                            for (Object child : children) {
-                                if (child != null) {
-                                    builder.addRule((Rule) child);
-                                }
-                            }
-                            return builder.build();
-                    }
-                    throw new RuntimeException("Should not reach here");
-                }
-
-                @Override
-                public Object ambiguityNode(Set<Object> node) {
-                    return null;
-                }
-
-                @Override
-                public Object metaSymbolNode(Symbol symbol, List<Object> children, int leftExtent, int rightExtent) {
-                    return null;
-                }
-            });
-            System.out.println(grammar);
+        if (result.isParseError()) {
+            throw new RuntimeException("Parse error");
         }
+
+        Grammar grammar = (Grammar) result.asParseSuccess().getParseTree(new ParseTreeBuilder<Object>() {
+
+            private Start start;
+
+            @Override
+            public Object terminalNode(Terminal terminal, int leftExtent, int rightExtent) {
+                return input.subString(leftExtent, rightExtent);
+            }
+
+            @Override
+            public Object nonterminalNode(Rule rule, List<Object> children, int leftExtent, int rightExtent) {
+                if (rule.isLayout()) return null;
+
+                switch (rule.getHead().getName()) {
+
+                    case "Definition": {
+                        Grammar.Builder builder = Grammar.builder();
+                        List<Rule> rules = (List<Rule>) children.get(0);
+                        rules.forEach(r -> builder.addRule(r));
+                        return builder.setStartSymbol(start).build();
+                    }
+
+                    case "Rule":
+                        switch (rule.getLabel()) {
+
+                            case "Syntax":
+                                Nonterminal head = (Nonterminal) getByName(rule, children, "NontName");
+                                Optional<String> tag = getOption("Tag?", rule, children);
+                                if (tag.isPresent()) {
+                                    switch (tag.get()) {
+                                        case "@Start":
+                                            start = Start.from(head);
+                                            break;
+                                    }
+                                }
+                                List<Symbol> body = (List<Symbol>) getByName(rule, children, "Body");
+                                return new Rule.Builder(head).addSymbols(body).build();
+                        }
+                        break;
+
+                    case "Body":
+                        return children.get(0);
+
+                    case "NontName":
+                        return Nonterminal.withName((String) children.get(0));
+
+                    case "Identifier":
+                        return input.subString(leftExtent, rightExtent);
+
+                    case "Layout":
+                    case "WhiteSpaceOrComment":
+                        return null;
+                }
+                throw new RuntimeException("Should not reach here " + rule.getHead().getName());
+            }
+
+            @Override
+            public Object ambiguityNode(Set<Object> node) {
+                throw new RuntimeException("Grammar cannot be ambiguous");
+            }
+
+            @Override
+            public Object metaSymbolNode(Symbol symbol, List<Object> children, int leftExtent, int rightExtent) {
+                if (symbol instanceof Start) {
+                    return children.get(1);
+                }
+                return children;
+            }
+
+            private Optional<String> getOption(String name, Rule rule, List<Object> children) {
+                List<String> values = (List<String>) getByName(rule, children, name);
+                if (values.size() == 0) return Optional.empty();
+                if (values.size() == 1) return Optional.of(values.get(0));
+                throw new RuntimeException("There are more than one values for an optional symbol");
+            }
+        });
+
+        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
+        precedenceAndAssociativity.setOP2();
+//        grammar = precedenceAndAssociativity.transform(grammar);
+
+        grammar = new EBNFToBNF().transform(grammar);
+        grammar = new LayoutWeaver().transform(grammar);
+        grammar = new DesugarStartSymbol().transform(grammar);
+        return grammar;
     }
 
 }

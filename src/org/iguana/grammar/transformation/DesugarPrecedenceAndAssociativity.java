@@ -751,7 +751,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		for (Rule rule :grammar.getRules())
 			rules.add(transform(rule));
 		
-		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
+		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).setStartSymbol(grammar.getStartSymbol()).build();
 	}
 	
 	public Rule transform(Rule rule) {
@@ -2321,7 +2321,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					break;
 			}
-			return builder.build();
+			return builder.setDefinition(rule.getDefinition()).build();
 		}
 		
 		@Override

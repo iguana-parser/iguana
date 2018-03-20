@@ -37,6 +37,7 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
@@ -127,7 +128,7 @@ public class Iguana {
 
         return parseResult;
     }
-	
+
 	public static ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
 		return parse(input, grammarGraph, Configuration.load(), startSymbol, Collections.emptyMap(), true);
 	}
@@ -141,19 +142,6 @@ public class Iguana {
 	        throw new IllegalArgumentException("No start symbol defined in the grammar");
 
         return parse(input, GrammarGraph.from(grammar, input, Configuration.load()), Nonterminal.withName(grammar.getStartSymbol().getName()));
-    }
-
-    public static ParseResult parse(Input input, Grammar grammar, Start startSymbol) {
-	    return parse(input, grammar, Configuration.DEFAULT, startSymbol);
-    }
-
-    public static ParseResult parse(Input input, Grammar grammar, Configuration config, Start startSymbol) {
-	    if (!startSymbol.equals(grammar.getStartSymbol())) {
-            Grammar.Builder builder = new Grammar.Builder(grammar);
-            builder.setStartSymbol(startSymbol);
-            grammar = builder.build();
-        }
-        return parse(input, GrammarGraph.from(grammar, input, config), Nonterminal.withName(startSymbol.getName()));
     }
 
     public static ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol) {

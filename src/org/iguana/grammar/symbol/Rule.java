@@ -394,7 +394,6 @@ public class Rule implements Serializable {
         }
 
         public Builder setLayout(Nonterminal layout) {
-            this.layoutStrategy = LayoutStrategy.FIXED;
             this.layout = layout;
             return this;
         }

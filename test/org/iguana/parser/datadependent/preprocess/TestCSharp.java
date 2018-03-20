@@ -64,7 +64,7 @@ public class TestCSharp {
 	@Test
 	public void test1() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test1.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar);
 		System.out.println(result);
 		
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
@@ -85,7 +85,7 @@ public class TestCSharp {
 	@Test
 	public void test2() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test2.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar);
 		System.out.println(result);
 
 		Map<String, NonterminalNode> nodes = new HashMap<>();
@@ -106,7 +106,7 @@ public class TestCSharp {
 	@Test
 	public void test3() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test7.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start);
+		ParseResult result = Iguana.parse(input, grammar);
 		System.out.println(result);
 		
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
