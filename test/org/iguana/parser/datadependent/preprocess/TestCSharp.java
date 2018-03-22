@@ -75,7 +75,7 @@ public class TestCSharp {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getSPPFNode());
+//		}).visit(result.asParseSuccess().getResult());
 		
 
 		assertTrue(result.isParseSuccess());
@@ -96,7 +96,7 @@ public class TestCSharp {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getSPPFNode());
+//		}).visit(result.asParseSuccess().getResult());
 		
 
 		assertTrue(result.isParseSuccess());
@@ -117,7 +117,7 @@ public class TestCSharp {
 //				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getSPPFNode());
+//		}).visit(result.asParseSuccess().getResult());
 		
 
 		assertTrue(result.isParseSuccess());

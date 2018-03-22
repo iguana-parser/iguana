@@ -38,8 +38,9 @@ public class TestRunner {
 
     public static void run(String rootDir) {
         Iterable<String> tests = getTests(rootDir);
-        for (String testDir : tests)
-            runTest(testDir);
+        for (String testDir : tests) {
+            runRecognizer(testDir);
+        }
     }
 
     public static void record(Grammar grammar, Input input, int number, String dir) {
@@ -66,14 +67,79 @@ public class TestRunner {
             String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
             FileUtils.writeFile(jsonStatistics, dir + "/statistics" + number + ".json");
 
-            String jsonSPPF = SPPFJsonSerializer.serialize(result.asParseSuccess().getSPPFNode());
+            String jsonSPPF = SPPFJsonSerializer.serialize((NonterminalNode) result.asParseSuccess().getResult());
             FileUtils.writeFile(jsonSPPF, dir + "/sppf" + number + ".json");
 
-            String jsonTree = JsonSerializer.toJSON(result.asParseSuccess().getParseTree());
+            ParseTreeNode parseTree = SPPFToParseTree.toParseTree((NonterminalNode) result, new DefaultParseTreeBuilder());
+            String jsonTree = JsonSerializer.toJSON(parseTree);
             FileUtils.writeFile(jsonTree, dir + "/parsetree" + number + ".json");
         } catch (IOException | CyclicGrammarException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void runRecognizer(String testPath) {
+        Path path = Paths.get(testPath);
+        Path testName = path.getFileName();
+        System.out.println("Running " + testName);
+
+        String grammarPath = testPath + "/grammar.json";
+
+        Grammar grammar;
+        try {
+            grammar = Grammar.load(grammarPath, "json");
+        } catch (FileNotFoundException e) {
+            System.out.println("No grammar.json file is present");
+            return;
+        }
+
+        String iggyPath = testPath + "/grammar.iggy";
+        if (new File(iggyPath).exists()) {
+            try {
+                Grammar iggyGrammar = IggyParser.getGrammar(iggyPath);
+
+                if (!iggyGrammar.equals(grammar)) {
+                    error("Grammars do not match");
+                }
+            } catch (IOException e) {
+                System.out.println("Problem parsing grammar.iggy");
+                return;
+            }
+        }
+
+        File testDir = new File(testPath);
+        int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
+
+        for (int i = 1; i <= size; i++) {
+            System.out.print("Input" + i);
+            String inputPath = testPath + "/input" + i + ".txt";
+            Input input;
+            try {
+                input = Input.fromPath(inputPath);
+            } catch (FileNotFoundException e) {
+                System.out.println("Input file not found");
+                continue;
+            } catch (IOException e) {
+                System.out.println("An error occurred while reading from " + inputPath);
+                continue;
+            }
+
+            ParseResult<Integer> result = Iguana.recognize(input, grammar);
+            if (result.isParseError()) {
+                error(result.asParseError().toString());
+                continue;
+            }
+
+            if (result.asParseSuccess().getResult() != input.length() - 1) {
+                error("Recognition error");
+                continue;
+            }
+
+            if (!checkParseStatistics(testPath, i, result.asParseSuccess().getStatistics())) continue;
+
+            success();
+        }
+        System.out.println();
     }
 
     public static void runTest(String testPath) {
@@ -128,19 +194,7 @@ public class TestRunner {
                 continue;
             }
 
-            ParseStatistics statistics = result.asParseSuccess().getStatistics();
-            String statisticsPath = testPath + "/statistics" + i + ".json";
-            try {
-                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
-                if (!expectedStatistics.equals(statistics)) {
-                    error("Parse results do not match");
-                    continue;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("An error occurred while reading from " + statisticsPath);
-                continue;
-            }
+            if (!checkParseStatistics(testPath, i, result.asParseSuccess().getStatistics())) continue;
 
             String sppfPath = testPath + "/sppf" + i + ".json";
             NonterminalNode expectedSPPFNode;
@@ -152,14 +206,14 @@ public class TestRunner {
                 continue;
             }
 
-            if (!equals(expectedSPPFNode, result.asParseSuccess().getSPPFNode())) {
+            if (!equals(expectedSPPFNode, (NonterminalNode) result.asParseSuccess().getResult())) {
                 error("SPPF nodes do not match");
                 continue;
             }
 
             ParseTreeNode actualParseTree;
             try {
-                actualParseTree = SPPFToParseTree.toParseTree(result.asParseSuccess().getSPPFNode(), new DefaultParseTreeBuilder());
+                actualParseTree = SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
             } catch (CyclicGrammarException e) {
                 success();
                 continue;
@@ -181,6 +235,22 @@ public class TestRunner {
             success();
         }
         System.out.println();
+    }
+
+    private static boolean checkParseStatistics(String testPath, int i, ParseStatistics statistics) {
+        String statisticsPath = testPath + "/statistics" + i + ".json";
+        try {
+            ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
+            if (!expectedStatistics.equals(statistics)) {
+                error("Parse results do not match");
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("An error occurred while reading from " + statisticsPath);
+            return false;
+        }
+        return true;
     }
 
     private static void error(String message) {

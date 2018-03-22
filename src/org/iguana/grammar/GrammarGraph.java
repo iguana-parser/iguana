@@ -243,7 +243,7 @@ public class GrammarGraph<T> implements Serializable {
             rule2graph.nextSymbol();
     }
 
-    public ParserRuntime getRuntime() {
+    public ParserRuntime<T> getRuntime() {
         return runtime;
     }
 
@@ -519,4 +519,7 @@ public class GrammarGraph<T> implements Serializable {
         return ConditionsFactory.getConditions(conditions, matcherFactory);
     }
 
+    public ResultOps<T> getResultOps() {
+        return ops;
+    }
 }

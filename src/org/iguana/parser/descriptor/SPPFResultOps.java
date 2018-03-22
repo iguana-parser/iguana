@@ -9,6 +9,8 @@ import org.iguana.util.ParserLogger;
 
 public class SPPFResultOps implements ResultOps<NonPackedNode> {
 
+    private ParserLogger logger = ParserLogger.getInstance();
+
     @Override
     public NonPackedNode dummy(int index) {
         return new DummyNode(index);
@@ -17,7 +19,8 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
     @Override
     public NonPackedNode base(TerminalGrammarSlot slot, int start, int end) {
         TerminalNode node = new TerminalNode(slot, start, end);
-        ParserLogger.getInstance().terminalNodeAdded(node);
+        logger.terminalNodeAdded();
+        logger.log("Terminal node added %s", node);
         return node;
     }
 
@@ -30,14 +33,18 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
         packedNode.setLeftChild(result1);
         packedNode.setRightChild(result2);
 
-        ParserLogger.getInstance().packedNodeAdded(packedNode);
+        logger.packedNodeAdded();
+        logger.log("Packed node added %s", packedNode);
 
         if (current == null) {
             current = new IntermediateNode();
-            ParserLogger.getInstance().intermediateNodeAdded((IntermediateNode) current);
+            logger.intermediateNodeAdded();
+            logger.log("Intermediate node added %s", current);
         } else {
-            if (current.getChildren().size() == 1)
-                ParserLogger.getInstance().ambiguousNodeAdded((NonterminalOrIntermediateNode<?>) current);
+            if (current.getChildren().size() == 1) {
+                logger.ambiguousNodeAdded();
+                logger.log("Ambiguous node added: %s", current);
+            }
         }
 
         ((IntermediateNode) current).addPackedNode(packedNode);
@@ -49,7 +56,8 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
         PackedNode packedNode = new PackedNode(slot);
         packedNode.setLeftChild(result);
 
-        ParserLogger.getInstance().packedNodeAdded(packedNode);
+        logger.packedNodeAdded();
+        logger.log("Packed node added %s", packedNode);
 
         if (current == null) {
             if (value == null)
@@ -57,10 +65,13 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
             else
                 current = new NonterminalNodeWithValue(slot.getNonterminal(), value);
 
-            ParserLogger.getInstance().nonterminalNodeAdded((NonterminalNode) current);
+            logger.nonterminalNodeAdded();
+            logger.log("Nonterminal node added %s", current);
         } else {
-            if (current.getChildren().size() == 1)
-                ParserLogger.getInstance().ambiguousNodeAdded((NonterminalOrIntermediateNode<?>) current);
+            if (current.getChildren().size() == 1) {
+                ParserLogger.getInstance().ambiguousNodeAdded();
+                logger.log("Ambiguous node added: %s", current);
+            }
         }
 
         ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);

@@ -35,7 +35,6 @@ import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.ParserLogger;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ import java.util.List;
  */
 public class GSSNode<T> {
 	
-	protected final NonterminalGrammarSlot slot;
+	protected final NonterminalGrammarSlot<T> slot;
 
 	private final int inputIndex;
 	
@@ -99,7 +98,7 @@ public class GSSNode<T> {
 
             if (!edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(node)))) continue;
 
-            Descriptor descriptor = edge.addDescriptor(input, this, node);
+            Descriptor<T> descriptor = edge.addDescriptor(input, this, node);
             if (descriptor != null) {
                 slot.getRuntime().scheduleDescriptor(descriptor);
             }
