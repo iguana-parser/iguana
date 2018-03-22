@@ -81,7 +81,7 @@
 ////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 ////				nodes.put(yield, n);
 ////			}
-////		}).visit(result.asParseSuccess().getSPPFNode());
+////		}).visit(result.asParseSuccess().getResult());
 ////
 ////		assertEquals(expected, nodes.keySet());
 //	}
@@ -115,7 +115,7 @@
 ////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 ////				nodes.put(yield, n);
 ////			}
-////		}).visit(result.asParseSuccess().getSPPFNode());
+////		}).visit(result.asParseSuccess().getResult());
 ////
 ////		assertEquals(expected, nodes.keySet());
 //	}
@@ -149,7 +149,7 @@
 ////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 ////				nodes.put(yield, n);
 ////			}
-////		}).visit(result.asParseSuccess().getSPPFNode());
+////		}).visit(result.asParseSuccess().getResult());
 ////
 ////		assertEquals(expected, nodes.keySet());
 //	}
@@ -183,7 +183,7 @@
 ////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
 ////				nodes.put(yield, n);
 ////			}
-////		}).visit(result.asParseSuccess().getSPPFNode());
+////		}).visit(result.asParseSuccess().getResult());
 ////
 ////		assertEquals(expected, nodes.keySet());
 //	}

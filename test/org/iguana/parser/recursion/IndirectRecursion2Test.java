@@ -82,7 +82,7 @@ public class IndirectRecursion2Test {
 		Input input = Input.fromString("ad");
 		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
-//		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(expectedSPPF(parser.getGrammarGraph())));
+//		assertTrue(result.asParseSuccess().getResult().deepEquals(expectedSPPF(parser.getGrammarGraph())));
 	}
 	
 	//TODO: fix it

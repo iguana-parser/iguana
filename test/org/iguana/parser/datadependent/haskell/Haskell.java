@@ -1012,7 +1012,7 @@
 //
 //         Assert.assertTrue(result.isParseSuccess());
 //
-////         SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getSPPFNode());
+////         SelectedFiles.getVisitor(input).visit(result.asParseSuccess().getResult());
 //
 //         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
 //    }

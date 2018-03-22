@@ -53,38 +53,24 @@ public class ParserLogger {
         countGSSEdges = 0;
     }
 
-    public void terminalNodeAdded(TerminalNode node) {
+    public void terminalNodeAdded() {
         countTerminalNodes++;
-        logger.log("Terminal node added %s", node);
     }
 
-    public void nonterminalNodeAdded(NonterminalNode node) {
+    public void nonterminalNodeAdded() {
         countNonterminalNodes++;
-        logger.log("Nonterminal node added %s", node);
     }
 
-    public void intermediateNodeAdded(IntermediateNode node) {
+    public void intermediateNodeAdded() {
         countIntermediateNodes++;
-        logger.log("Intermediate node added %s", node);
     }
 
-    public void packedNodeAdded(PackedNode packedNode) {
+    public void packedNodeAdded() {
         countPackedNodes++;
-        logger.log("Packed node added %s", packedNode);
     }
 
-    public void ambiguousNodeAdded(NonterminalOrIntermediateNode<?> node) {
+    public void ambiguousNodeAdded() {
         countAmbiguousNodes++;
-        logger.log("Ambiguous node added: %s", node);
-//		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
-//		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
-//		for (PackedNode packedNode : node.getChildren()) {
-//			System.out.println("   Packed node: " + packedNode.toString());
-//			for (org.iguana.sppf.NonPackedNode first : packedNode.getChildren()) {
-//				System.out.println(String.format("       %s %s", first, input.getNodeInfo(first)));
-//			}
-//		}
-//		System.exit(0);
     }
 
     public void gssNodeAdded(GSSNode node) {

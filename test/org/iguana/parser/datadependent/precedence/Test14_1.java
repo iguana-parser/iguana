@@ -54,9 +54,9 @@ Grammar.builder()
          Assert.assertTrue(result.isParseSuccess());
          
 //         Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-//                 result.asParseSuccess().getSPPFNode(), input);
+//                 result.asParseSuccess().getResult(), input);
 //
-//         NonterminalNode node = result.asParseSuccess().getSPPFNode();
+//         NonterminalNode node = result.asParseSuccess().getResult();
 //         boolean hasAmbiguousIntermediateNode = false;
 //         for (PackedNode pnode : node.getChildren().get(0).getChildAt(0).getChildren()) {
 //        	 NonPackedNode first = pnode.getChildAt(0);

@@ -10,6 +10,9 @@ import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parsetree.ParseTreeBuilder;
+import org.iguana.parsetree.SPPFToParseTree;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.IOException;
@@ -44,13 +47,15 @@ public class IggyParser {
 
     public static Grammar getGrammar(String path) throws IOException {
         Input input = Input.fromPath(path);
-        ParseResult result = Iguana.parse(input, iggyGrammar());
+        ParseResult<NonPackedNode> parseResult = Iguana.parse(input, iggyGrammar());
 
-        if (result.isParseError()) {
+        if (parseResult.isParseError()) {
             throw new RuntimeException("Parse error");
         }
 
-        Grammar grammar = (Grammar) result.asParseSuccess().getParseTree(new ParseTreeBuilder<Object>() {
+        NonterminalNode result = (NonterminalNode) parseResult.asParseSuccess().getResult();
+
+        Grammar grammar = (Grammar) SPPFToParseTree.toParseTree(result, new ParseTreeBuilder<Object>() {
 
             private Start start;
 

@@ -100,7 +100,7 @@ public class Test1 {
 		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
 		
 		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-		// 		result.asParseSuccess().getSPPFNode(), input);
+		// 		result.asParseSuccess().getResult(), input);
 		
 		Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
 		

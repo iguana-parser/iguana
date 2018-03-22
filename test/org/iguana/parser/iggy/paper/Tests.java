@@ -2,7 +2,6 @@ package org.iguana.parser.iggy.paper;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.DesugarAlignAndOffside;
@@ -13,7 +12,6 @@ import org.iguana.iggy.InlineRegex;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +61,7 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 
-        return getGrammar(result.asParseSuccess().getSPPFNode(), input);
+        return getGrammar((NonterminalNode) result.asParseSuccess().getResult(), input);
     }
 
     @Test
@@ -94,7 +92,7 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 
-        return getGrammar(result.asParseSuccess().getSPPFNode(), input);
+        return getGrammar((NonterminalNode) result.asParseSuccess().getResult(), input);
     }
 
     @Test
@@ -121,7 +119,7 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 
-        return getGrammar(result.asParseSuccess().getSPPFNode(), input);
+        return getGrammar((NonterminalNode) result.asParseSuccess().getResult(), input);
     }
 
     @Test
@@ -152,7 +150,7 @@ public class Tests {
         Assert.assertTrue(result.isParseSuccess());
         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
 
-        return getGrammar(result.asParseSuccess().getSPPFNode(), input);
+        return getGrammar((NonterminalNode) result.asParseSuccess().getResult(), input);
     }
 
     private static Grammar getGrammar(NonterminalNode sppf, Input input) {

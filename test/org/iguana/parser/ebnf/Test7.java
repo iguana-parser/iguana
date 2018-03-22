@@ -74,7 +74,6 @@ public class Test7 {
         assertTrue(result.isParseSuccess());
         GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new SPPFResultOps());
         assertEquals(getParseResult1(graph), result);
-        result.asParseSuccess().getParseTree();
     }
 
     @Test

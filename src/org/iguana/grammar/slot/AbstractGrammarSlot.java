@@ -38,13 +38,13 @@ public abstract class AbstractGrammarSlot<T> implements GrammarSlot<T> {
 
 	protected final List<Transition<T>> transitions;
 
-    protected final ParserRuntime runtime;
+    protected final ParserRuntime<T> runtime;
 	
-	public AbstractGrammarSlot(ParserRuntime runtime) {
+	public AbstractGrammarSlot(ParserRuntime<T> runtime) {
 		this(runtime, Collections.emptyList());
 	}
 	
-	public AbstractGrammarSlot(ParserRuntime runtime, List<Transition<T>> transitions) {
+	public AbstractGrammarSlot(ParserRuntime<T> runtime, List<Transition<T>> transitions) {
         this.runtime = runtime;
 		this.transitions = new ArrayList<>(transitions);
 	}
@@ -60,7 +60,7 @@ public abstract class AbstractGrammarSlot<T> implements GrammarSlot<T> {
 	}
 
     @Override
-    public ParserRuntime getRuntime() {
+    public ParserRuntime<T> getRuntime() {
         return runtime;
     }
 

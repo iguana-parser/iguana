@@ -29,7 +29,7 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 
-public interface ParseResult {
+public interface ParseResult<T> {
 	
 	boolean isParseError();
 	
@@ -37,7 +37,7 @@ public interface ParseResult {
 	
 	ParseError asParseError();
 	
-	ParseSuccess asParseSuccess();
+	ParseSuccess<T> asParseSuccess();
 	
 	Input getInput();
 }

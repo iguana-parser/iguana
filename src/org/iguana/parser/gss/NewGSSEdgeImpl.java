@@ -34,7 +34,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
-import org.iguana.sppf.NonPackedNode;
 
 public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	

@@ -27,17 +27,13 @@
 
 package org.iguana.parser.gss.lookup;
 
-import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static iguana.utils.collections.CollectionsUtil.concat;
 import static java.util.Arrays.asList;

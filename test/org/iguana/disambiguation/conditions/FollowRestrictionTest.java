@@ -124,7 +124,7 @@ public class FollowRestrictionTest {
             Input input = Input.fromString("aasb");
             ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
             assertTrue(result.isParseSuccess());
-    //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
+    //		assertTrue(result.asParseSuccess().getResult().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
         }
 
     //	private SPPFNode getExpectedSPPF(GrammarGraph registry) {
