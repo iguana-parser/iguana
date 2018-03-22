@@ -98,12 +98,9 @@ public class Test3 {
 	
 	@Test
 	public void test() {
-		System.out.println(grammar);
-		
 		Input input = Input.fromString("abc");
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 	}
 
 }

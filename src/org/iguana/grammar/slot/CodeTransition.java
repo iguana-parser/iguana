@@ -31,27 +31,28 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.NonPackedNode;
 
 import static iguana.utils.string.StringUtil.listToString;
 
-public class CodeTransition extends AbstractTransition {
+public class CodeTransition<T> extends AbstractTransition<T> {
 	
 	private final Statement[] statements;
 
-	public CodeTransition(Statement[] statements, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public CodeTransition(Statement[] statements, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime, ResultOps<T> ops) {
+		super(origin, dest, runtime, ops);
 		this.statements = statements;
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
+	public void execute(Input input, GSSNode<T> u, T result) {
 		runtime.evaluate(statements, runtime.getEmptyEnvironment());
 		if (runtime.getEnvironment().isEmpty())
-			dest.execute(input, u, node);
+			dest.execute(input, u, result);
 		else
-			dest.execute(input, u, node, runtime.getEnvironment());
+			dest.execute(input, u, result, runtime.getEnvironment());
 	}
 	
 	/**
@@ -60,9 +61,9 @@ public class CodeTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
 		runtime.evaluate(statements, env);
-		dest.execute(input, u, node, runtime.getEnvironment());
+		dest.execute(input, u, result, runtime.getEnvironment());
 	}
 
 	@Override

@@ -54,40 +54,35 @@ public class Test9 {
     @Test
     public void testParse0() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input0);
-        ParseResult result = Iguana.parse(input0, graph, S);
+        ParseResult result = Iguana.parse(input0, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse1() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1);
-        ParseResult result = Iguana.parse(input1, graph, S);
+        ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse2() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input2);
-        ParseResult result = Iguana.parse(input2, graph, S);
+        ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse3() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input3);
-        ParseResult result = Iguana.parse(input3, graph, S);
+        ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse4() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input4);
-        ParseResult result = Iguana.parse(input4, graph, S);
+        ParseResult result = Iguana.parse(input4, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 

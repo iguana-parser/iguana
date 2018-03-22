@@ -99,7 +99,7 @@ public class Gamma1Test {
 	@Test
 	public void testSPPF() {
 		Input input = Input.fromString("aad");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}

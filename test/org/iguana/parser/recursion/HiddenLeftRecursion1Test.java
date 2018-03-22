@@ -87,7 +87,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test1() {
 		Input input = Input.fromString("xca");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode1(parser.getGrammarGraph())));
 	}
@@ -95,7 +95,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test2() {
 		Input input = Input.fromString("ycb");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode2(parser.getGrammarGraph())));
 	}
@@ -103,7 +103,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test3() {
 		Input input = Input.fromString("cababaab");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode3(parser.getGrammarGraph())));
 	}
@@ -111,7 +111,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test4() {
 		Input input = Input.fromString("xcabbbbb");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode4(parser.getGrammarGraph())));
 	}
@@ -119,7 +119,7 @@ public class HiddenLeftRecursion1Test {
 	@Test
 	public void test5() {
 		Input input = Input.fromString("ycaaaabaaaa");
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("A"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 		assertTrue(result.isParseSuccess());
 //		assertTrue(result.asParseSuccess().getSPPFNode().deepEquals(getSPPFNode5(parser.getGrammarGraph())));
 	}

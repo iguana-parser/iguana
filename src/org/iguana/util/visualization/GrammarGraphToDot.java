@@ -39,18 +39,18 @@ import static iguana.utils.visualization.GraphVizUtil.*;
 
 public class GrammarGraphToDot {
 
-	public static String toDot(GrammarGraph g) {
+	public static String toDot(GrammarGraph<?> g) {
 		ids.clear();
 		final StringBuilder sb = new StringBuilder();
 		
-		for (NonterminalGrammarSlot nonterminal : g.getNonterminals()) {
+		for (NonterminalGrammarSlot<?> nonterminal : g.getNonterminals()) {
 			toDot(nonterminal, sb);
 		}
 		
 		return sb.toString();
 	}
 	
-	private static void toDot(NonterminalGrammarSlot slot, StringBuilder sb) {
+	private static void toDot(NonterminalGrammarSlot<?> slot, StringBuilder sb) {
 		sb.append("\"" + getId(slot) + "\"" + String.format(NONTERMINAL_SLOT,
 				escape(slot.getNonterminal().getParameters() != null? 
 						String.format("%s(%s)", slot.getNonterminal().getName(), listToString(slot.getNonterminal().getParameters(), ","))
@@ -60,7 +60,7 @@ public class GrammarGraphToDot {
 		slot.getFirstSlots().forEach(s -> toDot(s, sb));
 	}
 	
-	private static void toDot(GrammarSlot slot, StringBuilder sb) {
+	private static void toDot(GrammarSlot<?> slot, StringBuilder sb) {
 		if (slot instanceof EndGrammarSlot) {
 			sb.append("\"" + getId(slot) + "\"" + String.format(END_SLOT, "") + "\n");
 		} else {

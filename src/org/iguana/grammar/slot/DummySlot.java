@@ -42,7 +42,7 @@ public class DummySlot extends BodyGrammarSlot {
 	}
 	
 	private DummySlot() {
-		super(null, null, null, null, null, null);
+		super(null, null, null, null, null, null, null);
 	}
 
 	@Override

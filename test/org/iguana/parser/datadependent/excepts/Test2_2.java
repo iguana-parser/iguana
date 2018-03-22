@@ -36,6 +36,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.parser.descriptor.SPPFResultOps;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
@@ -73,16 +74,11 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("+a^a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
+         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT, new SPPFResultOps());
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/excepts/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
-
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/excepts/",
-         //                   result.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }

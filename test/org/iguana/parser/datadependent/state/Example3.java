@@ -56,7 +56,6 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("a;aa;aa;aa;a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
          Map<String, Object> inits = new HashMap<>();
          inits.put("x", 0);
@@ -71,7 +70,7 @@ Grammar.builder()
         	 }
          }
          
-         ParseResult result = Iguana.parse(input, graph, Configuration.DEFAULT, start, inits, false);
+         ParseResult result = Iguana.parse(input, grammar, start, Configuration.DEFAULT, inits, false);
 
          Assert.assertTrue(result.isParseSuccess());
 

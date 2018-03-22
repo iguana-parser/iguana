@@ -44,8 +44,7 @@ public class Tests {
     public void simple() throws IOException {
         Grammar grammar = simpleGrammar();
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/Simple.txt"));
-        GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-        ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("A"));
+        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("A"));
 
         if (result.isParseError())
             System.out.println(result.asParseError());
@@ -103,7 +102,6 @@ public class Tests {
         Grammar grammar = transform(ocamlGrammar());
         Start start = Start.from(Nonterminal.withName("start"));
         Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/paper/inputs/OCaml.txt"));
-        GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input, grammar);
 
         if (result.isParseError())

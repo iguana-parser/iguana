@@ -35,29 +35,29 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Tuple;
 
-public class EpsilonTransition extends AbstractTransition {
+public class EpsilonTransition<T> extends AbstractTransition<T> {
 	
 	private final Type type;
-	private final String label;
-	private final Conditions conditions;
+    private final String label;
+    private final Conditions conditions;
 
-	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		this(Type.DUMMY, conditions, origin, dest, runtime);
+	public EpsilonTransition(Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+		this(Type.DUMMY, conditions, origin, dest, runtime, ops);
 	}
 	
-	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+		super(origin, dest, runtime, ops);
 		this.type = type;
-		this.label = null;
-		this.conditions = conditions;
-	}
+        this.label = null;
+        this.conditions = conditions;
+    }
 	
-	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+		super(origin, dest, runtime, ops);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
 		
@@ -67,8 +67,8 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-        int i = node.getRightExtent();
+	public void execute(Input input, GSSNode<T> u, T result) {
+        int i = ops.getRightIndex(result);
 		switch(type) {
             case DUMMY:
                 if (conditions.execute(input, u, i))
@@ -85,7 +85,7 @@ public class EpsilonTransition extends AbstractTransition {
                 runtime.setEnvironment(runtime.getEmptyEnvironment());
                 runtime.getEvaluatorContext().pushEnvironment();
 
-                dest.execute(input, u, node, runtime.getEnvironment());
+                dest.execute(input, u, result, runtime.getEnvironment());
                 return;
 
             case CLOSE:
@@ -103,7 +103,7 @@ public class EpsilonTransition extends AbstractTransition {
                 if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
                     return;
 
-                dest.execute(input, u, node, runtime.getEnvironment());
+                dest.execute(input, u, result, runtime.getEnvironment());
                 return;
 
             case STORE_LABEL:
@@ -124,11 +124,11 @@ public class EpsilonTransition extends AbstractTransition {
                 if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
                     return;
 
-                dest.execute(input, u, node, runtime.getEnvironment());
+                dest.execute(input, u, result, runtime.getEnvironment());
                 return;
         }
 		
-		dest.execute(input, u, node);
+		dest.execute(input, u, result);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class EpsilonTransition extends AbstractTransition {
 		case DECLARE_LABEL:
 			return label + ".lExt " + conditions;
 		case DUMMY:
-			return conditions.equals("") ? String.valueOf('\u2205') : conditions.toString();
+			return conditions.toString().equals("") ? String.valueOf('\u2205') : conditions.toString();
 		case OPEN:
 			return conditions + " {";
 		case STORE_LABEL:
@@ -151,9 +151,9 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
 
-        int i = node.getRightExtent();
+        int i = ops.getRightIndex(result);
 
 		runtime.setEnvironment(env);
 		
@@ -205,7 +205,7 @@ public class EpsilonTransition extends AbstractTransition {
                 break;
             }
 		
-		dest.execute(input, u, node, runtime.getEnvironment());
+		dest.execute(input, u, result, runtime.getEnvironment());
 	}
 
 	public static enum Type {

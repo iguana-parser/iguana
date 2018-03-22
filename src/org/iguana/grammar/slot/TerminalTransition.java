@@ -32,30 +32,28 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.TerminalNode;
 
+public class TerminalTransition<T> extends AbstractTransition<T> {
 
-public class TerminalTransition extends AbstractTransition {
-
-    protected final TerminalGrammarSlot slot;
+    protected final TerminalGrammarSlot<T> slot;
 	
 	private final Conditions preConditions;
 	
 	private final Conditions postConditions;
 
-    public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest,
-                              Conditions preConditions, Conditions postConditions, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public TerminalTransition(TerminalGrammarSlot<T> slot, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
+							  Conditions preConditions, Conditions postConditions, ParserRuntime runtime, ResultOps<T> ops) {
+		super(origin, dest, runtime, ops);
         this.slot = slot;
         this.preConditions = preConditions;
         this.postConditions = postConditions;
-    }
+	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-		int i = node.getRightExtent();
+	public void execute(Input input, GSSNode<T> u, T node) {
+		int i = ops.getRightIndex(node);
 
 		if (dest.getLabel() != null) {
             execute(input, u, node, runtime.getEmptyEnvironment());
@@ -65,19 +63,19 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, u, i))
 			return;
 			
-		TerminalNode cr = slot.getTerminalNode(input, i);
+		T cr = slot.getResult(input, i);
 		
 		if (cr == null) {
 			runtime.recordParseError(input, i, origin, u);
 			return;			
 		}
 
-		int rightExtent = cr.getRightExtent();
+		int rightExtent = ops.getRightIndex(cr);
 			
 		if (postConditions.execute(input, u, rightExtent))
 			return;
 			
-		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
+		T n = dest.isFirst() ? cr : ops.merge(null, node, cr, dest);
 				
 		dest.execute(input, u, n);
 	}
@@ -97,9 +95,9 @@ public class TerminalTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
 
-        int i = node.getRightExtent();
+        int i = ops.getRightIndex(node);
 
 		runtime.setEnvironment(env);
 		
@@ -109,7 +107,7 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
 			return;
 		
-		TerminalNode cr = slot.getTerminalNode(input, i);
+		T cr = slot.getResult(input, i);
 		
 		if (cr == null) {
 			runtime.recordParseError(input, i, origin, u);
@@ -119,10 +117,10 @@ public class TerminalTransition extends AbstractTransition {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, cr.getRightExtent(), runtime.getEvaluatorContext()))
+		if (postConditions.execute(input, u, ops.getRightIndex(cr), runtime.getEvaluatorContext()))
 			return;
 		
-		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
+		T n = dest.isFirst() ? cr : ops.merge(null, node, cr, dest);
 				
 		dest.execute(input, u, n, runtime.getEnvironment());
 	}

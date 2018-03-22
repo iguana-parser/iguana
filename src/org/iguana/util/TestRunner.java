@@ -1,17 +1,13 @@
 package org.iguana.util;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.grammar.transformation.DesugarStartSymbol;
-import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.iggy.IggyParser;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
+import org.iguana.parser.descriptor.SPPFResultOps;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
@@ -149,7 +145,7 @@ public class TestRunner {
             String sppfPath = testPath + "/sppf" + i + ".json";
             NonterminalNode expectedSPPFNode;
             try {
-                GrammarGraph grammarGraph = GrammarGraph.from(grammar, input);
+                GrammarGraph grammarGraph = GrammarGraph.from(grammar, input, new SPPFResultOps());
                 expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), grammarGraph);
             } catch (IOException e) {
                 error("Cannot deserialize SPPF");

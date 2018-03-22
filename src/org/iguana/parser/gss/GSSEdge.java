@@ -32,9 +32,9 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.sppf.NonPackedNode;
 
-public interface GSSEdge {
+public interface GSSEdge<T> {
 
-	NonPackedNode getNode();
+	T getResult();
 
 	BodyGrammarSlot getReturnSlot();
 
@@ -49,6 +49,6 @@ public interface GSSEdge {
 	 * (2.2) if no, creates one and returns it
 	 * 
 	 */
-	Descriptor addDescriptor(Input input, GSSNode source, NonPackedNode sppfNode);
+	Descriptor addDescriptor(Input input, GSSNode<T> source, T result);
 
 }

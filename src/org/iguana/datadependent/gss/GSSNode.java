@@ -29,14 +29,15 @@ package org.iguana.datadependent.gss;
 
 import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNodeData;
 
-public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
+public class GSSNode<T, V> extends org.iguana.parser.gss.GSSNode<T> {
 	
-	private final GSSNodeData<T> data;
+	private final GSSNodeData<V> data;
 
-	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, GSSNodeData<T> data) {
-		super(slot, inputIndex);
+	public GSSNode(NonterminalGrammarSlot<T> slot, int inputIndex, GSSNodeData<V> data, ResultOps<T> ops) {
+		super(slot, inputIndex, ops);
 		this.data = data;
 	}
 	
@@ -44,16 +45,16 @@ public class GSSNode<T> extends org.iguana.parser.gss.GSSNode {
 	public boolean equals(Object other) {
 		if (this == other) return true;
 		
-		if (!(other instanceof GSSNode<?>)) return false;
+		if (!(other instanceof GSSNode<?,?>)) return false;
 		
-		GSSNode<?> that = (GSSNode<?>) other;
+		GSSNode<?,?> that = (GSSNode<?,?>) other;
 		
 		return getGrammarSlot() == that.getGrammarSlot() 
 				&& getInputIndex() == that.getInputIndex()
 				&& data.equals(that.data);
 	}
 	
-	public GSSNodeData<T> getData() {
+	public GSSNodeData<V> getData() {
 		return data;
 	}
 	

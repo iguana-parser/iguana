@@ -32,22 +32,22 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
-public class ConditionalTransition extends AbstractTransition {
+public class ConditionalTransition<T> extends AbstractTransition<T> {
 	
 	private final Expression condition;
 	
-	private final BodyGrammarSlot ifFalse;
+	private final BodyGrammarSlot<T> ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		this(condition, origin, dest, null, runtime);
+	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+		this(condition, origin, dest, null, runtime, ops);
 	}
 	
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest,
-                                 BodyGrammarSlot ifFalse, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
+                                 BodyGrammarSlot<T> ifFalse, ParserRuntime runtime, ResultOps<T> ops) {
+		super(origin, dest, runtime, ops);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
 	}
@@ -57,7 +57,7 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
+	public void execute(Input input, GSSNode<T> u, T node) {
 		
 		Object value = runtime.evaluate(condition, runtime.getEmptyEnvironment());
 		
@@ -65,7 +65,7 @@ public class ConditionalTransition extends AbstractTransition {
 			throw new UnexpectedRuntimeTypeException(condition);
 		}
 		
-		boolean isTrue = ((Boolean) value) == true;
+		boolean isTrue = (Boolean) value;
 		
 		if (isTrue)
 			dest.execute(input, u, node);
@@ -80,7 +80,7 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
 		
 		Object value = runtime.evaluate(condition, env);
 		
@@ -88,12 +88,12 @@ public class ConditionalTransition extends AbstractTransition {
 			throw new UnexpectedRuntimeTypeException(condition);
 		}
 		
-		boolean isTrue = ((Boolean) value) == true;
+		boolean isTrue = (Boolean) value;
 		
 		if (isTrue)
-			dest.execute(input, u, node, env);
+			dest.execute(input, u, result, env);
 		else if (ifFalse != null)
-			ifFalse.execute(input, u, node, env);
+			ifFalse.execute(input, u, result, env);
 		// TODO: logging
 	}
 

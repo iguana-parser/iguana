@@ -30,16 +30,25 @@ package org.iguana.parser.gss.lookup;
 import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class ArrayNodeLookup extends AbstractNodeLookup {
+import static iguana.utils.collections.CollectionsUtil.concat;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+
+public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 
 	private GSSNode[] gssNodes;
 	
-	public ArrayNodeLookup(Input input) {
+	public ArrayNodeLookup(Input input, ResultOps<T> ops) {
+		super(ops);
 		gssNodes = new GSSNode[input.length()];
 	}
 	
@@ -50,20 +59,22 @@ public class ArrayNodeLookup extends AbstractNodeLookup {
 	}
 	
 	@Override
-	public Iterable<GSSNode> getNodes() {
-		return CollectionsUtil.concat(Arrays.stream(gssNodes).filter(n -> n != null).collect(Collectors.toList()), super.map.values());
+	public Iterable<GSSNode<T>> getNodes() {
+		@SuppressWarnings("unchecked")
+		List<GSSNode<T>> list = asList(this.gssNodes);
+		return concat(list.stream().filter(Objects::nonNull).collect(toList()), super.map.values());
 	}
 
 	@Override
-	public void get(int i, GSSNodeCreator creator) {
+	public void get(int i, GSSNodeCreator<T> creator) {
 		gssNodes[i] = creator.create(gssNodes[i]);
 	}
 
 	@Override
-	public GSSNode get(NonterminalGrammarSlot slot, int i) {
-		GSSNode node = gssNodes[i];
+	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
+		GSSNode<T> node = gssNodes[i];
 		if (node == null) {
-			node = new GSSNode(slot, i);
+			node = new GSSNode<>(slot, i, ops);
 			gssNodes[i] = node;
 			return node;
 		} 

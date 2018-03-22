@@ -55,8 +55,7 @@ public class JavaNat {
          desugarPrecedenceAndAssociativity.setOP2();
          
          Grammar grammar3 = desugarPrecedenceAndAssociativity.transform(grammar);
-         // System.out.println(grammar3);
-         
+
          grammar3 = new LayoutWeaver().transform(grammar3);
          
          Grammar grammar4 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/JavaSpecChar"));
@@ -65,15 +64,11 @@ public class JavaNat {
          grammar4 = new LayoutWeaver().transform(grammar4);
 
          Input input = Input.fromFile(new File("src/org/iguana/util/hashing/hashfunction/MurmurHash2.java"));
-         GrammarGraph graph1 = GrammarGraph.from(grammar1, input, Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
-         GrammarGraph graph2 = GrammarGraph.from(grammar2, input, Configuration.DEFAULT);
-         GrammarGraph graph3 = GrammarGraph.from(grammar3, input, Configuration.DEFAULT);
-         GrammarGraph graph4 = GrammarGraph.from(grammar4, input, Configuration.DEFAULT);
 
-         ParseResult result1 = Iguana.parse(input, graph1, Nonterminal.withName("CompilationUnit"));
-         ParseResult result2 = Iguana.parse(input, graph2, Nonterminal.withName("CompilationUnit"));
-         ParseResult result3 = Iguana.parse(input, graph3, Nonterminal.withName("CompilationUnit"));
-         ParseResult result4 = Iguana.parse(input, graph4, Nonterminal.withName("CompilationUnit"));
+         ParseResult result1 = Iguana.parse(input, grammar1, Nonterminal.withName("CompilationUnit"), Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
+         ParseResult result2 = Iguana.parse(input, grammar2, Nonterminal.withName("CompilationUnit"));
+         ParseResult result3 = Iguana.parse(input, grammar3, Nonterminal.withName("CompilationUnit"));
+         ParseResult result4 = Iguana.parse(input, grammar4, Nonterminal.withName("CompilationUnit"));
          
          Assert.assertTrue(result1.isParseSuccess());
          Assert.assertTrue(result2.isParseSuccess());

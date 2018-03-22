@@ -94,16 +94,10 @@ Grammar.builder()
                                         "        x =        \n" +
                                         "         a +       \n" +
                                         "         a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
-
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/",
-         //                   result.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
     }

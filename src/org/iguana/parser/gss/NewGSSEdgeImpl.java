@@ -33,29 +33,32 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.sppf.NonPackedNode;
 
-public class NewGSSEdgeImpl implements GSSEdge {
+public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	
-	protected final BodyGrammarSlot returnSlot;
-	private final NonPackedNode node;
-	private final GSSNode destination;
+	private final BodyGrammarSlot<T> returnSlot;
+	private final T result;
+	private final GSSNode<T> destination;
+	protected final ResultOps<T> ops;
 
-	public NewGSSEdgeImpl(BodyGrammarSlot slot, NonPackedNode node, GSSNode destination) {
+	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination, ResultOps<T> ops) {
 		this.returnSlot = slot;
-		this.node = node;
+		this.result = result;
 		this.destination = destination;
+		this.ops = ops;
 	}
 
-	public NonPackedNode getNode() {
-		return node;
+	public T getResult() {
+		return result;
 	}
 
-	public BodyGrammarSlot getReturnSlot() {
+	public BodyGrammarSlot<T> getReturnSlot() {
 		return returnSlot;
 	}
 
-	public GSSNode getDestination() {
+	public GSSNode<T> getDestination() {
 		return destination;
 	}
 
@@ -84,11 +87,11 @@ public class NewGSSEdgeImpl implements GSSEdge {
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %s, %s)", returnSlot, node, destination);
+		return String.format("(%s, %s, %s)", returnSlot, result, destination);
 	}
 
 	@Override
-	public Descriptor addDescriptor(Input input, GSSNode source, NonPackedNode sppfNode) {
+	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T _result) {
 		
 		/**
 		 * 
@@ -96,14 +99,14 @@ public class NewGSSEdgeImpl implements GSSEdge {
 		 * 
 		 */
 
-        int i = sppfNode.getRightExtent();
+        int i = ops.getRightIndex(_result);
         ParserRuntime runtime = returnSlot.getRuntime();
 		
-		NonPackedNode y;
-		BodyGrammarSlot returnSlot = this.returnSlot;
+		T y;
+		BodyGrammarSlot<T> returnSlot = this.returnSlot;
 		
 		if (returnSlot.requiresBinding()) {
-			Environment env = returnSlot.doBinding(sppfNode, runtime.getEmptyEnvironment());
+			Environment env = returnSlot.doBinding(_result, runtime.getEmptyEnvironment());
 
             runtime.setEnvironment(env);
 			
@@ -112,13 +115,13 @@ public class NewGSSEdgeImpl implements GSSEdge {
 			
 			env = runtime.getEnvironment();
 			
-			y = returnSlot.getIntermediateNode2(input, node, sppfNode, env);
+			y = returnSlot.getIntermediateNode2(result, _result, env);
 			
 //			y = parser.getNode(returnSlot, node, sppfNode, env);
 //			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 //				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 			
-			return y != null ? new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, y, input, env) : null;
+			return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, input, env, ops) : null;
 		}
 		
 		if (returnSlot.getConditions().execute(input, source, i))
@@ -128,9 +131,9 @@ public class NewGSSEdgeImpl implements GSSEdge {
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 //			return new Descriptor(returnSlot, destination, inputIndex, y);
 		
-		y = returnSlot.getIntermediateNode2(input, node, sppfNode);
+		y = returnSlot.getIntermediateNode2(input, result, _result);
 		
-		return y != null ? new Descriptor(returnSlot, destination, y, input) : null;
+		return y != null ? new Descriptor<>(returnSlot, destination, y, input, ops) : null;
 	}
 
 }
