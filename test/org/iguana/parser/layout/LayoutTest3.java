@@ -83,7 +83,7 @@ public class LayoutTest3 {
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
 		Grammar grammar = getGrammar();
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"), Configuration.DEFAULT);
 		assertTrue(result.isParseSuccess());
 	}
 }

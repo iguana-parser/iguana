@@ -66,23 +66,14 @@ Grammar.builder()
 // S ::= E  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 .build();
-         // grammar = new EBNFToBNF().transform(grammar);
-         System.out.println(grammar);
-
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("a*a^a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/excepts/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
-
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/excepts/",
-         //                   result.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }

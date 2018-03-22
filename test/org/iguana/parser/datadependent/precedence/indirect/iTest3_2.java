@@ -4,13 +4,11 @@ import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,7 +41,6 @@ Grammar.builder()
 .build();
 
          grammar = new EBNFToBNF().transform(grammar);
-         // System.out.println(grammar);
 
          DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          precedenceAndAssociativity.setOP2();
@@ -52,11 +49,8 @@ Grammar.builder()
          System.out.println(grammar.toString());
 
          Input input = Input.fromString("a+fa");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/indirect/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
 

@@ -10,6 +10,7 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.parser.descriptor.SPPFResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -57,25 +58,25 @@ public class Test4 {
 
     @Test
     public void testParser1() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
-        ParseResult result = Iguana.parse(input1, graph, S);
+        ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new SPPFResultOps());
         assertEquals(getParseResult1(graph), result);
     }
 
     @Test
     public void testParser2() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT);
-        ParseResult result = Iguana.parse(input2, graph, S);
+        ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT, new SPPFResultOps());
         assertEquals(getParseResult2(graph), result);
     }
 
     @Test
     public void testParser3() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT);
-        ParseResult result = Iguana.parse(input3, graph, S);
+        ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT, new SPPFResultOps());
         assertEquals(getParseResult3(graph), result);
     }
 

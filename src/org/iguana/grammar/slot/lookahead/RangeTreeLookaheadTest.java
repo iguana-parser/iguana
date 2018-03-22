@@ -4,22 +4,23 @@ import iguana.regex.CharRange;
 import iguana.utils.collections.rangemap.RangeTree;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class RangeTreeLookaheadTest implements LookAheadTest {
-	
-	private final RangeTree<List<BodyGrammarSlot>> rangeTree = new RangeTree<>();
+import static java.util.Collections.emptyList;
 
-	public RangeTreeLookaheadTest(Map<CharRange, List<BodyGrammarSlot>> nonOverlappingMap) {
-		nonOverlappingMap.entrySet().forEach(e -> rangeTree.insert(e.getKey(), e.getValue().isEmpty() ? Collections.emptyList() : e.getValue()));
+public class RangeTreeLookaheadTest<T> implements LookAheadTest<T> {
+	
+	private final RangeTree<List<BodyGrammarSlot<T>>> rangeTree = new RangeTree<>();
+
+	public RangeTreeLookaheadTest(Map<CharRange, List<BodyGrammarSlot<T>>> nonOverlappingMap) {
+		nonOverlappingMap.forEach((key, value) -> rangeTree.insert(key, value.isEmpty() ? emptyList() : value));
 	}
 	
 	@Override
-	public List<BodyGrammarSlot> get(int v) {
-		List<BodyGrammarSlot> alternatives = rangeTree.get(v);
-		return alternatives == null ? Collections.emptyList() : alternatives;
+	public List<BodyGrammarSlot<T>> get(int v) {
+		List<BodyGrammarSlot<T>> alternatives = rangeTree.get(v);
+		return alternatives == null ? emptyList() : alternatives;
 	}
 
 }

@@ -32,41 +32,41 @@ import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.sppf.TerminalNode;
+import org.iguana.parser.descriptor.ResultOps;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class TerminalGrammarSlot extends AbstractGrammarSlot {
+public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	
 	private final Terminal terminal;
-    private final Matcher matcher;
-    private final Map<Integer, TerminalNode> terminalNodes;
-    private final String terminalName;
+	private final Matcher matcher;
+	private final Map<Integer, T> terminalNodes;
+	private final String terminalName;
+	private final ResultOps<T> ops;
 
-	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime, ResultOps<T> ops) {
 		super(runtime, Collections.emptyList());
 		this.terminal = terminal;
-        this.matcher = factory.getMatcher(terminal.getRegularExpression());
+		this.matcher = factory.getMatcher(terminal.getRegularExpression());
         this.terminalNodes = new HashMap<>();
         this.terminalName = terminalName;
+        this.ops = ops;
     }
 
-    public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime runtime) {
-        this(terminal, factory, null, runtime);
+    public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime runtime, ResultOps<T> ops) {
+        this(terminal, factory, null, runtime, ops);
     }
 
-	public TerminalNode getTerminalNode(Input input, int i) {
+	public T getResult(Input input, int i) {
 		return terminalNodes.computeIfAbsent(i, k -> {
 			int length = matcher.match(input, i);
 			if (length < 0) {
 				return null;
 			} else {
-				TerminalNode t = new TerminalNode(this, i, i + length);
-				runtime.terminalNodeAdded(t);
-				return t;
+				return ops.base(this, i, i + length);
 			}
 		});
 	}
@@ -76,7 +76,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
     }
 
     @Override
-	public Set<Transition> getTransitions() {
+	public Set<Transition<T>> getTransitions() {
 		return Collections.emptySet();
 	}
 

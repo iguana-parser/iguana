@@ -42,7 +42,7 @@ import org.iguana.parser.ParserRuntime;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot {
+public interface GrammarSlot<T> {
 
 	/*
 	 * Corresponds to a grammar position A ::= B . \alpha
@@ -53,9 +53,9 @@ public interface GrammarSlot {
 
 	void reset(Input input);
 	
-	boolean addTransition(Transition transition);
+	boolean addTransition(Transition<T> transition);
 	
-	Iterable<Transition> getTransitions();
+	Iterable<Transition<T>> getTransitions();
 
     ParserRuntime getRuntime();
 

@@ -30,19 +30,22 @@ package org.iguana.parser.gss.lookup;
 import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//import java.util.HashMap;
+public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
 
-public class JavaHashMapNodeLookup extends AbstractNodeLookup {
+	private Map<Integer, GSSNode<T>> map = new HashMap<>();
 
-	private Map<Integer, GSSNode> map = new HashMap<>();
-	
+	public JavaHashMapNodeLookup(ResultOps<T> ops) {
+		super(ops);
+	}
+
 	@Override
-	public void get(int i, GSSNodeCreator creator) {
+	public void get(int i, GSSNodeCreator<T> creator) {
 		map.compute(i, (k, v) -> creator.create(v)); 
 	}
 	
@@ -53,13 +56,13 @@ public class JavaHashMapNodeLookup extends AbstractNodeLookup {
 	}
 
 	@Override
-	public Iterable<GSSNode> getNodes() {
+	public Iterable<GSSNode<T>> getNodes() {
 		return CollectionsUtil.concat(map.values(), super.map.values());
 	}
 
 	@Override
 	public GSSNode get(NonterminalGrammarSlot slot, int i) {
-		return map.computeIfAbsent(i, k -> new GSSNode(slot, i));
+		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i, ops));
 	}
 
 }

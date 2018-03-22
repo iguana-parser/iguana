@@ -2,9 +2,6 @@ package org.iguana.parser;
 
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
-import iguana.utils.logging.IguanaLogger;
-import iguana.utils.logging.JavaUtilIguanaLogger;
-import iguana.utils.logging.LogLevel;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
@@ -13,26 +10,22 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.NonterminalOrIntermediateNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.ParserLogger;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ParserRuntimeImpl implements ParserRuntime {
+public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     /**
      * The grammar slot at which a parse error is occurred.
      */
-    private GrammarSlot errorSlot;
+    private GrammarSlot<T> errorSlot;
 
     /**
      * The last input index at which an error is occurred.
@@ -44,27 +37,23 @@ public class ParserRuntimeImpl implements ParserRuntime {
     /**
      * The current GSS node at which an error is occurred.
      */
-    private GSSNode errorGSSNode;
+    private GSSNode<T> errorGSSNode;
 
-    private final Deque<Descriptor> descriptorsStack;
+    private final Deque<Descriptor<T>> descriptorsStack;
 
-    private final IguanaLogger logger;
-
-    private final GrammarGraph grammarGraph;
+    private final GrammarGraph<T> grammarGraph;
 
     private final IEvaluatorContext ctx;
 
     private final Configuration config;
 
-    public ParserRuntimeImpl(GrammarGraph grammarGraph, Configuration config, IEvaluatorContext ctx) {
+    private final ParserLogger logger = ParserLogger.getInstance();
+
+    public ParserRuntimeImpl(GrammarGraph<T> grammarGraph, Configuration config, IEvaluatorContext ctx) {
         this.grammarGraph = grammarGraph;
         this.descriptorsStack = new ArrayDeque<>();
         this.ctx = ctx;
         this.config = config;
-        if (config.getLogLevel() == LogLevel.NONE)
-            logger = IguanaLogger.DEFAULT;
-        else
-            logger = new JavaUtilIguanaLogger("Iguana Logger", config.getLogLevel());
     }
 
     /**
@@ -75,7 +64,7 @@ public class ParserRuntimeImpl implements ParserRuntime {
      *
      */
     @Override
-    public void recordParseError(Input input, int i, GrammarSlot slot, GSSNode u) {
+    public void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u) {
         if (i >= this.errorIndex) {
             logger.log("Error recorded at %s %d", slot, i);
             this.errorInput = input;
@@ -91,19 +80,18 @@ public class ParserRuntimeImpl implements ParserRuntime {
     }
 
     @Override
-    public Descriptor nextDescriptor() {
+    public Descriptor<T> nextDescriptor() {
         return descriptorsStack.pop();
     }
 
     @Override
-    public final void scheduleDescriptor(Descriptor descriptor) {
+    public final void scheduleDescriptor(Descriptor<T> descriptor) {
         descriptorsStack.push(descriptor);
-        logger.log("Descriptor created: %s", descriptor);
-        descriptorsCount++;
+        logger.descriptorAdded(descriptor);
     }
 
     @Override
-    public Iterable<GSSNode> getGSSNodes() {
+    public Iterable<GSSNode<T>> getGSSNodes() {
         return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
     }
 
@@ -128,7 +116,7 @@ public class ParserRuntimeImpl implements ParserRuntime {
     }
 
     @Override
-    public GrammarGraph getGrammarGraph() {
+    public GrammarGraph<T> getGrammarGraph() {
         return grammarGraph;
     }
 
@@ -177,87 +165,6 @@ public class ParserRuntimeImpl implements ParserRuntime {
     }
 
     @Override
-    public void terminalNodeAdded(TerminalNode node) {
-        countTerminalNodes++;
-        logger.log("Terminal node added %s", node);
-    }
-
-    @Override
-    public void nonterminalNodeAdded(NonterminalNode node) {
-        countNonterminalNodes++;
-        logger.log("Nonterminal node added %s", node);
-    }
-
-    @Override
-    public void intermediateNodeAdded(IntermediateNode node) {
-        countIntermediateNodes++;
-        logger.log("Intermediate node added %s", node);
-    }
-
-    @Override
-    public void packedNodeAdded(Object slot, int pivot) {
-        countPackedNodes++;
-        logger.log("Packed node added (%s, %d)", slot, pivot);
-    }
-
-    @Override
-    public void ambiguousNodeAdded(NonterminalOrIntermediateNode<?> node) {
-        countAmbiguousNodes++;
-        logger.log("Ambiguous node added: %s", node);
-//		System.out.println(String.format("Ambiguous node added: %s %s", node, input.getNodeInfo(node)));
-//		org.iguana.util.Visualization.generateSPPFGraph("/Users/afroozeh/output", node, input);
-//		for (PackedNode packedNode : node.getChildren()) {
-//			System.out.println("   Packed node: " + packedNode.toString());
-//			for (org.iguana.sppf.NonPackedNode first : packedNode.getChildren()) {
-//				System.out.println(String.format("       %s %s", first, input.getNodeInfo(first)));
-//			}
-//		}
-//		System.exit(0);
-    }
-
-    @Override
-    public void gssNodeAdded(GSSNode node) {
-        countGSSNodes++;
-        logger.log("GSS node added %s", node);
-    }
-
-    @Override
-    public void gssEdgeAdded(GSSEdge edge) {
-        countGSSEdges++;
-        logger.log("GSS Edge added %s", edge);
-    }
-
-    @Override
-    public void log(String s) {
-        logger.log(s);
-    }
-
-    @Override
-    public void log(String s, Object arg) {
-        logger.log(s, arg);
-    }
-
-    @Override
-    public void log(String s, Object arg1, Object arg2) {
-        logger.log(s, arg1, arg2);
-    }
-
-    @Override
-    public void log(String s, Object arg1, Object arg2, Object arg3) {
-        logger.log(s, arg1, arg2, arg3);
-    }
-
-    @Override
-    public void log(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
-        logger.log(s, arg1, arg2, arg3, arg4);
-    }
-
-    @Override
-    public void log(String s, Object...args) {
-        logger.log(s, args);
-    }
-
-    @Override
     public ParseError getParseError() {
         return new ParseError(errorSlot, errorInput == null ? Input.empty() : errorInput, errorIndex, errorGSSNode);
     }
@@ -269,43 +176,26 @@ public class ParserRuntimeImpl implements ParserRuntime {
                               .setUserTime(timer.getUserTime())
                               .setSystemTime(timer.getSystemTime())
                               .setMemoryUsed(getMemoryUsed())
-                              .setDescriptorsCount(descriptorsCount)
-                              .setGSSNodesCount(countGSSNodes + 1) // + start gss node
-                              .setGSSEdgesCount(countGSSEdges)
-                              .setNonterminalNodesCount(countNonterminalNodes)
-                              .setTerminalNodesCount(countTerminalNodes)
-                              .setIntermediateNodesCount(countIntermediateNodes)
-                              .setPackedNodesCount(countPackedNodes)
-                              .setAmbiguousNodesCount(countAmbiguousNodes)
+                              .setDescriptorsCount(logger.getDescriptorsCount())
+                              .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
+                              .setGSSEdgesCount(logger.getCountGSSEdges())
+                              .setNonterminalNodesCount(logger.getCountNonterminalNodes())
+                              .setTerminalNodesCount(logger.getCountTerminalNodes())
+                              .setIntermediateNodesCount(logger.getCountIntermediateNodes())
+                              .setPackedNodesCount(logger.getCountPackedNodes())
+                              .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())
                               .build();
     }
 
-    public static int getMemoryUsed() {
+    private static int getMemoryUsed() {
         int mb = 1024 * 1024;
         Runtime runtime = Runtime.getRuntime();
-        int memoryUsed = (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
-        return memoryUsed;
+        return (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
     }
 
     @Override
     public Configuration getConfiguration() {
         return config;
     }
-
-    private int descriptorsCount;
-
-    private int countNonterminalNodes;
-
-    private int countIntermediateNodes;
-
-    private int countTerminalNodes;
-
-    private int countPackedNodes;
-
-    private int countAmbiguousNodes;
-
-    private int countGSSNodes;
-
-    private int countGSSEdges;
 
 }

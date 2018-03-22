@@ -41,19 +41,12 @@ Grammar.builder()
 .build();
 
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
-         System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("-+a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
-
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-         //                   result.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }

@@ -30,38 +30,40 @@ package org.iguana.parser.descriptor;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 /**
  * @author Ali Afroozeh
  * 
  */
 // The label of SPPFNode is the same as the slot
-public class Descriptor {
+public class Descriptor<T> {
 	
 	// L
-	private final BodyGrammarSlot slot;
+	private final BodyGrammarSlot<T> slot;
 	
 	// (L1, i)
-	private final GSSNode gssNode;
+	private final GSSNode<T> gssNode;
 	
 	// (L, i, j)
-	private final NonPackedNode sppfNode;
+	private final T result;
 
     protected final Input input;
-	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, NonPackedNode sppfNode, Input input) {
+
+	private ResultOps<T> resultOps;
+
+	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result, Input input, ResultOps<T> resultOps) {
 		assert slot != null;
 		assert gssNode != null;
-		assert sppfNode != null;
-		
+		assert result != null;
+
 		this.slot = slot;
 		this.gssNode = gssNode;
-		this.sppfNode = sppfNode;
-        this.input = input;
+		this.result = result;
+		this.resultOps = resultOps;
+		this.input = input;
 	}
 	
-	public BodyGrammarSlot getGrammarSlot() {
+	public BodyGrammarSlot<T> getGrammarSlot() {
 		return slot;
 	}
 
@@ -70,20 +72,20 @@ public class Descriptor {
 	}
 	
 	public int getInputIndex() {
-		return sppfNode.getRightExtent();
+		return resultOps.getRightIndex(result);
 	}
 
-	public NonPackedNode getSPPFNode() {
-		return sppfNode;
+	public T getSPPFNode() {
+		return result;
 	}
 	
 	public void execute() {
-		slot.execute(input, gssNode, sppfNode);
+		slot.execute(input, gssNode, result);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %s, %s)", slot, sppfNode.getRightExtent(), gssNode, sppfNode);
+		return String.format("(%s, %d, %s, %s)", slot, resultOps.getRightIndex(result), gssNode, result);
 	}
 	
 }

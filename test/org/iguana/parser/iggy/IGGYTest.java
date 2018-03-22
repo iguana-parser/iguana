@@ -32,19 +32,12 @@ public class IGGYTest {
 		grammar = new EBNFToBNF().transform(grammar);
 		grammar = precedenceAndAssociativity.transform(grammar);
 		grammar = new LayoutWeaver().transform(grammar);
-		
-		// System.out.println(grammar);
-		// System.exit(0);
-		
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("Definition"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Definition"));
 		
 		Assert.assertTrue(result.isParseSuccess());
 		
 		NonterminalNode sppf = result.asParseSuccess().getSPPFNode();
-		
-		// TreeVisualization.generate(term, "test/org/iguana/parser/idea/", "terms");
 	}
 
 }

@@ -33,45 +33,45 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 import static iguana.utils.string.StringUtil.listToString;
 
 
-public class NonterminalTransition extends AbstractTransition {
+public class NonterminalTransition<T> extends AbstractTransition<T> {
 	
-	private final NonterminalGrammarSlot nonterminal;
+	private final NonterminalGrammarSlot<T> nonterminal;
 	
 	private final Conditions preConditions;
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest,
-                                 Conditions preConditions, ParserRuntime runtime) {
-		this(nonterminal, origin, dest, null, preConditions, runtime);
+	public NonterminalTransition(NonterminalGrammarSlot<T> nonterminal, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
+								 Conditions preConditions, ParserRuntime runtime, ResultOps<T> ops) {
+		this(nonterminal, origin, dest, null, preConditions, runtime, ops);
 	}
 	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT, runtime);
+	public NonterminalTransition(NonterminalGrammarSlot<T> nonterminal, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT, runtime, ops);
 	}	
 	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			                     Expression[] arguments, Conditions preConditions, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public NonterminalTransition(NonterminalGrammarSlot<T> nonterminal, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
+			                     Expression[] arguments, Conditions preConditions, ParserRuntime runtime, ResultOps<T> ops) {
+		super(origin, dest, runtime, ops);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
 		this.preConditions = preConditions;
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
+	public void execute(Input input, GSSNode<T> u, T node) {
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
 //			return;
 //		}
 
-        int i = node.getRightExtent();
+        int i = ops.getRightIndex(node);
 		
 		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
 			
@@ -115,14 +115,14 @@ public class NonterminalTransition extends AbstractTransition {
 	 * 
 	 */
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
 		
 //		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
 //			parser.recordParseError(origin);
 //			return;
 //		}
 
-        int i = node.getRightExtent();
+        int i = ops.getRightIndex(node);
 
         if (dest.getLabel() != null) {
 			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);

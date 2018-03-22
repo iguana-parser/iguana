@@ -32,25 +32,25 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 import java.util.Collections;
 import java.util.Set;
 
-public class EndGrammarSlot extends BodyGrammarSlot {
+public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
-		this(position, nonterminal, label, -1, variable, -1, state, conditions, runtime);
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label,
+			              String variable, Set<String> state, Conditions conditions, ParserRuntime runtime, ResultOps<T> ops) {
+		this(position, nonterminal, label, -1, variable, -1, state, conditions, runtime, ops);
 	}
 	
-	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label, int i1,
             			  String variable, int i2, Set<String> state, Conditions conditions,
-                          ParserRuntime runtime) {
-		super(position, label, i1, variable, i2, state, conditions, runtime);
+                          ParserRuntime runtime, ResultOps<T> ops) {
+		super(position, label, i1, variable, i2, state, conditions, runtime, ops);
 		this.nonterminal = nonterminal;
     }
 	
@@ -59,9 +59,9 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
-            u.pop(input, this, node);
+	public void execute(Input input, GSSNode<T> u, T result) {
+		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(result))))
+            u.pop(input, this, result);
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public Set<Transition> getTransitions() {
+	public Set<Transition<T>> getTransitions() {
 		return Collections.emptySet();
 	}
 
@@ -89,13 +89,13 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	 * 
 	 */
 	@Override
-	public void execute(Input input, GSSNode u,NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
+	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
+		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(node))))
             u.pop(input, this, node);
 	}
 	
-	public void execute(Input input, GSSNode u, NonPackedNode node, Object value) {
-		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
+	public void execute(Input input, GSSNode<T> u, T node, Object value) {
+		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(node))))
             u.pop(input, this, node, value);
 	}
 

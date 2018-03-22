@@ -37,27 +37,27 @@ import org.iguana.parser.gss.GSSNodeData;
  * @author Ali Afroozeh
  *
  */
-public interface GSSNodeLookup {
+public interface GSSNodeLookup<T> {
 	
-	void get(int i, GSSNodeCreator creator);
+	void get(int i, GSSNodeCreator<T> creator);
 	
-	GSSNode get(NonterminalGrammarSlot slot, int i);
+	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i);
 	
 	void reset(Input input);
 	
-	Iterable<GSSNode> getNodes();
+	Iterable<GSSNode<T>> getNodes();
 	
 	/*
 	 * 
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	<T> void get(int i, GSSNodeData<T> data, GSSNodeCreator creator);
+	<V> void get(int i, GSSNodeData<V> data, GSSNodeCreator<T> creator);
 	
-	<T> GSSNode get(NonterminalGrammarSlot slot, int i, GSSNodeData<T> data);
+	<V> GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<V> data);
 	
 	@FunctionalInterface
-	interface GSSNodeCreator {
-		GSSNode create(GSSNode node);
+	interface GSSNodeCreator<T> {
+		GSSNode<T> create(GSSNode<T> node);
 	}
 }

@@ -73,16 +73,10 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("a^+a*a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/excepts/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
-
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/excepts/",
-         //                   result.asParseSuccess().getSPPFNode(), input);
 
          Assert.assertEquals(2, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }

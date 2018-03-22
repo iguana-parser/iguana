@@ -32,24 +32,24 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
-public class EpsilonGrammarSlot extends EndGrammarSlot {
+public class EpsilonGrammarSlot<T> extends EndGrammarSlot<T> {
 
-	private TerminalGrammarSlot epsilonSlot;
+	private TerminalGrammarSlot<T> epsilonSlot;
 
-	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot,
-			                  Conditions conditions, ParserRuntime runtime) {
-		super(position, nonterminal, null, null, null, conditions, runtime);
+	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, TerminalGrammarSlot<T> epsilonSlot,
+							  Conditions conditions, ParserRuntime runtime, ResultOps<T> ops) {
+		super(position, nonterminal, null, null, null, conditions, runtime, ops);
 		this.epsilonSlot = epsilonSlot;
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-        int i = node.getRightExtent();
+	public void execute(Input input, GSSNode<T> u, T result) {
+        int i = ops.getRightIndex(result);
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
+            u.pop(input, this, epsilonSlot.getResult(input, i));
 	}
 	
 	/**
@@ -59,17 +59,17 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	 * 
 	 */
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
-        int i = node.getRightExtent();
+	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
+        int i = ops.getRightIndex(result);
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
+            u.pop(input, this, epsilonSlot.getResult(input, i));
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode u,NonPackedNode node, Object value) {
-        int i = node.getRightExtent();
+	public void execute(Input input, GSSNode<T> u, T node, Object value) {
+        int i = ops.getRightIndex(node);
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getTerminalNode(input, i), value);
+            u.pop(input, this, epsilonSlot.getResult(input, i), value);
 	}
 
 }

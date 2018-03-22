@@ -29,6 +29,7 @@ package org.iguana.parser.gss.lookup;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.util.Tuple;
@@ -42,18 +43,23 @@ import java.util.Map;
  *
  */
 
-public abstract class AbstractNodeLookup implements GSSNodeLookup {
+public abstract class AbstractNodeLookup<T> implements GSSNodeLookup<T> {
 	
 	/**
 	 * 
 	 * Data-dependent GLL parsing
 	 * 
 	 */
-	protected Map<Tuple<Integer, GSSNodeData<?>>, GSSNode> map = new HashMap<>();
-	
+	protected Map<Tuple<Integer, GSSNodeData<?>>, GSSNode<T>> map = new HashMap<>();
+
+	protected ResultOps<T> ops;
+
+	public AbstractNodeLookup(ResultOps<T> ops) {
+		this.ops = ops;
+	}
 	
 	@Override
-	public <T> void get(int i, GSSNodeData<T> data, GSSNodeCreator creator) {
+	public <V> void get(int i, GSSNodeData<V> data, GSSNodeCreator<T> creator) {
 		map.compute(new Tuple<>(i, data), (k, v) -> creator.create(v));
 	}
 	
@@ -63,10 +69,10 @@ public abstract class AbstractNodeLookup implements GSSNodeLookup {
 	}
 	
 	@Override
-	public <T> GSSNode get(NonterminalGrammarSlot slot, int i, GSSNodeData<T> data) {
-		GSSNode gssNode = map.get(new Tuple<>(i, data));
+	public <V> GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<V> data) {
+		GSSNode<T> gssNode = map.get(new Tuple<>(i, data));
 		if (gssNode == null)
-			return new org.iguana.datadependent.gss.GSSNode<>(slot, i, data);
+			return new org.iguana.datadependent.gss.GSSNode<>(slot, i, data, ops);
 		return gssNode;
 	}
 	

@@ -41,6 +41,7 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.parser.descriptor.SPPFResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -121,33 +122,33 @@ public class Test8 {
 	@Test
 	public void testParser1_1() {
         ParseResult result = Iguana.parse(input1, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1);
 		assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult1_Lookahead1(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar, input1, new SPPFResultOps());
+		assertEquals(getParseResult1_Lookahead1(graph), result);
     }
 
     @Test
     public void testParser1_0() {
         ParseResult result = Iguana.parse(input1, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build());
         assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult1_Lookahead0(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build(), new SPPFResultOps());
+		assertEquals(getParseResult1_Lookahead0(graph), result);
     }
 
     @Test
     public void testParser2_1() {
         ParseResult result = Iguana.parse(input2, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input2);
         assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult2_Lookahead1(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar, input2, new SPPFResultOps());
+		assertEquals(getParseResult2_Lookahead1(graph), result);
     }
 
     @Test
     public void testParser2_0() {
         ParseResult result = Iguana.parse(input2, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build());
         assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult2_Lookahead0(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build(), new SPPFResultOps());
+		assertEquals(getParseResult2_Lookahead0(graph), result);
     }
 
 

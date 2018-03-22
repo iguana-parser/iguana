@@ -10,26 +10,21 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSEdge;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.NonterminalOrIntermediateNode;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 
-public interface ParserRuntime {
+public interface ParserRuntime<T> {
 
     boolean hasDescriptor();
 
-    Descriptor nextDescriptor();
+    Descriptor<T> nextDescriptor();
 
-    void scheduleDescriptor(Descriptor descriptor);
+    void scheduleDescriptor(Descriptor<T> descriptor);
 
-    void recordParseError(Input input, int i, GrammarSlot slot, GSSNode u);
+    void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u);
 
-    Iterable<GSSNode> getGSSNodes();
+    Iterable<GSSNode<T>> getGSSNodes();
 
     /*
      *
@@ -54,40 +49,10 @@ public interface ParserRuntime {
 
     GrammarGraph getGrammarGraph();
 
-    void terminalNodeAdded(TerminalNode node);
-
-    void nonterminalNodeAdded(NonterminalNode node);
-
-    void intermediateNodeAdded(IntermediateNode node);
-
-    void packedNodeAdded(Object slot, int pivot);
-
-    void ambiguousNodeAdded(NonterminalOrIntermediateNode<?> node);
-
-    void gssNodeAdded(GSSNode node);
-
-    void gssEdgeAdded(GSSEdge edge);
-
     ParseError getParseError();
 
     ParseStatistics getParseStatistics(Timer timer);
 
     Configuration getConfiguration();
-
-    default void log(Object obj) {
-        log(String.valueOf(obj));
-    }
-
-    void log(String s);
-
-    void log(String s, Object arg);
-
-    void log(String s, Object arg1, Object arg2);
-
-    void log(String s, Object arg1, Object arg2, Object arg3);
-
-    void log(String s, Object arg1, Object arg2, Object arg3, Object arg4);
-
-    void log(String s, Object... args);
 
 }

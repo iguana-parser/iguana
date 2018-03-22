@@ -99,13 +99,9 @@ public class Test5 {
 	
 	@Test
 	public void test() {
-		System.out.println(grammar);
-		
 		Input input = Input.fromString("a+-a+a");
-		// Input input = Input.fromString("a+a+a");
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
 	}
 
