@@ -33,7 +33,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 public class NewGSSEdgeImpl<T> extends org.iguana.parser.gss.NewGSSEdgeImpl<T> {
 	
@@ -72,7 +71,7 @@ public class NewGSSEdgeImpl<T> extends org.iguana.parser.gss.NewGSSEdgeImpl<T> {
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 //			return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 		
-		return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, input, env, ops) : null;
+		return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, env) : null;
 	}
 
 }

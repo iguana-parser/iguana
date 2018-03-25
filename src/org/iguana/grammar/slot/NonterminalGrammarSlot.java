@@ -68,7 +68,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 
 	private final ResultOps<T> ops;
 
-	public NonterminalGrammarSlot(Nonterminal nonterminal, GSSNodeLookup<T> nodeLookup, NonterminalNodeType nodeType, ParserRuntime runtime, ResultOps<T> ops) {
+	public NonterminalGrammarSlot(Nonterminal nonterminal, GSSNodeLookup<T> nodeLookup, NonterminalNodeType nodeType, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(runtime);
 		this.nonterminal = nonterminal;
 		this.nodeLookup = nodeLookup;
@@ -135,7 +135,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				if (firstSlots != null)
 					for (BodyGrammarSlot<T> s : firstSlots) {
 						if (!s.getConditions().execute(input, gssNode, i))
-							runtime.scheduleDescriptor(new Descriptor<>(s, gssNode, ops.dummy(i), input, ops));
+							runtime.scheduleDescriptor(new Descriptor<>(s, gssNode, ops.dummy(i)));
 					}
 				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 			} else {
@@ -190,7 +190,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 					if (firstSlots != null)
 						for (BodyGrammarSlot<T> s : firstSlots) {
 							if (!s.getConditions().execute(input, __gssNode, i))
-								runtime.scheduleDescriptor(new Descriptor<>(s, __gssNode, ops.dummy(i), input, ops));
+								runtime.scheduleDescriptor(new Descriptor<>(s, __gssNode, ops.dummy(i)));
 						}
 					// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new Descriptor(s, __gssNode, i, DummyNode.getInstance())));
 				} else {
@@ -230,7 +230,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
 
 					if (!s.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext()))
-						runtime.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor<>(s, gssNode, ops.dummy(i), input, runtime.getEnvironment(), ops));
+						runtime.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor<>(s, gssNode, ops.dummy(i), runtime.getEnvironment()));
 				}
 				
 				// nonterminal.getFirstSlots().forEach(s -> scheduleDescriptor(new org.jgll.datadependent.descriptor.Descriptor(s, __gssNode, i, DummyNode.getInstance(), newEnv)));

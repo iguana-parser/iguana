@@ -43,7 +43,7 @@ public class OCaml {
 //				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk", "java", true)
 //				.setLimit(500)
 				.setWarmupCount(0)
-				.setRunCount(10)
+				.setRunCount(20)
 //				.setRunGCInBetween(true)
 				.build()
 				.run();
@@ -63,7 +63,7 @@ public class OCaml {
 //        Assert.assertTrue(result.isParseSuccess());
 //
 //        // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/indirect/",
-//        //                   result.asParseSuccess().getSPPFNode(), input);
+//        //                   result.asParseSuccess().getResult(), input);
 //
 //        Assert.assertEquals(0, result.asParseSuccess().getStatistics().getCountAmbiguousNodes());
 //
