@@ -30,23 +30,21 @@ package org.iguana.datadependent.descriptor;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 public class Descriptor<T> extends org.iguana.parser.descriptor.Descriptor<T> {
 	
 	private final Environment env;
 	
-	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result, Input input, Environment env, ResultOps<T> resultOps) {
-		super(slot, gssNode, result, input, resultOps);
+	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result, Environment env) {
+		super(slot, gssNode, result);
 		
 		assert env != null;
 		this.env = env;
 	}
 
 	@Override
-	public void execute() {
-		getGrammarSlot().execute(input, getGSSNode(), getSPPFNode(), env);
+	public void execute(Input input) {
+		getGrammarSlot().execute(input, getGSSNode(), getResult(), env);
 	}
 }

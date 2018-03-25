@@ -120,7 +120,7 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 //			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
 //				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
 			
-			return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, input, env, ops) : null;
+			return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, env) : null;
 		}
 		
 		if (returnSlot.getConditions().execute(input, source, i))
@@ -132,7 +132,7 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 		
 		y = returnSlot.getIntermediateNode2(input, destination.getInputIndex(), result, _result);
 		
-		return y != null ? new Descriptor<>(returnSlot, destination, y, input, ops) : null;
+		return y != null ? new Descriptor<>(returnSlot, destination, y) : null;
 	}
 
 }

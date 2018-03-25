@@ -47,11 +47,7 @@ public class Descriptor<T> {
 	// (L, i, j)
 	private final T result;
 
-    protected final Input input;
-
-	private ResultOps<T> resultOps;
-
-	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result, Input input, ResultOps<T> resultOps) {
+	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result) {
 		assert slot != null;
 		assert gssNode != null;
 		assert result != null;
@@ -59,33 +55,27 @@ public class Descriptor<T> {
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.result = result;
-		this.resultOps = resultOps;
-		this.input = input;
 	}
 	
 	public BodyGrammarSlot<T> getGrammarSlot() {
 		return slot;
 	}
 
-	public GSSNode getGSSNode() {
+	public GSSNode<T> getGSSNode() {
 		return gssNode;
 	}
 	
-	public int getInputIndex() {
-		return resultOps.getRightIndex(result);
-	}
-
-	public T getSPPFNode() {
+	public T getResult() {
 		return result;
 	}
 	
-	public void execute() {
+	public void execute(Input input) {
 		slot.execute(input, gssNode, result);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %s, %s)", slot, resultOps.getRightIndex(result), gssNode, result);
+		return String.format("(%s, %s, %s)", slot, gssNode, result);
 	}
 	
 }
