@@ -100,7 +100,7 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return followTest.test(v);
 	}
 	
-	public T getIntermediateNode2(Input input, T leftResult, T rightResult) {
+	public T getIntermediateNode2(Input input, int destinationIndex, T leftResult, T rightResult) {
 		
 		if (isFirst())
 			return rightResult;
@@ -117,14 +117,14 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 			}
 		};
 
-        Key key = Keys.from((x, y) -> x * input.length() + y, ops.getLeftIndex(leftResult), ops.getRightIndex(rightResult));
+        Key key = Keys.from((x, y) -> x * input.length() + y, destinationIndex, ops.getRightIndex(rightResult));
 
         intermediateNodes.compute(key, creator);
 		
 		return holder.get();
 	}
 	
-	public T getIntermediateNode2(T leftResult, T rightResult, Environment env) {
+	public T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env) {
 		
 		if (isFirst())
 			return rightResult;
@@ -141,7 +141,7 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		};
 
 
-        Key key = Keys.from(ops.getLeftIndex(leftResult), ops.getRightIndex(rightResult), env);
+        Key key = Keys.from(destinationIndex, ops.getRightIndex(rightResult), env);
         intermediateNodes.compute(key, creator);
 		
 		return holder.get();

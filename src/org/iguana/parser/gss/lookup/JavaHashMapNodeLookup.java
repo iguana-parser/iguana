@@ -61,7 +61,7 @@ public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
 	}
 
 	@Override
-	public GSSNode get(NonterminalGrammarSlot slot, int i) {
+	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
 		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i, ops));
 	}
 

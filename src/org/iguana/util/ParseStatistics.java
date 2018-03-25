@@ -155,8 +155,8 @@ public class ParseStatistics {
 			   nonterminalNodesCount == other.nonterminalNodesCount &&
 			   terminalNodesCount == other.terminalNodesCount &&
 			   intermediateNodesCount == other.intermediateNodesCount &&
-			   packedNodesCount == other.packedNodesCount &&
-			   ambiguousNodesCount == other.ambiguousNodesCount;
+			   packedNodesCount == other.packedNodesCount;
+//			   ambiguousNodesCount == other.ambiguousNodesCount;
 	}
 	
 	@Override

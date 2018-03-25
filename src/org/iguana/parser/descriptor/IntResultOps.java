@@ -22,11 +22,15 @@ public class IntResultOps implements ResultOps<Integer> {
 
     @Override
     public Integer merge(Integer current, Integer result1, Integer result2, BodyGrammarSlot slot) {
+        logger.packedNodeAdded();
+        if (current == null) logger.intermediateNodeAdded();
         return result2;
     }
 
     @Override
     public Integer convert(Integer current, Integer result, EndGrammarSlot slot, Object value) {
+        logger.packedNodeAdded();
+        if (current == null) logger.nonterminalNodeAdded();
         return result;
     }
 

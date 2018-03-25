@@ -123,12 +123,12 @@ public class EBNFToBNF implements GrammarTransformation {
 	}
 
 	
-	public static String getName(Symbol symbol, List<Symbol> separators, Nonterminal layout) {
+	public static String getName(Symbol symbol, List<Symbol> separators, Symbol layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
 		} else {
 			return "{" + symbol.getName() +
-					  ", " + separators.stream().map(s -> s.getName()).collect(Collectors.joining(", ")) + 
+					  ", " + separators.stream().map(Symbol::getName).collect(Collectors.joining(", ")) +
 					  ", " + layout + 
 				   "}";	
 		}
@@ -138,7 +138,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		private final Set<String> state;
 		private final Set<Rule> addedRules;
-		private final Nonterminal layout;
+		private final Symbol layout;
 		private final LayoutStrategy strategy;
 		
 		private final Map<String, Set<String>> ebnfLefts;
@@ -146,7 +146,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		private static int counter = 0;
 		
-		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Nonterminal layout, LayoutStrategy strategy,
+		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Symbol layout, LayoutStrategy strategy,
 						   Map<String, Set<String>> ebnfLefts, Map<String, Set<String>> ebnfRights) {
 			this.state = state;
 			this.addedRules = addedRules;

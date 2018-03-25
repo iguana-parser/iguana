@@ -98,7 +98,7 @@ public class OperatorPrecedence {
 			Nonterminal head = e.getKey();
 			for (int i = 0; i < e.getValue().size(); i++) {
 				List<Symbol> list = definitions.get(head).get(i);
-				Nonterminal layout = grammar.getDefinitions().get(plain(head)).get(i).getLayout();
+				Symbol layout = grammar.getDefinitions().get(plain(head)).get(i).getLayout();
 				LayoutStrategy strategy = grammar.getDefinitions().get(plain(head)).get(i).getLayoutStrategy();
 				Rule rule = Rule.withHead(head).addSymbols(list).setLayout(layout).setLayoutStrategy(strategy).build();
 				if (rule.getBody() != null)

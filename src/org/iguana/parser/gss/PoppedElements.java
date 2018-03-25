@@ -88,7 +88,7 @@ public class PoppedElements<T> {
 	public T add(EndGrammarSlot slot, T result, Object value) {
 		// No node added yet
 		if (firstResult == null) {
-            firstResult = ops.convert(null, result, slot, null);
+            firstResult = ops.convert(null, result, slot, value);
             return firstResult;
         } else {
             Key key = Keys.from(ops.getRightIndex(result), value);

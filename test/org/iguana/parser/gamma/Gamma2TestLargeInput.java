@@ -31,12 +31,15 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.transformation.DesugarStartSymbol;
+import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.ParseStatistics;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,22 @@ public class Gamma2TestLargeInput {
 		Rule rule1 = Rule.withHead(S).addSymbols(S, S, S).build();
 		Rule rule2 = Rule.withHead(S).addSymbols(S, S).build();
 		Rule rule3 = Rule.withHead(S).addSymbols(b).build();
-		return Grammar.builder().addRules(rule1, rule2, rule3).build();
+		return new DesugarStartSymbol().transform(Grammar.builder().addRules(rule1, rule2, rule3).setStartSymbol(Start.from(S)).build());
+	}
+
+	@Test
+	public void test() throws InterruptedException {
+		for (int i = 0; i < 10; i++) {
+			ParseResult<Integer> result = Iguana.recognize(getInput(200), getGrammar());
+			Assert.assertTrue(result.isParseSuccess());
+			Assert.assertEquals(200, (int) result.asParseSuccess().getResult());
+			System.gc();
+			System.gc();
+			Thread.sleep(5000);
+			System.gc();
+			System.gc();
+			System.out.println(result.asParseSuccess().getStatistics());
+		}
 	}
 	
 	private static Nonterminal getStartSymbol() {

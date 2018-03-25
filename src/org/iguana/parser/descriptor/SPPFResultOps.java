@@ -38,16 +38,17 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
 
         if (current == null) {
             current = new IntermediateNode();
+            ((IntermediateNode) current).addPackedNode(packedNode);
             logger.intermediateNodeAdded();
             logger.log("Intermediate node added %s", current);
         } else {
-            if (current.getChildren().size() == 1) {
+            ((IntermediateNode) current).addPackedNode(packedNode);
+            if (current.getChildren().size() == 2) {
                 logger.ambiguousNodeAdded();
                 logger.log("Ambiguous node added: %s", current);
             }
         }
 
-        ((IntermediateNode) current).addPackedNode(packedNode);
         return current;
     }
 
@@ -65,16 +66,17 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
             else
                 current = new NonterminalNodeWithValue(slot.getNonterminal(), value);
 
+            ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
             logger.nonterminalNodeAdded();
             logger.log("Nonterminal node added %s", current);
         } else {
-            if (current.getChildren().size() == 1) {
-                ParserLogger.getInstance().ambiguousNodeAdded();
+            ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
+            if (current.getChildren().size() == 2) {
+                logger.ambiguousNodeAdded();
                 logger.log("Ambiguous node added: %s", current);
             }
         }
 
-        ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
         return current;
     }
 

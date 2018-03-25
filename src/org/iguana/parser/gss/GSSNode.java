@@ -58,7 +58,7 @@ public class GSSNode<T> {
 
 	private final ResultOps<T> ops;
 
-	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, ResultOps<T> ops) {
+	public GSSNode(NonterminalGrammarSlot<T> slot, int inputIndex, ResultOps<T> ops) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new PoppedElements<>(ops);
@@ -74,7 +74,7 @@ public class GSSNode<T> {
 		
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-				Descriptor descriptor = edge.addDescriptor(input, this, z);
+				Descriptor<T> descriptor = edge.addDescriptor(input, this, z);
 				if (descriptor != null) {
 					slot.getRuntime().scheduleDescriptor(descriptor);
 				}
@@ -169,7 +169,7 @@ public class GSSNode<T> {
 
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-				Descriptor descriptor = edge.addDescriptor(input, this, z);
+				Descriptor<T> descriptor = edge.addDescriptor(input, this, z);
 				if (descriptor != null) {
                     returnSlot.getRuntime().scheduleDescriptor(descriptor);
 				}
