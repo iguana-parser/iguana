@@ -30,6 +30,7 @@ package org.iguana.parser.gss;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.parser.descriptor.ResultOps;
 
 public interface GSSEdge<T> {
 
@@ -48,6 +49,6 @@ public interface GSSEdge<T> {
 	 * (2.2) if no, creates one and returns it
 	 * 
 	 */
-	Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T result);
+	Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops);
 
 }

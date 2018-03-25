@@ -38,15 +38,15 @@ public class NewGSSEdgeImpl<T> extends org.iguana.parser.gss.NewGSSEdgeImpl<T> {
 	
 	private final Environment env;
 	
-	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T node, GSSNode<T> destination, Environment env, ResultOps<T> ops) {
-		super(slot, node, destination, ops);
+	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T node, GSSNode<T> destination, Environment env) {
+		super(slot, node, destination);
 		
 		assert env != null;
 		this.env = env;
 	}
 	
 	@Override
-	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T result) {
+	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops) {
 
         int inputIndex = ops.getRightIndex(result);
 

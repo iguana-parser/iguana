@@ -61,7 +61,7 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	@Override
 	public void execute(Input input, GSSNode<T> u, T result) {
 		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(result))))
-            u.pop(input, this, result);
+            u.pop(input, this, result, ops);
 	}
 	
 	@Override
@@ -91,12 +91,12 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
 		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(node))))
-            u.pop(input, this, node);
+            u.pop(input, this, node, ops);
 	}
 	
 	public void execute(Input input, GSSNode<T> u, T node, Object value) {
 		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(node))))
-            u.pop(input, this, node, value);
+            u.pop(input, this, node, value, ops);
 	}
 
 }
