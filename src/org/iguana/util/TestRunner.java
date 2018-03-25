@@ -40,6 +40,7 @@ public class TestRunner {
         Iterable<String> tests = getTests(rootDir);
         for (String testDir : tests) {
             runRecognizer(testDir);
+            runParser(testDir);
         }
     }
 
@@ -142,7 +143,7 @@ public class TestRunner {
         System.out.println();
     }
 
-    public static void runTest(String testPath) {
+    public static void runParser(String testPath) {
         Path path = Paths.get(testPath);
         Path testName = path.getFileName();
         System.out.println("Running " + testName);

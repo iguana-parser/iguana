@@ -122,10 +122,10 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 
         int i = ops.getRightIndex(node);
 
-		GSSNodeCreator<T> creator = gssNode -> {
+		nodeLookup.get(i, gssNode -> {
 			// No GSS node labelled (slot, k) exits
 			if (gssNode == null) {
-				
+
 				gssNode = new GSSNode<>(this, i, ops);
 				ParserLogger.getInstance().gssNodeAdded(gssNode);
 
@@ -143,9 +143,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				gssNode.createGSSEdge(input, returnSlot, u, node);
 			}
 			return gssNode;
-		};
-		
-		nodeLookup.get(i, creator);
+		});
 	}
 	
 	@Override
@@ -177,18 +175,17 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
         int i = ops.getRightIndex(node);
 		
 		if (arguments == null) {
-			
-			GSSNodeCreator<T> creator = gssNode -> {
+			nodeLookup.get(i, gssNode -> {
 				// No GSS node labelled (slot, k) exits
 				if (gssNode == null) {
-					
+
 					gssNode = new GSSNode<>(this, i, ops);
 					ParserLogger.getInstance().gssNodeAdded(gssNode);
-					
+
 					gssNode.createGSSEdge(input, returnSlot, u, node, env); // Record environment on the edge;
-					
+
 					final GSSNode<T> __gssNode = gssNode;
-					
+
 					List<BodyGrammarSlot<T>> firstSlots = getFirstSlots(input.charAt(i));
 					if (firstSlots != null)
 						for (BodyGrammarSlot<T> s : firstSlots) {
@@ -201,9 +198,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 					gssNode.createGSSEdge(input, returnSlot, u, node, env); // Record environment on the edge
 				}
 				return gssNode;
-			};	
-			
-			nodeLookup.get(i, creator);
+			});
 			return;
 		}
 		

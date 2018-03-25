@@ -48,7 +48,7 @@ public class Rule implements Serializable {
 
     private final List<Symbol> body;
 
-	private final Nonterminal layout;
+	private final Symbol layout;
 	
 	private final LayoutStrategy layoutStrategy;
 	
@@ -116,7 +116,7 @@ public class Rule implements Serializable {
 		return body.get(i);
 	}
 	
-	public Nonterminal getLayout() {
+	public Symbol getLayout() {
 		return layout;
 	}
 	
@@ -312,7 +312,7 @@ public class Rule implements Serializable {
         private List<Symbol> body;
         private Serializable object;
         private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
-        private Nonterminal layout;
+        private Symbol layout;
 
         private Recursion recursion = Recursion.NON_REC;
         private Recursion irecursion = Recursion.NON_REC;
@@ -393,7 +393,7 @@ public class Rule implements Serializable {
             return this;
         }
 
-        public Builder setLayout(Nonterminal layout) {
+        public Builder setLayout(Symbol layout) {
             this.layout = layout;
             return this;
         }
