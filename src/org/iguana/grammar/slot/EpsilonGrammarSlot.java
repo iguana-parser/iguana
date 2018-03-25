@@ -49,7 +49,7 @@ public class EpsilonGrammarSlot<T> extends EndGrammarSlot<T> {
 	public void execute(Input input, GSSNode<T> u, T result) {
         int i = ops.getRightIndex(result);
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getResult(input, i));
+            u.pop(input, this, epsilonSlot.getResult(input, i), ops);
 	}
 	
 	/**
@@ -62,14 +62,14 @@ public class EpsilonGrammarSlot<T> extends EndGrammarSlot<T> {
 	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
         int i = ops.getRightIndex(result);
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getResult(input, i));
+            u.pop(input, this, epsilonSlot.getResult(input, i), ops);
 	}
 	
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Object value) {
         int i = ops.getRightIndex(node);
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getResult(input, i), value);
+            u.pop(input, this, epsilonSlot.getResult(input, i), value, ops);
 	}
 
 }

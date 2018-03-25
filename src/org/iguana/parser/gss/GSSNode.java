@@ -56,25 +56,22 @@ public class GSSNode<T> {
 	
 	private final List<GSSEdge<T>> gssEdges;
 
-	private final ResultOps<T> ops;
-
 	public GSSNode(NonterminalGrammarSlot<T> slot, int inputIndex, ResultOps<T> ops) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new PoppedElements<>(ops);
 		this.gssEdges = new ArrayList<>();
-		this.ops = ops;
 	}
 	
-	public void createGSSEdge(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> destination, T w) {
-		GSSEdge<T> edge = new NewGSSEdgeImpl<>(returnSlot, w, destination, ops);
+	public void createGSSEdge(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> destination, T w, ResultOps<T> ops) {
+		GSSEdge<T> edge = new NewGSSEdgeImpl<>(returnSlot, w, destination);
 		ParserLogger.getInstance().gssEdgeAdded(edge);
 		
 		gssEdges.add(edge);
 		
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-				Descriptor<T> descriptor = edge.addDescriptor(input, this, z);
+				Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
 				if (descriptor != null) {
 					slot.getRuntime().scheduleDescriptor(descriptor);
 				}
@@ -82,23 +79,23 @@ public class GSSNode<T> {
 		});
 	}
 
-    public void pop(Input input, EndGrammarSlot slot, T child) {
+    public void pop(Input input, EndGrammarSlot slot, T child, ResultOps<T> ops) {
 		ParserLogger.getInstance().log("Pop %s, %d, %s", this, inputIndex, child);
         T node = poppedElements.add(slot, child);
-        if (node != null) iterateOverEdges(input, node);
+        if (node != null) iterateOverEdges(input, node, ops);
     }
 
-    public void pop(Input input, EndGrammarSlot slot, T child, Object value) {
+    public void pop(Input input, EndGrammarSlot slot, T child, Object value, ResultOps<T> ops) {
         T node = poppedElements.add(slot, child, value);
-        if (node != null) iterateOverEdges(input, node);
+        if (node != null) iterateOverEdges(input, node, ops);
     }
 
-    private void iterateOverEdges(Input input, T node) {
+    private void iterateOverEdges(Input input, T node, ResultOps<T> ops) {
         for(GSSEdge<T> edge : getGSSEdges()) {
 
             if (!edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(node)))) continue;
 
-            Descriptor<T> descriptor = edge.addDescriptor(input, this, node);
+            Descriptor<T> descriptor = edge.addDescriptor(input, this, node, ops);
             if (descriptor != null) {
                 slot.getRuntime().scheduleDescriptor(descriptor);
             }
@@ -161,15 +158,15 @@ public class GSSNode<T> {
 	 * 
 	 */
 	
-	public void createGSSEdge(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> destination, T w, Environment env) {
-		GSSEdge<T> edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl<>(returnSlot, w, destination, env, ops);
+	public void createGSSEdge(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> destination, T w, Environment env, ResultOps<T> ops) {
+		GSSEdge<T> edge = new org.iguana.datadependent.gss.NewGSSEdgeImpl<>(returnSlot, w, destination, env);
 		
 		gssEdges.add(edge);
 		ParserLogger.getInstance().gssEdgeAdded(edge);
 
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-				Descriptor<T> descriptor = edge.addDescriptor(input, this, z);
+				Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
 				if (descriptor != null) {
                     returnSlot.getRuntime().scheduleDescriptor(descriptor);
 				}

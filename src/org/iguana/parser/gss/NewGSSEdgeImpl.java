@@ -40,13 +40,11 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	private final BodyGrammarSlot<T> returnSlot;
 	private final T result;
 	private final GSSNode<T> destination;
-	protected final ResultOps<T> ops;
 
-	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination, ResultOps<T> ops) {
+	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination) {
 		this.returnSlot = slot;
 		this.result = result;
 		this.destination = destination;
-		this.ops = ops;
 	}
 
 	public T getResult() {
@@ -90,22 +88,22 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	}
 
 	@Override
-	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T _result) {
+	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T newResult, ResultOps<T> ops) {
 		
-		/**
+		/*
 		 * 
 		 * Data-dependent GLL parsing
 		 * 
 		 */
 
-        int i = ops.getRightIndex(_result);
+        int i = ops.getRightIndex(newResult);
         ParserRuntime runtime = returnSlot.getRuntime();
 		
 		T y;
 		BodyGrammarSlot<T> returnSlot = this.returnSlot;
 		
 		if (returnSlot.requiresBinding()) {
-			Environment env = returnSlot.doBinding(_result, runtime.getEmptyEnvironment());
+			Environment env = returnSlot.doBinding(newResult, runtime.getEmptyEnvironment());
 
             runtime.setEnvironment(env);
 			
@@ -114,7 +112,7 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 			
 			env = runtime.getEnvironment();
 			
-			y = returnSlot.getIntermediateNode2(result, destination.getInputIndex(), _result, env);
+			y = returnSlot.getIntermediateNode2(result, destination.getInputIndex(), newResult, env);
 			
 //			y = parser.getNode(returnSlot, node, sppfNode, env);
 //			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
@@ -130,7 +128,7 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 //		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
 //			return new Descriptor(returnSlot, destination, inputIndex, y);
 		
-		y = returnSlot.getIntermediateNode2(input, destination.getInputIndex(), result, _result);
+		y = returnSlot.getIntermediateNode2(input, destination.getInputIndex(), result, newResult);
 		
 		return y != null ? new Descriptor<>(returnSlot, destination, y) : null;
 	}
