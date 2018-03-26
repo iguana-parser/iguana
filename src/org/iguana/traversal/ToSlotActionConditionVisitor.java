@@ -166,7 +166,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 				};
 				
 			default:
-				throw new RuntimeException("Unexpected error occured.");
+				throw new RuntimeException("Unexpected error occurred.");
 		}
 	}
 

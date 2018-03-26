@@ -65,12 +65,12 @@ public class PoppedElements<T> {
 			// Initialize the map and put the firstResult element there
 			if (poppedElements == null) {
 				poppedElements = new LinkedHashMap<>();
-				poppedElements.put(Keys.from(ops.getRightIndex(firstResult)), firstResult);
+				poppedElements.put(ops.getRightIndex(firstResult), firstResult);
 			}
 
 			Holder<T> holder = new Holder<>();
 
-			poppedElements.compute(Keys.from(ops.getRightIndex(result)), (k, v) -> {
+			poppedElements.compute(ops.getRightIndex(result), (k, v) -> {
                 if (v == null) {
                     T node = ops.convert(null, result, slot, null);
                     holder.set(node);
@@ -134,7 +134,7 @@ public class PoppedElements<T> {
 			else
 				return null;
 		}
-		return poppedElements.get(Keys.from(j));
+		return poppedElements.get(j);
 	}
 
 	public int size() {

@@ -9,6 +9,7 @@ import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.Configuration;
@@ -16,9 +17,9 @@ import org.iguana.util.ParseStatistics;
 import org.iguana.util.ParserLogger;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.List;
 
 public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
@@ -88,11 +89,6 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     public final void scheduleDescriptor(Descriptor<T> descriptor) {
         descriptorsStack.push(descriptor);
         logger.descriptorAdded(descriptor);
-    }
-
-    @Override
-    public Iterable<GSSNode<T>> getGSSNodes() {
-        return grammarGraph.getNonterminals().stream().flatMap(s -> StreamSupport.stream(s.getGSSNodes().spliterator(), false)).collect(Collectors.toList());
     }
 
     @Override

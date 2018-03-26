@@ -53,22 +53,28 @@ public class GSSNode<T> {
 	private final int inputIndex;
 	
 	private final PoppedElements<T> poppedElements;
+
+	private GSSEdge<T> firstGSSEdge;
 	
-	private final List<GSSEdge<T>> gssEdges;
+	private List<GSSEdge<T>> gssEdges;
 
 	public GSSNode(NonterminalGrammarSlot<T> slot, int inputIndex, ResultOps<T> ops) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.poppedElements = new PoppedElements<>(ops);
-		this.gssEdges = new ArrayList<>();
 	}
 	
 	public void createGSSEdge(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> destination, T w, ResultOps<T> ops) {
 		GSSEdge<T> edge = new NewGSSEdgeImpl<>(returnSlot, w, destination);
 		ParserLogger.getInstance().gssEdgeAdded(edge);
-		
-		gssEdges.add(edge);
-		
+
+		if (firstGSSEdge == null) {
+			firstGSSEdge = edge;
+		} else {
+			if (gssEdges == null) gssEdges = new ArrayList<>(4);
+			gssEdges.add(edge);
+		}
+
 		poppedElements.forEach(z -> {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
 				Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
@@ -91,18 +97,24 @@ public class GSSNode<T> {
     }
 
     private void iterateOverEdges(Input input, T node, ResultOps<T> ops) {
-        for(GSSEdge<T> edge : getGSSEdges()) {
+		if (firstGSSEdge != null)
+			processEdge(input, node, ops, firstGSSEdge);
 
-            if (!edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(node)))) continue;
-
-            Descriptor<T> descriptor = edge.addDescriptor(input, this, node, ops);
-            if (descriptor != null) {
-                slot.getRuntime().scheduleDescriptor(descriptor);
-            }
-        }
+		if (gssEdges != null)
+        	for(GSSEdge<T> edge : gssEdges)
+				processEdge(input, node, ops, edge);
     }
 
-    public T getResult(int j) {
+	private void processEdge(Input input, T node, ResultOps<T> ops, GSSEdge<T> edge) {
+		if (!edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(node)))) return;
+
+		Descriptor<T> descriptor = edge.addDescriptor(input, this, node, ops);
+		if (descriptor != null) {
+            slot.getRuntime().scheduleDescriptor(descriptor);
+        }
+	}
+
+	public T getResult(int j) {
 		return poppedElements.getResult(j);
 	}
 

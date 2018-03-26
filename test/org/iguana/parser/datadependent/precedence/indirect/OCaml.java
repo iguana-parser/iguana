@@ -1,15 +1,10 @@
 package org.iguana.parser.datadependent.precedence.indirect;
 
-import com.google.common.collect.Iterables;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParseSuccess;
 import org.iguana.util.IguanaRunner;
 import org.iguana.util.ParseStatistics;
 import org.junit.Test;
@@ -43,7 +38,7 @@ public class OCaml {
 //				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk", "java", true)
 //				.setLimit(500)
 				.setWarmupCount(0)
-				.setRunCount(20)
+				.setRunCount(1000)
 //				.setRunGCInBetween(true)
 				.build()
 				.run();

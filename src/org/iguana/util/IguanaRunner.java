@@ -119,7 +119,7 @@ public class IguanaRunner {
 		private final Grammar grammar;
 		private Start start;
 		private List<File> inputFiles = new ArrayList<>();
-		private Configuration config = Configuration.DEFAULT;
+		private Configuration config = Configuration.load();
 		private int warmupCount = 0;
 		private int runCount = 1;
 		private boolean runGCInBetween = false;

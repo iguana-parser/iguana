@@ -40,12 +40,16 @@ import org.iguana.parser.gss.GSSNodeData;
 public interface GSSNodeLookup<T> {
 	
 	void get(int i, GSSNodeCreator<T> creator);
+
+	GSSNode<T> get(int i);
 	
 	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i);
 	
 	void reset(Input input);
-	
+
 	Iterable<GSSNode<T>> getNodes();
+
+	int size();
 	
 	/*
 	 * 
@@ -55,7 +59,9 @@ public interface GSSNodeLookup<T> {
 	<V> void get(int i, GSSNodeData<V> data, GSSNodeCreator<T> creator);
 	
 	<V> GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<V> data);
-	
+
+	void put(int i, GSSNode<T> gssNode);
+
 	@FunctionalInterface
 	interface GSSNodeCreator<T> {
 		GSSNode<T> create(GSSNode<T> node);

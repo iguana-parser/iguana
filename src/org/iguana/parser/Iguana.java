@@ -47,8 +47,10 @@ import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.ParserLogger;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 
@@ -183,4 +185,40 @@ public class Iguana {
         return parseResult;
     }
 
+    private static <T> void printStats(GrammarGraph<T> grammarGraph) {
+        for (NonterminalGrammarSlot<T> slot : grammarGraph.getNonterminalGrammarSlots()) {
+            System.out.print(slot.getNonterminal().getName());
+            System.out.println(" GSS nodes: " + slot.countGSSNodes());
+            double[] poppedElementStats = stats(slot.getGSSNodes(), GSSNode::countPoppedElements);
+            double[] gssEdgesStats = stats(slot.getGSSNodes(), GSSNode::countGSSEdges);
+            if (poppedElementStats == null)
+                System.out.println("Popped Elements: empty");
+            else
+                System.out.printf("Popped Elements (min: %d, max: %d, mean: %.2f)%n", (int) poppedElementStats[0], (int) poppedElementStats[1], poppedElementStats[2]);
+
+            if (gssEdgesStats == null)
+                System.out.println("GSS Edges: empty");
+            else
+                System.out.printf("GSS Edges (min: %d, max: %d, mean: %.2f)%n", (int) gssEdgesStats[0], (int) gssEdgesStats[1], gssEdgesStats[2]);
+            System.out.println("---------------");
+        }
+    }
+
+    private static <T> double[] stats(Iterable<GSSNode<T>> gssNodes, Function<GSSNode<T>, Integer> f) {
+        if (!gssNodes.iterator().hasNext()) return null;
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        int count = 0;
+
+        for (GSSNode<T> gssNode : gssNodes) {
+            min = Integer.min(min, f.apply(gssNode));
+            max = Integer.max(max, f.apply(gssNode));
+            sum += f.apply(gssNode);
+            count++;
+        }
+
+        return new double[] { min, max, (double) sum / count };
+    }
 }
