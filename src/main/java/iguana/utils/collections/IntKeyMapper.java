@@ -2,5 +2,5 @@ package iguana.utils.collections;
 
 @FunctionalInterface
 public interface IntKeyMapper<T> {
-	public T apply(int a, T t);
+	T apply(int k, T v);
 }

@@ -1,12 +1,12 @@
 package iguana.utils.collections;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
 import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.assertEquals;
 
 public class TestIntHashMap {
 
@@ -18,9 +18,33 @@ public class TestIntHashMap {
         map.put(1, "a");
         map.put(2, "b");
         map.put(3, "c");
-        map.put(3, "c");
-        map.put(4, "d");
-        map.put(4, "d");
+        map.put(3, "d");
+        map.put(4, "e");
+        map.put(4, "e");
+    }
+
+    @Test
+    public void testGet() {
+        assertEquals("a", map.get(1));
+        assertEquals("b", map.get(2));
+        assertEquals("d", map.get(3));
+        assertEquals("e", map.get(4));
+    }
+
+    @Test
+    public void testCompute() {
+        String s1 = map.compute(5, (k, v) -> {
+            assertEquals(null, v);
+            return "e";
+        });
+        assertEquals("e", s1);
+
+        String s2 = map.compute(3, (k, v) -> {
+            assertEquals("d", v);
+            return "d";
+        });
+        assertEquals("d", s2);
+
     }
 
     @Test
@@ -30,13 +54,13 @@ public class TestIntHashMap {
             actualValues.add(s);
         }
 
-        Assert.assertEquals(actualValues, set("a", "b", "c", "d"));
+        assertEquals(set("a", "b", "d", "e"), actualValues);
     }
 
     @Test
     public void testToString() {
-        Assert.assertEquals("{ }", new OpenAddressingIntHashMap<String>().toString());
-        Assert.assertEquals("{(1, a), (3, c), (2, b), (4, d)}", map.toString());
+        assertEquals("{ }", new OpenAddressingIntHashMap<String>().toString());
+        assertEquals("{(1, a), (3, d), (2, b), (4, e)}", map.toString());
     }
 
 }
