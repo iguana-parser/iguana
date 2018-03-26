@@ -17,8 +17,18 @@ public class IntOpenAddressingMap<T> extends AbstractNodeLookup<T> {
 	}
 
 	@Override
-	public void get(int i, GSSNodeCreator creator) {
+	public void get(int i, GSSNodeCreator<T> creator) {
 		map.compute(i, (k, v) -> creator.create(v));
+	}
+
+	@Override
+	public GSSNode<T> get(int i) {
+		return map.get(i);
+	}
+
+	@Override
+	public void put(int i, GSSNode<T> gssNode) {
+		map.put(i, gssNode);
 	}
 
 	@Override
@@ -33,7 +43,12 @@ public class IntOpenAddressingMap<T> extends AbstractNodeLookup<T> {
 	}
 
 	@Override
-	public GSSNode get(NonterminalGrammarSlot slot, int i) {
+	public int size() {
+		return map.size();
+	}
+
+	@Override
+	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
 		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i, ops));
 	}
 

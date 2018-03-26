@@ -48,7 +48,12 @@ public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
 	public void get(int i, GSSNodeCreator<T> creator) {
 		map.compute(i, (k, v) -> creator.create(v)); 
 	}
-	
+
+	@Override
+	public GSSNode<T> get(int i) {
+		return map.get(i);
+	}
+
 	@Override
 	public void reset(Input input) {
 		super.reset(input);
@@ -58,6 +63,16 @@ public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
 	@Override
 	public Iterable<GSSNode<T>> getNodes() {
 		return CollectionsUtil.concat(map.values(), super.map.values());
+	}
+
+	@Override
+	public int size() {
+		return map.size();
+	}
+
+	@Override
+	public void put(int i, GSSNode<T> gssNode) {
+		map.put(i, gssNode);
 	}
 
 	@Override

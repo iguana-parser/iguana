@@ -4,7 +4,7 @@
         <Lookahead>1</Lookahead>
         <GSSLookupImpl>HASH_MAP</GSSLookupImpl>
         <MatcherType>DFA</MatcherType>
-        <HashMapImpl>Java</HashMapImpl>
+        <HashMapImpl>INT_OPEN_ADDRESSING</HashMapImpl>
         <EnvironmentImpl>Trie</EnvironmentImpl>
     </Parser>
 

@@ -167,7 +167,7 @@ public class GrammarGraph<T> implements Serializable {
         return names.get(s);
     }
 
-    public Collection<NonterminalGrammarSlot<T>> getNonterminals() {
+    public Collection<NonterminalGrammarSlot<T>> getNonterminalGrammarSlots() {
         return nonterminalsMap.values();
     }
 

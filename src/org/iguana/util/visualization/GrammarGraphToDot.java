@@ -43,7 +43,7 @@ public class GrammarGraphToDot {
 		ids.clear();
 		final StringBuilder sb = new StringBuilder();
 		
-		for (NonterminalGrammarSlot<?> nonterminal : g.getNonterminals()) {
+		for (NonterminalGrammarSlot<?> nonterminal : g.getNonterminalGrammarSlots()) {
 			toDot(nonterminal, sb);
 		}
 		

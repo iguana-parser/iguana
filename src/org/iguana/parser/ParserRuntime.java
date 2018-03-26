@@ -24,8 +24,6 @@ public interface ParserRuntime<T> {
 
     void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u);
 
-    Iterable<GSSNode<T>> getGSSNodes();
-
     /*
      *
      * Data-dependent GLL parsing

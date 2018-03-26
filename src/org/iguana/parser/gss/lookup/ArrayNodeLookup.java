@@ -42,6 +42,7 @@ import static java.util.stream.Collectors.toList;
 public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 
 	private GSSNode[] gssNodes;
+	private int size;
 	
 	public ArrayNodeLookup(Input input, ResultOps<T> ops) {
 		super(ops);
@@ -51,7 +52,8 @@ public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 	@Override
 	public void reset(Input input) {
 		super.reset(input);
-		gssNodes = new GSSNode[input.length()];		
+		gssNodes = new GSSNode[input.length()];
+		size = 0;
 	}
 	
 	@Override
@@ -62,8 +64,24 @@ public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 	}
 
 	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public void put(int i, GSSNode<T> gssNode) {
+		gssNodes[i] = gssNode;
+		size++;
+	}
+
+	@Override
 	public void get(int i, GSSNodeCreator<T> creator) {
 		gssNodes[i] = creator.create(gssNodes[i]);
+	}
+
+	@Override
+	public GSSNode<T> get(int i) {
+		return gssNodes[i];
 	}
 
 	@Override
