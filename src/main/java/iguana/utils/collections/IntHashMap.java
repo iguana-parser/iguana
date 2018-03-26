@@ -10,31 +10,30 @@ import java.util.function.IntFunction;
  */
 public interface IntHashMap<T> extends Iterable<Entry<T>> {
 	
-	public boolean containsKey(int key);
+	boolean containsKey(int key);
 	
-	public T computeIfAbsent(int key, IntFunction<T> f);
+	T computeIfAbsent(int key, IntFunction<T> f);
 	
-	public T compute(int key, IntKeyMapper<T> mapper);
+	T compute(int key, IntKeyMapper<T> mapper);
 	
-	public T put(int key, T value);
+	T put(int key, T value);
 	
-	public T remove(int key);
-		
-	public T get(int key);
+	T remove(int key);
 
-	public int size();
-	
-	public int getInitialCapacity();
-	
-	public int getEnlargeCount();
+	T get(int key);
 
-	public boolean isEmpty();
-
-	public void clear();
-
-	public int getCollisionCount();
+	int size();
 	
-	public Iterable<T> values();
+	int getInitialCapacity();
 	
+	int getEnlargeCount();
+
+	boolean isEmpty();
+
+	void clear();
+
+	int getCollisionCount();
+	
+	Iterable<T> values();
 }
 

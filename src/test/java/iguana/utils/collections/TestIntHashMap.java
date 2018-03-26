@@ -1,33 +1,42 @@
 package iguana.utils.collections;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
+import static iguana.utils.collections.CollectionsUtil.set;
+
 public class TestIntHashMap {
-	
-	int max = 1000_000;
-	
-	@Test
-	public void test() {
-		Random rand = new Random();
 
-		List<Integer> keys = new ArrayList<>();
-		
-		for (int i = 0; i < 100_000; i++) {
-			keys.add(rand.nextInt(max));
-		}
+    private IntHashMap<String> map;
 
-		for (int i = 0; i < 15; i++) {
-			Map<Integer, String> map = new HashMap<>();
-			keys.forEach(k -> map.put(k, k + ""));
+    @Before
+    public void init() {
+        map = new OpenAddressingIntHashMap<>();
+        map.put(1, "a");
+        map.put(2, "b");
+        map.put(3, "c");
+        map.put(3, "c");
+        map.put(4, "d");
+        map.put(4, "d");
+    }
 
-			IntHashMap<String> imap = new ChainingIntHashMap<>();
-			keys.forEach(k -> imap.put(k, k + ""));
+    @Test
+    public void testIteration() {
+        Set<String> actualValues = new HashSet<>();
+        for (String s : map.values()) {
+            actualValues.add(s);
+        }
 
-			keys.forEach(k -> Assert.assertTrue(map.containsKey(k) && imap.containsKey(k) && map.get(k).equals(imap.get(k))));
-		}
-	}
+        Assert.assertEquals(actualValues, set("a", "b", "c", "d"));
+    }
+
+    @Test
+    public void testToString() {
+        Assert.assertEquals("{ }", new OpenAddressingIntHashMap<String>().toString());
+        Assert.assertEquals("{(1, a), (3, c), (2, b), (4, d)}", map.toString());
+    }
 
 }

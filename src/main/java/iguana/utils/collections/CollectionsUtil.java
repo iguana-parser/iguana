@@ -45,7 +45,7 @@ public class CollectionsUtil {
 		if (objects.length == 0) return Collections.emptySet();
 		
 		Set<T>  set = new HashSet<>();
-		for(T t : objects) {
+		for (T t : objects) {
 			set.add(t);
 		}
 		return set;
@@ -148,24 +148,24 @@ public class CollectionsUtil {
 				
 				return new Iterator<T>() {
 
-					T next;
+					Iterator<T> curr;
 
 					@Override
 					public boolean hasNext() {
 						if (it1.hasNext()) {
-							next = it1.next();
+							curr = it1;
 							return true;
-						} else if (it2.hasNext()) {
-							next = it2.next();
-							return true;
-						} else {
-							return false;
 						}
+						else if (it2.hasNext()) {
+							curr = it2;
+							return true;
+						}
+						return false;
 					}
 
 					@Override
 					public T next() {
-						return next;
+						return curr.next();
 					}
 				};
 			}

@@ -133,7 +133,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	
 	@Override
 	public T put(int key, T value) {
-		
 		int j = 0;
 		int index = hash(key, j);
 
@@ -256,21 +255,23 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 	}
 	
 	public String toString() {
-		
+		if (isEmpty()) return "{ }";
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		
-		for(int t : keys) {
-			if(t != -1) { 
-				sb.append(t).append(", ");
+
+		Iterator<Entry<T>> it = iterator();
+
+		while (true) {
+			Entry<T> next = it.next();
+			sb.append(next);
+			if (!it.hasNext()) {
+				sb.append("}");
+				break;
 			}
+			sb.append(", ");
 		}
-		
-		if(sb.length() > 2) {
-			sb.delete(sb.length() - 2, sb.length());
-		}
-		
-		sb.append("}");
+
 		return sb.toString();
 	}
 	
@@ -283,43 +284,45 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
 		h ^= h >>> 16;
 		return (h + j) & bitMask; 
 	}
-	
-	@FunctionalInterface
-	static interface HashFunction {
-		int apply(int k, int j);
-	}
 
 	@Override
 	public Iterable<T> values() {
-		return new Iterable<T>() {
+		return () -> new Iterator<T>() {
+			int it = 0;
+            int i = 0;
 
-			@Override
-			public Iterator<T> iterator() {
-				return new Iterator<T>() {
-					int i, j = 0;
-		
-					@Override
-					public boolean hasNext() {
-						return i < size;
-					}
-		
-					@Override
-					public T next() {
-						do j++; while (values[j] == null);
-						i++;
-						if (values[j] == null) 
-							System.out.println("WTF?");
-						return values[j];
-					}
-				};
-			}
-		};
+            @Override
+            public boolean hasNext() {
+                return it < size;
+            }
+
+            @Override
+            public T next() {
+            	while (values[i++] == null);
+            	it++;
+                return values[i - 1];
+            }
+        };
 	}
 
 	@Override
 	public Iterator<Entry<T>> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Iterator<Entry<T>>() {
+			int it = 0;
+			int i = 0;
+
+			@Override
+			public boolean hasNext() {
+				return it < size;
+			}
+
+			@Override
+			public Entry<T> next() {
+				while (values[i++] == null);
+				it++;
+				return new Entry<>(keys[i - 1], values[i - 1]);
+			}
+		};
 	}
-	
+
 }
