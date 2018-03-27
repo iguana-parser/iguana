@@ -1,13 +1,10 @@
 package iguana.utils.collections;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.IntFunction;
 
-public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.7f;
@@ -104,7 +101,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
         int index = hash(key, j);
 
         do {
-            if (keys[index] == -1) {
+            if (keys[index] == -1) {    // Key is not in the map
                 keys[index] = key;
                 T val = f.apply(key, null);
                 values[index] = val;
@@ -117,7 +114,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
                 T val = values[index];
                 val = f.apply(key, val);
                 values[index] = val;
-                return val;
+                return null;
             }
 
             collisionsCount++;
@@ -282,24 +279,11 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
         return (h + j) & bitMask;
     }
 
+    private IntMapIterator it = new IntMapIterator();
+
     @Override
     public Iterable<T> values() {
-        return () -> new Iterator<T>() {
-            int it = 0;
-            int i = 0;
-
-            @Override
-            public boolean hasNext() {
-                return it < size;
-            }
-
-            @Override
-            public T next() {
-                while (values[i++] == null) ;
-                it++;
-                return values[i - 1];
-            }
-        };
+        return () -> it.reset();
     }
 
     @Override
@@ -320,6 +304,29 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T>, Serializable 
                 return new Entry<>(keys[i - 1], values[i - 1]);
             }
         };
+    }
+
+    private class IntMapIterator implements Iterator<T> {
+        int count = 0;
+        int i = 0;
+
+        @Override
+        public boolean hasNext() {
+            return count < size;
+        }
+
+        @Override
+        public T next() {
+            while (values[i++] == null);
+            count++;
+            return values[i - 1];
+        }
+
+        public IntMapIterator reset() {
+            count = 0;
+            i = 0;
+            return this;
+        }
     }
 
 }

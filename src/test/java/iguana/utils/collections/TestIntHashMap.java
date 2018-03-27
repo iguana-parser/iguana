@@ -41,10 +41,9 @@ public class TestIntHashMap {
 
         String s2 = map.compute(3, (k, v) -> {
             assertEquals("d", v);
-            return "d";
+            return "x";
         });
-        assertEquals("d", s2);
-
+        assertEquals(null, s2);
     }
 
     @Test

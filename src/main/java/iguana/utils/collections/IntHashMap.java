@@ -13,7 +13,10 @@ public interface IntHashMap<T> extends Iterable<Entry<T>> {
 	boolean containsKey(int key);
 	
 	T computeIfAbsent(int key, IntFunction<T> f);
-	
+
+	/**
+	 * @return null if there is already a value associated with a key
+	 */
 	T compute(int key, IntKeyMapper<T> mapper);
 	
 	T put(int key, T value);
@@ -35,5 +38,6 @@ public interface IntHashMap<T> extends Iterable<Entry<T>> {
 	int getCollisionCount();
 	
 	Iterable<T> values();
+
 }
 
