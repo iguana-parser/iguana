@@ -12,6 +12,7 @@ import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.CyclicGrammarException;
+import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
@@ -53,7 +54,7 @@ public class TestRunner {
             if (!dirCreated) throw new RuntimeException("Could not create the directory");
         }
 
-        ParseResult result = Iguana.parse(input, grammar);
+        ParseResult<NonPackedNode> result = Iguana.parse(input, grammar);
         if (result.isParseError()) {
             throw new RuntimeException("Parse Error");
         }
@@ -71,7 +72,7 @@ public class TestRunner {
             String jsonSPPF = SPPFJsonSerializer.serialize((NonterminalNode) result.asParseSuccess().getResult());
             FileUtils.writeFile(jsonSPPF, dir + "/sppf" + number + ".json");
 
-            ParseTreeNode parseTree = SPPFToParseTree.toParseTree((NonterminalNode) result, new DefaultParseTreeBuilder());
+            ParseTreeNode parseTree = SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
             String jsonTree = JsonSerializer.toJSON(parseTree);
             FileUtils.writeFile(jsonTree, dir + "/parsetree" + number + ".json");
         } catch (IOException | CyclicGrammarException e) {
@@ -79,7 +80,7 @@ public class TestRunner {
         }
     }
 
-    public static void runRecognizer(String testPath) {
+    private static void runRecognizer(String testPath) {
         Path path = Paths.get(testPath);
         Path testName = path.getFileName();
         System.out.println("Running " + testName);
