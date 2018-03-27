@@ -65,11 +65,11 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 
 	protected final ResultOps<T> ops;
 	
-	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions, ParserRuntime runtime, ResultOps<T> ops) {
+	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		this(position, label, -1, variable, -1, state, conditions, runtime, ops);
 	}
 	
-	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, ParserRuntime runtime, ResultOps<T> ops) {
+	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(runtime);
 		this.position = position;
 		this.conditions = conditions;
