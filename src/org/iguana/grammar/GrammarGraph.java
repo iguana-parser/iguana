@@ -48,7 +48,6 @@ import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Terminal.Category;
 import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.ParserRuntimeImpl;
@@ -98,7 +97,7 @@ public class GrammarGraph<T> implements Serializable {
 
     private TerminalGrammarSlot<T> epsilonSlot;
 
-    private ParserRuntime runtime;
+    private ParserRuntime<T> runtime;
 
     private ResultOps<T> ops;
 
@@ -109,12 +108,12 @@ public class GrammarGraph<T> implements Serializable {
     public static <T> GrammarGraph<T> from(Grammar grammar, Input input, Configuration config, ResultOps<T> ops) {
         IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config, input);
         GrammarGraph<T> grammarGraph = new GrammarGraph<>(grammar, input, config, ops);
-        ParserRuntime runtime = new ParserRuntimeImpl(grammarGraph, config, ctx);
+        ParserRuntime<T> runtime = new ParserRuntimeImpl<>(grammarGraph, config, ctx);
         grammarGraph.convert(runtime);
         return grammarGraph;
     }
 
-    private void convert(ParserRuntime runtime) {
+    private void convert(ParserRuntime<T> runtime) {
         matcherFactory = new DFAMatcherFactory();
 
         this.runtime = runtime;
@@ -343,13 +342,7 @@ public class GrammarGraph<T> implements Serializable {
 
         @Override
         public Void visit(Terminal symbol) {
-            TerminalGrammarSlot<T> terminalSlot;
-
-            if (symbol.getCategory() == Category.Regex) {
-                terminalSlot = getTerminalGrammarSlot(symbol, symbol.getName());
-            } else {
-                terminalSlot = getTerminalGrammarSlot(symbol, null);
-            }
+            TerminalGrammarSlot<T> terminalSlot = getTerminalGrammarSlot(symbol);
 
             BodyGrammarSlot<T> slot;
 
@@ -425,8 +418,8 @@ public class GrammarGraph<T> implements Serializable {
         return new TerminalTransition<>(slot, origin, dest, getConditions(preConditions), getConditions(postConditions), runtime, ops);
     }
 
-    private TerminalGrammarSlot<T> getTerminalGrammarSlot(Terminal t, String name) {
-        TerminalGrammarSlot<T> terminalSlot = terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot<>(t, matcherFactory, name, runtime, ops));
+    private TerminalGrammarSlot<T> getTerminalGrammarSlot(Terminal t) {
+        TerminalGrammarSlot<T> terminalSlot = terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot<>(t, matcherFactory, runtime, ops));
         add(terminalSlot);
         return terminalSlot;
     }
@@ -489,7 +482,7 @@ public class GrammarGraph<T> implements Serializable {
         slots.add(slot);
     }
 
-    private GSSNodeLookup getNodeLookup() {
+    private GSSNodeLookup<T> getNodeLookup() {
         if (config.getGSSLookupImpl() == LookupImpl.HASH_MAP) {
             if (config.getHashmapImpl() == HashMapImpl.JAVA)
                 return new JavaHashMapNodeLookup<>(ops);

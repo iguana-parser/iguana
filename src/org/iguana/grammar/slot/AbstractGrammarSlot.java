@@ -55,7 +55,7 @@ public abstract class AbstractGrammarSlot<T> implements GrammarSlot<T> {
 	}
 
 	@Override
-	public Iterable<Transition<T>> getTransitions() {
+	public List<Transition<T>> getTransitions() {
 		return transitions;
 	}
 

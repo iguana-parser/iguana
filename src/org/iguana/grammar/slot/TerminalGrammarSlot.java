@@ -36,28 +36,22 @@ import org.iguana.parser.descriptor.ResultOps;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	
 	private final Terminal terminal;
 	private final Matcher matcher;
 	private final Map<Integer, T> terminalNodes;
-	private final String terminalName;
 	private final ResultOps<T> ops;
 
-	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime, ResultOps<T> ops) {
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(runtime, Collections.emptyList());
 		this.terminal = terminal;
 		this.matcher = factory.getMatcher(terminal.getRegularExpression());
         this.terminalNodes = new HashMap<>();
-        this.terminalName = terminalName;
         this.ops = ops;
-    }
-
-    public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime runtime, ResultOps<T> ops) {
-        this(terminal, factory, null, runtime, ops);
     }
 
 	public T getResult(Input input, int i) {
@@ -76,8 +70,8 @@ public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
     }
 
     @Override
-	public Set<Transition<T>> getTransitions() {
-		return Collections.emptySet();
+	public List<Transition<T>> getTransitions() {
+		return Collections.emptyList();
 	}
 
 	@Override

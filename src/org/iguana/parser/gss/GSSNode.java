@@ -75,14 +75,14 @@ public class GSSNode<T> {
 			gssEdges.add(edge);
 		}
 
-		poppedElements.forEach(z -> {
-			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-				Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
-				if (descriptor != null) {
-					slot.getRuntime().scheduleDescriptor(descriptor);
-				}
-			}
-		});
+		for (T z : poppedElements) {
+            if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
+                Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
+                if (descriptor != null) {
+                    slot.getRuntime().scheduleDescriptor(descriptor);
+                }
+            }
+        }
 	}
 
     public void pop(Input input, EndGrammarSlot slot, T child, ResultOps<T> ops) {
@@ -176,14 +176,14 @@ public class GSSNode<T> {
 		gssEdges.add(edge);
 		ParserLogger.getInstance().gssEdgeAdded(edge);
 
-		poppedElements.forEach(z -> {
+		for (T z : poppedElements) {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
 				Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
 				if (descriptor != null) {
                     returnSlot.getRuntime().scheduleDescriptor(descriptor);
 				}
 			}
-		});
+		}
 	}
 	
 }

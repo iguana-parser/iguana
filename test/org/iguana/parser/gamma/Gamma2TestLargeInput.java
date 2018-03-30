@@ -65,14 +65,9 @@ public class Gamma2TestLargeInput {
 	@Test
 	public void test() throws InterruptedException {
 		for (int i = 0; i < 10; i++) {
-			ParseResult<Integer> result = Iguana.recognize(getInput(200), getGrammar());
+			ParseResult<NonPackedNode> result = Iguana.parse(getInput(150), getGrammar());
 			Assert.assertTrue(result.isParseSuccess());
-			Assert.assertEquals(200, (int) result.asParseSuccess().getResult());
-			System.gc();
-			System.gc();
-			Thread.sleep(5000);
-			System.gc();
-			System.gc();
+//			Assert.assertEquals(200, (int) result.asParseSuccess().getResult());
 			System.out.println(result.asParseSuccess().getStatistics());
 		}
 	}

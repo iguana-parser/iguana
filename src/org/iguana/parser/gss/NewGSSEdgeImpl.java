@@ -97,7 +97,7 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 		 */
 
         int i = ops.getRightIndex(newResult);
-        ParserRuntime runtime = returnSlot.getRuntime();
+        ParserRuntime<T> runtime = returnSlot.getRuntime();
 		
 		T y;
 		BodyGrammarSlot<T> returnSlot = this.returnSlot;

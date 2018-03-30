@@ -36,11 +36,12 @@ import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.util.Holder;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class PoppedElements<T> {
+public class PoppedElements<T> implements Iterable<T> {
 
     private ResultOps<T> ops;
 
@@ -116,14 +117,6 @@ public class PoppedElements<T> {
 //        }
 	}
 
-	public void forEach(Consumer<T> c) {
-		if (poppedElements == null) {
-			if (firstResult != null) c.accept(firstResult);
-		} else {
-			poppedElements.values().forEach(c);
-		}
-	}
-
 	public T getResult(int j) {
 		if (poppedElements == null) {
 			if (firstResult != null && ops.getRightIndex(firstResult) == j)
@@ -141,4 +134,44 @@ public class PoppedElements<T> {
 			return poppedElements.size();
 		}
 	}
+
+	private PoppedElementIterator it = new PoppedElementIterator();
+
+    @Override
+    public Iterator<T> iterator() {
+        return it.reset();
+    }
+
+    class PoppedElementIterator implements Iterator<T> {
+
+        private boolean iteratedFirst;
+        private Iterator<T> poppedElementsIterator;
+
+        PoppedElementIterator() {
+            reset();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (!iteratedFirst && firstResult != null)
+                return true;
+            return poppedElements != null && poppedElementsIterator.hasNext();
+        }
+
+        @Override
+        public T next() {
+            if (!iteratedFirst) {
+                iteratedFirst = true;
+                return firstResult;
+            }
+            return poppedElementsIterator.next();
+        }
+
+        public PoppedElementIterator reset() {
+            iteratedFirst = false;
+            if (poppedElements != null)
+                poppedElementsIterator = poppedElements.values().iterator();
+            return this;
+        }
+    }
 }
