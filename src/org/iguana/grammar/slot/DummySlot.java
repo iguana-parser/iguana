@@ -30,10 +30,10 @@ package org.iguana.grammar.slot;
 import iguana.utils.input.Input;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 
-public class DummySlot extends BodyGrammarSlot {
+public class DummySlot<T> extends BodyGrammarSlot<T> {
 
 	private static final DummySlot instance = new DummySlot();
 	
@@ -55,8 +55,8 @@ public class DummySlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public Set<Transition> getTransitions() {
-		return Collections.emptySet();
+	public List<Transition<T>> getTransitions() {
+		return Collections.emptyList();
 	}
 	
 	@Override

@@ -104,24 +104,17 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		
 		if (isFirst())
 			return rightResult;
-		
-		Holder<T> holder = new Holder<>();
-		
-		BiFunction<Key, T, T> creator = (key, value) -> {
-			if (value != null) {
-				return ops.merge(value, leftResult, rightResult, this);
-			} else {
-				T newNode = ops.merge(null, leftResult, rightResult, this);
-				holder.set(newNode);
-				return newNode;				
-			}
-		};
 
         Key key = Keys.from((x, y) -> x * input.length() + y, destinationIndex, ops.getRightIndex(rightResult));
+        T value = intermediateNodes.get(key);
 
-        intermediateNodes.compute(key, creator);
-		
-		return holder.get();
+        if (value != null) {
+            intermediateNodes.put(key, ops.merge(value, leftResult, rightResult, this));
+            return null;
+        } else {
+            intermediateNodes.put(key, ops.merge(null, leftResult, rightResult, this));
+            return ops.merge(null, leftResult, rightResult, this);
+        }
 	}
 	
 	public T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env) {
@@ -140,7 +133,6 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 			}
 		};
 
-
         Key key = Keys.from(destinationIndex, ops.getRightIndex(rightResult), env);
         intermediateNodes.compute(key, creator);
 		
@@ -157,7 +149,10 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	}
 	
 	public void execute(Input input, GSSNode<T> u, T result) {
-		getTransitions().forEach(t -> t.execute(input, u, result));
+	    for (int i = 0; i < getTransitions().size(); i++) {
+	        Transition<T> transition = getTransitions().get(i);
+            transition.execute(input, u, result);
+        }
 	}
 	
 	/*
@@ -174,7 +169,10 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	}
 	
 	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
-		getTransitions().forEach(t -> t.execute(input, u, result, env));
+        for (int i = 0; i < getTransitions().size(); i++) {
+            Transition<T> transition = getTransitions().get(i);
+            transition.execute(input, u, result, env);
+        }
 	}
 		
 	public boolean requiresBinding() {

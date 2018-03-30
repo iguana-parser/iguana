@@ -36,6 +36,7 @@ import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
@@ -43,13 +44,13 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	protected final NonterminalGrammarSlot nonterminal;
 
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, ParserRuntime runtime, ResultOps<T> ops) {
+			              String variable, Set<String> state, Conditions conditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		this(position, nonterminal, label, -1, variable, -1, state, conditions, runtime, ops);
 	}
 	
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label, int i1,
             			  String variable, int i2, Set<String> state, Conditions conditions,
-                          ParserRuntime runtime, ResultOps<T> ops) {
+                          ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(position, label, i1, variable, i2, state, conditions, runtime, ops);
 		this.nonterminal = nonterminal;
     }
@@ -74,8 +75,8 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	}
 	
 	@Override
-	public Set<Transition<T>> getTransitions() {
-		return Collections.emptySet();
+	public List<Transition<T>> getTransitions() {
+		return Collections.emptyList();
 	}
 
 	@Override

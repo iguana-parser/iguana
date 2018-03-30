@@ -52,7 +52,7 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     public ParserRuntimeImpl(GrammarGraph<T> grammarGraph, Configuration config, IEvaluatorContext ctx) {
         this.grammarGraph = grammarGraph;
-        this.descriptorsStack = new ArrayDeque<>();
+        this.descriptorsStack = new ArrayDeque<>(512);
         this.ctx = ctx;
         this.config = config;
     }
