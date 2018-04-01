@@ -101,9 +101,7 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	}
 	
 	public T getIntermediateNode2(Input input, int destinationIndex, T leftResult, T rightResult) {
-		
-		if (isFirst())
-			return rightResult;
+		if (isFirst()) return rightResult;
 
         Key key = Keys.from((x, y) -> x * input.length() + y, destinationIndex, ops.getRightIndex(rightResult));
         T value = intermediateNodes.get(key);
@@ -112,15 +110,14 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
             intermediateNodes.put(key, ops.merge(value, leftResult, rightResult, this));
             return null;
         } else {
-            intermediateNodes.put(key, ops.merge(null, leftResult, rightResult, this));
-            return ops.merge(null, leftResult, rightResult, this);
+			T result = ops.merge(null, leftResult, rightResult, this);
+            intermediateNodes.put(key, result);
+            return result;
         }
 	}
 	
 	public T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env) {
-		
-		if (isFirst())
-			return rightResult;
+		if (isFirst()) return rightResult;
 		
 		Holder<T> holder = new Holder<>();
 		BiFunction<Key, T, T> creator = (key, value) -> {

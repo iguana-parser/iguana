@@ -30,7 +30,6 @@ package org.iguana.datadependent.gss;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
@@ -46,8 +45,7 @@ public class NewGSSEdgeImpl<T> extends org.iguana.parser.gss.NewGSSEdgeImpl<T> {
 	}
 	
 	@Override
-	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops) {
-
+	public T addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops) {
         int inputIndex = ops.getRightIndex(result);
 
 		BodyGrammarSlot<T> returnSlot = getReturnSlot();
@@ -65,13 +63,7 @@ public class NewGSSEdgeImpl<T> extends org.iguana.parser.gss.NewGSSEdgeImpl<T> {
 		
 		env = returnSlot.getRuntime().getEnvironment();
 		
-		T y = returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env);
-		
-//		NonPackedNode y = parser.getResult(returnSlot, getResult(), result, env);
-//		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
-//			return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
-		
-		return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, env) : null;
+		return returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env);
 	}
 
 }

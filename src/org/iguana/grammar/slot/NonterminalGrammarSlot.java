@@ -34,7 +34,6 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
@@ -137,7 +136,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				for (int slotIndex = 0; slotIndex < firstSlots.size(); slotIndex++) {
 					BodyGrammarSlot<T> slot = firstSlots.get(slotIndex);
 					if (!slot.getConditions().execute(input, gssNode, i))
-						runtime.scheduleDescriptor(new Descriptor<>(slot, gssNode, ops.dummy(i)));
+						runtime.scheduleDescriptor(slot, gssNode, ops.dummy(i));
 				}
 			}
 		} else {
@@ -185,9 +184,9 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 
 				List<BodyGrammarSlot<T>> firstSlots = getFirstSlots(input.charAt(i));
 				if (firstSlots != null)
-					for (BodyGrammarSlot<T> s : firstSlots) {
-						if (!s.getConditions().execute(input, gssNode, i))
-							runtime.scheduleDescriptor(new Descriptor<>(s, gssNode, ops.dummy(i)));
+					for (BodyGrammarSlot<T> slot : firstSlots) {
+						if (!slot.getConditions().execute(input, gssNode, i))
+							runtime.scheduleDescriptor(slot, gssNode, ops.dummy(i));
 					}
 			} else {
 				ParserLogger.getInstance().log("GSSNode found: %s", gssNode);
@@ -225,7 +224,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
 
 					if (!s.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext()))
-						runtime.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor<>(s, gssNode, ops.dummy(i), runtime.getEnvironment()));
+						runtime.scheduleDescriptor(s, gssNode, ops.dummy(i), runtime.getEnvironment());
 				}
 				
 			} else {

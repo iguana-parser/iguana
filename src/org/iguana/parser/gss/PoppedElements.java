@@ -60,7 +60,7 @@ public class PoppedElements<T> implements Iterable<T> {
 			firstResult = ops.convert(null, result, slot, null);
 			return firstResult;
 		// Only one node is added and there is an ambiguity
-		} else if (poppedElements == null && ops.getRightIndex(firstResult) == ops.getRightIndex(result)) {
+		} else if (ops.getRightIndex(firstResult) == ops.getRightIndex(result)) {
 		    ops.convert(firstResult, result, slot, null);
 			return null;
         // Only one node is added and the node is not in the map
@@ -68,7 +68,6 @@ public class PoppedElements<T> implements Iterable<T> {
 			// Initialize the map and put the firstResult element there
 			if (poppedElements == null) {
 				poppedElements = new OpenAddressingIntHashMap<>();
-				poppedElements.put(ops.getRightIndex(firstResult), firstResult);
 			}
 
 			return poppedElements.compute(ops.getRightIndex(result), (k, v) -> {

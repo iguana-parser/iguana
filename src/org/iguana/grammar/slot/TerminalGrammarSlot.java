@@ -58,10 +58,12 @@ public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		T node = terminalNodes.get(i);
 		if (node == null) {
 			int length = matcher.match(input, i);
-			if (length < 0)
+			if (length < 0) {
 				node = null;
-			else
+			} else {
 				node = ops.base(this, i, i + length);
+			}
+			terminalNodes.put(i, node);
 		}
 		return node;
 	}

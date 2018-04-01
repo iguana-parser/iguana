@@ -32,7 +32,6 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
 
 public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
@@ -88,7 +87,7 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	}
 
 	@Override
-	public Descriptor<T> addDescriptor(Input input, GSSNode<T> source, T newResult, ResultOps<T> ops) {
+	public T addDescriptor(Input input, GSSNode<T> source, T newResult, ResultOps<T> ops) {
 		
 		/*
 		 * 
@@ -99,7 +98,6 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
         int i = ops.getRightIndex(newResult);
         ParserRuntime<T> runtime = returnSlot.getRuntime();
 		
-		T y;
 		BodyGrammarSlot<T> returnSlot = this.returnSlot;
 		
 		if (returnSlot.requiresBinding()) {
@@ -112,25 +110,12 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 			
 			env = runtime.getEnvironment();
 			
-			y = returnSlot.getIntermediateNode2(result, destination.getInputIndex(), newResult, env);
-			
-//			y = parser.getNode(returnSlot, node, sppfNode, env);
-//			if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y, env))
-//				return new org.iguana.datadependent.descriptor.Descriptor(returnSlot, destination, inputIndex, y, env);
-			
-			return y != null ? new org.iguana.datadependent.descriptor.Descriptor<>(returnSlot, destination, y, env) : null;
+			return returnSlot.getIntermediateNode2(result, destination.getInputIndex(), newResult, env);
 		}
 		
 		if (returnSlot.getConditions().execute(input, source, i))
 			return null;
 		
-//		y = parser.getNode(returnSlot, node, sppfNode);
-//		if (!parser.hasDescriptor(returnSlot, destination, inputIndex, y))
-//			return new Descriptor(returnSlot, destination, inputIndex, y);
-		
-		y = returnSlot.getIntermediateNode2(input, destination.getInputIndex(), result, newResult);
-		
-		return y != null ? new Descriptor<>(returnSlot, destination, y) : null;
+		return returnSlot.getIntermediateNode2(input, destination.getInputIndex(), result, newResult);
 	}
-
 }
