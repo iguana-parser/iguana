@@ -44,7 +44,7 @@ public class OCaml {
 				.run();
 
 		long sum = results.values().stream().flatMap(List::stream).mapToLong(ParseStatistics::getNanoTime).sum();
-		System.out.println(sum / 1000_000);
+		System.out.println("Sum running time: " + sum / 1000_000);
 
 
 //		Input input = Input.fromFile(new File("/Users/afroozeh/workspace/iguana/test/org/iguana/parser/datadependent/precedence/indirect/Test.ml"));
