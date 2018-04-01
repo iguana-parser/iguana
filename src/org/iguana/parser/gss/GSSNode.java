@@ -33,7 +33,6 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.util.ParserLogger;
 
@@ -77,9 +76,9 @@ public class GSSNode<T> {
 
 		for (T z : poppedElements) {
             if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-                Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
-                if (descriptor != null) {
-                    slot.getRuntime().scheduleDescriptor(descriptor);
+				T result = edge.addDescriptor(input, this, z, ops);
+                if (result != null) {
+                    slot.getRuntime().scheduleDescriptor(returnSlot, destination, result);
                 }
             }
         }
@@ -101,16 +100,18 @@ public class GSSNode<T> {
 			processEdge(input, node, ops, firstGSSEdge);
 
 		if (gssEdges != null)
-        	for(GSSEdge<T> edge : gssEdges)
+			for (int i = 0; i < gssEdges.size(); i++) {
+				GSSEdge<T> edge = gssEdges.get(i);
 				processEdge(input, node, ops, edge);
+			}
     }
 
 	private void processEdge(Input input, T node, ResultOps<T> ops, GSSEdge<T> edge) {
 		if (!edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(node)))) return;
 
-		Descriptor<T> descriptor = edge.addDescriptor(input, this, node, ops);
-		if (descriptor != null) {
-            slot.getRuntime().scheduleDescriptor(descriptor);
+		T result = edge.addDescriptor(input, this, node, ops);
+		if (result != null) {
+            slot.getRuntime().scheduleDescriptor(edge.getReturnSlot(), edge.getDestination(), result);
         }
 	}
 
@@ -178,9 +179,9 @@ public class GSSNode<T> {
 
 		for (T z : poppedElements) {
 			if (edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(z)))) {
-				Descriptor<T> descriptor = edge.addDescriptor(input, this, z, ops);
-				if (descriptor != null) {
-                    returnSlot.getRuntime().scheduleDescriptor(descriptor);
+				T result = edge.addDescriptor(input, this, z, ops);
+				if (result != null) {
+                    returnSlot.getRuntime().scheduleDescriptor(returnSlot, destination, result);
 				}
 			}
 		}

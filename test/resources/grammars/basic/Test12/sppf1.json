@@ -75,16 +75,16 @@
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
-      9,
-      2
+      2,
+      9
     ]
   },
   {
     "id" : 9,
     "kind" : "NonterminalNode",
     "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
+    "leftExtent" : 1,
+    "rightExtent" : 1,
     "children" : [
       10,
       11
@@ -94,8 +94,8 @@
     "id" : 10,
     "kind" : "PackedNode",
     "label" : "A ::= .",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
+    "leftExtent" : 1,
+    "rightExtent" : 1,
     "children" : [
       12
     ]
@@ -104,15 +104,15 @@
     "id" : 12,
     "kind" : "TerminalNode",
     "label" : "epsilon",
-    "leftExtent" : 0,
-    "rightExtent" : 0
+    "leftExtent" : 1,
+    "rightExtent" : 1
   },
   {
     "id" : 11,
     "kind" : "PackedNode",
     "label" : "A ::= A A .",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
+    "leftExtent" : 1,
+    "rightExtent" : 1,
     "children" : [
       13
     ]
@@ -121,8 +121,8 @@
     "id" : 13,
     "kind" : "IntermediateNode",
     "label" : "A ::= A A .",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
+    "leftExtent" : 1,
+    "rightExtent" : 1,
     "children" : [
       14
     ]
@@ -131,8 +131,8 @@
     "id" : 14,
     "kind" : "PackedNode",
     "label" : "A ::= A A .",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
+    "leftExtent" : 1,
+    "rightExtent" : 1,
     "children" : [
       9,
       9
@@ -145,16 +145,16 @@
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
-      2,
-      15
+      15,
+      2
     ]
   },
   {
     "id" : 15,
     "kind" : "NonterminalNode",
     "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 1,
+    "leftExtent" : 0,
+    "rightExtent" : 0,
     "children" : [
       16,
       17
@@ -164,8 +164,8 @@
     "id" : 16,
     "kind" : "PackedNode",
     "label" : "A ::= .",
-    "leftExtent" : 1,
-    "rightExtent" : 1,
+    "leftExtent" : 0,
+    "rightExtent" : 0,
     "children" : [
       18
     ]
@@ -174,15 +174,15 @@
     "id" : 18,
     "kind" : "TerminalNode",
     "label" : "epsilon",
-    "leftExtent" : 1,
-    "rightExtent" : 1
+    "leftExtent" : 0,
+    "rightExtent" : 0
   },
   {
     "id" : 17,
     "kind" : "PackedNode",
     "label" : "A ::= A A .",
-    "leftExtent" : 1,
-    "rightExtent" : 1,
+    "leftExtent" : 0,
+    "rightExtent" : 0,
     "children" : [
       19
     ]
@@ -191,8 +191,8 @@
     "id" : 19,
     "kind" : "IntermediateNode",
     "label" : "A ::= A A .",
-    "leftExtent" : 1,
-    "rightExtent" : 1,
+    "leftExtent" : 0,
+    "rightExtent" : 0,
     "children" : [
       20
     ]
@@ -201,8 +201,8 @@
     "id" : 20,
     "kind" : "PackedNode",
     "label" : "A ::= A A .",
-    "leftExtent" : 1,
-    "rightExtent" : 1,
+    "leftExtent" : 0,
+    "rightExtent" : 0,
     "children" : [
       15,
       15

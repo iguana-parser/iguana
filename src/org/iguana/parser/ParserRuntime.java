@@ -8,9 +8,11 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 
@@ -20,7 +22,9 @@ public interface ParserRuntime<T> {
 
     Descriptor<T> nextDescriptor();
 
-    void scheduleDescriptor(Descriptor<T> descriptor);
+    void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t);
+
+    void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t, Environment env);
 
     void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u);
 
