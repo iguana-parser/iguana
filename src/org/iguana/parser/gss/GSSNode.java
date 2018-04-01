@@ -128,7 +128,10 @@ public class GSSNode<T> {
 	}
 	
 	public int countGSSEdges() {
-		return gssEdges.size();
+	    int count = 0;
+	    count += firstGSSEdge == null ? 0 : 1;
+	    count += gssEdges == null ? 0 : gssEdges.size();
+		return count;
 	}
 	
 	public int countPoppedElements() {

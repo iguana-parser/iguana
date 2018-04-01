@@ -57,4 +57,5 @@ public interface ParserRuntime<T> {
 
     Configuration getConfiguration();
 
+    int getDescriptorPoolSize();
 }

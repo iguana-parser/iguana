@@ -241,12 +241,6 @@ public class Rule implements Serializable {
 		
 		Rule other = (Rule) obj;
 
-		if (body == null && other.body != null) {
-            System.out.println("Hi!!!");
-        }
-		if (body != null && !body.equals(other.body)) {
-            System.out.println("fuck!");
-        }
 		return head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
 	}
 	

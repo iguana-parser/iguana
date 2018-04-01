@@ -101,6 +101,7 @@ public class IguanaRunner {
 						System.out.printf("%-10d%20s%n", i + 1, result.asParseError());
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					System.out.printf("%-10d%20s%n", i + 1, "Unexpected Error");
 				}
 				if (runGCInBetween)

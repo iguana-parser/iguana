@@ -38,6 +38,8 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
      */
     private GSSNode<T> errorGSSNode;
 
+    private final Deque<Descriptor<T>> descriptorPool;
+
     private final Deque<Descriptor<T>> descriptorsStack;
 
     private final GrammarGraph<T> grammarGraph;
@@ -51,6 +53,7 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     public ParserRuntimeImpl(GrammarGraph<T> grammarGraph, Configuration config, IEvaluatorContext ctx) {
         this.grammarGraph = grammarGraph;
         this.descriptorsStack = new ArrayDeque<>(512);
+        this.descriptorPool = new ArrayDeque<>(512);
         this.ctx = ctx;
         this.config = config;
     }
@@ -80,12 +83,20 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     @Override
     public Descriptor<T> nextDescriptor() {
-        return descriptorsStack.pop();
+        Descriptor<T> descriptor = descriptorsStack.pop();
+        descriptorPool.push(descriptor);
+        return descriptor;
     }
 
     @Override
     public void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t) {
-        Descriptor<T> descriptor = new Descriptor<>(grammarSlot, gssNode, t);
+        Descriptor<T> descriptor;
+        if (!descriptorPool.isEmpty()) {
+            descriptor = descriptorPool.pop();
+            descriptor.init(grammarSlot, gssNode, t);
+        } else {
+            descriptor = new Descriptor<>(grammarSlot, gssNode, t);
+        }
         descriptorsStack.push(descriptor);
         logger.descriptorAdded(descriptor);
     }
@@ -198,6 +209,11 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     @Override
     public Configuration getConfiguration() {
         return config;
+    }
+
+    @Override
+    public int getDescriptorPoolSize() {
+        return descriptorPool.size();
     }
 
 }

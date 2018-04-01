@@ -39,19 +39,19 @@ import org.iguana.parser.gss.GSSNode;
 public class Descriptor<T> {
 	
 	// L
-	private final BodyGrammarSlot<T> slot;
+	private BodyGrammarSlot<T> slot;
 	
 	// (L1, i)
-	private final GSSNode<T> gssNode;
+	private GSSNode<T> gssNode;
 	
 	// (L, i, j)
-	private final T result;
+	private T result;
 
 	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result) {
-		assert slot != null;
-		assert gssNode != null;
-		assert result != null;
+		init(slot, gssNode, result);
+	}
 
+	public void init(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result) {
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.result = result;
@@ -68,7 +68,7 @@ public class Descriptor<T> {
 	public T getResult() {
 		return result;
 	}
-	
+
 	public void execute(Input input) {
 		slot.execute(input, gssNode, result);
 	}
