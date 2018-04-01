@@ -88,6 +88,7 @@ public class IguanaRunner {
 			}
 
 			System.out.println("Running " + file.getPath());
+			System.out.printf("%-10s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "memory");
 			for (int i = 0; i < runCount; i++) {
 				try {
 					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
