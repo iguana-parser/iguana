@@ -40,9 +40,9 @@ import org.iguana.parser.gss.GSSNode;
 @FunctionalInterface
 public interface Conditions {
 	
-	public boolean execute(Input input, GSSNode u, int i);
+	<T> boolean execute(Input input, GSSNode<T> u, int i);
 	
-	default boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
+	default <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx) {
 		return execute(input, u, i);
 	}
 	

@@ -3,7 +3,6 @@ package org.iguana.parser.descriptor;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.*;
 import org.iguana.util.ParserLogger;
@@ -15,7 +14,7 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
     private static final DummyNode dummyNode = new DummyNode();
 
     @Override
-    public NonPackedNode dummy() {
+    public NonPackedNode dummy(int i) {
         return dummyNode;
     }
 
@@ -28,7 +27,7 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public NonPackedNode merge(NonPackedNode current, NonPackedNode result1, NonPackedNode result2, BodyGrammarSlot slot) {
+    public NonPackedNode merge(NonPackedNode current, NonPackedNode result1, NonPackedNode result2, BodyGrammarSlot<NonPackedNode> slot) {
         if (result1 instanceof DummyNode)
             return result2;
 

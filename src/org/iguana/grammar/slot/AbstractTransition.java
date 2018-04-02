@@ -37,11 +37,11 @@ public abstract class AbstractTransition<T> implements Transition<T> {
 
 	protected final BodyGrammarSlot<T> origin;
 
-    protected final ParserRuntime runtime;
+    protected final ParserRuntime<T> runtime;
 
 	protected final ResultOps<T> ops;
 
-	public AbstractTransition(BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+	public AbstractTransition(BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		this.origin = origin;
 		this.dest = dest;
         this.runtime = runtime;

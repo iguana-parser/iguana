@@ -44,7 +44,7 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	private final Conditions postConditions;
 
 	public TerminalTransition(TerminalGrammarSlot<T> slot, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
-							  Conditions preConditions, Conditions postConditions, ParserRuntime runtime, ResultOps<T> ops) {
+							  Conditions preConditions, Conditions postConditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(origin, dest, runtime, ops);
         this.slot = slot;
         this.preConditions = preConditions;
