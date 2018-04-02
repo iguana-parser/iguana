@@ -34,7 +34,7 @@ public class UndefinedRuntimeValueException extends RuntimeException {
 	private UndefinedRuntimeValueException() {
 		super("Undefined runtime value.");
 	}
-	
-	static public UndefinedRuntimeValueException instance = new UndefinedRuntimeValueException();
+
+	public static UndefinedRuntimeValueException instance = new UndefinedRuntimeValueException();
 
 }
