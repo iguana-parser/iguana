@@ -35,7 +35,7 @@ public class DataDependentCondition extends Condition {
 	
 	private final org.iguana.datadependent.ast.Expression expression;
 	
-	DataDependentCondition(ConditionType type, org.iguana.datadependent.ast.Expression expression) {
+	private DataDependentCondition(ConditionType type, org.iguana.datadependent.ast.Expression expression) {
 		super(type);
 		this.expression = expression;
 	}
@@ -49,7 +49,7 @@ public class DataDependentCondition extends Condition {
 		return true;
 	}
 
-	static public DataDependentCondition predicate(org.iguana.datadependent.ast.Expression expression) {
+	public static DataDependentCondition predicate(org.iguana.datadependent.ast.Expression expression) {
 		return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
 	}
 	

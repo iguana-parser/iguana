@@ -34,9 +34,7 @@ import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNodeWithValue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -50,7 +48,7 @@ public abstract class Expression extends AbstractAST {
         return false;
     }
 
-    static public abstract class Boolean extends Expression {
+    public static abstract class Boolean extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -58,7 +56,7 @@ public abstract class Expression extends AbstractAST {
             return true;
         }
 
-        static public final Boolean TRUE = new Boolean() {
+        static final Boolean TRUE = new Boolean() {
 
             private static final long serialVersionUID = 1L;
 
@@ -78,7 +76,7 @@ public abstract class Expression extends AbstractAST {
             }
         };
 
-        static public final Boolean FALSE = new Boolean() {
+        static final Boolean FALSE = new Boolean() {
 
             private static final long serialVersionUID = 1L;
 
@@ -105,7 +103,7 @@ public abstract class Expression extends AbstractAST {
         return false;
     }
 
-    static public class Integer extends Expression {
+    public static class Integer extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -149,11 +147,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    public boolean isReal() {
-        return false;
-    }
-
-    static public class Real extends Expression {
+    public static class Real extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -161,10 +155,6 @@ public abstract class Expression extends AbstractAST {
 
         Real(java.lang.Float value) {
             this.value = value;
-        }
-
-        public boolean isReal() {
-            return true;
         }
 
         @Override
@@ -201,7 +191,7 @@ public abstract class Expression extends AbstractAST {
         return false;
     }
 
-    static public class String extends Expression {
+    public static class String extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -244,7 +234,7 @@ public abstract class Expression extends AbstractAST {
         }
     }
 
-    static public class Tuple extends Expression {
+    public static class Tuple extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -278,7 +268,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public java.lang.String toString() {
-            return "(" + listToString(Arrays.stream(elements).map(elem -> elem.toString()).collect(Collectors.toList()), ",") + ")";
+            return "(" + listToString(Arrays.stream(elements).map(Object::toString).collect(Collectors.toList()), ",") + ")";
         }
 
         @Override
@@ -300,7 +290,7 @@ public abstract class Expression extends AbstractAST {
         }
     }
 
-    static public class Name extends Expression {
+    public static class Name extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -354,7 +344,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public abstract class Call extends Expression {
+    public static abstract class Call extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -406,7 +396,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class Assignment extends Expression {
+    public static class Assignment extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -466,7 +456,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class LShiftANDEqZero extends Expression {
+    public static class LShiftANDEqZero extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -523,7 +513,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class OrIndent extends Expression {
+    public static class OrIndent extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -564,7 +554,7 @@ public abstract class Expression extends AbstractAST {
                 return true;
 
             int first = (java.lang.Integer) this.first.interpret(ctx);
-            int lExt = -1;
+            int lExt;
             if (first == 1) {
 
                 int index = (java.lang.Integer) this.index.interpret(ctx);
@@ -615,7 +605,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class AndIndent extends Expression {
+    public static class AndIndent extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -697,7 +687,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class Or extends Expression {
+    public static class Or extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -720,7 +710,7 @@ public abstract class Expression extends AbstractAST {
         @Override
         public Object interpret(IEvaluatorContext ctx) {
             boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx);
-            if (lhs) return lhs;
+            if (lhs) return true;
 
             return this.rhs.interpret(ctx);
         }
@@ -750,7 +740,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class And extends Expression {
+    public static class And extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -773,8 +763,7 @@ public abstract class Expression extends AbstractAST {
         @Override
         public Object interpret(IEvaluatorContext ctx) {
             boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx);
-            if (lhs == false)
-                return lhs;
+            if (!lhs) return false;
 
             return this.rhs.interpret(ctx);
         }
@@ -804,7 +793,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class Less extends Expression {
+    public static class Less extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -865,7 +854,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class LessThanEqual extends Expression {
+    public static class LessThanEqual extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -926,7 +915,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class Greater extends Expression {
+    public static class Greater extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -987,7 +976,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class GreaterThanEqual extends Expression {
+    public static class GreaterThanEqual extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -1048,7 +1037,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class Equal extends Expression {
+    public static class Equal extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -1074,9 +1063,7 @@ public abstract class Expression extends AbstractAST {
             Object rhs = this.rhs.interpret(ctx);
 
             if (lhs == AST.UNDEF || rhs == AST.UNDEF) {
-                if (lhs == rhs)
-                    return true;
-                return false;
+                return lhs == rhs;
             }
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
@@ -1119,7 +1106,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class NotEqual extends Expression {
+    public static class NotEqual extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -1180,11 +1167,11 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class LeftExtent extends Expression {
+    public static class LeftExtent extends Expression {
 
         private static final long serialVersionUID = 1L;
 
-        static public java.lang.String format = "%s.lExt";
+        public static java.lang.String format = "%s.lExt";
 
         private final java.lang.String label;
 
@@ -1213,7 +1200,7 @@ public abstract class Expression extends AbstractAST {
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof NotEqual)) return false;
+            if (!(obj instanceof LeftExtent)) return false;
             LeftExtent other = (LeftExtent) obj;
             return this.label.equals(other.label);
         }
@@ -1230,11 +1217,11 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class RightExtent extends Expression {
+    public static class RightExtent extends Expression {
 
         private static final long serialVersionUID = 1L;
 
-        static public java.lang.String format = "%s.rExt";
+        public static java.lang.String format = "%s.rExt";
 
         private final java.lang.String label;
 
@@ -1268,7 +1255,7 @@ public abstract class Expression extends AbstractAST {
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof NotEqual)) return false;
+            if (!(obj instanceof RightExtent)) return false;
             RightExtent other = (RightExtent) obj;
             return this.label.equals(other.label);
         }
@@ -1285,10 +1272,10 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class Yield extends Expression {
+    public static class Yield extends Expression {
         private static final long serialVersionUID = 1L;
 
-        static public java.lang.String format = "%s.yield";
+        public static java.lang.String format = "%s.yield";
 
         private final java.lang.String label;
         private final int i;
@@ -1345,10 +1332,10 @@ public abstract class Expression extends AbstractAST {
         }
     }
 
-    static public class Val extends Expression {
+    public static class Val extends Expression {
         private static final long serialVersionUID = 1L;
 
-        static public java.lang.String format = "%s.val";
+        public static java.lang.String format = "%s.val";
 
         private final java.lang.String label;
 
@@ -1400,7 +1387,7 @@ public abstract class Expression extends AbstractAST {
         }
     }
 
-    static public class EndOfFile extends Expression {
+    public static class EndOfFile extends Expression {
 
         private static final long serialVersionUID = 1L;
 
@@ -1446,7 +1433,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    static public class IfThenElse extends Expression {
+    public static class IfThenElse extends Expression {
 
         private static final long serialVersionUID = 1L;
 

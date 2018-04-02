@@ -57,14 +57,11 @@ public class DesugarState implements GrammarTransformation {
 	
 	private final Map<Nonterminal, Set<String>> returns = new HashMap<>();
 	private final Map<Nonterminal, List<Map<Nonterminal, Set<String>>>> bindings = new HashMap<>();
-	
-	private Set<String> current_uses;
-	private Set<String> current_updates;
-	
-	private Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 
 	@Override
 	public Grammar transform(Grammar grammar) {
+		Set<String> current_uses;
+		Set<String> current_updates;
 		for (Nonterminal head : grammar.getNonterminals()) {
 			
 			current_uses = new HashSet<>();
@@ -81,8 +78,8 @@ public class DesugarState implements GrammarTransformation {
 			if (!current_updates.isEmpty())
 				System.out.println("Updates: " + head + "    " + listToString(current_updates, " , ") );
 		}
-		
-		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();		
+
+		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
 		for (Map.Entry<Nonterminal, Set<Nonterminal>> entry : reachabilityGraph.entrySet()) {
 			current_uses = uses.get(entry.getKey());
 			current_updates = updates.get(entry.getKey());
@@ -210,13 +207,13 @@ public class DesugarState implements GrammarTransformation {
 		return builder.build();
 	}
 	
-	static public class DesugarStateVisitor implements ISymbolVisitor<Symbol> {
+	public static class DesugarStateVisitor implements ISymbolVisitor<Symbol> {
 		
 		private final Map<Nonterminal, Set<String>> uses;
 		private final Map<Nonterminal, Set<String>> returns;
 		private final Map<Nonterminal, Set<String>> bindings;
 		
-		public DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
+		DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
 			this.uses = uses;
 			this.returns = returns;
 			this.bindings = bindings;

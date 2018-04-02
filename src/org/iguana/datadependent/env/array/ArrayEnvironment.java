@@ -9,7 +9,7 @@ public class ArrayEnvironment implements Environment {
 	private final Object[] values;
 	private final int hashCode;
 	
-	static public final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
+	static final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
 	
 	private ArrayEnvironment(Object[] values, int hashCode) {
 		this.values = values;
