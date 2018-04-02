@@ -51,11 +51,7 @@ public class GSSToDot {
 	}
 
 	private String getId(GSSNode<?> node) {
-		if (node instanceof org.iguana.datadependent.gss.GSSNode<?,?>) {
-			org.iguana.datadependent.gss.GSSNode<?,?> gssNode = (org.iguana.datadependent.gss.GSSNode<?,?>) node;
-			return node.getGrammarSlot() + "" + node.getInputIndex() + gssNode.getData();
-		}
-		return node.getGrammarSlot() + "" + node.getInputIndex();
+		return node.getGrammarSlot().toString() + node.getInputIndex() + node.getData();
 	}
 	
 	public String getString() {

@@ -32,7 +32,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 import java.util.Collections;
@@ -60,12 +60,6 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result) {
-		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(result))))
-            u.pop(input, this, result, ops);
-	}
-	
-	@Override
 	public boolean isEnd() {
 		return true;
 	}
@@ -84,20 +78,14 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 		throw new UnsupportedOperationException();
 	}
 
-    /**
-	 *
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
-		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(node))))
-            u.pop(input, this, node, ops);
+		execute(input, u, node, (Object) null);
 	}
 	
-	public void execute(Input input, GSSNode<T> u, T node, Object value) {
-		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(node))))
-            u.pop(input, this, node, value, ops);
+	public void execute(Input input, GSSNode<T> u, T result, Object value) {
+		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(result, u))))
+            u.pop(input, this, result, value, ops);
 	}
 
 }

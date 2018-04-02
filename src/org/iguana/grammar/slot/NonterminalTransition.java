@@ -32,7 +32,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 import static iguana.utils.string.StringUtil.listToString;
@@ -47,42 +47,13 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 	private final Expression[] arguments;
 
 	public NonterminalTransition(NonterminalGrammarSlot<T> nonterminal, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
-			                     Expression[] arguments, Conditions preConditions, ParserRuntime runtime, ResultOps<T> ops) {
+			                     Expression[] arguments, Conditions preConditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(origin, dest, runtime, ops);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
 		this.preConditions = preConditions;
 	}
 
-	@Override
-	public void execute(Input input, GSSNode<T> u, T result) {
-		int i = ops.getRightIndex(result, u);
-
-		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
-			
-			if (preConditions.execute(input, u, i))
-				return;
-			
-			nonterminal.create(input, dest, u, result);
-			
-		} else {
-			
-			Environment env = runtime.getEmptyEnvironment();
-			
-			if (dest.getLabel() != null) {
-				env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
-			}
-			
-			runtime.setEnvironment(env);
-			
-			if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
-				return;
-			
-			nonterminal.create(input, dest, u, result, arguments, runtime.getEnvironment());
-		}
-		
-	}
-	
 	public NonterminalGrammarSlot getSlot() {
 		return nonterminal;
 	}
@@ -94,11 +65,6 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), listToString(arguments, ",")) : getSlot().toString());
 	}
 
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
 

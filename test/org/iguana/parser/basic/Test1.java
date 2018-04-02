@@ -39,7 +39,7 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
@@ -93,7 +93,7 @@ public class Test1 {
 	public void testParser() {
 		ParseResult result = Iguana.parse(input, grammar);
 		assertTrue(result.isParseSuccess());
-		GrammarGraph graph = GrammarGraph.from(grammar, input, new SPPFResultOps());
+		GrammarGraph graph = GrammarGraph.from(grammar, input, new ParserResultOps());
 		assertEquals(getParseResult(graph), result);
     }
 		

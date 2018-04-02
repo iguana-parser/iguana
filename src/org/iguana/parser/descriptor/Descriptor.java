@@ -28,6 +28,7 @@
 package org.iguana.parser.descriptor;
 
 import iguana.utils.input.Input;
+import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.gss.GSSNode;
 
@@ -47,14 +48,17 @@ public class Descriptor<T> {
 	// (L, i, j)
 	private T result;
 
-	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result) {
-		init(slot, gssNode, result);
+	private Environment env;
+
+	public Descriptor(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result, Environment env) {
+		init(slot, gssNode, result, env);
 	}
 
-	public void init(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result) {
+	public void init(BodyGrammarSlot<T> slot, GSSNode<T> gssNode, T result, Environment env) {
 		this.slot = slot;
 		this.gssNode = gssNode;
 		this.result = result;
+		this.env = env;
 	}
 	
 	public BodyGrammarSlot<T> getGrammarSlot() {
@@ -70,7 +74,7 @@ public class Descriptor<T> {
 	}
 
 	public void execute(Input input) {
-		slot.execute(input, gssNode, result);
+		slot.execute(input, gssNode, result, env);
 	}
 	
 	@Override

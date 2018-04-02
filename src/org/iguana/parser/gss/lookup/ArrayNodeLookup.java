@@ -29,7 +29,7 @@ package org.iguana.parser.gss.lookup;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 import java.util.List;

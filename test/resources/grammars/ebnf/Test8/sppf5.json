@@ -576,7 +576,7 @@
     "kind" : "NonterminalNode",
     "label" : "A+",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       69,
       70
@@ -587,7 +587,7 @@
     "kind" : "PackedNode",
     "label" : "A+ ::= A .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       71
     ]
@@ -597,7 +597,7 @@
     "kind" : "NonterminalNode",
     "label" : "A",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       72
     ]
@@ -607,7 +607,7 @@
     "kind" : "PackedNode",
     "label" : "A ::= a* .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       73
     ]
@@ -617,7 +617,7 @@
     "kind" : "NonterminalNode",
     "label" : "a*",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       74
     ]
@@ -627,9 +627,9 @@
     "kind" : "PackedNode",
     "label" : "a* ::= a+ .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
-      47
+      37
     ]
   },
   {
@@ -637,7 +637,7 @@
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       75
     ]
@@ -647,11 +647,13 @@
     "kind" : "IntermediateNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       76,
       77,
-      78
+      78,
+      79,
+      80
     ]
   },
   {
@@ -659,38 +661,18 @@
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       67,
-      79
-    ]
-  },
-  {
-    "id" : 79,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 2,
-    "children" : [
-      80
-    ]
-  },
-  {
-    "id" : 80,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 2,
-    "children" : [
       81
     ]
   },
   {
     "id" : 81,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 2,
+    "label" : "A",
+    "leftExtent" : 4,
+    "rightExtent" : 4,
     "children" : [
       82
     ]
@@ -698,37 +680,46 @@
   {
     "id" : 82,
     "kind" : "PackedNode",
-    "label" : "a* ::= .",
-    "leftExtent" : 2,
-    "rightExtent" : 2,
+    "label" : "A ::= a* .",
+    "leftExtent" : 4,
+    "rightExtent" : 4,
     "children" : [
       83
     ]
   },
   {
     "id" : 83,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 4,
+    "rightExtent" : 4,
+    "children" : [
+      84
+    ]
+  },
+  {
+    "id" : 84,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 4,
+    "rightExtent" : 4,
+    "children" : [
+      85
+    ]
+  },
+  {
+    "id" : 85,
     "kind" : "TerminalNode",
     "label" : "epsilon",
-    "leftExtent" : 2,
-    "rightExtent" : 2
+    "leftExtent" : 4,
+    "rightExtent" : 4
   },
   {
     "id" : 77,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
-    "children" : [
-      84,
-      85
-    ]
-  },
-  {
-    "id" : 84,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 1,
+    "rightExtent" : 4,
     "children" : [
       86,
       87
@@ -736,28 +727,19 @@
   },
   {
     "id" : 86,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 1,
-    "children" : [
-      88
-    ]
-  },
-  {
-    "id" : 88,
     "kind" : "NonterminalNode",
-    "label" : "A",
+    "label" : "A+",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
+      88,
       89
     ]
   },
   {
-    "id" : 89,
+    "id" : 88,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
+    "label" : "A+ ::= A .",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
@@ -767,7 +749,7 @@
   {
     "id" : 90,
     "kind" : "NonterminalNode",
-    "label" : "a*",
+    "label" : "A",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
@@ -777,17 +759,7 @@
   {
     "id" : 91,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 0,
-    "rightExtent" : 1,
-    "children" : [
-      52
-    ]
-  },
-  {
-    "id" : 87,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
+    "label" : "A ::= a* .",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
@@ -796,50 +768,60 @@
   },
   {
     "id" : 92,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
+    "kind" : "NonterminalNode",
+    "label" : "a*",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
-      93,
-      94
+      93
     ]
   },
   {
     "id" : 93,
     "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 0,
+    "rightExtent" : 1,
+    "children" : [
+      52
+    ]
+  },
+  {
+    "id" : 89,
+    "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
-      84,
-      95
+      94
     ]
   },
   {
-    "id" : 95,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
+    "id" : 94,
+    "kind" : "IntermediateNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
+      95,
       96
     ]
   },
   {
-    "id" : 96,
+    "id" : 95,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
+      86,
       97
     ]
   },
   {
     "id" : 97,
     "kind" : "NonterminalNode",
-    "label" : "a*",
+    "label" : "A",
     "leftExtent" : 1,
     "rightExtent" : 1,
     "children" : [
@@ -849,7 +831,7 @@
   {
     "id" : 98,
     "kind" : "PackedNode",
-    "label" : "a* ::= .",
+    "label" : "A ::= a* .",
     "leftExtent" : 1,
     "rightExtent" : 1,
     "children" : [
@@ -858,57 +840,57 @@
   },
   {
     "id" : 99,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 1,
+    "children" : [
+      100
+    ]
+  },
+  {
+    "id" : 100,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 1,
+    "rightExtent" : 1,
+    "children" : [
+      101
+    ]
+  },
+  {
+    "id" : 101,
     "kind" : "TerminalNode",
     "label" : "epsilon",
     "leftExtent" : 1,
     "rightExtent" : 1
   },
   {
-    "id" : 94,
+    "id" : 96,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 1,
     "children" : [
-      100,
-      88
+      102,
+      90
     ]
   },
   {
-    "id" : 100,
+    "id" : 102,
     "kind" : "NonterminalNode",
     "label" : "A+",
     "leftExtent" : 0,
     "rightExtent" : 0,
     "children" : [
-      101,
-      102
-    ]
-  },
-  {
-    "id" : 101,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
-    "children" : [
-      103
-    ]
-  },
-  {
-    "id" : 103,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 0,
-    "children" : [
+      103,
       104
     ]
   },
   {
-    "id" : 104,
+    "id" : 103,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
+    "label" : "A+ ::= A .",
     "leftExtent" : 0,
     "rightExtent" : 0,
     "children" : [
@@ -918,7 +900,7 @@
   {
     "id" : 105,
     "kind" : "NonterminalNode",
-    "label" : "a*",
+    "label" : "A",
     "leftExtent" : 0,
     "rightExtent" : 0,
     "children" : [
@@ -928,7 +910,7 @@
   {
     "id" : 106,
     "kind" : "PackedNode",
-    "label" : "a* ::= .",
+    "label" : "A ::= a* .",
     "leftExtent" : 0,
     "rightExtent" : 0,
     "children" : [
@@ -937,15 +919,8 @@
   },
   {
     "id" : 107,
-    "kind" : "TerminalNode",
-    "label" : "epsilon",
-    "leftExtent" : 0,
-    "rightExtent" : 0
-  },
-  {
-    "id" : 102,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
+    "kind" : "NonterminalNode",
+    "label" : "a*",
     "leftExtent" : 0,
     "rightExtent" : 0,
     "children" : [
@@ -954,8 +929,8 @@
   },
   {
     "id" : 108,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
     "leftExtent" : 0,
     "rightExtent" : 0,
     "children" : [
@@ -964,41 +939,48 @@
   },
   {
     "id" : 109,
+    "kind" : "TerminalNode",
+    "label" : "epsilon",
+    "leftExtent" : 0,
+    "rightExtent" : 0
+  },
+  {
+    "id" : 104,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 0,
-    "children" : [
-      100,
-      103
-    ]
-  },
-  {
-    "id" : 85,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 2,
     "children" : [
       110
     ]
   },
   {
     "id" : 110,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 2,
+    "kind" : "IntermediateNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 0,
     "children" : [
       111
     ]
   },
   {
     "id" : 111,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 0,
+    "children" : [
+      102,
+      105
+    ]
+  },
+  {
+    "id" : 87,
     "kind" : "NonterminalNode",
-    "label" : "a*",
+    "label" : "A",
     "leftExtent" : 1,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       112
     ]
@@ -1006,9 +988,9 @@
   {
     "id" : 112,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
+    "label" : "A ::= a* .",
     "leftExtent" : 1,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       113
     ]
@@ -1016,15 +998,117 @@
   {
     "id" : 113,
     "kind" : "NonterminalNode",
-    "label" : "a+",
+    "label" : "a*",
     "leftExtent" : 1,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       114
     ]
   },
   {
     "id" : 114,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 4,
+    "children" : [
+      115
+    ]
+  },
+  {
+    "id" : 115,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 4,
+    "children" : [
+      116
+    ]
+  },
+  {
+    "id" : 116,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 4,
+    "children" : [
+      117
+    ]
+  },
+  {
+    "id" : 117,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 4,
+    "children" : [
+      118
+    ]
+  },
+  {
+    "id" : 118,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 4,
+    "children" : [
+      119,
+      43
+    ]
+  },
+  {
+    "id" : 119,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 3,
+    "children" : [
+      120
+    ]
+  },
+  {
+    "id" : 120,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 3,
+    "children" : [
+      121
+    ]
+  },
+  {
+    "id" : 121,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 3,
+    "children" : [
+      122
+    ]
+  },
+  {
+    "id" : 122,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 3,
+    "children" : [
+      123,
+      48
+    ]
+  },
+  {
+    "id" : 123,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 2,
+    "children" : [
+      124
+    ]
+  },
+  {
+    "id" : 124,
     "kind" : "PackedNode",
     "label" : "a+ ::= a .",
     "leftExtent" : 1,
@@ -1038,382 +1122,65 @@
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
-      100,
-      71
-    ]
-  },
-  {
-    "id" : 68,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      115
-    ]
-  },
-  {
-    "id" : 115,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      116
-    ]
-  },
-  {
-    "id" : 116,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      117
-    ]
-  },
-  {
-    "id" : 117,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      118
-    ]
-  },
-  {
-    "id" : 118,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      119
-    ]
-  },
-  {
-    "id" : 119,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      120
-    ]
-  },
-  {
-    "id" : 120,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      121
-    ]
-  },
-  {
-    "id" : 121,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 9,
-    "children" : [
-      122,
-      18
-    ]
-  },
-  {
-    "id" : 122,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
-    "children" : [
-      123
-    ]
-  },
-  {
-    "id" : 123,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
-    "children" : [
-      124
-    ]
-  },
-  {
-    "id" : 124,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
-    "children" : [
-      125
+      125,
+      126
     ]
   },
   {
     "id" : 125,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
-    "children" : [
-      126,
-      23
-    ]
-  },
-  {
-    "id" : 126,
     "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
+    "label" : "A+",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
     "children" : [
-      127
+      127,
+      128
     ]
   },
   {
     "id" : 127,
     "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
-    "children" : [
-      128
-    ]
-  },
-  {
-    "id" : 128,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
+    "label" : "A+ ::= A .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
     "children" : [
       129
     ]
   },
   {
     "id" : 129,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
     "children" : [
-      130,
-      28
+      130
     ]
   },
   {
     "id" : 130,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
     "children" : [
       131
     ]
   },
   {
     "id" : 131,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
     "children" : [
       132
     ]
   },
   {
     "id" : 132,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
-    "children" : [
-      133
-    ]
-  },
-  {
-    "id" : 133,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
-    "children" : [
-      134,
-      33
-    ]
-  },
-  {
-    "id" : 134,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      135
-    ]
-  },
-  {
-    "id" : 135,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      136
-    ]
-  },
-  {
-    "id" : 136,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      137
-    ]
-  },
-  {
-    "id" : 137,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      138,
-      38
-    ]
-  },
-  {
-    "id" : 138,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      139
-    ]
-  },
-  {
-    "id" : 139,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      140
-    ]
-  },
-  {
-    "id" : 140,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      141
-    ]
-  },
-  {
-    "id" : 141,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      142,
-      43
-    ]
-  },
-  {
-    "id" : 142,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 2,
-    "rightExtent" : 3,
-    "children" : [
-      143
-    ]
-  },
-  {
-    "id" : 143,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 2,
-    "rightExtent" : 3,
-    "children" : [
-      48
-    ]
-  },
-  {
-    "id" : 58,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
-      144,
-      145
-    ]
-  },
-  {
-    "id" : 144,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 3,
-    "children" : [
-      146,
-      147
-    ]
-  },
-  {
-    "id" : 146,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 3,
-    "children" : [
-      148
-    ]
-  },
-  {
-    "id" : 148,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 3,
-    "children" : [
-      149
-    ]
-  },
-  {
-    "id" : 149,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 0,
-    "rightExtent" : 3,
-    "children" : [
-      150
-    ]
-  },
-  {
-    "id" : 150,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 0,
-    "rightExtent" : 3,
-    "children" : [
-      151
-    ]
-  },
-  {
-    "id" : 151,
     "kind" : "PackedNode",
     "label" : "a* ::= a+ .",
     "leftExtent" : 0,
@@ -1423,227 +1190,229 @@
     ]
   },
   {
-    "id" : 147,
+    "id" : 128,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 3,
     "children" : [
-      152
+      133
     ]
   },
   {
-    "id" : 152,
+    "id" : 133,
     "kind" : "IntermediateNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 3,
     "children" : [
-      153,
-      154,
-      155,
-      156
+      134,
+      135,
+      136,
+      137
     ]
   },
   {
-    "id" : 153,
+    "id" : 134,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 3,
     "children" : [
-      67,
-      157
+      86,
+      138
     ]
   },
   {
-    "id" : 157,
+    "id" : 138,
     "kind" : "NonterminalNode",
     "label" : "A",
-    "leftExtent" : 2,
+    "leftExtent" : 1,
     "rightExtent" : 3,
     "children" : [
-      158
+      139
     ]
   },
   {
-    "id" : 158,
+    "id" : 139,
     "kind" : "PackedNode",
     "label" : "A ::= a* .",
-    "leftExtent" : 2,
+    "leftExtent" : 1,
     "rightExtent" : 3,
     "children" : [
-      159
+      140
     ]
   },
   {
-    "id" : 159,
+    "id" : 140,
     "kind" : "NonterminalNode",
     "label" : "a*",
-    "leftExtent" : 2,
+    "leftExtent" : 1,
     "rightExtent" : 3,
     "children" : [
-      160
+      141
     ]
   },
   {
-    "id" : 160,
+    "id" : 141,
     "kind" : "PackedNode",
     "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
+    "leftExtent" : 1,
     "rightExtent" : 3,
     "children" : [
+      119
+    ]
+  },
+  {
+    "id" : 135,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
+    "children" : [
+      125,
       142
     ]
   },
   {
-    "id" : 154,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 3,
-    "children" : [
-      144,
-      161
-    ]
-  },
-  {
-    "id" : 161,
+    "id" : 142,
     "kind" : "NonterminalNode",
     "label" : "A",
     "leftExtent" : 3,
     "rightExtent" : 3,
     "children" : [
-      162
+      143
     ]
   },
   {
-    "id" : 162,
+    "id" : 143,
     "kind" : "PackedNode",
     "label" : "A ::= a* .",
     "leftExtent" : 3,
     "rightExtent" : 3,
     "children" : [
-      163
+      144
     ]
   },
   {
-    "id" : 163,
+    "id" : 144,
     "kind" : "NonterminalNode",
     "label" : "a*",
     "leftExtent" : 3,
     "rightExtent" : 3,
     "children" : [
-      164
+      145
     ]
   },
   {
-    "id" : 164,
+    "id" : 145,
     "kind" : "PackedNode",
     "label" : "a* ::= .",
     "leftExtent" : 3,
     "rightExtent" : 3,
     "children" : [
-      165
+      146
     ]
   },
   {
-    "id" : 165,
+    "id" : 146,
     "kind" : "TerminalNode",
     "label" : "epsilon",
     "leftExtent" : 3,
     "rightExtent" : 3
   },
   {
-    "id" : 155,
+    "id" : 136,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 3,
     "children" : [
-      84,
-      166
+      147,
+      148
     ]
   },
   {
-    "id" : 166,
+    "id" : 147,
+    "kind" : "NonterminalNode",
+    "label" : "A+",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
+    "children" : [
+      149,
+      150
+    ]
+  },
+  {
+    "id" : 149,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A .",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
+    "children" : [
+      151
+    ]
+  },
+  {
+    "id" : 151,
     "kind" : "NonterminalNode",
     "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
+    "leftExtent" : 0,
+    "rightExtent" : 2,
     "children" : [
-      167
+      152
     ]
   },
   {
-    "id" : 167,
+    "id" : 152,
     "kind" : "PackedNode",
     "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
+    "leftExtent" : 0,
+    "rightExtent" : 2,
     "children" : [
-      168
+      153
     ]
   },
   {
-    "id" : 168,
+    "id" : 153,
     "kind" : "NonterminalNode",
     "label" : "a*",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
+    "leftExtent" : 0,
+    "rightExtent" : 2,
     "children" : [
-      169
+      154
     ]
   },
   {
-    "id" : 169,
+    "id" : 154,
     "kind" : "PackedNode",
     "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
+    "leftExtent" : 0,
+    "rightExtent" : 2,
     "children" : [
-      170
+      47
     ]
   },
   {
-    "id" : 170,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
-    "children" : [
-      171
-    ]
-  },
-  {
-    "id" : 171,
+    "id" : 150,
     "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
     "children" : [
-      172
+      155
     ]
   },
   {
-    "id" : 172,
+    "id" : 155,
     "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
     "children" : [
-      173
-    ]
-  },
-  {
-    "id" : 173,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 3,
-    "children" : [
-      113,
-      48
+      156,
+      157,
+      158
     ]
   },
   {
@@ -1651,140 +1420,361 @@
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 3,
+    "rightExtent" : 2,
     "children" : [
-      100,
-      148
+      86,
+      159
     ]
   },
   {
-    "id" : 145,
+    "id" : 159,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 1,
+    "rightExtent" : 2,
+    "children" : [
+      160
+    ]
+  },
+  {
+    "id" : 160,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 1,
+    "rightExtent" : 2,
+    "children" : [
+      161
+    ]
+  },
+  {
+    "id" : 161,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 2,
+    "children" : [
+      162
+    ]
+  },
+  {
+    "id" : 162,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 2,
+    "children" : [
+      123
+    ]
+  },
+  {
+    "id" : 157,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
+    "children" : [
+      147,
+      163
+    ]
+  },
+  {
+    "id" : 163,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 2,
+    "children" : [
+      164
+    ]
+  },
+  {
+    "id" : 164,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 2,
+    "children" : [
+      165
+    ]
+  },
+  {
+    "id" : 165,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 2,
+    "children" : [
+      166
+    ]
+  },
+  {
+    "id" : 166,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 2,
+    "rightExtent" : 2,
+    "children" : [
+      167
+    ]
+  },
+  {
+    "id" : 167,
+    "kind" : "TerminalNode",
+    "label" : "epsilon",
+    "leftExtent" : 2,
+    "rightExtent" : 2
+  },
+  {
+    "id" : 158,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 2,
+    "children" : [
+      102,
+      151
+    ]
+  },
+  {
+    "id" : 148,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      168
+    ]
+  },
+  {
+    "id" : 168,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      169
+    ]
+  },
+  {
+    "id" : 169,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      170
+    ]
+  },
+  {
+    "id" : 170,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      171
+    ]
+  },
+  {
+    "id" : 171,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      172
+    ]
+  },
+  {
+    "id" : 172,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a .",
+    "leftExtent" : 2,
+    "rightExtent" : 3,
+    "children" : [
+      48
+    ]
+  },
+  {
+    "id" : 137,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 3,
+    "children" : [
+      102,
+      129
+    ]
+  },
+  {
+    "id" : 126,
     "kind" : "NonterminalNode",
     "label" : "A",
     "leftExtent" : 3,
-    "rightExtent" : 9,
+    "rightExtent" : 4,
+    "children" : [
+      173
+    ]
+  },
+  {
+    "id" : 173,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 3,
+    "rightExtent" : 4,
     "children" : [
       174
     ]
   },
   {
     "id" : 174,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
+    "kind" : "NonterminalNode",
+    "label" : "a*",
     "leftExtent" : 3,
-    "rightExtent" : 9,
+    "rightExtent" : 4,
     "children" : [
       175
     ]
   },
   {
     "id" : 175,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
     "leftExtent" : 3,
-    "rightExtent" : 9,
+    "rightExtent" : 4,
     "children" : [
       176
     ]
   },
   {
     "id" : 176,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
+    "kind" : "NonterminalNode",
+    "label" : "a+",
     "leftExtent" : 3,
-    "rightExtent" : 9,
+    "rightExtent" : 4,
     "children" : [
       177
     ]
   },
   {
     "id" : 177,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a .",
     "leftExtent" : 3,
-    "rightExtent" : 9,
+    "rightExtent" : 4,
     "children" : [
+      43
+    ]
+  },
+  {
+    "id" : 79,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 4,
+    "children" : [
+      147,
       178
     ]
   },
   {
     "id" : 178,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 9,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       179
     ]
   },
   {
     "id" : 179,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 9,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       180
     ]
   },
   {
     "id" : 180,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 9,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
-      181,
-      18
+      181
     ]
   },
   {
     "id" : 181,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       182
     ]
   },
   {
     "id" : 182,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       183
     ]
   },
   {
     "id" : 183,
-    "kind" : "IntermediateNode",
+    "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
       184
     ]
   },
   {
     "id" : 184,
-    "kind" : "PackedNode",
+    "kind" : "IntermediateNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "leftExtent" : 2,
+    "rightExtent" : 4,
     "children" : [
-      185,
-      23
+      185
     ]
   },
   {
     "id" : 185,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 4,
+    "children" : [
+      171,
+      43
+    ]
+  },
+  {
+    "id" : 80,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 4,
+    "children" : [
+      102,
+      71
+    ]
+  },
+  {
+    "id" : 68,
     "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
+    "label" : "A",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       186
     ]
@@ -1792,19 +1782,19 @@
   {
     "id" : 186,
     "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
+    "label" : "A ::= a* .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       187
     ]
   },
   {
     "id" : 187,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       188
     ]
@@ -1812,20 +1802,19 @@
   {
     "id" : 188,
     "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
-      189,
-      28
+      189
     ]
   },
   {
     "id" : 189,
     "kind" : "NonterminalNode",
     "label" : "a+",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       190
     ]
@@ -1834,8 +1823,8 @@
     "id" : 190,
     "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       191
     ]
@@ -1844,8 +1833,8 @@
     "id" : 191,
     "kind" : "IntermediateNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       192
     ]
@@ -1854,19 +1843,19 @@
     "id" : 192,
     "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
+    "leftExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
       193,
-      33
+      18
     ]
   },
   {
     "id" : 193,
     "kind" : "NonterminalNode",
     "label" : "a+",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
+    "leftExtent" : 4,
+    "rightExtent" : 8,
     "children" : [
       194
     ]
@@ -1875,8 +1864,8 @@
     "id" : 194,
     "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
+    "leftExtent" : 4,
+    "rightExtent" : 8,
     "children" : [
       195
     ]
@@ -1885,8 +1874,8 @@
     "id" : 195,
     "kind" : "IntermediateNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
+    "leftExtent" : 4,
+    "rightExtent" : 8,
     "children" : [
       196
     ]
@@ -1895,19 +1884,19 @@
     "id" : 196,
     "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
+    "leftExtent" : 4,
+    "rightExtent" : 8,
     "children" : [
       197,
-      38
+      23
     ]
   },
   {
     "id" : 197,
     "kind" : "NonterminalNode",
     "label" : "a+",
-    "leftExtent" : 3,
-    "rightExtent" : 4,
+    "leftExtent" : 4,
+    "rightExtent" : 7,
     "children" : [
       198
     ]
@@ -1915,51 +1904,60 @@
   {
     "id" : 198,
     "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 3,
-    "rightExtent" : 4,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
     "children" : [
-      43
-    ]
-  },
-  {
-    "id" : 59,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
-      199,
-      200
+      199
     ]
   },
   {
     "id" : 199,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      200
+    ]
+  },
+  {
+    "id" : 200,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
     "children" : [
       201,
-      202
+      28
     ]
   },
   {
     "id" : 201,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      202
+    ]
+  },
+  {
+    "id" : 202,
     "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
     "children" : [
       203
     ]
   },
   {
     "id" : 203,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
     "children" : [
       204
     ]
@@ -1967,19 +1965,20 @@
   {
     "id" : 204,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
     "children" : [
-      205
+      205,
+      33
     ]
   },
   {
     "id" : 205,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
+    "label" : "a+",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
     "children" : [
       206
     ]
@@ -1987,2403 +1986,77 @@
   {
     "id" : 206,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
+    "label" : "a+ ::= a .",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
     "children" : [
-      37
+      38
     ]
   },
   {
-    "id" : 202,
+    "id" : 58,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
-    "rightExtent" : 4,
+    "rightExtent" : 9,
     "children" : [
-      207
+      207,
+      208
     ]
   },
   {
     "id" : 207,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
+    "kind" : "NonterminalNode",
+    "label" : "A+",
     "leftExtent" : 0,
-    "rightExtent" : 4,
+    "rightExtent" : 8,
     "children" : [
-      208,
       209,
-      210,
-      211,
+      210
+    ]
+  },
+  {
+    "id" : 209,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      211
+    ]
+  },
+  {
+    "id" : 211,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
       212
     ]
   },
   {
-    "id" : 208,
+    "id" : 212,
     "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
+    "label" : "A ::= a* .",
     "leftExtent" : 0,
-    "rightExtent" : 4,
+    "rightExtent" : 8,
     "children" : [
-      67,
       213
     ]
   },
   {
     "id" : 213,
     "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
+    "label" : "a*",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
     "children" : [
       214
     ]
   },
   {
     "id" : 214,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      215
-    ]
-  },
-  {
-    "id" : 215,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      216
-    ]
-  },
-  {
-    "id" : 216,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
-    "rightExtent" : 4,
-    "children" : [
-      138
-    ]
-  },
-  {
-    "id" : 209,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
-    "children" : [
-      144,
-      217
-    ]
-  },
-  {
-    "id" : 217,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 3,
-    "rightExtent" : 4,
-    "children" : [
-      218
-    ]
-  },
-  {
-    "id" : 218,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 3,
-    "rightExtent" : 4,
-    "children" : [
-      219
-    ]
-  },
-  {
-    "id" : 219,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 3,
-    "rightExtent" : 4,
-    "children" : [
-      220
-    ]
-  },
-  {
-    "id" : 220,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 3,
-    "rightExtent" : 4,
-    "children" : [
-      197
-    ]
-  },
-  {
-    "id" : 210,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
-    "children" : [
-      199,
-      221
-    ]
-  },
-  {
-    "id" : 221,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 4,
-    "rightExtent" : 4,
-    "children" : [
-      222
-    ]
-  },
-  {
-    "id" : 222,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 4,
-    "rightExtent" : 4,
-    "children" : [
-      223
-    ]
-  },
-  {
-    "id" : 223,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 4,
-    "rightExtent" : 4,
-    "children" : [
-      224
-    ]
-  },
-  {
-    "id" : 224,
-    "kind" : "PackedNode",
-    "label" : "a* ::= .",
-    "leftExtent" : 4,
-    "rightExtent" : 4,
-    "children" : [
-      225
-    ]
-  },
-  {
-    "id" : 225,
-    "kind" : "TerminalNode",
-    "label" : "epsilon",
-    "leftExtent" : 4,
-    "rightExtent" : 4
-  },
-  {
-    "id" : 211,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
-    "children" : [
-      84,
-      226
-    ]
-  },
-  {
-    "id" : 226,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      227
-    ]
-  },
-  {
-    "id" : 227,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      228
-    ]
-  },
-  {
-    "id" : 228,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      229
-    ]
-  },
-  {
-    "id" : 229,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      230
-    ]
-  },
-  {
-    "id" : 230,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      231
-    ]
-  },
-  {
-    "id" : 231,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      232
-    ]
-  },
-  {
-    "id" : 232,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      233
-    ]
-  },
-  {
-    "id" : 233,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 4,
-    "children" : [
-      170,
-      43
-    ]
-  },
-  {
-    "id" : 212,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 4,
-    "children" : [
-      100,
-      203
-    ]
-  },
-  {
-    "id" : 200,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      234
-    ]
-  },
-  {
-    "id" : 234,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      235
-    ]
-  },
-  {
-    "id" : 235,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      236
-    ]
-  },
-  {
-    "id" : 236,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      237
-    ]
-  },
-  {
-    "id" : 237,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      238
-    ]
-  },
-  {
-    "id" : 238,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      239
-    ]
-  },
-  {
-    "id" : 239,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      240
-    ]
-  },
-  {
-    "id" : 240,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 9,
-    "children" : [
-      241,
-      18
-    ]
-  },
-  {
-    "id" : 241,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
-    "children" : [
-      242
-    ]
-  },
-  {
-    "id" : 242,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
-    "children" : [
-      243
-    ]
-  },
-  {
-    "id" : 243,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
-    "children" : [
-      244
-    ]
-  },
-  {
-    "id" : 244,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
-    "children" : [
-      245,
-      23
-    ]
-  },
-  {
-    "id" : 245,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      246
-    ]
-  },
-  {
-    "id" : 246,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      247
-    ]
-  },
-  {
-    "id" : 247,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      248
-    ]
-  },
-  {
-    "id" : 248,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      249,
-      28
-    ]
-  },
-  {
-    "id" : 249,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      250
-    ]
-  },
-  {
-    "id" : 250,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      251
-    ]
-  },
-  {
-    "id" : 251,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      252
-    ]
-  },
-  {
-    "id" : 252,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      253,
-      33
-    ]
-  },
-  {
-    "id" : 253,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 4,
-    "rightExtent" : 5,
-    "children" : [
-      254
-    ]
-  },
-  {
-    "id" : 254,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 4,
-    "rightExtent" : 5,
-    "children" : [
-      38
-    ]
-  },
-  {
-    "id" : 60,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
-      255,
-      256
-    ]
-  },
-  {
-    "id" : 255,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      257,
-      258
-    ]
-  },
-  {
-    "id" : 257,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      259
-    ]
-  },
-  {
-    "id" : 259,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      260
-    ]
-  },
-  {
-    "id" : 260,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      261
-    ]
-  },
-  {
-    "id" : 261,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      262
-    ]
-  },
-  {
-    "id" : 262,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      32
-    ]
-  },
-  {
-    "id" : 258,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      263
-    ]
-  },
-  {
-    "id" : 263,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      264,
-      265,
-      266,
-      267,
-      268,
-      269
-    ]
-  },
-  {
-    "id" : 264,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      67,
-      270
-    ]
-  },
-  {
-    "id" : 270,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      271
-    ]
-  },
-  {
-    "id" : 271,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      272
-    ]
-  },
-  {
-    "id" : 272,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      273
-    ]
-  },
-  {
-    "id" : 273,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
-    "rightExtent" : 5,
-    "children" : [
-      134
-    ]
-  },
-  {
-    "id" : 265,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      144,
-      274
-    ]
-  },
-  {
-    "id" : 274,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
-    "children" : [
-      275
-    ]
-  },
-  {
-    "id" : 275,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
-    "children" : [
-      276
-    ]
-  },
-  {
-    "id" : 276,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
-    "children" : [
-      277
-    ]
-  },
-  {
-    "id" : 277,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 3,
-    "rightExtent" : 5,
-    "children" : [
-      193
-    ]
-  },
-  {
-    "id" : 266,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      199,
-      278
-    ]
-  },
-  {
-    "id" : 278,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 4,
-    "rightExtent" : 5,
-    "children" : [
-      279
-    ]
-  },
-  {
-    "id" : 279,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 4,
-    "rightExtent" : 5,
-    "children" : [
-      280
-    ]
-  },
-  {
-    "id" : 280,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 4,
-    "rightExtent" : 5,
-    "children" : [
-      281
-    ]
-  },
-  {
-    "id" : 281,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 4,
-    "rightExtent" : 5,
-    "children" : [
-      253
-    ]
-  },
-  {
-    "id" : 267,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      255,
-      282
-    ]
-  },
-  {
-    "id" : 282,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 5,
-    "rightExtent" : 5,
-    "children" : [
-      283
-    ]
-  },
-  {
-    "id" : 283,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 5,
-    "rightExtent" : 5,
-    "children" : [
-      284
-    ]
-  },
-  {
-    "id" : 284,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 5,
-    "rightExtent" : 5,
-    "children" : [
-      285
-    ]
-  },
-  {
-    "id" : 285,
-    "kind" : "PackedNode",
-    "label" : "a* ::= .",
-    "leftExtent" : 5,
-    "rightExtent" : 5,
-    "children" : [
-      286
-    ]
-  },
-  {
-    "id" : 286,
-    "kind" : "TerminalNode",
-    "label" : "epsilon",
-    "leftExtent" : 5,
-    "rightExtent" : 5
-  },
-  {
-    "id" : 268,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      84,
-      287
-    ]
-  },
-  {
-    "id" : 287,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      288
-    ]
-  },
-  {
-    "id" : 288,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      289
-    ]
-  },
-  {
-    "id" : 289,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      290
-    ]
-  },
-  {
-    "id" : 290,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      291
-    ]
-  },
-  {
-    "id" : 291,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      292
-    ]
-  },
-  {
-    "id" : 292,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      293
-    ]
-  },
-  {
-    "id" : 293,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      294
-    ]
-  },
-  {
-    "id" : 294,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 5,
-    "children" : [
-      230,
-      38
-    ]
-  },
-  {
-    "id" : 269,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 5,
-    "children" : [
-      100,
-      259
-    ]
-  },
-  {
-    "id" : 256,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      295
-    ]
-  },
-  {
-    "id" : 295,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      296
-    ]
-  },
-  {
-    "id" : 296,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      297
-    ]
-  },
-  {
-    "id" : 297,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      298
-    ]
-  },
-  {
-    "id" : 298,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      299
-    ]
-  },
-  {
-    "id" : 299,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      300
-    ]
-  },
-  {
-    "id" : 300,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      301
-    ]
-  },
-  {
-    "id" : 301,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 9,
-    "children" : [
-      302,
-      18
-    ]
-  },
-  {
-    "id" : 302,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
-    "children" : [
-      303
-    ]
-  },
-  {
-    "id" : 303,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
-    "children" : [
-      304
-    ]
-  },
-  {
-    "id" : 304,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
-    "children" : [
-      305
-    ]
-  },
-  {
-    "id" : 305,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
-    "children" : [
-      306,
-      23
-    ]
-  },
-  {
-    "id" : 306,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      307
-    ]
-  },
-  {
-    "id" : 307,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      308
-    ]
-  },
-  {
-    "id" : 308,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      309
-    ]
-  },
-  {
-    "id" : 309,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      310,
-      28
-    ]
-  },
-  {
-    "id" : 310,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 5,
-    "rightExtent" : 6,
-    "children" : [
-      311
-    ]
-  },
-  {
-    "id" : 311,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 5,
-    "rightExtent" : 6,
-    "children" : [
-      33
-    ]
-  },
-  {
-    "id" : 61,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
-      312,
-      313
-    ]
-  },
-  {
-    "id" : 312,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      314,
-      315
-    ]
-  },
-  {
-    "id" : 314,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      316
-    ]
-  },
-  {
-    "id" : 316,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      317
-    ]
-  },
-  {
-    "id" : 317,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      318
-    ]
-  },
-  {
-    "id" : 318,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      319
-    ]
-  },
-  {
-    "id" : 319,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      27
-    ]
-  },
-  {
-    "id" : 315,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      320
-    ]
-  },
-  {
-    "id" : 320,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      321,
-      322,
-      323,
-      324,
-      325,
-      326,
-      327
-    ]
-  },
-  {
-    "id" : 321,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      67,
-      328
-    ]
-  },
-  {
-    "id" : 328,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
-    "children" : [
-      329
-    ]
-  },
-  {
-    "id" : 329,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
-    "children" : [
-      330
-    ]
-  },
-  {
-    "id" : 330,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
-    "children" : [
-      331
-    ]
-  },
-  {
-    "id" : 331,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
-    "rightExtent" : 6,
-    "children" : [
-      130
-    ]
-  },
-  {
-    "id" : 322,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      144,
-      332
-    ]
-  },
-  {
-    "id" : 332,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
-    "children" : [
-      333
-    ]
-  },
-  {
-    "id" : 333,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
-    "children" : [
-      334
-    ]
-  },
-  {
-    "id" : 334,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
-    "children" : [
-      335
-    ]
-  },
-  {
-    "id" : 335,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 3,
-    "rightExtent" : 6,
-    "children" : [
-      189
-    ]
-  },
-  {
-    "id" : 323,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      199,
-      336
-    ]
-  },
-  {
-    "id" : 336,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      337
-    ]
-  },
-  {
-    "id" : 337,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      338
-    ]
-  },
-  {
-    "id" : 338,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      339
-    ]
-  },
-  {
-    "id" : 339,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 4,
-    "rightExtent" : 6,
-    "children" : [
-      249
-    ]
-  },
-  {
-    "id" : 324,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      255,
-      340
-    ]
-  },
-  {
-    "id" : 340,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 5,
-    "rightExtent" : 6,
-    "children" : [
-      341
-    ]
-  },
-  {
-    "id" : 341,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 5,
-    "rightExtent" : 6,
-    "children" : [
-      342
-    ]
-  },
-  {
-    "id" : 342,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 5,
-    "rightExtent" : 6,
-    "children" : [
-      343
-    ]
-  },
-  {
-    "id" : 343,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 5,
-    "rightExtent" : 6,
-    "children" : [
-      310
-    ]
-  },
-  {
-    "id" : 325,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      312,
-      344
-    ]
-  },
-  {
-    "id" : 344,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 6,
-    "rightExtent" : 6,
-    "children" : [
-      345
-    ]
-  },
-  {
-    "id" : 345,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 6,
-    "rightExtent" : 6,
-    "children" : [
-      346
-    ]
-  },
-  {
-    "id" : 346,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 6,
-    "rightExtent" : 6,
-    "children" : [
-      347
-    ]
-  },
-  {
-    "id" : 347,
-    "kind" : "PackedNode",
-    "label" : "a* ::= .",
-    "leftExtent" : 6,
-    "rightExtent" : 6,
-    "children" : [
-      348
-    ]
-  },
-  {
-    "id" : 348,
-    "kind" : "TerminalNode",
-    "label" : "epsilon",
-    "leftExtent" : 6,
-    "rightExtent" : 6
-  },
-  {
-    "id" : 326,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      84,
-      349
-    ]
-  },
-  {
-    "id" : 349,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      350
-    ]
-  },
-  {
-    "id" : 350,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      351
-    ]
-  },
-  {
-    "id" : 351,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      352
-    ]
-  },
-  {
-    "id" : 352,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      353
-    ]
-  },
-  {
-    "id" : 353,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      354
-    ]
-  },
-  {
-    "id" : 354,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      355
-    ]
-  },
-  {
-    "id" : 355,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      356
-    ]
-  },
-  {
-    "id" : 356,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 6,
-    "children" : [
-      291,
-      33
-    ]
-  },
-  {
-    "id" : 327,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 6,
-    "children" : [
-      100,
-      316
-    ]
-  },
-  {
-    "id" : 313,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      357
-    ]
-  },
-  {
-    "id" : 357,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      358
-    ]
-  },
-  {
-    "id" : 358,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      359
-    ]
-  },
-  {
-    "id" : 359,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      360
-    ]
-  },
-  {
-    "id" : 360,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      361
-    ]
-  },
-  {
-    "id" : 361,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      362
-    ]
-  },
-  {
-    "id" : 362,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      363
-    ]
-  },
-  {
-    "id" : 363,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 6,
-    "rightExtent" : 9,
-    "children" : [
-      364,
-      18
-    ]
-  },
-  {
-    "id" : 364,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
-    "children" : [
-      365
-    ]
-  },
-  {
-    "id" : 365,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
-    "children" : [
-      366
-    ]
-  },
-  {
-    "id" : 366,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
-    "children" : [
-      367
-    ]
-  },
-  {
-    "id" : 367,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
-    "children" : [
-      368,
-      23
-    ]
-  },
-  {
-    "id" : 368,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 6,
-    "rightExtent" : 7,
-    "children" : [
-      369
-    ]
-  },
-  {
-    "id" : 369,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 6,
-    "rightExtent" : 7,
-    "children" : [
-      28
-    ]
-  },
-  {
-    "id" : 62,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
-      370,
-      371
-    ]
-  },
-  {
-    "id" : 370,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      372,
-      373
-    ]
-  },
-  {
-    "id" : 372,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      374
-    ]
-  },
-  {
-    "id" : 374,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      375
-    ]
-  },
-  {
-    "id" : 375,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      376
-    ]
-  },
-  {
-    "id" : 376,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      377
-    ]
-  },
-  {
-    "id" : 377,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      22
-    ]
-  },
-  {
-    "id" : 373,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      378
-    ]
-  },
-  {
-    "id" : 378,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      379,
-      380,
-      381,
-      382,
-      383,
-      384,
-      385,
-      386
-    ]
-  },
-  {
-    "id" : 379,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      67,
-      387
-    ]
-  },
-  {
-    "id" : 387,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
-    "children" : [
-      388
-    ]
-  },
-  {
-    "id" : 388,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
-    "children" : [
-      389
-    ]
-  },
-  {
-    "id" : 389,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
-    "children" : [
-      390
-    ]
-  },
-  {
-    "id" : 390,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
-    "rightExtent" : 7,
-    "children" : [
-      126
-    ]
-  },
-  {
-    "id" : 380,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      144,
-      391
-    ]
-  },
-  {
-    "id" : 391,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
-    "children" : [
-      392
-    ]
-  },
-  {
-    "id" : 392,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
-    "children" : [
-      393
-    ]
-  },
-  {
-    "id" : 393,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
-    "children" : [
-      394
-    ]
-  },
-  {
-    "id" : 394,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 3,
-    "rightExtent" : 7,
-    "children" : [
-      185
-    ]
-  },
-  {
-    "id" : 381,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      199,
-      395
-    ]
-  },
-  {
-    "id" : 395,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      396
-    ]
-  },
-  {
-    "id" : 396,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      397
-    ]
-  },
-  {
-    "id" : 397,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      398
-    ]
-  },
-  {
-    "id" : 398,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 4,
-    "rightExtent" : 7,
-    "children" : [
-      245
-    ]
-  },
-  {
-    "id" : 382,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      255,
-      399
-    ]
-  },
-  {
-    "id" : 399,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      400
-    ]
-  },
-  {
-    "id" : 400,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      401
-    ]
-  },
-  {
-    "id" : 401,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      402
-    ]
-  },
-  {
-    "id" : 402,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 5,
-    "rightExtent" : 7,
-    "children" : [
-      306
-    ]
-  },
-  {
-    "id" : 383,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      312,
-      403
-    ]
-  },
-  {
-    "id" : 403,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 6,
-    "rightExtent" : 7,
-    "children" : [
-      404
-    ]
-  },
-  {
-    "id" : 404,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 6,
-    "rightExtent" : 7,
-    "children" : [
-      405
-    ]
-  },
-  {
-    "id" : 405,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 6,
-    "rightExtent" : 7,
-    "children" : [
-      406
-    ]
-  },
-  {
-    "id" : 406,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 6,
-    "rightExtent" : 7,
-    "children" : [
-      368
-    ]
-  },
-  {
-    "id" : 384,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      370,
-      407
-    ]
-  },
-  {
-    "id" : 407,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 7,
-    "rightExtent" : 7,
-    "children" : [
-      408
-    ]
-  },
-  {
-    "id" : 408,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 7,
-    "rightExtent" : 7,
-    "children" : [
-      409
-    ]
-  },
-  {
-    "id" : 409,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 7,
-    "rightExtent" : 7,
-    "children" : [
-      410
-    ]
-  },
-  {
-    "id" : 410,
-    "kind" : "PackedNode",
-    "label" : "a* ::= .",
-    "leftExtent" : 7,
-    "rightExtent" : 7,
-    "children" : [
-      411
-    ]
-  },
-  {
-    "id" : 411,
-    "kind" : "TerminalNode",
-    "label" : "epsilon",
-    "leftExtent" : 7,
-    "rightExtent" : 7
-  },
-  {
-    "id" : 385,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      84,
-      412
-    ]
-  },
-  {
-    "id" : 412,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      413
-    ]
-  },
-  {
-    "id" : 413,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      414
-    ]
-  },
-  {
-    "id" : 414,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      415
-    ]
-  },
-  {
-    "id" : 415,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      416
-    ]
-  },
-  {
-    "id" : 416,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      417
-    ]
-  },
-  {
-    "id" : 417,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      418
-    ]
-  },
-  {
-    "id" : 418,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      419
-    ]
-  },
-  {
-    "id" : 419,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 7,
-    "children" : [
-      353,
-      28
-    ]
-  },
-  {
-    "id" : 386,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 7,
-    "children" : [
-      100,
-      374
-    ]
-  },
-  {
-    "id" : 371,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      420
-    ]
-  },
-  {
-    "id" : 420,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      421
-    ]
-  },
-  {
-    "id" : 421,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      422
-    ]
-  },
-  {
-    "id" : 422,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      423
-    ]
-  },
-  {
-    "id" : 423,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      424
-    ]
-  },
-  {
-    "id" : 424,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      425
-    ]
-  },
-  {
-    "id" : 425,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      426
-    ]
-  },
-  {
-    "id" : 426,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 7,
-    "rightExtent" : 9,
-    "children" : [
-      427,
-      18
-    ]
-  },
-  {
-    "id" : 427,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 7,
-    "rightExtent" : 8,
-    "children" : [
-      428
-    ]
-  },
-  {
-    "id" : 428,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 7,
-    "rightExtent" : 8,
-    "children" : [
-      23
-    ]
-  },
-  {
-    "id" : 63,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
-      429,
-      430
-    ]
-  },
-  {
-    "id" : 429,
-    "kind" : "NonterminalNode",
-    "label" : "A+",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      431,
-      432
-    ]
-  },
-  {
-    "id" : 431,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      433
-    ]
-  },
-  {
-    "id" : 433,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      434
-    ]
-  },
-  {
-    "id" : 434,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      435
-    ]
-  },
-  {
-    "id" : 435,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      436
-    ]
-  },
-  {
-    "id" : 436,
     "kind" : "PackedNode",
     "label" : "a* ::= a+ .",
     "leftExtent" : 0,
@@ -4393,10 +2066,2280 @@
     ]
   },
   {
-    "id" : 432,
+    "id" : 210,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      215
+    ]
+  },
+  {
+    "id" : 215,
+    "kind" : "IntermediateNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      216,
+      217,
+      218,
+      219,
+      220,
+      221,
+      222,
+      223,
+      224
+    ]
+  },
+  {
+    "id" : 216,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      67,
+      225
+    ]
+  },
+  {
+    "id" : 225,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 4,
+    "rightExtent" : 8,
+    "children" : [
+      226
+    ]
+  },
+  {
+    "id" : 226,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 4,
+    "rightExtent" : 8,
+    "children" : [
+      227
+    ]
+  },
+  {
+    "id" : 227,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 4,
+    "rightExtent" : 8,
+    "children" : [
+      228
+    ]
+  },
+  {
+    "id" : 228,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 4,
+    "rightExtent" : 8,
+    "children" : [
+      193
+    ]
+  },
+  {
+    "id" : 217,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      207,
+      229
+    ]
+  },
+  {
+    "id" : 229,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 8,
+    "rightExtent" : 8,
+    "children" : [
+      230
+    ]
+  },
+  {
+    "id" : 230,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 8,
+    "rightExtent" : 8,
+    "children" : [
+      231
+    ]
+  },
+  {
+    "id" : 231,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 8,
+    "rightExtent" : 8,
+    "children" : [
+      232
+    ]
+  },
+  {
+    "id" : 232,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 8,
+    "rightExtent" : 8,
+    "children" : [
+      233
+    ]
+  },
+  {
+    "id" : 233,
+    "kind" : "TerminalNode",
+    "label" : "epsilon",
+    "leftExtent" : 8,
+    "rightExtent" : 8
+  },
+  {
+    "id" : 218,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      86,
+      234
+    ]
+  },
+  {
+    "id" : 234,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      235
+    ]
+  },
+  {
+    "id" : 235,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      236
+    ]
+  },
+  {
+    "id" : 236,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      237
+    ]
+  },
+  {
+    "id" : 237,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      238
+    ]
+  },
+  {
+    "id" : 238,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      239
+    ]
+  },
+  {
+    "id" : 239,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      240
+    ]
+  },
+  {
+    "id" : 240,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      241
+    ]
+  },
+  {
+    "id" : 241,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 8,
+    "children" : [
+      242,
+      23
+    ]
+  },
+  {
+    "id" : 242,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      243
+    ]
+  },
+  {
+    "id" : 243,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      244
+    ]
+  },
+  {
+    "id" : 244,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      245
+    ]
+  },
+  {
+    "id" : 245,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      246,
+      28
+    ]
+  },
+  {
+    "id" : 246,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      247
+    ]
+  },
+  {
+    "id" : 247,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      248
+    ]
+  },
+  {
+    "id" : 248,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      249
+    ]
+  },
+  {
+    "id" : 249,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      250,
+      33
+    ]
+  },
+  {
+    "id" : 250,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      251
+    ]
+  },
+  {
+    "id" : 251,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      252
+    ]
+  },
+  {
+    "id" : 252,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      253
+    ]
+  },
+  {
+    "id" : 253,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      115,
+      38
+    ]
+  },
+  {
+    "id" : 219,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      254,
+      255
+    ]
+  },
+  {
+    "id" : 254,
+    "kind" : "NonterminalNode",
+    "label" : "A+",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      256,
+      257
+    ]
+  },
+  {
+    "id" : 256,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      258
+    ]
+  },
+  {
+    "id" : 258,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      259
+    ]
+  },
+  {
+    "id" : 259,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      260
+    ]
+  },
+  {
+    "id" : 260,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      261
+    ]
+  },
+  {
+    "id" : 261,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      22
+    ]
+  },
+  {
+    "id" : 257,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      262
+    ]
+  },
+  {
+    "id" : 262,
+    "kind" : "IntermediateNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      263,
+      264,
+      265,
+      266,
+      267,
+      268,
+      269,
+      270
+    ]
+  },
+  {
+    "id" : 263,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      67,
+      271
+    ]
+  },
+  {
+    "id" : 271,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      272
+    ]
+  },
+  {
+    "id" : 272,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      273
+    ]
+  },
+  {
+    "id" : 273,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      274
+    ]
+  },
+  {
+    "id" : 274,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 4,
+    "rightExtent" : 7,
+    "children" : [
+      197
+    ]
+  },
+  {
+    "id" : 264,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      86,
+      275
+    ]
+  },
+  {
+    "id" : 275,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      276
+    ]
+  },
+  {
+    "id" : 276,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      277
+    ]
+  },
+  {
+    "id" : 277,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      278
+    ]
+  },
+  {
+    "id" : 278,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 7,
+    "children" : [
+      242
+    ]
+  },
+  {
+    "id" : 265,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      254,
+      279
+    ]
+  },
+  {
+    "id" : 279,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 7,
+    "rightExtent" : 7,
+    "children" : [
+      280
+    ]
+  },
+  {
+    "id" : 280,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 7,
+    "rightExtent" : 7,
+    "children" : [
+      281
+    ]
+  },
+  {
+    "id" : 281,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 7,
+    "rightExtent" : 7,
+    "children" : [
+      282
+    ]
+  },
+  {
+    "id" : 282,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 7,
+    "rightExtent" : 7,
+    "children" : [
+      283
+    ]
+  },
+  {
+    "id" : 283,
+    "kind" : "TerminalNode",
+    "label" : "epsilon",
+    "leftExtent" : 7,
+    "rightExtent" : 7
+  },
+  {
+    "id" : 266,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      125,
+      284
+    ]
+  },
+  {
+    "id" : 284,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      285
+    ]
+  },
+  {
+    "id" : 285,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      286
+    ]
+  },
+  {
+    "id" : 286,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      287
+    ]
+  },
+  {
+    "id" : 287,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      288
+    ]
+  },
+  {
+    "id" : 288,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      289
+    ]
+  },
+  {
+    "id" : 289,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      290
+    ]
+  },
+  {
+    "id" : 290,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      291
+    ]
+  },
+  {
+    "id" : 291,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 7,
+    "children" : [
+      292,
+      28
+    ]
+  },
+  {
+    "id" : 292,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      293
+    ]
+  },
+  {
+    "id" : 293,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      294
+    ]
+  },
+  {
+    "id" : 294,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      295
+    ]
+  },
+  {
+    "id" : 295,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      296,
+      33
+    ]
+  },
+  {
+    "id" : 296,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      297
+    ]
+  },
+  {
+    "id" : 297,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      298
+    ]
+  },
+  {
+    "id" : 298,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      299
+    ]
+  },
+  {
+    "id" : 299,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      176,
+      38
+    ]
+  },
+  {
+    "id" : 267,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      300,
+      301
+    ]
+  },
+  {
+    "id" : 300,
+    "kind" : "NonterminalNode",
+    "label" : "A+",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      302,
+      303
+    ]
+  },
+  {
+    "id" : 302,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      304
+    ]
+  },
+  {
+    "id" : 304,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      305
+    ]
+  },
+  {
+    "id" : 305,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      306
+    ]
+  },
+  {
+    "id" : 306,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      307
+    ]
+  },
+  {
+    "id" : 307,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      32
+    ]
+  },
+  {
+    "id" : 303,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      308
+    ]
+  },
+  {
+    "id" : 308,
+    "kind" : "IntermediateNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      309,
+      310,
+      311,
+      312,
+      313,
+      314
+    ]
+  },
+  {
+    "id" : 309,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      67,
+      315
+    ]
+  },
+  {
+    "id" : 315,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
+    "children" : [
+      316
+    ]
+  },
+  {
+    "id" : 316,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
+    "children" : [
+      317
+    ]
+  },
+  {
+    "id" : 317,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
+    "children" : [
+      318
+    ]
+  },
+  {
+    "id" : 318,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 4,
+    "rightExtent" : 5,
+    "children" : [
+      205
+    ]
+  },
+  {
+    "id" : 310,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      86,
+      319
+    ]
+  },
+  {
+    "id" : 319,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      320
+    ]
+  },
+  {
+    "id" : 320,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      321
+    ]
+  },
+  {
+    "id" : 321,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      322
+    ]
+  },
+  {
+    "id" : 322,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 5,
+    "children" : [
+      250
+    ]
+  },
+  {
+    "id" : 311,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      125,
+      323
+    ]
+  },
+  {
+    "id" : 323,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      324
+    ]
+  },
+  {
+    "id" : 324,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      325
+    ]
+  },
+  {
+    "id" : 325,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      326
+    ]
+  },
+  {
+    "id" : 326,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 3,
+    "rightExtent" : 5,
+    "children" : [
+      296
+    ]
+  },
+  {
+    "id" : 312,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      300,
+      327
+    ]
+  },
+  {
+    "id" : 327,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 5,
+    "rightExtent" : 5,
+    "children" : [
+      328
+    ]
+  },
+  {
+    "id" : 328,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 5,
+    "rightExtent" : 5,
+    "children" : [
+      329
+    ]
+  },
+  {
+    "id" : 329,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 5,
+    "rightExtent" : 5,
+    "children" : [
+      330
+    ]
+  },
+  {
+    "id" : 330,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 5,
+    "rightExtent" : 5,
+    "children" : [
+      331
+    ]
+  },
+  {
+    "id" : 331,
+    "kind" : "TerminalNode",
+    "label" : "epsilon",
+    "leftExtent" : 5,
+    "rightExtent" : 5
+  },
+  {
+    "id" : 313,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      147,
+      332
+    ]
+  },
+  {
+    "id" : 332,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      333
+    ]
+  },
+  {
+    "id" : 333,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      334
+    ]
+  },
+  {
+    "id" : 334,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      335
+    ]
+  },
+  {
+    "id" : 335,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      336
+    ]
+  },
+  {
+    "id" : 336,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      337
+    ]
+  },
+  {
+    "id" : 337,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      338
+    ]
+  },
+  {
+    "id" : 338,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      339
+    ]
+  },
+  {
+    "id" : 339,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 5,
+    "children" : [
+      182,
+      38
+    ]
+  },
+  {
+    "id" : 314,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 5,
+    "children" : [
+      102,
+      304
+    ]
+  },
+  {
+    "id" : 301,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      340
+    ]
+  },
+  {
+    "id" : 340,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      341
+    ]
+  },
+  {
+    "id" : 341,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      342
+    ]
+  },
+  {
+    "id" : 342,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      343
+    ]
+  },
+  {
+    "id" : 343,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      344
+    ]
+  },
+  {
+    "id" : 344,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      345
+    ]
+  },
+  {
+    "id" : 345,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      346
+    ]
+  },
+  {
+    "id" : 346,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 7,
+    "children" : [
+      347,
+      28
+    ]
+  },
+  {
+    "id" : 347,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 5,
+    "rightExtent" : 6,
+    "children" : [
+      348
+    ]
+  },
+  {
+    "id" : 348,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a .",
+    "leftExtent" : 5,
+    "rightExtent" : 6,
+    "children" : [
+      33
+    ]
+  },
+  {
+    "id" : 268,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      147,
+      349
+    ]
+  },
+  {
+    "id" : 349,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      350
+    ]
+  },
+  {
+    "id" : 350,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      351
+    ]
+  },
+  {
+    "id" : 351,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      352
+    ]
+  },
+  {
+    "id" : 352,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      353
+    ]
+  },
+  {
+    "id" : 353,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      354
+    ]
+  },
+  {
+    "id" : 354,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      355
+    ]
+  },
+  {
+    "id" : 355,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      356
+    ]
+  },
+  {
+    "id" : 356,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 7,
+    "children" : [
+      357,
+      28
+    ]
+  },
+  {
+    "id" : 357,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      358
+    ]
+  },
+  {
+    "id" : 358,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      359
+    ]
+  },
+  {
+    "id" : 359,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      360
+    ]
+  },
+  {
+    "id" : 360,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      336,
+      33
+    ]
+  },
+  {
+    "id" : 269,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      361,
+      362
+    ]
+  },
+  {
+    "id" : 361,
+    "kind" : "NonterminalNode",
+    "label" : "A+",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      363,
+      364
+    ]
+  },
+  {
+    "id" : 363,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      365
+    ]
+  },
+  {
+    "id" : 365,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      366
+    ]
+  },
+  {
+    "id" : 366,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      367
+    ]
+  },
+  {
+    "id" : 367,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      368
+    ]
+  },
+  {
+    "id" : 368,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      27
+    ]
+  },
+  {
+    "id" : 364,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      369
+    ]
+  },
+  {
+    "id" : 369,
+    "kind" : "IntermediateNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      370,
+      371,
+      372,
+      373,
+      374,
+      375,
+      376
+    ]
+  },
+  {
+    "id" : 370,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      67,
+      377
+    ]
+  },
+  {
+    "id" : 377,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      378
+    ]
+  },
+  {
+    "id" : 378,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      379
+    ]
+  },
+  {
+    "id" : 379,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      380
+    ]
+  },
+  {
+    "id" : 380,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 4,
+    "rightExtent" : 6,
+    "children" : [
+      201
+    ]
+  },
+  {
+    "id" : 371,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      86,
+      381
+    ]
+  },
+  {
+    "id" : 381,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      382
+    ]
+  },
+  {
+    "id" : 382,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      383
+    ]
+  },
+  {
+    "id" : 383,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      384
+    ]
+  },
+  {
+    "id" : 384,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 6,
+    "children" : [
+      246
+    ]
+  },
+  {
+    "id" : 372,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      125,
+      385
+    ]
+  },
+  {
+    "id" : 385,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      386
+    ]
+  },
+  {
+    "id" : 386,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      387
+    ]
+  },
+  {
+    "id" : 387,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      388
+    ]
+  },
+  {
+    "id" : 388,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 3,
+    "rightExtent" : 6,
+    "children" : [
+      292
+    ]
+  },
+  {
+    "id" : 373,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      300,
+      389
+    ]
+  },
+  {
+    "id" : 389,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 5,
+    "rightExtent" : 6,
+    "children" : [
+      390
+    ]
+  },
+  {
+    "id" : 390,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 5,
+    "rightExtent" : 6,
+    "children" : [
+      391
+    ]
+  },
+  {
+    "id" : 391,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 5,
+    "rightExtent" : 6,
+    "children" : [
+      392
+    ]
+  },
+  {
+    "id" : 392,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 5,
+    "rightExtent" : 6,
+    "children" : [
+      347
+    ]
+  },
+  {
+    "id" : 374,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      147,
+      393
+    ]
+  },
+  {
+    "id" : 393,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      394
+    ]
+  },
+  {
+    "id" : 394,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      395
+    ]
+  },
+  {
+    "id" : 395,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      396
+    ]
+  },
+  {
+    "id" : 396,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
+    "rightExtent" : 6,
+    "children" : [
+      357
+    ]
+  },
+  {
+    "id" : 375,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      361,
+      397
+    ]
+  },
+  {
+    "id" : 397,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 6,
+    "rightExtent" : 6,
+    "children" : [
+      398
+    ]
+  },
+  {
+    "id" : 398,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 6,
+    "rightExtent" : 6,
+    "children" : [
+      399
+    ]
+  },
+  {
+    "id" : 399,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 6,
+    "rightExtent" : 6,
+    "children" : [
+      400
+    ]
+  },
+  {
+    "id" : 400,
+    "kind" : "PackedNode",
+    "label" : "a* ::= .",
+    "leftExtent" : 6,
+    "rightExtent" : 6,
+    "children" : [
+      401
+    ]
+  },
+  {
+    "id" : 401,
+    "kind" : "TerminalNode",
+    "label" : "epsilon",
+    "leftExtent" : 6,
+    "rightExtent" : 6
+  },
+  {
+    "id" : 376,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 6,
+    "children" : [
+      102,
+      365
+    ]
+  },
+  {
+    "id" : 362,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      402
+    ]
+  },
+  {
+    "id" : 402,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      403
+    ]
+  },
+  {
+    "id" : 403,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      404
+    ]
+  },
+  {
+    "id" : 404,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      405
+    ]
+  },
+  {
+    "id" : 405,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      406
+    ]
+  },
+  {
+    "id" : 406,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a .",
+    "leftExtent" : 6,
+    "rightExtent" : 7,
+    "children" : [
+      28
+    ]
+  },
+  {
+    "id" : 270,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 7,
+    "children" : [
+      102,
+      258
+    ]
+  },
+  {
+    "id" : 255,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 7,
+    "rightExtent" : 8,
+    "children" : [
+      407
+    ]
+  },
+  {
+    "id" : 407,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 7,
+    "rightExtent" : 8,
+    "children" : [
+      408
+    ]
+  },
+  {
+    "id" : 408,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 7,
+    "rightExtent" : 8,
+    "children" : [
+      409
+    ]
+  },
+  {
+    "id" : 409,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 7,
+    "rightExtent" : 8,
+    "children" : [
+      410
+    ]
+  },
+  {
+    "id" : 410,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 7,
+    "rightExtent" : 8,
+    "children" : [
+      411
+    ]
+  },
+  {
+    "id" : 411,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a .",
+    "leftExtent" : 7,
+    "rightExtent" : 8,
+    "children" : [
+      23
+    ]
+  },
+  {
+    "id" : 220,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      125,
+      412
+    ]
+  },
+  {
+    "id" : 412,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      413
+    ]
+  },
+  {
+    "id" : 413,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      414
+    ]
+  },
+  {
+    "id" : 414,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      415
+    ]
+  },
+  {
+    "id" : 415,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      416
+    ]
+  },
+  {
+    "id" : 416,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      417
+    ]
+  },
+  {
+    "id" : 417,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      418
+    ]
+  },
+  {
+    "id" : 418,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      419
+    ]
+  },
+  {
+    "id" : 419,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 8,
+    "children" : [
+      288,
+      23
+    ]
+  },
+  {
+    "id" : 221,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      300,
+      420
+    ]
+  },
+  {
+    "id" : 420,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      421
+    ]
+  },
+  {
+    "id" : 421,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      422
+    ]
+  },
+  {
+    "id" : 422,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      423
+    ]
+  },
+  {
+    "id" : 423,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      424
+    ]
+  },
+  {
+    "id" : 424,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      425
+    ]
+  },
+  {
+    "id" : 425,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      426
+    ]
+  },
+  {
+    "id" : 426,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      427
+    ]
+  },
+  {
+    "id" : 427,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 8,
+    "children" : [
+      343,
+      23
+    ]
+  },
+  {
+    "id" : 222,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      147,
+      428
+    ]
+  },
+  {
+    "id" : 428,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      429
+    ]
+  },
+  {
+    "id" : 429,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      430
+    ]
+  },
+  {
+    "id" : 430,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      431
+    ]
+  },
+  {
+    "id" : 431,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      432
+    ]
+  },
+  {
+    "id" : 432,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      433
+    ]
+  },
+  {
+    "id" : 433,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      434
+    ]
+  },
+  {
+    "id" : 434,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      435
+    ]
+  },
+  {
+    "id" : 435,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
+    "rightExtent" : 8,
+    "children" : [
+      353,
+      23
+    ]
+  },
+  {
+    "id" : 223,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 8,
+    "children" : [
+      361,
+      436
+    ]
+  },
+  {
+    "id" : 436,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 6,
     "rightExtent" : 8,
     "children" : [
       437
@@ -4404,39 +4347,132 @@
   },
   {
     "id" : 437,
-    "kind" : "IntermediateNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 6,
     "rightExtent" : 8,
     "children" : [
-      438,
-      439,
-      440,
-      441,
-      442,
-      443,
-      444,
-      445,
-      446
+      438
     ]
   },
   {
     "id" : 438,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      439
+    ]
+  },
+  {
+    "id" : 439,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      440
+    ]
+  },
+  {
+    "id" : 440,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      441
+    ]
+  },
+  {
+    "id" : 441,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      442
+    ]
+  },
+  {
+    "id" : 442,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      443
+    ]
+  },
+  {
+    "id" : 443,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 6,
+    "rightExtent" : 8,
+    "children" : [
+      405,
+      23
+    ]
+  },
+  {
+    "id" : 224,
     "kind" : "PackedNode",
     "label" : "A+ ::= A+ A .",
     "leftExtent" : 0,
     "rightExtent" : 8,
     "children" : [
-      67,
+      102,
+      211
+    ]
+  },
+  {
+    "id" : 208,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
+    "children" : [
+      444
+    ]
+  },
+  {
+    "id" : 444,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
+    "children" : [
+      445
+    ]
+  },
+  {
+    "id" : 445,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
+    "children" : [
+      446
+    ]
+  },
+  {
+    "id" : 446,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
+    "children" : [
       447
     ]
   },
   {
     "id" : 447,
     "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
+    "label" : "a+",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
     "children" : [
       448
     ]
@@ -4444,19 +4480,30 @@
   {
     "id" : 448,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a .",
+    "leftExtent" : 8,
+    "rightExtent" : 9,
     "children" : [
+      18
+    ]
+  },
+  {
+    "id" : 59,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      86,
       449
     ]
   },
   {
     "id" : 449,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
+    "label" : "A",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
       450
     ]
@@ -4464,30 +4511,19 @@
   {
     "id" : 450,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 2,
-    "rightExtent" : 8,
+    "label" : "A ::= a* .",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
-      122
-    ]
-  },
-  {
-    "id" : 439,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      144,
       451
     ]
   },
   {
     "id" : 451,
     "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "label" : "a*",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
       452
     ]
@@ -4495,9 +4531,9 @@
   {
     "id" : 452,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
       453
     ]
@@ -4505,9 +4541,9 @@
   {
     "id" : 453,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "label" : "a+",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
       454
     ]
@@ -4515,30 +4551,19 @@
   {
     "id" : 454,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 3,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
-      181
-    ]
-  },
-  {
-    "id" : 440,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      199,
       455
     ]
   },
   {
     "id" : 455,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
       456
     ]
@@ -4546,19 +4571,31 @@
   {
     "id" : 456,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 1,
+    "rightExtent" : 9,
     "children" : [
+      238,
+      18
+    ]
+  },
+  {
+    "id" : 60,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      254,
       457
     ]
   },
   {
     "id" : 457,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
+    "label" : "A",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
       458
     ]
@@ -4566,30 +4603,19 @@
   {
     "id" : 458,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 4,
-    "rightExtent" : 8,
+    "label" : "A ::= a* .",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
-      241
-    ]
-  },
-  {
-    "id" : 441,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      255,
       459
     ]
   },
   {
     "id" : 459,
     "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
+    "label" : "a*",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
       460
     ]
@@ -4597,9 +4623,9 @@
   {
     "id" : 460,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
       461
     ]
@@ -4607,9 +4633,9 @@
   {
     "id" : 461,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
+    "label" : "a+",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
       462
     ]
@@ -4617,30 +4643,19 @@
   {
     "id" : 462,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 5,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
-      302
-    ]
-  },
-  {
-    "id" : 442,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      312,
       463
     ]
   },
   {
     "id" : 463,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
       464
     ]
@@ -4648,19 +4663,31 @@
   {
     "id" : 464,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 7,
+    "rightExtent" : 9,
     "children" : [
+      410,
+      18
+    ]
+  },
+  {
+    "id" : 61,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      125,
       465
     ]
   },
   {
     "id" : 465,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
+    "label" : "A",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
       466
     ]
@@ -4668,30 +4695,19 @@
   {
     "id" : 466,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 6,
-    "rightExtent" : 8,
+    "label" : "A ::= a* .",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
-      364
-    ]
-  },
-  {
-    "id" : 443,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      370,
       467
     ]
   },
   {
     "id" : 467,
     "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 7,
-    "rightExtent" : 8,
+    "label" : "a*",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
       468
     ]
@@ -4699,9 +4715,9 @@
   {
     "id" : 468,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 7,
-    "rightExtent" : 8,
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
       469
     ]
@@ -4709,9 +4725,9 @@
   {
     "id" : 469,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 7,
-    "rightExtent" : 8,
+    "label" : "a+",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
       470
     ]
@@ -4719,30 +4735,19 @@
   {
     "id" : 470,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 7,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
-      427
-    ]
-  },
-  {
-    "id" : 444,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      429,
       471
     ]
   },
   {
     "id" : 471,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 8,
-    "rightExtent" : 8,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
       472
     ]
@@ -4750,19 +4755,31 @@
   {
     "id" : 472,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 8,
-    "rightExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 3,
+    "rightExtent" : 9,
     "children" : [
+      416,
+      18
+    ]
+  },
+  {
+    "id" : 62,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      300,
       473
     ]
   },
   {
     "id" : 473,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 8,
-    "rightExtent" : 8,
+    "label" : "A",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
       474
     ]
@@ -4770,128 +4787,110 @@
   {
     "id" : 474,
     "kind" : "PackedNode",
-    "label" : "a* ::= .",
-    "leftExtent" : 8,
-    "rightExtent" : 8,
+    "label" : "A ::= a* .",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
       475
     ]
   },
   {
     "id" : 475,
-    "kind" : "TerminalNode",
-    "label" : "epsilon",
-    "leftExtent" : 8,
-    "rightExtent" : 8
-  },
-  {
-    "id" : 445,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
+    "kind" : "NonterminalNode",
+    "label" : "a*",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
-      84,
       476
     ]
   },
   {
     "id" : 476,
-    "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "PackedNode",
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
       477
     ]
   },
   {
     "id" : 477,
-    "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "NonterminalNode",
+    "label" : "a+",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
       478
     ]
   },
   {
     "id" : 478,
-    "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
       479
     ]
   },
   {
     "id" : 479,
-    "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
       480
     ]
   },
   {
     "id" : 480,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "PackedNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 5,
+    "rightExtent" : 9,
     "children" : [
+      424,
+      18
+    ]
+  },
+  {
+    "id" : 63,
+    "kind" : "PackedNode",
+    "label" : "A+ ::= A+ A .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      147,
       481
     ]
   },
   {
     "id" : 481,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "NonterminalNode",
+    "label" : "A",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
     "children" : [
       482
     ]
   },
   {
     "id" : 482,
-    "kind" : "IntermediateNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
+    "kind" : "PackedNode",
+    "label" : "A ::= a* .",
+    "leftExtent" : 2,
+    "rightExtent" : 9,
     "children" : [
       483
     ]
   },
   {
     "id" : 483,
-    "kind" : "PackedNode",
-    "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
-    "rightExtent" : 8,
-    "children" : [
-      416,
-      23
-    ]
-  },
-  {
-    "id" : 446,
-    "kind" : "PackedNode",
-    "label" : "A+ ::= A+ A .",
-    "leftExtent" : 0,
-    "rightExtent" : 8,
-    "children" : [
-      100,
-      433
-    ]
-  },
-  {
-    "id" : 430,
     "kind" : "NonterminalNode",
-    "label" : "A",
-    "leftExtent" : 8,
+    "label" : "a*",
+    "leftExtent" : 2,
     "rightExtent" : 9,
     "children" : [
       484
@@ -4900,8 +4899,8 @@
   {
     "id" : 484,
     "kind" : "PackedNode",
-    "label" : "A ::= a* .",
-    "leftExtent" : 8,
+    "label" : "a* ::= a+ .",
+    "leftExtent" : 2,
     "rightExtent" : 9,
     "children" : [
       485
@@ -4910,8 +4909,8 @@
   {
     "id" : 485,
     "kind" : "NonterminalNode",
-    "label" : "a*",
-    "leftExtent" : 8,
+    "label" : "a+",
+    "leftExtent" : 2,
     "rightExtent" : 9,
     "children" : [
       486
@@ -4920,8 +4919,8 @@
   {
     "id" : 486,
     "kind" : "PackedNode",
-    "label" : "a* ::= a+ .",
-    "leftExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
     "rightExtent" : 9,
     "children" : [
       487
@@ -4929,9 +4928,9 @@
   },
   {
     "id" : 487,
-    "kind" : "NonterminalNode",
-    "label" : "a+",
-    "leftExtent" : 8,
+    "kind" : "IntermediateNode",
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
     "rightExtent" : 9,
     "children" : [
       488
@@ -4940,10 +4939,11 @@
   {
     "id" : 488,
     "kind" : "PackedNode",
-    "label" : "a+ ::= a .",
-    "leftExtent" : 8,
+    "label" : "a+ ::= a+ a .",
+    "leftExtent" : 2,
     "rightExtent" : 9,
     "children" : [
+      432,
       18
     ]
   },
@@ -5012,7 +5012,7 @@
     "leftExtent" : 0,
     "rightExtent" : 9,
     "children" : [
-      84,
+      361,
       494
     ]
   },
@@ -5020,7 +5020,7 @@
     "id" : 494,
     "kind" : "NonterminalNode",
     "label" : "A",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       495
@@ -5030,7 +5030,7 @@
     "id" : 495,
     "kind" : "PackedNode",
     "label" : "A ::= a* .",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       496
@@ -5040,7 +5040,7 @@
     "id" : 496,
     "kind" : "NonterminalNode",
     "label" : "a*",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       497
@@ -5050,7 +5050,7 @@
     "id" : 497,
     "kind" : "PackedNode",
     "label" : "a* ::= a+ .",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       498
@@ -5060,7 +5060,7 @@
     "id" : 498,
     "kind" : "NonterminalNode",
     "label" : "a+",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       499
@@ -5070,7 +5070,7 @@
     "id" : 499,
     "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       500
@@ -5080,7 +5080,7 @@
     "id" : 500,
     "kind" : "IntermediateNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
       501
@@ -5090,10 +5090,10 @@
     "id" : 501,
     "kind" : "PackedNode",
     "label" : "a+ ::= a+ a .",
-    "leftExtent" : 1,
+    "leftExtent" : 6,
     "rightExtent" : 9,
     "children" : [
-      480,
+      440,
       18
     ]
   },
@@ -5104,7 +5104,7 @@
     "leftExtent" : 0,
     "rightExtent" : 9,
     "children" : [
-      100,
+      102,
       9
     ]
   }

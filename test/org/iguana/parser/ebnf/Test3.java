@@ -10,7 +10,7 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
@@ -56,14 +56,14 @@ public class Test3 {
     public void testParser0() {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input0, grammar, S);
-        GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT, new SPPFResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT, new ParserResultOps());
         assertEquals(getParseResult0(graph), result);
     }
 
     @Test
     public void testParser1() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new SPPFResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new ParserResultOps());
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);

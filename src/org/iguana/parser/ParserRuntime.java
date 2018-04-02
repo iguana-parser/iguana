@@ -22,17 +22,10 @@ public interface ParserRuntime<T> {
 
     Descriptor<T> nextDescriptor();
 
-    void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t);
-
     void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t, Environment env);
 
     void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u);
 
-    /*
-     *
-     * Data-dependent GLL parsing
-     *
-     */
     Object evaluate(Statement[] statements, Environment env);
 
     Object evaluate(DataDependentCondition condition, Environment env);

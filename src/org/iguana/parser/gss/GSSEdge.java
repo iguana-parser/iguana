@@ -29,7 +29,7 @@ package org.iguana.parser.gss;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 
 public interface GSSEdge<T> {
 

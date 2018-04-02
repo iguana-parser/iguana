@@ -32,7 +32,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 import org.iguana.parser.gss.GSSNode;
 
 public class TerminalTransition<T> extends AbstractTransition<T> {
@@ -51,35 +51,6 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
         this.postConditions = postConditions;
 	}
 
-	@Override
-	public void execute(Input input, GSSNode<T> u, T result) {
-		int i = ops.getRightIndex(result, u);
-
-		if (dest.getLabel() != null) {
-            execute(input, u, result, runtime.getEmptyEnvironment());
-            return;
-        }
-		
-		if (preConditions.execute(input, u, i))
-			return;
-			
-		T cr = slot.getResult(input, i);
-		
-		if (cr == null) {
-			runtime.recordParseError(input, i, origin, u);
-			return;			
-		}
-
-		int rightExtent = ops.getRightIndex(cr);
-			
-		if (postConditions.execute(input, u, rightExtent))
-			return;
-			
-		T n = dest.isFirst() ? cr : ops.merge(null, result, cr, dest);
-				
-		dest.execute(input, u, n);
-	}
-	
 	public TerminalGrammarSlot getSlot() {
 		return slot;
 	}
@@ -89,14 +60,8 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getSlot();
 	}
 	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
-
         int i = ops.getRightIndex(node, u);
 
 		runtime.setEnvironment(env);

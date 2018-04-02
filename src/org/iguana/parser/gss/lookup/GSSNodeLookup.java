@@ -51,14 +51,9 @@ public interface GSSNodeLookup<T> {
 
 	int size();
 	
-	/*
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	<V> void get(int i, GSSNodeData<V> data, GSSNodeCreator<T> creator);
-	
-	<V> GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<V> data);
+	void get(int i, GSSNodeData<Object> data, GSSNodeCreator<T> creator);
+
+	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<Object> data);
 
 	void put(int i, GSSNode<T> gssNode);
 

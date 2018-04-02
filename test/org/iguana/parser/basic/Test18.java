@@ -12,12 +12,11 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
@@ -60,7 +59,7 @@ public class Test18 {
     public void testParser1() {
         ParseResult result = Iguana.parse(input1, grammar);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, new SPPFResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, input1, new ParserResultOps());
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -68,7 +67,7 @@ public class Test18 {
     public void testParser2() {
         ParseResult result = Iguana.parse(input2, grammar);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input2, new SPPFResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, input2, new ParserResultOps());
         assertEquals(getParseResult2(graph), result);
     }
 
@@ -76,7 +75,7 @@ public class Test18 {
     public void testParser3() {
         ParseResult result = Iguana.parse(input3, grammar);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input3, new SPPFResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, input3, new ParserResultOps());
         assertEquals(getParseResult3(graph), result);
     }
 

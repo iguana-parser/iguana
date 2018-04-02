@@ -31,22 +31,16 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.result.ResultOps;
 
 public class ReturnTransition<T> extends AbstractTransition<T> {
 	
 	private final Expression expression;
 
-	public ReturnTransition(Expression expression, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+	public ReturnTransition(Expression expression, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(origin, dest, runtime, ops);
 		this.expression = expression;
-	}
-
-	@Override
-	public void execute(Input input, GSSNode<T> u, T result) {
-	   Object value = runtime.evaluate(expression, runtime.getEmptyEnvironment());
-	   ((EndGrammarSlot<T>) dest).execute(input, u, result, value);
 	}
 
 	@Override

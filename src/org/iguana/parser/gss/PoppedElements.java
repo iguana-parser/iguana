@@ -27,12 +27,16 @@
 
 package org.iguana.parser.gss;
 
-import iguana.utils.collections.IntHashMap;
-import iguana.utils.collections.OpenAddressingIntHashMap;
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.key.Key;
 import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
+import org.iguana.util.Holder;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 public class PoppedElements<T> implements Iterable<T> {
 
@@ -40,73 +44,45 @@ public class PoppedElements<T> implements Iterable<T> {
 
     private T firstResult;
 
-	private IntHashMap<T> poppedElements;
+	private Map<Key, T> poppedElements;
 
     PoppedElements(ResultOps<T> ops) {
         this.ops = ops;
     }
 
-	public T add(EndGrammarSlot<T> slot, T result) {
-
+	public T add(EndGrammarSlot<T> slot, T result, Object value) {
 		// No node added yet
 		if (firstResult == null) {
-			firstResult = ops.convert(null, result, slot, null);
-			return firstResult;
-		// Only one node is added and there is an ambiguity
-		} else if (ops.getRightIndex(firstResult) == ops.getRightIndex(result)) {
-		    ops.convert(firstResult, result, slot, null);
-			return null;
-        // Only one node is added and the node is not in the map
-		} else {
-			// Initialize the map and put the firstResult element there
-			if (poppedElements == null) {
-				poppedElements = new OpenAddressingIntHashMap<>();
-			}
+            firstResult = ops.convert(null, result, slot, value);
+            return firstResult;
+        } else {
+            int rightIndex = ops.getRightIndex(result);
+            Key key = value == null ? Keys.from(rightIndex) : Keys.from(rightIndex, value);
+            // Only one node is added and there is an ambiguity
 
-			return poppedElements.compute(ops.getRightIndex(result), (k, v) -> {
-                if (v == null) {
-                    return ops.convert(null, result, slot, null);
-                } else {
-                    ops.convert(v, result, slot, null);
-                    return v;
+            if (rightIndex == ops.getRightIndex(firstResult) && Objects.equals(value, ops.getValue(firstResult))) {
+                ops.convert(firstResult, result, slot, value);
+                return null;
+            } else {
+                // Initialize the map and put the firstResult element there
+                if (poppedElements == null) {
+                    poppedElements = new HashMap<>();
                 }
-            });
-		}
-	}
 
-	public T add(EndGrammarSlot<T> slot, T result, Object value) {
-    	throw new UnsupportedOperationException();
-//		// No node added yet
-//		if (firstResult == null) {
-//            firstResult = ops.convert(null, result, slot, value);
-//            return firstResult;
-//        } else {
-//            Key key = Keys.from(ops.getRightIndex(result), value);
-//            // Only one node is added and there is an ambiguity
-//            if (poppedElements == null && Keys.from(ops.getRightIndex(firstResult), ops.getValue(firstResult)).equals(key)) {
-//                ops.convert(firstResult, result, slot, value);
-//                return null;
-//            } else {
-//                // Initialize the map and put the firstResult element there
-//                if (poppedElements == null) {
-//                    poppedElements = new HashMap<>();
-//                    poppedElements.put(Keys.from(ops.getRightIndex(firstResult), ops.getValue(firstResult)), firstResult);
-//                }
-//
-//                Holder<T> holder = new Holder<>();
-//                poppedElements.compute(key, (k, v) -> {
-//                    if (v == null) {
-//                        T node = ops.convert(null, result, slot, value);
-//                        holder.set(node);
-//                        return node;
-//                    } else {
-//                        ops.convert(v, result, slot, value);
-//                        return v;
-//                    }
-//                });
-//                return holder.get();
-//            }
-//        }
+                Holder<T> holder = new Holder<>();
+                poppedElements.compute(key, (k, v) -> {
+                    if (v == null) {
+                        T node = ops.convert(null, result, slot, value);
+                        holder.set(node);
+                        return node;
+                    } else {
+                        ops.convert(v, result, slot, value);
+                        return v;
+                    }
+                });
+                return holder.get();
+            }
+        }
 	}
 
 	public T getResult(int j) {

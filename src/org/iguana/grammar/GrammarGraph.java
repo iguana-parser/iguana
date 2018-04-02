@@ -51,7 +51,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.ParserRuntimeImpl;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 import org.iguana.parser.gss.lookup.ArrayNodeLookup;
 import org.iguana.parser.gss.lookup.GSSNodeLookup;
 import org.iguana.parser.gss.lookup.IntOpenAddressingMap;

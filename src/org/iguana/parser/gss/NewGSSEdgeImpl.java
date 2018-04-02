@@ -32,18 +32,20 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 
 public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	
 	private final BodyGrammarSlot<T> returnSlot;
 	private final T result;
 	private final GSSNode<T> destination;
+	private final Environment env;
 
-	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination) {
+	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination, Environment env) {
 		this.returnSlot = slot;
 		this.result = result;
 		this.destination = destination;
+		this.env = env;
 	}
 
 	public T getResult() {
@@ -87,35 +89,24 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	}
 
 	@Override
-	public T addDescriptor(Input input, GSSNode<T> source, T newResult, ResultOps<T> ops) {
-		
-		/*
-		 * 
-		 * Data-dependent GLL parsing
-		 * 
-		 */
+	public T addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops) {
+		int inputIndex = ops.getRightIndex(result);
 
-        int i = ops.getRightIndex(newResult);
-        ParserRuntime<T> runtime = returnSlot.getRuntime();
-		
-		BodyGrammarSlot<T> returnSlot = this.returnSlot;
-		
-		if (returnSlot.requiresBinding()) {
-			Environment env = returnSlot.doBinding(newResult, runtime.getEmptyEnvironment());
+		BodyGrammarSlot<T> returnSlot = getReturnSlot();
+		GSSNode<T> destination = getDestination();
 
-            runtime.setEnvironment(env);
-			
-			if (returnSlot.getConditions().execute(input, source, i, runtime.getEvaluatorContext()))
-				return null;
-			
-			env = runtime.getEnvironment();
-			
-			return returnSlot.getIntermediateNode2(result, destination.getInputIndex(), newResult, env);
-		}
-		
-		if (returnSlot.getConditions().execute(input, source, i))
+		Environment env = this.env;
+
+		if (returnSlot.requiresBinding())
+			env = returnSlot.doBinding(result, env);
+
+		returnSlot.getRuntime().setEnvironment(env);
+
+		if (returnSlot.getConditions().execute(input, source, inputIndex, returnSlot.getRuntime().getEvaluatorContext()))
 			return null;
-		
-		return returnSlot.getIntermediateNode2(input, destination.getInputIndex(), result, newResult);
+
+		env = returnSlot.getRuntime().getEnvironment();
+
+		return returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env);
 	}
 }
