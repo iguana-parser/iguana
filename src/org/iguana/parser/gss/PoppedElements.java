@@ -28,18 +28,11 @@
 package org.iguana.parser.gss;
 
 import iguana.utils.collections.IntHashMap;
-import iguana.utils.collections.Keys;
 import iguana.utils.collections.OpenAddressingIntHashMap;
-import iguana.utils.collections.key.Key;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.parser.descriptor.ResultOps;
-import org.iguana.util.Holder;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 public class PoppedElements<T> implements Iterable<T> {
 
@@ -53,7 +46,7 @@ public class PoppedElements<T> implements Iterable<T> {
         this.ops = ops;
     }
 
-	public T add(EndGrammarSlot slot, T result) {
+	public T add(EndGrammarSlot<T> slot, T result) {
 
 		// No node added yet
 		if (firstResult == null) {
@@ -81,7 +74,7 @@ public class PoppedElements<T> implements Iterable<T> {
 		}
 	}
 
-	public T add(EndGrammarSlot slot, T result, Object value) {
+	public T add(EndGrammarSlot<T> slot, T result, Object value) {
     	throw new UnsupportedOperationException();
 //		// No node added yet
 //		if (firstResult == null) {

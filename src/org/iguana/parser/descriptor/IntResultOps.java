@@ -11,8 +11,8 @@ public class IntResultOps implements ResultOps<Integer> {
     private ParserLogger logger = ParserLogger.getInstance();
 
     @Override
-    public Integer dummy() {
-        return -1;
+    public Integer dummy(int i) {
+        return i;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class IntResultOps implements ResultOps<Integer> {
     }
 
     @Override
-    public Integer merge(Integer current, Integer result1, Integer result2, BodyGrammarSlot slot) {
+    public Integer merge(Integer current, Integer result1, Integer result2, BodyGrammarSlot<Integer> slot) {
         logger.packedNodeAdded();
         if (current == null) logger.intermediateNodeAdded();
         return result2;

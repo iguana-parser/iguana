@@ -76,12 +76,12 @@ public class ConditionsFactory {
 			return new Conditions() {
 				
 				@Override
-				public boolean execute(Input input, GSSNode u, int i) {
+				public <T> boolean execute(Input input, GSSNode<T> u, int i) {
 					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(input));
 				}
 				
 				@Override
-				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
+				public <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx) {
 					for (SlotAction c : actions) {
 					    if (c.execute(input, u, i, ctx)) {
 //			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
@@ -103,7 +103,7 @@ public class ConditionsFactory {
 		return new Conditions() {
 			
 			@Override
-			public boolean execute(Input input, GSSNode u, int i) {
+			public <T> boolean execute(Input input, GSSNode<T> u, int i) {
 		        for (SlotAction c : actions) {
 		            if (c.execute(input, u, i)) {
 //		                log.trace("Condition %s executed", c);

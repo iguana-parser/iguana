@@ -84,13 +84,13 @@ public class GSSNode<T> {
         }
 	}
 
-    public void pop(Input input, EndGrammarSlot slot, T child, ResultOps<T> ops) {
+    public void pop(Input input, EndGrammarSlot<T> slot, T child, ResultOps<T> ops) {
 		ParserLogger.getInstance().log("Pop %s, %d, %s", this, inputIndex, child);
         T node = poppedElements.add(slot, child);
         if (node != null) iterateOverEdges(input, node, ops);
     }
 
-    public void pop(Input input, EndGrammarSlot slot, T child, Object value, ResultOps<T> ops) {
+    public void pop(Input input, EndGrammarSlot<T> slot, T child, Object value, ResultOps<T> ops) {
         T node = poppedElements.add(slot, child, value);
         if (node != null) iterateOverEdges(input, node, ops);
     }
@@ -119,7 +119,7 @@ public class GSSNode<T> {
 		return poppedElements.getResult(j);
 	}
 
-	public NonterminalGrammarSlot getGrammarSlot() {
+	public NonterminalGrammarSlot<T> getGrammarSlot() {
 		return slot;
 	}
 

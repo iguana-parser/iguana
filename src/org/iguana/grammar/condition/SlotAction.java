@@ -32,10 +32,10 @@ import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.parser.gss.GSSNode;
 
 @FunctionalInterface
-public interface SlotAction {
-	public boolean execute(Input input, GSSNode gssNode, int inputIndex);
+public interface SlotAction<T> {
+	boolean execute(Input input, GSSNode<T> gssNode, int inputIndex);
 	
-	default boolean execute(Input input, GSSNode gssNode, int inputIndex, IEvaluatorContext ctx) {
+	default boolean execute(Input input, GSSNode<T> gssNode, int inputIndex, IEvaluatorContext ctx) {
 		return execute(input, gssNode, inputIndex);
 	}
 }
