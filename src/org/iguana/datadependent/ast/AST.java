@@ -644,9 +644,9 @@ public class AST {
 
 					@Override
 					public Object interpret(IEvaluatorContext ctx) {
-						List<?> value = (List<?>) arg1.interpret(ctx);
+						Object[] value = (Object[]) arg1.interpret(ctx);
 						int i = (java.lang.Integer) arg2.interpret(ctx);
-						return value.get(i);
+						return value[i];
 					}
 					
 					@Override
@@ -655,8 +655,8 @@ public class AST {
 					}
 		};
 	}
-	
-	static public final Object UNDEF = new Object() { 
+
+	public static final Object UNDEF = new Object() {
 		public String toString() {
 			return "UNDEF";
 		}

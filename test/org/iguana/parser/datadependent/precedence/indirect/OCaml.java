@@ -2,6 +2,7 @@ package org.iguana.parser.datadependent.precedence.indirect;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
@@ -19,14 +20,14 @@ public class OCaml {
 	@Test
     public void test() throws FileNotFoundException {
 
-		Grammar grammar = Grammar.load(new File("/Users/afroozeh/Java"));
+		Grammar grammar = Grammar.load(new File("/Users/afroozeh/JavaNat"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
 		
-//		DesugarPrecedenceAndAssociativity precedence = new DesugarPrecedenceAndAssociativity();
-//		precedence.setOP2();
+		DesugarPrecedenceAndAssociativity precedence = new DesugarPrecedenceAndAssociativity();
+		precedence.setOP2();
 		
-//		grammar = precedence.transform(grammar);
+		grammar = precedence.transform(grammar);
 		// System.out.println(grammar.toString());
 		
 		grammar = new LayoutWeaver().transform(grammar);
@@ -34,8 +35,8 @@ public class OCaml {
 		grammar = new DesugarStartSymbol().transform(grammar);
 
 		Map<Input, List<ParseStatistics>> results = IguanaRunner.builder(grammar)
-//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
-				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
+				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
 //				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk", "java", true)
 //				.setLimit(500)
 				.setWarmupCount(0)

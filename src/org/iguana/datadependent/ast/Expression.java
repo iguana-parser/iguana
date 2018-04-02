@@ -268,9 +268,10 @@ public abstract class Expression extends AbstractAST {
             if (length == 1)
                 return elements[0].interpret(ctx);
 
-            List<Object> values = new ArrayList<Object>();
-            for (Expression element : elements)
-                values.add(element.interpret(ctx));
+            Object[] values = new Object[elements.length];
+            for (int i = 0; i < elements.length; i++) {
+                values[i] = elements[i].interpret(ctx);
+            }
 
             return values;
         }

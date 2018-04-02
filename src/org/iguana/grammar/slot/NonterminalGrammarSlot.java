@@ -156,9 +156,11 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 
 				List<BodyGrammarSlot<T>> firstSlots = getFirstSlots(input.charAt(i));
 				if (firstSlots != null)
-					for (BodyGrammarSlot<T> slot : firstSlots) {
-						if (!slot.getConditions().execute(input, gssNode, i))
+					for (int j = 0; j < firstSlots.size(); j++) {
+						BodyGrammarSlot<T> slot = firstSlots.get(j);
+						if (!slot.getConditions().execute(input, gssNode, i)) {
 							runtime.scheduleDescriptor(slot, gssNode, ops.dummy(), env);
+						}
 					}
 			} else {
 				ParserLogger.getInstance().log("GSSNode found: %s", gssNode);
