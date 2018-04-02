@@ -155,9 +155,9 @@ public class Iguana {
         ResultOps<T> ops = grammarGraph.getResultOps();
 
         if (env == null)
-            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(s, startGSSNode, ops.dummy(0)));
+            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(s, startGSSNode, ops.dummy()));
         else
-            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(s, startGSSNode, ops.dummy(0), env));
+            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(s, startGSSNode, ops.dummy(), env));
 
         while(runtime.hasDescriptor()) {
             Descriptor descriptor = runtime.nextDescriptor();

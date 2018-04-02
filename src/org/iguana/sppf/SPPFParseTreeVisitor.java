@@ -84,7 +84,7 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
                 }
 
                 case Plus: {
-                    Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
+                    Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
                     VisitResult visitResult = packedNode.accept(this);
                     result = ebnf(visitResult.getValues(), symbol);
                     break;
@@ -95,7 +95,7 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
                 case Alt:
                 case Opt:
                 case Start: {
-                    Symbol symbol = packedNode.getGrammarSlot().getPosition().getRule().getDefinition();
+                    Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
                     VisitResult visitResult = packedNode.accept(this);
                     result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
                     break;

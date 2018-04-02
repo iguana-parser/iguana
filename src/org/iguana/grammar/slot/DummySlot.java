@@ -50,8 +50,8 @@ public class DummySlot<T> extends BodyGrammarSlot<T> {
 	}
 
 	@Override
-	public boolean addTransition(Transition transition) {
-		return false;
+	public void addTransition(Transition transition) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

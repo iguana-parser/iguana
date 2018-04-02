@@ -78,8 +78,8 @@ public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	}
 
 	@Override
-	public boolean addTransition(Transition transition) {
-		return false;
+	public void addTransition(Transition transition) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -92,4 +92,8 @@ public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		terminalNodes.clear();
 	}
 
+	@Override
+	public int getPosition() {
+		throw new UnsupportedOperationException();
+	}
 }

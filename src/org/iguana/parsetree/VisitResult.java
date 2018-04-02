@@ -478,13 +478,13 @@ public abstract class VisitResult {
 
         @Override
         public java.util.List<T> visit(Empty result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            Rule rule = packedNode.getGrammarSlot().getRule();
             return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
         }
 
         @Override
         public java.util.List<T> visit(Single result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            Rule rule = packedNode.getGrammarSlot().getRule();
             return CollectionsUtil.list((parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent())));
         }
 
@@ -498,13 +498,13 @@ public abstract class VisitResult {
                     values.add((T) o);
                 }
             }
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            Rule rule = packedNode.getGrammarSlot().getRule();
             return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, values, packedNode.getLeftExtent(), packedNode.getRightExtent()));
         }
 
         @Override
         public java.util.List<T> visit(EBNF result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
+            Rule rule = packedNode.getGrammarSlot().getRule();
             Object ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent());
             return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, Arrays.asList((T) ebnfNode), packedNode.getLeftExtent(), packedNode.getRightExtent()));
 
@@ -514,7 +514,7 @@ public abstract class VisitResult {
         public java.util.List<T> visit(ListOfResult result, PackedNode packedNode) {
             Set<T> set = new HashSet<>();
             for (VisitResult vResult :result.getVisitResults()) {
-                set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
             }
             return CollectionsUtil.list(parseTreeBuilder.ambiguityNode(set));
         }

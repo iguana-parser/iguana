@@ -4,6 +4,7 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.*;
 import org.iguana.util.ParserLogger;
 
@@ -11,9 +12,11 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
 
     private ParserLogger logger = ParserLogger.getInstance();
 
+    private static final DummyNode dummyNode = new DummyNode();
+
     @Override
-    public NonPackedNode dummy(int index) {
-        return new DummyNode(index);
+    public NonPackedNode dummy() {
+        return dummyNode;
     }
 
     @Override
@@ -81,12 +84,15 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public int getLeftIndex(NonPackedNode result) {
-        return result.getLeftExtent();
+    public int getRightIndex(NonPackedNode result) {
+        return result.getRightExtent();
     }
 
     @Override
-    public int getRightIndex(NonPackedNode result) {
+    public int getRightIndex(NonPackedNode result, GSSNode<NonPackedNode> gssNode) {
+        if (result instanceof DummyNode) {
+            return gssNode.getInputIndex();
+        }
         return result.getRightExtent();
     }
 

@@ -52,11 +52,11 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node) {
-		int i = ops.getRightIndex(node);
+	public void execute(Input input, GSSNode<T> u, T result) {
+		int i = ops.getRightIndex(result, u);
 
 		if (dest.getLabel() != null) {
-            execute(input, u, node, runtime.getEmptyEnvironment());
+            execute(input, u, result, runtime.getEmptyEnvironment());
             return;
         }
 		
@@ -75,7 +75,7 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 		if (postConditions.execute(input, u, rightExtent))
 			return;
 			
-		T n = dest.isFirst() ? cr : ops.merge(null, node, cr, dest);
+		T n = dest.isFirst() ? cr : ops.merge(null, result, cr, dest);
 				
 		dest.execute(input, u, n);
 	}
@@ -97,7 +97,7 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
 
-        int i = ops.getRightIndex(node);
+        int i = ops.getRightIndex(node, u);
 
 		runtime.setEnvironment(env);
 		
