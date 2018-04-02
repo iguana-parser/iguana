@@ -27,16 +27,14 @@
 
 package org.iguana.sppf;
 
-import org.iguana.grammar.slot.GrammarSlot;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> extends NonPackedNode {
+public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 	protected PackedNode first;
-	protected List<PackedNode> rest;
+	private List<PackedNode> rest;
 
 	/*
 	 * returns true if the second packed node of this nonterminal node is added.
