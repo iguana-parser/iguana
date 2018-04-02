@@ -123,7 +123,7 @@ public class Test8 {
 	public void testParser1_1() {
         ParseResult result = Iguana.parse(input1, grammar);
 		assertTrue(result.isParseSuccess());
-		GrammarGraph graph = GrammarGraph.from(grammar, input1, new ParserResultOps());
+		GrammarGraph graph = GrammarGraph.from(grammar);
 		assertEquals(getParseResult1_Lookahead1(graph), result);
     }
 
@@ -131,7 +131,7 @@ public class Test8 {
     public void testParser1_0() {
         ParseResult result = Iguana.parse(input1, grammar);
         assertTrue(result.isParseSuccess());
-		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build(), new ParserResultOps());
+		GrammarGraph graph = GrammarGraph.from(grammar, Configuration.builder().setLookaheadCount(0).build());
 		assertEquals(getParseResult1_Lookahead0(graph), result);
     }
 
@@ -139,7 +139,7 @@ public class Test8 {
     public void testParser2_1() {
         ParseResult result = Iguana.parse(input2, grammar);
         assertTrue(result.isParseSuccess());
-		GrammarGraph graph = GrammarGraph.from(grammar, input2, new ParserResultOps());
+		GrammarGraph graph = GrammarGraph.from(grammar);
 		assertEquals(getParseResult2_Lookahead1(graph), result);
     }
 
@@ -147,7 +147,7 @@ public class Test8 {
     public void testParser2_0() {
         ParseResult result = Iguana.parse(input2, grammar);
         assertTrue(result.isParseSuccess());
-		GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build(), new ParserResultOps());
+		GrammarGraph graph = GrammarGraph.from(grammar, Configuration.builder().setLookaheadCount(0).build());
 		assertEquals(getParseResult2_Lookahead0(graph), result);
     }
 

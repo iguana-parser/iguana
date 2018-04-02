@@ -31,9 +31,8 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.result.ResultOps;
 
 public class ConditionalTransition<T> extends AbstractTransition<T> {
 	
@@ -41,13 +40,12 @@ public class ConditionalTransition<T> extends AbstractTransition<T> {
 	
 	private final BodyGrammarSlot<T> ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		this(condition, origin, dest, null, runtime, ops);
+	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+		this(condition, origin, dest, null);
 	}
-	
-	private ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
-                                 BodyGrammarSlot<T> ifFalse, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+
+	private ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, BodyGrammarSlot<T> ifFalse) {
+		super(origin, dest);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
 	}
@@ -62,9 +60,9 @@ public class ConditionalTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
 		
-		Object value = runtime.evaluate(condition, env);
+		Object value = runtime.evaluate(condition, env, input);
 		
 		if (!(value instanceof Boolean)) {
 			throw new UnexpectedRuntimeTypeException(condition);
@@ -73,9 +71,9 @@ public class ConditionalTransition<T> extends AbstractTransition<T> {
 		boolean isTrue = (Boolean) value;
 		
 		if (isTrue)
-			dest.execute(input, u, result, env);
+			dest.execute(input, u, result, env, runtime);
 		else if (ifFalse != null)
-			ifFalse.execute(input, u, result, env);
+			ifFalse.execute(input, u, result, env, runtime);
 		// TODO: logging
 	}
 

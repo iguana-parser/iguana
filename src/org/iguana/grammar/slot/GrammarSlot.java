@@ -28,7 +28,6 @@
 package org.iguana.grammar.slot;
 
 import iguana.utils.input.Input;
-import org.iguana.parser.ParserRuntime;
 
 /**
  * A GrammarSlot is a position immediately before or after
@@ -49,8 +48,6 @@ public interface GrammarSlot<T> {
 	void addTransition(Transition<T> transition);
 	
 	Iterable<Transition<T>> getTransitions();
-
-    ParserRuntime getRuntime();
 
     int getPosition();
 

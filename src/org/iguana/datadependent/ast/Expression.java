@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
@@ -61,7 +62,7 @@ public abstract class Expression extends AbstractAST {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Object interpret(IEvaluatorContext ctx) {
+            public Object interpret(IEvaluatorContext ctx, Input input) {
                 return true;
             }
 
@@ -81,7 +82,7 @@ public abstract class Expression extends AbstractAST {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Object interpret(IEvaluatorContext ctx) {
+            public Object interpret(IEvaluatorContext ctx, Input input) {
                 return false;
             }
 
@@ -118,7 +119,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             return value;
         }
 
@@ -158,7 +159,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             return value;
         }
 
@@ -206,7 +207,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             return value;
         }
 
@@ -254,13 +255,13 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             if (length == 1)
-                return elements[0].interpret(ctx);
+                return elements[0].interpret(ctx, input);
 
             Object[] values = new Object[elements.length];
             for (int i = 0; i < elements.length; i++) {
-                values[i] = elements[i].interpret(ctx);
+                values[i] = elements[i].interpret(ctx, input);
             }
 
             return values;
@@ -311,7 +312,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = i != -1 ? ctx.lookupVariable(i) : ctx.lookupVariable(name);
             if (value == null) {
                 throw new UndeclaredVariableException(name);
@@ -364,12 +365,12 @@ public abstract class Expression extends AbstractAST {
             return this.arguments;
         }
 
-        protected Object[] interpretArguments(IEvaluatorContext ctx) {
+        protected Object[] interpretArguments(IEvaluatorContext ctx, Input input) {
             Object[] values = new Object[arguments.length];
 
             int i = 0;
             while (i < arguments.length) {
-                values[i] = arguments[i].interpret(ctx);
+                values[i] = arguments[i].interpret(ctx, input);
                 i++;
             }
 
@@ -423,11 +424,11 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             if (i != -1)
-                ctx.storeVariable(i, exp.interpret(ctx));
+                ctx.storeVariable(i, exp.interpret(ctx, input));
             else
-                ctx.storeVariable(id, exp.interpret(ctx));
+                ctx.storeVariable(id, exp.interpret(ctx, input));
             return null;
         }
 
@@ -477,9 +478,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
                 return (((java.lang.Integer) lhs) & (1 << ((java.lang.Integer) rhs))) == 0;
@@ -546,30 +547,30 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
 
-            int ind = (java.lang.Integer) this.ind.interpret(ctx);
+            int ind = (java.lang.Integer) this.ind.interpret(ctx, input);
 
             if (ind == 0)
                 return true;
 
-            int first = (java.lang.Integer) this.first.interpret(ctx);
+            int first = (java.lang.Integer) this.first.interpret(ctx, input);
             int lExt;
             if (first == 1) {
 
-                int index = (java.lang.Integer) this.index.interpret(ctx);
-                lExt = (java.lang.Integer) this.lExt.interpret(ctx);
+                int index = (java.lang.Integer) this.index.interpret(ctx, input);
+                lExt = (java.lang.Integer) this.lExt.interpret(ctx, input);
 
                 if (lExt - index == 0)
                     return true;
                 else {
-                    int indent = ctx.getInput().getColumnNumber(lExt);
+                    int indent = input.getColumnNumber(lExt);
                     return indent > ind;
                 }
 
             } else {
-                lExt = (java.lang.Integer) this.lExt.interpret(ctx);
-                int indent = ctx.getInput().getColumnNumber(lExt);
+                lExt = (java.lang.Integer) this.lExt.interpret(ctx, input);
+                int indent = input.getColumnNumber(lExt);
                 return indent > ind;
             }
 
@@ -642,12 +643,12 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            int first = (java.lang.Integer) this.first.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            int first = (java.lang.Integer) this.first.interpret(ctx, input);
             if (first == 1) {
 
-                int index = (java.lang.Integer) this.index.interpret(ctx);
-                int lExt = (java.lang.Integer) this.lExt.interpret(ctx);
+                int index = (java.lang.Integer) this.index.interpret(ctx, input);
+                int lExt = (java.lang.Integer) this.lExt.interpret(ctx, input);
 
                 if (lExt - index == 0)
                     return returnIndex ? index : 1;
@@ -708,11 +709,11 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx, input);
             if (lhs) return true;
 
-            return this.rhs.interpret(ctx);
+            return this.rhs.interpret(ctx, input);
         }
 
         @Override
@@ -761,11 +762,11 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            boolean lhs = (java.lang.Boolean) this.lhs.interpret(ctx, input);
             if (!lhs) return false;
 
-            return this.rhs.interpret(ctx);
+            return this.rhs.interpret(ctx, input);
         }
 
         @Override
@@ -814,9 +815,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
                 return ((java.lang.Integer) lhs) < ((java.lang.Integer) rhs);
@@ -875,9 +876,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
                 return ((java.lang.Integer) lhs) <= ((java.lang.Integer) rhs);
@@ -936,9 +937,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
                 return ((java.lang.Integer) lhs) > ((java.lang.Integer) rhs);
@@ -997,9 +998,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
                 return ((java.lang.Integer) lhs) >= ((java.lang.Integer) rhs);
@@ -1058,9 +1059,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs == AST.UNDEF || rhs == AST.UNDEF) {
                 return lhs == rhs;
@@ -1127,9 +1128,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            Object lhs = this.lhs.interpret(ctx);
-            Object rhs = this.rhs.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
             if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer) {
                 return lhs != rhs;
@@ -1184,7 +1185,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = ctx.lookupVariable(java.lang.String.format(format, label));
             if (value == null) {
                 throw new UndeclaredVariableException(label + "." + "lExt");
@@ -1234,7 +1235,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = ctx.lookupVariable(label);
             if (value == null) {
                 throw new UndeclaredVariableException(label);
@@ -1294,7 +1295,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = i == -1 ? ctx.lookupVariable(label) : ctx.lookupVariable(i);
             if (value == null) {
                 throw new UndeclaredVariableException(label);
@@ -1305,7 +1306,7 @@ public abstract class Expression extends AbstractAST {
             }
 
             NonPackedNode node = (NonPackedNode) value;
-            return ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent());
+            return input.subString(node.getLeftExtent(), node.getRightExtent());
         }
 
         @Override
@@ -1348,7 +1349,7 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
+        public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = ctx.lookupVariable(label);
             if (value == null) {
                 throw new UndeclaredVariableException(label);
@@ -1402,9 +1403,9 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            int index = (java.lang.Integer) this.index.interpret(ctx);
-            int length = ctx.getInput().length();
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            int index = (java.lang.Integer) this.index.interpret(ctx, input);
+            int length = input.length();
             return length == index + 1;
         }
 
@@ -1460,12 +1461,12 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public Object interpret(IEvaluatorContext ctx) {
-            boolean cond = (java.lang.Boolean) condition.interpret(ctx);
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            boolean cond = (java.lang.Boolean) condition.interpret(ctx, input);
             if (cond)
-                return thenPart.interpret(ctx);
+                return thenPart.interpret(ctx, input);
             else
-                return elsePart.interpret(ctx);
+                return elsePart.interpret(ctx, input);
         }
 
         @Override

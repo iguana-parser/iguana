@@ -27,27 +27,14 @@
 
 package org.iguana.datadependent.env;
 
-import iguana.utils.input.Input;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 	
-	private final Input input;
-	
 	private Environment env;
 	
 	private Map<String, Object> global;
-	
-	public AbstractEvaluatorContext(Input input) {
-		this.input = input;
-	}
-	
-	@Override
-	public Input getInput() {
-		return this.input;
-	}
 
 	@Override
 	public Environment getEnvironment() {

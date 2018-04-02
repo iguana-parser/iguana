@@ -2,16 +2,41 @@ package org.iguana.result;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 import org.iguana.sppf.*;
+import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
+
+import java.util.List;
 
 public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     private ParserLogger logger = ParserLogger.getInstance();
 
-    private static final DummyNode dummyNode = new DummyNode();
+    private static final NonPackedNode dummyNode = new NonPackedNode() {
+        @Override
+        public PackedNode getChildAt(int index) {  throw new UnsupportedOperationException(); }
+
+        @Override
+        public List<PackedNode> getChildren() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public int childrenCount() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public GrammarSlot getGrammarSlot() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public int getLeftExtent() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public int getRightExtent() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
+    };
 
     @Override
     public NonPackedNode dummy() {

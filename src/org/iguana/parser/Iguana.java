@@ -37,13 +37,13 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.gss.GSSNode;
+import org.iguana.gss.GSSNodeData;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.result.ParserResultOps;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.result.ResultOps;
-import org.iguana.result.ParserResultOps;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -82,8 +82,8 @@ public class Iguana {
     }
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
-        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, input, config, new ParserResultOps());
-        return parse(input, grammarGraph, startSymbol, config, map, global);
+        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
+        return parse(input, grammarGraph, startSymbol, config, map, global, new ParserResultOps());
     }
 
     public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar) {
@@ -106,14 +106,14 @@ public class Iguana {
     }
 
     public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
-        GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, input, config, new RecognizerResultOps());
-        return parse(input, grammarGraph, startSymbol, config, map, global);
+        GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, config);
+        return parse(input, grammarGraph, startSymbol, config, map, global, new RecognizerResultOps());
     }
 
-    public static <T> ParseResult<T> parse(Input input, GrammarGraph<T> grammarGraph, Nonterminal nonterminal, Configuration config, Map<String, ?> map, boolean global) {
-        IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config, input);
+    public static <T> ParseResult<T> parse(Input input, GrammarGraph<T> grammarGraph, Nonterminal nonterminal, Configuration config, Map<String, ?> map, boolean global, ResultOps<T> resultOps) {
+        IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config);
 
-        ParserRuntime<T> runtime = grammarGraph.getRuntime();
+        ParserRuntime<T> runtime = new ParserRuntimeImpl<>(config, ctx, resultOps);
 
         grammarGraph.reset(input);
 
@@ -153,19 +153,17 @@ public class Iguana {
         Timer timer = new Timer();
         timer.start();
 
-        ResultOps<T> ops = grammarGraph.getResultOps();
-
         for (BodyGrammarSlot<T> slot : startSymbol.getFirstSlots()) {
-            runtime.scheduleDescriptor(slot, startGSSNode, ops.dummy(), env);
+            runtime.scheduleDescriptor(slot, startGSSNode, resultOps.dummy(), env);
         }
 
         while(runtime.hasDescriptor()) {
-            Descriptor descriptor = runtime.nextDescriptor();
+            Descriptor<T> descriptor = runtime.nextDescriptor();
             logger.log("Processing %s", descriptor);
-            descriptor.execute(input);
+            descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), runtime);
         }
 
-        root = startGSSNode.getResult(input.length() - 1);
+        root = startGSSNode.getResult(input.length() - 1, resultOps);
 
         timer.stop();
 

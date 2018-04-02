@@ -34,7 +34,6 @@ import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.result.ResultOps;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,24 +43,22 @@ public class TerminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	private final Terminal terminal;
 	private final Matcher matcher;
 	private final IntHashMap<T> terminalNodes;
-	private final ResultOps<T> ops;
 
-	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(runtime, Collections.emptyList());
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
+		super(Collections.emptyList());
 		this.terminal = terminal;
 		this.matcher = factory.getMatcher(terminal.getRegularExpression());
         this.terminalNodes = new OpenAddressingIntHashMap<>();
-        this.ops = ops;
     }
 
-	public T getResult(Input input, int i) {
+	public T getResult(Input input, int i, ParserRuntime<T> runtime) {
 		T node = terminalNodes.get(i);
 		if (node == null) {
 			int length = matcher.match(input, i);
 			if (length < 0) {
 				node = null;
 			} else {
-				node = ops.base(this, i, i + length);
+				node = runtime.getResultOps().base(this, i, i + length);
 			}
 			terminalNodes.put(i, node);
 		}

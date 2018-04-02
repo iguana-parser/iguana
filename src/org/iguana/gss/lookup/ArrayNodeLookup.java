@@ -25,29 +25,72 @@
  *
  */
 
-package org.iguana.parser.gss;
+package org.iguana.gss.lookup;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.result.ResultOps;
+import org.iguana.gss.GSSNode;
 
-public interface GSSEdge<T> {
+import java.util.List;
+import java.util.Objects;
 
-	T getResult();
+import static iguana.utils.collections.CollectionsUtil.concat;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
-	BodyGrammarSlot<T> getReturnSlot();
+public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 
-	GSSNode<T> getDestination();
+	private GSSNode[] gssNodes;
+	private int size;
 	
-	/*
-	 * 
-	 * Does the following:
-	 * (1) checks conditions associated with the return slot
-	 * (2) checks whether the descriptor to be created has been already created (and scheduled) before
-	 * (2.1) if yes, returns null
-	 * (2.2) if no, creates one and returns it
-	 * 
-	 */
-	T addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops);
+	public ArrayNodeLookup(Input input) {
+		gssNodes = new GSSNode[input.length()];
+	}
+	
+	@Override
+	public void reset(Input input) {
+		super.reset(input);
+		gssNodes = new GSSNode[input.length()];
+		size = 0;
+	}
+	
+	@Override
+	public Iterable<GSSNode<T>> getNodes() {
+		@SuppressWarnings("unchecked")
+		List<GSSNode<T>> list = asList(this.gssNodes);
+		return concat(list.stream().filter(Objects::nonNull).collect(toList()), super.map.values());
+	}
 
+	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public void put(int i, GSSNode<T> gssNode) {
+		gssNodes[i] = gssNode;
+		size++;
+	}
+
+	@Override
+	public void get(int i, GSSNodeCreator<T> creator) {
+		gssNodes[i] = creator.create(gssNodes[i]);
+	}
+
+	@Override
+	public GSSNode<T> get(int i) {
+		return gssNodes[i];
+	}
+
+	@Override
+	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
+		GSSNode<T> node = gssNodes[i];
+		if (node == null) {
+			node = new GSSNode<>(slot, i);
+			gssNodes[i] = node;
+			return node;
+		} 
+		return node;
+	}
 }

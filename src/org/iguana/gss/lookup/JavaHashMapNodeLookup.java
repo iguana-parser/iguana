@@ -25,93 +25,55 @@
  *
  */
 
-package org.iguana.parser.gss;
+package org.iguana.gss.lookup;
 
-import java.util.Iterator;
+import iguana.utils.collections.CollectionsUtil;
+import iguana.utils.input.Input;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.result.ResultOps;
+import org.iguana.gss.GSSNode;
 
-import static iguana.utils.string.StringUtil.listToString;
+import java.util.HashMap;
+import java.util.Map;
 
-public class GSSNodeData<T> implements Iterable<T> {
-	
-	private final T[] elements;
-	
-	public final int size;
-	
-	public GSSNodeData(T[] elements) {
-		this.elements = elements;
-		this.size = elements == null? 0 : elements.length;
-	}
-	
-	public T[] getValues() {
-		return elements;
-	}
-	
+public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
+
+	private Map<Integer, GSSNode<T>> map = new HashMap<>();
+
 	@Override
-	public boolean equals(Object other) {
-		if (this == other) return true;
-		
-		if (!(other instanceof GSSNodeData)) {
-			return false;
-		}
-		
-		GSSNodeData<?> that = (GSSNodeData<?>) other;
-		
-		if (this.size != that.size) return false;
-		
-		Iterator<T> iter1 = iterator();
-		Iterator<?> iter2 = that.iterator();
-		
-		while (iter1.hasNext()) {
-			if (!iter1.next().equals(iter2.next())) {
-				return false;
-			};
-		}
-		
-		return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		int result = 17;
-		
-		for (T element : elements) {
-			result = 31 * result + element.hashCode();
-		}
-		
-		return result;
-		
+	public void get(int i, GSSNodeCreator<T> creator) {
+		map.compute(i, (k, v) -> creator.create(v)); 
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new GSSNodeDataIterator<T>(this);
+	public GSSNode<T> get(int i) {
+		return map.get(i);
 	}
-	
+
 	@Override
-	public String toString() {
-		return listToString(elements, ",");
+	public void reset(Input input) {
+		super.reset(input);
+		map = new HashMap<>();
 	}
-	
-	static private class GSSNodeDataIterator<T> implements Iterator<T> {
-		
-		private GSSNodeData<T> data;
-		
-		private int i = 0;
-		
-		GSSNodeDataIterator(GSSNodeData<T> data) {
-			this.data = data;
-		}
 
-		@Override
-		public boolean hasNext() {
-			return i < data.size;
-		}
+	@Override
+	public Iterable<GSSNode<T>> getNodes() {
+		return CollectionsUtil.concat(map.values(), super.map.values());
+	}
 
-		@Override
-		public T next() {
-			return data.elements[i++];
-		}
-		
+	@Override
+	public int size() {
+		return map.size();
+	}
+
+	@Override
+	public void put(int i, GSSNode<T> gssNode) {
+		map.put(i, gssNode);
+	}
+
+	@Override
+	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
+		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i));
 	}
 
 }

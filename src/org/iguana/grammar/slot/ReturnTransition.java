@@ -30,16 +30,15 @@ package org.iguana.grammar.slot;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.result.ResultOps;
 
 public class ReturnTransition<T> extends AbstractTransition<T> {
 	
 	private final Expression expression;
 
-	public ReturnTransition(Expression expression, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+	public ReturnTransition(Expression expression, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+		super(origin, dest);
 		this.expression = expression;
 	}
 
@@ -49,9 +48,9 @@ public class ReturnTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
-		Object value = runtime.evaluate(expression, env);
-		((EndGrammarSlot<T>) dest).execute(input, u, result, value);
+	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
+		Object value = runtime.evaluate(expression, env, input);
+		((EndGrammarSlot<T>) dest).execute(input, u, result, value, runtime);
 	}
 
 }

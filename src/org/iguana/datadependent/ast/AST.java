@@ -27,12 +27,16 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.values.Stack;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static iguana.utils.string.StringUtil.listToString;
 
@@ -75,8 +79,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object[] arguments = interpretArguments(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object[] arguments = interpretArguments(ctx, input);
 						for (Object argument : arguments) {
 							System.out.print(argument);
 							System.out.print("; ");
@@ -98,13 +102,13 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof java.lang.Integer)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
 						
-						return ctx.getInput().getColumnNumber((java.lang.Integer) value);
+						return input.getColumnNumber((java.lang.Integer) value);
 					}
 					
 					@Override
@@ -120,17 +124,16 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
+					public Object interpret(IEvaluatorContext ctx, Input input) {
 						
-						Object var = variable.interpret(ctx);
+						Object var = variable.interpret(ctx, input);
 						
 						if (!(var instanceof NonPackedNode))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
 						NonPackedNode node = (NonPackedNode) var;
 						
-						ctx.declareGlobalVariable(ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent()), 
-								                  value.interpret(ctx));
+						ctx.declareGlobalVariable(input.subString(node.getLeftExtent(), node.getRightExtent()), value.interpret(ctx, input));
 						
 						return null;
 					}
@@ -148,15 +151,15 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof NonPackedNode)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
 						
 						NonPackedNode node = (NonPackedNode) value;
 						
-						java.lang.String subString = ctx.getInput().subString(node.getLeftExtent(), node.getRightExtent());
+						java.lang.String subString = input.subString(node.getLeftExtent(), node.getRightExtent());
 						
 						if (subString.equals("true"))
 							return true;
@@ -180,21 +183,21 @@ public class AST {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object i = index.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object i = index.interpret(ctx, input);
 						if (!(i instanceof java.lang.Integer)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
 						
 						int j = (java.lang.Integer) i;
 						
-						Object c = character.interpret(ctx);
+						Object c = character.interpret(ctx, input);
 						
 						if (!(c instanceof java.lang.String)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
 						
-						Object obj = ctx.getInput().subString(j - 1, j);
+						Object obj = input.subString(j - 1, j);
 						return obj.equals(c);
 					}
 					
@@ -211,8 +214,8 @@ public class AST {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object i = args[0].interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object i = args[0].interpret(ctx, input);
 						if (!(i instanceof java.lang.Integer)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
@@ -220,15 +223,15 @@ public class AST {
 						int j = (java.lang.Integer) i;
 						
 						for (int k = 1; k < args.length; k++) {
-							Object str = args[k].interpret(ctx);
+							Object str = args[k].interpret(ctx, input);
 							
 							if (!(str instanceof java.lang.String)) {
 								throw new UnexpectedTypeOfArgumentException(this);
 							}
 							
 							int len = j + ((java.lang.String) str).length();
-							if (len < ctx.getInput().length()) {
-								Object obj = ctx.getInput().subString(j, len);
+							if (len < input.length()) {
+								Object obj = input.subString(j, len);
 								if (obj.equals(str))
 									return true;
 							}
@@ -249,8 +252,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof java.lang.Boolean)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
@@ -271,8 +274,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof java.lang.Integer)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
@@ -293,8 +296,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof NonPackedNode)) {
 							throw new UnexpectedTypeOfArgumentException(this);
 						}
@@ -317,14 +320,14 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						int v = (java.lang.Integer) arg1.interpret(ctx);
-						int curr = (java.lang.Integer) arg2.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						int v = (java.lang.Integer) arg1.interpret(ctx, input);
+						int curr = (java.lang.Integer) arg2.interpret(ctx, input);
 						
 						if (v >= curr)
 							return v;
 						
-						int prev = (java.lang.Integer) arg3.interpret(ctx); // prev is actually previous plus one
+						int prev = (java.lang.Integer) arg3.interpret(ctx, input); // prev is actually previous plus one
 						
 						if (v >= prev)
 							return curr;
@@ -351,21 +354,21 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
+					public Object interpret(IEvaluatorContext ctx, Input input) {
 						
-						int v = (java.lang.Integer) arg1.interpret(ctx);
-						int curr = (java.lang.Integer) arg2.interpret(ctx);
+						int v = (java.lang.Integer) arg1.interpret(ctx, input);
+						int curr = (java.lang.Integer) arg2.interpret(ctx, input);
 						
 						if (v >= curr)
 							return v;
 						
-						int prev = (java.lang.Integer) arg3[0].interpret(ctx);
+						int prev = (java.lang.Integer) arg3[0].interpret(ctx, input);
 						
 						if (v >= prev)
 							return curr;
 						
 						for (int i = 1; i < arg3.length; i++) {
-							prev = (java.lang.Integer) arg3[i].interpret(ctx);
+							prev = (java.lang.Integer) arg3[i].interpret(ctx, input);
 							
 							if (v >= prev)
 								return prev;
@@ -387,10 +390,10 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
+					public Object interpret(IEvaluatorContext ctx, Input input) {
 						
-						int v1 = (java.lang.Integer) arg1.interpret(ctx);
-						int v2 = (java.lang.Integer) arg2.interpret(ctx);
+						int v1 = (java.lang.Integer) arg1.interpret(ctx, input);
+						int v2 = (java.lang.Integer) arg2.interpret(ctx, input);
 						
 						if (v1 == 0)
 							return v2;
@@ -414,9 +417,9 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						int v1 = (java.lang.Integer) arg1.interpret(ctx);
-						int v2 = (java.lang.Integer) arg2.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						int v1 = (java.lang.Integer) arg1.interpret(ctx, input);
+						int v2 = (java.lang.Integer) arg2.interpret(ctx, input);
 						return java.lang.Integer.min(v1, v2);
 					}
 					
@@ -433,8 +436,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						return new HashMap<Object, Object>();
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						return new HashMap<>();
 					}
 					
 					@Override
@@ -450,17 +453,17 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg1.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg1.interpret(ctx, input);
 						if (!(value instanceof Set<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
 						@SuppressWarnings("unchecked")
 						Set<Object> s = (Set<Object>) value;
 						
-						value = arg2.interpret(ctx);
+						value = arg2.interpret(ctx, input);
 						if (!s.contains(value)) {
-							s = new HashSet<Object>(s);
+							s = new HashSet<>(s);
 							s.add(value);
 						}
 						
@@ -480,16 +483,16 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg1.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg1.interpret(ctx, input);
 						if (!(value instanceof Map<?,?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
 						@SuppressWarnings("unchecked")
 						Map<Object, Object> m = (Map<Object, Object>) value;
 						
-						m = new HashMap<Object, Object>(m);
-						m.put(arg2.interpret(ctx), arg3.interpret(ctx));
+						m = new HashMap<>(m);
+						m.put(arg2.interpret(ctx, input), arg3.interpret(ctx, input));
 						
 						return m;
 					}
@@ -507,15 +510,15 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg1.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg1.interpret(ctx, input);
 						if (!(value instanceof Set<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
 						@SuppressWarnings("unchecked")
 						Set<Object> s = (Set<Object>) value;
 						
-						value = arg2.interpret(ctx);
+						value = arg2.interpret(ctx, input);
 						
 						return s.contains(value);
 					}
@@ -533,11 +536,11 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg1.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg1.interpret(ctx, input);
 						
 						if (value == null)
-							return Stack.from(arg2.interpret(ctx));
+							return Stack.from(arg2.interpret(ctx, input));
 						
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
@@ -545,7 +548,7 @@ public class AST {
 						@SuppressWarnings("unchecked")
 						Stack<Object> s = (Stack<Object>) value;
 						
-						return s.push(arg2.interpret(ctx));
+						return s.push(arg2.interpret(ctx, input));
 					}
 					
 					@Override
@@ -561,8 +564,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
@@ -585,8 +588,8 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg.interpret(ctx, input);
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
@@ -609,15 +612,15 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object value = arg1.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object value = arg1.interpret(ctx, input);
 						if (!(value instanceof Stack<?>))
 							throw new UnexpectedTypeOfArgumentException(this);
 						
 						@SuppressWarnings("unchecked")
 						Stack<Map<java.lang.String, java.lang.Boolean>> s = (Stack<Map<java.lang.String, java.lang.Boolean>>) value;
 						
-						java.lang.String key = (java.lang.String) arg2.interpret(ctx);
+						java.lang.String key = (java.lang.String) arg2.interpret(ctx, input);
 						
 						java.lang.Boolean hit;
 						while (s != null) {
@@ -643,9 +646,9 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						Object[] value = (Object[]) arg1.interpret(ctx);
-						int i = (java.lang.Integer) arg2.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						Object[] value = (Object[]) arg1.interpret(ctx, input);
+						int i = (java.lang.Integer) arg2.interpret(ctx, input);
 						return value[i];
 					}
 					
@@ -656,7 +659,7 @@ public class AST {
 		};
 	}
 
-	public static final Object UNDEF = new Object() {
+	static final Object UNDEF = new Object() {
 		public String toString() {
 			return "UNDEF";
 		}
@@ -668,12 +671,12 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
-						int i = (java.lang.Integer) arg1.interpret(ctx);
+					public Object interpret(IEvaluatorContext ctx, Input input) {
+						int i = (java.lang.Integer) arg1.interpret(ctx, input);
 						if (i == 0)
 							return 0;
 						
-						int j = (java.lang.Integer) arg2.interpret(ctx);
+						int j = (java.lang.Integer) arg2.interpret(ctx, input);
 						return i & j;
 					}
 					
@@ -690,7 +693,7 @@ public class AST {
 			private static final long serialVersionUID = 1L;
 
 					@Override
-					public Object interpret(IEvaluatorContext ctx) {
+					public Object interpret(IEvaluatorContext ctx, Input input) {
 						return UNDEF;
 					}
 					

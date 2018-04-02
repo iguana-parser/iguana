@@ -29,7 +29,7 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 
 /**

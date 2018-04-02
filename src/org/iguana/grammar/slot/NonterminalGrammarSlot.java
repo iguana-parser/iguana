@@ -33,12 +33,11 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.gss.GSSNode;
+import org.iguana.gss.GSSNodeData;
+import org.iguana.gss.lookup.GSSNodeLookup;
+import org.iguana.gss.lookup.GSSNodeLookup.GSSNodeCreator;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.parser.gss.lookup.GSSNodeLookup;
-import org.iguana.parser.gss.lookup.GSSNodeLookup.GSSNodeCreator;
-import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
@@ -46,11 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
 public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	
 	private final Nonterminal nonterminal;
@@ -63,17 +57,10 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 
 	private FollowTest followTest;
 
-	private final NonterminalNodeType nodeType;
-
-	private final ResultOps<T> ops;
-
-	public NonterminalGrammarSlot(Nonterminal nonterminal, GSSNodeLookup<T> nodeLookup, NonterminalNodeType nodeType, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(runtime);
+	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
-		this.nodeLookup = nodeLookup;
-		this.ops = ops;
+		this.nodeLookup = GSSNodeLookup.getNodeLookup();
 		this.firstSlots = new ArrayList<>();
-		this.nodeType = nodeType;
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot<T> slot) {
@@ -105,7 +92,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	}
 
 	public NonterminalNodeType getNodeType() {
-		return nodeType;
+		return nonterminal.getNodeType();
 	}
 
 	public String[] getParameters() {
@@ -144,43 +131,43 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		nodeLookup.reset(input);
 	}
 	
-	public void create(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> u, T node, Expression[] arguments, Environment env) {
-        int i = ops.getRightIndex(node, u);
+	public void create(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> u, T node, Expression[] arguments, Environment env, ParserRuntime<T> runtime) {
+        int i = runtime.getResultOps().getRightIndex(node, u);
 		
 		if (arguments == null) {
 			GSSNode<T> gssNode = nodeLookup.get(i);
 			// No GSS node labelled (slot, k) exits
 			if (gssNode == null) {
-				gssNode = new GSSNode<>(this, i, ops);
+				gssNode = new GSSNode<>(this, i);
 				ParserLogger.getInstance().gssNodeAdded(gssNode);
 
 				List<BodyGrammarSlot<T>> firstSlots = getFirstSlots(input.charAt(i));
 				if (firstSlots != null)
 					for (int j = 0; j < firstSlots.size(); j++) {
 						BodyGrammarSlot<T> slot = firstSlots.get(j);
-						if (!slot.getConditions().execute(input, gssNode, i)) {
-							runtime.scheduleDescriptor(slot, gssNode, ops.dummy(), env);
+						if (!slot.getConditions().execute(input, gssNode, i, runtime)) {
+							runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), env);
 						}
 					}
 			} else {
 				ParserLogger.getInstance().log("GSSNode found: %s", gssNode);
 			}
-			gssNode.createGSSEdge(input, returnSlot, u, node, env, ops); // Record environment on the edge
+			gssNode.createGSSEdge(input, returnSlot, u, node, env, runtime); // Record environment on the edge
 			nodeLookup.put(i, gssNode);
 			return;
 		}
 		
-		GSSNodeData<Object> data = new GSSNodeData<>(runtime.evaluate(arguments, env));
+		GSSNodeData<Object> data = new GSSNodeData<>(runtime.evaluate(arguments, env, input));
 		
 		GSSNodeCreator<T> creator = gssNode -> {
 			if (gssNode == null) {
 				
-				gssNode = new GSSNode<>(this, i, data, ops);
+				gssNode = new GSSNode<>(this, i, data);
 
 				ParserLogger.getInstance().gssNodeAdded(gssNode);
 				ParserLogger.getInstance().log("GSSNode created: %s(%s)", gssNode, data);
 				
-				gssNode.createGSSEdge(input, returnSlot, u, node, env, ops);
+				gssNode.createGSSEdge(input, returnSlot, u, node, env, runtime);
 
 				Environment newEnv;
 				
@@ -196,12 +183,12 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 					if (s.getLabel() != null)
 						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
 
-					if (!s.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext()))
-						runtime.scheduleDescriptor(s, gssNode, ops.dummy(), runtime.getEnvironment());
+					if (!s.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
+						runtime.scheduleDescriptor(s, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
 				}
 				
 			} else {
-				gssNode.createGSSEdge(input, returnSlot, u, node, env, ops);
+				gssNode.createGSSEdge(input, returnSlot, u, node, env, runtime);
 			}
 			return gssNode;
 		};
@@ -212,7 +199,4 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return nodeLookup.get(this, i, data);
 	}
 
-    public NonterminalNodeType nodeType() {
-        return nodeType;
-    }
 }

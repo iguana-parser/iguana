@@ -25,40 +25,44 @@
  *
  */
 
-package org.iguana.parser.gss.lookup;
+package org.iguana.gss.lookup;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
+import org.iguana.result.ResultOps;
+import org.iguana.gss.GSSNode;
+import org.iguana.gss.GSSNodeData;
+import org.iguana.util.Tuple;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
- * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
  *
  */
-public interface GSSNodeLookup<T> {
-	
-	void get(int i, GSSNodeCreator<T> creator);
 
-	GSSNode<T> get(int i);
-	
-	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i);
-	
-	void reset(Input input);
+public abstract class AbstractNodeLookup<T> implements GSSNodeLookup<T> {
 
-	Iterable<GSSNode<T>> getNodes();
+	protected Map<Tuple<Integer, GSSNodeData<?>>, GSSNode<T>> map = new HashMap<>();
 
-	int size();
-	
-	void get(int i, GSSNodeData<Object> data, GSSNodeCreator<T> creator);
-
-	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<Object> data);
-
-	void put(int i, GSSNode<T> gssNode);
-
-	@FunctionalInterface
-	interface GSSNodeCreator<T> {
-		GSSNode<T> create(GSSNode<T> node);
+	@Override
+	public void get(int i, GSSNodeData<Object> data, GSSNodeCreator<T> creator) {
+		map.compute(new Tuple<>(i, data), (k, v) -> creator.create(v));
 	}
+	
+	@Override
+	public void reset(Input input) {
+		map = new HashMap<>();
+	}
+	
+	@Override
+	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<Object> data) {
+		GSSNode<T> gssNode = map.get(new Tuple<>(i, data));
+		if (gssNode == null)
+			return new GSSNode<>(slot, i, data);
+		return gssNode;
+	}
+	
 }

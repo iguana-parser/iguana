@@ -1,20 +1,15 @@
-package org.iguana.parser.gss.lookup;
+package org.iguana.gss.lookup;
 
 import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.result.ResultOps;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 public class IntOpenAddressingMap<T> extends AbstractNodeLookup<T> {
 
 	private IntHashMap<GSSNode<T>> map = new OpenAddressingIntHashMap<>();
-
-	public IntOpenAddressingMap(ResultOps<T> ops) {
-		super(ops);
-	}
 
 	@Override
 	public void get(int i, GSSNodeCreator<T> creator) {
@@ -49,7 +44,7 @@ public class IntOpenAddressingMap<T> extends AbstractNodeLookup<T> {
 
 	@Override
 	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
-		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i, ops));
+		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i));
 	}
 
 }

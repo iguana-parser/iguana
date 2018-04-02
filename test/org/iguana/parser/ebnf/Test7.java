@@ -10,7 +10,6 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -72,7 +71,7 @@ public class Test7 {
     public void testParse1() {
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -80,7 +79,7 @@ public class Test7 {
     public void testParse2() {
         ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult2(graph), result);
     }
 
@@ -88,7 +87,7 @@ public class Test7 {
     public void testParse3() {
         ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult3(graph), result);
     }
 
@@ -96,7 +95,7 @@ public class Test7 {
     public void testParse4() {
         ParseResult result = Iguana.parse(input4, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input4, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult4(graph), result);
     }
 
@@ -104,7 +103,7 @@ public class Test7 {
     public void testParse5() {
         ParseResult result = Iguana.parse(input5, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input5, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult5(graph), result);
     }
 

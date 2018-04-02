@@ -31,9 +31,8 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.result.ResultOps;
-import org.iguana.parser.gss.GSSNode;
 
 import static iguana.utils.string.StringUtil.listToString;
 
@@ -47,8 +46,8 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 	private final Expression[] arguments;
 
 	public NonterminalTransition(NonterminalGrammarSlot<T> nonterminal, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
-			                     Expression[] arguments, Conditions preConditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+			                     Expression[] arguments, Conditions preConditions) {
+		super(origin, dest);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
 		this.preConditions = preConditions;
@@ -66,9 +65,9 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
 
-        int i = ops.getRightIndex(node, u);
+        int i = runtime.getResultOps().getRightIndex(node, u);
 
         if (dest.getLabel() != null) {
 			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
@@ -76,10 +75,10 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 		
 		runtime.setEnvironment(env);
 		
-		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 				
-		nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment());
+		nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment(), runtime);
 	}
 
 }

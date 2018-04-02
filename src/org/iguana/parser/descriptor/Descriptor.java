@@ -27,10 +27,9 @@
 
 package org.iguana.parser.descriptor;
 
-import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 /**
  * @author Ali Afroozeh
@@ -73,10 +72,10 @@ public class Descriptor<T> {
 		return result;
 	}
 
-	public void execute(Input input) {
-		slot.execute(input, gssNode, result, env);
+	public Environment getEnv() {
+		return env;
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("(%s, %s, %s)", slot, gssNode, result);

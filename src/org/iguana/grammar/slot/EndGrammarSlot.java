@@ -31,9 +31,9 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.result.ResultOps;
-import org.iguana.parser.gss.GSSNode;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,14 +44,13 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	protected final NonterminalGrammarSlot nonterminal;
 
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		this(position, nonterminal, label, -1, variable, -1, state, conditions, runtime, ops);
+			              String variable, Set<String> state, Conditions conditions) {
+		this(position, nonterminal, label, -1, variable, -1, state, conditions);
 	}
 	
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label, int i1,
-            			  String variable, int i2, Set<String> state, Conditions conditions,
-                          ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(position, label, i1, variable, i2, state, conditions, runtime, ops);
+            			  String variable, int i2, Set<String> state, Conditions conditions) {
+		super(position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
     }
 	
@@ -79,13 +78,14 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
-		execute(input, u, node, (Object) null);
+	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
+		execute(input, u, node, (Object) null, runtime);
 	}
 	
-	public void execute(Input input, GSSNode<T> u, T result, Object value) {
+	public void execute(Input input, GSSNode<T> u, T result, Object value, ParserRuntime<T> runtime) {
+		ResultOps<T> ops = runtime.getResultOps();
 		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(result, u))))
-            u.pop(input, this, result, value, ops);
+            u.pop(input, this, result, value, runtime);
 	}
 
 }

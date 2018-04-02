@@ -4,9 +4,8 @@ import iguana.utils.logging.IguanaLogger;
 import iguana.utils.logging.JavaUtilIguanaLogger;
 import iguana.utils.logging.LogLevel;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSEdge;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.*;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
 
 public class ParserLogger {
 

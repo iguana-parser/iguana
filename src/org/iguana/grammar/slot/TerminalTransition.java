@@ -33,7 +33,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.result.ResultOps;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 public class TerminalTransition<T> extends AbstractTransition<T> {
 
@@ -43,9 +43,8 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	
 	private final Conditions postConditions;
 
-	public TerminalTransition(TerminalGrammarSlot<T> slot, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
-							  Conditions preConditions, Conditions postConditions, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+	public TerminalTransition(TerminalGrammarSlot<T> slot, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, Conditions preConditions, Conditions postConditions) {
+		super(origin, dest);
         this.slot = slot;
         this.preConditions = preConditions;
         this.postConditions = postConditions;
@@ -61,7 +60,8 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
+		ResultOps<T> ops = runtime.getResultOps();
         int i = ops.getRightIndex(node, u);
 
 		runtime.setEnvironment(env);
@@ -69,10 +69,10 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 		
-		T cr = slot.getResult(input, i);
+		T cr = slot.getResult(input, i, runtime);
 		
 		if (cr == null) {
 			runtime.recordParseError(input, i, origin, u);
@@ -82,12 +82,12 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, ops.getRightIndex(cr), runtime.getEvaluatorContext()))
+		if (postConditions.execute(input, u, ops.getRightIndex(cr), runtime.getEvaluatorContext(), runtime))
 			return;
 		
 		T n = dest.isFirst() ? cr : ops.merge(null, node, cr, dest);
 				
-		dest.execute(input, u, n, runtime.getEnvironment());
+		dest.execute(input, u, n, runtime.getEnvironment(), runtime);
 	}
 	
 }
