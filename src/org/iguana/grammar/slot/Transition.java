@@ -29,26 +29,17 @@ package org.iguana.grammar.slot;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
 
 
 public interface Transition<T> {
-	
-	void execute(Input input, GSSNode<T> u, T result);
 	
 	GrammarSlot destination();
 	
 	GrammarSlot origin();
 
 	String getLabel();
-	
-	/*
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
+
 	void execute(Input input, GSSNode<T> u, T result, Environment env);
 	
 }

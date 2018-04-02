@@ -34,6 +34,7 @@ public class OCaml {
 		grammar = new DesugarStartSymbol().transform(grammar);
 
 		Map<Input, List<ParseStatistics>> results = IguanaRunner.builder(grammar)
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
 				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
 //				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk", "java", true)
 //				.setLimit(500)

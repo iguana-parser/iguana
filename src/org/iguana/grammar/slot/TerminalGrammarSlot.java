@@ -34,7 +34,7 @@ import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 
 import java.util.Collections;
 import java.util.List;

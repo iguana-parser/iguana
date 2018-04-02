@@ -37,8 +37,9 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.descriptor.IntResultOps;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.ParserResultOps;
+import org.iguana.result.RecognizerResult;
+import org.iguana.result.RecognizerResultOps;
 import org.iguana.sppf.NonPackedNode;
 
 import java.io.File;
@@ -80,8 +81,8 @@ public class IguanaRunner {
 				continue;
 			}
 
-//			GrammarGraph<Integer> grammarGraph = GrammarGraph.from(grammar, input, config, new IntResultOps());
-			GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, input, config, new SPPFResultOps());
+//			GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, input, config, new RecognizerResultOps());
+			GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, input, config, new ParserResultOps());
 
 			for (int i = 0; i < warmupCount; i++) {
 				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
@@ -92,7 +93,7 @@ public class IguanaRunner {
 			for (int i = 0; i < runCount; i++) {
 				try {
 					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
-//					ParseResult<Integer> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
+//					ParseResult<RecognizerResult> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input, key -> new ArrayList<>()).add(statistics);

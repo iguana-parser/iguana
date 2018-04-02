@@ -89,21 +89,14 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     }
 
     @Override
-    public void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t) {
+    public void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t, Environment env) {
         Descriptor<T> descriptor;
         if (!descriptorPool.isEmpty()) {
             descriptor = descriptorPool.pop();
-            descriptor.init(grammarSlot, gssNode, t);
+            descriptor.init(grammarSlot, gssNode, t, env);
         } else {
-            descriptor = new Descriptor<>(grammarSlot, gssNode, t);
+            descriptor = new Descriptor<>(grammarSlot, gssNode, t, env);
         }
-        descriptorsStack.push(descriptor);
-        logger.descriptorAdded(descriptor);
-    }
-
-    @Override
-    public void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t, Environment env) {
-        org.iguana.datadependent.descriptor.Descriptor<T> descriptor = new org.iguana.datadependent.descriptor.Descriptor<>(grammarSlot, gssNode, t, env);
         descriptorsStack.push(descriptor);
         logger.descriptorAdded(descriptor);
     }

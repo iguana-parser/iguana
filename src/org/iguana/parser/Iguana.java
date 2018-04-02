@@ -34,12 +34,14 @@ import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.descriptor.IntResultOps;
-import org.iguana.parser.descriptor.ResultOps;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.RecognizerResult;
+import org.iguana.result.RecognizerResultOps;
+import org.iguana.result.ResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.parser.gss.GSSNode;
 import org.iguana.parser.gss.GSSNodeData;
 import org.iguana.sppf.NonPackedNode;
@@ -80,31 +82,31 @@ public class Iguana {
     }
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
-        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, input, config, new SPPFResultOps());
+        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, input, config, new ParserResultOps());
         return parse(input, grammarGraph, startSymbol, config, map, global);
     }
 
-    public static ParseResult<Integer> recognize(Input input, Grammar grammar) {
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar) {
         if (grammar.getStartSymbol() == null)
             throw new IllegalArgumentException("No start symbol defined in the grammar");
 
         return recognize(input, grammar, Nonterminal.withName(grammar.getStartSymbol().getName()));
     }
 
-    public static ParseResult<Integer> recognize(Input input, Grammar grammar, Nonterminal startSymbol) {
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol) {
         return recognize(input, grammar, startSymbol, Configuration.DEFAULT);
     }
 
-    public static ParseResult<Integer> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
         return recognize(input, grammar, startSymbol, config, Collections.emptyMap());
     }
 
-    public static ParseResult<Integer> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map) {
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map) {
         return recognize(input, grammar, startSymbol, config, map, true);
     }
 
-    public static ParseResult<Integer> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
-        GrammarGraph<Integer> grammarGraph = GrammarGraph.from(grammar, input, config, new IntResultOps());
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
+        GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, input, config, new RecognizerResultOps());
         return parse(input, grammarGraph, startSymbol, config, map, global);
     }
 
@@ -126,7 +128,7 @@ public class Iguana {
 
         T root;
 
-        final Environment env;
+        Environment env = ctx.getEmptyEnvironment();
 
         GSSNode<T> startGSSNode;
 
@@ -140,7 +142,6 @@ public class Iguana {
             startGSSNode = startSymbol.getGSSNode(0, new GSSNodeData<>(arguments));
             env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
         } else {
-            env = null;
             startGSSNode = startSymbol.getGSSNode(0);
         }
 
@@ -154,10 +155,9 @@ public class Iguana {
 
         ResultOps<T> ops = grammarGraph.getResultOps();
 
-        if (env == null)
-            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(s, startGSSNode, ops.dummy(0)));
-        else
-            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(s, startGSSNode, ops.dummy(0), env));
+        for (BodyGrammarSlot<T> slot : startSymbol.getFirstSlots()) {
+            runtime.scheduleDescriptor(slot, startGSSNode, ops.dummy(), env);
+        }
 
         while(runtime.hasDescriptor()) {
             Descriptor descriptor = runtime.nextDescriptor();

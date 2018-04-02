@@ -1,4 +1,4 @@
-package org.iguana.parser.descriptor;
+package org.iguana.result;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
@@ -7,14 +7,14 @@ import org.iguana.parser.gss.GSSNode;
 import org.iguana.sppf.*;
 import org.iguana.util.ParserLogger;
 
-public class SPPFResultOps implements ResultOps<NonPackedNode> {
+public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     private ParserLogger logger = ParserLogger.getInstance();
 
     private static final DummyNode dummyNode = new DummyNode();
 
     @Override
-    public NonPackedNode dummy(int i) {
+    public NonPackedNode dummy() {
         return dummyNode;
     }
 
@@ -28,7 +28,7 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
 
     @Override
     public NonPackedNode merge(NonPackedNode current, NonPackedNode result1, NonPackedNode result2, BodyGrammarSlot<NonPackedNode> slot) {
-        if (result1 instanceof DummyNode)
+        if (result1 == dummyNode)
             return result2;
 
         PackedNode packedNode = new PackedNode(slot);
@@ -55,7 +55,7 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public NonPackedNode convert(NonPackedNode current, NonPackedNode result, EndGrammarSlot slot, Object value) {
+    public NonPackedNode convert(NonPackedNode current, NonPackedNode result, EndGrammarSlot<NonPackedNode> slot, Object value) {
         PackedNode packedNode = new PackedNode(slot);
         packedNode.setLeftChild(result);
 
@@ -89,7 +89,7 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
 
     @Override
     public int getRightIndex(NonPackedNode result, GSSNode<NonPackedNode> gssNode) {
-        if (result instanceof DummyNode) {
+        if (result == dummyNode) {
             return gssNode.getInputIndex();
         }
         return result.getRightExtent();
@@ -97,6 +97,9 @@ public class SPPFResultOps implements ResultOps<NonPackedNode> {
 
     @Override
     public Object getValue(NonPackedNode result) {
-        return ((NonterminalNodeWithValue) result).getValue();
+        if (result instanceof NonterminalNodeWithValue)
+            return ((NonterminalNodeWithValue) result).getValue();
+        return null;
     }
+
 }

@@ -7,10 +7,11 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.iggy.IggyParser;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
+import org.iguana.result.RecognizerResult;
 import org.iguana.sppf.CyclicGrammarException;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
@@ -54,7 +55,12 @@ public class TestRunner {
             if (!dirCreated) throw new RuntimeException("Could not create the directory");
         }
 
-        ParseResult<NonPackedNode> result = Iguana.parse(input, grammar);
+        ParseResult<NonPackedNode> result = null;
+        try {
+            result = Iguana.parse(input, grammar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (result.isParseError()) {
             throw new RuntimeException("Parse Error");
         }
@@ -126,13 +132,13 @@ public class TestRunner {
                 continue;
             }
 
-            ParseResult<Integer> result = Iguana.recognize(input, grammar);
+            ParseResult<RecognizerResult> result = Iguana.recognize(input, grammar);
             if (result.isParseError()) {
                 error(result.asParseError().toString());
                 continue;
             }
 
-            if (result.asParseSuccess().getResult() != input.length() - 1) {
+            if (result.asParseSuccess().getResult().getIndex() != input.length() - 1) {
                 error("Recognition error");
                 continue;
             }
@@ -201,7 +207,7 @@ public class TestRunner {
             String sppfPath = testPath + "/sppf" + i + ".json";
             NonterminalNode expectedSPPFNode;
             try {
-                GrammarGraph grammarGraph = GrammarGraph.from(grammar, input, new SPPFResultOps());
+                GrammarGraph grammarGraph = GrammarGraph.from(grammar, input, new ParserResultOps());
                 expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), grammarGraph);
             } catch (IOException e) {
                 error("Cannot deserialize SPPF");

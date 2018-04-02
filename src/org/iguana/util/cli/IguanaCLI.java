@@ -33,7 +33,7 @@ import iguana.utils.visualization.GraphVizUtil;
 import org.apache.commons.cli.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.parser.descriptor.SPPFResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.serialization.JsonSerializer;
@@ -113,7 +113,7 @@ public class IguanaCLI {
                     String contentPath = values[0];
                     String outputFile = values[1];
 
-                    NonterminalNode sppf = SPPFJsonSerializer.deserialize(new FileInputStream(contentPath), GrammarGraph.from(grammar, input, new SPPFResultOps()));
+                    NonterminalNode sppf = SPPFJsonSerializer.deserialize(new FileInputStream(contentPath), GrammarGraph.from(grammar, input, new ParserResultOps()));
                     SPPFToDot toDot = new SPPFToDot(input);
                     toDot.visit(sppf);
                     GraphVizUtil.generateGraph(toDot.getString(), outputFile);

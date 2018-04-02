@@ -32,8 +32,8 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.result.ResultOps;
 
 public class ConditionalTransition<T> extends AbstractTransition<T> {
 	
@@ -41,12 +41,12 @@ public class ConditionalTransition<T> extends AbstractTransition<T> {
 	
 	private final BodyGrammarSlot<T> ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime runtime, ResultOps<T> ops) {
+	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		this(condition, origin, dest, null, runtime, ops);
 	}
 	
-	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
-                                 BodyGrammarSlot<T> ifFalse, ParserRuntime runtime, ResultOps<T> ops) {
+	private ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
+                                 BodyGrammarSlot<T> ifFalse, ParserRuntime<T> runtime, ResultOps<T> ops) {
 		super(origin, dest, runtime, ops);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
@@ -56,24 +56,6 @@ public class ConditionalTransition<T> extends AbstractTransition<T> {
 		return ifFalse;
 	}
 	
-	@Override
-	public void execute(Input input, GSSNode<T> u, T node) {
-		
-		Object value = runtime.evaluate(condition, runtime.getEmptyEnvironment());
-		
-		if (!(value instanceof Boolean)) {
-			throw new UnexpectedRuntimeTypeException(condition);
-		}
-		
-		boolean isTrue = (Boolean) value;
-		
-		if (isTrue)
-			dest.execute(input, u, node);
-		else if (ifFalse != null)
-			ifFalse.execute(input, u, node);
-		// TODO: logging
-	}
-
 	@Override
 	public String getLabel() {
 		return String.format("[%s]", condition.toString());

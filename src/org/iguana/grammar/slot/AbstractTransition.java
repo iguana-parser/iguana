@@ -29,7 +29,7 @@ package org.iguana.grammar.slot;
 
 
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
+import org.iguana.result.ResultOps;
 
 public abstract class AbstractTransition<T> implements Transition<T> {
 	

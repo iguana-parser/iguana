@@ -36,8 +36,8 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
+import org.iguana.result.ResultOps;
 import org.iguana.util.Holder;
 
 import java.util.*;
@@ -95,25 +95,10 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	public boolean testFollow(int v) {
 		return followTest.test(v);
 	}
-	
-	public T getIntermediateNode2(Input input, int destinationIndex, T leftResult, T rightResult) {
-		if (isFirst()) return rightResult;
 
-        Key key = Keys.from((x, y) -> x * input.length() + y, destinationIndex, ops.getRightIndex(rightResult));
-        T value = intermediateNodes.get(key);
-
-        if (value != null) {
-            intermediateNodes.put(key, ops.merge(value, leftResult, rightResult, this));
-            return null;
-        } else {
-			T result = ops.merge(null, leftResult, rightResult, this);
-            intermediateNodes.put(key, result);
-            return result;
-        }
-	}
-	
 	public T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env) {
-		if (isFirst()) return rightResult;
+		if (isFirst())
+			return rightResult;
 		
 		Holder<T> holder = new Holder<>();
 		BiFunction<Key, T, T> creator = (key, value) -> {
@@ -140,19 +125,7 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
 	}
-	
-	public void execute(Input input, GSSNode<T> u, T result) {
-	    for (int i = 0; i < getTransitions().size(); i++) {
-	        Transition<T> transition = getTransitions().get(i);
-            transition.execute(input, u, result);
-        }
-	}
-	
-	/*
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
+
 	public String getLabel() {
 		return label;
 	}
