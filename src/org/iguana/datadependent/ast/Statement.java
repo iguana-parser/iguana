@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
@@ -49,8 +50,8 @@ public abstract class Statement extends AbstractAST {
 		}
 		
 		@Override
-		public Object interpret(IEvaluatorContext ctx) {
-			exp.interpret(ctx);
+		public Object interpret(IEvaluatorContext ctx, Input input) {
+			exp.interpret(ctx, input);
 			return null;
 		}
 
@@ -81,8 +82,8 @@ public abstract class Statement extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(IEvaluatorContext ctx) {
-			decl.interpret(ctx);
+		public Object interpret(IEvaluatorContext ctx, Input input) {
+			decl.interpret(ctx, input);
 			return null;
 		}
 		

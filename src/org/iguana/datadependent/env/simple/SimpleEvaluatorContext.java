@@ -27,14 +27,12 @@
 
 package org.iguana.datadependent.env.simple;
 
-import iguana.utils.input.Input;
 import org.iguana.datadependent.env.AbstractEvaluatorContext;
 import org.iguana.datadependent.env.Environment;
 
 public class SimpleEvaluatorContext extends AbstractEvaluatorContext {
 
-	public SimpleEvaluatorContext(Input input) {
-		super(input);
+	public SimpleEvaluatorContext() {
 		setEnvironment(SimpleImmutableEnvironment.EMPTY);
 	}
 

@@ -25,73 +25,48 @@
  *
  */
 
-package org.iguana.parser.gss.lookup;
+package org.iguana.gss.lookup;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.gss.GSSNode;
+import org.iguana.gss.GSSNodeData;
 import org.iguana.result.ResultOps;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.util.Configuration;
 
-import java.util.List;
-import java.util.Objects;
-
-import static iguana.utils.collections.CollectionsUtil.concat;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-
-public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
-
-	private GSSNode[] gssNodes;
-	private int size;
+public interface GSSNodeLookup<T> {
 	
-	public ArrayNodeLookup(Input input, ResultOps<T> ops) {
-		super(ops);
-		gssNodes = new GSSNode[input.length()];
-	}
+	void get(int i, GSSNodeCreator<T> creator);
+
+	GSSNode<T> get(int i);
 	
-	@Override
-	public void reset(Input input) {
-		super.reset(input);
-		gssNodes = new GSSNode[input.length()];
-		size = 0;
-	}
+	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i);
 	
-	@Override
-	public Iterable<GSSNode<T>> getNodes() {
-		@SuppressWarnings("unchecked")
-		List<GSSNode<T>> list = asList(this.gssNodes);
-		return concat(list.stream().filter(Objects::nonNull).collect(toList()), super.map.values());
+	void reset(Input input);
+
+	Iterable<GSSNode<T>> getNodes();
+
+	int size();
+	
+	void get(int i, GSSNodeData<Object> data, GSSNodeCreator<T> creator);
+
+	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<Object> data);
+
+	void put(int i, GSSNode<T> gssNode);
+
+	static <T> GSSNodeLookup<T> getNodeLookup() {
+		Configuration config = Configuration.load();
+		if (config.getGSSLookupImpl() == Configuration.LookupImpl.HASH_MAP) {
+			if (config.getHashmapImpl() == Configuration.HashMapImpl.JAVA)
+				return new JavaHashMapNodeLookup<>();
+			else if (config.getHashmapImpl() == Configuration.HashMapImpl.INT_OPEN_ADDRESSING)
+				return new IntOpenAddressingMap<>();
+		}
+		throw new RuntimeException("Cannot create GSS node lookup");
 	}
 
-	@Override
-	public int size() {
-		return size;
-	}
-
-	@Override
-	public void put(int i, GSSNode<T> gssNode) {
-		gssNodes[i] = gssNode;
-		size++;
-	}
-
-	@Override
-	public void get(int i, GSSNodeCreator<T> creator) {
-		gssNodes[i] = creator.create(gssNodes[i]);
-	}
-
-	@Override
-	public GSSNode<T> get(int i) {
-		return gssNodes[i];
-	}
-
-	@Override
-	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
-		GSSNode<T> node = gssNodes[i];
-		if (node == null) {
-			node = new GSSNode<>(slot, i, ops);
-			gssNodes[i] = node;
-			return node;
-		} 
-		return node;
+	@FunctionalInterface
+	interface GSSNodeCreator<T> {
+		GSSNode<T> create(GSSNode<T> node);
 	}
 }

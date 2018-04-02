@@ -61,7 +61,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input0, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult0(graph), result);
     }
 
@@ -70,7 +70,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -79,7 +79,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input2, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult2(graph), result);
     }
 
@@ -88,7 +88,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input3, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult3(graph), result);
     }
 

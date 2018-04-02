@@ -30,9 +30,8 @@ package org.iguana.grammar.slot;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.result.ResultOps;
 
 import static iguana.utils.string.StringUtil.listToString;
 
@@ -40,8 +39,8 @@ public class CodeTransition<T> extends AbstractTransition<T> {
 	
 	private final Statement[] statements;
 
-	public CodeTransition(Statement[] statements, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+	public CodeTransition(Statement[] statements, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+		super(origin, dest);
 		this.statements = statements;
 	}
 	
@@ -51,9 +50,9 @@ public class CodeTransition<T> extends AbstractTransition<T> {
 	 * 
 	 */
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
-		runtime.evaluate(statements, env);
-		dest.execute(input, u, result, runtime.getEnvironment());
+	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
+		runtime.evaluate(statements, env, input);
+		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}
 
 	@Override

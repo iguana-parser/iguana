@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.parser.gss;
+package org.iguana.gss;
 
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
@@ -34,14 +34,14 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.result.ResultOps;
 
-public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
-	
+public class GSSEdge<T> {
+
 	private final BodyGrammarSlot<T> returnSlot;
 	private final T result;
 	private final GSSNode<T> destination;
 	private final Environment env;
 
-	public NewGSSEdgeImpl(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination, Environment env) {
+	GSSEdge(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination, Environment env) {
 		this.returnSlot = slot;
 		this.result = result;
 		this.destination = destination;
@@ -82,14 +82,22 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 	public int hashCode() {
 		return MurmurHash3.fn().apply(returnSlot, destination.getInputIndex(), destination.getGrammarSlot());
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("(%s, %s, %s)", returnSlot, result, destination);
 	}
 
-	@Override
-	public T addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops) {
+	/*
+	 *
+	 * Does the following:
+	 * (1) checks conditions associated with the return slot
+	 * (2) checks whether the descriptor to be created has been already created (and scheduled) before
+	 * (2.1) if yes, returns null
+	 * (2.2) if no, creates one and returns it
+	 *
+	 */
+	T addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops, ParserRuntime<T> runtime) {
 		int inputIndex = ops.getRightIndex(result);
 
 		BodyGrammarSlot<T> returnSlot = getReturnSlot();
@@ -98,15 +106,16 @@ public class NewGSSEdgeImpl<T> implements GSSEdge<T> {
 		Environment env = this.env;
 
 		if (returnSlot.requiresBinding())
-			env = returnSlot.doBinding(result, env);
+			env = returnSlot.doBinding(result, env, runtime);
 
-		returnSlot.getRuntime().setEnvironment(env);
+		runtime.setEnvironment(env);
 
-		if (returnSlot.getConditions().execute(input, source, inputIndex, returnSlot.getRuntime().getEvaluatorContext()))
+		if (returnSlot.getConditions().execute(input, source, inputIndex, runtime.getEvaluatorContext(), runtime))
 			return null;
 
-		env = returnSlot.getRuntime().getEnvironment();
+		env = runtime.getEnvironment();
 
-		return returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env);
+		return returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env, runtime);
 	}
+
 }

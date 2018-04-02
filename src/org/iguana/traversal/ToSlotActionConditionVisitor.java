@@ -35,7 +35,7 @@ import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.condition.SlotAction;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			
 			@Override
 			public boolean execute(Input input, GSSNode gssNode, int inputIndex, IEvaluatorContext ctx) {
-				Object value = condition.getExpression().interpret(ctx);
+				Object value = condition.getExpression().interpret(ctx, input);
 				if (!(value instanceof Boolean)) 
 					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
 				return (!(Boolean) value);
@@ -78,7 +78,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
 	@Override
 	public SlotAction visit(PositionalCondition condition) {
-		return cachePositional.computeIfAbsent(condition, c -> create(c));
+		return cachePositional.computeIfAbsent(condition, ToSlotActionConditionVisitor::create);
 	}
 	
 	private static SlotAction create(PositionalCondition condition) {

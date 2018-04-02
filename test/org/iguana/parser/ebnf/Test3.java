@@ -56,14 +56,14 @@ public class Test3 {
     public void testParser0() {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input0, grammar, S);
-        GrammarGraph graph = GrammarGraph.from(grammar, input0, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult0(graph), result);
     }
 
     @Test
     public void testParser1() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);

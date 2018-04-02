@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
@@ -67,11 +68,11 @@ public class VariableDeclaration extends AbstractAST {
 	}
 
 	@Override
-	public Object interpret(IEvaluatorContext ctx) {
+	public Object interpret(IEvaluatorContext ctx, Input input) {
 		Object value = defaultValue;
 		
 		if (expression != null)
-			value = expression.interpret(ctx);
+			value = expression.interpret(ctx, input);
 		
 		if (i != -1)
 			ctx.declareVariable(value);

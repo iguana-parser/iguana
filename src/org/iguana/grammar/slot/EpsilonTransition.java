@@ -34,9 +34,8 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.result.ResultOps;
 import org.iguana.util.Tuple;
 
 public class EpsilonTransition<T> extends AbstractTransition<T> {
@@ -45,19 +44,19 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
     private final String label;
     private final Conditions conditions;
 
-	public EpsilonTransition(Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		this(Type.DUMMY, conditions, origin, dest, runtime, ops);
+	public EpsilonTransition(Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+		this(Type.DUMMY, conditions, origin, dest);
 	}
 
-	private EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+	private EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+		super(origin, dest);
 		this.type = type;
         this.label = null;
         this.conditions = conditions;
     }
 
-	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, ParserRuntime<T> runtime, ResultOps<T> ops) {
-		super(origin, dest, runtime, ops);
+	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+		super(origin, dest);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
 		
@@ -86,16 +85,16 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env) {
+	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
 
-        int i = ops.getRightIndex(result, u);
+        int i = runtime.getResultOps().getRightIndex(result, u);
 
 		runtime.setEnvironment(env);
 		
 		switch(type) {
 		
             case DUMMY:
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -103,14 +102,14 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
                 break;
 
             case OPEN:
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 runtime.getEvaluatorContext().pushEnvironment();
                 break;
 
             case CLOSE:
                 runtime.getEvaluatorContext().popEnvironment();
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -118,7 +117,7 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
                 runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
                 runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
 
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -135,16 +134,16 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
 
                 runtime.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
 
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
             }
 		
-		dest.execute(input, u, result, runtime.getEnvironment());
+		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}
 
 	public enum Type {
-		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL;
+		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL
 	}
 
 }

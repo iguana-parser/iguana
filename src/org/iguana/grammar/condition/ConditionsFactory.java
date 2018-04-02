@@ -31,7 +31,8 @@ import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.ParserRuntime;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
 
 import java.util.ArrayList;
@@ -45,12 +46,12 @@ import static iguana.utils.string.StringUtil.listToString;
 public class ConditionsFactory {
 	
 	public static Conditions DEFAULT = new Conditions() {
-		
+
 		@Override
-		public boolean execute(Input input, GSSNode u, int i) {
+		public <T> boolean execute(Input input, GSSNode<T> u, int i, ParserRuntime<T> runtime) {
 			return false;
 		}
-		
+
 		@Override
 		public String toString() {
 			return "";
@@ -76,16 +77,16 @@ public class ConditionsFactory {
 			return new Conditions() {
 				
 				@Override
-				public <T> boolean execute(Input input, GSSNode<T> u, int i) {
-					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(input));
+				public <T> boolean execute(Input input, GSSNode<T> u, int i,  ParserRuntime<T> runtime) {
+					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
 				}
 				
 				@Override
-				public <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx) {
-					for (SlotAction c : actions) {
+				public <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, ParserRuntime<T> runtime) {
+					for (SlotAction<T> c : actions) {
 					    if (c.execute(input, u, i, ctx)) {
 //			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
-                            u.getGrammarSlot().getRuntime().recordParseError(input, i, u.getGrammarSlot(), u);
+                            runtime.recordParseError(input, i, u.getGrammarSlot(), u);
 			                return true;
 			            }
 			        }
@@ -103,11 +104,10 @@ public class ConditionsFactory {
 		return new Conditions() {
 			
 			@Override
-			public <T> boolean execute(Input input, GSSNode<T> u, int i) {
+			public <T> boolean execute(Input input, GSSNode<T> u, int i, ParserRuntime<T> runtime) {
 		        for (SlotAction c : actions) {
 		            if (c.execute(input, u, i)) {
-//		                log.trace("Condition %s executed", c);
-                        u.getGrammarSlot().getRuntime().recordParseError(input, i, u.getGrammarSlot(), u);
+                        runtime.recordParseError(input, i, u.getGrammarSlot(), u);
 		                return true;
 		            }
 		        }

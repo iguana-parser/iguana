@@ -6,13 +6,12 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 
@@ -26,13 +25,13 @@ public interface ParserRuntime<T> {
 
     void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u);
 
-    Object evaluate(Statement[] statements, Environment env);
+    Object evaluate(Statement[] statements, Environment env, Input input);
 
-    Object evaluate(DataDependentCondition condition, Environment env);
+    Object evaluate(DataDependentCondition condition, Environment env, Input input);
 
-    Object evaluate(Expression expression, Environment env);
+    Object evaluate(Expression expression, Environment env, Input input);
 
-    Object[] evaluate(Expression[] arguments, Environment env);
+    Object[] evaluate(Expression[] arguments, Environment env, Input input);
 
     IEvaluatorContext getEvaluatorContext();
 
@@ -42,8 +41,6 @@ public interface ParserRuntime<T> {
 
     Environment getEmptyEnvironment();
 
-    GrammarGraph getGrammarGraph();
-
     ParseError getParseError();
 
     ParseStatistics getParseStatistics(Timer timer);
@@ -51,4 +48,6 @@ public interface ParserRuntime<T> {
     Configuration getConfiguration();
 
     int getDescriptorPoolSize();
+
+    ResultOps<T> getResultOps();
 }

@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.parser.gss;
+package org.iguana.gss;
 
 import iguana.utils.collections.Keys;
 import iguana.utils.collections.key.Key;

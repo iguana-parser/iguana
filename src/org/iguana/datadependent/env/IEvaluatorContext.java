@@ -27,11 +27,7 @@
 
 package org.iguana.datadependent.env;
 
-import iguana.utils.input.Input;
-
 public interface IEvaluatorContext {
-	
-	Input getInput();
 	
 	Environment getEnvironment();
 	

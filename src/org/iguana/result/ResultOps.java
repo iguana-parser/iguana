@@ -3,7 +3,7 @@ package org.iguana.result;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 public interface ResultOps<T> {
     T dummy();

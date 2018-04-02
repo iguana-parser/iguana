@@ -6,12 +6,12 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.ParserLogger;
@@ -42,16 +42,16 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     private final Deque<Descriptor<T>> descriptorsStack;
 
-    private final GrammarGraph<T> grammarGraph;
-
     private final IEvaluatorContext ctx;
 
     private final Configuration config;
 
     private final ParserLogger logger = ParserLogger.getInstance();
 
-    public ParserRuntimeImpl(GrammarGraph<T> grammarGraph, Configuration config, IEvaluatorContext ctx) {
-        this.grammarGraph = grammarGraph;
+    private ResultOps<T> resultOps;
+
+    ParserRuntimeImpl(Configuration config, IEvaluatorContext ctx, ResultOps<T> resultOps) {
+        this.resultOps = resultOps;
         this.descriptorsStack = new ArrayDeque<>(512);
         this.descriptorPool = new ArrayDeque<>(512);
         this.ctx = ctx;
@@ -122,19 +122,14 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     }
 
     @Override
-    public GrammarGraph<T> getGrammarGraph() {
-        return grammarGraph;
-    }
-
-    @Override
-    public Object evaluate(Statement[] statements, Environment env) {
+    public Object evaluate(Statement[] statements, Environment env, Input input) {
         assert statements.length > 1;
 
         ctx.setEnvironment(env);
 
         int i = 0;
         while (i < statements.length) {
-            statements[i].interpret(ctx);
+            statements[i].interpret(ctx, input);
             i++;
         }
 
@@ -142,19 +137,19 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     }
 
     @Override
-    public Object evaluate(DataDependentCondition condition, Environment env) {
+    public Object evaluate(DataDependentCondition condition, Environment env, Input input) {
         ctx.setEnvironment(env);
-        return condition.getExpression().interpret(ctx);
+        return condition.getExpression().interpret(ctx, input);
     }
 
     @Override
-    public Object evaluate(Expression expression, Environment env) {
+    public Object evaluate(Expression expression, Environment env, Input input) {
         ctx.setEnvironment(env);
-        return expression.interpret(ctx);
+        return expression.interpret(ctx, input);
     }
 
     @Override
-    public Object[] evaluate(Expression[] arguments, Environment env) {
+    public Object[] evaluate(Expression[] arguments, Environment env, Input input) {
         if (arguments == null) return null;
 
         ctx.setEnvironment(env);
@@ -163,7 +158,7 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
         int i = 0;
         while (i < arguments.length) {
-            values[i] = arguments[i].interpret(ctx);
+            values[i] = arguments[i].interpret(ctx, input);
             i++;
         }
 
@@ -207,6 +202,11 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     @Override
     public int getDescriptorPoolSize() {
         return descriptorPool.size();
+    }
+
+    @Override
+    public ResultOps<T> getResultOps() {
+        return resultOps;
     }
 
 }

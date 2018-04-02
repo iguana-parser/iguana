@@ -1,13 +1,11 @@
 package org.iguana.datadependent.env.array;
 
-import iguana.utils.input.Input;
 import org.iguana.datadependent.env.AbstractEvaluatorContext;
 import org.iguana.datadependent.env.Environment;
 
 public class ArrayEvaluatorContext extends AbstractEvaluatorContext {
 
-	public ArrayEvaluatorContext(Input input) {
-		super(input);
+	public ArrayEvaluatorContext() {
 		setEnvironment(ArrayEnvironment.EMPTY);
 	}
 

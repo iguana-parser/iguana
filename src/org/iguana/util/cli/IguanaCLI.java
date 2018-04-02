@@ -113,7 +113,7 @@ public class IguanaCLI {
                     String contentPath = values[0];
                     String outputFile = values[1];
 
-                    NonterminalNode sppf = SPPFJsonSerializer.deserialize(new FileInputStream(contentPath), GrammarGraph.from(grammar, input, new ParserResultOps()));
+                    NonterminalNode sppf = SPPFJsonSerializer.deserialize(new FileInputStream(contentPath), GrammarGraph.from(grammar));
                     SPPFToDot toDot = new SPPFToDot(input);
                     toDot.visit(sppf);
                     GraphVizUtil.generateGraph(toDot.getString(), outputFile);

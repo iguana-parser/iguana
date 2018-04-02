@@ -36,7 +36,6 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.result.ParserResultOps;
 import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
@@ -74,7 +73,7 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("+a^a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT, new ParserResultOps());
+         GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
 
          ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 

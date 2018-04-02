@@ -97,7 +97,7 @@ public class LayoutTest2 {
 		Input input = Input.fromString("a c");
         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult(graph, input), result);
     }
 

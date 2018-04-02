@@ -29,7 +29,7 @@ package org.iguana.grammar.condition;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 @FunctionalInterface
 public interface SlotAction<T> {

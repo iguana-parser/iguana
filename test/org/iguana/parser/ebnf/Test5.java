@@ -56,7 +56,7 @@ public class Test5 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
         assertEquals(getParseResult1(graph), result);
     }
 

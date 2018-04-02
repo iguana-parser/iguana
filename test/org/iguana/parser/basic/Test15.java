@@ -101,7 +101,7 @@ public class Test15 {
     @Test
     public void testParser() {
         ParseResult result = Iguana.parse(input, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input, new ParserResultOps());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult(graph), result);
     }
 	

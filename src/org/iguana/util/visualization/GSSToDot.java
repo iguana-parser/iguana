@@ -27,8 +27,8 @@
 
 package org.iguana.util.visualization;
 
-import org.iguana.parser.gss.GSSEdge;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
 
 import static iguana.utils.visualization.GraphVizUtil.GSS_EDGE;
 import static iguana.utils.visualization.GraphVizUtil.GSS_NODE;

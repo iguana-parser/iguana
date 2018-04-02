@@ -7,7 +7,6 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.iggy.IggyParser;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.result.ParserResultOps;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.SPPFToParseTree;
@@ -207,7 +206,7 @@ public class TestRunner {
             String sppfPath = testPath + "/sppf" + i + ".json";
             NonterminalNode expectedSPPFNode;
             try {
-                GrammarGraph grammarGraph = GrammarGraph.from(grammar, input, new ParserResultOps());
+                GrammarGraph grammarGraph = GrammarGraph.from(grammar);
                 expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), grammarGraph);
             } catch (IOException e) {
                 error("Cannot deserialize SPPF");
