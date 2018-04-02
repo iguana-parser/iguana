@@ -94,8 +94,18 @@ public class ArrayEnvironment implements Environment {
 			System.arraycopy(this.values, 0, values, 0, length);
 		
 		values[length] = value;
+
+		int valueHashCode = hashCode;
+		if (value instanceof Object[]) {
+			for (int i = 0; i < ((Object[]) value).length; i++) {
+				Object element = ((Object[]) value)[i];
+				valueHashCode = 31 * valueHashCode + element.hashCode();
+			}
+		} else {
+			valueHashCode = 31 * valueHashCode + value.hashCode();
+		}
 		
-		return new ArrayEnvironment(values, hashCode + 31 * value.hashCode());
+		return new ArrayEnvironment(values, valueHashCode);
 	}
 
 	@Override

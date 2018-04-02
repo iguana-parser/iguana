@@ -89,7 +89,7 @@ public class IguanaRunner {
 			}
 
 			System.out.println("Running " + file.getPath());
-			System.out.printf("%-10s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "memory");
+			System.out.printf("%-10s%20s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "ambiguities", "memory");
 			for (int i = 0; i < runCount; i++) {
 				try {
 					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
@@ -97,7 +97,7 @@ public class IguanaRunner {
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input, key -> new ArrayList<>()).add(statistics);
-						System.out.printf("%-10d%20d%20d%20d%20d%20d%n", i + 1, input.length(), statistics.getNanoTime() / 1000_000, statistics.getUserTime() / 1000_000, statistics.getDescriptorsCount(), statistics.getMemoryUsed());
+						System.out.printf("%-10d%20d%20d%20d%20d%20d%20d%n", i + 1, input.length(), statistics.getNanoTime() / 1000_000, statistics.getUserTime() / 1000_000, statistics.getDescriptorsCount(), statistics.getAmbiguousNodesCount(), statistics.getMemoryUsed());
 					} else {
 						System.out.printf("%-10d%20s%n", i + 1, result.asParseError());
 					}
