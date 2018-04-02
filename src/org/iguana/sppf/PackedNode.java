@@ -57,7 +57,7 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
         this.rightChild = rightChild;
     }
 
-    public int getPivot() {
+    private int getPivot() {
         return leftChild.getRightExtent();
     }
 
@@ -85,11 +85,11 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
         return visitAction.visit(this);
     }
 
-    public NonPackedNode getLeftChild() {
+    NonPackedNode getLeftChild() {
         return leftChild;
     }
 
-    public NonPackedNode getRightChild() {
+    NonPackedNode getRightChild() {
         return rightChild;
     }
 
