@@ -50,8 +50,8 @@ public abstract class AbstractGrammarSlot<T> implements GrammarSlot<T> {
 	}
 
 	@Override
-	public boolean addTransition(Transition<T> transition) {
-		return transitions.add(transition);
+	public void addTransition(Transition<T> transition) {
+		transitions.add(transition);
 	}
 
 	@Override

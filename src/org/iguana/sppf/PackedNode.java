@@ -31,6 +31,7 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,13 +39,13 @@ import java.util.List;
  */
 public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
 
-    private final BodyGrammarSlot slot;
+    private final BodyGrammarSlot<NonPackedNode> slot;
 
     private NonPackedNode leftChild;
 
     private NonPackedNode rightChild;
 
-    public PackedNode(BodyGrammarSlot slot) {
+    public PackedNode(BodyGrammarSlot<NonPackedNode> slot) {
         this.slot = slot;
     }
 
@@ -61,7 +62,7 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
     }
 
     @Override
-    public BodyGrammarSlot getGrammarSlot() {
+    public BodyGrammarSlot<NonPackedNode> getGrammarSlot() {
         return slot;
     }
 
@@ -110,7 +111,7 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
     @Override
     public List<NonPackedNode> getChildren() {
         if (rightChild == null)
-            return Arrays.asList(leftChild);
+            return Collections.singletonList(leftChild);
         else
             return Arrays.asList(leftChild, rightChild);
     }

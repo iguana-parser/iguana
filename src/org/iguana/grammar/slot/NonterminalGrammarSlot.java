@@ -122,8 +122,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	}
 	
 	public void create(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> u, T node) {
-
-        int i = ops.getRightIndex(node);
+        int i = ops.getRightIndex(node, u);
 
 		GSSNode<T> gssNode = nodeLookup.get(i);
 
@@ -136,7 +135,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				for (int slotIndex = 0; slotIndex < firstSlots.size(); slotIndex++) {
 					BodyGrammarSlot<T> slot = firstSlots.get(slotIndex);
 					if (!slot.getConditions().execute(input, gssNode, i))
-						runtime.scheduleDescriptor(slot, gssNode, ops.dummy(i));
+						runtime.scheduleDescriptor(slot, gssNode, ops.dummy());
 				}
 			}
 		} else {
@@ -152,7 +151,12 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return true;
 	}
 
-	public GSSNode<T> getGSSNode(int i) {
+    @Override
+    public int getPosition() {
+        throw new UnsupportedOperationException();
+    }
+
+    public GSSNode<T> getGSSNode(int i) {
 		return nodeLookup.get(this, i);
 	}
 	
@@ -186,7 +190,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				if (firstSlots != null)
 					for (BodyGrammarSlot<T> slot : firstSlots) {
 						if (!slot.getConditions().execute(input, gssNode, i))
-							runtime.scheduleDescriptor(slot, gssNode, ops.dummy(i));
+							runtime.scheduleDescriptor(slot, gssNode, ops.dummy());
 					}
 			} else {
 				ParserLogger.getInstance().log("GSSNode found: %s", gssNode);
@@ -224,7 +228,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
 
 					if (!s.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext()))
-						runtime.scheduleDescriptor(s, gssNode, ops.dummy(i), runtime.getEnvironment());
+						runtime.scheduleDescriptor(s, gssNode, ops.dummy(), runtime.getEnvironment());
 				}
 				
 			} else {

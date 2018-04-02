@@ -39,45 +39,39 @@ import java.util.List;
  */
 public class DummyNode extends NonPackedNode {
 
-	private int rightExtent;
-
-	public DummyNode(int rightExtent) {
-		this.rightExtent = rightExtent;
-	}
-
 	@Override
 	public PackedNode getChildAt(int index) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<PackedNode> getChildren() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public int childrenCount() {
-		return 0;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public DummySlot getGrammarSlot() {
-		return DummySlot.getInstance();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public int getLeftExtent() {
-		return 0;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public int getRightExtent() {
-		return rightExtent;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public <R> R accept(SPPFVisitor<R> visitAction) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

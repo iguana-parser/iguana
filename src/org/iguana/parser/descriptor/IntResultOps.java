@@ -3,6 +3,7 @@ package org.iguana.parser.descriptor;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.parser.gss.GSSNode;
 import org.iguana.util.ParserLogger;
 
 public class IntResultOps implements ResultOps<Integer> {
@@ -10,8 +11,8 @@ public class IntResultOps implements ResultOps<Integer> {
     private ParserLogger logger = ParserLogger.getInstance();
 
     @Override
-    public Integer dummy(int index) {
-        return index;
+    public Integer dummy() {
+        return -1;
     }
 
     @Override
@@ -35,12 +36,12 @@ public class IntResultOps implements ResultOps<Integer> {
     }
 
     @Override
-    public int getLeftIndex(Integer result) {
+    public int getRightIndex(Integer result) {
         return result;
     }
 
     @Override
-    public int getRightIndex(Integer result) {
+    public int getRightIndex(Integer result, GSSNode<Integer> gssNode) {
         return result;
     }
 

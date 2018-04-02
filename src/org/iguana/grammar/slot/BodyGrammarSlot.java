@@ -34,6 +34,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
+import org.iguana.grammar.symbol.Rule;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.parser.descriptor.ResultOps;
 import org.iguana.parser.gss.GSSNode;
@@ -85,11 +86,6 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 	@Override
 	public String toString() {
 		return position.toString();
-	}
-	
-	@Override
-	public boolean isFirst() {
-		return position.isFirst();
 	}
 	
 	public void setFollowTest(FollowTest followTest) {
@@ -224,7 +220,11 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return env;
 	}
 
-	public Position getPosition() {
-		return position;
+	public int getPosition() {
+		return position.getPosition();
+	}
+
+	public Rule getRule() {
+		return position.getRule();
 	}
 }

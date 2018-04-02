@@ -44,19 +44,26 @@ import org.iguana.parser.ParserRuntime;
  */
 public interface GrammarSlot<T> {
 
-	/*
-	 * Corresponds to a grammar position A ::= B . \alpha
-	 */
-	default boolean isFirst() { return false; }
-	
-	default boolean isEnd() { return false; }
-
 	void reset(Input input);
 	
-	boolean addTransition(Transition<T> transition);
+	void addTransition(Transition<T> transition);
 	
 	Iterable<Transition<T>> getTransitions();
 
     ParserRuntime getRuntime();
+
+    int getPosition();
+
+	/*
+	 * Corresponds to a grammar position A ::= B . \alpha
+	 */
+	default boolean isFirst() { return getPosition() == 1; }
+
+	/*
+	 * Corresponds to a grammar position A ::= . \alpha
+	 */
+	default boolean isStart() { return getPosition() == 0; }
+
+	default boolean isEnd() { return false; }
 
 }
