@@ -34,9 +34,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author Ali Afroozeh
- */
 public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
 
     private final BodyGrammarSlot<NonPackedNode> slot;
@@ -67,7 +64,8 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
     }
 
     @Override
-    public int getLeftExtent() { return leftChild.getLeftExtent();
+    public int getLeftExtent() {
+        return leftChild.getLeftExtent();
     }
 
     @Override
@@ -114,5 +112,14 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
             return Collections.singletonList(leftChild);
         else
             return Arrays.asList(leftChild, rightChild);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof PackedNode)) return false;
+
+        PackedNode other = (PackedNode) obj;
+        return slot == other.slot && getPivot() == other.getPivot();
     }
 }

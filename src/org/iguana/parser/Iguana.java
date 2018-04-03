@@ -111,11 +111,11 @@ public class Iguana {
     }
 
     public static <T> ParseResult<T> parse(Input input, GrammarGraph<T> grammarGraph, Nonterminal nonterminal, Configuration config, Map<String, ?> map, boolean global, ResultOps<T> resultOps) {
-        IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config);
-
-        ParserRuntime<T> runtime = new ParserRuntimeImpl<>(config, ctx, resultOps);
+        ParserRuntime<T> runtime = new ParserRuntimeImpl<>(config, resultOps);
 
         grammarGraph.reset(input);
+
+        IEvaluatorContext ctx = runtime.getEvaluatorContext();
 
         if (global)
             map.forEach(ctx::declareGlobalVariable);

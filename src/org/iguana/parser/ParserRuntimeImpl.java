@@ -5,6 +5,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
@@ -50,11 +51,11 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     private ResultOps<T> resultOps;
 
-    ParserRuntimeImpl(Configuration config, IEvaluatorContext ctx, ResultOps<T> resultOps) {
+    public ParserRuntimeImpl(Configuration config, ResultOps<T> resultOps) {
         this.resultOps = resultOps;
         this.descriptorsStack = new ArrayDeque<>(512);
         this.descriptorPool = new ArrayDeque<>(512);
-        this.ctx = ctx;
+        this.ctx = GLLEvaluator.getEvaluatorContext(config);
         this.config = config;
     }
 
