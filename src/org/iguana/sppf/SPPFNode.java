@@ -32,11 +32,6 @@ import org.iguana.traversal.SPPFVisitor;
 
 import java.util.List;
 
-/**
- * 
- * @author Ali Afroozeh
- * 
- */
 public interface SPPFNode<T extends GrammarSlot, U extends SPPFNode<?, ?>> {
 	
 	U getChildAt(int index);

@@ -87,29 +87,34 @@ public class GSSNode<T> {
 		iterateOverPoppedElements(edge, destination, input, env, runtime);
 	}
 
-    public void pop(Input input, EndGrammarSlot<T> slot, T child, Object value, ParserRuntime<T> runtime) {
-		ParserLogger.getInstance().log("Pop %s, %d, %s, %s", this, inputIndex, child, value);
-        T node = add(slot, child, value, runtime.getResultOps());
-        if (node != null)
-        	iterateOverEdges(input, node, runtime.getResultOps(), runtime);
+    public boolean pop(Input input, EndGrammarSlot<T> slot, T child, ParserRuntime<T> runtime) {
+	    return pop(input, slot, child, null, runtime);
     }
 
-	private T add(EndGrammarSlot<T> slot, T result, Object value, ResultOps<T> ops) {
+    public boolean pop(Input input, EndGrammarSlot<T> slot, T child, Object value, ParserRuntime<T> runtime) {
+		ParserLogger.getInstance().log("Pop %s, %d, %s, %s", this, inputIndex, child, value);
+        T node = addPoppedElements(slot, child, value, runtime.getResultOps());
+        if (node != null)
+        	iterateOverEdges(input, node, runtime.getResultOps(), runtime);
+        return node != null;
+    }
+
+	private T addPoppedElements(EndGrammarSlot<T> slot, T child, Object value, ResultOps<T> ops) {
 		// No node added yet
 		if (firstPoppedElement == null) {
-			firstPoppedElement = ops.convert(null, result, slot, value);
+			firstPoppedElement = ops.convert(null, child, slot, value);
 			return firstPoppedElement;
 		} else {
-			int rightIndex = ops.getRightIndex(result);
+			int rightIndex = ops.getRightIndex(child);
 
 			// Only one node is added and there is an ambiguity
 			if (rightIndex == ops.getRightIndex(firstPoppedElement) && Objects.equals(value, ops.getValue(firstPoppedElement))) {
-				ops.convert(firstPoppedElement, result, slot, value);
+				ops.convert(firstPoppedElement, child, slot, value);
 				return null;
 			} else {
 				if (restPoppedElements == null) {
 					restPoppedElements = new ArrayList<>(4);
-					T poppedElement = ops.convert(null, result, slot, value);
+					T poppedElement = ops.convert(null, child, slot, value);
 					restPoppedElements.add(poppedElement);
 					return poppedElement;
 				}
@@ -117,14 +122,14 @@ public class GSSNode<T> {
 				for (int i = 0; i < restPoppedElements.size(); i++) {
 					T element = restPoppedElements.get(i);
 					if (rightIndex == ops.getRightIndex(element) && Objects.equals(value, ops.getValue(element))) {
-						ops.convert(element, result, slot, value);
+						ops.convert(element, child, slot, value);
 						return null;
 					}
 				}
 
-				T poppedElement = ops.convert(null, result, slot, value);
+				T poppedElement = ops.convert(null, child, slot, value);
 				restPoppedElements.add(poppedElement);
-				return null;
+				return poppedElement;
 			}
 		}
 	}
@@ -232,6 +237,12 @@ public class GSSNode<T> {
 	public int hashCode() {
 		return MurmurHash3.fn().apply(slot.hashCode(), getInputIndex(), data);
 	}
+
+	public T getPoppedElement(int index) {
+	    if (index == 0) return firstPoppedElement;
+	    if (restPoppedElements == null) return null;
+	    return restPoppedElements.get(index - 1);
+    }
 
 	public int getCountGSSEdges() {
 		int count = 0;

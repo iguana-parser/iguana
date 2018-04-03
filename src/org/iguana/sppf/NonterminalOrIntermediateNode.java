@@ -74,7 +74,7 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 	@Override
 	public List<PackedNode> getChildren() {
-		List<PackedNode> children = new ArrayList<>();
+		List<PackedNode> children = new ArrayList<>(childrenCount());
 		if (first != null) children.add(first);
 		if (rest != null) children.addAll(rest);
 		return children;

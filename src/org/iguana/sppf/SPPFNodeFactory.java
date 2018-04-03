@@ -28,36 +28,25 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 
 public class SPPFNodeFactory {
 
-    private GrammarGraph grammarGraph;
+    private GrammarGraph<NonPackedNode> grammarGraph;
 
-    public SPPFNodeFactory(GrammarGraph graph) {
+    public SPPFNodeFactory(GrammarGraph<NonPackedNode> graph) {
         this.grammarGraph = graph;
     }
 
 	public NonterminalNode createNonterminalNode(String head, String slot, NonPackedNode child) {
-		PackedNode packedNode = new PackedNode((BodyGrammarSlot) grammarGraph.getSlot(slot));
+		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(child);
-		NonterminalNode node = new NonterminalNode((NonterminalGrammarSlot) grammarGraph.getSlot(head));
+		NonterminalNode node = new NonterminalNode(grammarGraph.getNonterminalGrammarSlot(head));
 		node.addPackedNode(packedNode);
 		return node;
 	}
 
-	public NonterminalNode createNonterminalNode(String head, BodyGrammarSlot slot, NonPackedNode child, Object value) {
-		PackedNode packedNode = new PackedNode(slot);
-		packedNode.setLeftChild(child);
-		NonterminalNodeWithValue node = new NonterminalNodeWithValue((NonterminalGrammarSlot) grammarGraph.getSlot(head), value);
-		node.addPackedNode(packedNode);
-		return  node;
-	}
-
 	public IntermediateNode createIntermediateNode(String slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-		PackedNode packedNode = new PackedNode((BodyGrammarSlot) grammarGraph.getSlot(slot));
+		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(leftChild);
 		packedNode.setRightChild(rightChild);
 		IntermediateNode node = new IntermediateNode();
@@ -66,17 +55,17 @@ public class SPPFNodeFactory {
 	}
 	
 	public TerminalNode createTerminalNode(String slot, int leftExtent, int rightExtent) {
-		return new TerminalNode((TerminalGrammarSlot) grammarGraph.getSlot(slot), leftExtent, rightExtent);
+		return new TerminalNode(grammarGraph.getTerminalGrammarSlot(slot), leftExtent, rightExtent);
 	}
 
 	public PackedNode createPackedNode(String slot, NonPackedNode leftChild) {
-		PackedNode packedNode = new PackedNode((BodyGrammarSlot) grammarGraph.getSlot(slot));
+		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(leftChild);
 		return packedNode;
 	}
 
     public PackedNode createPackedNode(String slot, NonPackedNode leftChild, NonPackedNode rightChild) {
-    	PackedNode packedNode = new PackedNode((BodyGrammarSlot) grammarGraph.getSlot(slot));
+    	PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
     	packedNode.setLeftChild(leftChild);
     	packedNode.setRightChild(rightChild);
         return packedNode;

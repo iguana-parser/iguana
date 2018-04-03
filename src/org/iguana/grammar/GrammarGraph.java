@@ -139,7 +139,35 @@ public class GrammarGraph<T> implements Serializable {
         return nonterminalsMap.get(start);
     }
 
-    public GrammarSlot getSlot(String s) {
+    public NonterminalGrammarSlot<T> getNonterminalGrammarSlot(String s) {
+        GrammarSlot<T> slot = names.get(s);
+        if (!(slot instanceof NonterminalGrammarSlot<?>))
+            throw new RuntimeException(s + " does not represent a nonterminal grammar slot");
+        return (NonterminalGrammarSlot<T>) slot;
+    }
+
+    public TerminalGrammarSlot<T> getTerminalGrammarSlot(String s) {
+        GrammarSlot<T> slot = names.get(s);
+        if (!(slot instanceof TerminalGrammarSlot<?>))
+            throw new RuntimeException(s + " does not represent a terminal grammar slot");
+        return (TerminalGrammarSlot<T>) slot;
+    }
+
+    public BodyGrammarSlot<T> getBodyGrammarSlot(String s) {
+        GrammarSlot<T> slot = names.get(s);
+        if (!(slot instanceof BodyGrammarSlot<?>))
+            throw new RuntimeException(s + " does not represent a body grammar slot");
+        return (BodyGrammarSlot<T>) slot;
+    }
+
+    public EndGrammarSlot<T> getEndGrammarSlot(String s) {
+        GrammarSlot<T> slot = names.get(s);
+        if (!(slot instanceof BodyGrammarSlot<?>))
+            throw new RuntimeException(s + " does not represent an end grammar slot");
+        return (EndGrammarSlot<T>) slot;
+    }
+
+    public GrammarSlot<T> getSlot(String s) {
         return names.get(s);
     }
 

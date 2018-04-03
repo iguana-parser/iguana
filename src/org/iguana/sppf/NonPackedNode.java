@@ -47,4 +47,14 @@ public abstract class NonPackedNode implements SPPFNode<GrammarSlot, PackedNode>
         return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getRightExtent());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof NonPackedNode)) return false;
+        NonPackedNode other = (NonPackedNode) obj;
+
+        return getGrammarSlot() == other.getGrammarSlot() &&
+               getLeftExtent() == other.getLeftExtent() &&
+               getRightExtent() == other.getRightExtent();
+    }
 }
