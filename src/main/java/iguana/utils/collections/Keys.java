@@ -13,6 +13,8 @@ public class Keys {
         return from(MurmurHash3.f2(), a, b);
     }
 
+    public static Key from(int a) { return new IntKey1(a); }
+
     public static Key from(IntFunction2 f, int a, int b) {
         return new IntKey2(a, b, f.apply(a, b));
     }

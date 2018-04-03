@@ -27,8 +27,6 @@
 
 package iguana.utils.collections.key;
 
-import iguana.utils.function.IntFunctionAny;
-
 public class IntKey2 implements Key, Comparable<IntKey2> {
 
     private final int k1;
