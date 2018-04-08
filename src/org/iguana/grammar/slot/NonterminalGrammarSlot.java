@@ -131,8 +131,8 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		nodeLookup.reset(input);
 	}
 	
-	public void create(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> u, T node, Expression[] arguments, Environment env, ParserRuntime<T> runtime) {
-        int i = runtime.getResultOps().getRightIndex(node, u);
+	public void create(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, ParserRuntime<T> runtime) {
+        int i = runtime.getResultOps().isDummy(result) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(result);
 		
 		if (arguments == null) {
 			GSSNode<T> gssNode = nodeLookup.get(i);
@@ -152,7 +152,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 			} else {
 				ParserLogger.getInstance().log("GSSNode found: %s", gssNode);
 			}
-			gssNode.createGSSEdge(input, returnSlot, u, node, env, runtime); // Record environment on the edge
+			gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime); // Record environment on the edge
 			nodeLookup.put(i, gssNode);
 			return;
 		}
@@ -167,7 +167,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				ParserLogger.getInstance().gssNodeAdded(gssNode);
 				ParserLogger.getInstance().log("GSSNode created: %s(%s)", gssNode, data);
 				
-				gssNode.createGSSEdge(input, returnSlot, u, node, env, runtime);
+				gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime);
 
 				Environment newEnv;
 				
@@ -188,7 +188,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				}
 				
 			} else {
-				gssNode.createGSSEdge(input, returnSlot, u, node, env, runtime);
+				gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime);
 			}
 			return gssNode;
 		};

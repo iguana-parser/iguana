@@ -11,6 +11,6 @@ public interface ResultOps<T> {
     T merge(T current, T result1, T result2, BodyGrammarSlot<T> slot);
     T convert(T current, T result, EndGrammarSlot<T> slot, Object value);
     int getRightIndex(T result);
-    int getRightIndex(T result, GSSNode<T> gssNode);
     Object getValue(T result);
+    boolean isDummy(T result);
 }

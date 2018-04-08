@@ -31,9 +31,9 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParserRuntime;
 import org.iguana.result.ResultOps;
-import org.iguana.gss.GSSNode;
 
 public class TerminalTransition<T> extends AbstractTransition<T> {
 
@@ -62,7 +62,8 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
 		ResultOps<T> ops = runtime.getResultOps();
-        int i = ops.getRightIndex(node, u);
+
+        int i = ops.isDummy(node) ? u.getInputIndex() : ops.getRightIndex(node);
 
 		runtime.setEnvironment(env);
 		

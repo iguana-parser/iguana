@@ -50,7 +50,8 @@ public class EpsilonGrammarSlot<T> extends EndGrammarSlot<T> {
 	
 	@Override
 	public void execute(Input input, GSSNode<T> u, T result, Object value, ParserRuntime<T> runtime) {
-        int i = runtime.getResultOps().getRightIndex(result, u);
+        int i = runtime.getResultOps().isDummy(result) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(result);
+
 		if (getNonterminal().testFollow(input.charAt(i)))
             u.pop(input, this, epsilonSlot.getResult(input, i, runtime), value, runtime);
 	}

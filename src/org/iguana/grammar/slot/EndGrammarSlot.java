@@ -84,7 +84,9 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	
 	public void execute(Input input, GSSNode<T> u, T result, Object value, ParserRuntime<T> runtime) {
 		ResultOps<T> ops = runtime.getResultOps();
-		if (nonterminal.testFollow(input.charAt(ops.getRightIndex(result, u))))
+		int rightExtent = ops.isDummy(result) ? u.getInputIndex() : ops.getRightIndex(result);
+
+		if (nonterminal.testFollow(input.charAt(rightExtent)))
             u.pop(input, this, result, value, runtime);
 	}
 

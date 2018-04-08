@@ -3,7 +3,6 @@ package org.iguana.result;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.gss.GSSNode;
 import org.iguana.util.ParserLogger;
 
 public class RecognizerResultOps implements ResultOps<RecognizerResult> {
@@ -49,16 +48,12 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
     }
 
     @Override
-    public int getRightIndex(RecognizerResult result, GSSNode<RecognizerResult> gssNode) {
-        if (result == dummy) {
-            return gssNode.getInputIndex();
-        }
-
-        return result.getIndex();
+    public Object getValue(RecognizerResult result) {
+        return result.getValue();
     }
 
     @Override
-    public Object getValue(RecognizerResult result) {
-        return result.getValue();
+    public boolean isDummy(RecognizerResult result) {
+        return result == dummy;
     }
 }

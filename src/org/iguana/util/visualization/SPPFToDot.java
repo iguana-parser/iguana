@@ -134,13 +134,13 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		return null;
 	}
 	
-	protected void addEdgesToChildren(SPPFNode<?,?> node) {
-		for (SPPFNode<?,?> child : node.getChildren()) {
+	protected void addEdgesToChildren(SPPFNode node) {
+		for (SPPFNode child : node.getChildren()) {
 			addEdgeToChild(node, child);
 		}
 	}
 	
-	protected void addEdgeToChild(SPPFNode<?,?> parentNode, SPPFNode<?,?> childNode) {
+	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
 		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
 	}
 	
@@ -152,15 +152,15 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		return sb.toString();
 	}
 
-	public void visitChildren(SPPFNode<?, ?> node) {
-		for (SPPFNode<?,?> child : node.getChildren()) {
+	public void visitChildren(SPPFNode node) {
+		for (SPPFNode child : node.getChildren()) {
 			child.accept(this);
 		}
 	}
 
-	private static Map<SPPFNode<?, ?>, Integer> ids = new HashMap<>();
+	private static Map<SPPFNode, Integer> ids = new HashMap<>();
 
-	private static int getId(SPPFNode<?, ?> node) {
+	private static int getId(SPPFNode node) {
 		return ids.computeIfAbsent(node, k -> ids.size() + 1);
 	}
 
