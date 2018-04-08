@@ -63,10 +63,10 @@ Grammar.builder()
         	 }
          }
 
-         ParseResult result = Iguana.parse(input, grammar, start, Configuration.DEFAULT, inits, false);
+         ParseResult result = Iguana.parse(input, grammar, start, inits, false);
 
          Assert.assertTrue(result.isParseSuccess());
 
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
+         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }
 }

@@ -79,6 +79,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 				.setRightEnds(rule.getRightEnds())
 				.setLayout(rule.getLayout())
 				.setLayoutStrategy(rule.getLayoutStrategy())
+				.setLabel(rule.getLabel())
+				.setDefinition(rule.getDefinition())
 				.build();
 	}
 	

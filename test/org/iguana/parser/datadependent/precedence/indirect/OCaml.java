@@ -20,7 +20,7 @@ public class OCaml {
 	@Test
     public void test() throws FileNotFoundException {
 
-		Grammar grammar = Grammar.load(new File("/Users/afroozeh/JavaNat"));
+		Grammar grammar = Grammar.load(new File("/Users/afroozeh/Java"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
 		

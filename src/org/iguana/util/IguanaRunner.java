@@ -83,14 +83,14 @@ public class IguanaRunner {
 			GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
 
 			for (int i = 0; i < warmupCount; i++) {
-				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true, new ParserResultOps());
+				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new ParserResultOps());
 			}
 
 			System.out.println("Running " + file.getPath());
 			System.out.printf("%-10s%20s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "ambiguities", "memory");
 			for (int i = 0; i < runCount; i++) {
 				try {
-					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true, new ParserResultOps());
+					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new ParserResultOps());
 //					ParseResult<RecognizerResult> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
