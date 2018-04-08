@@ -87,7 +87,7 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
 	@Override
 	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
 
-        int i = runtime.getResultOps().getRightIndex(result, u);
+        int i = runtime.getResultOps().isDummy(result) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(result);
 
 		runtime.setEnvironment(env);
 		

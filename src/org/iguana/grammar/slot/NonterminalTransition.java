@@ -67,7 +67,7 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 	@Override
 	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
 
-        int i = runtime.getResultOps().getRightIndex(node, u);
+        int i = runtime.getResultOps().isDummy(node) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(node);
 
         if (dest.getLabel() != null) {
 			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);

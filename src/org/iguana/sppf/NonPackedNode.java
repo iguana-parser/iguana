@@ -27,20 +27,7 @@
 
 package org.iguana.sppf;
 
-import org.iguana.grammar.slot.GrammarSlot;
-
-
-/**
- *
- * A NonPackedNode is the abstract super class for nonterminal
- * and intermediate symbol nodes.
- *
- *
- * @author Ali Afroozeh
- *
- */
-
-public abstract class NonPackedNode implements SPPFNode<GrammarSlot, PackedNode> {
+public abstract class NonPackedNode implements SPPFNode {
 
     private final int rightExtent;
 

@@ -31,11 +31,6 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
 
-/**
- * @author Ali Afroozeh
- * 
- */
-// The label of SPPFNode is the same as the slot
 public class Descriptor<T> {
 	
 	// L
@@ -44,7 +39,7 @@ public class Descriptor<T> {
 	// (L1, i)
 	private GSSNode<T> gssNode;
 	
-	// (L, i, j)
+	// (L, i, j), The label of SPPFNode is the same as the slot
 	private T result;
 
 	private Environment env;
