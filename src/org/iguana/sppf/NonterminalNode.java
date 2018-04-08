@@ -30,16 +30,12 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-/**
- *
- * @author Ali Afroozeh
- *
- */
 public class NonterminalNode extends NonterminalOrIntermediateNode {
 
 	private NonterminalGrammarSlot slot;
 
-	public NonterminalNode(NonterminalGrammarSlot slot) {
+	public NonterminalNode(NonterminalGrammarSlot slot, int rightExtent) {
+		super(rightExtent);
 		this.slot = slot;
 	}
 

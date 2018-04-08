@@ -36,6 +36,10 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	protected PackedNode first;
 	private List<PackedNode> rest;
 
+	public NonterminalOrIntermediateNode(int rightExtent) {
+		super(rightExtent);
+	}
+
 	/*
 	 * returns true if the second packed node of this nonterminal node is added.
 	 *         This is useful for counting the number of ambiguous nodes.
@@ -58,11 +62,6 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	@Override
 	public int getLeftExtent() {
 		return first.getLeftExtent();
-	}
-
-	@Override
-	public int getRightExtent() {
-		return first.getRightExtent();
 	}
 
 	@Override

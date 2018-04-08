@@ -42,22 +42,16 @@ public class TerminalNode extends NonPackedNode {
 
 	private TerminalGrammarSlot slot;
 	private int leftExtent;
-	private int rightExtent;
 
 	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		super(rightExtent);
 		this.slot = slot;
 		this.leftExtent = leftExtent;
-		this.rightExtent = rightExtent;
 	}
 
 	@Override
 	public int getLeftExtent() {
 		return leftExtent;
-	}
-
-	@Override
-	public int getRightExtent() {
-		return rightExtent;
 	}
 
 	@Override

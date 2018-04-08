@@ -30,12 +30,11 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-/**
- *
- * @author Ali Afroozeh
- *
- */
 public class IntermediateNode extends NonterminalOrIntermediateNode {
+
+    public IntermediateNode(int rightExtent) {
+        super(rightExtent);
+    }
 
     @Override
     public <R> R accept(SPPFVisitor<R> visitAction) {
