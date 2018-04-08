@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static iguana.utils.string.StringUtil.listToString;
+import static java.lang.Integer.toUnsignedLong;
 
 public abstract class Expression extends AbstractAST {
 
@@ -283,6 +284,56 @@ public abstract class Expression extends AbstractAST {
         @Override
         public int hashCode() {
             return Objects.hash(this.elements, this.length);
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+    }
+
+    public static class IntTuple2 extends Expression {
+
+        private static final long serialVersionUID = 1L;
+        private final Integer element1;
+        private final Integer element2;
+
+        IntTuple2(Integer element1, Integer element2) {
+            this.element1 = element1;
+            this.element2 = element2;
+        }
+
+        public Integer getElement1() {
+            return element1;
+        }
+
+        public Integer getElement2() {
+            return element2;
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            int value1 = (java.lang.Integer) element1.interpret(ctx, input);
+            int value2 = (java.lang.Integer) element2.interpret(ctx, input);
+            return toUnsignedLong(value1) << 32 | toUnsignedLong(value2);
+        }
+
+        @Override
+        public java.lang.String toString() {
+            return "(" + element1 + ", " + element2 + ")";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof IntTuple2)) return false;
+            IntTuple2 other = (IntTuple2) obj;
+            return element1.equals(other.element1) && element2.equals(other.element2);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(element1, element2);
         }
 
         @Override
@@ -588,9 +639,9 @@ public abstract class Expression extends AbstractAST {
             if (!(obj instanceof OrIndent)) return false;
             OrIndent other = (OrIndent) obj;
             return this.index.equals(other.index) &&
-                   this.ind.equals(other.ind) &&
-                   this.first.equals(other.first) &&
-                   this.lExt.equals(other.lExt);
+                    this.ind.equals(other.ind) &&
+                    this.first.equals(other.first) &&
+                    this.lExt.equals(other.lExt);
         }
 
         @Override
@@ -671,8 +722,8 @@ public abstract class Expression extends AbstractAST {
             if (!(obj instanceof AndIndent)) return false;
             AndIndent other = (AndIndent) obj;
             return this.index.equals(other.index) &&
-                   this.first.equals(other.first) &&
-                   this.lExt.equals(other.lExt);
+                    this.first.equals(other.first) &&
+                    this.lExt.equals(other.lExt);
         }
 
         @Override
@@ -1480,8 +1531,8 @@ public abstract class Expression extends AbstractAST {
             if (!(obj instanceof IfThenElse)) return false;
             IfThenElse other = (IfThenElse) obj;
             return this.condition.equals(other.condition) &&
-                   this.thenPart.equals(other.thenPart) &&
-                   this.elsePart.equals(other.elsePart);
+                    this.thenPart.equals(other.thenPart) &&
+                    this.elsePart.equals(other.elsePart);
         }
 
         @Override

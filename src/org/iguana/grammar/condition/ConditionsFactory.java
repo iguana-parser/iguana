@@ -83,8 +83,9 @@ public class ConditionsFactory {
 				
 				@Override
 				public <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, ParserRuntime<T> runtime) {
-					for (SlotAction<T> c : actions) {
-					    if (c.execute(input, u, i, ctx)) {
+					for (int j = 0; j < actions.size(); j++) {
+						SlotAction<T> slotAction = actions.get(j);
+					    if (slotAction.execute(input, u, i, ctx)) {
 //			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
                             runtime.recordParseError(input, i, u.getGrammarSlot(), u);
 			                return true;
@@ -105,8 +106,9 @@ public class ConditionsFactory {
 			
 			@Override
 			public <T> boolean execute(Input input, GSSNode<T> u, int i, ParserRuntime<T> runtime) {
-		        for (SlotAction c : actions) {
-		            if (c.execute(input, u, i)) {
+				for (int j = 0; j < actions.size(); j++) {
+					SlotAction slotAction = actions.get(j);
+		            if (slotAction.execute(input, u, i)) {
                         runtime.recordParseError(input, i, u.getGrammarSlot(), u);
 		                return true;
 		            }

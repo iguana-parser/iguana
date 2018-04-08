@@ -38,6 +38,8 @@ import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.result.ParserResultOps;
+import org.iguana.result.RecognizerResult;
+import org.iguana.result.RecognizerResultOps;
 import org.iguana.sppf.NonPackedNode;
 
 import java.io.File;
@@ -79,11 +81,12 @@ public class IguanaRunner {
 				continue;
 			}
 
-//			GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, input, config, new RecognizerResultOps());
+//			GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, config);
 			GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
 
 			for (int i = 0; i < warmupCount; i++) {
 				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new ParserResultOps());
+//				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new RecognizerResultOps());
 			}
 
 			System.out.println("Running " + file.getPath());
@@ -91,7 +94,7 @@ public class IguanaRunner {
 			for (int i = 0; i < runCount; i++) {
 				try {
 					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new ParserResultOps());
-//					ParseResult<RecognizerResult> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.DEFAULT, Collections.emptyMap(), true);
+//					ParseResult<RecognizerResult> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new RecognizerResultOps());
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input, key -> new ArrayList<>()).add(statistics);

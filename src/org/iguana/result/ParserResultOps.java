@@ -15,7 +15,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     private ParserLogger logger = ParserLogger.getInstance();
 
-    private static final NonPackedNode dummyNode = new NonPackedNode() {
+    private static final NonPackedNode dummyNode = new NonPackedNode(-1) {
         @Override
         public PackedNode getChildAt(int index) {  throw new UnsupportedOperationException(); }
 
@@ -60,11 +60,13 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         packedNode.setLeftChild(result1);
         packedNode.setRightChild(result2);
 
+        int rightExtent = (result2 != null) ? result2.getRightExtent() : result1.getRightExtent();
+
         logger.packedNodeAdded();
         logger.log("Packed node added %s", packedNode);
 
         if (current == null) {
-            current = new IntermediateNode();
+            current = new IntermediateNode(rightExtent);
             ((IntermediateNode) current).addPackedNode(packedNode);
             logger.intermediateNodeAdded();
             logger.log("Intermediate node added %s", current);
@@ -89,9 +91,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
         if (current == null) {
             if (value == null)
-                current = new NonterminalNode(slot.getNonterminal());
+                current = new NonterminalNode(slot.getNonterminal(), result.getRightExtent());
             else
-                current = new NonterminalNodeWithValue(slot.getNonterminal(), value);
+                current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getRightExtent(), value);
 
             ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
             logger.nonterminalNodeAdded();

@@ -42,9 +42,20 @@ import org.iguana.grammar.slot.GrammarSlot;
 
 public abstract class NonPackedNode implements SPPFNode<GrammarSlot, PackedNode> {
 
+    private final int rightExtent;
+
+    public NonPackedNode(int rightExtent) {
+        this.rightExtent = rightExtent;
+    }
+
     @Override
     public String toString() {
         return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getRightExtent());
+    }
+
+    @Override
+    public int getRightExtent() {
+        return rightExtent;
     }
 
     @Override

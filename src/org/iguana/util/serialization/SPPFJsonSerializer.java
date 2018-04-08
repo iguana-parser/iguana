@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 
@@ -104,13 +102,13 @@ public class SPPFJsonSerializer {
 
                 switch (kind) {
                     case "NonterminalNode":
-                        sppfNode = new NonterminalNode(getGrammarSlot(child));
+                        sppfNode = new NonterminalNode(getGrammarSlot(child), rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         addChildren(child, childrenMap);
                         break;
 
                     case "IntermediateNode":
-                        sppfNode = new IntermediateNode();
+                        sppfNode = new IntermediateNode(rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         addChildren(child, childrenMap);
                         break;

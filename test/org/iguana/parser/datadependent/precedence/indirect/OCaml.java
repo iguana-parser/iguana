@@ -20,13 +20,13 @@ public class OCaml {
 	@Test
     public void test() throws FileNotFoundException {
 
-		Grammar grammar = Grammar.load(new File("/Users/afroozeh/Java"));
+		Grammar grammar = Grammar.load(new File("/Users/afroozeh/JavaNat"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
 		
 		DesugarPrecedenceAndAssociativity precedence = new DesugarPrecedenceAndAssociativity();
 		precedence.setOP2();
-		
+
 		grammar = precedence.transform(grammar);
 		// System.out.println(grammar.toString());
 		
