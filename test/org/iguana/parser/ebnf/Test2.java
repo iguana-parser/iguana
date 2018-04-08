@@ -10,12 +10,10 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
@@ -61,7 +59,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input0, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult0(graph), result);
     }
 
@@ -70,7 +68,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -79,7 +77,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult2(graph), result);
     }
 
@@ -88,7 +86,7 @@ public class Test2 {
         grammar = EBNFToBNF.convert(grammar);
         ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult3(graph), result);
     }
 

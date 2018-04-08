@@ -39,8 +39,6 @@ public class Configuration {
 
 	public static final int DEFAULT_LOOKAHEAD = 1;
 	
-	public static final Configuration DEFAULT = builder().build();
-	
 	private final LookupImpl gssLookupImpl;
 	
 	private final MatcherType matcherType;
@@ -59,8 +57,7 @@ public class Configuration {
             XMLConfigFileParser parser = XMLConfigFileParser.create("config.xml");
             configuration = parser.getConfiguration();
         } catch (Exception e) {
-            e.printStackTrace();
-            configuration = Configuration.DEFAULT;
+            throw new RuntimeException(e);
         }
         return configuration;
     }

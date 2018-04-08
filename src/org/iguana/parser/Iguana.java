@@ -30,7 +30,6 @@ package org.iguana.parser;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -70,7 +69,7 @@ public class Iguana {
     }
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol) {
-        return parse(input, grammar, startSymbol, Configuration.DEFAULT);
+        return parse(input, grammar, startSymbol, Configuration.load());
     }
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
@@ -80,6 +79,13 @@ public class Iguana {
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map) {
         return parse(input, grammar, startSymbol, config, map, true);
     }
+
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, ?> map, boolean global) {
+        Configuration config = Configuration.load();
+        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
+        return parse(input, grammarGraph, startSymbol, config, map, global, new ParserResultOps());
+    }
+
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
         GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
@@ -94,7 +100,7 @@ public class Iguana {
     }
 
     public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol) {
-        return recognize(input, grammar, startSymbol, Configuration.DEFAULT);
+        return recognize(input, grammar, startSymbol, Configuration.load());
     }
 
     public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {

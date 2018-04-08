@@ -921,17 +921,6 @@
     "leftExtent" : 0,
     "rightExtent" : 9,
     "children" : [
-      84,
-      58
-    ]
-  },
-  {
-    "id" : 92,
-    "kind" : "PackedNode",
-    "label" : "E ::= E * E .",
-    "leftExtent" : 0,
-    "rightExtent" : 9,
-    "children" : [
       93,
       21
     ]
@@ -1040,6 +1029,17 @@
     "children" : [
       84,
       50
+    ]
+  },
+  {
+    "id" : 92,
+    "kind" : "PackedNode",
+    "label" : "E ::= E * E .",
+    "leftExtent" : 0,
+    "rightExtent" : 9,
+    "children" : [
+      84,
+      58
     ]
   }
 ]

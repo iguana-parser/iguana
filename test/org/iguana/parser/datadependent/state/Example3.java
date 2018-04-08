@@ -5,13 +5,11 @@ import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,10 +68,10 @@ Grammar.builder()
         	 }
          }
          
-         ParseResult result = Iguana.parse(input, grammar, start, Configuration.DEFAULT, inits, false);
+         ParseResult result = Iguana.parse(input, grammar, start, inits, false);
 
          Assert.assertTrue(result.isParseSuccess());
 
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
+         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }
 }

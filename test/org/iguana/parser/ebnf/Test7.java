@@ -71,7 +71,7 @@ public class Test7 {
     public void testParse1() {
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -79,7 +79,7 @@ public class Test7 {
     public void testParse2() {
         ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult2(graph), result);
     }
 
@@ -87,7 +87,7 @@ public class Test7 {
     public void testParse3() {
         ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult3(graph), result);
     }
 
@@ -95,7 +95,7 @@ public class Test7 {
     public void testParse4() {
         ParseResult result = Iguana.parse(input4, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult4(graph), result);
     }
 
@@ -103,7 +103,7 @@ public class Test7 {
     public void testParse5() {
         ParseResult result = Iguana.parse(input5, grammar, S);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult5(graph), result);
     }
 

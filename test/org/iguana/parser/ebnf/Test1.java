@@ -14,7 +14,6 @@ import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
@@ -57,7 +56,7 @@ public class Test1 {
     public void testParser0() {
         ParseResult result = Iguana.parse(input0, grammar, A);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult0(graph), result);
     }
 
@@ -65,7 +64,7 @@ public class Test1 {
     public void testParser1() {
         ParseResult result = Iguana.parse(input1, grammar, A);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -73,7 +72,7 @@ public class Test1 {
     public void testParser2() {
         ParseResult result = Iguana.parse(input2, grammar, A);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult2(graph), result);
     }
 
@@ -81,7 +80,7 @@ public class Test1 {
     public void testParser3() {
         ParseResult result = Iguana.parse(input3, grammar, A);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult3(graph), result);
     }
 
@@ -89,7 +88,7 @@ public class Test1 {
     public void testParser4() {
         ParseResult result = Iguana.parse(input4, grammar, A);
         assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, Configuration.DEFAULT);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult4(graph), result);
     }
 
