@@ -32,7 +32,8 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ConditionsFactory {
 	public static Conditions DEFAULT = new Conditions() {
 
 		@Override
-		public <T> boolean execute(Input input, GSSNode<T> u, int i, ParserRuntime<T> runtime) {
+		public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, Runtime<T> runtime) {
 			return false;
 		}
 
@@ -75,16 +76,16 @@ public class ConditionsFactory {
 		
 		if (requiresEnvironment) {
 			return new Conditions() {
-				
+
 				@Override
-				public <T> boolean execute(Input input, GSSNode<T> u, int i,  ParserRuntime<T> runtime) {
+				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i,  Runtime<T> runtime) {
 					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
 				}
 				
 				@Override
-				public <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, ParserRuntime<T> runtime) {
+				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, Runtime<T> runtime) {
 					for (int j = 0; j < actions.size(); j++) {
-						SlotAction<T> slotAction = actions.get(j);
+						SlotAction slotAction = actions.get(j);
 					    if (slotAction.execute(input, u, i, ctx)) {
 //			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
                             runtime.recordParseError(input, i, u.getGrammarSlot(), u);
@@ -103,9 +104,9 @@ public class ConditionsFactory {
 		}
 		
 		return new Conditions() {
-			
+
 			@Override
-			public <T> boolean execute(Input input, GSSNode<T> u, int i, ParserRuntime<T> runtime) {
+			public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, Runtime<T> runtime) {
 				for (int j = 0; j < actions.size(); j++) {
 					SlotAction slotAction = actions.get(j);
 		            if (slotAction.execute(input, u, i)) {

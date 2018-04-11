@@ -78,7 +78,7 @@
 ////
 ////		NonterminalNodeVisitor.create(n -> {
 ////			if (n.getSlot().getNonterminal().getName().equals("Id")) {
-////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+////				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 ////				nodes.put(yield, n);
 ////			}
 ////		}).visit(result.asParseSuccess().getResult());
@@ -112,7 +112,7 @@
 ////
 ////		NonterminalNodeVisitor.create(n -> {
 ////			if (n.getSlot().getNonterminal().getName().equals("Id")) {
-////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+////				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 ////				nodes.put(yield, n);
 ////			}
 ////		}).visit(result.asParseSuccess().getResult());
@@ -146,7 +146,7 @@
 ////
 ////		NonterminalNodeVisitor.create(n -> {
 ////			if (n.getSlot().getNonterminal().getName().equals("Id")) {
-////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+////				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 ////				nodes.put(yield, n);
 ////			}
 ////		}).visit(result.asParseSuccess().getResult());
@@ -180,7 +180,7 @@
 ////
 ////		NonterminalNodeVisitor.create(n -> {
 ////			if (n.getSlot().getNonterminal().getName().equals("Id")) {
-////				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+////				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 ////				nodes.put(yield, n);
 ////			}
 ////		}).visit(result.asParseSuccess().getResult());

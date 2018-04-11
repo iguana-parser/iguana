@@ -41,13 +41,13 @@ import iguana.utils.input.Input;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot<T> {
+public interface GrammarSlot {
 
 	void reset(Input input);
 	
-	void addTransition(Transition<T> transition);
+	void addTransition(Transition transition);
 	
-	Iterable<Transition<T>> getTransitions();
+	Iterable<Transition> getTransitions();
 
     int getPosition();
 

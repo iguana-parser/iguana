@@ -31,16 +31,16 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.gss.GSSNodeData;
-import org.iguana.result.ResultOps;
+import org.iguana.result.Result;
 import org.iguana.util.Configuration;
 
-public interface GSSNodeLookup<T> {
+public interface GSSNodeLookup<T extends Result> {
 	
 	void get(int i, GSSNodeCreator<T> creator);
 
 	GSSNode<T> get(int i);
 	
-	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i);
+	GSSNode<T> get(NonterminalGrammarSlot slot, int i);
 	
 	void reset(Input input);
 
@@ -50,11 +50,11 @@ public interface GSSNodeLookup<T> {
 	
 	void get(int i, GSSNodeData<Object> data, GSSNodeCreator<T> creator);
 
-	GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<Object> data);
+	GSSNode<T> get(NonterminalGrammarSlot slot, int i, GSSNodeData<Object> data);
 
 	void put(int i, GSSNode<T> gssNode);
 
-	static <T> GSSNodeLookup<T> getNodeLookup() {
+	static <T extends Result> GSSNodeLookup<T> getNodeLookup() {
 		Configuration config = Configuration.load();
 		if (config.getGSSLookupImpl() == Configuration.LookupImpl.HASH_MAP) {
 			if (config.getHashmapImpl() == Configuration.HashMapImpl.JAVA)
@@ -66,7 +66,7 @@ public interface GSSNodeLookup<T> {
 	}
 
 	@FunctionalInterface
-	interface GSSNodeCreator<T> {
+	interface GSSNodeCreator<T extends Result> {
 		GSSNode<T> create(GSSNode<T> node);
 	}
 }

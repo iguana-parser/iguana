@@ -31,26 +31,22 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import static iguana.utils.string.StringUtil.listToString;
 
-public class CodeTransition<T> extends AbstractTransition<T> {
+public class CodeTransition extends AbstractTransition {
 	
 	private final Statement[] statements;
 
-	public CodeTransition(Statement[] statements, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+	public CodeTransition(Statement[] statements, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		this.statements = statements;
 	}
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
+
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 		runtime.evaluate(statements, env, input);
 		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}

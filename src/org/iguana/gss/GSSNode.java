@@ -35,15 +35,16 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.ParserLogger;
 
 import java.util.*;
 
-public class GSSNode<T> {
+public class GSSNode<T extends Result> {
 
-	private final NonterminalGrammarSlot<T> slot;
+	private final NonterminalGrammarSlot slot;
 
 	private final int inputIndex;
 
@@ -57,17 +58,17 @@ public class GSSNode<T> {
 
 	private final GSSNodeData<Object> data;
 
-	public GSSNode(NonterminalGrammarSlot<T> slot, int inputIndex) {
+	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
 		this(slot, inputIndex, null);
 	}
 
-	public GSSNode(NonterminalGrammarSlot<T> slot, int inputIndex, GSSNodeData<Object> data) {
+	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, GSSNodeData<Object> data) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.data = data;
 	}
 
-	public void createGSSEdge(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> destination, T w, Environment env, ParserRuntime<T> runtime) {
+	public void createGSSEdge(Input input, BodyGrammarSlot returnSlot, GSSNode<T> destination, T w, Environment env, Runtime<T> runtime) {
 		GSSEdge<T> edge = new GSSEdge<>(returnSlot, w, destination, env);
 		ParserLogger.getInstance().gssEdgeAdded(edge);
 
@@ -81,31 +82,31 @@ public class GSSNode<T> {
 		iterateOverPoppedElements(edge, destination, input, env, runtime);
 	}
 
-	public boolean pop(Input input, EndGrammarSlot<T> slot, T child, ParserRuntime<T> runtime) {
+	public boolean pop(Input input, EndGrammarSlot slot, T child, Runtime<T> runtime) {
 		return pop(input, slot, child, null, runtime);
 	}
 
-	public boolean pop(Input input, EndGrammarSlot<T> slot, T child, Object value, ParserRuntime<T> runtime) {
+	public boolean pop(Input input, EndGrammarSlot slot, T child, Object value, Runtime<T> runtime) {
 		ParserLogger.getInstance().log("Pop %s, %d, %s, %s", this, inputIndex, child, value);
 		T node = addPoppedElements(slot, child, value, runtime.getResultOps());
 		if (node != null)
-			iterateOverEdges(input, node, runtime.getResultOps(), runtime);
+			iterateOverEdges(input, node, runtime);
 		return node != null;
 	}
 
 	/**
 	 * Returns the newly created popped element, or null if the node already exists
 	 */
-	private T addPoppedElements(EndGrammarSlot<T> slot, T child, Object value, ResultOps<T> ops) {
+	private T addPoppedElements(EndGrammarSlot slot, T child, Object value, ResultOps<T> ops) {
 		// No node added yet
 		if (firstPoppedElement == null) {
 			firstPoppedElement = ops.convert(null, child, slot, value);
 			return firstPoppedElement;
 		} else {
-			int rightIndex = ops.getRightIndex(child);
+			int rightIndex = child.getIndex();
 
 			// Only one node is added and there is an ambiguity
-			if (rightIndex == ops.getRightIndex(firstPoppedElement) && Objects.equals(value, ops.getValue(firstPoppedElement))) {
+			if (rightIndex == firstPoppedElement.getIndex() && Objects.equals(value, firstPoppedElement.getValue())) {
 				ops.convert(firstPoppedElement, child, slot, value);
 				return null;
 			} else {
@@ -131,7 +132,7 @@ public class GSSNode<T> {
 		}
 	}
 
-	private void iterateOverPoppedElements(GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, ParserRuntime<T> runtime) {
+	private void iterateOverPoppedElements(GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, Runtime<T> runtime) {
 		if (firstPoppedElement != null)
 			processPoppedElement(firstPoppedElement, edge, destination, input, env, runtime);
 
@@ -142,40 +143,39 @@ public class GSSNode<T> {
 		}
 	}
 
-	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, ParserRuntime<T> runtime) {
-		BodyGrammarSlot<T> returnSlot = edge.getReturnSlot();
-		ResultOps<T> ops = runtime.getResultOps();
-		if (returnSlot.testFollow(input.charAt(ops.getRightIndex(poppedElement)))) {
-			T result = edge.addDescriptor(input, this, poppedElement, ops, runtime);
+	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, Runtime<T> runtime) {
+		BodyGrammarSlot returnSlot = edge.getReturnSlot();
+		if (returnSlot.testFollow(input.charAt(poppedElement.getIndex()))) {
+			T result = edge.addDescriptor(input, this, poppedElement, runtime);
 			if (result != null) {
 				runtime.scheduleDescriptor(returnSlot, destination, result, env);
 			}
 		}
 	}
 
-	private void iterateOverEdges(Input input, T node, ResultOps<T> ops, ParserRuntime<T> runtime) {
+	private void iterateOverEdges(Input input, T result, Runtime<T> runtime) {
 		if (firstGSSEdge != null)
-			processEdge(input, node, ops, firstGSSEdge, runtime);
+			processEdge(input, result, firstGSSEdge, runtime);
 
 		if (restGSSEdges != null)
 			for (int i = 0; i < restGSSEdges.size(); i++) {
 				GSSEdge<T> edge = restGSSEdges.get(i);
-				processEdge(input, node, ops, edge, runtime);
+				processEdge(input, result, edge, runtime);
 			}
 	}
 
-	private void processEdge(Input input, T node, ResultOps<T> ops, GSSEdge<T> edge, ParserRuntime<T> runtime) {
-		if (!edge.getReturnSlot().testFollow(input.charAt(ops.getRightIndex(node)))) return;
+	private void processEdge(Input input, T node, GSSEdge<T> edge, Runtime<T> runtime) {
+		if (!edge.getReturnSlot().testFollow(input.charAt(node.getIndex()))) return;
 
-		T result = edge.addDescriptor(input, this, node, ops, runtime);
+		T result = edge.addDescriptor(input, this, node, runtime);
 		if (result != null) {
 			Environment env = runtime.getEnvironment();
 			runtime.scheduleDescriptor(edge.getReturnSlot(), edge.getDestination(), result, env);
 		}
 	}
 
-	public T getResult(int j, ResultOps<T> ops) {
-		if (firstPoppedElement != null && ops.getRightIndex(firstPoppedElement) == j)
+	public Result getResult(int j) {
+		if (firstPoppedElement != null && firstPoppedElement.getIndex() == j)
 			return firstPoppedElement;
 
 		if (restPoppedElements != null) {
@@ -184,7 +184,7 @@ public class GSSNode<T> {
 		return null;
 	}
 
-	public NonterminalGrammarSlot<T> getGrammarSlot() {
+	public NonterminalGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
@@ -230,8 +230,8 @@ public class GSSNode<T> {
 		return MurmurHash3.fn().apply(slot.hashCode(), getInputIndex(), data);
 	}
 
-	public List<T> getPoppedElements() {
-		List<T> poppedElements = new ArrayList<>(countPoppedElements());
+	public List<Result> getPoppedElements() {
+		List<Result> poppedElements = new ArrayList<>(countPoppedElements());
 		if (firstPoppedElement != null) poppedElements.add(firstPoppedElement);
 		if (restPoppedElements != null)
 			poppedElements.addAll(restPoppedElements.values());

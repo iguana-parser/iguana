@@ -9,7 +9,22 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
 
     private ParserLogger logger = ParserLogger.getInstance();
 
-    private static final RecognizerResult dummy = RecognizerResult.of(-1);
+    private static final RecognizerResult dummy = new RecognizerResult() {
+        @Override
+        public int getIndex() {
+            return -1;
+        }
+
+        @Override
+        public boolean isDummy() {
+            return true;
+        }
+
+        @Override
+        public Object getValue() {
+            return null;
+        }
+    };
 
     @Override
     public RecognizerResult dummy() {
@@ -23,7 +38,7 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
     }
 
     @Override
-    public RecognizerResult merge(RecognizerResult current, RecognizerResult result1, RecognizerResult result2, BodyGrammarSlot<RecognizerResult> slot) {
+    public RecognizerResult merge(RecognizerResult current, RecognizerResult result1, RecognizerResult result2, BodyGrammarSlot slot) {
         logger.packedNodeAdded();
         if (current == null) logger.intermediateNodeAdded();
         return result2;
@@ -41,19 +56,5 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
         }
         return result;
     }
-
-    @Override
-    public int getRightIndex(RecognizerResult result) {
-        return result.getIndex();
-    }
-
-    @Override
-    public Object getValue(RecognizerResult result) {
-        return result.getValue();
-    }
-
-    @Override
-    public boolean isDummy(RecognizerResult result) {
-        return result == dummy;
-    }
 }
+

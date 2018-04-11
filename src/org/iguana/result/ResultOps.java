@@ -3,14 +3,10 @@ package org.iguana.result;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.gss.GSSNode;
 
-public interface ResultOps<T> {
+public interface ResultOps<T extends Result> {
     T dummy();
     T base(TerminalGrammarSlot slot, int start, int end);
-    T merge(T current, T result1, T result2, BodyGrammarSlot<T> slot);
-    T convert(T current, T result, EndGrammarSlot<T> slot, Object value);
-    int getRightIndex(T result);
-    Object getValue(T result);
-    boolean isDummy(T result);
+    T merge(T current, T result1, T result2, BodyGrammarSlot slot);
+    T convert(T current, T result, EndGrammarSlot slot, Object value);
 }

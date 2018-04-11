@@ -32,23 +32,23 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.result.ResultOps;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
+public class EndGrammarSlot extends BodyGrammarSlot {
 
 	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label,
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
 			              String variable, Set<String> state, Conditions conditions) {
 		this(position, nonterminal, label, -1, variable, -1, state, conditions);
 	}
 	
-	public EndGrammarSlot(Position position, NonterminalGrammarSlot<T> nonterminal, String label, int i1,
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
             			  String variable, int i2, Set<String> state, Conditions conditions) {
 		super(position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
@@ -68,7 +68,7 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	}
 	
 	@Override
-	public List<Transition<T>> getTransitions() {
+	public List<Transition> getTransitions() {
 		return Collections.emptyList();
 	}
 
@@ -78,13 +78,12 @@ public class EndGrammarSlot<T> extends BodyGrammarSlot<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
-		execute(input, u, node, (Object) null, runtime);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+		execute(input, u, result, (Object) null, runtime);
 	}
 	
-	public void execute(Input input, GSSNode<T> u, T result, Object value, ParserRuntime<T> runtime) {
-		ResultOps<T> ops = runtime.getResultOps();
-		int rightExtent = ops.isDummy(result) ? u.getInputIndex() : ops.getRightIndex(result);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, Runtime<T> runtime) {
+		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		if (nonterminal.testFollow(input.charAt(rightExtent)))
             u.pop(input, this, result, value, runtime);

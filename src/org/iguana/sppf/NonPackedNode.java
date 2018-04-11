@@ -37,11 +37,11 @@ public abstract class NonPackedNode implements SPPFNode {
 
     @Override
     public String toString() {
-        return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getRightExtent());
+        return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getIndex());
     }
 
     @Override
-    public int getRightExtent() {
+    public int getIndex() {
         return rightExtent;
     }
 
@@ -53,6 +53,6 @@ public abstract class NonPackedNode implements SPPFNode {
 
         return getGrammarSlot() == other.getGrammarSlot() &&
                getLeftExtent() == other.getLeftExtent() &&
-               getRightExtent() == other.getRightExtent();
+               getIndex() == other.getIndex();
     }
 }

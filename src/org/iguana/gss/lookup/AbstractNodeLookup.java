@@ -29,21 +29,15 @@ package org.iguana.gss.lookup;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.result.ResultOps;
 import org.iguana.gss.GSSNode;
 import org.iguana.gss.GSSNodeData;
+import org.iguana.result.Result;
 import org.iguana.util.Tuple;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 
- * @author Anastasia Izmaylova
- *
- */
-
-public abstract class AbstractNodeLookup<T> implements GSSNodeLookup<T> {
+public abstract class AbstractNodeLookup<T extends Result> implements GSSNodeLookup<T> {
 
 	protected Map<Tuple<Integer, GSSNodeData<?>>, GSSNode<T>> map = new HashMap<>();
 
@@ -58,7 +52,7 @@ public abstract class AbstractNodeLookup<T> implements GSSNodeLookup<T> {
 	}
 	
 	@Override
-	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i, GSSNodeData<Object> data) {
+	public GSSNode<T> get(NonterminalGrammarSlot slot, int i, GSSNodeData<Object> data) {
 		GSSNode<T> gssNode = map.get(new Tuple<>(i, data));
 		if (gssNode == null)
 			return new GSSNode<>(slot, i, data);

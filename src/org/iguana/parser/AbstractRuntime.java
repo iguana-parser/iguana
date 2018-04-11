@@ -7,11 +7,11 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -20,12 +20,12 @@ import org.iguana.util.ParserLogger;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
+public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
 
     /**
      * The grammar slot at which a parse error is occurred.
      */
-    private GrammarSlot<T> errorSlot;
+    private GrammarSlot errorSlot;
 
     /**
      * The last input index at which an error is occurred.
@@ -49,14 +49,14 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     private final ParserLogger logger = ParserLogger.getInstance();
 
-    private ResultOps<T> resultOps;
+    private final ResultOps<T> resultOps;
 
-    public ParserRuntimeImpl(Configuration config, ResultOps<T> resultOps) {
+    AbstractRuntime(Configuration config, ResultOps<T> resultOps) {
+        this.config = config;
         this.resultOps = resultOps;
         this.descriptorsStack = new ArrayDeque<>(512);
         this.descriptorPool = new ArrayDeque<>(512);
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
-        this.config = config;
     }
 
     /**
@@ -67,7 +67,7 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
      *
      */
     @Override
-    public void recordParseError(Input input, int i, GrammarSlot<T> slot, GSSNode<T> u) {
+    public void recordParseError(Input input, int i, GrammarSlot slot, GSSNode<T> u) {
         if (i >= this.errorIndex) {
             logger.log("Error recorded at %s %d", slot, i);
             this.errorInput = input;
@@ -90,13 +90,13 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     }
 
     @Override
-    public void scheduleDescriptor(BodyGrammarSlot<T> grammarSlot, GSSNode<T> gssNode, T t, Environment env) {
+    public void scheduleDescriptor(BodyGrammarSlot grammarSlot, GSSNode<T> gssNode, T result, Environment env) {
         Descriptor<T> descriptor;
         if (!descriptorPool.isEmpty()) {
             descriptor = descriptorPool.pop();
-            descriptor.init(grammarSlot, gssNode, t, env);
+            descriptor.init(grammarSlot, gssNode, result, env);
         } else {
-            descriptor = new Descriptor<>(grammarSlot, gssNode, t, env);
+            descriptor = new Descriptor<>(grammarSlot, gssNode, result, env);
         }
         descriptorsStack.push(descriptor);
         logger.descriptorAdded(descriptor);
@@ -123,7 +123,7 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     }
 
     @Override
-    public Object evaluate(Statement[] statements, Environment env, Input input) {
+    public void evaluate(Statement[] statements, Environment env, Input input) {
         assert statements.length > 1;
 
         ctx.setEnvironment(env);
@@ -133,14 +133,6 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
             statements[i].interpret(ctx, input);
             i++;
         }
-
-        return null;
-    }
-
-    @Override
-    public Object evaluate(DataDependentCondition condition, Environment env, Input input) {
-        ctx.setEnvironment(env);
-        return condition.getExpression().interpret(ctx, input);
     }
 
     @Override
@@ -191,7 +183,7 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
 
     private static int getMemoryUsed() {
         int mb = 1024 * 1024;
-        Runtime runtime = Runtime.getRuntime();
+        java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
         return (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
     }
 
@@ -209,5 +201,4 @@ public class ParserRuntimeImpl<T> implements ParserRuntime<T> {
     public ResultOps<T> getResultOps() {
         return resultOps;
     }
-
 }

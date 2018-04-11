@@ -31,17 +31,17 @@ import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.result.ResultOps;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
-public class GSSEdge<T> {
+public class GSSEdge<T extends Result> {
 
-	private final BodyGrammarSlot<T> returnSlot;
+	private final BodyGrammarSlot returnSlot;
 	private final T result;
 	private final GSSNode<T> destination;
 	private final Environment env;
 
-	GSSEdge(BodyGrammarSlot<T> slot, T result, GSSNode<T> destination, Environment env) {
+	GSSEdge(BodyGrammarSlot slot, T result, GSSNode<T> destination, Environment env) {
 		this.returnSlot = slot;
 		this.result = result;
 		this.destination = destination;
@@ -52,7 +52,7 @@ public class GSSEdge<T> {
 		return result;
 	}
 
-	public BodyGrammarSlot<T> getReturnSlot() {
+	public BodyGrammarSlot getReturnSlot() {
 		return returnSlot;
 	}
 
@@ -69,7 +69,7 @@ public class GSSEdge<T> {
 		if (!(obj instanceof GSSEdge))
 			return false;
 
-		GSSEdge other = (GSSEdge) obj;
+		GSSEdge<?> other = (GSSEdge<?>) obj;
 
 		// Because destination.getInputIndex() == node.getLeftExtent, and
 		// node.getRightExtent() == source.getLeftExtent we don't use them here.
@@ -97,16 +97,16 @@ public class GSSEdge<T> {
 	 * (2.2) if no, creates one and returns it
 	 *
 	 */
-	T addDescriptor(Input input, GSSNode<T> source, T result, ResultOps<T> ops, ParserRuntime<T> runtime) {
-		int inputIndex = ops.getRightIndex(result);
+	T addDescriptor(Input input, GSSNode<T> source, T result, Runtime<T> runtime) {
+		int inputIndex = result.getIndex();
 
-		BodyGrammarSlot<T> returnSlot = getReturnSlot();
+		BodyGrammarSlot returnSlot = getReturnSlot();
 		GSSNode<T> destination = getDestination();
 
 		Environment env = this.env;
 
 		if (returnSlot.requiresBinding())
-			env = returnSlot.doBinding(result, env, runtime);
+			env = returnSlot.doBinding(result, env);
 
 		runtime.setEnvironment(env);
 
