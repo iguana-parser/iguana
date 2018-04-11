@@ -226,7 +226,7 @@ public class SPPFJsonSerializer {
             gen.writeStringField("kind", kind);
             gen.writeStringField("label", node.getGrammarSlot().toString());
             gen.writeNumberField("leftExtent", node.getLeftExtent());
-            gen.writeNumberField("rightExtent", node.getRightExtent());
+            gen.writeNumberField("rightExtent", node.getIndex());
 
             if (node.getChildren().size() > 0) {
                 gen.writeArrayFieldStart("children");

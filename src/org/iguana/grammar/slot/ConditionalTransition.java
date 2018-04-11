@@ -32,19 +32,20 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
-public class ConditionalTransition<T> extends AbstractTransition<T> {
+public class ConditionalTransition extends AbstractTransition {
 	
 	private final Expression condition;
 	
-	private final BodyGrammarSlot<T> ifFalse;
+	private final BodyGrammarSlot ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(condition, origin, dest, null);
 	}
 
-	private ConditionalTransition(Expression condition, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, BodyGrammarSlot<T> ifFalse) {
+	private ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, BodyGrammarSlot ifFalse) {
 		super(origin, dest);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
@@ -60,7 +61,7 @@ public class ConditionalTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 		
 		Object value = runtime.evaluate(condition, env, input);
 		

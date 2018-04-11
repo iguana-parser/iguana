@@ -88,8 +88,8 @@ public class SelectedFiles {
 //							System.out.println(n.getSlot().getNonterminal().getName() + ": "
 //											   + input.getLineNumber(n.getLeftExtent()) + ":"
 //											   + input.getColumnNumber(n.getLeftExtent()) + " "
-//											   + input.getLineNumber(n.getRightExtent()) + ":"
-//											   + input.getColumnNumber(n.getRightExtent()));
+//											   + input.getLineNumber(n.getIndex()) + ":"
+//											   + input.getColumnNumber(n.getIndex()));
 //						}
 //			   });
 //	}

@@ -31,16 +31,16 @@ import org.iguana.grammar.GrammarGraph;
 
 public class SPPFNodeFactory {
 
-    private GrammarGraph<NonPackedNode> grammarGraph;
+    private GrammarGraph grammarGraph;
 
-    public SPPFNodeFactory(GrammarGraph<NonPackedNode> graph) {
+    public SPPFNodeFactory(GrammarGraph graph) {
         this.grammarGraph = graph;
     }
 
 	public NonterminalNode createNonterminalNode(String head, String slot, NonPackedNode child) {
 		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(child);
-		NonterminalNode node = new NonterminalNode(grammarGraph.getNonterminalGrammarSlot(head), child.getRightExtent());
+		NonterminalNode node = new NonterminalNode(grammarGraph.getNonterminalGrammarSlot(head), child.getIndex());
 		node.addPackedNode(packedNode);
 		return node;
 	}
@@ -49,7 +49,7 @@ public class SPPFNodeFactory {
 		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(leftChild);
 		packedNode.setRightChild(rightChild);
-		int rightExtent = (rightChild != null) ? rightChild.getRightExtent() : leftChild.getRightExtent();
+		int rightExtent = (rightChild != null) ? rightChild.getIndex() : leftChild.getIndex();
 		IntermediateNode node = new IntermediateNode(rightExtent);
 		node.addPackedNode(packedNode);
 		return node;

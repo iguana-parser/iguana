@@ -29,7 +29,6 @@ package org.iguana.gss.lookup;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.result.ResultOps;
 import org.iguana.gss.GSSNode;
 
 import java.util.List;
@@ -39,7 +38,7 @@ import static iguana.utils.collections.CollectionsUtil.concat;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
-public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
+public class ArrayNodeLookup extends AbstractNodeLookup {
 
 	private GSSNode[] gssNodes;
 	private int size;
@@ -56,9 +55,9 @@ public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 	}
 	
 	@Override
-	public Iterable<GSSNode<T>> getNodes() {
+	public Iterable<GSSNode> getNodes() {
 		@SuppressWarnings("unchecked")
-		List<GSSNode<T>> list = asList(this.gssNodes);
+		List<GSSNode> list = asList(this.gssNodes);
 		return concat(list.stream().filter(Objects::nonNull).collect(toList()), super.map.values());
 	}
 
@@ -68,26 +67,26 @@ public class ArrayNodeLookup<T> extends AbstractNodeLookup<T> {
 	}
 
 	@Override
-	public void put(int i, GSSNode<T> gssNode) {
+	public void put(int i, GSSNode gssNode) {
 		gssNodes[i] = gssNode;
 		size++;
 	}
 
 	@Override
-	public void get(int i, GSSNodeCreator<T> creator) {
+	public void get(int i, GSSNodeCreator creator) {
 		gssNodes[i] = creator.create(gssNodes[i]);
 	}
 
 	@Override
-	public GSSNode<T> get(int i) {
+	public GSSNode get(int i) {
 		return gssNodes[i];
 	}
 
 	@Override
-	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
-		GSSNode<T> node = gssNodes[i];
+	public GSSNode get(NonterminalGrammarSlot slot, int i) {
+		GSSNode node = gssNodes[i];
 		if (node == null) {
-			node = new GSSNode<>(slot, i);
+			node = new GSSNode(slot, i);
 			gssNodes[i] = node;
 			return node;
 		} 

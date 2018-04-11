@@ -32,18 +32,18 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.result.ResultOps;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
-public class TerminalTransition<T> extends AbstractTransition<T> {
+public class TerminalTransition extends AbstractTransition {
 
-    protected final TerminalGrammarSlot<T> slot;
+    protected final TerminalGrammarSlot slot;
 	
 	private final Conditions preConditions;
 	
 	private final Conditions postConditions;
 
-	public TerminalTransition(TerminalGrammarSlot<T> slot, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest, Conditions preConditions, Conditions postConditions) {
+	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions, Conditions postConditions) {
 		super(origin, dest);
         this.slot = slot;
         this.preConditions = preConditions;
@@ -60,10 +60,8 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
-		ResultOps<T> ops = runtime.getResultOps();
-
-        int i = ops.isDummy(node) ? u.getInputIndex() : ops.getRightIndex(node);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T node, Environment env, Runtime<T> runtime) {
+        int i = node.isDummy() ? u.getInputIndex() : node.getIndex();
 
 		runtime.setEnvironment(env);
 		
@@ -83,10 +81,10 @@ public class TerminalTransition<T> extends AbstractTransition<T> {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, ops.getRightIndex(cr), runtime.getEvaluatorContext(), runtime))
+		if (postConditions.execute(input, u, cr.getIndex(), runtime.getEvaluatorContext(), runtime))
 			return;
 		
-		T n = dest.isFirst() ? cr : ops.merge(null, node, cr, dest);
+		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, node, cr, dest);
 				
 		dest.execute(input, u, n, runtime.getEnvironment(), runtime);
 	}

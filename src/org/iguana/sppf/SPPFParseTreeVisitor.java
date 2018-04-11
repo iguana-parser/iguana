@@ -30,8 +30,8 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
     @Override
     public VisitResult visit(TerminalNode node) {
         return convertedNodes.computeIfAbsent(node, key -> {
-                    if (node.getLeftExtent() == node.getRightExtent()) return empty();
-                    Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
+                    if (node.getLeftExtent() == node.getIndex()) return empty();
+                    Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());
                     return single(terminalNode);
                 }
         );
@@ -97,7 +97,7 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
                 case Start: {
                     Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
                     VisitResult visitResult = packedNode.accept(this);
-                    result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                    result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getIndex()));
                     break;
                 }
             }

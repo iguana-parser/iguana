@@ -37,7 +37,8 @@ import org.iguana.gss.GSSNode;
 import org.iguana.gss.GSSNodeData;
 import org.iguana.gss.lookup.GSSNodeLookup;
 import org.iguana.gss.lookup.GSSNodeLookup.GSSNodeCreator;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
@@ -45,15 +46,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
+public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Nonterminal nonterminal;
 	
-	private final List<BodyGrammarSlot<T>> firstSlots;
+	private final List<BodyGrammarSlot> firstSlots;
 
-	private final GSSNodeLookup<T> nodeLookup;
+	private final GSSNodeLookup nodeLookup;
 
-	private LookAheadTest<T> lookAheadTest;
+	private LookAheadTest lookAheadTest;
 
 	private FollowTest followTest;
 
@@ -63,19 +64,19 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		this.firstSlots = new ArrayList<>();
 	}
 	
-	public void addFirstSlot(BodyGrammarSlot<T> slot) {
+	public void addFirstSlot(BodyGrammarSlot slot) {
 		firstSlots.add(slot);
 	}
 	
-	public List<BodyGrammarSlot<T>> getFirstSlots() {
+	public List<BodyGrammarSlot> getFirstSlots() {
 		return firstSlots;
 	}
 	
-	private List<BodyGrammarSlot<T>> getFirstSlots(int v) {
+	private List<BodyGrammarSlot> getFirstSlots(int v) {
 		return lookAheadTest.get(v);
 	}
 	
-	public void setLookAheadTest(LookAheadTest<T> lookAheadTest) {
+	public void setLookAheadTest(LookAheadTest lookAheadTest) {
 		this.lookAheadTest = lookAheadTest;
 	}
 
@@ -118,11 +119,11 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
         throw new UnsupportedOperationException();
     }
 
-    public GSSNode<T> getGSSNode(int i) {
+    public GSSNode getGSSNode(int i) {
 		return nodeLookup.get(this, i);
 	}
 	
-	public Iterable<GSSNode<T>> getGSSNodes() {
+	public Iterable<GSSNode> getGSSNodes() {
 		return nodeLookup.getNodes();
 	}
 
@@ -131,8 +132,8 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		nodeLookup.reset(input);
 	}
 	
-	public void create(Input input, BodyGrammarSlot<T> returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, ParserRuntime<T> runtime) {
-        int i = runtime.getResultOps().isDummy(result) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(result);
+	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode u, T result, Expression[] arguments, Environment env, Runtime<T> runtime) {
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 		
 		if (arguments == null) {
 			GSSNode<T> gssNode = nodeLookup.get(i);
@@ -141,10 +142,10 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				gssNode = new GSSNode<>(this, i);
 				ParserLogger.getInstance().gssNodeAdded(gssNode);
 
-				List<BodyGrammarSlot<T>> firstSlots = getFirstSlots(input.charAt(i));
+				List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
 				if (firstSlots != null)
 					for (int j = 0; j < firstSlots.size(); j++) {
-						BodyGrammarSlot<T> slot = firstSlots.get(j);
+						BodyGrammarSlot slot = firstSlots.get(j);
 						if (!slot.getConditions().execute(input, gssNode, i, runtime)) {
 							runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), env);
 						}
@@ -176,7 +177,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 				else
 					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
 				
-				for (BodyGrammarSlot<T> s : getFirstSlots(input.charAt(i))) {
+				for (BodyGrammarSlot s : getFirstSlots(input.charAt(i))) {
 					
 					runtime.setEnvironment(newEnv);
 
@@ -195,7 +196,7 @@ public class NonterminalGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		nodeLookup.get(i, data, creator);
 	}
 	
-	public GSSNode<T> getGSSNode(int i, GSSNodeData<Object> data) {
+	public GSSNode getGSSNode(int i, GSSNodeData<Object> data) {
 		return nodeLookup.get(this, i, data);
 	}
 

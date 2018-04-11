@@ -30,10 +30,11 @@ package org.iguana.grammar.slot;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 
-public interface Transition<T> {
+public interface Transition {
 	
 	GrammarSlot destination();
 	
@@ -41,6 +42,6 @@ public interface Transition<T> {
 
 	String getLabel();
 
-	void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime);
+	<T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime);
 	
 }

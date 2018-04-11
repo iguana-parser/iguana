@@ -12,8 +12,6 @@ import java.util.List;
 
 public class ParserResultOps implements ResultOps<NonPackedNode> {
 
-    private ParserLogger logger = ParserLogger.getInstance();
-
     private static final NonPackedNode dummyNode = new NonPackedNode(-1) {
         @Override
         public PackedNode getChildAt(int index) {  throw new UnsupportedOperationException(); }
@@ -31,11 +29,18 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         public int getLeftExtent() { throw new UnsupportedOperationException(); }
 
         @Override
-        public int getRightExtent() { throw new UnsupportedOperationException(); }
+        public int getIndex() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public boolean isDummy() {
+            return true;
+        }
 
         @Override
         public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
     };
+
+    private ParserLogger logger = ParserLogger.getInstance();
 
     @Override
     public NonPackedNode dummy() {
@@ -51,7 +56,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public NonPackedNode merge(NonPackedNode current, NonPackedNode result1, NonPackedNode result2, BodyGrammarSlot<NonPackedNode> slot) {
+    public NonPackedNode merge(NonPackedNode current, NonPackedNode result1, NonPackedNode result2, BodyGrammarSlot slot) {
         if (result1 == dummyNode)
             return result2;
 
@@ -59,7 +64,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         packedNode.setLeftChild(result1);
         packedNode.setRightChild(result2);
 
-        int rightExtent = (result2 != null) ? result2.getRightExtent() : result1.getRightExtent();
+        int rightExtent = (result2 != null) ? result2.getIndex() : result1.getIndex();
 
         logger.packedNodeAdded();
         logger.log("Packed node added %s", packedNode);
@@ -81,7 +86,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public NonPackedNode convert(NonPackedNode current, NonPackedNode result, EndGrammarSlot<NonPackedNode> slot, Object value) {
+    public NonPackedNode convert(NonPackedNode current, NonPackedNode result, EndGrammarSlot slot, Object value) {
         PackedNode packedNode = new PackedNode(slot);
         packedNode.setLeftChild(result);
 
@@ -90,9 +95,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
         if (current == null) {
             if (value == null)
-                current = new NonterminalNode(slot.getNonterminal(), result.getRightExtent());
+                current = new NonterminalNode(slot.getNonterminal(), result.getIndex());
             else
-                current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getRightExtent(), value);
+                current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getIndex(), value);
 
             ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
             logger.nonterminalNodeAdded();
@@ -106,23 +111,6 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         }
 
         return current;
-    }
-
-    @Override
-    public int getRightIndex(NonPackedNode result) {
-        return result.getRightExtent();
-    }
-
-    @Override
-    public Object getValue(NonPackedNode result) {
-        if (result instanceof NonterminalNodeWithValue)
-            return result.getValue();
-        return null;
-    }
-
-    @Override
-    public boolean isDummy(NonPackedNode result) {
-        return result == dummyNode;
     }
 
 }

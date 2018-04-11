@@ -28,13 +28,13 @@
 package org.iguana.grammar.slot;
 
 
-public abstract class AbstractTransition<T> implements Transition<T> {
+public abstract class AbstractTransition implements Transition {
 	
-	protected final BodyGrammarSlot<T> dest;
+	protected final BodyGrammarSlot dest;
 
-	protected final BodyGrammarSlot<T> origin;
+	protected final BodyGrammarSlot origin;
 
-	public AbstractTransition(BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+	public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this.origin = origin;
 		this.dest = dest;
 	}

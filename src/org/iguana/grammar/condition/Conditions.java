@@ -30,20 +30,16 @@ package org.iguana.grammar.condition;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
 @FunctionalInterface
 public interface Conditions {
+
+	<T extends Result> boolean execute(Input input, GSSNode<T> u, int i, Runtime<T> runtime);
 	
-	<T> boolean execute(Input input, GSSNode<T> u, int i, ParserRuntime<T> runtime);
-	
-	default <T> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, ParserRuntime<T> runtime) {
+	default <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, Runtime<T> runtime) {
 		return execute(input, u, i, runtime);
 	}
 	

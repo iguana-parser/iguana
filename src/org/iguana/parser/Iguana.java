@@ -39,10 +39,8 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.gss.GSSNodeData;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.result.ParserResultOps;
 import org.iguana.result.RecognizerResult;
-import org.iguana.result.RecognizerResultOps;
-import org.iguana.result.ResultOps;
+import org.iguana.result.Result;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
@@ -52,13 +50,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * 
- * 
- * @author Ali Afroozeh
- * @author Anastasia Izmaylova
- *
- */
 public class Iguana {
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar) {
@@ -81,15 +72,13 @@ public class Iguana {
     }
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, ?> map, boolean global) {
-        Configuration config = Configuration.load();
-        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
-        return parse(input, grammarGraph, startSymbol, config, map, global, new ParserResultOps());
+        return parse(input, grammar, startSymbol, Configuration.load(), map, global);
     }
 
 
     public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
-        GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
-        return parse(input, grammarGraph, startSymbol, config, map, global, new ParserResultOps());
+        GrammarGraph grammarGraph = GrammarGraph.from(grammar, config);
+        return run(input, new ParserRuntime(config), grammarGraph, startSymbol, map, global);
     }
 
     public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar) {
@@ -112,13 +101,11 @@ public class Iguana {
     }
 
     public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
-        GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, config);
-        return parse(input, grammarGraph, startSymbol, config, map, global, new RecognizerResultOps());
+        GrammarGraph grammarGraph = GrammarGraph.from(grammar, config);
+        return run(input, new RecognizerRuntime(config), grammarGraph, startSymbol, map, global);
     }
 
-    public static <T> ParseResult<T> parse(Input input, GrammarGraph<T> grammarGraph, Nonterminal nonterminal, Configuration config, Map<String, ?> map, boolean global, ResultOps<T> resultOps) {
-        ParserRuntime<T> runtime = new ParserRuntimeImpl<>(config, resultOps);
-
+    public static <T extends Result> ParseResult<T> run(Input input, Runtime<T> runtime, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ?> map, boolean global) {
         grammarGraph.reset(input);
 
         IEvaluatorContext ctx = runtime.getEvaluatorContext();
@@ -126,13 +113,13 @@ public class Iguana {
         if (global)
             map.forEach(ctx::declareGlobalVariable);
 
-        NonterminalGrammarSlot<T> startSymbol = grammarGraph.getHead(nonterminal);
+        NonterminalGrammarSlot startSymbol = grammarGraph.getHead(nonterminal);
 
         if (startSymbol == null) {
             throw new RuntimeException("No nonterminal named " + nonterminal + " found");
         }
 
-        T root;
+        Result root;
 
         Environment env = ctx.getEmptyEnvironment();
 
@@ -159,8 +146,8 @@ public class Iguana {
         Timer timer = new Timer();
         timer.start();
 
-        for (BodyGrammarSlot<T> slot : startSymbol.getFirstSlots()) {
-            runtime.scheduleDescriptor(slot, startGSSNode, resultOps.dummy(), env);
+        for (BodyGrammarSlot slot : startSymbol.getFirstSlots()) {
+            runtime.scheduleDescriptor(slot, startGSSNode, runtime.getResultOps().dummy(), env);
         }
 
         while(runtime.hasDescriptor()) {
@@ -169,7 +156,7 @@ public class Iguana {
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), runtime);
         }
 
-        root = startGSSNode.getResult(input.length() - 1, resultOps);
+        root = startGSSNode.getResult(input.length() - 1);
 
         timer.stop();
 
@@ -180,7 +167,7 @@ public class Iguana {
             logger.log("Parse error:\n %s", parseResult);
         } else {
             ParseStatistics parseStatistics = runtime.getParseStatistics(timer);
-            parseResult = new ParseSuccess<>(root, parseStatistics, input);
+            parseResult = new ParseSuccess(root, parseStatistics, input);
             logger.log("Parsing finished successfully.");
             logger.log(parseStatistics.toString());
         }
@@ -188,8 +175,8 @@ public class Iguana {
         return parseResult;
     }
 
-    private static <T> void printStats(GrammarGraph<T> grammarGraph) {
-        for (NonterminalGrammarSlot<T> slot : grammarGraph.getNonterminalGrammarSlots()) {
+    private static  void printStats(GrammarGraph grammarGraph) {
+        for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {
             System.out.print(slot.getNonterminal().getName());
             System.out.println(" GSS nodes: " + slot.countGSSNodes());
             double[] poppedElementStats = stats(slot.getGSSNodes(), GSSNode::countPoppedElements);
@@ -207,7 +194,7 @@ public class Iguana {
         }
     }
 
-    private static <T> double[] stats(Iterable<GSSNode<T>> gssNodes, Function<GSSNode<T>, Integer> f) {
+    private static  double[] stats(Iterable<GSSNode> gssNodes, Function<GSSNode, Integer> f) {
         if (!gssNodes.iterator().hasNext()) return null;
 
         int min = Integer.MAX_VALUE;
@@ -215,7 +202,7 @@ public class Iguana {
         int sum = 0;
         int count = 0;
 
-        for (GSSNode<T> gssNode : gssNodes) {
+        for (GSSNode gssNode : gssNodes) {
             min = Integer.min(min, f.apply(gssNode));
             max = Integer.max(max, f.apply(gssNode));
             sum += f.apply(gssNode);

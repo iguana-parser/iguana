@@ -50,7 +50,7 @@ public class GSSToDot {
 		}
 	}
 
-	private String getId(GSSNode<?> node) {
+	private String getId(GSSNode node) {
 		return node.getGrammarSlot().toString() + node.getInputIndex() + node.getData();
 	}
 	

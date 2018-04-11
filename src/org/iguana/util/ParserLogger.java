@@ -72,12 +72,12 @@ public class ParserLogger {
         countAmbiguousNodes++;
     }
 
-    public void gssNodeAdded(GSSNode node) {
+    public void gssNodeAdded(GSSNode<?> node) {
         countGSSNodes++;
         logger.log("GSS node added %s", node);
     }
 
-    public void gssEdgeAdded(GSSEdge edge) {
+    public void gssEdgeAdded(GSSEdge<?> edge) {
         countGSSEdges++;
         logger.log("GSS Edge added %s", edge);
     }

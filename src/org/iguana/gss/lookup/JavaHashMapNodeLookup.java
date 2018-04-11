@@ -30,13 +30,13 @@ package org.iguana.gss.lookup;
 import iguana.utils.collections.CollectionsUtil;
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.result.ResultOps;
 import org.iguana.gss.GSSNode;
+import org.iguana.result.Result;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
+public class JavaHashMapNodeLookup<T extends Result> extends AbstractNodeLookup<T> {
 
 	private Map<Integer, GSSNode<T>> map = new HashMap<>();
 
@@ -72,7 +72,7 @@ public class JavaHashMapNodeLookup<T> extends AbstractNodeLookup<T> {
 	}
 
 	@Override
-	public GSSNode<T> get(NonterminalGrammarSlot<T> slot, int i) {
+	public GSSNode<T> get(NonterminalGrammarSlot slot, int i) {
 		return map.computeIfAbsent(i, k -> new GSSNode<>(slot, i));
 	}
 

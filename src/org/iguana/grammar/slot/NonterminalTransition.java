@@ -32,20 +32,21 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import static iguana.utils.string.StringUtil.listToString;
 
 
-public class NonterminalTransition<T> extends AbstractTransition<T> {
+public class NonterminalTransition extends AbstractTransition {
 	
-	private final NonterminalGrammarSlot<T> nonterminal;
+	private final NonterminalGrammarSlot nonterminal;
 	
 	private final Conditions preConditions;
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot<T> nonterminal, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest,
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest,
 			                     Expression[] arguments, Conditions preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
@@ -65,9 +66,9 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T node, Environment env, ParserRuntime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 
-        int i = runtime.getResultOps().isDummy(node) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(node);
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
         if (dest.getLabel() != null) {
 			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
@@ -78,7 +79,7 @@ public class NonterminalTransition<T> extends AbstractTransition<T> {
 		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 				
-		nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment(), runtime);
+		nonterminal.create(input, dest, u, result, arguments, runtime.getEnvironment(), runtime);
 	}
 
 }

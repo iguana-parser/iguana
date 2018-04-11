@@ -36,13 +36,13 @@ import java.util.List;
 
 public class PackedNode implements SPPFNode {
 
-    private final BodyGrammarSlot<NonPackedNode> slot;
+    private final BodyGrammarSlot slot;
 
     private NonPackedNode leftChild;
 
     private NonPackedNode rightChild;
 
-    public PackedNode(BodyGrammarSlot<NonPackedNode> slot) {
+    public PackedNode(BodyGrammarSlot slot) {
         this.slot = slot;
     }
 
@@ -55,11 +55,11 @@ public class PackedNode implements SPPFNode {
     }
 
     private int getPivot() {
-        return leftChild.getRightExtent();
+        return leftChild.getIndex();
     }
 
     @Override
-    public BodyGrammarSlot<NonPackedNode> getGrammarSlot() {
+    public BodyGrammarSlot getGrammarSlot() {
         return slot;
     }
 
@@ -69,8 +69,8 @@ public class PackedNode implements SPPFNode {
     }
 
     @Override
-    public int getRightExtent() {
-        return (rightChild != null) ? rightChild.getRightExtent() : leftChild.getRightExtent();
+    public int getIndex() {
+        return (rightChild != null) ? rightChild.getIndex() : leftChild.getIndex();
     }
 
     @Override

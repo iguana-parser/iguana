@@ -51,7 +51,7 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
+		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getIndex());
 	}
 
 	public Object getValue() {

@@ -10,8 +10,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.ParserRuntimeImpl;
-import org.iguana.result.ParserResultOps;
+import org.iguana.parser.Runtime;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -24,10 +23,10 @@ import static org.junit.Assert.*;
 
 public class GSSNodeTest {
 
-    private ParserRuntime<NonPackedNode> runtime;
+    private Runtime runtime;
     private Input input;
     private SPPFNodeFactory sppfFactory;
-    private GrammarGraph<NonPackedNode> grammarGraph;
+    private GrammarGraph grammarGraph;
 
     @Before
     public void init() {
@@ -36,16 +35,16 @@ public class GSSNodeTest {
 
         grammarGraph = GrammarGraph.from(grammar);
         sppfFactory = new SPPFNodeFactory(grammarGraph);
-        runtime = new ParserRuntimeImpl<>(Configuration.load(), new ParserResultOps());
+        runtime = new ParserRuntime(Configuration.load());
         input = Input.fromString("Test");
     }
 
     @Test
     public void test() {
-        NonterminalGrammarSlot<NonPackedNode> nonterminalGrammarSlot = grammarGraph.getNonterminalGrammarSlot("A");
-        GSSNode<NonPackedNode> gssNode = new GSSNode<>(nonterminalGrammarSlot, 0);
+        NonterminalGrammarSlot nonterminalGrammarSlot = grammarGraph.getNonterminalGrammarSlot("A");
+        GSSNode gssNode = new GSSNode(nonterminalGrammarSlot, 0);
 
-        EndGrammarSlot<NonPackedNode> endGrammarSlot = grammarGraph.getEndGrammarSlot("A ::= a .");
+        EndGrammarSlot endGrammarSlot = grammarGraph.getEndGrammarSlot("A ::= a .");
 
         TerminalNode terminalNode01 = sppfFactory.createTerminalNode("a", 0, 1);
         TerminalNode terminalNode02 = sppfFactory.createTerminalNode("a", 0, 2);
@@ -60,26 +59,26 @@ public class GSSNodeTest {
         // Pop ("a", 0, 1)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));
         assertEquals(1, gssNode.countPoppedElements());
-        assertEquals(2, gssNode.getPoppedElements().get(0).childrenCount());
+        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
 
         // Pop ("a", 0, 2)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(2, gssNode.countPoppedElements());
-        assertEquals(2, gssNode.getPoppedElements().get(0).childrenCount());
-        assertEquals(1, gssNode.getPoppedElements().get(1).childrenCount());
+        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
+        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(1)).childrenCount());
 
         // Pop ("a", 0, 3)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode03, runtime));
         assertEquals(3, gssNode.countPoppedElements());
-        assertEquals(2, gssNode.getPoppedElements().get(0).childrenCount());
-        assertEquals(1, gssNode.getPoppedElements().get(1).childrenCount());
-        assertEquals(1, gssNode.getPoppedElements().get(2).childrenCount());
+        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
+        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(1)).childrenCount());
+        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(2)).childrenCount());
 
         // Pop ("a", 0, 2)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(3, gssNode.countPoppedElements());
-        assertEquals(2, gssNode.getPoppedElements().get(0).childrenCount());
-        assertEquals(2, gssNode.getPoppedElements().get(1).childrenCount());
-        assertEquals(1, gssNode.getPoppedElements().get(2).childrenCount());
+        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
+        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(1)).childrenCount());
+        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(2)).childrenCount());
     }
 }

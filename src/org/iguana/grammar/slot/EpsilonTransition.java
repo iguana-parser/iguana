@@ -35,27 +35,28 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 import org.iguana.util.Tuple;
 
-public class EpsilonTransition<T> extends AbstractTransition<T> {
+public class EpsilonTransition extends AbstractTransition {
 	
 	private final Type type;
     private final String label;
     private final Conditions conditions;
 
-	public EpsilonTransition(Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(Type.DUMMY, conditions, origin, dest);
 	}
 
-	private EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+	private EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		this.type = type;
         this.label = null;
         this.conditions = conditions;
     }
 
-	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot<T> origin, BodyGrammarSlot<T> dest) {
+	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
@@ -85,9 +86,9 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 
-        int i = runtime.getResultOps().isDummy(result) ? u.getInputIndex() : runtime.getResultOps().getRightIndex(result);
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		runtime.setEnvironment(env);
 		
@@ -132,7 +133,7 @@ public class EpsilonTransition<T> extends AbstractTransition<T> {
                     throw new UnexpectedRuntimeTypeException(AST.var(label));
                 }
 
-                runtime.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
+                runtime.getEvaluatorContext().storeVariable(label, Tuple.of(lhs, i));
 
                 if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;

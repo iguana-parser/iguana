@@ -32,25 +32,25 @@ import java.util.Collections;
 import java.util.List;
 
 
-public abstract class AbstractGrammarSlot<T> implements GrammarSlot<T> {
+public abstract class AbstractGrammarSlot implements GrammarSlot {
 
-	protected final List<Transition<T>> transitions;
+	protected final List<Transition> transitions;
 
 	public AbstractGrammarSlot() {
 		this(Collections.emptyList());
 	}
 	
-	public AbstractGrammarSlot(List<Transition<T>> transitions) {
+	public AbstractGrammarSlot(List<Transition> transitions) {
 		this.transitions = new ArrayList<>(transitions);
 	}
 
 	@Override
-	public void addTransition(Transition<T> transition) {
+	public void addTransition(Transition transition) {
 		transitions.add(transition);
 	}
 
 	@Override
-	public List<Transition<T>> getTransitions() {
+	public List<Transition> getTransitions() {
 		return transitions;
 	}
 

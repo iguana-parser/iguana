@@ -1,9 +1,6 @@
 package org.iguana.result;
 
-public interface RecognizerResult {
-    int getIndex();
-    Object getValue();
-
+public interface RecognizerResult extends Result {
     static RecognizerResult of(int index) {
         return new SimpleRecognizerResult(index);
     }
@@ -13,7 +10,7 @@ public interface RecognizerResult {
     }
 }
 
-class SimpleRecognizerResult implements  RecognizerResult {
+class SimpleRecognizerResult implements RecognizerResult {
 
     private final int index;
 
@@ -27,12 +24,17 @@ class SimpleRecognizerResult implements  RecognizerResult {
     }
 
     @Override
+    public boolean isDummy() {
+        return false;
+    }
+
+    @Override
     public Object getValue() {
         return null;
     }
 }
 
-class DataDependentRecognizerResult implements  RecognizerResult {
+class DataDependentRecognizerResult implements RecognizerResult {
 
     private final int index;
     private final Object value;
@@ -45,6 +47,11 @@ class DataDependentRecognizerResult implements  RecognizerResult {
     @Override
     public int getIndex() {
         return index;
+    }
+
+    @Override
+    public boolean isDummy() {
+        return false;
     }
 
     @Override

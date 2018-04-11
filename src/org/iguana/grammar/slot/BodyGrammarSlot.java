@@ -36,19 +36,16 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.result.ResultOps;
-import org.iguana.util.Holder;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import java.util.*;
-import java.util.function.BiFunction;
 
-
-public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
+public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	protected final Position position;
 	
-	private Map<Key, T> intermediateNodes;
+	private Map<Key, Object> intermediateNodes;
 	
 	private final Conditions conditions;
 	
@@ -92,26 +89,23 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return followTest.test(v);
 	}
 
-	public T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env, ParserRuntime<T> runtime) {
+	@SuppressWarnings("unchecked")
+	public <T extends Result> T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env, Runtime<T> runtime) {
 		if (isFirst())
 			return rightResult;
-		
-		Holder<T> holder = new Holder<>();
-		BiFunction<Key, T, T> creator = (key, value) -> {
-			if (value != null) {
-				return runtime.getResultOps().merge(value, leftResult, rightResult, this);
-			} else {
-				T newNode = runtime.getResultOps().merge(null, leftResult, rightResult, this);
-				holder.set(newNode);
-				return newNode;
-			}
-		};
 
-        Key key = Keys.from(destinationIndex, runtime.getResultOps().getRightIndex(rightResult), env);
-        intermediateNodes.compute(key, creator);
-		
-		return holder.get();
-	}	
+		Key key = Keys.from(destinationIndex, rightResult.getIndex(), env);
+
+		Object value = intermediateNodes.get(key);
+		if (value == null) {
+			T newNode = runtime.getResultOps().merge(null, leftResult, rightResult, this);
+			intermediateNodes.put(key, newNode);
+			return newNode;
+		}
+
+		runtime.getResultOps().merge((T) value, leftResult, rightResult, this);
+		return null;
+	}
 	
 	public Conditions getConditions() {
 		return conditions;
@@ -130,9 +124,9 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return variable;
 	}
 	
-	public void execute(Input input, GSSNode<T> u, T result, Environment env, ParserRuntime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
         for (int i = 0; i < getTransitions().size(); i++) {
-            Transition<T> transition = getTransitions().get(i);
+            Transition transition = getTransitions().get(i);
             transition.execute(input, u, result, env, runtime);
         }
 	}
@@ -141,8 +135,7 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		return label != null || variable != null || state != null; 
 	}
 	
-	public Environment doBinding(T result, Environment env, ParserRuntime<T> runtime) {
-		ResultOps<T> ops = runtime.getResultOps();
+	public Environment doBinding(Result result, Environment env) {
 
 		if (label != null) {
 			if (i1 != -1)
@@ -153,20 +146,20 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		
 		if (variable != null && state == null) {
 			if (i2 != -1)
-				env = env._declare(ops.getValue(result));
+				env = env._declare(result.getValue());
 			else
-				env = env._declare(variable, ops.getValue(result));
+				env = env._declare(variable, result.getValue());
 		}
 
 		if (variable == null && state != null) { // TODO: support for the array-based environment implementation
 			if (state.size() == 1) {
 				String v = state.iterator().next();
 				if (!v.equals("_")) {
-					Object value = ops.getValue(result);
+					Object value = result.getValue();
 					env = env._declare(v, value);
 				}
 			} else {
-				List<?> values = (List<?>) ops.getValue(result);
+				List<?> values = (List<?>) result.getValue();
 				Iterator<?> it = values.iterator();
 				for (String v : state) {
 					if (!v.equals("_"))
@@ -176,7 +169,7 @@ public class BodyGrammarSlot<T> extends AbstractGrammarSlot<T> {
 		}
 		
 		if (variable != null && state != null) { // TODO: support for the array-based environment implementation
-			List<?> values = (List<?>) ops.getValue(result);
+			List<?> values = (List<?>) result.getValue();
 			Iterator<?> it = values.iterator();
 			
 			env = env._declare(variable, it.next());

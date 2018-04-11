@@ -37,9 +37,9 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.result.ParserResultOps;
+import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.RecognizerRuntime;
 import org.iguana.result.RecognizerResult;
-import org.iguana.result.RecognizerResultOps;
 import org.iguana.sppf.NonPackedNode;
 
 import java.io.File;
@@ -81,20 +81,19 @@ public class IguanaRunner {
 				continue;
 			}
 
-//			GrammarGraph<RecognizerResult> grammarGraph = GrammarGraph.from(grammar, config);
-			GrammarGraph<NonPackedNode> grammarGraph = GrammarGraph.from(grammar, config);
+			GrammarGraph grammarGraph = GrammarGraph.from(grammar, config);
 
 			for (int i = 0; i < warmupCount; i++) {
-				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new ParserResultOps());
-//				Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new RecognizerResultOps());
+				Iguana.run(input, new ParserRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
+//				Iguana.run(input, new RecognizerRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
 			}
 
 			System.out.println("Running " + file.getPath());
 			System.out.printf("%-10s%20s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "ambiguities", "memory");
 			for (int i = 0; i < runCount; i++) {
 				try {
-					ParseResult<NonPackedNode> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new ParserResultOps());
-//					ParseResult<RecognizerResult> result = Iguana.parse(input, grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Configuration.load(), Collections.emptyMap(), true, new RecognizerResultOps());
+					ParseResult<NonPackedNode> result = Iguana.run(input, new ParserRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
+//					ParseResult<RecognizerResult> result = Iguana.run(input, new RecognizerRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input, key -> new ArrayList<>()).add(statistics);
