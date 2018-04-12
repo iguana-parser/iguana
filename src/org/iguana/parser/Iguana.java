@@ -132,7 +132,7 @@ public class Iguana {
             for (String parameter : nonterminal.getParameters())
                 arguments[i++] = map.get(parameter);
 
-            startGSSNode = startSymbol.getGSSNode(0, new GSSNodeData<>(arguments));
+            startGSSNode = startSymbol.getGSSNode(0, arguments);
             env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
         } else {
             startGSSNode = startSymbol.getGSSNode(0);

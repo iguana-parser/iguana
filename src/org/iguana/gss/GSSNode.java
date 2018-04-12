@@ -56,13 +56,13 @@ public class GSSNode<T extends Result> {
 
 	private Map<Key, T> restPoppedElements;
 
-	private final GSSNodeData<Object> data;
+	private final Object[] data;
 
 	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
 		this(slot, inputIndex, null);
 	}
 
-	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, GSSNodeData<Object> data) {
+	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, Object[] data) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.data = data;
@@ -192,7 +192,7 @@ public class GSSNode<T extends Result> {
 		return inputIndex;
 	}
 
-	public GSSNodeData<Object> getData() {
+	public Object[] getData() {
 		return data;
 	}
 
@@ -223,7 +223,7 @@ public class GSSNode<T extends Result> {
 
 		return  slot == other.getGrammarSlot() &&
 				inputIndex == other.getInputIndex() &&
-				data.equals(other.data);
+				Arrays.equals(data, other.data);
 	}
 
 	public int hashCode() {
