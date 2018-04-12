@@ -27,6 +27,8 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
@@ -34,16 +36,15 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
-import org.iguana.gss.GSSNodeData;
-import org.iguana.gss.lookup.GSSNodeLookup;
-import org.iguana.gss.lookup.GSSNodeLookup.GSSNodeCreator;
 import org.iguana.parser.Runtime;
 import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class NonterminalGrammarSlot extends AbstractGrammarSlot {
@@ -52,7 +53,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final List<BodyGrammarSlot> firstSlots;
 
-	private final GSSNodeLookup nodeLookup;
+	private Map<Key, GSSNode> gssNodes;
 
 	private LookAheadTest lookAheadTest;
 
@@ -60,7 +61,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
-		this.nodeLookup = GSSNodeLookup.getNodeLookup();
+		this.gssNodes = new HashMap<>();
 		this.firstSlots = new ArrayList<>();
 	}
 	
@@ -101,7 +102,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	public int countGSSNodes() {
-		return nodeLookup.size();
+		return gssNodes.size();
 	}
 	
 	@Override
@@ -120,84 +121,72 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
     }
 
     public GSSNode getGSSNode(int i) {
-		return nodeLookup.get(this, i);
+		return gssNodes.computeIfAbsent(Keys.from(i), key -> new GSSNode(this, i));
+	}
+
+	public GSSNode getGSSNode(int i, Object[] data) {
+		return gssNodes.computeIfAbsent(Keys.from(i, data), key -> new GSSNode(this, i, data));
 	}
 	
 	public Iterable<GSSNode> getGSSNodes() {
-		return nodeLookup.getNodes();
+		return gssNodes.values();
 	}
 
 	@Override
 	public void reset(Input input) {
-		nodeLookup.reset(input);
+		gssNodes = new HashMap<>();
 	}
 	
-	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode u, T result, Expression[] arguments, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, Runtime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
-		
-		if (arguments == null) {
-			GSSNode<T> gssNode = nodeLookup.get(i);
-			// No GSS node labelled (slot, k) exits
-			if (gssNode == null) {
-				gssNode = new GSSNode<>(this, i);
-				ParserLogger.getInstance().gssNodeAdded(gssNode);
 
-				List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
-				if (firstSlots != null)
-					for (int j = 0; j < firstSlots.size(); j++) {
-						BodyGrammarSlot slot = firstSlots.get(j);
-						if (!slot.getConditions().execute(input, gssNode, i, runtime)) {
-							runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), env);
-						}
-					}
-			} else {
-				ParserLogger.getInstance().log("GSSNode found: %s", gssNode);
-			}
-			gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime); // Record environment on the edge
-			nodeLookup.put(i, gssNode);
-			return;
+        Key key;
+        Object[] data = null;
+
+        if (arguments == null) {
+        	key = Keys.from(i);
+		} else {
+			data = runtime.evaluate(arguments, env, input);
+        	key = Keys.from(i, data);
 		}
-		
-		GSSNodeData<Object> data = new GSSNodeData<>(runtime.evaluate(arguments, env, input));
-		
-		GSSNodeCreator<T> creator = gssNode -> {
-			if (gssNode == null) {
-				
-				gssNode = new GSSNode<>(this, i, data);
 
-				ParserLogger.getInstance().gssNodeAdded(gssNode);
-				ParserLogger.getInstance().log("GSSNode created: %s(%s)", gssNode, data);
-				
-				gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime);
+		GSSNode<T> gssNode = gssNodes.get(key);
 
-				Environment newEnv;
-				
+		if (gssNode == null) {
+			gssNode = new GSSNode<>(this, i, data);
+
+			ParserLogger.getInstance().gssNodeAdded(gssNode);
+			ParserLogger.getInstance().log("GSSNode created: %s(%s)", gssNode, data);
+
+			Environment newEnv = runtime.getEnvironment();
+
+			if (data != null) {
 				if (runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY)
-					newEnv = runtime.getEmptyEnvironment().declare(data.getValues());
+					newEnv = runtime.getEmptyEnvironment().declare(data);
 				else
-					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data.getValues());
-				
-				for (BodyGrammarSlot s : getFirstSlots(input.charAt(i))) {
-					
+					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);
+			}
+
+			List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
+			if (firstSlots != null) {
+				for (int j = 0; j < firstSlots.size(); j++) {
+					BodyGrammarSlot slot = firstSlots.get(j);
+
 					runtime.setEnvironment(newEnv);
 
-					if (s.getLabel() != null)
-						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, s.getLabel()), i);
+					if (slot.getLabel() != null)
+						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-					if (!s.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
-						runtime.scheduleDescriptor(s, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
+					if (!slot.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
+						runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
+
 				}
-				
-			} else {
-				gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime);
 			}
-			return gssNode;
-		};
-		nodeLookup.get(i, data, creator);
-	}
-	
-	public GSSNode getGSSNode(int i, GSSNodeData<Object> data) {
-		return nodeLookup.get(this, i, data);
+
+			gssNodes.put(key, gssNode);
+		}
+
+		gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime);
 	}
 
 }
