@@ -32,8 +32,6 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
      */
     private int errorIndex;
 
-    private Input errorInput;
-
     /**
      * The current GSS node at which an error is occurred.
      */
@@ -67,10 +65,9 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
      *
      */
     @Override
-    public void recordParseError(Input input, int i, GrammarSlot slot, GSSNode<T> u) {
+    public void recordParseError(int i, GrammarSlot slot, GSSNode<T> u) {
         if (i >= this.errorIndex) {
-            logger.log("Error recorded at %s %d", slot, i);
-            this.errorInput = input;
+            logger.error(slot, i);
             this.errorIndex = i;
             this.errorSlot = slot;
             this.errorGSSNode = u;
@@ -160,7 +157,7 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
 
     @Override
     public ParseError getParseError() {
-        return new ParseError(errorSlot, errorInput == null ? Input.empty() : errorInput, errorIndex, errorGSSNode);
+        return new ParseError(errorSlot, errorIndex, errorGSSNode);
     }
 
     @Override

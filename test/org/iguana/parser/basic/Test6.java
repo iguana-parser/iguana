@@ -41,7 +41,6 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -119,7 +118,7 @@ public class Test6 {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	@Test

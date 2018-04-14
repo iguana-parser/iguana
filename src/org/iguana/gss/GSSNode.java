@@ -87,7 +87,7 @@ public class GSSNode<T extends Result> {
 	}
 
 	public boolean pop(Input input, EndGrammarSlot slot, T child, Object value, Runtime<T> runtime) {
-		ParserLogger.getInstance().log("Pop %s, %d, %s, %s", this, inputIndex, child, value);
+		ParserLogger.getInstance().pop(this, inputIndex, child, value);
 		T node = addPoppedElements(slot, child, value, runtime.getResultOps());
 		if (node != null)
 			iterateOverEdges(input, node, runtime);

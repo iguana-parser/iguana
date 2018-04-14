@@ -155,8 +155,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		if (gssNode == null) {
 			gssNode = new GSSNode<>(this, i, data);
 
-			ParserLogger.getInstance().gssNodeAdded(gssNode);
-			ParserLogger.getInstance().log("GSSNode created: %s(%s)", gssNode, data);
+			ParserLogger.getInstance().gssNodeAdded(gssNode, data);
 
 			Environment newEnv = runtime.getEnvironment();
 

@@ -90,7 +90,7 @@ public class Test4 {
                 .setIntermediateNodesCount(0)
                 .setPackedNodesCount(3)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
@@ -111,7 +111,7 @@ public class Test4 {
                 .setIntermediateNodesCount(1)
                 .setPackedNodesCount(6)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
@@ -136,7 +136,7 @@ public class Test4 {
                 .setIntermediateNodesCount(2)
                 .setPackedNodesCount(9)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics, input2);
+        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {

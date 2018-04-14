@@ -127,7 +127,7 @@ public class Test9 {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(5)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics);
 	}
 
 	private static ParseSuccess getParseResult1(GrammarGraph graph) {
@@ -140,7 +140,7 @@ public class Test9 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static org.iguana.sppf.NonterminalNode expectedSPPF(SPPFNodeFactory factory) {

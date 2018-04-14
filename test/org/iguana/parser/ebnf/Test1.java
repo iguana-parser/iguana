@@ -102,7 +102,7 @@ public class Test1 {
                 .setIntermediateNodesCount(0)
                 .setPackedNodesCount(2)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF0(new SPPFNodeFactory(graph)), statistics, input0);
+        return new ParseSuccess(expectedSPPF0(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF0(SPPFNodeFactory factory) {
@@ -122,7 +122,7 @@ public class Test1 {
                 .setIntermediateNodesCount(0)
                 .setPackedNodesCount(3)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input0);
+        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
@@ -143,7 +143,7 @@ public class Test1 {
                 .setIntermediateNodesCount(1)
                 .setPackedNodesCount(5)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
@@ -167,7 +167,7 @@ public class Test1 {
                 .setIntermediateNodesCount(2)
                 .setPackedNodesCount(7)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics, input2);
+        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {
@@ -194,7 +194,7 @@ public class Test1 {
                 .setIntermediateNodesCount(10)
                 .setPackedNodesCount(23)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF4(new SPPFNodeFactory(graph)), statistics, input0);
+        return new ParseSuccess(expectedSPPF4(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF4(SPPFNodeFactory factory) {

@@ -33,22 +33,22 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
 
     @Override
     public RecognizerResult base(TerminalGrammarSlot slot, int start, int end) {
-        logger.terminalNodeAdded();
+        logger.terminalNodeAdded(null);
         return RecognizerResult.of(end);
     }
 
     @Override
     public RecognizerResult merge(RecognizerResult current, RecognizerResult result1, RecognizerResult result2, BodyGrammarSlot slot) {
-        logger.packedNodeAdded();
-        if (current == null) logger.intermediateNodeAdded();
+        logger.packedNodeAdded(null);
+        if (current == null) logger.intermediateNodeAdded(null);
         return result2;
     }
 
     @Override
     public RecognizerResult convert(RecognizerResult current, RecognizerResult result, EndGrammarSlot slot, Object value) {
-        logger.packedNodeAdded();
+        logger.packedNodeAdded(null);
         if (current == null) {
-            logger.nonterminalNodeAdded();
+            logger.nonterminalNodeAdded(null);
             if (value == null) {
                 return result;
             }
