@@ -50,8 +50,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     @Override
     public NonPackedNode base(TerminalGrammarSlot slot, int start, int end) {
         TerminalNode node = new TerminalNode(slot, start, end);
-        logger.terminalNodeAdded();
-        logger.log("Terminal node added %s", node);
+        logger.terminalNodeAdded(node);
         return node;
     }
 
@@ -66,19 +65,17 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
         int rightExtent = (result2 != null) ? result2.getIndex() : result1.getIndex();
 
-        logger.packedNodeAdded();
-        logger.log("Packed node added %s", packedNode);
+        logger.packedNodeAdded(packedNode);
 
         if (current == null) {
             current = new IntermediateNode(rightExtent);
-            ((IntermediateNode) current).addPackedNode(packedNode);
-            logger.intermediateNodeAdded();
-            logger.log("Intermediate node added %s", current);
+            IntermediateNode intermediateNode = (IntermediateNode) current;
+            intermediateNode.addPackedNode(packedNode);
+            logger.intermediateNodeAdded(intermediateNode);
         } else {
             ((IntermediateNode) current).addPackedNode(packedNode);
             if (current.getChildren().size() == 2) {
-                logger.ambiguousNodeAdded();
-                logger.log("Ambiguous node added: %s", current);
+                logger.ambiguousNodeAdded(current);
             }
         }
 
@@ -90,8 +87,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         PackedNode packedNode = new PackedNode(slot);
         packedNode.setLeftChild(result);
 
-        logger.packedNodeAdded();
-        logger.log("Packed node added %s", packedNode);
+        logger.packedNodeAdded(packedNode);
 
         if (current == null) {
             if (value == null)
@@ -99,14 +95,13 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
             else
                 current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getIndex(), value);
 
-            ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
-            logger.nonterminalNodeAdded();
-            logger.log("Nonterminal node added %s", current);
+            NonterminalNode nonterminalNode = (NonterminalNode) current;
+            nonterminalNode.addPackedNode(packedNode);
+            logger.nonterminalNodeAdded(nonterminalNode);
         } else {
             ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
             if (current.getChildren().size() == 2) {
-                logger.ambiguousNodeAdded();
-                logger.log("Ambiguous node added: %s", current);
+                logger.ambiguousNodeAdded(current);
             }
         }
 

@@ -37,7 +37,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
-import org.iguana.gss.GSSNodeData;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.Result;
@@ -141,8 +140,6 @@ public class Iguana {
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
 
-        logger.log("Parsing %s:", input.getURI());
-
         Timer timer = new Timer();
         timer.start();
 
@@ -152,7 +149,7 @@ public class Iguana {
 
         while(runtime.hasDescriptor()) {
             Descriptor<T> descriptor = runtime.nextDescriptor();
-            logger.log("Processing %s", descriptor);
+            logger.processDescriptor(descriptor);
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), runtime);
         }
 
@@ -160,19 +157,14 @@ public class Iguana {
 
         timer.stop();
 
-        ParseResult<T> parseResult;
-
         if (root == null) {
-            parseResult = runtime.getParseError();
-            logger.log("Parse error:\n %s", parseResult);
+            ParseError error = runtime.getParseError();
+            logger.error(error.getSlot(), error.getInputIndex());
+            return error;
         } else {
             ParseStatistics parseStatistics = runtime.getParseStatistics(timer);
-            parseResult = new ParseSuccess(root, parseStatistics, input);
-            logger.log("Parsing finished successfully.");
-            logger.log(parseStatistics.toString());
+            return new ParseSuccess(root, parseStatistics);
         }
-
-        return parseResult;
     }
 
     private static  void printStats(GrammarGraph grammarGraph) {

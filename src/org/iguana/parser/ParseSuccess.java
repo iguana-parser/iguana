@@ -27,7 +27,6 @@
 
 package org.iguana.parser;
 
-import iguana.utils.input.Input;
 import org.iguana.util.ParseStatistics;
 
 public class ParseSuccess<T> extends AbstractParseResult<T> {
@@ -35,8 +34,7 @@ public class ParseSuccess<T> extends AbstractParseResult<T> {
 	private final T result;
 	private final ParseStatistics parseStatistics;
 
-	public ParseSuccess(T result, ParseStatistics parseStatistics, Input input) {
-		super(input);
+	public ParseSuccess(T result, ParseStatistics parseStatistics) {
 		this.result = result;
 		this.parseStatistics = parseStatistics;
     }

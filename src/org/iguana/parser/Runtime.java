@@ -23,7 +23,7 @@ public interface Runtime<T extends Result> {
 
     void scheduleDescriptor(BodyGrammarSlot grammarSlot, GSSNode<T> gssNode, T result, Environment env);
 
-    void recordParseError(Input input, int i, GrammarSlot slot, GSSNode<T> u);
+    void recordParseError(int i, GrammarSlot slot, GSSNode<T> u);
 
     void evaluate(Statement[] statements, Environment env, Input input);
 

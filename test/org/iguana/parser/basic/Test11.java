@@ -118,7 +118,7 @@ public class Test11 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(7)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static NonterminalNode expectedSPPF(SPPFNodeFactory factory) {

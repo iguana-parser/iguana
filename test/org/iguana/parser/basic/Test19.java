@@ -12,7 +12,6 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -92,7 +91,7 @@ public class Test19 {
                 .setIntermediateNodesCount(2)
                 .setPackedNodesCount(5)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
     }
 
     private NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
@@ -117,7 +116,7 @@ public class Test19 {
                 .setIntermediateNodesCount(7)
                 .setPackedNodesCount(14)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
     }
 
     private NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
@@ -153,7 +152,7 @@ public class Test19 {
                 .setIntermediateNodesCount(26)
                 .setPackedNodesCount(51)
                 .setAmbiguousNodesCount(10).build();
-        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics, input3);
+        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics);
     }
 
     private NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {

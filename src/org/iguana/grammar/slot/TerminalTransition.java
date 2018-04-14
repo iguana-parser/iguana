@@ -74,7 +74,7 @@ public class TerminalTransition extends AbstractTransition {
 		T cr = slot.getResult(input, i, runtime);
 		
 		if (cr == null) {
-			runtime.recordParseError(input, i, origin, u);
+			runtime.recordParseError(i, origin, u);
 			return;
 		}
 

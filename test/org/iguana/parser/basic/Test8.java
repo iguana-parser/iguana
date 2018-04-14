@@ -162,7 +162,7 @@ public class Test8 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static ParseSuccess getParseResult1_Lookahead1(GrammarGraph graph) {
@@ -175,7 +175,7 @@ public class Test8 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static ParseSuccess getParseResult2_Lookahead0(GrammarGraph graph) {
@@ -188,7 +188,7 @@ public class Test8 {
 				.setIntermediateNodesCount(4)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static ParseSuccess getParseResult2_Lookahead1(GrammarGraph graph) {
@@ -201,7 +201,7 @@ public class Test8 {
 				.setIntermediateNodesCount(4)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {

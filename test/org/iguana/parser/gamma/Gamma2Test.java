@@ -83,7 +83,7 @@ public class Gamma2Test {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(12)
 				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(null, statistics, getInput1());
+		return new ParseSuccess(null, statistics);
 	}
 	
 	private static ParseSuccess getNewParseResult2(GrammarGraph graph) {
@@ -96,7 +96,7 @@ public class Gamma2Test {
 				.setIntermediateNodesCount(6)
 				.setPackedNodesCount(28)
 				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(null, statistics, getInput2());
+		return new ParseSuccess(null, statistics);
 	}
 	
 	private static ParseSuccess getNewParseResult3(GrammarGraph graph) {
@@ -109,7 +109,7 @@ public class Gamma2Test {
 				.setIntermediateNodesCount(10)
 				.setPackedNodesCount(55)
 				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(null, statistics, getInput3());
+		return new ParseSuccess(null, statistics);
 	}
 	
 //	private static NonterminalNode expectedSPPF1(GrammarGraph graph) {

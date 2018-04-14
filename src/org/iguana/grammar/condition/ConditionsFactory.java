@@ -88,7 +88,7 @@ public class ConditionsFactory {
 						SlotAction slotAction = actions.get(j);
 					    if (slotAction.execute(input, u, i, ctx)) {
 //			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
-                            runtime.recordParseError(input, i, u.getGrammarSlot(), u);
+                            runtime.recordParseError(i, u.getGrammarSlot(), u);
 			                return true;
 			            }
 			        }
@@ -110,7 +110,7 @@ public class ConditionsFactory {
 				for (int j = 0; j < actions.size(); j++) {
 					SlotAction slotAction = actions.get(j);
 		            if (slotAction.execute(input, u, i)) {
-                        runtime.recordParseError(input, i, u.getGrammarSlot(), u);
+                        runtime.recordParseError(i, u.getGrammarSlot(), u);
 		                return true;
 		            }
 		        }

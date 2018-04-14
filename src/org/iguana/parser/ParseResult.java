@@ -27,8 +27,6 @@
 
 package org.iguana.parser;
 
-import iguana.utils.input.Input;
-
 public interface ParseResult<T> {
 	
 	boolean isParseError();
@@ -38,6 +36,4 @@ public interface ParseResult<T> {
 	ParseError asParseError();
 	
 	ParseSuccess<T> asParseSuccess();
-	
-	Input getInput();
 }

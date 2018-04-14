@@ -111,7 +111,7 @@ public class LayoutTest2 {
                 .setIntermediateNodesCount(6)
                 .setPackedNodesCount(15)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(getSPPFNode(new SPPFNodeFactory(graph), input), statistics, input);
+        return new ParseSuccess(getSPPFNode(new SPPFNodeFactory(graph), input), statistics);
     }
 
 

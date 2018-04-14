@@ -95,7 +95,7 @@ public class Gamma2TestLargeInput {
 							   .setIntermediateNodesCount(1225)
 							   .setPackedNodesCount(61300)
 							   .setAmbiguousNodesCount(2352)
-							   .build(), getInput(50)));
+							   .build()));
 
 		// 100
 		results.add((GrammarGraph registry) -> new ParseSuccess(null,
@@ -108,7 +108,7 @@ public class Gamma2TestLargeInput {
 							   .setIntermediateNodesCount(4950)
 							   .setPackedNodesCount(495100)
 							   .setAmbiguousNodesCount(9702)
-							   .build(), getInput(50)));
+							   .build()));
 
 		// 150
 //		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 

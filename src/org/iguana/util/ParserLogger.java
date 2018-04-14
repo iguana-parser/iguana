@@ -3,9 +3,12 @@ package org.iguana.util;
 import iguana.utils.logging.IguanaLogger;
 import iguana.utils.logging.JavaUtilIguanaLogger;
 import iguana.utils.logging.LogLevel;
-import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
+import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.result.Result;
+import org.iguana.sppf.*;
 
 public class ParserLogger {
 
@@ -33,6 +36,8 @@ public class ParserLogger {
 
     private final IguanaLogger logger;
 
+    private boolean logEnabled;
+
     public ParserLogger() {
         Configuration config = Configuration.load();
         if (config.getLogLevel() == LogLevel.NONE)
@@ -52,63 +57,56 @@ public class ParserLogger {
         countGSSEdges = 0;
     }
 
-    public void terminalNodeAdded() {
+    public void terminalNodeAdded(TerminalNode node) {
         countTerminalNodes++;
+        if (logEnabled) logger.log("Terminal node added %s", node);
     }
 
-    public void nonterminalNodeAdded() {
+    public void nonterminalNodeAdded(NonterminalNode node) {
         countNonterminalNodes++;
+        if (logEnabled) logger.log("Nonterminal node added %s", node);
     }
 
-    public void intermediateNodeAdded() {
+    public void intermediateNodeAdded(IntermediateNode node) {
         countIntermediateNodes++;
+        if (logEnabled) logger.log("Intermediate node added %s", node);
     }
 
-    public void packedNodeAdded() {
+    public void packedNodeAdded(PackedNode packedNode) {
         countPackedNodes++;
+        if (logEnabled) logger.log("Packed node added %s", packedNode);
     }
 
-    public void ambiguousNodeAdded() {
+    public void ambiguousNodeAdded(NonPackedNode node) {
         countAmbiguousNodes++;
+        if (logEnabled) logger.log("Ambiguous node added: %s", node);
     }
 
-    public void gssNodeAdded(GSSNode<?> node) {
+    public void gssNodeAdded(GSSNode<?> node, Object[] data) {
         countGSSNodes++;
-        logger.log("GSS node added %s", node);
+        if (logEnabled) logger.log("GSS node added %s(%s)", node, data);
     }
 
     public void gssEdgeAdded(GSSEdge<?> edge) {
         countGSSEdges++;
-        logger.log("GSS Edge added %s", edge);
+        if (logEnabled) logger.log("GSS Edge added %s", edge);
     }
 
     public void descriptorAdded(Descriptor<?> descriptor) {
-        logger.log("Descriptor created: %s", descriptor);
         descriptorsCount++;
+        if (logEnabled) logger.log("Descriptor created: %s", descriptor);
     }
 
-    public void log(String s) {
-        logger.log(s);
+    public <T extends Result> void pop(GSSNode<T> gssNode, int inputIndex, T child, Object value) {
+        if (logEnabled) logger.log("Pop %s, %d, %s, %s", gssNode, inputIndex, child, value);
     }
 
-    public void log(String s, Object arg) {
-        logger.log(s, arg);
+    public void error(GrammarSlot slot, int i) {
+        if (logEnabled) logger.log("Error recorded at %s %d", slot, i);
     }
 
-    public void log(String s, Object arg1, Object arg2) {
-        logger.log(s, arg1, arg2);
-    }
-
-    public void log(String s, Object arg1, Object arg2, Object arg3) {
-        logger.log(s, arg1, arg2, arg3);
-    }
-
-    public void log(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
-        logger.log(s, arg1, arg2, arg3, arg4);
-    }
-
-    public void log(String s, Object...args) {
-        logger.log(s, args);
+    public <T extends Result> void processDescriptor(Descriptor<T> descriptor) {
+        if (logEnabled) logger.log("Processing %s", descriptor);
     }
 
     public int getDescriptorsCount() {
@@ -142,4 +140,5 @@ public class ParserLogger {
     public int getCountGSSEdges() {
         return countGSSEdges;
     }
+
 }
