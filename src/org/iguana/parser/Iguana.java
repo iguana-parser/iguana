@@ -35,6 +35,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
@@ -157,6 +158,8 @@ public class Iguana {
 
         timer.stop();
 
+//        printStats(grammarGraph);
+
         if (root == null) {
             ParseError error = runtime.getParseError();
             logger.error(error.getSlot(), error.getInputIndex());
@@ -168,6 +171,10 @@ public class Iguana {
     }
 
     private static  void printStats(GrammarGraph grammarGraph) {
+        for (TerminalGrammarSlot slot: grammarGraph.getTerminalGrammarSlots()) {
+            System.out.println(slot.getTerminal().getName() + " : " + slot.countTerminalNodes());
+        }
+
         for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {
             System.out.print(slot.getNonterminal().getName());
             System.out.println(" GSS nodes: " + slot.countGSSNodes());
