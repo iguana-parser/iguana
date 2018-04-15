@@ -175,6 +175,10 @@ public class GrammarGraph implements Serializable {
         return nonterminalsMap.values();
     }
 
+    public Collection<TerminalGrammarSlot> getTerminalGrammarSlots() {
+        return terminalsMap.values();
+    }
+
     private void convert(Rule rule) {
         Nonterminal nonterminal = rule.getHead();
         NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(nonterminal);

@@ -37,7 +37,9 @@ import org.iguana.parser.Runtime;
 import org.iguana.result.Result;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
@@ -60,10 +62,15 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 				node = null;
 			} else {
 				node = runtime.getResultOps().base(this, i, i + length);
+				terminalNodes.put(i, node);
 			}
-			terminalNodes.put(i, node);
 		}
 		return node;
+	}
+
+	public int countTerminalNodes() {
+		System.out.println(terminalNodes);
+		return terminalNodes.size();
 	}
 
     public Terminal getTerminal() {
