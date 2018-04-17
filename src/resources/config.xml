@@ -5,7 +5,7 @@
         <GSSLookupImpl>HASH_MAP</GSSLookupImpl>
         <MatcherType>DFA</MatcherType>
         <HashMapImpl>INT_OPEN_ADDRESSING</HashMapImpl>
-        <EnvironmentImpl>ARRAY</EnvironmentImpl>
+        <EnvironmentImpl>INT_ARRAY</EnvironmentImpl>
     </Parser>
 
     <Logging>

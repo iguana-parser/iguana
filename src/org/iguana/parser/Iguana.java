@@ -30,13 +30,16 @@ package org.iguana.parser;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.env.array.ArrayEnvironment;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.RecognizerResult;
@@ -106,6 +109,7 @@ public class Iguana {
     }
 
     public static <T extends Result> ParseResult<T> run(Input input, Runtime<T> runtime, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ?> map, boolean global) {
+        EnvironmentPool.clean();
         grammarGraph.reset(input);
 
         IEvaluatorContext ctx = runtime.getEvaluatorContext();
@@ -159,6 +163,11 @@ public class Iguana {
         timer.stop();
 
 //        printStats(grammarGraph);
+
+//        System.out.println(ArrayEnvironment.count);
+//        System.out.println(EnvironmentPool.environmentPools[0].size());
+//        System.out.println(EnvironmentPool.environmentPools[1].size());
+//        System.out.println(EnvironmentPool.environmentPools[2].size());
 
         if (root == null) {
             ParseError error = runtime.getParseError();
