@@ -52,4 +52,8 @@ public interface Environment {
 	
 	Object lookup(int i);
 
+	default int size() {
+		return 0;
+	}
+
 }

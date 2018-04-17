@@ -84,12 +84,12 @@ public class IguanaRunner {
 			GrammarGraph grammarGraph = GrammarGraph.from(grammar, config);
 
 			for (int i = 0; i < warmupCount; i++) {
-				Iguana.run(input, new ParserRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
+//				Iguana.run(input, new ParserRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
 //				Iguana.run(input, new RecognizerRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
 			}
 
 			System.out.println("Running " + file.getPath());
-			System.out.printf("%-10s%20s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "ambiguities", "memory");
+			System.out.printf("%-10s%20s%20s%20s%20s%20s%20s%20s%n", "#", "length", "nano time", "user time", "descriptors", "gss nodes", "ambiguities", "memory");
 			for (int i = 0; i < runCount; i++) {
 				try {
 					ParseResult<NonPackedNode> result = Iguana.run(input, new ParserRuntime(config), grammarGraph, Nonterminal.withName(grammar.getStartSymbol().getName()), Collections.emptyMap(), true);
@@ -97,7 +97,7 @@ public class IguanaRunner {
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input, key -> new ArrayList<>()).add(statistics);
-						System.out.printf("%-10d%20d%20d%20d%20d%20d%20d%n", i + 1, input.length(), statistics.getNanoTime() / 1000_000, statistics.getUserTime() / 1000_000, statistics.getDescriptorsCount(), statistics.getAmbiguousNodesCount(), statistics.getMemoryUsed());
+						System.out.printf("%-10d%20d%20d%20d%20d%20d%20d%20d%n", i + 1, input.length(), statistics.getNanoTime() / 1000_000, statistics.getUserTime() / 1000_000, statistics.getDescriptorsCount(), statistics.getGssNodesCount(), statistics.getAmbiguousNodesCount(), statistics.getMemoryUsed());
 					} else {
 						System.out.printf("%-10d%20s%n", i + 1, result.asParseError());
 					}

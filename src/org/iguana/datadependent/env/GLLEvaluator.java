@@ -29,6 +29,7 @@ package org.iguana.datadependent.env;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.array.ArrayEvaluatorContext;
+import org.iguana.datadependent.env.intarray.IntArrayEvaluatorContext;
 import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.iguana.datadependent.env.simple.SimpleEvaluatorContext;
 import org.iguana.util.Configuration;
@@ -45,7 +46,9 @@ public class GLLEvaluator {
 		switch(config.getEnvImpl()) {
 			case ARRAY: 
 				return new ArrayEvaluatorContext();
-			case HASH_MAP: 
+			case INT_ARRAY:
+				return new IntArrayEvaluatorContext();
+			case HASH_MAP:
 				return new SimpleEvaluatorContext();
 			case TRIE: 
 				return new PersistentEvaluatorContext();

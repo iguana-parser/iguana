@@ -119,7 +119,7 @@ public class GrammarGraph implements Serializable {
     }
 
     private GrammarGraph(Grammar grammar, Configuration config) {
-        if (config.getEnvImpl() == EnvironmentImpl.ARRAY) {
+        if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {
             VarToInt transformer = new VarToInt();
             this.grammar = transformer.transform(grammar);
             this.mapping = transformer.getMapping();

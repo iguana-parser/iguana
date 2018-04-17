@@ -29,6 +29,7 @@ package org.iguana.datadependent.ast;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.env.intarray.MutableLong;
 import org.iguana.datadependent.values.Stack;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
@@ -653,6 +654,14 @@ public class AST {
             @Override
             public Object interpret(IEvaluatorContext ctx, Input input) {
                 Object result = arg1.interpret(ctx, input);
+                if (result instanceof MutableLong) {
+                    MutableLong value = (MutableLong) result;
+                    int i = (java.lang.Integer) arg2.interpret(ctx, input);
+                    if (i == 0) {
+                        return value.getHigherOrderInt();
+                    }
+                    return value.getLowerOrderInt();
+                }
                 if (result instanceof Long) {
                     long value = (Long) result;
                     int i = (java.lang.Integer) arg2.interpret(ctx, input);

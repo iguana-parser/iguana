@@ -160,7 +160,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 			Environment newEnv = runtime.getEnvironment();
 
 			if (data != null) {
-				if (runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY)
+				if (runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY || runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.INT_ARRAY)
 					newEnv = runtime.getEmptyEnvironment().declare(data);
 				else
 					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);

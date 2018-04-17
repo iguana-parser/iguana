@@ -30,6 +30,7 @@ package org.iguana.gss;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.parser.Runtime;
 import org.iguana.result.Result;
@@ -110,8 +111,10 @@ public class GSSEdge<T extends Result> {
 
 		runtime.setEnvironment(env);
 
-		if (returnSlot.getConditions().execute(input, source, inputIndex, runtime.getEvaluatorContext(), runtime))
+		if (returnSlot.getConditions().execute(input, source, inputIndex, runtime.getEvaluatorContext(), runtime)) {
+			EnvironmentPool.returnToPool(env);
 			return null;
+		}
 
 		env = runtime.getEnvironment();
 
