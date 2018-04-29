@@ -15,6 +15,12 @@ public class Keys {
 
     public static Key from(int a) { return new IntKey1(a); }
 
+    public static Key from(int a, Object o) { return new IntObjectKey(a, o); }
+
+    public static Key from(int a, Object[] objects) { return new IntArrayKey(a, objects); }
+
+    public static Key from(int a, int b, Object object) { return new IntIntObjectKey(a, b, object); }
+
     public static Key from(IntFunction2 f, int a, int b) {
         return new IntKey2(a, b, f.apply(a, b));
     }

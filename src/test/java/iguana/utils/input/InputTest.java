@@ -32,24 +32,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class InputTest {
-	
-	@Test
-	public void testLogicalLine() {
-		String s = "\uD83C\uDF55abc\uD83C\uDF55";
-		
-		IntArrayCharSequence seq = Input.fromString(s).asCharSequence();
-		
-		assertEquals(5, seq.logicalLength());
-		
-		assertEquals(0, seq.logicalIndexAt(0));
-		assertEquals(0, seq.logicalIndexAt(1));
-		assertEquals(1, seq.logicalIndexAt(2));
-		assertEquals(2, seq.logicalIndexAt(3));
-		assertEquals(3, seq.logicalIndexAt(4));
-		assertEquals(4, seq.logicalIndexAt(5));
-		assertEquals(4, seq.logicalIndexAt(6));
-	}
-	
+
 	@Test
 	public void testLineColumnNumber1() {
 		Input input = Input.fromString("big\n brother");
@@ -109,29 +92,5 @@ public class InputTest {
 		assertTrue(input.matchBackward(37, "all"));
 		assertTrue(input.matchBackward(32, "the"));
 	}
-
-    @Test
-    public void testInsert1() {
-        Input input1 = Input.fromString("We are just in the wall");
-        Input input2 = Input.fromString(" another brick");
-        Input result = input1.insert(11, input2);
-        assertEquals(Input.fromString("We are just another brick in the wall"), result);
-    }
-
-    @Test
-    public void testInsert2() {
-        Input input1 = Input.fromString(" another brick in the wall");
-        Input input2 = Input.fromString("We are just");
-        Input result = input1.insert(0, input2);
-        assertEquals(Input.fromString("We are just another brick in the wall"), result);
-    }
-
-    @Test
-    public void testInsert3() {
-        Input input1 = Input.fromString("We are just another");
-        Input input2 = Input.fromString(" brick in the wall");
-        Input result = input1.insert(input1.length() - 1, input2);
-        assertEquals(Input.fromString("We are just another brick in the wall"), result);
-    }
 
 }
