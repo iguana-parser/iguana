@@ -174,7 +174,7 @@ public class Iguana {
             logger.error(error.getSlot(), error.getInputIndex());
             return error;
         } else {
-            ParseStatistics parseStatistics = runtime.getParseStatistics(timer);
+            ParseStatistics parseStatistics = runtime.getParseStatistics(timer, input);
             return new ParseSuccess(root, parseStatistics);
         }
     }

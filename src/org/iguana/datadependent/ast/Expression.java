@@ -119,6 +119,10 @@ public abstract class Expression extends AbstractAST {
             return true;
         }
 
+        public int getValue() {
+            return value;
+        }
+
         @Override
         public Object interpret(IEvaluatorContext ctx, Input input) {
             return value;
@@ -139,7 +143,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public java.lang.String toString() {
-            return value.toString();
+            return java.lang.String.valueOf(value);
         }
 
         @Override
@@ -297,10 +301,12 @@ public abstract class Expression extends AbstractAST {
         private static final long serialVersionUID = 1L;
         private final Integer element1;
         private final Integer element2;
+        private final Long longValue;
 
         IntTuple2(Integer element1, Integer element2) {
             this.element1 = element1;
             this.element2 = element2;
+            this.longValue = toUnsignedLong(element1.value) << 32 | toUnsignedLong(element2.value);
         }
 
         public Integer getElement1() {
@@ -313,9 +319,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public Object interpret(IEvaluatorContext ctx, Input input) {
-            int value1 = (java.lang.Integer) element1.interpret(ctx, input);
-            int value2 = (java.lang.Integer) element2.interpret(ctx, input);
-            return toUnsignedLong(value1) << 32 | toUnsignedLong(value2);
+            return longValue;
         }
 
         @Override

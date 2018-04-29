@@ -2,14 +2,13 @@ package org.iguana.datadependent.env.intarray;
 
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.EnvironmentPool;
-import org.iguana.datadependent.env.array.ArrayEnvironment;
 
 import static java.lang.Integer.toUnsignedLong;
 
 public class IntArrayEnvironment implements Environment {
 
     /**
-     * size o6 o5 o4 o3 o2 o1
+     * size [o6, o5] [o4, o3] o2 o1
      */
     private long value;
 

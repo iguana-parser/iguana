@@ -161,12 +161,13 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
     }
 
     @Override
-    public ParseStatistics getParseStatistics(Timer timer) {
+    public ParseStatistics getParseStatistics(Timer timer, Input input) {
         return ParseStatistics.builder()
                               .setNanoTime(timer.getNanoTime())
                               .setUserTime(timer.getUserTime())
                               .setSystemTime(timer.getSystemTime())
                               .setMemoryUsed(getMemoryUsed())
+                              .setInputLength(input.length())
                               .setDescriptorsCount(logger.getDescriptorsCount())
                               .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
                               .setGSSEdgesCount(logger.getCountGSSEdges())

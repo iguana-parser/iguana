@@ -332,6 +332,9 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
             case "find":
                 return AST.find(arguments[0], arguments[1]);
             case "get":
+                if (arguments[1] instanceof Integer) {
+                    return AST.get(arguments[0], ((Integer) arguments[1]).getValue());
+                }
                 return AST.get(arguments[0], arguments[1]);
             case "undef":
                 return AST.undef();
