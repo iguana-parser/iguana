@@ -50,7 +50,7 @@ public class AST {
     public static final Expression TRUE = Expression.Boolean.TRUE;
     public static final Expression FALSE = Expression.Boolean.FALSE;
 
-    public static Expression integer(java.lang.Integer value) {
+    public static Expression.Integer integer(java.lang.Integer value) {
         return new Expression.Integer(value);
     }
 
@@ -642,6 +642,39 @@ public class AST {
             @Override
             public java.lang.String toString() {
                 return java.lang.String.format("find(%s,%s)", arg1, arg2);
+            }
+        };
+    }
+
+    public static Expression.Call get(Expression arg1, int arg2) {
+        return new Expression.Call("get", arg1, AST.integer(arg2)) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Object interpret(IEvaluatorContext ctx, Input input) {
+                Object result = arg1.interpret(ctx, input);
+                if (result instanceof MutableLong) {
+                    MutableLong value = (MutableLong) result;
+                    if (arg2 == 0) {
+                        return value.getHigherOrderInt();
+                    }
+                    return value.getLowerOrderInt();
+                }
+                if (result instanceof Long) {
+                    long value = (Long) result;
+                    if (arg2 == 0) {
+                        return (int) (value >> 32);
+                    }
+                    return (int) (value & 0xffffffffL);
+                }
+                Object[] value = (Object[]) result;
+                return value[arg2];
+            }
+
+            @Override
+            public java.lang.String toString() {
+                return java.lang.String.format("%s.%s", arg1, arg2);
             }
         };
     }

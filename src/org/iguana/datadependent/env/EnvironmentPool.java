@@ -5,11 +5,19 @@ import java.util.Deque;
 
 public class EnvironmentPool {
 
-    static Deque<Environment>[] environmentPools = new Deque[3];
+    static Deque<Environment>[] environmentPools;
+
+    static {
+        environmentPools = new ArrayDeque[3];
+        for (int i = 0; i < environmentPools.length; i++) {
+            environmentPools[i] = new ArrayDeque<>(1000);
+        }
+    }
 
     public static void clean() {
-        for (int i = 0; i < environmentPools.length; i++)
-            environmentPools[i] = new ArrayDeque<>(1000_000);
+        for (int i = 0; i < environmentPools.length; i++) {
+            environmentPools[i].clear();
+        }
     }
 
     public static Environment get(int size) {

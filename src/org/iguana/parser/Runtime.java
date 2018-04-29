@@ -41,7 +41,7 @@ public interface Runtime<T extends Result> {
 
     ParseError getParseError();
 
-    ParseStatistics getParseStatistics(Timer timer);
+    ParseStatistics getParseStatistics(Timer timer, Input input);
 
     Configuration getConfiguration();
 

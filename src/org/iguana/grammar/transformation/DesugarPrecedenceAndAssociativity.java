@@ -892,7 +892,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					if (!leftOrRightRecursiveNonterminals.contains(rule.getHead().getName()))
 						xlcond = or(equal(var("l"), integer(-1)), lShiftANDEqZero(integer(n), var("l")));
-					else xlcond = or(equal(get(var("l"),integer(1)), integer(-1)), lShiftANDEqZero(integer(n), get(var("l"),integer(1))));
+					else xlcond = or(equal(get(var("l"), 1), integer(-1)), lShiftANDEqZero(integer(n), get(var("l"), 1)));
 				}
 			}
 		}
@@ -1175,17 +1175,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Expression passoc = null;
 			
 			if (labeled && larity == 2) { 
-				lprec = get(get(var("l"), integer(0)), integer(0));  // l.0.0
-				lassoc = get(get(var("l"), integer(0)), integer(1)); // l.0.1
-				rprec = get(get(var("r"), integer(0)), integer(0));  // r.0.0
+				lprec = get(get(var("l"), 0), 0);  // l.0.0
+				lassoc = get(get(var("l"), 0), 1); // l.0.1
+				rprec = get(get(var("r"), 0), 0);  // r.0.0
 			} else if (labeled && larity != 2) {
-				lprec = get(var("l"), integer(0));  // l.0
-				lassoc = get(var("l"), integer(0)); // l.0
-				rprec = get(var("r"), integer(0));  // l.0
+				lprec = get(var("l"), 0);  // l.0
+				lassoc = get(var("l"), 0); // l.0
+				rprec = get(var("r"), 0);  // l.0
 			} else if (!labeled && larity == 2) {
-				lprec = get(var("l"), integer(0));  // l.0
-				lassoc = get(var("l"), integer(1)); // l.1
-				rprec = get(var("r"), integer(0));  // l.0
+				lprec = get(var("l"), 0);  // l.0
+				lassoc = get(var("l"), 1); // l.1
+				rprec = get(var("r"), 0);  // l.0
 			} else {
 				lprec = var("l");
 				lassoc = var("l");
@@ -1193,8 +1193,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 			
 			if (parity == 2) { 
-				pprec = get(var("p"), integer(0));  // p.0
-				passoc = get(var("p"), integer(1)); // p.1
+				pprec = get(var("p"), 0);  // p.0
+				passoc = get(var("p"), 1); // p.1
 			} else {
 				pprec = var("p");  // p
 				passoc = var("p"); // p
@@ -2550,14 +2550,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							} else if (isFirst) { // X ::= E alpha
 								variable = "l";
 								if (canBeFromLeft && canBeFromRight)
-									arguments = new Expression[] { get(var("p" + i), integer(0)) };
+									arguments = new Expression[] { get(var("p" + i), 0) };
 								else if (canBeFromLeft)
 									arguments = new Expression[] { var("p" + i) };
 								lret[i] = var("l");
 							} else if (isLast) { // X ::= alpha E
 								variable = "r";
 								if (canBeFromLeft && canBeFromRight)
-									arguments = new Expression[] { get(var("p" + i), integer(1)) };
+									arguments = new Expression[] { get(var("p" + i), 1) };
 								else if (canBeFromRight) {
 									arguments = new Expression[] { var("p" + i) };
 									
@@ -2625,8 +2625,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							if (pends.size() == 1) {
 								variable = symbol.getName().toLowerCase(); // x
 								if (canReachLeft && canReachRight) {
-									lbinding = varDeclStat("l", get(var(variable), integer(0)));
-									rbinding = varDeclStat("r", get(var(variable), integer(1)));
+									lbinding = varDeclStat("l", get(var(variable), 0));
+									rbinding = varDeclStat("r", get(var(variable), 1));
 									arguments = new Expression[] { tuple(larg, rarg) };
 								} else if (canReachLeft) {
 									variable = "l";
@@ -2644,17 +2644,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								int i = config.pends.indexOf(rule.getHead().getName());
 								variable = symbol.getName().toLowerCase();
 								if (canReachLeft && canReachRight) {
-									lbinding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0))); // l = x.i.0
-									rbinding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1))); // r = x.i.1
+									lbinding = varDeclStat("l", get(get(var(variable), i), 0)); // l = x.i.0
+									rbinding = varDeclStat("r", get(get(var(variable), i), 1)); // r = x.i.1
 									arguments[i] = tuple(larg, rarg);
 								} else if (canReachLeft) {
-									binding = varDeclStat("l", get(var(variable), integer(i)));
+									binding = varDeclStat("l", get(var(variable), i));
 									arguments[i] = larg;
 								} else {
 									boolean prefixBelow = configs.get(rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
 									boolean canBecomePostfix = configs.get(rule.getHead().getName()).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 									if (prefixBelow || canBecomePostfix)
-										binding = varDeclStat("r", get(var(variable), integer(i)));
+										binding = varDeclStat("r", get(var(variable), i));
 									else
 										variable = "";
 									arguments[i] = rarg;
@@ -2664,7 +2664,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							if (pends.size() == 1) {
 								variable = "l" + symbol.getName().toLowerCase();
 								if (canReachLeft && canReachRight) {
-									binding = varDeclStat("l", get(var(variable), integer(0)));
+									binding = varDeclStat("l", get(var(variable), 0));
 									arguments = new Expression[] { tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0)) };
 								} else {
 									variable = "l";
@@ -2674,10 +2674,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								int i = config.pends.indexOf(rule.getHead().getName());
 								variable = "l" + symbol.getName().toLowerCase();
 								if (canReachLeft && canReachRight) {
-									binding = varDeclStat("l", get(get(var(variable), integer(i)), integer(0)));
+									binding = varDeclStat("l", get(get(var(variable), i), 0));
 									arguments[i] = tuple(larg, config.parity == 2? tuple(integer(0), integer(0)) : integer(0));
 								} else {
-									binding = varDeclStat("l", get(var(variable), integer(i)));
+									binding = varDeclStat("l", get(var(variable), i));
 									arguments[i] = larg;
 								}
 							}
@@ -2690,7 +2690,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								
 								if (canReachLeft && canReachRight) {
 									if (prefixBelow || canBecomePostfix)
-										binding = varDeclStat("r", get(var(variable), integer(1)));
+										binding = varDeclStat("r", get(var(variable), 1));
 									else
 										variable = "";
 									arguments = new Expression[] { tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg) };
@@ -2709,13 +2709,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								
 								if (canReachLeft && canReachRight) {
 									if (prefixBelow || canBecomePostfix)
-										binding = varDeclStat("r", get(get(var(variable), integer(i)), integer(1)));
+										binding = varDeclStat("r", get(get(var(variable), i), 1));
 									else
 										variable = "";
 									arguments[i] = tuple(config.parity == 2? tuple(integer(0), integer(0)) : integer(0), rarg);
 								} else {
 									if (prefixBelow || canBecomePostfix)
-										binding = varDeclStat("r", get(var(variable), integer(i)));
+										binding = varDeclStat("r", get(var(variable), i));
 									else
 										variable = "";
 									arguments[i] = rarg;
@@ -2741,24 +2741,24 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									arguments[i] = var("p" + i);
 									
 									if (canBeFromLeft && canBeFromRight) {
-										lret[config.pends.indexOf(end)] = ends.size() == 1? get(var(variable), integer(0)) : get(get(var(variable), integer(i)), integer(0));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? get(var(variable), 0) : get(get(var(variable), i), 0);
 										
 										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.pends.indexOf(end)] = ends.size() == 1? get(var(variable), integer(1)) : get(get(var(variable), integer(i)), integer(1));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? get(var(variable), 1) : get(get(var(variable), i), 1);
 											
 									} else if (canBeFromLeft) {
 										variable = "l";
-										lret[config.pends.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), i);
 									} else {
 										variable = "r";
 										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.pends.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), integer(i));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? var(variable) : get(var(variable), i);
 										else
 											variable = "";
 									}
@@ -2781,11 +2781,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									variable = "l";
 									
 									if (canBeFromLeft && canBeFromRight) {
-										arguments[i] = tuple(get(var("p" + i), integer(0)), parity == 2? tuple(integer(0), integer(0)) : integer(0));
-										lret[config.pends.indexOf(end)] = ends.size() == 1? get(var("l"), integer(0)) : get(get(var("l"), integer(i)), integer(0));
+										arguments[i] = tuple(get(var("p" + i), 0), parity == 2? tuple(integer(0), integer(0)) : integer(0));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? get(var("l"), 0) : get(get(var("l"), i), 0);
 									} else if (canBeFromLeft) {
 										arguments[i] = var("p" + i);
-										lret[config.pends.indexOf(end)] = ends.size() == 1? var("l") : get(var("l"), integer(i));
+										lret[config.pends.indexOf(end)] = ends.size() == 1? var("l") : get(var("l"), i);
 									} else if (canBeFromRight) {
 										arguments[i] = parity == 2? tuple(integer(0), integer(0)) : integer(0);
 										variable = "";
@@ -2809,13 +2809,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 									variable = "r";
 									
 									if (canBeFromLeft && canBeFromRight) {
-										arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), get(var("p" + i), integer(1)));
+										arguments[i] = tuple(parity == 2? tuple(integer(0), integer(0)) : integer(0), get(var("p" + i), 1));
 										
 										boolean hasPrefixBelow = configs.get(end).rightEndsPrefixBelow.contains(symbol.getName());
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.pends.indexOf(end)] = ends.size() == 1? get(var("r"), integer(1)) : get(get(var("r"), integer(i)), integer(1));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? get(var("r"), 1) : get(get(var("r"), i), 1);
 										else
 											variable = "";
 									} else if (canBeFromRight) {
@@ -2826,7 +2826,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 										boolean canBecomePostfix = configs.get(end).rightEndsThatCanLeadToPostfix.contains(symbol.getName());
 										
 										if (hasPrefixBelow || canBecomePostfix)
-											rret[config.pends.indexOf(end)] = ends.size() == 1? var("r") : get(var("r"), integer(i));
+											rret[config.pends.indexOf(end)] = ends.size() == 1? var("r") : get(var("r"), i);
 										else
 											variable = "";
 									} else if (canBeFromLeft) {

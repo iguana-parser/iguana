@@ -12,14 +12,13 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
 public class OCaml {
-	
-	@Test
-    public void test() throws FileNotFoundException {
 
+	public static void main(String[] args) throws FileNotFoundException {
 		Grammar grammar = Grammar.load(new File("/Users/afroozeh/JavaNat"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
@@ -34,11 +33,12 @@ public class OCaml {
 
 		grammar = new DesugarStartSymbol().transform(grammar);
 
-		Map<Input, List<ParseStatistics>> results = IguanaRunner.builder(grammar)
+		Map<URI, List<ParseStatistics>> results = IguanaRunner.builder(grammar)
 				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
-//				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk", "java", true)
+//				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java", "java", true)
 //				.setLimit(500)
+				.setStart(grammar.getStartSymbol())
 				.setWarmupCount(0)
 				.setRunCount(1000)
 //				.setRunGCInBetween(true)
@@ -48,6 +48,12 @@ public class OCaml {
 		long sum = results.values().stream().flatMap(List::stream).mapToLong(ParseStatistics::getNanoTime).sum();
 		System.out.println("Sum running time: " + sum / 1000_000);
 
+
+//		try {
+//			Thread.sleep(1000_000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
 //		Input input = Input.fromFile(new File("/Users/afroozeh/workspace/iguana/test/org/iguana/parser/datadependent/precedence/indirect/Test.ml"));
 //
