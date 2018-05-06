@@ -29,13 +29,14 @@ package org.iguana.grammar.condition;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.result.Result;
 
 @FunctionalInterface
 public interface SlotAction {
-	public boolean execute(Input input, GSSNode gssNode, int inputIndex);
+	<T extends Result> boolean execute(Input input, GSSNode<T> gssNode, int inputIndex);
 	
-	default boolean execute(Input input, GSSNode gssNode, int inputIndex, IEvaluatorContext ctx) {
+	default <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, int inputIndex, IEvaluatorContext ctx) {
 		return execute(input, gssNode, inputIndex);
 	}
 }

@@ -96,7 +96,7 @@ public class LayoutWeaver implements GrammarTransformation {
 			}
 
 			if (rule.getLayoutStrategy() == INHERITED) {
-				ruleBuilder.setLayout((Nonterminal) layout);
+				ruleBuilder.setLayout(layout);
 			}
 			builder.addRule(ruleBuilder.build());
 		}

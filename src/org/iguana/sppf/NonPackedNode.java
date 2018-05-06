@@ -27,24 +27,32 @@
 
 package org.iguana.sppf;
 
-import org.iguana.grammar.slot.GrammarSlot;
+public abstract class NonPackedNode implements SPPFNode {
 
+    private final int rightExtent;
 
-/**
- *
- * A NonPackedNode is the abstract super class for nonterminal
- * and intermediate symbol nodes.
- *
- *
- * @author Ali Afroozeh
- *
- */
-
-public abstract class NonPackedNode implements SPPFNode<GrammarSlot, PackedNode> {
+    public NonPackedNode(int rightExtent) {
+        this.rightExtent = rightExtent;
+    }
 
     @Override
     public String toString() {
-        return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getRightExtent());
+        return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getIndex());
     }
 
+    @Override
+    public int getIndex() {
+        return rightExtent;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof NonPackedNode)) return false;
+        NonPackedNode other = (NonPackedNode) obj;
+
+        return getGrammarSlot() == other.getGrammarSlot() &&
+               getLeftExtent() == other.getLeftExtent() &&
+               getIndex() == other.getIndex();
+    }
 }

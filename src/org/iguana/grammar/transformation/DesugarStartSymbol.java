@@ -14,7 +14,7 @@ public class DesugarStartSymbol implements GrammarTransformation {
         Grammar.Builder builder = new Grammar.Builder(grammar);
         Symbol layout = grammar.getLayout();
 
-        Nonterminal startNonterminal = Nonterminal.builder(startSymbol.getName()).setType(NonterminalNodeType.Start).build();
+        Nonterminal startNonterminal = Nonterminal.builder(startSymbol.getName()).setNodeType(NonterminalNodeType.Start).build();
 
         Rule startRule;
         if (layout != null)

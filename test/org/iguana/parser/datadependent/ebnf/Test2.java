@@ -89,25 +89,15 @@ public class Test2 {
 	
 	@Test
 	public void test() {
-		System.out.println(grammar);
-		
 		grammar = new EBNFToBNF().transform(grammar);
-		System.out.println(grammar);
-		
+
 		Input input = Input.fromString("acdbcd");
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("X"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());
 		
-		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-		// 		result.asParseSuccess().getSPPFNode(), input);
-		
 		Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
-		
 	}
 
 }

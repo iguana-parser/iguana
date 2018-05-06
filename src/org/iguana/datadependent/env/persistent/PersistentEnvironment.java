@@ -39,8 +39,8 @@ public class PersistentEnvironment implements Environment {
 	private final PersistentEnvironment parent;
 	
 	final private ImmutableMap<String, Object> bindings;
-	
-	static public final Environment EMPTY = new PersistentEnvironment(null, (TrieMap<String, Object>) TrieMap.<String, Object>of());
+
+	static final Environment EMPTY = new PersistentEnvironment(null, (TrieMap<String, Object>) TrieMap.<String, Object>of());
 	
 	private PersistentEnvironment(PersistentEnvironment parent, ImmutableMap<String, Object> bindings) {
 		this.parent = parent;
@@ -59,7 +59,7 @@ public class PersistentEnvironment implements Environment {
 
 	@Override
 	public Environment push() {
-		return new PersistentEnvironment(this, (TrieMap<String, Object>) TrieMap.<String, Object>of());
+		return new PersistentEnvironment(this, TrieMap.of());
 	}
 	
 	@Override

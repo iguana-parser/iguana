@@ -31,11 +31,9 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.TerminalNode;
-
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 public class TerminalTransition extends AbstractTransition {
 
@@ -45,43 +43,13 @@ public class TerminalTransition extends AbstractTransition {
 	
 	private final Conditions postConditions;
 
-    public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest,
-                              Conditions preConditions, Conditions postConditions, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions, Conditions postConditions) {
+		super(origin, dest);
         this.slot = slot;
         this.preConditions = preConditions;
         this.postConditions = postConditions;
-    }
-
-	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-		int i = node.getRightExtent();
-
-		if (dest.getLabel() != null) {
-            execute(input, u, node, runtime.getEmptyEnvironment());
-            return;
-        }
-		
-		if (preConditions.execute(input, u, i))
-			return;
-			
-		TerminalNode cr = slot.getTerminalNode(input, i);
-		
-		if (cr == null) {
-			runtime.recordParseError(input, i, origin, u);
-			return;			
-		}
-
-		int rightExtent = cr.getRightExtent();
-			
-		if (postConditions.execute(input, u, rightExtent))
-			return;
-			
-		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
-				
-		dest.execute(input, u, n);
 	}
-	
+
 	public TerminalGrammarSlot getSlot() {
 		return slot;
 	}
@@ -91,40 +59,34 @@ public class TerminalTransition extends AbstractTransition {
 		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getSlot();
 	}
 	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
-
-        int i = node.getRightExtent();
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T node, Environment env, Runtime<T> runtime) {
+        int i = node.isDummy() ? u.getInputIndex() : node.getIndex();
 
 		runtime.setEnvironment(env);
 		
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 		
-		TerminalNode cr = slot.getTerminalNode(input, i);
+		T cr = slot.getResult(input, i, runtime);
 		
 		if (cr == null) {
-			runtime.recordParseError(input, i, origin, u);
+			runtime.recordParseError(i, origin, u);
 			return;
 		}
 
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, cr.getRightExtent(), runtime.getEvaluatorContext()))
+		if (postConditions.execute(input, u, cr.getIndex(), runtime.getEvaluatorContext(), runtime))
 			return;
 		
-		NonPackedNode n = dest.isFirst() ? cr : dest.createIntermediateNode(node, cr);
+		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, node, cr, dest);
 				
-		dest.execute(input, u, n, runtime.getEnvironment());
+		dest.execute(input, u, n, runtime.getEnvironment(), runtime);
 	}
 	
 }

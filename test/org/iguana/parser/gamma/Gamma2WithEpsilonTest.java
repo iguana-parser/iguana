@@ -35,7 +35,6 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,7 +74,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
-        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(129, parseStatistics.getDescriptorsCount());
@@ -88,7 +87,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
-        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(374, parseStatistics.getDescriptorsCount());
@@ -101,7 +100,7 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
-        ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
         assertTrue(result.isParseSuccess());
         ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
 		assertEquals(26159, parseStatistics.getDescriptorsCount());

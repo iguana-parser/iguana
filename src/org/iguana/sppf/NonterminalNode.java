@@ -27,20 +27,15 @@
 
 package org.iguana.sppf;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-/**
- *
- * @author Ali Afroozeh
- *
- */
-public class NonterminalNode extends NonterminalOrIntermediateNode<NonterminalGrammarSlot> {
+public class NonterminalNode extends NonterminalOrIntermediateNode {
 
 	private NonterminalGrammarSlot slot;
 
-	public NonterminalNode(NonterminalGrammarSlot slot) {
+	public NonterminalNode(NonterminalGrammarSlot slot, int rightExtent) {
+		super(rightExtent);
 		this.slot = slot;
 	}
 
@@ -54,13 +49,9 @@ public class NonterminalNode extends NonterminalOrIntermediateNode<NonterminalGr
 		return visitAction.visit(this);
 	}
 
-	public boolean isListNode() {
-		return getGrammarSlot().getNonterminal().isEbnfList();
-	}
-
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
+		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getIndex());
 	}
 
 	public Object getValue() {

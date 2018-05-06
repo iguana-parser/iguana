@@ -29,22 +29,16 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSNode;
 
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
-public class ParseError extends AbstractParseResult {
+public class ParseError implements ParseResult {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
     private final GSSNode gssNode;
 
-    public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode gssNode) {
-		super(input);
+    public ParseError(GrammarSlot slot, int inputIndex, GSSNode gssNode) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
         this.gssNode = gssNode;
@@ -66,13 +60,6 @@ public class ParseError extends AbstractParseResult {
 	}
 
 	@Override
-	public String toString() {
-		return String.format("Parse error at %d, line: %d, column: %d", inputIndex, 
-							 input.getLineNumber(inputIndex), 
-							 input.getColumnNumber(inputIndex));
-	}
-
-	@Override
 	public boolean isParseError() {
 		return true;
 	}
@@ -91,5 +78,5 @@ public class ParseError extends AbstractParseResult {
 	public ParseSuccess asParseSuccess() {
 		throw new RuntimeException("Cannot call getParseSuccess on ParseError.");
 	}
- 	
+
 }

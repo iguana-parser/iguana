@@ -3,7 +3,6 @@ package org.iguana.parser.ebnf;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -53,36 +52,31 @@ public class Test8 {
 
     @Test
     public void testParse0() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input0);
-        ParseResult result = Iguana.parse(input0, graph, S);
+        ParseResult result = Iguana.parse(input0, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse1() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input1);
-        ParseResult result = Iguana.parse(input1, graph, S);
+        ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse2() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input2);
-        ParseResult result = Iguana.parse(input2, graph, S);
+        ParseResult result = Iguana.parse(input2, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse3() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input3);
-        ParseResult result = Iguana.parse(input3, graph, S);
+        ParseResult result = Iguana.parse(input3, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 
     @Test
     public void testParse4() {
-        GrammarGraph graph = GrammarGraph.from(grammar, input4);
-        ParseResult result = Iguana.parse(input4, graph, S);
+        ParseResult result = Iguana.parse(input4, grammar, S);
         assertTrue(result.isParseSuccess());
     }
 

@@ -31,10 +31,9 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.grammar.condition.ConditionsFactory;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import static iguana.utils.string.StringUtil.listToString;
 
@@ -48,56 +47,13 @@ public class NonterminalTransition extends AbstractTransition {
 	private final Expression[] arguments;
 
 	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest,
-                                 Conditions preConditions, ParserRuntime runtime) {
-		this(nonterminal, origin, dest, null, preConditions, runtime);
-	}
-	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT, runtime);
-	}	
-	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			                     Expression[] arguments, Conditions preConditions, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+			                     Expression[] arguments, Conditions preConditions) {
+		super(origin, dest);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
 		this.preConditions = preConditions;
 	}
 
-	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-//		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
-//			parser.recordParseError(origin);
-//			return;
-//		}
-
-        int i = node.getRightExtent();
-		
-		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
-			
-			if (preConditions.execute(input, u, i))
-				return;
-			
-			nonterminal.create(input, dest, u, node);
-			
-		} else {
-			
-			Environment env = runtime.getEmptyEnvironment();
-			
-			if (dest.getLabel() != null) {
-				env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
-			}
-			
-			runtime.setEnvironment(env);
-			
-			if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
-				return;
-			
-			nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment());
-		}
-		
-	}
-	
 	public NonterminalGrammarSlot getSlot() {
 		return nonterminal;
 	}
@@ -109,20 +65,10 @@ public class NonterminalTransition extends AbstractTransition {
 				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), listToString(arguments, ",")) : getSlot().toString());
 	}
 
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
-		
-//		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
-//			parser.recordParseError(origin);
-//			return;
-//		}
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 
-        int i = node.getRightExtent();
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
         if (dest.getLabel() != null) {
 			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
@@ -130,10 +76,10 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		runtime.setEnvironment(env);
 		
-		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext()))
+		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 				
-		nonterminal.create(input, dest, u, node, arguments, runtime.getEnvironment());
+		nonterminal.create(input, dest, u, result, arguments, runtime.getEnvironment(), runtime);
 	}
 
 }

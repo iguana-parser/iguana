@@ -29,46 +29,48 @@ package org.iguana.grammar.slot;
 
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.collections.IntHashMap;
+import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.sppf.TerminalNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Terminal terminal;
-    private final Matcher matcher;
-    private final Map<Integer, TerminalNode> terminalNodes;
-    private final String terminalName;
+	private final Matcher matcher;
+	private final IntHashMap<Object> terminalNodes;
 
-	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, String terminalName, ParserRuntime runtime) {
-		super(runtime, Collections.emptyList());
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
+		super(Collections.emptyList());
 		this.terminal = terminal;
-        this.matcher = factory.getMatcher(terminal.getRegularExpression());
-        this.terminalNodes = new HashMap<>();
-        this.terminalName = terminalName;
+		this.matcher = factory.getMatcher(terminal.getRegularExpression());
+        this.terminalNodes = new OpenAddressingIntHashMap<>();
     }
 
-    public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, ParserRuntime runtime) {
-        this(terminal, factory, null, runtime);
-    }
-
-	public TerminalNode getTerminalNode(Input input, int i) {
-		return terminalNodes.computeIfAbsent(i, k -> {
+	public <T extends Result> T getResult(Input input, int i, Runtime<T> runtime) {
+		T node = (T) terminalNodes.get(i);
+		if (node == null) {
 			int length = matcher.match(input, i);
 			if (length < 0) {
-				return null;
+				node = null;
 			} else {
-				TerminalNode t = new TerminalNode(this, i, i + length);
-				runtime.terminalNodeAdded(t);
-				return t;
+				node = runtime.getResultOps().base(this, i, i + length);
+				terminalNodes.put(i, node);
 			}
-		});
+		}
+		return node;
+	}
+
+	public int countTerminalNodes() {
+		System.out.println(terminalNodes);
+		return terminalNodes.size();
 	}
 
     public Terminal getTerminal() {
@@ -76,13 +78,13 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
     }
 
     @Override
-	public Set<Transition> getTransitions() {
-		return Collections.emptySet();
+	public List<Transition> getTransitions() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public boolean addTransition(Transition transition) {
-		return false;
+	public void addTransition(Transition transition) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -95,4 +97,8 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		terminalNodes.clear();
 	}
 
+	@Override
+	public int getPosition() {
+		throw new UnsupportedOperationException();
+	}
 }

@@ -70,11 +70,7 @@ Grammar.builder()
 
          Input input = Input.fromString("<note> <to>John</to> <from>Alice</from> </note>");
          
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/iguana/test/org/iguana/parser/datadependent/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("Element"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Element"));
 
          Assert.assertTrue(result.isParseSuccess());
 

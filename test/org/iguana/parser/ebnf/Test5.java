@@ -14,7 +14,6 @@ import org.iguana.parser.ParseSuccess;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
 import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
@@ -53,9 +52,9 @@ public class Test5 {
     @Test
     public void testParse1() {
         grammar = EBNFToBNF.convert(grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.DEFAULT);
-        ParseResult result = Iguana.parse(input1, graph, S);
+        ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult1(graph), result);
     }
 
@@ -69,7 +68,7 @@ public class Test5 {
                 .setIntermediateNodesCount(0)
                 .setPackedNodesCount(3)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
     }
 
     private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {

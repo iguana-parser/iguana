@@ -3,25 +3,37 @@ package org.iguana.util.visualization;
 import iguana.utils.input.Input;
 import org.iguana.parsetree.*;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static iguana.utils.visualization.GraphVizUtil.*;
 
 public class ParseTreeToDot {
 
     private StringBuilder sb = new StringBuilder();
 
-    private Input input;
-
     public String toDot(ParseTreeNode node, Input input) {
-        this.input = input;
-        node.accept(new ToDotParseTreeVisitor());
+        return toDot(node, input, Collections.emptySet());
+    }
+
+    public String toDot(ParseTreeNode node, Input input, Set<String> exclude) {
+        node.accept(new ToDotParseTreeVisitor(input, exclude));
         return sb.toString();
     }
 
     class ToDotParseTreeVisitor implements ParseTreeVisitor<Integer> {
 
+        private final Input input;
+        private final Set<String> exclude;
+
+        public ToDotParseTreeVisitor(Input input, Set<String> exclude) {
+            this.input = input;
+            this.exclude = exclude;
+        }
+
         @Override
         public Integer visit(NonterminalNode node) {
-            String label = String.format("(%s, %d, %d)", node.definition(), node.start(), node.end());
+            String label = String.format("(%s, %d, %d)", node.definition().getHead().getName(), node.start(), node.end());
 
             int id = nextId();
             sb.append("\"").append(id).append("\"").append(String.format(ROUNDED_RECTANGLE, "black", replaceWhiteSpace(label))).append("\n");
@@ -52,6 +64,8 @@ public class ParseTreeToDot {
 
         @Override
         public Integer visit(TerminalNode node) {
+            if (exclude.contains(node.definition().getName())) return null;
+
             String color = "black";
             String label = String.format("(%s, %d, %d): \"%s\"", node.definition().getName(), node.start(), node.end(), node.text(input));
             int id = nextId();
@@ -75,8 +89,9 @@ public class ParseTreeToDot {
         private void visitChildren(ParseTreeNode node, int nodeId) {
             for (ParseTreeNode child : node.children()) {
                 if (child != null) {
-                    int childId = child.accept(this);
-                    addEdgeToChild(nodeId, childId);
+                    Integer childId = child.accept(this);
+                    if (childId != null)
+                        addEdgeToChild(nodeId, childId);
                 }
             }
         }

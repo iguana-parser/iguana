@@ -48,18 +48,15 @@ Grammar.builder()
          System.out.println(grammar);
 
          Input input = Input.fromString("a+a+a+a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseSuccess());
          
 //         Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-//                 result.asParseSuccess().getSPPFNode(), input);
+//                 result.asParseSuccess().getResult(), input);
 //
-//         NonterminalNode node = result.asParseSuccess().getSPPFNode();
+//         NonterminalNode node = result.asParseSuccess().getResult();
 //         boolean hasAmbiguousIntermediateNode = false;
 //         for (PackedNode pnode : node.getChildren().get(0).getChildAt(0).getChildren()) {
 //        	 NonPackedNode first = pnode.getChildAt(0);

@@ -97,9 +97,8 @@ public class Test11 {
 		grammar = new EBNFToBNF().transform(grammar);
 		
 		Input input = Input.fromString("a    b");
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("X"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
 		
 	}
 

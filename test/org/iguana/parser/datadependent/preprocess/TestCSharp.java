@@ -72,10 +72,10 @@ public class TestCSharp {
 //		NonterminalNodeVisitor.create(n -> {
 //			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
 //				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
-//				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+//				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getSPPFNode());
+//		}).visit(result.asParseSuccess().getResult());
 		
 
 		assertTrue(result.isParseSuccess());
@@ -93,10 +93,10 @@ public class TestCSharp {
 //		NonterminalNodeVisitor.create(n -> {
 //			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
 //				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
-//				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+//				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getSPPFNode());
+//		}).visit(result.asParseSuccess().getResult());
 		
 
 		assertTrue(result.isParseSuccess());
@@ -114,10 +114,10 @@ public class TestCSharp {
 //		NonterminalNodeVisitor.create(n -> {
 //			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
 //				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
-//				String yield = input.subString(n.getLeftExtent(), n.getRightExtent());
+//				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
-//		}).visit(result.asParseSuccess().getSPPFNode());
+//		}).visit(result.asParseSuccess().getResult());
 		
 
 		assertTrue(result.isParseSuccess());

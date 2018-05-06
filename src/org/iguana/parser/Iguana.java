@@ -30,55 +30,104 @@ package org.iguana.parser;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.env.GLLEvaluator;
+import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.datadependent.env.array.ArrayEnvironment;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Start;
-import org.iguana.grammar.transformation.DesugarStartSymbol;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.parser.gss.GSSNodeData;
-import org.iguana.sppf.DummyNode;
-import org.iguana.sppf.NonterminalNode;
+import org.iguana.result.RecognizerResult;
+import org.iguana.result.Result;
+import org.iguana.sppf.NonPackedNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.ParserLogger;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Function;
 
-/**
- * 
- * 
- * @author Ali Afroozeh
- * @author Anastasia Izmaylova
- *
- */
 public class Iguana {
-	
-	public static ParseResult parse(Input input, GrammarGraph grammarGraph, Configuration config, Nonterminal nonterminal, Map<String, ?> map, boolean global) {
-        IEvaluatorContext ctx = GLLEvaluator.getEvaluatorContext(config, input);
 
-        ParserRuntime runtime = grammarGraph.getRuntime();
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar) {
+        if (grammar.getStartSymbol() == null)
+            throw new IllegalArgumentException("No start symbol defined in the grammar");
 
+        return parse(input, grammar, Nonterminal.withName(grammar.getStartSymbol().getName()));
+    }
+
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol) {
+        return parse(input, grammar, startSymbol, Configuration.load());
+    }
+
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
+        return parse(input, grammar, startSymbol, config, Collections.emptyMap());
+    }
+
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map) {
+        return parse(input, grammar, startSymbol, config, map, true);
+    }
+
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Map<String, ?> map, boolean global) {
+        return parse(input, grammar, startSymbol, Configuration.load(), map, global);
+    }
+
+
+    public static ParseResult<NonPackedNode> parse(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
+        GrammarGraph grammarGraph = GrammarGraph.from(grammar, config);
+        return run(input, new ParserRuntime(config), grammarGraph, startSymbol, map, global);
+    }
+
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar) {
+        if (grammar.getStartSymbol() == null)
+            throw new IllegalArgumentException("No start symbol defined in the grammar");
+
+        return recognize(input, grammar, Nonterminal.withName(grammar.getStartSymbol().getName()));
+    }
+
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol) {
+        return recognize(input, grammar, startSymbol, Configuration.load());
+    }
+
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config) {
+        return recognize(input, grammar, startSymbol, config, Collections.emptyMap());
+    }
+
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map) {
+        return recognize(input, grammar, startSymbol, config, map, true);
+    }
+
+    public static ParseResult<RecognizerResult> recognize(Input input, Grammar grammar, Nonterminal startSymbol, Configuration config, Map<String, ?> map, boolean global) {
+        GrammarGraph grammarGraph = GrammarGraph.from(grammar, config);
+        return run(input, new RecognizerRuntime(config), grammarGraph, startSymbol, map, global);
+    }
+
+    public static <T extends Result> ParseResult<T> run(Input input, Runtime<T> runtime, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, ?> map, boolean global) {
+        EnvironmentPool.clean();
         grammarGraph.reset(input);
 
+        IEvaluatorContext ctx = runtime.getEvaluatorContext();
+
         if (global)
-            map.forEach((k,v) -> ctx.declareGlobalVariable(k, v));
+            map.forEach(ctx::declareGlobalVariable);
 
         NonterminalGrammarSlot startSymbol = grammarGraph.getHead(nonterminal);
 
-        if(startSymbol == null) {
+        if (startSymbol == null) {
             throw new RuntimeException("No nonterminal named " + nonterminal + " found");
         }
 
-        NonterminalNode root;
+        Result root;
 
-        final Environment env;
+        Environment env = ctx.getEmptyEnvironment();
 
-        GSSNode startGSSNode;
+        GSSNode<T> startGSSNode;
 
         if (!global && !map.isEmpty()) {
             Object[] arguments = new Object[map.size()];
@@ -87,68 +136,87 @@ public class Iguana {
             for (String parameter : nonterminal.getParameters())
                 arguments[i++] = map.get(parameter);
 
-            startGSSNode = startSymbol.getGSSNode(0, new GSSNodeData<>(arguments));
+            startGSSNode = startSymbol.getGSSNode(0, arguments);
             env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
         } else {
-            env = null;
             startGSSNode = startSymbol.getGSSNode(0);
         }
 
-        runtime.log("Parsing %s:", input.getURI());
+        ParserLogger logger = ParserLogger.getInstance();
+        logger.reset();
 
         Timer timer = new Timer();
         timer.start();
 
-        if (env == null)
-            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(new Descriptor(s, startGSSNode, new DummyNode(0), input)));
-        else
-            startSymbol.getFirstSlots().forEach(s -> runtime.scheduleDescriptor(new org.iguana.datadependent.descriptor.Descriptor(s, startGSSNode, new DummyNode(0), input, env)));
-
-        while(runtime.hasDescriptor()) {
-            Descriptor descriptor = runtime.nextDescriptor();
-            runtime.log("Processing %s", descriptor);
-            descriptor.execute();
+        for (BodyGrammarSlot slot : startSymbol.getFirstSlots()) {
+            runtime.scheduleDescriptor(slot, startGSSNode, runtime.getResultOps().dummy(), env);
         }
 
-        root = startGSSNode.getNonterminalNode(input, input.length() - 1);
+        while(runtime.hasDescriptor()) {
+            Descriptor<T> descriptor = runtime.nextDescriptor();
+            logger.processDescriptor(descriptor);
+            descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), runtime);
+        }
+
+        root = startGSSNode.getResult(input.length() - 1);
 
         timer.stop();
 
-        ParseResult parseResult;
+//        printStats(grammarGraph);
+
+//        System.out.println(ArrayEnvironment.count);
+//        System.out.println(EnvironmentPool.environmentPools[0].size());
+//        System.out.println(EnvironmentPool.environmentPools[1].size());
+//        System.out.println(EnvironmentPool.environmentPools[2].size());
 
         if (root == null) {
-            parseResult = runtime.getParseError();
-            runtime.log("Parse error:\n %s", parseResult);
+            ParseError error = runtime.getParseError();
+            logger.error(error.getSlot(), error.getInputIndex());
+            return error;
         } else {
-            ParseStatistics parseStatistics = runtime.getParseStatistics(timer);
-            parseResult = new ParseSuccess(root, parseStatistics, input);
-            runtime.log("Parsing finished successfully.");
-            runtime.log(parseStatistics.toString());
+            ParseStatistics parseStatistics = runtime.getParseStatistics(timer, input);
+            return new ParseSuccess(root, parseStatistics);
+        }
+    }
+
+    private static  void printStats(GrammarGraph grammarGraph) {
+        for (TerminalGrammarSlot slot: grammarGraph.getTerminalGrammarSlots()) {
+            System.out.println(slot.getTerminal().getName() + " : " + slot.countTerminalNodes());
         }
 
-        return parseResult;
+        for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {
+            System.out.print(slot.getNonterminal().getName());
+            System.out.println(" GSS nodes: " + slot.countGSSNodes());
+            double[] poppedElementStats = stats(slot.getGSSNodes(), GSSNode::countPoppedElements);
+            double[] gssEdgesStats = stats(slot.getGSSNodes(), GSSNode::countGSSEdges);
+            if (poppedElementStats == null)
+                System.out.println("Popped Elements: empty");
+            else
+                System.out.printf("Popped Elements (min: %d, max: %d, mean: %.2f)%n", (int) poppedElementStats[0], (int) poppedElementStats[1], poppedElementStats[2]);
+
+            if (gssEdgesStats == null)
+                System.out.println("GSS Edges: empty");
+            else
+                System.out.printf("GSS Edges (min: %d, max: %d, mean: %.2f)%n", (int) gssEdgesStats[0], (int) gssEdgesStats[1], gssEdgesStats[2]);
+            System.out.println("---------------");
+        }
     }
 
-	public static ParseResult parse(Input input, GrammarGraph grammarGraph, Nonterminal startSymbol) {
-		return parse(input, grammarGraph, Configuration.load(), startSymbol, Collections.emptyMap(), true);
-	}
+    private static  double[] stats(Iterable<GSSNode> gssNodes, Function<GSSNode, Integer> f) {
+        if (!gssNodes.iterator().hasNext()) return null;
 
-    public static ParseResult parse(Input input, Grammar grammar, Nonterminal startSymbol) {
-        return parse(input, GrammarGraph.from(grammar, input, Configuration.load()), startSymbol);
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        int count = 0;
+
+        for (GSSNode gssNode : gssNodes) {
+            min = Integer.min(min, f.apply(gssNode));
+            max = Integer.max(max, f.apply(gssNode));
+            sum += f.apply(gssNode);
+            count++;
+        }
+
+        return new double[] { min, max, (double) sum / count };
     }
-
-    public static ParseResult parse(Input input, Grammar grammar) {
-	    if (grammar.getStartSymbol() == null)
-	        throw new IllegalArgumentException("No start symbol defined in the grammar");
-
-        return parse(input, GrammarGraph.from(grammar, input, Configuration.load()), Nonterminal.withName(grammar.getStartSymbol().getName()));
-    }
-
-    public static ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol) {
-		return parse(input, GrammarGraph.from(grammar, input, config), startSymbol);
-	}
-	
-	public static ParseResult parse(Input input, Grammar grammar, Configuration config, Nonterminal startSymbol, Map<String, ?> map) {
-		return parse(input, GrammarGraph.from(grammar, input, config), config, startSymbol, map, true);
-	}
 }

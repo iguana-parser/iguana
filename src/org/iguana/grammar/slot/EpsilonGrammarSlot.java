@@ -31,45 +31,30 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
 
-	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot,
-			                  Conditions conditions, ParserRuntime runtime) {
-		super(position, nonterminal, null, null, null, conditions, runtime);
+	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, Conditions conditions) {
+		super(position, nonterminal, null, null, null, conditions);
 		this.epsilonSlot = epsilonSlot;
 	}
-	
+
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-        int i = node.getRightExtent();
-		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
-	}
-	
-	/**
-	 *
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
-        int i = node.getRightExtent();
-		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getTerminalNode(input, i));
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+		execute(input, u, result, (Object) null, runtime);
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode u,NonPackedNode node, Object value) {
-        int i = node.getRightExtent();
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, Runtime<T> runtime) {
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
+
 		if (getNonterminal().testFollow(input.charAt(i)))
-            u.pop(input, this, epsilonSlot.getTerminalNode(input, i), value);
+            u.pop(input, this, epsilonSlot.getResult(input, i, runtime), value, runtime);
 	}
 
 }

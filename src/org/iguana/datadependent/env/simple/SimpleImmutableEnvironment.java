@@ -47,7 +47,7 @@ public class SimpleImmutableEnvironment implements Environment {
 	
 	final private int hashCode;
 	
-	static public final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>(), 0);
+	static final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>(), 0);
 	
 	private SimpleImmutableEnvironment(SimpleImmutableEnvironment parent, Map<String, Object> bindings, int hashCode) {
 		this.parent = parent;

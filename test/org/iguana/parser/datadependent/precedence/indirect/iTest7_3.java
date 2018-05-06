@@ -60,11 +60,8 @@ Grammar.builder()
          System.out.println(grammar.toString());
 
          Input input = Input.fromString("a^a*a&a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/indirect/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseError());
     }

@@ -124,17 +124,19 @@ public class JsonSerializer {
         return serialize(node);
     }
 
-    public static void serialize(Grammar grammar, String path) throws IOException {
-        serialize(grammar, path, false);
+    public static void serialize(Object obj, String path) throws IOException {
+        serialize(obj, path, false);
     }
 
-    public static void serialize(Grammar grammar, String path, boolean gzip) throws IOException {
+    public static void serialize(Object obj, String path, boolean gzip) throws IOException {
         OutputStream out = new FileOutputStream(path);
         if (gzip) {
             out = new GZIPOutputStream(out);
         }
         try (Writer writer = new OutputStreamWriter(out)){
-            writer.write(toJSON(grammar));
+            DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
+            pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
+            mapper.writer(pp).writeValue(writer, obj);
         }
     }
 

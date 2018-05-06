@@ -39,7 +39,6 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -64,7 +63,7 @@ public class LayoutTest3 {
     static Nonterminal A = Nonterminal.withName("A");
     static Nonterminal B = Nonterminal.withName("B");
     static Nonterminal C = Nonterminal.withName("C");
-    static Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
+    static Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
     static Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
     static Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
@@ -83,7 +82,7 @@ public class LayoutTest3 {
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
 		Grammar grammar = getGrammar();
-		ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 		assertTrue(result.isParseSuccess());
 	}
 }

@@ -34,101 +34,36 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 import org.iguana.util.Tuple;
 
 public class EpsilonTransition extends AbstractTransition {
 	
 	private final Type type;
-	private final String label;
-	private final Conditions conditions;
+    private final String label;
+    private final Conditions conditions;
 
-	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		this(Type.DUMMY, conditions, origin, dest, runtime);
+	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+		this(Type.DUMMY, conditions, origin, dest);
 	}
-	
-	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+
+	private EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+		super(origin, dest);
 		this.type = type;
-		this.label = null;
-		this.conditions = conditions;
-	}
-	
-	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+        this.label = null;
+        this.conditions = conditions;
+    }
+
+	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+		super(origin, dest);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
 		
 		this.type = type;
 		this.label = label;
 		this.conditions = conditions;
-	}
-
-	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-        int i = node.getRightExtent();
-		switch(type) {
-            case DUMMY:
-                if (conditions.execute(input, u, i))
-                    return;
-                break;
-
-            case CLEAR_LABEL: // TODO: Decide if this case is needed
-                break;
-
-            case OPEN:
-                if (conditions.execute(input, u, i))
-                    return;
-
-                runtime.setEnvironment(runtime.getEmptyEnvironment());
-                runtime.getEvaluatorContext().pushEnvironment();
-
-                dest.execute(input, u, node, runtime.getEnvironment());
-                return;
-
-            case CLOSE:
-                if (conditions.execute(input, u, i))
-                    return;
-                break;
-
-            case DECLARE_LABEL:
-
-                runtime.setEnvironment(runtime.getEmptyEnvironment());
-
-                runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
-                runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
-
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
-                    return;
-
-                dest.execute(input, u, node, runtime.getEnvironment());
-                return;
-
-            case STORE_LABEL:
-
-                runtime.setEnvironment(runtime.getEmptyEnvironment());
-
-                Object value = runtime.getEvaluatorContext().lookupVariable(label);
-
-                Integer lhs;
-                if (!(value instanceof Tuple)) {
-                    lhs = (Integer) ((Tuple<?,?>) value).getFirst();
-                } else {
-                    throw new UnexpectedRuntimeTypeException(AST.var(label));
-                }
-
-                runtime.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
-
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
-                    return;
-
-                dest.execute(input, u, node, runtime.getEnvironment());
-                return;
-        }
-		
-		dest.execute(input, u, node);
 	}
 
 	@Override
@@ -141,7 +76,7 @@ public class EpsilonTransition extends AbstractTransition {
 		case DECLARE_LABEL:
 			return label + ".lExt " + conditions;
 		case DUMMY:
-			return conditions.equals("") ? String.valueOf('\u2205') : conditions.toString();
+			return conditions.toString().equals("") ? String.valueOf('\u2205') : conditions.toString();
 		case OPEN:
 			return conditions + " {";
 		case STORE_LABEL:
@@ -151,16 +86,16 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 
-        int i = node.getRightExtent();
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		runtime.setEnvironment(env);
 		
 		switch(type) {
 		
             case DUMMY:
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -168,14 +103,14 @@ public class EpsilonTransition extends AbstractTransition {
                 break;
 
             case OPEN:
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 runtime.getEvaluatorContext().pushEnvironment();
                 break;
 
             case CLOSE:
                 runtime.getEvaluatorContext().popEnvironment();
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -183,7 +118,7 @@ public class EpsilonTransition extends AbstractTransition {
                 runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
                 runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
 
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -198,18 +133,18 @@ public class EpsilonTransition extends AbstractTransition {
                     throw new UnexpectedRuntimeTypeException(AST.var(label));
                 }
 
-                runtime.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
+                runtime.getEvaluatorContext().storeVariable(label, Tuple.of(lhs, i));
 
-                if (conditions.execute(input, u, i, runtime.getEvaluatorContext()))
+                if (conditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
             }
 		
-		dest.execute(input, u, node, runtime.getEnvironment());
+		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}
 
-	public static enum Type {
-		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL;
+	public enum Type {
+		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL
 	}
 
 }

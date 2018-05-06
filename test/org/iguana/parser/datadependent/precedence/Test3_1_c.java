@@ -87,26 +87,17 @@ Grammar.builder()
          Input input = Input.fromString("a+a^a^a*a");
          // Input input = Input.fromString("a^a^a*a+a");
          // Input input = Input.fromString("a+a*a*a");
-         GrammarGraph graph1 = GrammarGraph.from(grammar1, input, Configuration.DEFAULT);
-         GrammarGraph graph2 = GrammarGraph.from(grammar2, input, Configuration.DEFAULT);
-         GrammarGraph graph3 = GrammarGraph.from(grammar3, input, Configuration.DEFAULT);
-         GrammarGraph graph4 = GrammarGraph.from(grammar4, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("test/org/iguana/parser/datadependent/precedence/", graph);
-
-         ParseResult result1 = Iguana.parse(input, graph1, Nonterminal.withName("S"));
-         ParseResult result2 = Iguana.parse(input, graph2, Nonterminal.withName("S"));
-         ParseResult result3 = Iguana.parse(input, graph3, Nonterminal.withName("S"));
-         ParseResult result4 = Iguana.parse(input, graph4, Nonterminal.withName("S"));
+         ParseResult result1 = Iguana.parse(input, grammar1, Nonterminal.withName("S"));
+         ParseResult result2 = Iguana.parse(input, grammar2, Nonterminal.withName("S"));
+         ParseResult result3 = Iguana.parse(input, grammar3, Nonterminal.withName("S"));
+         ParseResult result4 = Iguana.parse(input, grammar4, Nonterminal.withName("S"));
          
          Assert.assertTrue(result1.isParseSuccess());
          Assert.assertTrue(result2.isParseSuccess());
          Assert.assertTrue(result3.isParseSuccess());
          Assert.assertTrue(result4.isParseSuccess());
          
-         // Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-         //                   result1.asParseSuccess().getSPPFNode(), input);
-
          Assert.assertEquals(0, result1.asParseSuccess().getStatistics().getAmbiguousNodesCount());
          Assert.assertEquals(0, result2.asParseSuccess().getStatistics().getAmbiguousNodesCount());
          Assert.assertEquals(0, result3.asParseSuccess().getStatistics().getAmbiguousNodesCount());

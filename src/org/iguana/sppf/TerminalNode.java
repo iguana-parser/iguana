@@ -27,7 +27,6 @@
 
 package org.iguana.sppf;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
@@ -43,22 +42,16 @@ public class TerminalNode extends NonPackedNode {
 
 	private TerminalGrammarSlot slot;
 	private int leftExtent;
-	private int rightExtent;
 
 	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		super(rightExtent);
 		this.slot = slot;
 		this.leftExtent = leftExtent;
-		this.rightExtent = rightExtent;
 	}
 
 	@Override
 	public int getLeftExtent() {
 		return leftExtent;
-	}
-
-	@Override
-	public int getRightExtent() {
-		return rightExtent;
 	}
 
 	@Override

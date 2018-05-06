@@ -94,9 +94,8 @@ public class Test5 {
 		System.out.println(grammar);
 		
 		Input input = Input.fromString("abcbcbc");
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("X"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
 		
 		Assert.assertTrue(result.isParseSuccess());
 		
