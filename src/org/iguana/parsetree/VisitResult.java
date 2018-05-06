@@ -353,7 +353,7 @@ public abstract class VisitResult {
 
         @Override
         public List visit(Single other) {
-            java.util.List<Object> values = new ArrayList<>();
+            java.util.List<Object> values = new ArrayList<>(2);
             values.add(other.value);
             values.add(result);
             return new List(values);
@@ -361,7 +361,10 @@ public abstract class VisitResult {
 
         @Override
         public VisitResult visit(List other) {
-            throw new RuntimeException("Combination is not possible");
+            java.util.List<Object> values = new ArrayList<>(other.values.size() + 1);
+            values.addAll(other.values);
+            values.add(result);
+            return new List(values);
         }
 
         @Override
@@ -504,9 +507,8 @@ public abstract class VisitResult {
 
         @Override
         public java.util.List<T> visit(EBNF result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getRule();
-            Object ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex());
-            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, Arrays.asList((T) ebnfNode), packedNode.getLeftExtent(), packedNode.getIndex()));
+            T ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex());
+            return CollectionsUtil.list(ebnfNode);
 
         }
 

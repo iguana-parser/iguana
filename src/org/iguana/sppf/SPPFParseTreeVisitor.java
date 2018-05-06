@@ -1,16 +1,17 @@
 package org.iguana.sppf;
 
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.*;
+import java.util.List;
 
-import static org.iguana.parsetree.VisitResult.ebnf;
-import static org.iguana.parsetree.VisitResult.empty;
-import static org.iguana.parsetree.VisitResult.single;
+import static org.iguana.parsetree.VisitResult.*;
 
 public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
@@ -24,7 +25,7 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
         this.parseTreeBuilder = parseTreeBuilder;
         this.convertedNodes = new HashMap<>();
         this.visitedNodes = new LinkedHashSet<>();
-        this.createNodeVisitor = new VisitResult.CreateParseTreeVisitor(parseTreeBuilder);
+        this.createNodeVisitor = new VisitResult.CreateParseTreeVisitor<>(parseTreeBuilder);
     }
 
     @Override
@@ -78,7 +79,12 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
                     if (children.size() > 1) {
                         result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
                     } else {
-                        result = single(children.get(0));
+                        T child = children.get(0);
+                        if (child instanceof MetaSymbolNode) { // Last Plus node propagated up
+                            result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                        } else {
+                            result = single(children.get(0));
+                        }
                     }
                     break;
                 }
@@ -133,6 +139,22 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
             right = node.getRightChild().accept(this);
         else
             right = empty();
+
+        // It seems that we can simplify the SPPF to ParseTree creation by checking the packed node's node type
+        // and may be able to get rid of VisitResult hierarchy
+        if (node.getGrammarSlot().getRule().getHead().getNodeType() != NonterminalNodeType.Plus &&
+            node.getGrammarSlot().getRule().getHead().getNodeType() != NonterminalNodeType.Star) {
+            if (left instanceof EBNF) {
+                List<Object> values = new ArrayList<>();
+                values.add(left);
+                if (right instanceof EBNF) {
+                    values.add(right);
+                } else {
+                    values.addAll(right.getValues());
+                }
+                return list(values);
+            }
+        }
 
         return left.merge(right);
     }

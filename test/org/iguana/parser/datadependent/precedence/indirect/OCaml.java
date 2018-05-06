@@ -8,6 +8,7 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.util.IguanaRunner;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.serialization.JsonSerializer;
 import org.junit.Test;
 
 import java.io.File;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class OCaml {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		Grammar grammar = Grammar.load(new File("/Users/afroozeh/JavaNat"));
+		Grammar grammar = Grammar.load(new File("/Users/afroozeh/Java"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
 		
@@ -34,13 +35,14 @@ public class OCaml {
 		grammar = new DesugarStartSymbol().transform(grammar);
 
 		Map<URI, List<ParseStatistics>> results = IguanaRunner.builder(grammar)
-				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
-//				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java", "java", true)
-//				.setLimit(500)
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/net/SocketPermission.java")
+				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java", "java", true)
+//				.setLimit(1)
 				.setStart(grammar.getStartSymbol())
 				.setWarmupCount(0)
-				.setRunCount(1000)
+				.setRunCount(1)
 //				.setRunGCInBetween(true)
 				.build()
 				.run();

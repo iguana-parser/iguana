@@ -162,6 +162,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         if (symbol.getArguments() == null || symbol.getArguments().length == 0)
             return Nonterminal.builder(symbol.getName())
                     .setIndex(symbol.getIndex())
+                    .setNodeType(symbol.getNodeType())
                     .setVariable(symbol.getVariable())
                     .addExcepts(symbol.getExcepts())
                     .build();

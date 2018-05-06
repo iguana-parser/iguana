@@ -59,7 +59,7 @@ public class LayoutTest1 {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		
-		Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
+		Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 		
 		Rule r1 = Rule.withHead(S).addSymbols(A, B).setLayout(L).build();
 		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
