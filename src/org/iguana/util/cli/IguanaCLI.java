@@ -43,6 +43,8 @@ import org.iguana.util.visualization.ParseTreeToDot;
 import org.iguana.util.visualization.SPPFToDot;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class IguanaCLI {
 
@@ -94,8 +96,17 @@ public class IguanaCLI {
                     String contentPath = values[0];
                     String outputFile = values[1];
 
+                    Set<String> excludeSet = new HashSet<>();
+                    if (values.length > 2) {
+                        String exclude = values[2];
+
+                        String[] split = exclude.split(",");
+                        for (String s : split)
+                            excludeSet.add(s.trim());
+                    }
+
                     ParseTreeNode node = JsonSerializer.deserialize(FileUtils.readFile(contentPath), ParseTreeNode.class);
-                    String dot = new ParseTreeToDot().toDot(node, input);
+                    String dot = new ParseTreeToDot().toDot(node, input, excludeSet);
                     GraphVizUtil.generateGraph(dot, outputFile);
 
                 } catch (IOException e) {
@@ -220,8 +231,9 @@ public class IguanaCLI {
 
         Option visualizeTree = Option.builder("visTree")
                 .desc("visualizes the parse tree")
-                .numberOfArgs(2)
-                .argName("content> <output")
+                .numberOfArgs(3)
+                .optionalArg(true)
+                .argName("content> <output> <exclude")
                 .build();
 
         Option visualizeSPPF = Option.builder("visSPPF")

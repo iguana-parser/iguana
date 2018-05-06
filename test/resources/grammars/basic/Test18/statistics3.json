@@ -1,4 +1,5 @@
 {
+  "inputLength" : 10,
   "descriptorsCount" : 32,
   "gssNodesCount" : 6,
   "gssEdgesCount" : 16,

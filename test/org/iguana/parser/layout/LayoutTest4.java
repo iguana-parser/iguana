@@ -39,7 +39,6 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -66,7 +65,7 @@ public class LayoutTest4 {
     static Terminal space = Terminal.from(Char.from(' '));
     static Terminal comma = Terminal.from(Char.from(','));
 
-    static Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
+    static Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
     static Rule r1 = Rule.withHead(S).addSymbols(A, Plus.builder(B).addSeparator(comma).build(), C).setLayout(L).build();
     static Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();

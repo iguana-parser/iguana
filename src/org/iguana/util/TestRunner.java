@@ -2,6 +2,7 @@ package org.iguana.util;
 
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
+import iguana.utils.visualization.GraphVizUtil;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.iggy.IggyParser;
@@ -17,6 +18,8 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.SPPFJsonSerializer;
+import org.iguana.util.visualization.ParseTreeToDot;
+import org.iguana.util.visualization.SPPFToDot;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,8 +36,7 @@ import static iguana.utils.io.FileUtils.readFile;
 public class TestRunner {
 
     public static void main(String[] args) {
-        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
-        run(path);
+        run(Paths.get("test/resources/grammars").toAbsolutePath().toString());
     }
 
     public static void run(String rootDir) {

@@ -28,8 +28,10 @@
 package org.iguana.util;
 
 import iguana.utils.benchmark.BenchmarkUtil;
+import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import iguana.utils.logging.LogLevel;
+import iguana.utils.visualization.GraphVizUtil;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -38,7 +40,13 @@ import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parsetree.DefaultParseTreeBuilder;
+import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.util.serialization.JsonSerializer;
+import org.iguana.util.visualization.ParseTreeToDot;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,6 +103,11 @@ public class IguanaRunner {
 					if (result.isParseSuccess()) {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input.getURI(), key -> new ArrayList<>()).add(statistics);
+						Timer timer = new Timer();
+						timer.start();
+						SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
+						timer.stop();
+						System.out.println(timer.getSystemTime() / 1000_000 + ", " + timer.getNanoTime() / 1000_000);
 						System.out.printf("%-10d%20d%20d%20d%20d%20d%20d%20d%n", i + 1, input.length(), statistics.getNanoTime() / 1000_000, statistics.getUserTime() / 1000_000, statistics.getDescriptorsCount(), statistics.getGssNodesCount(), statistics.getAmbiguousNodesCount(), statistics.getMemoryUsed());
 					} else {
 						System.out.printf("%-10d%20s%n", i + 1, result.asParseError());

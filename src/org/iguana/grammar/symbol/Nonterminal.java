@@ -155,7 +155,7 @@ public class Nonterminal extends AbstractSymbol {
         return name + (index > 0 ? index : "");
     }
 
-    @Override
+	@Override
 	public int hashCode() {
 		return getEffectiveName().hashCode();
 	}
@@ -329,7 +329,7 @@ public class Nonterminal extends AbstractSymbol {
 			return this;
 		}
 
-		public Builder setType(NonterminalNodeType nodeType) {
+		public Builder setNodeType(NonterminalNodeType nodeType) {
 			this.nodeType = nodeType;
 			return this;
 		}
