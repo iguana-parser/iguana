@@ -1,19 +1,42 @@
 package org.iguana.datadependent.env.array;
 
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.EnvironmentPool;
 
 import java.util.Arrays;
 
 public class ArrayEnvironment implements Environment {
+
+	public static int count;
 	
 	private final Object[] values;
-	private final int hashCode;
+	private int hashCode;
 	
-	static public final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
+	static final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
 	
 	private ArrayEnvironment(Object[] values, int hashCode) {
+		count++;
 		this.values = values;
 		this.hashCode = hashCode;
+	}
+
+	private void init(Object[] oldValues, Object value, int oldHashCode) {
+		int length = oldValues.length;
+		System.arraycopy(this.values, 0, values, 0, length);
+
+		values[length] = value;
+
+		int valueHashCode = oldHashCode;
+		if (value instanceof Object[]) {
+			for (int i = 0; i < ((Object[]) value).length; i++) {
+				Object element = ((Object[]) value)[i];
+				valueHashCode = 31 * valueHashCode + element.hashCode();
+			}
+		} else {
+			valueHashCode = 31 * valueHashCode + value.hashCode();
+		}
+
+		this.hashCode = valueHashCode;
 	}
 
 	@Override
@@ -88,14 +111,31 @@ public class ArrayEnvironment implements Environment {
 	@Override
 	public Environment _declare(Object value) {
 		int length = this.values.length;
+
+		ArrayEnvironment environment = (ArrayEnvironment) EnvironmentPool.get(length + 1);
+		if (environment != null) {
+			environment.init(this.values, value, this.hashCode);
+			return environment;
+		}
+
 		Object[] values = new Object[length + 1];
-		
+
 		if (length != 0)
 			System.arraycopy(this.values, 0, values, 0, length);
 		
 		values[length] = value;
+
+		int valueHashCode = hashCode;
+		if (value instanceof Object[]) {
+			for (int i = 0; i < ((Object[]) value).length; i++) {
+				Object element = ((Object[]) value)[i];
+				valueHashCode = 31 * valueHashCode + element.hashCode();
+			}
+		} else {
+			valueHashCode = 31 * valueHashCode + value.hashCode();
+		}
 		
-		return new ArrayEnvironment(values, hashCode + 31 * value.hashCode());
+		return new ArrayEnvironment(values, valueHashCode);
 	}
 
 	@Override
@@ -140,6 +180,11 @@ public class ArrayEnvironment implements Environment {
 	@Override
 	public Object lookup(int i) {
 		return values[i];
+	}
+
+	@Override
+	public int size() {
+		return values.length;
 	}
 
 }

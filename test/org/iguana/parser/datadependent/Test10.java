@@ -31,13 +31,11 @@ import iguana.regex.Alt;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -106,9 +104,8 @@ public class Test10 {
 		grammar = new EBNFToBNF().transform(grammar);
 		
 		Input input = Input.fromString("a    b");
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("X"));
+
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
 	}
 
 }

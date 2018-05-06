@@ -41,6 +41,7 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -99,7 +100,7 @@ public class Test12 {
 	@Test
 	public void testParser1() {
         ParseResult result = Iguana.parse(input1, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1);
+        GrammarGraph graph = GrammarGraph.from(grammar);
 		assertTrue(result.isParseSuccess());
         assertEquals(getParseResult1(graph), result);
 	}
@@ -114,13 +115,13 @@ public class Test12 {
 				.setIntermediateNodesCount(3)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(4).build();
-		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
 	}
 
     @Test
     public void testParser2() {
         ParseResult result = Iguana.parse(input2, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input2);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertTrue(result.isParseSuccess());
         assertEquals(getParseResult2(graph), result);
     }
@@ -135,7 +136,7 @@ public class Test12 {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(3)
 				.setAmbiguousNodesCount(1).build();
-		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
 	}
 
     static NonterminalNode A_0_1;

@@ -104,7 +104,7 @@ public class Test6 {
 	public void testParser() {
 		ParseResult result = Iguana.parse(input, grammar);
 		assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar, input);
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult(graph), result);
     }
 	
@@ -118,7 +118,7 @@ public class Test6 {
 				.setIntermediateNodesCount(1)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics, input);
+		return new ParseSuccess(expectedSPPF(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	@Test

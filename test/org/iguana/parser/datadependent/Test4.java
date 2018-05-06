@@ -109,9 +109,7 @@ public class Test4 {
 		// Input input = Input.fromString("a^a-");
 		// Input input = Input.fromString("a-^a");
 		
-		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-		
-		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 	}
 
 }

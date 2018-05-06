@@ -637,12 +637,12 @@ public class GenerateElements {
 
                         if (declaration) {
                             writer.println();
-                            writer.println("    public String getName() { return getNode().getText(); }");
+                            writer.println("    public String getName() { return getResult().getText(); }");
                             writer.println();
                             writer.println("    public PsiElement setName(String name) throws IncorrectOperationException {");
                             writer.println("        ASTNode node = " + language + "ElementFactory.create" + head.substring(0, head.length() - 12) + "(getProject(), name);");
-                            writer.println("        ASTNode first = getNode().getFirstChildNode();");
-                            writer.println("        getNode().replaceChild(first, node);");
+                            writer.println("        ASTNode first = getResult().getFirstChildNode();");
+                            writer.println("        getResult().replaceChild(first, node);");
                             writer.println("        return this;");
                             writer.println("    }");
                         }
@@ -666,8 +666,8 @@ public class GenerateElements {
                             writer.println();
                             writer.println("    public PsiElement handleElementRename(String name) throws IncorrectOperationException {");
                             writer.println("        ASTNode node = " + language + "ElementFactory.create" + head.substring(0, head.length() - 10) + "(getProject(), name);");
-                            writer.println("        ASTNode first = getNode().getFirstChildNode();");
-                            writer.println("        getNode().replaceChild(first, node);");
+                            writer.println("        ASTNode first = getResult().getFirstChildNode();");
+                            writer.println("        getResult().replaceChild(first, node);");
                             writer.println("        return this;");
                             writer.println("    }");
                             writer.println();

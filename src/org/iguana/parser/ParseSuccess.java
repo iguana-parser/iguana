@@ -27,24 +27,15 @@
 
 package org.iguana.parser;
 
-import iguana.utils.collections.hash.MurmurHash3;
-import iguana.utils.input.Input;
-import org.iguana.parsetree.DefaultParseTreeBuilder;
-import org.iguana.parsetree.ParseTreeBuilder;
-import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.parsetree.SPPFToParseTree;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.serialization.SPPFJsonSerializer;
 
-public class ParseSuccess extends AbstractParseResult {
+public class ParseSuccess<T> extends AbstractParseResult<T> {
 
-	private final NonterminalNode sppfNode;
+	private final T result;
 	private final ParseStatistics parseStatistics;
 
-	public ParseSuccess(NonterminalNode sppfNode, ParseStatistics parseStatistics, Input input) {
-		super(input);
-		this.sppfNode = sppfNode;
+	public ParseSuccess(T result, ParseStatistics parseStatistics) {
+		this.result = result;
 		this.parseStatistics = parseStatistics;
     }
 
@@ -64,46 +55,16 @@ public class ParseSuccess extends AbstractParseResult {
 	}
 
 	@Override
-	public ParseSuccess asParseSuccess() {
+	public ParseSuccess<T> asParseSuccess() {
 		return this;
 	}
 	
-	public NonterminalNode getSPPFNode() {
-		return sppfNode;
+	public T getResult() {
+		return result;
 	}
 
-	public <T> T getParseTree(ParseTreeBuilder<T> parseTreeBuilder) {
-		return SPPFToParseTree.toParseTree(sppfNode, parseTreeBuilder);
-	}
-
-	public ParseTreeNode getParseTree() {
-		return getParseTree(new DefaultParseTreeBuilder());
-	}
-	
 	public ParseStatistics getStatistics() {
 		return parseStatistics;
 	}
 
-    @Override
-	public int hashCode() {
-		return MurmurHash3.fn().apply(parseStatistics, sppfNode);
-	}
-	
-	@Override
-	public boolean equals(java.lang.Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof ParseSuccess))
-			return false;
-		
-		ParseSuccess other = (ParseSuccess) obj;
-		return parseStatistics.equals(other.parseStatistics) &&
-			   SPPFJsonSerializer.serialize(sppfNode).equals(SPPFJsonSerializer.serialize(other.sppfNode));
-	}
-	
-	@Override
-	public String toString() {
-		return parseStatistics + "\n";// + SPPFToJavaCode.get(sppfNode) + "\n";
-	}
 }

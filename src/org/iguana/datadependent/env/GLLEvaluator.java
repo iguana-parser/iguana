@@ -29,26 +29,29 @@ package org.iguana.datadependent.env;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.array.ArrayEvaluatorContext;
+import org.iguana.datadependent.env.intarray.IntArrayEvaluatorContext;
 import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
 import org.iguana.datadependent.env.simple.SimpleEvaluatorContext;
 import org.iguana.util.Configuration;
 
 public class GLLEvaluator {
 	
-	public static IEvaluatorContext getDefaultEvaluatorContext(Input input) {
+	public static IEvaluatorContext getDefaultEvaluatorContext() {
 		// return new PersistentEvaluatorContext(input);
 		// return new SimpleEvaluatorContext(input);
-		return new ArrayEvaluatorContext(input);
+		return new ArrayEvaluatorContext();
 	}
 	
-	public static IEvaluatorContext getEvaluatorContext(Configuration config, Input input) {
+	public static IEvaluatorContext getEvaluatorContext(Configuration config) {
 		switch(config.getEnvImpl()) {
 			case ARRAY: 
-				return new ArrayEvaluatorContext(input);
-			case HASH_MAP: 
-				return new SimpleEvaluatorContext(input);
+				return new ArrayEvaluatorContext();
+			case INT_ARRAY:
+				return new IntArrayEvaluatorContext();
+			case HASH_MAP:
+				return new SimpleEvaluatorContext();
 			case TRIE: 
-				return new PersistentEvaluatorContext(input);
+				return new PersistentEvaluatorContext();
 			default:
 				throw new RuntimeException("Should not have happened!");
 		}

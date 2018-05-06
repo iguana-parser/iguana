@@ -29,16 +29,6 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 
-public abstract class AbstractParseResult implements ParseResult {
+public abstract class AbstractParseResult<T> implements ParseResult<T> {
 
-	protected final Input input;
-	
-	public AbstractParseResult(Input input) {
-		this.input = input;
-	}
-
-	@Override
-	public Input getInput() {
-		return input;
-	}
 }

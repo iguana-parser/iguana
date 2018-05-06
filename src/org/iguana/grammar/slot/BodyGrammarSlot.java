@@ -34,26 +34,18 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNodeWithValue;
-import org.iguana.sppf.PackedNode;
-import org.iguana.util.Holder;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.function.BiFunction;
-
+import java.util.*;
 
 public class BodyGrammarSlot extends AbstractGrammarSlot {
 	
 	protected final Position position;
 	
-	private HashMap<Key, IntermediateNode> intermediateNodes;
+	private Map<Key, Object> intermediateNodes;
 	
 	private final Conditions conditions;
 	
@@ -68,13 +60,12 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	private final Set<String> state;
 	
 	private FollowTest followTest;
-	
-	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
-		this(position, label, -1, variable, -1, state, conditions, runtime);
+
+	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions) {
+		this(position, label, -1, variable, -1, state, conditions);
 	}
 	
-	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, ParserRuntime runtime) {
-		super(runtime);
+	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions) {
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
@@ -90,11 +81,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.toString();
 	}
 	
-	@Override
-	public boolean isFirst() {
-		return position.isFirst();
-	}
-	
 	public void setFollowTest(FollowTest followTest) {
 		this.followTest = followTest;
 	}
@@ -102,75 +88,24 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public boolean testFollow(int v) {
 		return followTest.test(v);
 	}
-	
-	public IntermediateNode createIntermediateNode(NonPackedNode leftChild, NonPackedNode rightChild) {
-		IntermediateNode newNode = new IntermediateNode();
-		PackedNode packedNode = new PackedNode(this);
-		packedNode.setLeftChild(leftChild);
-		packedNode.setRightChild(rightChild);
-		newNode.addPackedNode(packedNode);
-		runtime.intermediateNodeAdded(newNode);
-        runtime.packedNodeAdded(this, leftChild.getRightExtent());
-		return newNode;
-	}
-	
-	public NonPackedNode getIntermediateNode2(Input input, NonPackedNode leftChild, NonPackedNode rightChild) {
-		
+
+	@SuppressWarnings("unchecked")
+	public <T extends Result> T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env, Runtime<T> runtime) {
 		if (isFirst())
-			return rightChild;
-		
-		Holder<IntermediateNode> holder = new Holder<>();
-		
-		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
-			if (value != null) {
-				PackedNode packedNode = new PackedNode(this);
-				packedNode.setLeftChild(leftChild);
-				packedNode.setRightChild(rightChild);
-				boolean ambiguous = value.addPackedNode(packedNode);
-                runtime.packedNodeAdded(this, leftChild.getRightExtent());
-                if (ambiguous) runtime.ambiguousNodeAdded(value);
-				return value;
-			} else {
-				IntermediateNode newNode = createIntermediateNode(leftChild, rightChild);
-				holder.set(newNode);
-				return newNode;				
-			}
-		};
+			return rightResult;
 
-        Key key = Keys.from((x, y) -> x * input.length() + y, leftChild.getLeftExtent(), rightChild.getRightExtent());
+		Key key = Keys.from(destinationIndex, rightResult.getIndex(), env);
 
-        intermediateNodes.compute(key, creator);
-		
-		return holder.get();
+		Object value = intermediateNodes.get(key);
+		if (value == null) {
+			T newNode = runtime.getResultOps().merge(null, leftResult, rightResult, this);
+			intermediateNodes.put(key, newNode);
+			return newNode;
+		}
+
+		runtime.getResultOps().merge((T) value, leftResult, rightResult, this);
+		return null;
 	}
-	
-	public NonPackedNode getIntermediateNode2(Input input, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		
-		if (isFirst())
-			return rightChild;
-		
-		Holder<IntermediateNode> holder = new Holder<>();
-		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
-			if (value != null) {
-				PackedNode packedNode = new PackedNode(this);
-				packedNode.setLeftChild(leftChild);
-				packedNode.setRightChild(rightChild);
-                boolean ambiguous = value.addPackedNode(packedNode);
-                runtime.packedNodeAdded(this, leftChild.getRightExtent());
-                if (ambiguous) runtime.ambiguousNodeAdded(value);
-				return value;
-			} else {
-				IntermediateNode newNode = createIntermediateNode(leftChild, rightChild);
-				holder.set(newNode);
-				return newNode;				
-			}
-		};
-
-        Key key = Keys.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), env);
-        intermediateNodes.compute(key, creator);
-		
-		return holder.get();
-	}	
 	
 	public Conditions getConditions() {
 		return conditions;
@@ -180,16 +115,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public void reset(Input input) {
 		intermediateNodes = new HashMap<>();
 	}
-	
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(input, u, node));
-	}
-	
-	/*
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
+
 	public String getLabel() {
 		return label;
 	}
@@ -198,39 +124,42 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return variable;
 	}
 	
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
-		getTransitions().forEach(t -> t.execute(input, u, node, env));
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+        for (int i = 0; i < getTransitions().size(); i++) {
+            Transition transition = getTransitions().get(i);
+            transition.execute(input, u, result, env, runtime);
+        }
 	}
 		
 	public boolean requiresBinding() {
 		return label != null || variable != null || state != null; 
 	}
 	
-	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
-		
+	public Environment doBinding(Result result, Environment env) {
+
 		if (label != null) {
 			if (i1 != -1)
-				env = env._declare(sppfNode);
+				env = env._declare(result);
 			else
-				env = env._declare(label, sppfNode);
+				env = env._declare(label, result);
 		}
 		
 		if (variable != null && state == null) {
 			if (i2 != -1)
-				env = env._declare(((NonterminalNodeWithValue) sppfNode).getValue());
+				env = env._declare(result.getValue());
 			else
-				env = env._declare(variable, ((NonterminalNodeWithValue) sppfNode).getValue());
+				env = env._declare(variable, result.getValue());
 		}
 
 		if (variable == null && state != null) { // TODO: support for the array-based environment implementation
 			if (state.size() == 1) {
 				String v = state.iterator().next();
 				if (!v.equals("_")) {
-					Object value = ((NonterminalNodeWithValue) sppfNode).getValue();
+					Object value = result.getValue();
 					env = env._declare(v, value);
 				}
 			} else {
-				List<?> values = (List<?>) ((NonterminalNodeWithValue) sppfNode).getValue();
+				List<?> values = (List<?>) result.getValue();
 				Iterator<?> it = values.iterator();
 				for (String v : state) {
 					if (!v.equals("_"))
@@ -240,7 +169,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		}
 		
 		if (variable != null && state != null) { // TODO: support for the array-based environment implementation
-			List<?> values = (List<?>) ((NonterminalNodeWithValue) sppfNode).getValue();
+			List<?> values = (List<?>) result.getValue();
 			Iterator<?> it = values.iterator();
 			
 			env = env._declare(variable, it.next());
@@ -254,7 +183,12 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return env;
 	}
 
-	public Position getPosition() {
-		return position;
+	public int getPosition() {
+		return position.getPosition();
 	}
+
+	public Rule getRule() {
+		return position.getRule();
+	}
+
 }

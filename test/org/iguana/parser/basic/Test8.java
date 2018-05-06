@@ -41,6 +41,7 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -121,33 +122,33 @@ public class Test8 {
 	@Test
 	public void testParser1_1() {
         ParseResult result = Iguana.parse(input1, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1);
 		assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult1_Lookahead1(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar);
+		assertEquals(getParseResult1_Lookahead1(graph), result);
     }
 
     @Test
     public void testParser1_0() {
         ParseResult result = Iguana.parse(input1, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build());
         assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult1_Lookahead0(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar, Configuration.builder().setLookaheadCount(0).build());
+		assertEquals(getParseResult1_Lookahead0(graph), result);
     }
 
     @Test
     public void testParser2_1() {
         ParseResult result = Iguana.parse(input2, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input2);
         assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult2_Lookahead1(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar);
+		assertEquals(getParseResult2_Lookahead1(graph), result);
     }
 
     @Test
     public void testParser2_0() {
         ParseResult result = Iguana.parse(input2, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1, Configuration.builder().setLookaheadCount(0).build());
         assertTrue(result.isParseSuccess());
-        assertEquals(getParseResult2_Lookahead0(graph), result);
+		GrammarGraph graph = GrammarGraph.from(grammar, Configuration.builder().setLookaheadCount(0).build());
+		assertEquals(getParseResult2_Lookahead0(graph), result);
     }
 
 
@@ -161,7 +162,7 @@ public class Test8 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static ParseSuccess getParseResult1_Lookahead1(GrammarGraph graph) {
@@ -174,7 +175,7 @@ public class Test8 {
 				.setIntermediateNodesCount(2)
 				.setPackedNodesCount(4)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+		return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static ParseSuccess getParseResult2_Lookahead0(GrammarGraph graph) {
@@ -187,7 +188,7 @@ public class Test8 {
 				.setIntermediateNodesCount(4)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static ParseSuccess getParseResult2_Lookahead1(GrammarGraph graph) {
@@ -200,7 +201,7 @@ public class Test8 {
 				.setIntermediateNodesCount(4)
 				.setPackedNodesCount(10)
 				.setAmbiguousNodesCount(0).build();
-		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+		return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
 	}
 	
 	private static NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {

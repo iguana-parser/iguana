@@ -92,7 +92,7 @@ public class GenerateParser {
             writer.println("        ParseResult result = Iguana.parse(input, graph, start);");
             writer.println("        if (result.isParseSuccess()) {");
             writer.println("            System.out.println(\"Success...\");");
-            writer.println("            NonterminalNode sppf = result.asParseSuccess().getSPPFNode();");
+            writer.println("            NonterminalNode sppf = result.asParseSuccess().getResult();");
             writer.println("            ASTNode ast = SPPFToTerms.convertNoSharing(sppf, new " + language + "TermBuilder());");
             writer.println("            return ast;");
             writer.println("        } else {");

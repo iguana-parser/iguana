@@ -60,24 +60,24 @@ public class Test19 {
     @Test
     public void testParser1() {
         ParseResult result = Iguana.parse(input1, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input1);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult1(graph), result);
     }
 
     @Test
     public void testParser2() {
         ParseResult result = Iguana.parse(input2, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input2);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult2(graph), result);
     }
 
     @Test
     public void testParser3() {
         ParseResult result = Iguana.parse(input3, grammar);
-        GrammarGraph graph = GrammarGraph.from(grammar, input3);
         assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult3(graph), result);
     }
 
@@ -91,7 +91,7 @@ public class Test19 {
                 .setIntermediateNodesCount(2)
                 .setPackedNodesCount(5)
                 .setAmbiguousNodesCount(0).build();
-        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics, input1);
+        return new ParseSuccess(expectedSPPF1(new SPPFNodeFactory(graph)), statistics);
     }
 
     private NonterminalNode expectedSPPF1(SPPFNodeFactory factory) {
@@ -116,7 +116,7 @@ public class Test19 {
                 .setIntermediateNodesCount(7)
                 .setPackedNodesCount(14)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics, input2);
+        return new ParseSuccess(expectedSPPF2(new SPPFNodeFactory(graph)), statistics);
     }
 
     private NonterminalNode expectedSPPF2(SPPFNodeFactory factory) {
@@ -152,7 +152,7 @@ public class Test19 {
                 .setIntermediateNodesCount(26)
                 .setPackedNodesCount(51)
                 .setAmbiguousNodesCount(10).build();
-        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics, input3);
+        return new ParseSuccess(expectedSPPF3(new SPPFNodeFactory(graph)), statistics);
     }
 
     private NonterminalNode expectedSPPF3(SPPFNodeFactory factory) {

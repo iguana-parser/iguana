@@ -31,9 +31,9 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 public class ConditionalTransition extends AbstractTransition {
 	
@@ -41,13 +41,12 @@ public class ConditionalTransition extends AbstractTransition {
 	
 	private final BodyGrammarSlot ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, ParserRuntime runtime) {
-		this(condition, origin, dest, null, runtime);
+	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+		this(condition, origin, dest, null);
 	}
-	
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest,
-                                 BodyGrammarSlot ifFalse, ParserRuntime runtime) {
-		super(origin, dest, runtime);
+
+	private ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, BodyGrammarSlot ifFalse) {
+		super(origin, dest);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
 	}
@@ -57,43 +56,25 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-		
-		Object value = runtime.evaluate(condition, runtime.getEmptyEnvironment());
-		
-		if (!(value instanceof Boolean)) {
-			throw new UnexpectedRuntimeTypeException(condition);
-		}
-		
-		boolean isTrue = ((Boolean) value) == true;
-		
-		if (isTrue)
-			dest.execute(input, u, node);
-		else if (ifFalse != null)
-			ifFalse.execute(input, u, node);
-		// TODO: logging
-	}
-
-	@Override
 	public String getLabel() {
 		return String.format("[%s]", condition.toString());
 	}
 
 	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node, Environment env) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
 		
-		Object value = runtime.evaluate(condition, env);
+		Object value = runtime.evaluate(condition, env, input);
 		
 		if (!(value instanceof Boolean)) {
 			throw new UnexpectedRuntimeTypeException(condition);
 		}
 		
-		boolean isTrue = ((Boolean) value) == true;
+		boolean isTrue = (Boolean) value;
 		
 		if (isTrue)
-			dest.execute(input, u, node, env);
+			dest.execute(input, u, result, env, runtime);
 		else if (ifFalse != null)
-			ifFalse.execute(input, u, node, env);
+			ifFalse.execute(input, u, result, env, runtime);
 		// TODO: logging
 	}
 

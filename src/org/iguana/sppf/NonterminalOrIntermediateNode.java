@@ -27,16 +27,18 @@
 
 package org.iguana.sppf;
 
-import org.iguana.grammar.slot.GrammarSlot;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> extends NonPackedNode {
+public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 
 	protected PackedNode first;
-	protected List<PackedNode> rest;
+	private List<PackedNode> rest;
+
+	public NonterminalOrIntermediateNode(int rightExtent) {
+		super(rightExtent);
+	}
 
 	/*
 	 * returns true if the second packed node of this nonterminal node is added.
@@ -63,11 +65,6 @@ public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> exten
 	}
 
 	@Override
-	public int getRightExtent() {
-		return first.getRightExtent();
-	}
-
-	@Override
 	public PackedNode getChildAt(int index) {
 		if (index ==  0)
 			return first;
@@ -76,7 +73,7 @@ public abstract class NonterminalOrIntermediateNode<T extends GrammarSlot> exten
 
 	@Override
 	public List<PackedNode> getChildren() {
-		List<PackedNode> children = new ArrayList<>();
+		List<PackedNode> children = new ArrayList<>(childrenCount());
 		if (first != null) children.add(first);
 		if (rest != null) children.addAll(rest);
 		return children;

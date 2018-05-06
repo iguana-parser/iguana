@@ -77,10 +77,8 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Plus.builder(Offside.builder(Nonterminal.builder("Stat").build()).build()).addSeparators(Arrays.asList(Terminal.builder(Seq.builder(Char.builder(59).build()).build()).build())).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 .build();
          grammar = new EBNFToBNF().transform(grammar);
-         // System.out.println(grammar);
 
          grammar = new DesugarPrecedenceAndAssociativity().transform(grammar);
-         // System.out.println(grammar.toStringWithOrderByPrecedence());
 
          DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
          desugarAlignAndOffside.doOffside();
@@ -94,11 +92,8 @@ Grammar.builder()
                                         "        x =        \n" +
                                         "        a +        \n" +
                                         "             a");
-         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
-
-         ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
+         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
 
          Assert.assertTrue(result.isParseError());
     }

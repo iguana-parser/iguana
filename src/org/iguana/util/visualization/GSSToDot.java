@@ -27,8 +27,8 @@
 
 package org.iguana.util.visualization;
 
-import org.iguana.parser.gss.GSSEdge;
-import org.iguana.parser.gss.GSSNode;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
 
 import static iguana.utils.visualization.GraphVizUtil.GSS_EDGE;
 import static iguana.utils.visualization.GraphVizUtil.GSS_NODE;
@@ -37,13 +37,13 @@ public class GSSToDot {
 	
 	private StringBuilder sb = new StringBuilder();
 	
-	public void execute(Iterable<GSSNode> set) {
+	public void execute(Iterable<GSSNode<?>> set) {
 		
-		for(GSSNode gssNode : set) {
+		for(GSSNode<?> gssNode : set) {
 			
 			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");
 			
-			for(GSSEdge edge : gssNode.getGSSEdges()) {
+			for(GSSEdge<?> edge : gssNode.getGSSEdges()) {
 				String label = edge.getReturnSlot() == null ? "" : String.format(GSS_EDGE, edge.getReturnSlot()); 
 				sb.append(label + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");				
 			}
@@ -51,11 +51,7 @@ public class GSSToDot {
 	}
 
 	private String getId(GSSNode node) {
-		if (node instanceof org.iguana.datadependent.gss.GSSNode<?>) {
-			org.iguana.datadependent.gss.GSSNode<?> gssNode = (org.iguana.datadependent.gss.GSSNode<?>) node;
-			return node.getGrammarSlot() + "" + node.getInputIndex() + gssNode.getData();
-		}
-		return node.getGrammarSlot() + "" + node.getInputIndex();
+		return node.getGrammarSlot().toString() + node.getInputIndex() + node.getData();
 	}
 	
 	public String getString() {

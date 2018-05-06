@@ -353,7 +353,7 @@ public abstract class VisitResult {
 
         @Override
         public List visit(Single other) {
-            java.util.List<Object> values = new ArrayList<>();
+            java.util.List<Object> values = new ArrayList<>(2);
             values.add(other.value);
             values.add(result);
             return new List(values);
@@ -361,7 +361,10 @@ public abstract class VisitResult {
 
         @Override
         public VisitResult visit(List other) {
-            throw new RuntimeException("Combination is not possible");
+            java.util.List<Object> values = new ArrayList<>(other.values.size() + 1);
+            values.addAll(other.values);
+            values.add(result);
+            return new List(values);
         }
 
         @Override
@@ -478,14 +481,14 @@ public abstract class VisitResult {
 
         @Override
         public java.util.List<T> visit(Empty result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
-            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+            Rule rule = packedNode.getGrammarSlot().getRule();
+            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex()));
         }
 
         @Override
         public java.util.List<T> visit(Single result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
-            return CollectionsUtil.list((parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent())));
+            Rule rule = packedNode.getGrammarSlot().getRule();
+            return CollectionsUtil.list((parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex())));
         }
 
         @Override
@@ -498,15 +501,14 @@ public abstract class VisitResult {
                     values.add((T) o);
                 }
             }
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
-            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, values, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+            Rule rule = packedNode.getGrammarSlot().getRule();
+            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, values, packedNode.getLeftExtent(), packedNode.getIndex()));
         }
 
         @Override
         public java.util.List<T> visit(EBNF result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getPosition().getRule();
-            Object ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent());
-            return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, Arrays.asList((T) ebnfNode), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+            T ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex());
+            return CollectionsUtil.list(ebnfNode);
 
         }
 
@@ -514,7 +516,7 @@ public abstract class VisitResult {
         public java.util.List<T> visit(ListOfResult result, PackedNode packedNode) {
             Set<T> set = new HashSet<>();
             for (VisitResult vResult :result.getVisitResults()) {
-                set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getPosition().getRule(), (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getIndex()));
             }
             return CollectionsUtil.list(parseTreeBuilder.ambiguityNode(set));
         }

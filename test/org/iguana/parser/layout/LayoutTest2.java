@@ -72,7 +72,7 @@ public class LayoutTest2 {
     Nonterminal B = Nonterminal.withName("B");
     Nonterminal C = Nonterminal.withName("C");
 
-    Nonterminal L = Nonterminal.builder("L").setType(NonterminalNodeType.Layout).build();
+    Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
     Rule r1 = Rule.withHead(S).addSymbols(A, B, C).setLayout(L).build();
     Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
@@ -94,9 +94,9 @@ public class LayoutTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("a c");
-        GrammarGraph graph = GrammarGraph.from(grammar, input);
-        ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
+        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        assertTrue(result.isParseSuccess());
+        GrammarGraph graph = GrammarGraph.from(grammar);
         assertEquals(getParseResult(graph, input), result);
     }
 
@@ -110,7 +110,7 @@ public class LayoutTest2 {
                 .setIntermediateNodesCount(6)
                 .setPackedNodesCount(15)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(getSPPFNode(new SPPFNodeFactory(graph), input), statistics, input);
+        return new ParseSuccess(getSPPFNode(new SPPFNodeFactory(graph), input), statistics);
     }
 
 

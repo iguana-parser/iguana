@@ -140,7 +140,7 @@
 ////         Assert.assertTrue(result.isParseSuccess());
 ////
 ////         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/",
-////         //                   result.asParseSuccess().getSPPFNode(), input);
+////         //                   result.asParseSuccess().getResult(), input);
 ////
 ////         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
 //    }

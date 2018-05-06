@@ -31,11 +31,12 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.Runtime;
+import org.iguana.result.Result;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
@@ -43,14 +44,13 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	protected final NonterminalGrammarSlot nonterminal;
 
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions, ParserRuntime runtime) {
-		this(position, nonterminal, label, -1, variable, -1, state, conditions, runtime);
+			              String variable, Set<String> state, Conditions conditions) {
+		this(position, nonterminal, label, -1, variable, -1, state, conditions);
 	}
 	
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
-            			  String variable, int i2, Set<String> state, Conditions conditions,
-                          ParserRuntime runtime) {
-		super(position, label, i1, variable, i2, state, conditions, runtime);
+            			  String variable, int i2, Set<String> state, Conditions conditions) {
+		super(position, label, i1, variable, i2, state, conditions);
 		this.nonterminal = nonterminal;
     }
 	
@@ -58,12 +58,6 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		return nonterminal;
 	}
 
-	@Override
-	public void execute(Input input, GSSNode u, NonPackedNode node) {
-		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
-            u.pop(input, this, node);
-	}
-	
 	@Override
 	public boolean isEnd() {
 		return true;
@@ -74,29 +68,25 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	@Override
-	public Set<Transition> getTransitions() {
-		return Collections.emptySet();
+	public List<Transition> getTransitions() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public boolean addTransition(Transition transition) {
-		return false;
+	public void addTransition(Transition transition) {
+		throw new UnsupportedOperationException();
 	}
 
-    /**
-	 *
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
-	public void execute(Input input, GSSNode u,NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
-            u.pop(input, this, node);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+		execute(input, u, result, (Object) null, runtime);
 	}
 	
-	public void execute(Input input, GSSNode u, NonPackedNode node, Object value) {
-		if (nonterminal.testFollow(input.charAt(node.getRightExtent())))
-            u.pop(input, this, node, value);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, Runtime<T> runtime) {
+		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
+
+		if (nonterminal.testFollow(input.charAt(rightExtent)))
+            u.pop(input, this, result, value, runtime);
 	}
 
 }

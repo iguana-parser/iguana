@@ -31,12 +31,10 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-/**
- * @author Ali Afroozeh
- */
-public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
+public class PackedNode implements SPPFNode {
 
     private final BodyGrammarSlot slot;
 
@@ -56,8 +54,8 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
         this.rightChild = rightChild;
     }
 
-    public int getPivot() {
-        return leftChild.getRightExtent();
+    private int getPivot() {
+        return leftChild.getIndex();
     }
 
     @Override
@@ -66,12 +64,13 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
     }
 
     @Override
-    public int getLeftExtent() { return leftChild.getLeftExtent();
+    public int getLeftExtent() {
+        return leftChild.getLeftExtent();
     }
 
     @Override
-    public int getRightExtent() {
-        return (rightChild != null) ? rightChild.getRightExtent() : leftChild.getRightExtent();
+    public int getIndex() {
+        return (rightChild != null) ? rightChild.getIndex() : leftChild.getIndex();
     }
 
     @Override
@@ -84,11 +83,11 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
         return visitAction.visit(this);
     }
 
-    public NonPackedNode getLeftChild() {
+    NonPackedNode getLeftChild() {
         return leftChild;
     }
 
-    public NonPackedNode getRightChild() {
+    NonPackedNode getRightChild() {
         return rightChild;
     }
 
@@ -110,8 +109,17 @@ public class PackedNode implements SPPFNode<BodyGrammarSlot, NonPackedNode> {
     @Override
     public List<NonPackedNode> getChildren() {
         if (rightChild == null)
-            return Arrays.asList(leftChild);
+            return Collections.singletonList(leftChild);
         else
             return Arrays.asList(leftChild, rightChild);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof PackedNode)) return false;
+
+        PackedNode other = (PackedNode) obj;
+        return slot == other.slot && getPivot() == other.getPivot();
     }
 }

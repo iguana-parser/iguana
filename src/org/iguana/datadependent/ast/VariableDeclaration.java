@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
@@ -34,7 +35,7 @@ public class VariableDeclaration extends AbstractAST {
 	
 	private static final long serialVersionUID = 1L;
 
-	static public Object defaultValue = new Object() {};
+	public static Object defaultValue = new Object() {};
 	
 	private final String name;
 	private final int i;
@@ -67,11 +68,11 @@ public class VariableDeclaration extends AbstractAST {
 	}
 
 	@Override
-	public Object interpret(IEvaluatorContext ctx) {
+	public Object interpret(IEvaluatorContext ctx, Input input) {
 		Object value = defaultValue;
 		
 		if (expression != null)
-			value = expression.interpret(ctx);
+			value = expression.interpret(ctx, input);
 		
 		if (i != -1)
 			ctx.declareVariable(value);

@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 
@@ -92,7 +90,7 @@ public class SPPFJsonSerializer {
             ObjectCodec codec = parser.getCodec();
             JsonNode node = codec.readTree(parser);
 
-            Map<Integer, SPPFNode<?,?>> idToNodeMap = new HashMap<>();
+            Map<Integer, SPPFNode> idToNodeMap = new HashMap<>();
             Map<Integer, List<Integer>> childrenMap = new HashMap<>();
 
             for (JsonNode child : node) {
@@ -100,17 +98,17 @@ public class SPPFJsonSerializer {
                 int id = child.get("id").asInt();
                 int leftExtent = child.get("leftExtent").asInt();
                 int rightExtent = child.get("rightExtent").asInt();
-                SPPFNode<?,?> sppfNode;
+                SPPFNode sppfNode;
 
                 switch (kind) {
                     case "NonterminalNode":
-                        sppfNode = new NonterminalNode(getGrammarSlot(child));
+                        sppfNode = new NonterminalNode(getGrammarSlot(child), rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         addChildren(child, childrenMap);
                         break;
 
                     case "IntermediateNode":
-                        sppfNode = new IntermediateNode();
+                        sppfNode = new IntermediateNode(rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         addChildren(child, childrenMap);
                         break;
@@ -128,9 +126,9 @@ public class SPPFJsonSerializer {
                 }
             }
 
-            for (Map.Entry<Integer, SPPFNode<?,?>> entry : idToNodeMap.entrySet()) {
+            for (Map.Entry<Integer, SPPFNode> entry : idToNodeMap.entrySet()) {
                 int id = entry.getKey();
-                SPPFNode<?,?> sppfNode = entry.getValue();
+                SPPFNode sppfNode = entry.getValue();
                 if (sppfNode instanceof NonterminalOrIntermediateNode) {
                     for (int childId : childrenMap.get(id)) {
                         ((NonterminalOrIntermediateNode) sppfNode).addPackedNode((PackedNode) idToNodeMap.get(childId));
@@ -165,8 +163,8 @@ public class SPPFJsonSerializer {
     private static class ToJsonSPPFVisitor implements SPPFVisitor<Void> {
 
         private JsonGenerator gen;
-        private Set<SPPFNode<?,?>> visitedNodes;
-        private Map<SPPFNode<?,?>, Integer> ids;
+        private Set<SPPFNode> visitedNodes;
+        private Map<SPPFNode, Integer> ids;
 
         ToJsonSPPFVisitor(JsonGenerator gen) {
             this.gen = gen;
@@ -174,7 +172,7 @@ public class SPPFJsonSerializer {
             ids = new HashMap<>();
         }
 
-        private int getId(SPPFNode<?,?> node) {
+        private int getId(SPPFNode node) {
             return ids.computeIfAbsent(node, key -> ids.size());
         }
 
@@ -218,7 +216,7 @@ public class SPPFJsonSerializer {
             return null;
         }
 
-        private void generateNode(SPPFNode<?,?> node, String kind) throws IOException {
+        private void generateNode(SPPFNode node, String kind) throws IOException {
             if (visitedNodes.contains(node)) return;
 
             visitedNodes.add(node);
@@ -228,18 +226,18 @@ public class SPPFJsonSerializer {
             gen.writeStringField("kind", kind);
             gen.writeStringField("label", node.getGrammarSlot().toString());
             gen.writeNumberField("leftExtent", node.getLeftExtent());
-            gen.writeNumberField("rightExtent", node.getRightExtent());
+            gen.writeNumberField("rightExtent", node.getIndex());
 
             if (node.getChildren().size() > 0) {
                 gen.writeArrayFieldStart("children");
-                for (SPPFNode<?,?> child : node.getChildren())
+                for (SPPFNode child : node.getChildren())
                     gen.writeNumber(getId(child));
                 gen.writeEndArray();
             }
 
             gen.writeEndObject();
 
-            for (SPPFNode<?,?> child : node.getChildren())
+            for (SPPFNode child : node.getChildren())
                 child.accept(this);
         }
     }

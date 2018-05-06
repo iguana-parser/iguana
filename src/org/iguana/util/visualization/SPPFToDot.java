@@ -71,9 +71,9 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		
 		if(!visited.contains(node)) {
 			visited.add(node);
-			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
+			String matchedInput = input.subString(node.getLeftExtent(), node.getIndex());
 			String color = "black";
-			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), matchedInput);
+			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex(), matchedInput);
 			sb.append("\"" + getId(node) + "\"" + String.format(ROUNDED_RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
 		}
 
@@ -87,13 +87,13 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 			
 			String label;
 			if (node.getValue() == null)
-				label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
+				label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex());
 			else {
 				if (node.getValue() instanceof List<?>)
-					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), 
+					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex(),
 												"(" + listToString((List<?>) node.getValue(), ",") + ")");
 				else
-					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), node.getValue());
+					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex(), node.getValue());
 			}
 
 			String color = node.isAmbiguous() ? "red" : "black";
@@ -110,7 +110,7 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		if(!visited.contains(node)) {
 			visited.add(node);
 			
-			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex());
 
 			String color = node.isAmbiguous() ? "red" : "black";
 			sb.append("\"" + getId(node) + "\"" + String.format(RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
@@ -134,13 +134,13 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		return null;
 	}
 	
-	protected void addEdgesToChildren(SPPFNode<?,?> node) {
-		for (SPPFNode<?,?> child : node.getChildren()) {
+	protected void addEdgesToChildren(SPPFNode node) {
+		for (SPPFNode child : node.getChildren()) {
 			addEdgeToChild(node, child);
 		}
 	}
 	
-	protected void addEdgeToChild(SPPFNode<?,?> parentNode, SPPFNode<?,?> childNode) {
+	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
 		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
 	}
 	
@@ -152,15 +152,15 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		return sb.toString();
 	}
 
-	public void visitChildren(SPPFNode<?, ?> node) {
-		for (SPPFNode<?,?> child : node.getChildren()) {
+	public void visitChildren(SPPFNode node) {
+		for (SPPFNode child : node.getChildren()) {
 			child.accept(this);
 		}
 	}
 
-	private static Map<SPPFNode<?, ?>, Integer> ids = new HashMap<>();
+	private static Map<SPPFNode, Integer> ids = new HashMap<>();
 
-	private static int getId(SPPFNode<?, ?> node) {
+	private static int getId(SPPFNode node) {
 		return ids.computeIfAbsent(node, k -> ids.size() + 1);
 	}
 

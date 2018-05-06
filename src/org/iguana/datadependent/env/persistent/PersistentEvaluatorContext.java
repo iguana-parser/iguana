@@ -27,14 +27,12 @@
 
 package org.iguana.datadependent.env.persistent;
 
-import iguana.utils.input.Input;
 import org.iguana.datadependent.env.AbstractEvaluatorContext;
 import org.iguana.datadependent.env.Environment;
 
 public class PersistentEvaluatorContext extends AbstractEvaluatorContext {
 	
-	public PersistentEvaluatorContext(Input input) {
-		super(input);
+	public PersistentEvaluatorContext() {
 		setEnvironment(PersistentEnvironment.EMPTY);
 	}
 

@@ -28,29 +28,32 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.result.Result;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.List;
 
-/**
- * 
- * @author Ali Afroozeh
- * 
- */
-public interface SPPFNode<T extends GrammarSlot, U extends SPPFNode<?, ?>> {
+public interface SPPFNode extends Result {
 	
-	U getChildAt(int index);
+	SPPFNode getChildAt(int index);
 
-	List<U> getChildren();
+	List<? extends SPPFNode> getChildren();
 		
 	int childrenCount();
 
-	T getGrammarSlot();
+	GrammarSlot getGrammarSlot();
 
 	int getLeftExtent();
 
-	int getRightExtent();
+	default int getRightExtent() {
+		return getIndex();
+	}
 
 	<R> R accept(SPPFVisitor<R> visitAction);
-	
+
+	default Object getValue() {
+		return null;
+	}
+
+	default boolean isDummy() { return false; }
 }
