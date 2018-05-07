@@ -3,13 +3,11 @@ package org.iguana.parser.ebnf;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
-import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -40,16 +38,6 @@ public class Test9 {
     static Input input2 = Input.fromString("aa");
     static Input input3 = Input.fromString("aaa");
     static Input input4 = Input.fromString("aaaaaaaaa");
-
-    @BeforeClass
-    public static void record() {
-        String path = Paths.get("test", "resources", "grammars", "ebnf").toAbsolutePath().toString();
-        TestRunner.record(grammar, input0, 1, path + "/Test9");
-        TestRunner.record(grammar, input1, 2, path + "/Test9");
-        TestRunner.record(grammar, input2, 3, path + "/Test9");
-        TestRunner.record(grammar, input3, 4, path + "/Test9");
-        TestRunner.record(grammar, input4, 5, path + "/Test9");
-    }
 
     @Test
     public void testParse0() {

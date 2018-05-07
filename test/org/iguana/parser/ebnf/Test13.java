@@ -15,11 +15,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.TestRunner;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -57,14 +53,6 @@ public class Test13 {
 
     private static Input input1 = Input.fromString("abcd");
     private static Input input2 = Input.fromString("abcccccd");
-
-    @BeforeClass
-    public static void record() {
-        System.out.println(grammar);
-        String path = Paths.get("test", "resources", "grammars", "ebnf").toAbsolutePath().toString();
-        TestRunner.record(grammar, input1, 1, path + "/Test13");
-        TestRunner.record(grammar, input2, 2, path + "/Test13");
-    }
 
     @Test
     public void testParser1() {

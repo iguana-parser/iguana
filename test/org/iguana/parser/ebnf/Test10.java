@@ -15,7 +15,6 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -50,16 +49,7 @@ public class Test10 {
     private static Input input1 = Input.fromString("b");
     private static Input input2 = Input.fromString("bb");
     private static Input input3 = Input.fromString("bbbbb");
-
-    @BeforeClass
-    public static void record() {
-        System.out.println(grammar);
-        String path = Paths.get("test", "resources", "grammars", "ebnf").toAbsolutePath().toString();
-        TestRunner.record(grammar, input1, 1, path + "/Test10");
-        TestRunner.record(grammar, input2, 2, path + "/Test10");
-        TestRunner.record(grammar, input3, 3, path + "/Test10");
-    }
-
+    
     @Test
     public void testParser1() {
         ParseResult result = Iguana.parse(input1, grammar, S);

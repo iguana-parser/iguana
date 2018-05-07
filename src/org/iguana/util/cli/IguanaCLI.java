@@ -33,16 +33,15 @@ import iguana.utils.visualization.GraphVizUtil;
 import org.apache.commons.cli.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.result.ParserResultOps;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.SPPFJsonSerializer;
-import org.iguana.util.TestRunner;
 import org.iguana.util.visualization.ParseTreeToDot;
 import org.iguana.util.visualization.SPPFToDot;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,12 +58,6 @@ public class IguanaCLI {
 
             if (line.hasOption("printHelp")) {
                 printHelp();
-                return;
-            }
-
-            if (line.hasOption("test")) {
-                String testPath = line.getOptionValue("test");
-                TestRunner.run(testPath);
                 return;
             }
 
@@ -247,11 +240,6 @@ public class IguanaCLI {
                 .hasArg()
                 .build();
 
-        Option test = Option.builder().longOpt("test")
-                .desc("run tests")
-                .hasArg()
-                .build();
-
         Options options = new Options();
         options.addOption(help);
         options.addOption(version);
@@ -262,7 +250,6 @@ public class IguanaCLI {
         options.addOption(visualizeTree);
         options.addOption(visualizeSPPF);
         options.addOption(benchmark);
-        options.addOption(test);
 
         return options;
     }
