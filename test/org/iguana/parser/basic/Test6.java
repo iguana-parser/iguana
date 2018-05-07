@@ -46,7 +46,6 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -79,12 +78,6 @@ public class Test6 {
     private static Grammar grammar = new DesugarStartSymbol().transform(Grammar.builder().addRule(r1).addRule(r2).addRule(r3).setStartSymbol(startSymbol).build());
 
     private static Input input = Input.fromString("bc");
-
-    @BeforeClass
-    public static void record() {
-        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
-        TestRunner.record(grammar, input, 1, path + "/Test6");
-    }
 
     @Test
 	public void testNullable() {
