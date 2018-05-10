@@ -37,7 +37,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -57,26 +56,26 @@ public class Input {
 	
 	private final URI uri;
 
-    public static Input fromString(String s) {
-        return fromString(s, URI.create("dummy:///"));
-    }
+	private final int hash;
 
-    private final int hash;
-
-	public static Input fromString(String s, URI uri) {
+	public static Input fromString(String s) {
 		try {
-			return new Input(fromStream(IOUtils.toInputStream(s)), uri);
+			return new Input(fromStream(IOUtils.toInputStream(s)), null);
 		} catch (IOException e) {
-            throw new RuntimeException("Should not reach here");
+			throw new RuntimeException("Should not reach here");
 		}
 	}
-	
-	public static Input fromPath(Path path) throws IOException {
-		return fromFile(path.toFile());
+
+	public static Input fromPath(String path) throws IOException {
+		return fromFile(new File(path));
 	}
-	
+
 	public static Input fromFile(File file) throws IOException {
 		return new Input(fromStream(new FileInputStream(file)), file.toURI());
+	}
+
+	public static Input empty() {
+		return fromString("");
 	}
 
 	private Input(Tuple<Object, Object> result, URI uri) {
@@ -243,7 +242,6 @@ public class Input {
 	public boolean isEmpty() {
 		return length() == 1;
 	}
-	
 	
 	public URI getURI() {
 		return uri;

@@ -43,7 +43,7 @@ public class InputTest {
 
     @BeforeEach
     public void init() {
-        input1 = Input.fromString("");
+        input1 = Input.empty();
         input2 = Input.fromString("big\n brother");
         input3 = Input.fromString("big\r\n brother");
 
@@ -59,14 +59,15 @@ public class InputTest {
 
         input4 = Input.fromString(String.join("\n", lines));
         input5 = Input.fromString("We are just another brick in the wall");
-        input6 = Input.fromString("🍕🥦🦁🍆");
+        input6 = Input.fromString("🍕\n\n🥦🦁a🍆\n🐰");
+
     }
 
     @Test
     public void lengthTest() {
         assertEquals(1, input1.length());
         assertEquals(13, input2.length());
-        assertEquals(5, input6.length());
+        assertEquals(10, input6.length());
     }
 
     @Test
@@ -145,11 +146,13 @@ public class InputTest {
         assertThrows(IndexOutOfBoundsException.class, () -> input4.isStartOfLine(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfLine(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfFile(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.charAt(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.getLineNumber(35));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.getColumnNumber(35));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.isStartOfLine(35));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfLine(35));
         assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfFile(35));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.charAt(35));
     }
 
     @Test
@@ -196,7 +199,26 @@ public class InputTest {
 
 	@Test
 	public void testCharAt() {
+        assertEquals(Character.toCodePoint('\ud83c', '\udf55'), input6.charAt(0)); // 🍕
+        assertEquals('\n', input6.charAt(1));
+        assertEquals('\n', input6.charAt(2));
+        assertEquals(Character.toCodePoint('\uD83E', '\uDD66'), input6.charAt(3)); // 🥦
+        assertEquals(Character.toCodePoint('\uD83E', '\uDD81'), input6.charAt(4)); // 🦁
+        assertEquals('a', input6.charAt(5));
+        assertEquals(Character.toCodePoint('\uD83C', '\uDF46'), input6.charAt(6)); // 🍆
+        assertEquals('\n', input6.charAt(7));
+        assertEquals(Character.toCodePoint('\uD83D', '\uDC30'), input6.charAt(8)); // 🐰
+        assertEquals(-1, input6.charAt(9));
+    }
 
+    @Test
+    public void getLineCoundTest() {
+        assertEquals(1, input1.getLineCount());
+        assertEquals(2, input2.getLineCount());
+        assertEquals(2, input3.getLineCount());
+        assertEquals(7, input4.getLineCount());
+        assertEquals(1, input5.getLineCount());
+        assertEquals(4, input6.getLineCount());
     }
 
 }
