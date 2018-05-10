@@ -27,70 +27,176 @@
 
 package iguana.utils.input;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InputTest {
 
-	@Test
+    private Input input1;
+    private Input input2;
+    private Input input3;
+    private Input input4;
+    private Input input5;
+    private Input input6;
+
+    @BeforeEach
+    public void init() {
+        input1 = Input.fromString("");
+        input2 = Input.fromString("big\n brother");
+        input3 = Input.fromString("big\r\n brother");
+
+        String[] lines = {
+                "a",
+                "bc",
+                "defg",
+                "hklm",
+                "nopqrstu",
+                "vwxyz0",
+                "123"
+        };
+
+        input4 = Input.fromString(String.join("\n", lines));
+        input5 = Input.fromString("We are just another brick in the wall");
+        input6 = Input.fromString("🍕🥦🦁🍆");
+    }
+
+    @Test
+    public void lengthTest() {
+        assertEquals(1, input1.length());
+        assertEquals(13, input2.length());
+        assertEquals(5, input6.length());
+    }
+
+    @Test
 	public void testLineColumnNumber1() {
-		Input input = Input.fromString("big\n brother");
-		assertEquals(1, input.getLineNumber(0));
-		assertEquals(1, input.getColumnNumber(0));
+		assertEquals(1, input2.getLineNumber(0));
+		assertEquals(1, input2.getColumnNumber(0));
 		
-		assertEquals(1, input.getLineNumber(1));
-		assertEquals(2, input.getColumnNumber(1));
+		assertEquals(1, input2.getLineNumber(1));
+		assertEquals(2, input2.getColumnNumber(1));
 		
-		assertEquals(1, input.getLineNumber(3));
-		assertEquals(4, input.getColumnNumber(3));
+		assertEquals(1, input2.getLineNumber(3));
+		assertEquals(4, input2.getColumnNumber(3));
 		
-		assertEquals(2, input.getLineNumber(5));
-		assertEquals(2, input.getColumnNumber(5));
+		assertEquals(2, input2.getLineNumber(5));
+		assertEquals(2, input2.getColumnNumber(5));
 	}
 	
 	@Test
 	public void testLineColumnNumber2() {
-		Input input = Input.fromString("big\r\n brother");
+		assertEquals(1, input3.getLineNumber(0));
+		assertEquals(1, input3.getColumnNumber(0));
 
-		assertEquals(1, input.getLineNumber(0));
-		assertEquals(1, input.getColumnNumber(0));
-
-		assertEquals(1, input.getLineNumber(1));
-		assertEquals(2, input.getColumnNumber(1));
+		assertEquals(1, input3.getLineNumber(1));
+		assertEquals(2, input3.getColumnNumber(1));
 		
-		assertEquals(1, input.getLineNumber(3));
-		assertEquals(4, input.getColumnNumber(3));
+		assertEquals(1, input3.getLineNumber(3));
+		assertEquals(4, input3.getColumnNumber(3));
 		
-		assertEquals(2, input.getLineNumber(6));
-		assertEquals(2, input.getColumnNumber(6));
+		assertEquals(2, input3.getLineNumber(6));
+		assertEquals(2, input3.getColumnNumber(6));
 	}
-	
+
+	@Test
+	public void testLineColumnNumber3() {
+        assertEquals(1, input4.getLineNumber(0));
+        assertEquals(1, input4.getColumnNumber(0));
+
+        assertEquals(1, input4.getLineNumber(1));
+        assertEquals(2, input4.getColumnNumber(1));
+
+        assertEquals(2, input4.getLineNumber(2));
+        assertEquals(1, input4.getColumnNumber(2));
+
+        assertEquals(3, input4.getLineNumber(5));
+        assertEquals(1, input4.getColumnNumber(5));
+
+        assertEquals(4, input4.getLineNumber(10));
+        assertEquals(1, input4.getColumnNumber(10));
+
+        assertEquals(4, input4.getLineNumber(12));
+        assertEquals(3, input4.getColumnNumber(12));
+
+        assertEquals(5, input4.getLineNumber(15));
+        assertEquals(1, input4.getColumnNumber(15));
+
+        assertEquals(5, input4.getLineNumber(22));
+        assertEquals(8, input4.getColumnNumber(22));
+
+        assertEquals(6, input4.getLineNumber(24));
+        assertEquals(1, input4.getColumnNumber(24));
+
+        assertEquals(6, input4.getLineNumber(30));
+        assertEquals(7, input4.getColumnNumber(30));
+
+        assertEquals(7, input4.getLineNumber(31));
+        assertEquals(1, input4.getColumnNumber(31));
+
+        assertEquals(7, input4.getLineNumber(34));
+        assertEquals(4, input4.getColumnNumber(34));
+    }
+
+    @Test
+    public void testBounds() {
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.getLineNumber(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.getColumnNumber(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.isStartOfLine(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfLine(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfFile(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.getLineNumber(35));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.getColumnNumber(35));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.isStartOfLine(35));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfLine(35));
+        assertThrows(IndexOutOfBoundsException.class, () -> input4.isEndOfFile(35));
+    }
+
+    @Test
+    public void testIsStartOfLine() {
+        assertTrue(input4.isStartOfLine(0));
+        assertTrue(input4.isStartOfLine(2));
+        assertTrue(input4.isStartOfLine(5));
+        assertTrue(input4.isStartOfLine(10));
+        assertTrue(input4.isStartOfLine(15));
+        assertTrue(input4.isStartOfLine(24));
+        assertTrue(input4.isStartOfLine(31));
+    }
+
+    @Test
+    public void testisEndOfLine() {
+        assertTrue(input4.isEndOfLine(1));
+        assertTrue(input4.isEndOfLine(4));
+        assertTrue(input4.isEndOfLine(9));
+        assertTrue(input4.isEndOfLine(14));
+        assertTrue(input4.isEndOfLine(23));
+        assertTrue(input4.isEndOfLine(30));
+    }
+
 	@Test
 	public void testMatch1() {
-		Input input = Input.fromString("We are just another brick in the wall");
-		
-		assertTrue(input.match(0, "We"));
-		assertTrue(input.match(33, "wall"));
-		assertFalse(input.match(35, "wall"));
+		assertTrue(input5.match(0, "We"));
+		assertTrue(input5.match(33, "wall"));
+		assertFalse(input5.match(35, "wall"));
 	}
 	
 	@Test
 	public void testMatch2() {
-		Input input = Input.fromString("We are just another brick in the wall");
-		
-		assertTrue(input.match(0, 2, "We"));
-		assertTrue(input.match(3, 11, "are just"));
+		assertTrue(input5.match(0, 2, "We"));
+		assertTrue(input5.match(3, 11, "are just"));
 	}
 	
 	@Test
 	public void testMatch3() {
-		Input input = Input.fromString("We are just another brick in the wall");
-		
-		assertTrue(input.matchBackward(2, "We"));
-		assertTrue(input.matchBackward(37, "wall"));
-		assertTrue(input.matchBackward(37, "all"));
-		assertTrue(input.matchBackward(32, "the"));
+		assertTrue(input5.matchBackward(2, "We"));
+		assertTrue(input5.matchBackward(37, "wall"));
+		assertTrue(input5.matchBackward(37, "all"));
+		assertTrue(input5.matchBackward(32, "the"));
 	}
+
+	@Test
+	public void testCharAt() {
+
+    }
 
 }
