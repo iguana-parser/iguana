@@ -67,6 +67,9 @@ public class InputTest {
     public void lengthTest() {
         assertEquals(1, input1.length());
         assertEquals(13, input2.length());
+        assertEquals(14, input3.length());
+        assertEquals(35, input4.length());
+        assertEquals(38, input5.length());
         assertEquals(10, input6.length());
     }
 
@@ -167,13 +170,14 @@ public class InputTest {
     }
 
     @Test
-    public void testisEndOfLine() {
+    public void testIsEndOfLine() {
         assertTrue(input4.isEndOfLine(1));
         assertTrue(input4.isEndOfLine(4));
         assertTrue(input4.isEndOfLine(9));
         assertTrue(input4.isEndOfLine(14));
         assertTrue(input4.isEndOfLine(23));
         assertTrue(input4.isEndOfLine(30));
+        assertTrue(input4.isEndOfLine(34));
     }
 
 	@Test
@@ -212,13 +216,23 @@ public class InputTest {
     }
 
     @Test
-    public void getLineCoundTest() {
+    public void getLineCountTest() {
         assertEquals(1, input1.getLineCount());
         assertEquals(2, input2.getLineCount());
         assertEquals(2, input3.getLineCount());
         assertEquals(7, input4.getLineCount());
         assertEquals(1, input5.getLineCount());
         assertEquals(4, input6.getLineCount());
+    }
+
+    @Test
+    public void isEndOfFile() {
+        assertTrue(input1.isEndOfFile(0));
+        assertTrue(input2.isEndOfFile(12));
+        assertTrue(input3.isEndOfFile(13));
+        assertTrue(input4.isEndOfFile(34));
+        assertTrue(input5.isEndOfFile(37));
+        assertTrue(input6.isEndOfFile(9));
     }
 
 }

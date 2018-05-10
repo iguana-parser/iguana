@@ -27,13 +27,15 @@
 
 package iguana.utils.input;
 
-import iguana.utils.collections.tuple.Tuple;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.BOMInputStream;
+import iguana.utils.collections.tuple.IntTuple;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Path;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,38 +55,92 @@ public class Input {
 	private final int[] characters;
 
 	private final int[] lineStarts;
+
+	private final int length;
 	
 	private final URI uri;
 
 	private final int hash;
 
 	public static Input fromString(String s) {
-		try {
-			return new Input(fromStream(IOUtils.toInputStream(s)), null);
-		} catch (IOException e) {
-			throw new RuntimeException("Should not reach here");
-		}
+		return new Input(s, null);
 	}
 
 	public static Input fromPath(String path) throws IOException {
-		return fromFile(new File(path));
+		return fromPath(path, StandardCharsets.UTF_8);
+	}
+
+	public static Input fromPath(String path, Charset charset) throws IOException {
+		return fromString(new String(Files.readAllBytes(Paths.get(path)), charset));
 	}
 
 	public static Input fromFile(File file) throws IOException {
-		return new Input(fromStream(new FileInputStream(file)), file.toURI());
+		return fromFile(file, StandardCharsets.UTF_8);
 	}
+
+	public static Input fromFile(File file, Charset charset) throws IOException {
+		return fromString(new String(Files.readAllBytes(Paths.get(file.toURI())), charset));
+	}
+
 
 	public static Input empty() {
 		return fromString("");
 	}
 
-	private Input(Tuple<Object, Object> result, URI uri) {
+	private Input(String s, URI uri) {
 		this.uri = uri;
-		this.characters = (int[]) result.getFirst();
-        this.lineStarts = new int[(int) result.getSecond()];
-		calculateLineLengths();
 
-        this.hash = Arrays.hashCode(characters);
+		this.characters = new int[s.length() + 1];
+
+		IntTuple result = convertStringToIntArray(s, characters);
+
+		this.length = result.first();
+		int lineCount = result.second();
+
+		this.lineStarts = new int[lineCount];
+		calculateLineLengths(lineStarts, characters);
+
+		this.hash = Arrays.hashCode(characters);
+	}
+
+	private static IntTuple convertStringToIntArray(String s, int[] characters) {
+		int lineCount = 0;
+
+		int i = 0;
+		int j = 0;
+		while (i < s.length()) {
+			char c = s.charAt(i);
+			if (!Character.isHighSurrogate(c)) {
+				characters[j++] = c;
+				if (c == '\n') {
+					lineCount++;
+				}
+				i++;
+			} else {
+				if (i < s.length() - 1) {
+					characters[j++] = Character.toCodePoint(c, s.charAt(i + 1));
+				} else {
+					throw new RuntimeException("Invalid input");
+				}
+				i += 2;
+			}
+		}
+
+		characters[j++] = EOF;
+
+		return IntTuple.of(j, lineCount + 1);
+	}
+
+	private static void calculateLineLengths(int[] lineStarts, int[] characters) {
+		lineStarts[0] = 0;
+		int j = 0;
+
+		for (int i = 0; i < characters.length; i++) {
+			if (characters[i] == '\n') {
+				if (i + 1 < characters.length)
+					lineStarts[++j] = i + 1;
+			}
+		}
 	}
 	
 	public int charAt(int index) {
@@ -95,7 +151,7 @@ public class Input {
      * The length is one more than the actual characters in the input as the last input character is considered EOF.
      */
 	public int length() {
-		return characters.length;
+		return length;
 	}
 	
 	public boolean match(int start, int end, String target) {
@@ -194,18 +250,6 @@ public class Input {
                Arrays.equals(characters, other.characters);
 	}
 
-	private void calculateLineLengths() {
-        lineStarts[0] = 0;
-        int j = 0;
-
-		for (int i = 0; i < characters.length; i++) {
-			if (characters[i] == '\n') {
-			    if (i + 1 < characters.length)
-			        lineStarts[++j] = i + 1;
-			}
-		}
-	}
-	
 	/**
 	 * Returns a string representation of this input instance from the
 	 * given start (including) and end (excluding) indices.
@@ -256,9 +300,7 @@ public class Input {
 	public boolean isEndOfLine(int inputIndex) {
         checkBounds(inputIndex, length());
 
-        int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
-        if (lineStart >= 0) return false;
-        return inputIndex == lineStarts[-lineStart - 1] - 1;
+        return charAt(inputIndex) == '\n' || charAt(inputIndex) == EOF;
 	}
 	
 	public boolean isEndOfFile(int inputIndex) {
@@ -266,42 +308,6 @@ public class Input {
 
 		return characters[inputIndex] == -1;
 	}
-
-    private static Tuple<Object, Object> fromStream(InputStream in) throws IOException {
-        BOMInputStream bomIn = new BOMInputStream(in, false);
-        Reader reader = new BufferedReader(new InputStreamReader(bomIn));
-
-        List<Integer> input = new ArrayList<>();
-
-        int lineCount = 0;
-
-        int c;
-        while ((c = reader.read()) != -1) {
-            if (!Character.isHighSurrogate((char) c)) {
-                input.add(c);
-                if (c == '\n') {
-                    lineCount++;
-                }
-            } else {
-                int next;
-                if ((next = reader.read()) != -1) {
-                    input.add(Character.toCodePoint((char)c, (char)next));
-                }
-            }
-        }
-
-        reader.close();
-        in.close();
-
-        int[] intInput = new int[input.size() + 1];
-        int i = 0;
-        for (Integer v : input) {
-            intInput[i++] = v;
-        }
-        intInput[i] = EOF;
-
-        return Tuple.of(intInput, lineCount + 1);
-    }
 
     private static void checkBounds(int index, int length) {
         if (index < 0 || index >= length) {
