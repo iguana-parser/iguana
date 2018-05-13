@@ -2,11 +2,29 @@ package iguana.utils.collections;
 
 import iguana.utils.collections.rangemap.Range;
 import iguana.utils.collections.rangemap.RangeMap;
+import iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class RangeMapTest {
+
+    /**
+     * 1-----7          a
+     */
+    @Test
+    public void testSingleRange() {
+        RangeMap<String> map = new RangeMapBuilder<String>()
+                .put(Range.in(1, 7), "a")
+                .build();
+
+        assertArrayEquals(new String[]{}, map.get(0));
+        assertArrayEquals(new String[]{"a"}, map.get(1));
+        assertArrayEquals(new String[]{"a"}, map.get(3));
+        assertArrayEquals(new String[]{"a"}, map.get(7));
+        assertArrayEquals(new String[]{},   map.get(8));
+    }
+
 
     /**
      * 1-----7                             a
@@ -15,7 +33,7 @@ public class RangeMapTest {
      */
     @Test
     public void testNonOverlapping() {
-        RangeMap map = RangeMap.<String>builder()
+        RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(1, 7), "a")
                 .put(Range.in(9, 13), "b")
                 .put(Range.in(17, 21), "c")
@@ -43,7 +61,7 @@ public class RangeMapTest {
      */
     @Test
     public void testOverlapping() {
-        RangeMap map = RangeMap.<String>builder()
+        RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(1, 7), "a")
                 .put(Range.in(5, 13), "b")
                 .put(Range.in(6, 21), "c")
@@ -69,7 +87,7 @@ public class RangeMapTest {
      */
     @Test
     public void testOverlapping2() {
-        RangeMap map = RangeMap.<String>builder()
+        RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(1, 5), "a")
                 .put(Range.in(5, 8), "b")
                 .put(Range.in(8, 12), "c")
@@ -97,7 +115,7 @@ public class RangeMapTest {
      */
     @Test
     public void testOverlapping3() {
-        RangeMap map = RangeMap.<String>builder()
+        RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(10, 10), "a")
                 .put(Range.in(5, 13), "b")
                 .put(Range.in(10, 13), "c")
@@ -128,7 +146,7 @@ public class RangeMapTest {
      */
     @Test
     public void testOverlapping4() {
-        RangeMap map = RangeMap.<String>builder()
+        RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(5, 13), "a")
                 .put(Range.in(5, 13), "b")
                 .build();
@@ -151,7 +169,7 @@ public class RangeMapTest {
      */
     @Test
     public void testOverlapping5() {
-        RangeMap map = RangeMap.<String>builder()
+        RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(5, 7), "a")
                 .put(Range.in(9, 11), "b")
                 .put(Range.in(10, 15), "c")

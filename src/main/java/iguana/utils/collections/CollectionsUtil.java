@@ -40,6 +40,12 @@ import java.util.stream.StreamSupport;
 
 public class CollectionsUtil {
 
+	private static Object[] objects = new Object[0];
+
+	public static <T> T[] empty() {
+		return (T[]) objects;
+	}
+
 	@SafeVarargs
 	public static <T> Set<T> set(T...objects) {
 		if (objects.length == 0) return Collections.emptySet();
