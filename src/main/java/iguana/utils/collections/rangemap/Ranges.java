@@ -101,12 +101,12 @@ public class Ranges {
 		}
 		return false;
 	}
-	
+
 	private static Map<Range, List<Range>> convertOverlapping(Set<Range> ranges) {
-		
+
 		if (ranges.isEmpty())
 			return Collections.emptyMap();
-		
+
 		Set<Integer> set = new HashSet<>();
 		for (Range r : ranges) {
 			set.add(r.getStart() - 1);
@@ -114,15 +114,15 @@ public class Ranges {
 		}
 		List<Integer> l = new ArrayList<>(set);
 		Collections.sort(l);
-		
+
 		List<Range> result = new ArrayList<>();
-		
+
 		int start = l.get(0) + 1;
 		for (int i = 1; i < l.size(); i++) {
 			result.add(Range.in(start, l.get(i)));
 			start = l.get(i) + 1;
 		}
-		
+
 		Map<Range, List<Range>> rangesMap = new HashMap<>();
 		for (Range r1 : ranges) {
 			for (Range r2 : result) {
@@ -130,7 +130,7 @@ public class Ranges {
 					rangesMap.computeIfAbsent(r1, k -> new ArrayList<>()).add(r2);
 			}
 		}
-		
+
 		return rangesMap;
 	}
 	

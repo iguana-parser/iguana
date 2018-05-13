@@ -1,41 +1,40 @@
 package iguana.utils.collections.rangemap;
 
-public class Range implements Comparable<Range> {
+public interface Range extends Comparable<Range> {
 
-    private final int start;
-    private final int end;
+    int getStart();
 
-    public static Range in(int start, int end) {
-        return new Range(start, end);
-    }
+    int getEnd();
 
-    public Range(int start, int end) {
-        this.start = start;
-        this.end = end;
-    }
+    static Range in(int start, int end) {
+        return new Range() {
 
-    public int getStart() {
-        return start;
-    }
+            @Override
+            public int getStart() {
+                return start;
+            }
 
-    public int getEnd() {
-        return end;
+            @Override
+            public int getEnd() {
+                return end;
+            }
+        };
     }
 
     @Override
-    public int compareTo(Range o) {
-        return start == o.start ? end - o.end : start - o.start;
+    default int compareTo(Range o) {
+        return getStart() == o.getStart() ? getEnd() - o.getEnd() : getStart() - o.getStart();
     }
 
-    boolean contains(int c) {
-        return start <= c && c <= end;
+    default boolean contains(int c) {
+        return getStart() <= c && c <= getEnd();
     }
 
-    boolean contains(Range other) {
-        return start <= other.start && end >= other.end;
+    default boolean contains(Range other) {
+        return getStart() <= other.getStart() && getEnd() >= other.getEnd();
     }
 
-    boolean overlaps(Range other) {
-        return !(end < other.start || other.end < start);
+    default boolean overlaps(Range other) {
+        return !(getEnd() < other.getStart() || other.getEnd() < getStart());
     }
 }
