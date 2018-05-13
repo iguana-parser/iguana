@@ -1,12 +1,14 @@
 package iguana.utils.collections.rangemap;
 
+import java.util.List;
+
 public abstract class AbstractRangeMap<T> implements RangeMap<T> {
 
     protected final int[] points;
     protected final boolean[] starts;
-    protected final T[][] values;
+    protected final List<T>[] values;
 
-    public AbstractRangeMap(int[] points, boolean[] starts, T[][] values) {
+    public AbstractRangeMap(int[] points, boolean[] starts, List<T>[] values) {
         this.points = points;
         this.starts = starts;
         this.values = values;

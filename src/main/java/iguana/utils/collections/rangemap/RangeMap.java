@@ -1,5 +1,8 @@
 package iguana.utils.collections.rangemap;
 
+import java.util.List;
+
+@FunctionalInterface
 public interface RangeMap<T> {
-    T[] get(int key);
+    List<T> get(int key);
 }

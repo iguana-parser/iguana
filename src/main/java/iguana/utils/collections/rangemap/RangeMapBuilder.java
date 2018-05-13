@@ -2,8 +2,6 @@ package iguana.utils.collections.rangemap;
 
 import java.util.*;
 
-import static iguana.utils.collections.CollectionsUtil.empty;
-
 public class RangeMapBuilder<T> {
 
     private List<Range> ranges = new ArrayList<>();
@@ -53,7 +51,7 @@ public class RangeMapBuilder<T> {
         int size = cumulativeValues.size();
         int[] keys = new int[size];
         boolean[] starts = new boolean[size];
-        T[][] vals = (T[][]) new Object[size][];
+        List<T>[] vals = new List[size];
 
         int i = 0;
         for (Map.Entry<Point<T>, Set<T>> entry : cumulativeValues.entrySet()) {
@@ -64,9 +62,11 @@ public class RangeMapBuilder<T> {
             }
 
             if (cumulativeValues.size() == 0) {
-                vals[i] = empty();
+                vals[i] = Collections.emptyList();
             } else {
-                vals[i] = (T[]) cumulativeValues.get(point).toArray();
+                ArrayList<T> list = new ArrayList<>(cumulativeValues.get(point));
+                list.trimToSize();
+                vals[i] = list;
             }
             i++;
         }

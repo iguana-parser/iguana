@@ -5,7 +5,9 @@ import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static iguana.utils.collections.CollectionsUtil.list;
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RangeMapTest {
 
@@ -18,11 +20,11 @@ public class RangeMapTest {
                 .put(Range.in(1, 7), "a")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(0));
-        assertArrayEquals(new String[]{"a"}, map.get(1));
-        assertArrayEquals(new String[]{"a"}, map.get(3));
-        assertArrayEquals(new String[]{"a"}, map.get(7));
-        assertArrayEquals(new String[]{},   map.get(8));
+        assertEquals(emptyList(), map.get(0));
+        assertEquals(list("a"), map.get(1));
+        assertEquals(list("a"), map.get(3));
+        assertEquals(list("a"), map.get(7));
+        assertEquals(emptyList(),   map.get(8));
     }
 
 
@@ -39,19 +41,19 @@ public class RangeMapTest {
                 .put(Range.in(17, 21), "c")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(0));
-        assertArrayEquals(new String[]{"a"}, map.get(1));
-        assertArrayEquals(new String[]{"a"}, map.get(3));
-        assertArrayEquals(new String[]{"a"}, map.get(7));
-        assertArrayEquals(new String[]{},   map.get(8));
-        assertArrayEquals(new String[]{"b"}, map.get(9));
-        assertArrayEquals(new String[]{"b"}, map.get(11));
-        assertArrayEquals(new String[]{"b"}, map.get(13));
-        assertArrayEquals(new String[]{}, map.get(15));
-        assertArrayEquals(new String[]{"c"}, map.get(17));
-        assertArrayEquals(new String[]{"c"}, map.get(19));
-        assertArrayEquals(new String[]{"c"}, map.get(21));
-        assertArrayEquals(new String[]{}, map.get(22));
+        assertEquals(emptyList(), map.get(0));
+        assertEquals(list("a"), map.get(1));
+        assertEquals(list("a"), map.get(3));
+        assertEquals(list("a"), map.get(7));
+        assertEquals(emptyList(),   map.get(8));
+        assertEquals(list("b"), map.get(9));
+        assertEquals(list("b"), map.get(11));
+        assertEquals(list("b"), map.get(13));
+        assertEquals(emptyList(), map.get(15));
+        assertEquals(list("c"), map.get(17));
+        assertEquals(list("c"), map.get(19));
+        assertEquals(list("c"), map.get(21));
+        assertEquals(emptyList(), map.get(22));
     }
 
     /**
@@ -67,17 +69,17 @@ public class RangeMapTest {
                 .put(Range.in(6, 21), "c")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(0));
-        assertArrayEquals(new String[]{"a"}, map.get(1));
-        assertArrayEquals(new String[]{"a"}, map.get(3));
-        assertArrayEquals(new String[]{"a", "b"}, map.get(5));
-        assertArrayEquals(new String[]{"a", "b", "c"}, map.get(6));
-        assertArrayEquals(new String[]{"a", "b", "c"}, map.get(7));
-        assertArrayEquals(new String[]{"b", "c"}, map.get(8));
-        assertArrayEquals(new String[]{"b", "c"}, map.get(13));
-        assertArrayEquals(new String[]{"c"}, map.get(17));
-        assertArrayEquals(new String[]{"c"}, map.get(21));
-        assertArrayEquals(new String[]{}, map.get(22));
+        assertEquals(emptyList(), map.get(0));
+        assertEquals(list("a"), map.get(1));
+        assertEquals(list("a"), map.get(3));
+        assertEquals(list("a", "b"), map.get(5));
+        assertEquals(list("a", "b", "c"), map.get(6));
+        assertEquals(list("a", "b", "c"), map.get(7));
+        assertEquals(list("b", "c"), map.get(8));
+        assertEquals(list("b", "c"), map.get(13));
+        assertEquals(list("c"), map.get(17));
+        assertEquals(list("c"), map.get(21));
+        assertEquals(emptyList(), map.get(22));
     }
 
     /**
@@ -93,15 +95,15 @@ public class RangeMapTest {
                 .put(Range.in(8, 12), "c")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(0));
-        assertArrayEquals(new String[]{"a"}, map.get(1));
-        assertArrayEquals(new String[]{"a"}, map.get(3));
-        assertArrayEquals(new String[]{"a", "b"}, map.get(5));
-        assertArrayEquals(new String[]{"b"}, map.get(6));
-        assertArrayEquals(new String[]{"b", "c"}, map.get(8));
-        assertArrayEquals(new String[]{"c"}, map.get(10));
-        assertArrayEquals(new String[]{"c"}, map.get(12));
-        assertArrayEquals(new String[]{}, map.get(13));
+        assertEquals(emptyList(), map.get(0));
+        assertEquals(list("a"), map.get(1));
+        assertEquals(list("a"), map.get(3));
+        assertEquals(list("a", "b"), map.get(5));
+        assertEquals(list("b"), map.get(6));
+        assertEquals(list("b", "c"), map.get(8));
+        assertEquals(list("c"), map.get(10));
+        assertEquals(list("c"), map.get(12));
+        assertEquals(emptyList(), map.get(13));
     }
 
     /**
@@ -125,19 +127,19 @@ public class RangeMapTest {
                 .put(Range.in(1, 17), "g")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(0));
-        assertArrayEquals(new String[]{"d", "g"}, map.get(1));
-        assertArrayEquals(new String[]{"d", "g"}, map.get(2));
-        assertArrayEquals(new String[]{"d", "e", "g"}, map.get(3));
-        assertArrayEquals(new String[]{"d", "e", "g"}, map.get(4));
-        assertArrayEquals(new String[]{"b", "d", "e", "g"}, map.get(5));
-        assertArrayEquals(new String[]{"b", "e", "g"}, map.get(6));
-        assertArrayEquals(new String[]{"a", "b", "c", "e", "g"}, map.get(10));
-        assertArrayEquals(new String[]{"b", "c", "e", "f", "g"}, map.get(11));
-        assertArrayEquals(new String[]{"b", "c", "f", "g"}, map.get(13));
-        assertArrayEquals(new String[]{"g"}, map.get(15));
-        assertArrayEquals(new String[]{"g"}, map.get(17));
-        assertArrayEquals(new String[]{}, map.get(18));
+        assertEquals(emptyList(), map.get(0));
+        assertEquals(list("d", "g"), map.get(1));
+        assertEquals(list("d", "g"), map.get(2));
+        assertEquals(list("d", "e", "g"), map.get(3));
+        assertEquals(list("d", "e", "g"), map.get(4));
+        assertEquals(list("b", "d", "e", "g"), map.get(5));
+        assertEquals(list("b", "e", "g"), map.get(6));
+        assertEquals(list("a", "b", "c", "e", "g"), map.get(10));
+        assertEquals(list("b", "c", "e", "f", "g"), map.get(11));
+        assertEquals(list("b", "c", "f", "g"), map.get(13));
+        assertEquals(list("g"), map.get(15));
+        assertEquals(list("g"), map.get(17));
+        assertEquals(emptyList(), map.get(18));
     }
 
     /**
@@ -151,12 +153,12 @@ public class RangeMapTest {
                 .put(Range.in(5, 13), "b")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(4));
-        assertArrayEquals(new String[]{"a", "b"}, map.get(5));
-        assertArrayEquals(new String[]{"a", "b"}, map.get(7));
-        assertArrayEquals(new String[]{"a", "b"}, map.get(13));
-        assertArrayEquals(new String[]{"a", "b"}, map.get(13));
-        assertArrayEquals(new String[]{}, map.get(14));
+        assertEquals(emptyList(), map.get(4));
+        assertEquals(list("a", "b"), map.get(5));
+        assertEquals(list("a", "b"), map.get(7));
+        assertEquals(list("a", "b"), map.get(13));
+        assertEquals(list("a", "b"), map.get(13));
+        assertEquals(emptyList(), map.get(14));
     }
 
     /**
@@ -178,21 +180,21 @@ public class RangeMapTest {
                 .put(Range.in(21, 25), "f")
                 .build();
 
-        assertArrayEquals(new String[]{}, map.get(4));
-        assertArrayEquals(new String[]{"a"}, map.get(5));
-        assertArrayEquals(new String[]{"a"}, map.get(7));
-        assertArrayEquals(new String[]{}, map.get(8));
-        assertArrayEquals(new String[]{"b"}, map.get(9));
-        assertArrayEquals(new String[]{"b", "c"}, map.get(10));
-        assertArrayEquals(new String[]{"b", "c"}, map.get(10));
-        assertArrayEquals(new String[]{"c"}, map.get(15));
-        assertArrayEquals(new String[]{}, map.get(17));
-        assertArrayEquals(new String[]{"d"}, map.get(18));
-        assertArrayEquals(new String[]{"d", "e"}, map.get(19));
-        assertArrayEquals(new String[]{"d", "e"}, map.get(20));
-        assertArrayEquals(new String[]{"e", "f"}, map.get(21));
-        assertArrayEquals(new String[]{"e", "f"}, map.get(23));
-        assertArrayEquals(new String[]{"f"}, map.get(25));
-        assertArrayEquals(new String[]{}, map.get(26));
+        assertEquals(emptyList(), map.get(4));
+        assertEquals(list("a"), map.get(5));
+        assertEquals(list("a"), map.get(7));
+        assertEquals(emptyList(), map.get(8));
+        assertEquals(list("b"), map.get(9));
+        assertEquals(list("b", "c"), map.get(10));
+        assertEquals(list("b", "c"), map.get(10));
+        assertEquals(list("c"), map.get(15));
+        assertEquals(emptyList(), map.get(17));
+        assertEquals(list("d"), map.get(18));
+        assertEquals(list("d", "e"), map.get(19));
+        assertEquals(list("d", "e"), map.get(20));
+        assertEquals(list("e", "f"), map.get(21));
+        assertEquals(list("e", "f"), map.get(23));
+        assertEquals(list("f"), map.get(25));
+        assertEquals(emptyList(), map.get(26));
     }
 }
