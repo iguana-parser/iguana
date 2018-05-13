@@ -31,7 +31,6 @@ import iguana.utils.collections.rangemap.*;
 import org.junit.Test;
 
 import static iguana.utils.collections.CollectionsUtil.list;
-import static iguana.utils.collections.rangemap.ImmutableRange.*;
 
 import java.util.List;
 
@@ -42,26 +41,26 @@ public class IntRangeTest {
 	@Test
 	public void test() {
 		IntRangeTree tree = new AVLIntRangeTree();
-        tree.insert(in('.', '.'), 1);
-		tree.insert(in('$', '$'), 2);
-		tree.insert(in('&', '&'), 3);
-		tree.insert(in('*', '*'), 4);
-		tree.insert(in(':', ':'), 5);
-		tree.insert(in('<', '<'), 6);
-		tree.insert(in('>', '>'), 7);
-		tree.insert(in('@', '@'), 8);
-		tree.insert(in('\\', '\\'), 9);
-		tree.insert(in('^', '^'), 10);
-		tree.insert(in('|', '|'), 11);
-		tree.insert(in('~', '~'), 12);
-		tree.insert(in('!', '!'), 13);
-		tree.insert(in('#', '#'), 14);
-		tree.insert(in('%', '%'), 15);
-		tree.insert(in('+', '+'), 16);
-		tree.insert(in('-', '-'), 17);
-		tree.insert(in('/', '/'), 18);
-		tree.insert(in('=', '='), 19);
-		tree.insert(in('?', '?'), 20);
+        tree.insert(Range.in('.', '.'), 1);
+		tree.insert(Range.in('$', '$'), 2);
+		tree.insert(Range.in('&', '&'), 3);
+		tree.insert(Range.in('*', '*'), 4);
+		tree.insert(Range.in(':', ':'), 5);
+		tree.insert(Range.in('<', '<'), 6);
+		tree.insert(Range.in('>', '>'), 7);
+		tree.insert(Range.in('@', '@'), 8);
+		tree.insert(Range.in('\\', '\\'), 9);
+		tree.insert(Range.in('^', '^'), 10);
+		tree.insert(Range.in('|', '|'), 11);
+		tree.insert(Range.in('~', '~'), 12);
+		tree.insert(Range.in('!', '!'), 13);
+		tree.insert(Range.in('#', '#'), 14);
+		tree.insert(Range.in('%', '%'), 15);
+		tree.insert(Range.in('+', '+'), 16);
+		tree.insert(Range.in('-', '-'), 17);
+		tree.insert(Range.in('/', '/'), 18);
+		tree.insert(Range.in('=', '='), 19);
+		tree.insert(Range.in('?', '?'), 20);
 		
 		assertEquals(20, tree.size());
 		assertEquals(4, tree.getRoot().getHeight());
@@ -113,15 +112,15 @@ public class IntRangeTest {
 	@Test
 	public void test5() {
 		IntRangeTree tree = new AVLIntRangeTree();
-		tree.insert(in(44, 44), 1);
-		tree.insert(in(17, 17), 2);
-		tree.insert(in(32, 32), 3);
-		tree.insert(in(78, 78), 4);
-		tree.insert(in(50, 50), 5);
-		tree.insert(in(48, 48), 6);
-		tree.insert(in(62, 62), 7);
-		tree.insert(in(54, 54), 8);
-		tree.insert(in(88, 88), 9);
+		tree.insert(Range.in(44, 44), 1);
+		tree.insert(Range.in(17, 17), 2);
+		tree.insert(Range.in(32, 32), 3);
+		tree.insert(Range.in(78, 78), 4);
+		tree.insert(Range.in(50, 50), 5);
+		tree.insert(Range.in(48, 48), 6);
+		tree.insert(Range.in(62, 62), 7);
+		tree.insert(Range.in(54, 54), 8);
+		tree.insert(Range.in(88, 88), 9);
 		
 		assertEquals(9, tree.size());
 		assertEquals(3, tree.getRoot().getHeight());
@@ -152,13 +151,13 @@ public class IntRangeTest {
 	@Test
 	public void test6() {
 		IntRangeTree tree = new AVLIntRangeTree();
-		tree.insert(in(14, 14), 1);
-		tree.insert(in(17, 17), 2);
-		tree.insert(in(11, 11), 3);
-		tree.insert(in(7,  7), 4);
-		tree.insert(in(53, 53), 5);
-		tree.insert(in(4,  4), 6);
-		tree.insert(in(13, 13), 7);
+		tree.insert(Range.in(14, 14), 1);
+		tree.insert(Range.in(17, 17), 2);
+		tree.insert(Range.in(11, 11), 3);
+		tree.insert(Range.in(7,  7), 4);
+		tree.insert(Range.in(53, 53), 5);
+		tree.insert(Range.in(4,  4), 6);
+		tree.insert(Range.in(13, 13), 7);
 		
 		assertEquals(7, tree.size());
 		assertEquals(3, tree.getRoot().getHeight());
@@ -185,16 +184,16 @@ public class IntRangeTest {
 	@Test
 	public void test7() {
 		IntRangeTree tree = new AVLIntRangeTree();
-		tree.insert(in(3, 3), 1);
-		tree.insert(in(2, 2), 2);
-		tree.insert(in(1, 1), 3);
-		tree.insert(in(4, 4), 4);
-		tree.insert(in(5, 5), 5);
-		tree.insert(in(6, 6), 6);
-		tree.insert(in(7, 7), 7);
-		tree.insert(in(16, 16), 8);
-		tree.insert(in(15, 15), 9);
-		tree.insert(in(14, 14), 10);
+		tree.insert(Range.in(3, 3), 1);
+		tree.insert(Range.in(2, 2), 2);
+		tree.insert(Range.in(1, 1), 3);
+		tree.insert(Range.in(4, 4), 4);
+		tree.insert(Range.in(5, 5), 5);
+		tree.insert(Range.in(6, 6), 6);
+		tree.insert(Range.in(7, 7), 7);
+		tree.insert(Range.in(16, 16), 8);
+		tree.insert(Range.in(15, 15), 9);
+		tree.insert(Range.in(14, 14), 10);
 		
 		assertEquals(10, tree.size());
 		assertEquals(3, tree.getRoot().getHeight());
@@ -228,13 +227,13 @@ public class IntRangeTest {
 	public void test8() {
 		AVLIntRangeTree tree = new AVLIntRangeTree();
 		// [*, \u0000, \, \\u000A, \\u000D, \uFFFFFFFF, ]-\u10FFFF, \u0001-[]
-        List<Range> list = list(in('*', '*'),
-				                         in('\u0000', '\u0000'), 
-				                         in('\\', '\\'), 
-				                         in('\r', '\r'), 
-				                         in('\n', '\n'),
-				                         in(']', 1_114_111),
-				                         in(1, '[')
+        List<Range> list = list(Range.in('*', '*'),
+				                         Range.in('\u0000', '\u0000'),
+				                         Range.in('\\', '\\'),
+				                         Range.in('\r', '\r'),
+				                         Range.in('\n', '\n'),
+				                         Range.in(']', 1_114_111),
+				                         Range.in(1, '[')
 										 );
 		
 		Ranges.toNonOverlappingSet(list).forEach(range -> tree.insert(range, 1));
@@ -245,39 +244,39 @@ public class IntRangeTest {
 	@Test
 	public void test9() {
 		IntRangeTree tree = new AVLIntRangeTree();
-		tree.insert(in('A', 'Z'), 1);
-		tree.insert(in('d', 'd'), 1);
-		tree.insert(in(',', ','), 1);
-		tree.insert(in('0', '0'), 1);
-		tree.insert(in('\\', '\\'), 1);
-		tree.insert(in('f', 'f'), 1);
-		tree.insert(in('l', 'l'), 1);
-		tree.insert(in('~', '~'), 1);
-		tree.insert(in('p', 'p'), 1);
-		tree.insert(in('\u0020', '\u0020'), 1);
-		tree.insert(in('"', '"'), 1);
-		tree.insert(in('$', '$'), 1);
-		tree.insert(in('(', '('), 1);
-		tree.insert(in('j','k'), 1);
-		tree.insert(in('c', 'c'), 1);
-		tree.insert(in('i', 'i'), 1);
-		tree.insert(in('e', 'e'), 1);
-		tree.insert(in('{', '{'), 1);
-		tree.insert(in('#', '#'), 1);
-		tree.insert(in(-1, -1), 1);
-		tree.insert(in(13, 13), 1);
-		tree.insert(in('!', '!'), 1);
-		tree.insert(in('\'', '\''), 1);
-		tree.insert(in(')', ')'), 1);
-		tree.insert(in('-', '-'), 1);
-		tree.insert(in('[', '['), 1);
-		tree.insert(in('_', '_'), 1);
-		tree.insert(in('a', 'b'), 1);
-		tree.insert(in('g', 'h'), 1);
-		tree.insert(in('m', 'o'), 1);
-		tree.insert(in('\u0009', '\u000B'), 1);
-		tree.insert(in('1', '9'), 1);
-		tree.insert(in('q', 'z'), 1);
+		tree.insert(Range.in('A', 'Z'), 1);
+		tree.insert(Range.in('d', 'd'), 1);
+		tree.insert(Range.in(',', ','), 1);
+		tree.insert(Range.in('0', '0'), 1);
+		tree.insert(Range.in('\\', '\\'), 1);
+		tree.insert(Range.in('f', 'f'), 1);
+		tree.insert(Range.in('l', 'l'), 1);
+		tree.insert(Range.in('~', '~'), 1);
+		tree.insert(Range.in('p', 'p'), 1);
+		tree.insert(Range.in('\u0020', '\u0020'), 1);
+		tree.insert(Range.in('"', '"'), 1);
+		tree.insert(Range.in('$', '$'), 1);
+		tree.insert(Range.in('(', '('), 1);
+		tree.insert(Range.in('j','k'), 1);
+		tree.insert(Range.in('c', 'c'), 1);
+		tree.insert(Range.in('i', 'i'), 1);
+		tree.insert(Range.in('e', 'e'), 1);
+		tree.insert(Range.in('{', '{'), 1);
+		tree.insert(Range.in('#', '#'), 1);
+		tree.insert(Range.in(-1, -1), 1);
+		tree.insert(Range.in(13, 13), 1);
+		tree.insert(Range.in('!', '!'), 1);
+		tree.insert(Range.in('\'', '\''), 1);
+		tree.insert(Range.in(')', ')'), 1);
+		tree.insert(Range.in('-', '-'), 1);
+		tree.insert(Range.in('[', '['), 1);
+		tree.insert(Range.in('_', '_'), 1);
+		tree.insert(Range.in('a', 'b'), 1);
+		tree.insert(Range.in('g', 'h'), 1);
+		tree.insert(Range.in('m', 'o'), 1);
+		tree.insert(Range.in('\u0009', '\u000B'), 1);
+		tree.insert(Range.in('1', '9'), 1);
+		tree.insert(Range.in('q', 'z'), 1);
 		
 		assertEquals(1, tree.get('A'));
 		assertEquals(1, tree.get('D'));

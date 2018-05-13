@@ -119,7 +119,7 @@ public class Ranges {
 		
 		int start = l.get(0) + 1;
 		for (int i = 1; i < l.size(); i++) {
-			result.add(ImmutableRange.in(start, l.get(i)));
+			result.add(Range.in(start, l.get(i)));
 			start = l.get(i) + 1;
 		}
 		

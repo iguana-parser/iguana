@@ -27,10 +27,10 @@
 
 package iguana.utils.collections;
 
+import iguana.utils.collections.rangemap.Range;
 import iguana.utils.collections.rangemap.RangeTree;
 import org.junit.Test;
 
-import static iguana.utils.collections.rangemap.ImmutableRange.in;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -39,36 +39,36 @@ public class RangeTreeTest {
 	@Test
 	public void test1() {
 		RangeTree<String> rangeTree = new RangeTree<>();
-		rangeTree.insert(in(1, 4), "a");
-		rangeTree.insert(in(7, 13), "b");
-		rangeTree.insert(in(18, 101), "c");
+		rangeTree.insert(Range.in(1, 4), "a");
+		rangeTree.insert(Range.in(7, 13), "b");
+		rangeTree.insert(Range.in(18, 101), "c");
 		checkAsserts(rangeTree);
 	}
 	
 	@Test
 	public void test2() {
 		RangeTree<String> rangeTree = new RangeTree<>();
-		rangeTree.insert(in(18, 101), "c");
-		rangeTree.insert(in(7, 13), "b");
-		rangeTree.insert(in(1, 4), "a");
+		rangeTree.insert(Range.in(18, 101), "c");
+		rangeTree.insert(Range.in(7, 13), "b");
+		rangeTree.insert(Range.in(1, 4), "a");
 		checkAsserts(rangeTree);
 	}
 	
 	@Test
 	public void test3() {
 		RangeTree<String> rangeTree = new RangeTree<>();
-		rangeTree.insert(in(18, 101), "c");
-		rangeTree.insert(in(1, 4), "a");
-		rangeTree.insert(in(7, 13), "b");
+		rangeTree.insert(Range.in(18, 101), "c");
+		rangeTree.insert(Range.in(1, 4), "a");
+		rangeTree.insert(Range.in(7, 13), "b");
 		checkAsserts(rangeTree);
 	}
 	
 	@Test
 	public void test4() {
 		RangeTree<String> rangeTree = new RangeTree<>();
-		rangeTree.insert(in(7, 13), "b");
-		rangeTree.insert(in(18, 101), "c");
-		rangeTree.insert(in(1, 4), "a");
+		rangeTree.insert(Range.in(7, 13), "b");
+		rangeTree.insert(Range.in(18, 101), "c");
+		rangeTree.insert(Range.in(1, 4), "a");
 		checkAsserts(rangeTree);
 	}
 		
