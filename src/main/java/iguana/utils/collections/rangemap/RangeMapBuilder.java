@@ -23,7 +23,17 @@ public class RangeMapBuilder<T> {
             return emptyIntRangeMap;
         }
 
-        Result<T> result = getResult(ranges, values);
+        if (ranges.size() == 1) {
+            Range range = ranges.get(0);
+            return new SingleIntRangeMap(range.getStart(), range.getEnd(), (Integer) values.get(0));
+        }
+
+        List<Point<T>> points = getPoints(ranges, values);
+        if (points.get(points.size() - 1).index - points.get(0).index < 256) {
+            return new ArrayIntRangeMap<>(points.get(0).index, points.get(points.size() - 1).index, ranges, values);
+        }
+
+        Result<T> result = getResult(points);
 
         if (!result.canBuildIntRangeMap()) {
             throw new RuntimeException("There are more than one values available for a range");
@@ -37,6 +47,11 @@ public class RangeMapBuilder<T> {
                 intVals[j] = (Integer) l.get(0);
             }
         }
+
+        if (intVals.length < 8) {
+            return new LinearSerachIntRangeMap(result.keys, result.starts, intVals);
+        }
+
         return new BinarySearchIntRangeMap(result.keys, result.starts, intVals);
     }
 
@@ -47,10 +62,12 @@ public class RangeMapBuilder<T> {
 
         if (ranges.size() == 1) {
             Range range = ranges.get(0);
-            return new SingeRangeRangeMap<>(range.getStart(), range.getEnd(), values.get(0));
+            return new SingeRangeMap<>(range.getStart(), range.getEnd(), values.get(0));
         }
 
-        Result<T> result = getResult(ranges, values);
+        List<Point<T>> points = getPoints(ranges, values);
+
+        Result<T> result = getResult(points);
 
         if (result.size < 8) {
             return new LinearSerachRangeMap<>(result.keys, result.starts, result.vals);
@@ -59,7 +76,7 @@ public class RangeMapBuilder<T> {
         return new BinarySearchRangeMap<>(result.keys, result.starts, result.vals);
     }
 
-    private Result<T> getResult(List<Range> ranges, List<T> values) {
+    private List<Point<T>> getPoints(List<Range> ranges, List<T> values) {
         List<Point<T>> points = new ArrayList<>(ranges.size() * 2);
 
         for (int i = 0; i < ranges.size(); i++) {
@@ -69,7 +86,10 @@ public class RangeMapBuilder<T> {
         }
 
         Collections.sort(points);
+        return points;
+    }
 
+    private Result<T> getResult(List<Point<T>> points) {
         // A map from each point to a multiset of values (value, count)
         Map<Point<T>, Map<T, Integer>> cumulativeValues = new LinkedHashMap<>(ranges.size() * 2);
 
@@ -144,7 +164,7 @@ public class RangeMapBuilder<T> {
         }
     }
 
-    private static class Point<T> implements Comparable<Point<T>> {
+    static class Point<T> implements Comparable<Point<T>> {
         int index;
         boolean start;
         T value;

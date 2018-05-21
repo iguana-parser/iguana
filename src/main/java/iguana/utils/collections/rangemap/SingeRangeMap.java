@@ -5,13 +5,13 @@ import java.util.List;
 
 import static iguana.utils.collections.CollectionsUtil.list;
 
-public class SingeRangeRangeMap<T> implements RangeMap<T> {
+public class SingeRangeMap<T> implements RangeMap<T> {
 
     private final int start;
     private final int end;
     private final List<T> values;
 
-    public SingeRangeRangeMap(int start, int end, T value) {
+    SingeRangeMap(int start, int end, T value) {
         this.start = start;
         this.end = end;
         this.values = list(value);
