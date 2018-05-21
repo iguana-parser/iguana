@@ -1,9 +1,10 @@
 package iguana.utils.collections;
 
 import iguana.utils.collections.primitive.IntArray;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IntArrayTest {
 
@@ -26,14 +27,14 @@ public class IntArrayTest {
         assertEquals("[3,4,5]", new IntArray(a, 3, 6).toString());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void illeaglArrayInstantiation1() {
-        new IntArray(new int[] {0, 1, 2, 3, 4, 5}, -1, 4);
+        assertThrows(IllegalArgumentException.class, () -> new IntArray(new int[] {0, 1, 2, 3, 4, 5}, -1, 4));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void illeaglArrayInstantiation2() {
-        new IntArray(new int[] {0, 1, 2, 3, 4, 5}, 3, 7);
+        assertThrows(IllegalArgumentException.class, () -> new IntArray(new int[] {0, 1, 2, 3, 4, 5}, 3, 7));
     }
 
 }

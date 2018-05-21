@@ -18,6 +18,11 @@ public interface Range extends Comparable<Range> {
             public int getEnd() {
                 return end;
             }
+
+            @Override
+            public String toString() {
+                return "[" + start + ", " + end + "]";
+            }
         };
     }
 

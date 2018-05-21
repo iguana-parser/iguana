@@ -18,7 +18,7 @@ public class RangeMapTest {
     public void testSingleRange() {
         RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(1, 7), "a")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(0));
         assertEquals(list("a"), map.get(1));
@@ -34,12 +34,12 @@ public class RangeMapTest {
      *                         17----21    c
      */
     @Test
-    public void testNonOverlapping() {
+    public void testNonOverlapping1() {
         RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(1, 7), "a")
                 .put(Range.in(9, 13), "b")
                 .put(Range.in(17, 21), "c")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(0));
         assertEquals(list("a"), map.get(1));
@@ -57,6 +57,29 @@ public class RangeMapTest {
     }
 
     /**
+     * 1-1                 a
+     *       5-5           b
+     *            10-10    c
+     */
+    @Test
+    public void testNonOverlapping2() {
+        RangeMap<String> map = new RangeMapBuilder<String>()
+                .put(Range.in(1, 1), "a")
+                .put(Range.in(5, 5), "b")
+                .put(Range.in(10, 10), "c")
+                .buildRangeMap();
+
+        assertEquals(emptyList(), map.get(0));
+        assertEquals(list("a"), map.get(1));
+        assertEquals(emptyList(), map.get(3));
+        assertEquals(list("b"), map.get(5));
+        assertEquals(emptyList(),   map.get(7));
+        assertEquals(list("c"), map.get(10));
+        assertEquals(emptyList(), map.get(11));
+    }
+
+
+    /**
      * 1-----7                          a
      *     5------------13              b
      *      6---------------------21    c
@@ -67,7 +90,7 @@ public class RangeMapTest {
                 .put(Range.in(1, 7), "a")
                 .put(Range.in(5, 13), "b")
                 .put(Range.in(6, 21), "c")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(0));
         assertEquals(list("a"), map.get(1));
@@ -93,7 +116,7 @@ public class RangeMapTest {
                 .put(Range.in(1, 5), "a")
                 .put(Range.in(5, 8), "b")
                 .put(Range.in(8, 12), "c")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(0));
         assertEquals(list("a"), map.get(1));
@@ -125,18 +148,18 @@ public class RangeMapTest {
                 .put(Range.in(3, 11), "e")
                 .put(Range.in(11, 13), "f")
                 .put(Range.in(1, 17), "g")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(0));
         assertEquals(list("d", "g"), map.get(1));
         assertEquals(list("d", "g"), map.get(2));
-        assertEquals(list("d", "e", "g"), map.get(3));
-        assertEquals(list("d", "e", "g"), map.get(4));
-        assertEquals(list("b", "d", "e", "g"), map.get(5));
-        assertEquals(list("b", "e", "g"), map.get(6));
-        assertEquals(list("a", "b", "c", "e", "g"), map.get(10));
-        assertEquals(list("b", "c", "e", "f", "g"), map.get(11));
-        assertEquals(list("b", "c", "f", "g"), map.get(13));
+        assertEquals(list("d", "g", "e"), map.get(3));
+        assertEquals(list("d", "g", "e"), map.get(4));
+        assertEquals(list("d", "g", "e", "b"), map.get(5));
+        assertEquals(list("g", "e", "b"), map.get(6));
+        assertEquals(list("g", "e", "b", "a", "c"), map.get(10));
+        assertEquals(list("g", "e", "b", "c", "f"), map.get(11));
+        assertEquals(list("g", "b", "c", "f"), map.get(13));
         assertEquals(list("g"), map.get(15));
         assertEquals(list("g"), map.get(17));
         assertEquals(emptyList(), map.get(18));
@@ -151,7 +174,7 @@ public class RangeMapTest {
         RangeMap<String> map = new RangeMapBuilder<String>()
                 .put(Range.in(5, 13), "a")
                 .put(Range.in(5, 13), "b")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(4));
         assertEquals(list("a", "b"), map.get(5));
@@ -178,7 +201,7 @@ public class RangeMapTest {
                 .put(Range.in(18, 20), "d")
                 .put(Range.in(19, 23), "e")
                 .put(Range.in(21, 25), "f")
-                .build();
+                .buildRangeMap();
 
         assertEquals(emptyList(), map.get(4));
         assertEquals(list("a"), map.get(5));

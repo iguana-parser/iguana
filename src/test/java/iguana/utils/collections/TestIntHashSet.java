@@ -1,7 +1,9 @@
 package iguana.utils.collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestIntHashSet {
 
@@ -12,9 +14,9 @@ public class TestIntHashSet {
         set.add(2);
         set.add(3);
 
-        Assert.assertFalse(set.isEmpty());
-        Assert.assertTrue(set.contains(1));
-        Assert.assertTrue(set.contains(2));
-        Assert.assertTrue(set.contains(3));
+        assertFalse(set.isEmpty());
+        assertTrue(set.contains(1));
+        assertTrue(set.contains(2));
+        assertTrue(set.contains(3));
     }
 }

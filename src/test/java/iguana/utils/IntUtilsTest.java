@@ -1,7 +1,7 @@
 package iguana.utils;
 
 import iguana.utils.collections.IntUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 

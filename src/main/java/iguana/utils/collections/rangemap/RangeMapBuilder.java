@@ -2,10 +2,15 @@ package iguana.utils.collections.rangemap;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
+
 public class RangeMapBuilder<T> {
 
     private List<Range> ranges = new ArrayList<>();
     private List<T> values = new ArrayList<>();
+
+    private static RangeMap<?> emptyRangeMap = (RangeMap<Object>) key -> emptyList();
+    private static IntRangeMap emptyIntRangeMap = key -> -2;
 
     public RangeMapBuilder<T> put(Range range, T value) {
         ranges.add(range);
@@ -13,9 +18,31 @@ public class RangeMapBuilder<T> {
         return this;
     }
 
-    public RangeMap<T> build() {
+    public IntRangeMap buildIntRangeMap() {
         if (ranges.isEmpty()) {
-            throw new RuntimeException("Cannot build an empty range map");
+            return emptyIntRangeMap;
+        }
+
+        Result<T> result = getResult(ranges, values);
+
+        if (!result.canBuildIntRangeMap()) {
+            throw new RuntimeException("There are more than one values available for a range");
+        }
+
+        int[] intVals = new int[result.size];
+        Arrays.fill(intVals, IntRangeMap.EMPTY_VALUE);
+        for (int j = 0; j < result.vals.length; j++) {
+            List<T> l = result.vals[j];
+            if (l.size() == 1) {
+                intVals[j] = (Integer) l.get(0);
+            }
+        }
+        return new BinarySearchIntRangeMap(result.keys, result.starts, intVals);
+    }
+
+    public RangeMap<T> buildRangeMap() {
+        if (ranges.isEmpty()) {
+            return (RangeMap<T>) emptyRangeMap;
         }
 
         if (ranges.size() == 1) {
@@ -23,6 +50,16 @@ public class RangeMapBuilder<T> {
             return new SingeRangeRangeMap<>(range.getStart(), range.getEnd(), values.get(0));
         }
 
+        Result<T> result = getResult(ranges, values);
+
+        if (result.size < 8) {
+            return new LinearSerachRangeMap<>(result.keys, result.starts, result.vals);
+        }
+
+        return new BinarySearchRangeMap<>(result.keys, result.starts, result.vals);
+    }
+
+    private Result<T> getResult(List<Range> ranges, List<T> values) {
         List<Point<T>> points = new ArrayList<>(ranges.size() * 2);
 
         for (int i = 0; i < ranges.size(); i++) {
@@ -33,18 +70,21 @@ public class RangeMapBuilder<T> {
 
         Collections.sort(points);
 
-        Map<Point<T>, Set<T>> cumulativeValues = new LinkedHashMap<>(ranges.size() * 2);
+        // A map from each point to a multiset of values (value, count)
+        Map<Point<T>, Map<T, Integer>> cumulativeValues = new LinkedHashMap<>(ranges.size() * 2);
 
         for (int i = 0; i < ranges.size() * 2; i++) {
             Point<T> point = points.get(i);
-            Set<T> values = cumulativeValues.computeIfAbsent(point, k -> new HashSet<>());
-            if (i > 0)
-                values.addAll(cumulativeValues.get(points.get(i - 1)));
+            Map<T, Integer> valuesSet = cumulativeValues.computeIfAbsent(point, k -> new LinkedHashMap<>());
+
+            if (i > 0) {
+                valuesSet.putAll(cumulativeValues.get(points.get(i - 1)));
+            }
 
             if (point.isStart()) {
-                values.add(point.value);
+                valuesSet.compute(point.value, (k, v) -> v == null ? 1 : v + 1);
             } else {
-                values.remove(point.value);
+                valuesSet.compute(point.value, (k, v) -> v == null ? null : v - 1 == 0 ? null : v - 1);
             }
         }
 
@@ -54,31 +94,57 @@ public class RangeMapBuilder<T> {
         List<T>[] vals = new List[size];
 
         int i = 0;
-        for (Map.Entry<Point<T>, Set<T>> entry : cumulativeValues.entrySet()) {
+        for (Map.Entry<Point<T>, Map<T, Integer>> entry : cumulativeValues.entrySet()) {
             Point<T> point = entry.getKey();
             keys[i] = point.index;
             if (point.isStart()) {
                 starts[i] = true;
             }
 
-            if (cumulativeValues.size() == 0) {
-                vals[i] = Collections.emptyList();
+            Set<T> value = entry.getValue().keySet();
+            if (value.size() == 0) {
+                vals[i] = emptyList();
             } else {
-                ArrayList<T> list = new ArrayList<>(cumulativeValues.get(point));
+                ArrayList<T> list = new ArrayList<>(cumulativeValues.get(point).keySet());
                 list.trimToSize();
                 vals[i] = list;
             }
             i++;
         }
 
-        if (size < 8) {
-            return new LinearSerachRangeMap<>(keys, starts, vals);
-        }
-
-        return new BinarySearchRangeMap<>(keys, starts, vals);
+        return new Result<>(size, keys, starts, vals);
     }
 
-    static class Point<T> implements Comparable<Point<T>> {
+    private static class Result<T> {
+        int size;
+        int[] keys;
+        boolean[] starts;
+        List<T>[] vals;
+
+        Result(int size, int[] keys, boolean[] starts, List<T>[] vals) {
+            this.size = size;
+            this.keys = keys;
+            this.starts = starts;
+            this.vals = vals;
+        }
+
+        /**
+         * Returns true if the values are of type integer and there is at most one value for each key
+         */
+        boolean canBuildIntRangeMap() {
+            boolean canBuildRangeMap = true;
+            for (List<T> list : vals) {
+                if (list.isEmpty()) continue;
+                if (!(list.get(0) instanceof Integer) || list.size() > 1) {
+                    canBuildRangeMap = false;
+                    break;
+                }
+            }
+            return canBuildRangeMap;
+        }
+    }
+
+    private static class Point<T> implements Comparable<Point<T>> {
         int index;
         boolean start;
         T value;

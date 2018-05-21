@@ -13,4 +13,5 @@ public abstract class AbstractRangeMap<T> implements RangeMap<T> {
         this.starts = starts;
         this.values = values;
     }
+
 }

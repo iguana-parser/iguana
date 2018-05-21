@@ -29,8 +29,7 @@ package iguana.utils.collections.rangemap;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static iguana.utils.collections.CollectionsUtil.*;
-import java.util.Collections;
+import static iguana.utils.collections.CollectionsUtil.toList;
 
 public class Ranges {
 

@@ -1,27 +1,28 @@
 package iguana.utils.collections;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OpenAddressingHashMapTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeInitialCapacity() {
-        new OpenAddressingHashMap(-1);
+        assertThrows(IllegalArgumentException.class, () -> new OpenAddressingHashMap(-1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNegativeLoadFactor() {
-        new OpenAddressingHashMap(-1);
+        assertThrows(IllegalArgumentException.class, () -> new OpenAddressingHashMap(16, -1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGreaterThanOneLoadFactor() {
-        new OpenAddressingHashMap(1.05f);
+        assertThrows(IllegalArgumentException.class, () -> new OpenAddressingHashMap(1.05f));
     }
 
     @Test

@@ -1,9 +1,10 @@
 package iguana.utils.collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
@@ -12,7 +13,7 @@ public class TestIntHashMap {
 
     private IntHashMap<String> map;
 
-    @Before
+    @BeforeEach
     public void init() {
         map = new OpenAddressingIntHashMap<>();
         map.put(1, "a");

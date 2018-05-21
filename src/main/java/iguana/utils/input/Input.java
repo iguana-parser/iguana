@@ -71,7 +71,7 @@ public class Input {
 	}
 
 	public static Input fromPath(String path, Charset charset) throws IOException {
-		return fromString(new String(Files.readAllBytes(Paths.get(path)), charset));
+		return new Input(new String(Files.readAllBytes(Paths.get(path)), charset), URI.create(path));
 	}
 
 	public static Input fromFile(File file) throws IOException {
@@ -79,9 +79,8 @@ public class Input {
 	}
 
 	public static Input fromFile(File file, Charset charset) throws IOException {
-		return fromString(new String(Files.readAllBytes(Paths.get(file.toURI())), charset));
+		return new Input(new String(Files.readAllBytes(Paths.get(file.toURI())), charset), file.toURI());
 	}
-
 
 	public static Input empty() {
 		return fromString("");
