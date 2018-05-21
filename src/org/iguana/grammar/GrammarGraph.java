@@ -31,6 +31,8 @@ import iguana.regex.CharRange;
 import iguana.regex.Epsilon;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.collections.rangemap.RangeMap;
+import iguana.utils.collections.rangemap.RangeMapBuilder;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -42,9 +44,7 @@ import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.slot.*;
 import org.iguana.grammar.slot.EpsilonTransition.Type;
 import org.iguana.grammar.slot.lookahead.FollowTest;
-import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
-import org.iguana.grammar.slot.lookahead.RangeTreeLookaheadTest;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.util.Configuration;
@@ -52,11 +52,6 @@ import org.iguana.util.Configuration.EnvironmentImpl;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static iguana.regex.CharacterRanges.toNonOverlapping2;
-import static iguana.regex.CharacterRanges.toNonOverlappingSet;
 
 public class GrammarGraph implements Serializable {
 
@@ -88,7 +83,7 @@ public class GrammarGraph implements Serializable {
         return from(grammar, Configuration.load());
     }
 
-    public static  GrammarGraph from(Grammar grammar, Configuration config) {
+    public static GrammarGraph from(Grammar grammar, Configuration config) {
         GrammarGraph grammarGraph = new GrammarGraph(grammar, config);
         grammarGraph.convert();
         return grammarGraph;
@@ -191,57 +186,39 @@ public class GrammarGraph implements Serializable {
         nonterminalSlot.setFollowTest(getFollowTest(nonterminal));
     }
 
-    private LookAheadTest getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
+    private RangeMap<BodyGrammarSlot> getLookAheadTest(Nonterminal nonterminal, NonterminalGrammarSlot nonterminalSlot) {
         if (config.getLookAheadCount() == 0)
             return i -> nonterminalSlot.getFirstSlots();
 
-        Map<CharRange, List<BodyGrammarSlot>> map = new HashMap<>();
-
         List<Rule> alternatives = grammar.getAlternatives(nonterminal);
+
+        RangeMapBuilder<BodyGrammarSlot> builder = new RangeMapBuilder<>();
 
         for (int i = 0; i < alternatives.size(); i++) {
             Rule rule = alternatives.get(i);
             BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);
             Set<CharRange> set = firstFollow.getPredictionSet(rule, 0);
-            set.forEach(cr -> map.computeIfAbsent(cr, k -> new ArrayList<>()).add(firstSlot));
+            set.forEach(cr -> builder.put(cr, firstSlot));
         }
 
-        // A map from non-overlapping ranges to a list of original ranges
-        Map<CharRange, List<CharRange>> rangeMap = toNonOverlapping2(map.keySet());
-
-        // A map from non-overlapping ranges to a list associated body grammar slots
-        Map<CharRange, List<BodyGrammarSlot>> nonOverlappingMap = new HashMap<>();
-
-        // compute a list of body grammar slots from a non-overlapping range
-        Function<CharRange, Set<BodyGrammarSlot>> f = r -> rangeMap.get(r).stream().flatMap(range -> map.get(range).stream()).collect(Collectors.toCollection(LinkedHashSet::new));
-
-        rangeMap.keySet().forEach(r -> nonOverlappingMap.computeIfAbsent(r, range -> new ArrayList<>()).addAll(f.apply(r)));
-
-        return new RangeTreeLookaheadTest(nonOverlappingMap);
+        return builder.buildRangeMap();
     }
 
     private FollowTest getFollowTest(Nonterminal nonterminal) {
-
         if (config.getLookAheadCount() == 0)
             return FollowTest.DEFAULT;
 
-        // TODO: move toNonOverlapping to first follow itself
-        Set<CharRange> followSet = toNonOverlappingSet(firstFollow.getFollowSet(nonterminal));
-
-        return new RangeTreeFollowTest(followSet);
+        return new RangeTreeFollowTest(firstFollow.getFollowSet(nonterminal));
     }
 
     private FollowTest getFollowTest(Rule rule, int i) {
         if (config.getLookAheadCount() == 0)
             return FollowTest.DEFAULT;
 
-        Set<CharRange> set = toNonOverlappingSet(firstFollow.getPredictionSet(rule, i));
-
-        return new RangeTreeFollowTest(set);
+        return new RangeTreeFollowTest(firstFollow.getPredictionSet(rule, i));
     }
 
     private void addRule(NonterminalGrammarSlot head, Rule rule) {
-
         BodyGrammarSlot firstSlot = getFirstGrammarSlot(rule, head);
         head.addFirstSlot(firstSlot);
 

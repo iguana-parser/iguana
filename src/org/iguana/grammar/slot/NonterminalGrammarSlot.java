@@ -29,11 +29,11 @@ package org.iguana.grammar.slot;
 
 import iguana.utils.collections.Keys;
 import iguana.utils.collections.key.Key;
+import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
-import org.iguana.grammar.slot.lookahead.LookAheadTest;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.Runtime;
@@ -41,6 +41,7 @@ import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
+import javax.swing.text.html.parser.Parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	private Map<Key, GSSNode> gssNodes;
 
-	private LookAheadTest lookAheadTest;
+	private RangeMap<BodyGrammarSlot> lookAheadTest;
 
 	private FollowTest followTest;
 
@@ -77,7 +78,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return lookAheadTest.get(v);
 	}
 	
-	public void setLookAheadTest(LookAheadTest lookAheadTest) {
+	public void setLookAheadTest(RangeMap<BodyGrammarSlot> lookAheadTest) {
 		this.lookAheadTest = lookAheadTest;
 	}
 

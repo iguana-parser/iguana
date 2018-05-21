@@ -36,7 +36,7 @@ public class ParserLogger {
 
     private final IguanaLogger logger;
 
-    private boolean logEnabled;
+    private boolean logEnabled = false;
 
     public ParserLogger() {
         Configuration config = Configuration.load();
@@ -55,6 +55,10 @@ public class ParserLogger {
         countAmbiguousNodes = 0;
         countGSSNodes = 0;
         countGSSEdges = 0;
+    }
+
+    public void enable() {
+        logEnabled = true;
     }
 
     public void terminalNodeAdded(TerminalNode node) {
@@ -84,7 +88,13 @@ public class ParserLogger {
 
     public void gssNodeAdded(GSSNode<?> node, Object[] data) {
         countGSSNodes++;
-        if (logEnabled) logger.log("GSS node added %s(%s)", node, data);
+        if (logEnabled) {
+            if (data != null) {
+                logger.log("GSS node added %s(%s)", node, data);
+            } else {
+                logger.log("GSS node added %s", node, data);
+            }
+        }
     }
 
     public void gssEdgeAdded(GSSEdge<?> edge) {
@@ -94,7 +104,8 @@ public class ParserLogger {
 
     public void descriptorAdded(Descriptor<?> descriptor) {
         descriptorsCount++;
-        if (logEnabled) logger.log("Descriptor created: %s", descriptor);
+        if (logEnabled)
+            logger.log("Descriptor created: %s", descriptor);
     }
 
     public <T extends Result> void pop(GSSNode<T> gssNode, int inputIndex, T child, Object value) {

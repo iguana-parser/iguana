@@ -38,6 +38,11 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
         @Override
         public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String toString() {
+            return "$";
+        }
     };
 
     private ParserLogger logger = ParserLogger.getInstance();

@@ -51,6 +51,7 @@ import org.iguana.util.visualization.ParseTreeToDot;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Time;
 import java.util.*;
 
 public class IguanaRunner {
@@ -84,7 +85,11 @@ public class IguanaRunner {
 
 			Input input;
 			try {
+				Timer timer = new Timer();
+				timer.start();
 				input = Input.fromFile(inputFile);
+				timer.stop();
+				System.out.println("Input created in " + timer.getUserTime() / 1000_000 + "ms");
 			} catch (IOException e) {
 				e.printStackTrace();
 				continue;
@@ -104,10 +109,10 @@ public class IguanaRunner {
 						ParseStatistics statistics = result.asParseSuccess().getStatistics();
 						resultsMap.computeIfAbsent(input.getURI(), key -> new ArrayList<>()).add(statistics);
 						Timer timer = new Timer();
-						timer.start();
-						SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
-						timer.stop();
-						System.out.println(timer.getSystemTime() / 1000_000 + ", " + timer.getNanoTime() / 1000_000);
+//						timer.start();
+//						SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
+//						timer.stop();
+//						System.out.println(timer.getSystemTime() / 1000_000 + ", " + timer.getNanoTime() / 1000_000);
 						System.out.printf("%-10d%20d%20d%20d%20d%20d%20d%20d%n", i + 1, input.length(), statistics.getNanoTime() / 1000_000, statistics.getUserTime() / 1000_000, statistics.getDescriptorsCount(), statistics.getGssNodesCount(), statistics.getAmbiguousNodesCount(), statistics.getMemoryUsed());
 					} else {
 						System.out.printf("%-10d%20s%n", i + 1, result.asParseError());
@@ -145,7 +150,11 @@ public class IguanaRunner {
 		private Set<String> ignoreSet = new HashSet<>();
 		
 		public Builder(Grammar grammar) {
-			this.grammarGraph = GrammarGraph.from(grammar, config);;
+			Timer timer = new Timer();
+			timer.start();
+			this.grammarGraph = GrammarGraph.from(grammar, config);
+			timer.stop();
+			System.out.println("Grammar graph conversion: " + timer.getUserTime() / 1000_000 + "ms");
 		}
 		
 		public Builder addDirectory(String dir, String ext, boolean recursive) {
