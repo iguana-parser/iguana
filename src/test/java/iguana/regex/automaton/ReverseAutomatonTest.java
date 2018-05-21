@@ -53,16 +53,16 @@ public class ReverseAutomatonTest {
 		RegularExpression r = Alt.from(CharRange.in('a', 'z'), CharRange.in('A', 'Z'), CharRange.in('0', '9'), Char.from('_'));
 		Automaton a = AutomatonOperations.reverse(r.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
-		assertTrue(matcher.match(Input.fromChar('a')));
-		assertTrue(matcher.match(Input.fromChar('m')));
-		assertTrue(matcher.match(Input.fromChar('z')));
-		assertTrue(matcher.match(Input.fromChar('A')));
-		assertTrue(matcher.match(Input.fromChar('M')));
-		assertTrue(matcher.match(Input.fromChar('Z')));
-		assertTrue(matcher.match(Input.fromChar('0')));
-		assertTrue(matcher.match(Input.fromChar('9')));
-		assertTrue(matcher.match(Input.fromChar('3')));
-		assertTrue(matcher.match(Input.fromChar('_')));
+		assertTrue(matcher.match(Input.fromString("a")));
+		assertTrue(matcher.match(Input.fromString("m")));
+		assertTrue(matcher.match(Input.fromString("z")));
+		assertTrue(matcher.match(Input.fromString("A")));
+		assertTrue(matcher.match(Input.fromString("M")));
+		assertTrue(matcher.match(Input.fromString("Z")));
+		assertTrue(matcher.match(Input.fromString("0")));
+		assertTrue(matcher.match(Input.fromString("9")));
+		assertTrue(matcher.match(Input.fromString("3")));
+		assertTrue(matcher.match(Input.fromString("_")));
 	}
 
 }

@@ -66,8 +66,7 @@ public class DiffernceTest {
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), union);
 
 		DFAMatcher matcher = new DFAMatcher(a);
-		System.out.println(matcher.match(Input.fromString("f"), 0));
-		
+
 		assertTrue(matcher.match(Input.fromString("first")));
 		assertFalse(matcher.match(Input.fromString("if")));
 		assertFalse(matcher.match(Input.fromString("when")));

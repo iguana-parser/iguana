@@ -27,21 +27,20 @@
 
 package iguana.regex.matcher;
 
-import iguana.utils.collections.rangemap.AVLIntRangeTree;
-import iguana.utils.collections.rangemap.ArrayIntRangeTree;
-import iguana.utils.collections.rangemap.IntRangeTree;
-import iguana.utils.input.Input;
 import iguana.regex.RegularExpression;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.automaton.State;
 import iguana.regex.automaton.Transition;
+import iguana.utils.collections.rangemap.IntRangeMap;
+import iguana.utils.collections.rangemap.RangeMapBuilder;
+import iguana.utils.input.Input;
 
 public class DFAMatcher implements Matcher {
 	
 	public static final int ERROR_STATE = -2;
 
-	protected final IntRangeTree[] table;
+	protected IntRangeMap[] table;
 
 	protected final boolean[] finalStates;
 
@@ -54,24 +53,20 @@ public class DFAMatcher implements Matcher {
 	public DFAMatcher(Automaton automaton) {
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 
-		IntRangeTree[] tmp = new AVLIntRangeTree[automaton.getCountStates()];
-		for (int i = 0; i < tmp.length; i++) {
-			tmp[i] = new AVLIntRangeTree();
-		}
-
 		finalStates = new boolean[automaton.getStates().length];
-		for (State state : automaton.getStates()) {
 
+		int size = automaton.getCountStates();
+		table = new IntRangeMap[size];
+
+		for (int i = 0; i < size; i++) {
+			RangeMapBuilder<Integer> builder = new RangeMapBuilder<>();
+			State state = automaton.getStates()[i];
 			for (Transition transition : state.getTransitions()) {
-				tmp[state.getId()].insert(transition.getRange(), transition.getDestination().getId());
+				builder.put(transition.getRange(), transition.getDestination().getId());
 			}
+			table[i] = builder.buildIntRangeMap();
 
 			finalStates[state.getId()] = state.isFinalState();
-		}
-		
-		table = new ArrayIntRangeTree[automaton.getCountStates()];
-		for (int i = 0; i < tmp.length; i++) {
-			table[i] = new ArrayIntRangeTree(tmp[i]);
 		}
 
 		this.start = automaton.getStartState().getId();

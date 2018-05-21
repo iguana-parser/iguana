@@ -53,16 +53,16 @@ public class CharacterClassTest {
 		
 		Matcher matcher = factory.getMatcher(regex);
 		
-		assertTrue(matcher.match(Input.fromChar('a')));
-		assertTrue(matcher.match(Input.fromChar('f')));
-		assertTrue(matcher.match(Input.fromChar('z')));
-		assertTrue(matcher.match(Input.fromChar('1')));
-		assertTrue(matcher.match(Input.fromChar('5')));
-		assertTrue(matcher.match(Input.fromChar('8')));
+		assertTrue(matcher.match(Input.fromString("a")));
+		assertTrue(matcher.match(Input.fromString("f")));
+		assertTrue(matcher.match(Input.fromString("z")));
+		assertTrue(matcher.match(Input.fromString("1")));
+		assertTrue(matcher.match(Input.fromString("5")));
+		assertTrue(matcher.match(Input.fromString("8")));
 		
-		assertFalse(matcher.match(Input.fromChar('0')));
-		assertFalse(matcher.match(Input.fromChar('9')));
-		assertFalse(matcher.match(Input.fromChar('*')));
+		assertFalse(matcher.match(Input.fromString("0")));
+		assertFalse(matcher.match(Input.fromString("9")));
+		assertFalse(matcher.match(Input.fromString("*")));
 	}
 	
 	@Test
@@ -77,17 +77,17 @@ public class CharacterClassTest {
 
 		Matcher matcher = factory.getMatcher(regex);
 		
-		assertTrue(matcher.match(Input.fromChar('1')));
-		assertTrue(matcher.match(Input.fromChar('2')));
-		assertTrue(matcher.match(Input.fromChar('3')));
-		assertTrue(matcher.match(Input.fromChar('4')));
-		assertTrue(matcher.match(Input.fromChar('5')));
-		assertTrue(matcher.match(Input.fromChar('6')));
-		assertTrue(matcher.match(Input.fromChar('7')));
-		assertTrue(matcher.match(Input.fromChar('8')));
+		assertTrue(matcher.match(Input.fromString("1")));
+		assertTrue(matcher.match(Input.fromString("2")));
+		assertTrue(matcher.match(Input.fromString("3")));
+		assertTrue(matcher.match(Input.fromString("4")));
+		assertTrue(matcher.match(Input.fromString("5")));
+		assertTrue(matcher.match(Input.fromString("6")));
+		assertTrue(matcher.match(Input.fromString("7")));
+		assertTrue(matcher.match(Input.fromString("8")));
 		
-		assertFalse(matcher.match(Input.fromChar('0')));
-		assertFalse(matcher.match(Input.fromChar('9')));
+		assertFalse(matcher.match(Input.fromString("0")));
+		assertFalse(matcher.match(Input.fromString("9")));
 	}
 	
 	public void notTest() {

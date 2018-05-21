@@ -37,11 +37,11 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 	private static final long serialVersionUID = 1L;
 
 	private final List<T> symbols;
-	
+
 	public static Seq<Char> from(String s) {
-		return from(Input.toIntArray(s));
+		return builder(s.chars().mapToObj(Char::from).collect(Collectors.toList())).build();
 	}
-	
+
 	public static Seq<Char> from(int[] chars) {
 		return builder(Arrays.stream(chars).mapToObj(Char::from).collect(Collectors.toList())).build();
 	}

@@ -39,7 +39,7 @@ import iguana.utils.input.Input;
 @FunctionalInterface
 public interface Matcher {
 	
-	public int match(Input input, int i);
+	int match(Input input, int i);
 	
 	default boolean match(Input input) {
 		return match(input, 0) == input.length() - 1;

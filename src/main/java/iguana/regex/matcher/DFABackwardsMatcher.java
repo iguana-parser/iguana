@@ -27,13 +27,13 @@
 
 package iguana.regex.matcher;
 
-import iguana.utils.input.Input;
 import iguana.regex.RegularExpression;
 import iguana.regex.automaton.AutomatonOperations;
+import iguana.utils.input.Input;
 
 public class DFABackwardsMatcher extends DFAMatcher {
 
-	public DFABackwardsMatcher(RegularExpression regex) {
+	DFABackwardsMatcher(RegularExpression regex) {
 		super(AutomatonOperations.reverse(regex.getAutomaton()));
 	}
 

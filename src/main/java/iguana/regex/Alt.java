@@ -182,9 +182,6 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 		private Builder() {}
 		
 		public Builder(List<T> symbols) {
-			if (symbols.size() == 1) {
-				System.out.print("WTF");
-			}
 			this.addAll(symbols);
 		}
 
