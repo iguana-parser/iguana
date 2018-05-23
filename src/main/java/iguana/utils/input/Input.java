@@ -54,7 +54,9 @@ public class Input {
 
 	private final int[] characters;
 
-	private final int[] lineStarts;
+	private int[] lineStarts;
+
+	private final int lineCount;
 
 	private final int length;
 	
@@ -94,10 +96,7 @@ public class Input {
 		IntTuple result = convertStringToIntArray(s, characters);
 
 		this.length = result.first();
-		int lineCount = result.second();
-
-		this.lineStarts = new int[lineCount];
-		calculateLineLengths(lineStarts, characters);
+		this.lineCount = result.second();
 
 		this.hash = Arrays.hashCode(characters);
 	}
@@ -130,7 +129,8 @@ public class Input {
 		return IntTuple.of(j, lineCount + 1);
 	}
 
-	private static void calculateLineLengths(int[] lineStarts, int[] characters) {
+	private static int[] calculateLineLengths(int lineCount, int[] characters) {
+		int[] lineStarts = new int[lineCount];
 		lineStarts[0] = 0;
 		int j = 0;
 
@@ -140,10 +140,20 @@ public class Input {
 					lineStarts[++j] = i + 1;
 			}
 		}
+		return lineStarts;
 	}
 	
 	public int charAt(int index) {
 		return characters[index];
+	}
+
+	public int charAtIgnoreLayout(int index) {
+		while (true) {
+			int c = characters[index++];
+			if (c == EOF) return EOF;
+			if (!Character.isWhitespace(c))
+				return c;
+		}
 	}
 
     /**
@@ -217,21 +227,29 @@ public class Input {
 
 	public int getLineNumber(int inputIndex) {
         checkBounds(inputIndex, length());
+		checkLineStartsInitialized();
 
         int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
         if (lineStart >= 0) return lineStart + 1;
         return -lineStart - 1;
 	}
-	
+
 	public int getColumnNumber(int inputIndex) {
         checkBounds(inputIndex, length());
+		checkLineStartsInitialized();
 
         int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
         if (lineStart >= 0) return 1;
         return inputIndex - lineStarts[-lineStart - 1 - 1] + 1;
 	}
 
-    @Override
+	private void checkLineStartsInitialized() {
+		if (lineStarts == null) {
+			lineStarts = calculateLineLengths(getLineCount(), characters);
+		}
+	}
+
+	@Override
     public int hashCode() {
         return hash;
     }
@@ -279,7 +297,7 @@ public class Input {
 	}
 	
 	public int getLineCount() {
-		return lineStarts.length;
+		return this.lineCount;
 	}
 	
 	public boolean isEmpty() {
@@ -292,6 +310,7 @@ public class Input {
 
     public boolean isStartOfLine(int inputIndex) {
         checkBounds(inputIndex, length());
+        checkLineStartsInitialized();
 
         return Arrays.binarySearch(lineStarts, inputIndex) >= 0;
     }
