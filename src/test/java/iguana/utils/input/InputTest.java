@@ -235,4 +235,25 @@ public class InputTest {
         assertTrue(input6.isEndOfFile(9));
     }
 
+    @Test
+    public void charAtIgnoreLayout() {
+        Input input = Input.fromString("Process    finished  with exit code      ");
+        assertEquals('P', input.charAtIgnoreLayout(0));
+        assertEquals('s', input.charAtIgnoreLayout(6));
+        assertEquals('f', input.charAtIgnoreLayout(7));
+        assertEquals('f', input.charAtIgnoreLayout(11));
+        assertEquals('f', input.charAtIgnoreLayout(11));
+        assertEquals('d', input.charAtIgnoreLayout(18));
+        assertEquals('w', input.charAtIgnoreLayout(19));
+        assertEquals('w', input.charAtIgnoreLayout(20));
+        assertEquals('w', input.charAtIgnoreLayout(21));
+        assertEquals('h', input.charAtIgnoreLayout(24));
+        assertEquals('e', input.charAtIgnoreLayout(25));
+        assertEquals('e', input.charAtIgnoreLayout(26));
+        assertEquals('e', input.charAtIgnoreLayout(26));
+        assertEquals('c', input.charAtIgnoreLayout(30));
+        assertEquals('e',  input.charAtIgnoreLayout(34));
+        assertEquals(-1,  input.charAtIgnoreLayout(35));
+    }
+
 }
