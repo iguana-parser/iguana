@@ -35,12 +35,7 @@ import java.util.stream.StreamSupport;
 public class StringUtil {
 	
 	public static final String NewLine = System.getProperty("line.separator"); 
-	
-	public static String escape(String s) {
-		if (s == null) return "";
-		return s.replace("\\", "\\\\").replace("\"", "\\\"");
-	}
-	
+
 	public static <T> String listToString(T[] elements) {
 		return listToString(elements, " ");
 	}
