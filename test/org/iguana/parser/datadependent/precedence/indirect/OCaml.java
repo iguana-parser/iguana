@@ -17,7 +17,7 @@ import java.util.Map;
 public class OCaml {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		Grammar grammar = Grammar.load(new File("/Users/afroozeh/JavaNat"));
+		Grammar grammar = Grammar.load(new File("/Users/afroozeh/Java"));
 		
 		grammar = new EBNFToBNF().transform(grammar);
 		
@@ -35,6 +35,7 @@ public class OCaml {
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/net/SocketPermission.java")
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/net/MulticastSocket.java")
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/lang/invoke/FilterGeneric.java")
 //				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java", "java", true)
 //				.setLimit(10)
 				.setStart(grammar.getStartSymbol())

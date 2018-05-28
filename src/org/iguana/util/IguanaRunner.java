@@ -31,7 +31,6 @@ import iguana.utils.benchmark.BenchmarkUtil;
 import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import iguana.utils.logging.LogLevel;
-import iguana.utils.visualization.GraphVizUtil;
 import org.apache.commons.io.FileUtils;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
@@ -40,18 +39,11 @@ import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserRuntime;
-import org.iguana.parsetree.DefaultParseTreeBuilder;
-import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.parsetree.SPPFToParseTree;
 import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.serialization.JsonSerializer;
-import org.iguana.util.visualization.ParseTreeToDot;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.sql.Time;
 import java.util.*;
 
 public class IguanaRunner {

@@ -92,6 +92,4 @@ public class AutomatonToDot {
 		
 		return sb.toString();
 	}
-	
-	
 }
