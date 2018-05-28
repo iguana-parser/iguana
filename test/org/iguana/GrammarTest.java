@@ -2,6 +2,7 @@ package org.iguana;
 
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
+import iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.parser.Iguana;
@@ -17,6 +18,7 @@ import org.iguana.util.ParseStatistics;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.SPPFJsonSerializer;
+import org.iguana.util.visualization.SPPFToDot;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

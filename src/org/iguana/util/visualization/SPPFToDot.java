@@ -28,53 +28,52 @@
 package org.iguana.util.visualization;
 
 import iguana.utils.input.Input;
+import iguana.utils.visualization.DotGraph;
 import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.*;
 
 import static iguana.utils.string.StringUtil.listToString;
-import static iguana.utils.visualization.GraphVizUtil.*;
+import static iguana.utils.visualization.DotGraph.newEdge;
+import static iguana.utils.visualization.DotGraph.newNode;
 
-/**
- * Creates a Graphviz's dot format representation of an SPPF node.
- * 
- * 
- * @author Ali Afroozeh
- * 
- * @see SPPFVisitor
- * 
- */
 public class SPPFToDot implements SPPFVisitor<Void>  {
 	
-	protected final boolean showPackedNodeLabel;
+	private final boolean showPackedNodeLabel;
+
+	private Map<SPPFNode, Integer> ids = new HashMap<>();
 	
-	protected StringBuilder sb;
+	private DotGraph dotGraph;
 
 	protected Input input;
 	
-	protected Set<NonPackedNode> visited = new HashSet<>();
+	private Set<NonPackedNode> visited = new HashSet<>();
 
-	public SPPFToDot(Input input) {
-		this(input, false);
+	public static DotGraph getDotGraph(SPPFNode root, Input input) {
+		return getDotGraph(root, input, false);
 	}
-	
-	public SPPFToDot(Input input, boolean showPackedNodeLabel) {
+
+	public static DotGraph getDotGraph(SPPFNode root, Input input, boolean showPackedNodeLabel) {
+		DotGraph dotGraph = new DotGraph();
+		SPPFToDot sppfToDot = new SPPFToDot(input, dotGraph, showPackedNodeLabel);
+		root.accept(sppfToDot);
+		return dotGraph;
+	}
+
+	public SPPFToDot(Input input, DotGraph dotGraph, boolean showPackedNodeLabel) {
 		this.input = input;
 		this.showPackedNodeLabel = showPackedNodeLabel;
-		this.sb = new StringBuilder();
-		ids.clear();
+		this.dotGraph = dotGraph;
 	}
 
 	@Override
 	public Void visit(TerminalNode node) {
-		
 		if(!visited.contains(node)) {
 			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getIndex());
-			String color = "black";
 			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex(), matchedInput);
-			sb.append("\"" + getId(node) + "\"" + String.format(ROUNDED_RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
+			dotGraph.addNode(newNode(getId(node), label));
 		}
 
 		return null;
@@ -96,8 +95,11 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex(), node.getValue());
 			}
 
-			String color = node.isAmbiguous() ? "red" : "black";
-			sb.append("\"" + getId(node) + "\"" + String.format(ROUNDED_RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
+			DotGraph.Node dotNode = newNode(getId(node), label);
+			if (node.isAmbiguous()) {
+				dotNode.setColor(DotGraph.Color.RED);
+			}
+			dotGraph.addNode(dotNode);
 			addEdgesToChildren(node);
 			
 			visitChildren(node);
@@ -112,8 +114,11 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 			
 			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getIndex());
 
-			String color = node.isAmbiguous() ? "red" : "black";
-			sb.append("\"" + getId(node) + "\"" + String.format(RECTANGLE, color, replaceWhiteSpace(label)) + "\n");
+			DotGraph.Node dotNode = newNode(getId(node), label).setShape(DotGraph.Shape.RECTANGLE);
+			if (node.isAmbiguous()) {
+				dotNode.setColor(DotGraph.Color.RED);
+			}
+			dotGraph.addNode(dotNode);
 			addEdgesToChildren(node);
 	
 			visitChildren(node);
@@ -123,44 +128,35 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 
 	@Override
 	public Void visit(PackedNode node) {
-		if(showPackedNodeLabel) {
-			sb.append("\"" + getId(node) + "\"" + String.format(CIRCLE, "black", replaceWhiteSpace(node.toString())) + "\n");
-		} else {
-			sb.append("\"" + getId(node) + "\"" + String.format(CIRCLE, "black", "", "") + "\n");
+		DotGraph.Node dotNode = newNode(getId(node)).setShape(DotGraph.Shape.CIRCLE);
+		if (showPackedNodeLabel) {
+			dotNode.setLabel(node.toString());
 		}
+		dotGraph.addNode(dotNode);
+
 		addEdgesToChildren(node);
 		
 		visitChildren(node);
 		return null;
 	}
 	
-	protected void addEdgesToChildren(SPPFNode node) {
+	private void addEdgesToChildren(SPPFNode node) {
 		for (SPPFNode child : node.getChildren()) {
 			addEdgeToChild(node, child);
 		}
 	}
 	
-	protected void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
-		sb.append(EDGE + "\"" + getId(parentNode) + "\"" + "->" + "{\"" + getId(childNode) + "\"}" + "\n");
+	private void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
+		dotGraph.addEdge(newEdge(getId(parentNode), getId(childNode)));
 	}
 	
-	protected String replaceWhiteSpace(String s) {
-		return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
-	}
-
-	public String getString() {
-		return sb.toString();
-	}
-
-	public void visitChildren(SPPFNode node) {
+	private void visitChildren(SPPFNode node) {
 		for (SPPFNode child : node.getChildren()) {
 			child.accept(this);
 		}
 	}
 
-	private static Map<SPPFNode, Integer> ids = new HashMap<>();
-
-	private static int getId(SPPFNode node) {
+	private int getId(SPPFNode node) {
 		return ids.computeIfAbsent(node, k -> ids.size() + 1);
 	}
 

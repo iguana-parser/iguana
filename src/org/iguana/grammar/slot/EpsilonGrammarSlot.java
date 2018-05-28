@@ -53,7 +53,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, Runtime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
-		if (getNonterminal().testFollow(input.charAt(i)))
+		if (getNonterminal().testFollow(input.charAtIgnoreLayout(i)))
             u.pop(input, this, epsilonSlot.getResult(input, i, runtime), value, runtime);
 	}
 

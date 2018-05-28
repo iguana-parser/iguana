@@ -1,100 +1,92 @@
 package org.iguana.util.visualization;
 
 import iguana.utils.input.Input;
+import iguana.utils.visualization.DotGraph;
 import org.iguana.parsetree.*;
 
 import java.util.Collections;
 import java.util.Set;
 
-import static iguana.utils.visualization.GraphVizUtil.*;
+import static iguana.utils.visualization.DotGraph.newEdge;
+import static iguana.utils.visualization.DotGraph.newNode;
 
-public class ParseTreeToDot {
+public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
 
-    private StringBuilder sb = new StringBuilder();
+    private DotGraph dotGraph;
+    private final Input input;
+    private final Set<String> exclude;
 
-    public String toDot(ParseTreeNode node, Input input) {
-        return toDot(node, input, Collections.emptySet());
+    public static DotGraph getDotGraph(ParseTreeNode node, Input input) {
+        return getDotGraph(node, input, Collections.emptySet());
     }
 
-    public String toDot(ParseTreeNode node, Input input, Set<String> exclude) {
-        node.accept(new ToDotParseTreeVisitor(input, exclude));
-        return sb.toString();
+    public static DotGraph getDotGraph(ParseTreeNode node, Input input, Set<String> exclude) {
+        DotGraph dotGraph = new DotGraph();
+        node.accept(new ParseTreeToDot(dotGraph, input, exclude));
+        return dotGraph;
     }
 
-    class ToDotParseTreeVisitor implements ParseTreeVisitor<Integer> {
+    private ParseTreeToDot(DotGraph dotGraph, Input input, Set<String> exclude) {
+        this.dotGraph = dotGraph;
+        this.input = input;
+        this.exclude = exclude;
+    }
 
-        private final Input input;
-        private final Set<String> exclude;
+    @Override
+    public Integer visit(NonterminalNode node) {
+        int id = nextId();
+        String label = String.format("(%s, %d, %d)", node.definition().getHead().getName(), node.start(), node.end());
+        dotGraph.addNode(newNode(id, label));
 
-        public ToDotParseTreeVisitor(Input input, Set<String> exclude) {
-            this.input = input;
-            this.exclude = exclude;
-        }
+        visitChildren(node, id);
+        return id;
+    }
 
-        @Override
-        public Integer visit(NonterminalNode node) {
-            String label = String.format("(%s, %d, %d)", node.definition().getHead().getName(), node.start(), node.end());
+    @Override
+    public Integer visit(MetaSymbolNode node) {
+        int id = nextId();
+        String label = String.format("%s", node.getSymbol());
+        dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));
 
-            int id = nextId();
-            sb.append("\"").append(id).append("\"").append(String.format(ROUNDED_RECTANGLE, "black", replaceWhiteSpace(label))).append("\n");
+        visitChildren(node, id);
+        return id;
+    }
 
-            visitChildren(node, id);
-            return id;
-        }
+    @Override
+    public Integer visit(AmbiguityNode node) {
+        int id = nextId();
+        dotGraph.addNode(newNode(id).setShape(DotGraph.Shape.DIAMOND).setColor(DotGraph.Color.RED));
 
-        @Override
-        public Integer visit(MetaSymbolNode node) {
-            String color = "black";
-            String label = String.format("%s", node.getSymbol());
+        visitChildren(node, id);
+        return id;
+    }
 
-            int id = nextId();
-            sb.append("\"").append(id).append("\"").append(String.format(RECTANGLE, color, replaceWhiteSpace(label))).append("\n");
+    @Override
+    public Integer visit(TerminalNode node) {
+        if (exclude.contains(node.definition().getName())) return null;
 
-            visitChildren(node, id);
-            return id;
-        }
+        String label = String.format("(%s, %d, %d): \"%s\"", node.definition().getName(), node.start(), node.end(), node.text(input));
+        int id = nextId();
+        dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));
+        return id;
+    }
 
-        @Override
-        public Integer visit(AmbiguityNode node) {
-            int id = nextId();
-            sb.append("\"").append(id).append("\"").append(String.format(DIAMOND, "red"));
-            visitChildren(node, id);
-            return id;
-        }
+    private int id = 0;
+    private int nextId() {
+        return id++;
+    }
 
-        @Override
-        public Integer visit(TerminalNode node) {
-            if (exclude.contains(node.definition().getName())) return null;
+    private void addEdgeToChild(int parentNodeId, int childNodeId) {
+        dotGraph.addEdge(newEdge(parentNodeId, childNodeId));
+    }
 
-            String color = "black";
-            String label = String.format("(%s, %d, %d): \"%s\"", node.definition().getName(), node.start(), node.end(), node.text(input));
-            int id = nextId();
-            sb.append("\"").append(id).append("\"").append(String.format(ROUNDED_RECTANGLE, color, replaceWhiteSpace(label))).append("\n");
-            return id;
-        }
-
-        private int id = 0;
-        private int nextId() {
-            return id++;
-        }
-
-        private String replaceWhiteSpace(String s) {
-            return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
-        }
-
-        private void addEdgeToChild(int parentNodeId, int childNodeId) {
-            sb.append(EDGE).append("\"").append(parentNodeId).append("\" -> {\"").append(childNodeId).append("\"}").append("\n");
-        }
-
-        private void visitChildren(ParseTreeNode node, int nodeId) {
-            for (ParseTreeNode child : node.children()) {
-                if (child != null) {
-                    Integer childId = child.accept(this);
-                    if (childId != null)
-                        addEdgeToChild(nodeId, childId);
-                }
+    private void visitChildren(ParseTreeNode node, int nodeId) {
+        for (ParseTreeNode child : node.children()) {
+            if (child != null) {
+                Integer childId = child.accept(this);
+                if (childId != null)
+                    addEdgeToChild(nodeId, childId);
             }
         }
     }
-
 }
