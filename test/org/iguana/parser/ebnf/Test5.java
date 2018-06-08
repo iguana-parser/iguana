@@ -15,11 +15,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.TestRunner;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -42,12 +38,6 @@ public class Test5 {
     private static Grammar grammar = new DesugarStartSymbol().transform(EBNFToBNF.convert(Grammar.builder().addRules(r1, r2).setStartSymbol(start).build()));
 
     private static Input input1 = Input.fromString("a");
-
-    @BeforeClass
-    public static void record() {
-        String path = Paths.get("test", "resources", "grammars", "ebnf").toAbsolutePath().toString();
-        TestRunner.record(grammar, input1, 1, path + "/Test5");
-    }
 
     @Test
     public void testParse1() {

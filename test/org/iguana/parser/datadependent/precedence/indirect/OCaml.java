@@ -1,6 +1,5 @@
 package org.iguana.parser.datadependent.precedence.indirect;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
@@ -8,8 +7,6 @@ import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.util.IguanaRunner;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.serialization.JsonSerializer;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,21 +25,22 @@ public class OCaml {
 		precedence.setOP2();
 
 		grammar = precedence.transform(grammar);
-		// System.out.println(grammar.toString());
-		
+
 		grammar = new LayoutWeaver().transform(grammar);
 
 		grammar = new DesugarStartSymbol().transform(grammar);
 
 		Map<URI, List<ParseStatistics>> results = IguanaRunner.builder(grammar)
-//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
+				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/sun/nio/cs/EUC_TW_OLD.java")
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/test/java/lang/annotation/UnitTest.java")
 //				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/net/SocketPermission.java")
-				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java", "java", true)
-//				.setLimit(1)
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/net/MulticastSocket.java")
+//				.addFile("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java/lang/invoke/FilterGeneric.java")
+//				.addDirectory("/Users/afroozeh/workspace/jdk7u-jdk/src/share/classes/java", "java", true)
+//				.setLimit(10)
 				.setStart(grammar.getStartSymbol())
 				.setWarmupCount(0)
-				.setRunCount(1)
+				.setRunCount(100)
 //				.setRunGCInBetween(true)
 				.build()
 				.run();
