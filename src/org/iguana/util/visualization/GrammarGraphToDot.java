@@ -62,7 +62,6 @@ public class GrammarGraphToDot {
 		node.setLabel(label);
 		dotGraph.addNode(node);
 
-
 		slot.getFirstSlots().forEach(s -> dotGraph.addEdge(newEdge(getId(slot), getId(s))));
 		slot.getFirstSlots().forEach(s -> toDot(s, dotGraph));
 	}
