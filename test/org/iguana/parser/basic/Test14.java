@@ -41,13 +41,11 @@ import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParseSuccess;
-import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
-import org.iguana.util.TestRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -81,12 +79,6 @@ public class Test14 {
     private static Start startSymbol = Start.from(A);
 
     private static Grammar grammar = new DesugarStartSymbol().transform(Grammar.builder().addRule(r1).addRule(r2).setStartSymbol(startSymbol).build());
-
-    @BeforeClass
-    public static void record() {
-        String path = Paths.get("test", "resources", "grammars", "basic").toAbsolutePath().toString();
-        TestRunner.record(grammar, input, 1, path + "/Test14");
-    }
 
     @Test
 	public void testReachableNonterminals() {
