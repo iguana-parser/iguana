@@ -39,6 +39,8 @@ import org.iguana.grammar.symbol.Start;
 import org.iguana.parser.Iguana;
 import org.iguana.parser.ParseResult;
 import org.iguana.parser.ParserRuntime;
+import org.iguana.parser.RecognizerRuntime;
+import org.iguana.result.RecognizerResult;
 import org.iguana.sppf.NonPackedNode;
 
 import java.io.File;
