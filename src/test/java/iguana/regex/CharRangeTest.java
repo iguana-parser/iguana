@@ -27,18 +27,18 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static iguana.regex.CharacterRanges.toNonOverlapping;
 import static iguana.utils.collections.CollectionsUtil.*;
-import static iguana.regex.CharacterRanges.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

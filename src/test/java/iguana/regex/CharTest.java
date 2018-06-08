@@ -27,12 +27,12 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.matcher.DFAMatcher;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -45,12 +45,10 @@ public class CharTest {
 	
 	@Test
 	public void testAutomaton() {
-		Automaton a = c.getAutomaton();
-		assertArrayEquals(new CharRange[] {CharRange.in('a', 'a')}, a.getAlphabet());
-		assertEquals(2, a.getCountStates());
+		Automaton automaton = c.getAutomaton();
+		assertArrayEquals(new CharRange[] {CharRange.in('a', 'a')}, automaton.getAlphabet());
+		assertEquals(2, automaton.getCountStates());
 	}
-
-
 
     @Test
 	public void testMatcher() {

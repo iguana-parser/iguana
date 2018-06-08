@@ -27,16 +27,16 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.matcher.DFAMatcher;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
-
+import static iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.Assert.assertEquals;
 
 
@@ -48,14 +48,16 @@ public class AltTest {
 	public void test1() {
 		Char a = Char.from('a');
 		Char b = Char.from('b');
-		
+
 		RegularExpression regex = Alt.from(a, b);
 		
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(6, automaton.getCountStates());
-		
+		assertEquals(5, automaton.getCountStates());
+		assertEquals(set(a, b, regex), automaton.getRegularExpressions());
+
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(3, automaton.getCountStates());
+		assertEquals(set(a, b, regex), automaton.getRegularExpressions());
 		
 		Matcher dfa = new DFAMatcher(automaton);
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));

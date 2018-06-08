@@ -27,12 +27,12 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -46,7 +46,7 @@ public class CharacterClassTest {
 		RegularExpression regex = Alt.from(CharRange.in('a', 'z'), CharRange.in('1', '8'));
 
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(6, automaton.getCountStates());
+		assertEquals(5, automaton.getCountStates());
 		
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(3, automaton.getCountStates());
@@ -66,11 +66,11 @@ public class CharacterClassTest {
 	}
 	
 	@Test
-	public void test2() {
+	public void test2() throws Exception {
 		RegularExpression regex = Alt.from(CharRange.in('1', '5'), CharRange.in('1', '7'), CharRange.in('3', '8'));
 
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(8, automaton.getCountStates());
+		assertEquals(7, automaton.getCountStates());
 		
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(5, automaton.getCountStates());

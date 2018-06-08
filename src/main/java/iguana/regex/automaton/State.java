@@ -123,6 +123,10 @@ public class State implements Serializable {
 	public int getId() {
 		return id;
 	}
+
+	public void clearRegularExpressions() {
+		regularExpressions.clear();
+	}
 	
 	public Set<RegularExpression> getRegularExpressions() {
 		return regularExpressions;
@@ -137,7 +141,7 @@ public class State implements Serializable {
 		return this;
 	}
 	
-	public State addRegularExpressions(Collection<RegularExpression> c) {
+	public State addRegularExpressions(Collection<? extends RegularExpression> c) {
 		regularExpressions.addAll(c);
 		return this;
 	}

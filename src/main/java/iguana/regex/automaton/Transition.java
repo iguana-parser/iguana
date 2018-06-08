@@ -27,9 +27,9 @@
 
 package iguana.regex.automaton;
 
-import iguana.utils.collections.hash.MurmurHash3;
 import iguana.regex.CharRange;
 import iguana.regex.EOF;
+import iguana.utils.collections.hash.MurmurHash3;
 
 import java.io.Serializable;
 
@@ -78,14 +78,6 @@ public class Transition implements Comparable<Transition>, Serializable {
 		return range;
 	}
 	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public int getId() {
-		return id;
-	}
-	
 	public State getDestination() {
 		return destination;
 	}
@@ -131,11 +123,8 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	@Override
 	public String toString() {
-		
-		if(isEpsilonTransition()) {
-			return "-1";
-		}
-		
+		if (isEpsilonTransition()) return "-1";
+
 		return range.toString();
 	}
 

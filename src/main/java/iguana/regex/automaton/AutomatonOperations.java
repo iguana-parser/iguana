@@ -44,7 +44,7 @@ public class AutomatonOperations {
 	}
 
 	public static Automaton makeDeterministic(State start, CharRange[] alphabet) {
-		
+
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
 		
@@ -54,7 +54,7 @@ public class AutomatonOperations {
 		visitedStates.add(initialState);
 		processList.add(initialState);
 		
-		/**
+		/*
 		 * A map from the set of NFA states to the new state in the produced DFA.
 		 * This map is used for sharing DFA states.
 		 */
@@ -74,10 +74,15 @@ public class AutomatonOperations {
 					continue;
 				
 				State source = newStatesMap.get(stateSet);
-				State dest = newStatesMap.computeIfAbsent(destState, s -> new State());
+				State dest = newStatesMap.computeIfAbsent(destState, s -> {
+					State state = new State();
+					for (State ds : destState) {
+						state.addRegularExpressions(ds.getRegularExpressions());
+					}
+					return state;
+				});
 				source.addTransition(new Transition(r, dest));
 
-				
 				if (!visitedStates.contains(destState)) {
 					visitedStates.add(destState);
 					processList.add(destState);

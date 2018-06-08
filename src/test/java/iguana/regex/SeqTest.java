@@ -27,11 +27,11 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -54,8 +54,6 @@ public class SeqTest {
 		Automaton automaton = seq1.getAutomaton();
 		assertEquals(3, automaton.getCountStates());
 	}
-
-
 
     @Test
 	public void testDFAMatcher1() {

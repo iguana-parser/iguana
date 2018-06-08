@@ -27,11 +27,10 @@
 
 package iguana.regex.automaton;
 
-import iguana.regex.automaton.*;
-import iguana.utils.input.Input;
 import iguana.regex.RegularExpression;
 import iguana.regex.RegularExpressionExamples;
 import iguana.regex.matcher.DFAMatcher;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

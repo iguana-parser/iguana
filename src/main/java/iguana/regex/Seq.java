@@ -27,8 +27,6 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -156,7 +154,7 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 
 		public Builder(Seq<T> seq) {
 			super(seq);
-			this.symbols = seq.symbols;
+			this.symbols = new ArrayList<>(seq.symbols);
 		}
 
 		public Builder() {}
@@ -172,7 +170,7 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 		}
 
 		public Builder<T> setSymbols(List<T> symbols) {
-			this.symbols = symbols;
+			this.symbols = new ArrayList<>(symbols);
 			return this;
 		}
 		

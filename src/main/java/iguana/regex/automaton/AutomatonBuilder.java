@@ -44,14 +44,14 @@ public class AutomatonBuilder {
 	private CharRange[] alphabet;
 	
 	private State[] states;
-	
+
 	private Set<State> finalStates;
-	
+
 	/**
 	 * From transitions to non-overlapping transitions
 	 */
 	private Map<CharRange, List<CharRange>> rangeMap;
-	
+
 	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
 		this.minimized = automaton.isMinimized();
@@ -59,57 +59,57 @@ public class AutomatonBuilder {
 		this.startState = automaton.getStartState();
 		this.finalStates = automaton.getFinalStates();
 		this.alphabet = automaton.getAlphabet();
-		
+
 		if (!deterministic) {
 			convertToNonOverlapping(automaton.getStartState());
 		}
 	}
-	
+
 	public AutomatonBuilder(State startState) {
 		this.states = getAllStates(startState);
 		this.startState = startState;
 		this.finalStates = computeFinalStates();
 		convertToNonOverlapping(startState);
 	}
-	
+
 	public Automaton build() {
 		setStateIDs();
 		return new Automaton(this);
 	}
-	 
+
 	public CharRange[] getAlphabet() {
 		return alphabet;
 	}
-	
+
 	public Set<State> getFinalStates() {
 		return finalStates;
 	}
-	
+
 	public State getStartState() {
 		return startState;
 	}
-	
+
 	public State[] getStates() {
 		return states;
 	}
-	
+
 	public boolean isMinimized() {
 		return minimized;
 	}
-	
+
 	public boolean isDeterministic() {
 		return deterministic;
 	}
-	
+
 	private static Map<CharRange, List<CharRange>> getRangeMap(State startState) {
 		return CharacterRanges.toNonOverlapping(getAllRanges(startState));
 	}
-	
-	private static CharRange[] getAlphabet(State startState, Map<CharRange, List<CharRange>> rangeMap) {
+
+	private static CharRange[] getAlphabet(Map<CharRange, List<CharRange>> rangeMap) {
 		Set<CharRange> values = rangeMap.values().stream()
-				                                      .flatMap(l -> l.stream())
+				                                      .flatMap(Collection::stream)
 				                                      .collect(Collectors.toCollection(LinkedHashSet::new));
-		
+
 		CharRange[] alphabet = new CharRange[values.size()];
 		int i = 0;
 		for (CharRange r : values) {
@@ -117,7 +117,7 @@ public class AutomatonBuilder {
 		}
 		return alphabet;
 	}
-	
+
 	public AutomatonBuilder makeDeterministic() {
 		Automaton dfa = AutomatonOperations.makeDeterministic(startState, alphabet);
 		this.startState = dfa.getStartState();
@@ -126,22 +126,22 @@ public class AutomatonBuilder {
 		this.deterministic = true;
 		return this;
 	}
-	
+
 	public AutomatonBuilder setDeterministic(boolean deterministic) {
 		this.deterministic = deterministic;
 		return this;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Note: unreachable states are already removed as we gather the states
 	 * reachable from the start state of the given NFA.
-	 * 
+	 *
 	 */
 	public AutomatonBuilder minimize() {
 		if (!deterministic)
 			makeDeterministic();
-		
+
 		Automaton automaton = AutomatonOperations.minimize(alphabet, states);
 		this.startState = automaton.getStartState();
 		this.finalStates = automaton.getFinalStates();
@@ -149,14 +149,14 @@ public class AutomatonBuilder {
 		this.minimized = true;
 		return this;
 	}
-	
+
 	public AutomatonBuilder setMinimized(boolean minimized) {
 		this.minimized = minimized;
 		return this;
 	}
 
 	/**
-	 * For debugging purposes 
+	 * For debugging purposes
 	 */
 	@SuppressWarnings("unused")
 	private static void printMinimizationTable(int[][] table) {
@@ -167,64 +167,30 @@ public class AutomatonBuilder {
 			System.out.println("\n");
 		}
 	}
-	
-	public static String toJavaCode(Automaton automaton) {
-		State startState = automaton.getStartState();
-		StringBuilder sb = new StringBuilder();
-		Map<State, Integer> visitedStates = new HashMap<>();
-		visitedStates.put(startState, 1);
-		toJavaCode(startState, sb, visitedStates);
-		return sb.toString();
-	}
-	
-	private static void toJavaCode(State state, StringBuilder sb, Map<State, Integer> visitedStates) {
-		
-		if(state.isFinalState()) {
-			sb.append("State state" + visitedStates.get(state) + " = new State(true);\n");			
-		} else {
-			sb.append("State state" + visitedStates.get(state) + " = new State();\n");
-		}
-		
-		for(Transition transition : state.getTransitions()) {
-			State destination = transition.getDestination();
-			
-			if(!visitedStates.keySet().contains(destination)) {
-				visitedStates.put(destination, visitedStates.size() + 1);
-				toJavaCode(destination, sb, visitedStates);
-			}
-			
-			sb.append("state" + visitedStates.get(state) + ".addTransition(new Transition(" + transition.getStart() + 
-					                                               ", " + transition.getEnd() + ", state" + visitedStates.get(destination) + "));\n");
-		}
-	}
-	
+
 	public static BitSet getCharacters(Automaton automaton) {
 		final BitSet bitSet = new BitSet();
-		
-		AutomatonVisitor.visit(automaton, new VisitAction() {
-			
-			@Override
-			public void visit(State state) {
+
+		AutomatonVisitor.visit(automaton.getStartState(), state -> {
 				for(Transition transition : state.getTransitions()) {
 					bitSet.set(transition.getStart(), transition.getEnd() + 1);
 				}
-			}
-		});
-		
+			});
+
 		return bitSet;
 	}
-	
+
 	public static int[] merge(int[] i1, int[] i2) {
 		Set<Integer> set = new HashSet<>();
-		
+
 		for(int i = 0; i < i1.length; i++) {
 			set.add(i1[i]);
 		}
-		
+
 		for(int i = 0; i < i2.length; i++) {
 			set.add(i2[i]);
 		}
-		
+
 		int i = 0;
 		int[] merged = new int[set.size()];
 		for(int c : set) {
@@ -232,10 +198,10 @@ public class AutomatonBuilder {
 		}
 
 		Arrays.sort(merged);
-		
+
 		return merged;
 	}
-	
+
 	private void convertToNonOverlapping(State startState) {
 		this.rangeMap = getRangeMap(startState);
 		for (State state : states) {
@@ -246,15 +212,15 @@ public class AutomatonBuilder {
 					removeList.add(transition);
 					for (CharRange range : rangeMap.get(transition.getRange())) {
 						addList.add(new Transition(range, transition.getDestination()));
-					}					
+					}
 				}
 			}
 			state.removeTransitions(removeList);
 			state.addTransitions(addList);
 		}
-		this.alphabet = getAlphabet(startState, rangeMap);
+		this.alphabet = getAlphabet(rangeMap);
 	}
-		
+
 	private static List<CharRange> getAllRanges(State startState) {
 		final Set<CharRange> ranges = new HashSet<>();
 
@@ -265,50 +231,50 @@ public class AutomatonBuilder {
 				}
 			}
 		});
-		
+
 		return new ArrayList<>(ranges);
 	}
- 	
+
 	public static int getCountStates(Automaton automaton) {
 		final int[] count = new int[1];
-		
+
 		AutomatonVisitor.visit(automaton, s -> count[0]++);
-		
+
 		return count[0];
 	}
-	
+
 	private static State[] getAllStates(State startState) {
 		final Set<State> set = new LinkedHashSet<>();
 		AutomatonVisitor.visit(startState, s -> set.add(s));
-		
+
 		State[] states = new State[set.size()];
 		int i = 0;
 		for (State s : set) {
-			states[i++] = s; 
+			states[i++] = s;
 		}
 		return states;
 	}
-	
+
 	public void setStateIDs() {
 		for (int i = 0; i < states.length; i++) {
 			states[i].setId(i);
 		}
 	}
-	
+
 	private Set<State> computeFinalStates() {
-		
+
 		final Set<State> finalStates = new HashSet<>();
-		
+
 		AutomatonVisitor.visit(startState, s -> {
 				if (s.isFinalState()) {
 					finalStates.add(s);
 				}
 			});
-		
+
 		return finalStates;
 	}
-	
-	
+
+
 	public State getState(int i) {
 		return states[i];
 	}

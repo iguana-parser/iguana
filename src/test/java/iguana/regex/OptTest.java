@@ -27,12 +27,6 @@
 
 package iguana.regex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.matcher.DFAMatcher;
@@ -40,6 +34,10 @@ import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.Matcher;
 import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
+import org.junit.Test;
+
+import static iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.Assert.*;
 
 public class OptTest {
 	
@@ -47,12 +45,15 @@ public class OptTest {
 	
 	@Test
 	public void test1() {
+		RegularExpression a = Char.from('a');
 		RegularExpression regex = Opt.from(Char.from('a'));
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(4, automaton.getCountStates());
-		
+		assertEquals(2, automaton.getCountStates());
+		assertEquals(set(regex, a), automaton.getRegularExpressions());
+
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(2, automaton.getCountStates());
+		assertEquals(set(a, regex), automaton.getRegularExpressions());
 
 		Matcher matcher = new DFAMatcher(automaton);
 		assertTrue(matcher.match(Input.fromString("a")));
@@ -63,9 +64,9 @@ public class OptTest {
 	public void test2() {
 		RegularExpression regex = Opt.from(Seq.from("integer"));
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(10, automaton.getCountStates());
-		
-		automaton = AutomatonOperations.makeDeterministic(automaton);		
+		assertEquals(8, automaton.getCountStates());
+
+		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(8, automaton.getCountStates());
 
 		Matcher matcher = factory.getMatcher(regex);

@@ -27,14 +27,14 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.matcher.DFAMatcher;
 import iguana.regex.matcher.Matcher;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class StarTest {
 	
@@ -85,7 +85,7 @@ public class StarTest {
 		RegularExpression r3 = Char.from('*');
 		
 		Automaton automaton = Star.from(Alt.from(r1, r2, r3)).getAutomaton();
-		assertEquals(16, automaton.getCountStates());
+		assertEquals(15, automaton.getCountStates());
 		
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(6, automaton.getCountStates());

@@ -27,16 +27,14 @@
 
 package iguana.regex;
 
-import iguana.utils.input.Input;
 import iguana.regex.automaton.Automaton;
 import iguana.regex.automaton.AutomatonOperations;
 import iguana.regex.matcher.DFAMatcher;
 import iguana.regex.matcher.Matcher;
+import iguana.utils.input.Input;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class ExamplesTest {
@@ -46,7 +44,7 @@ public class ExamplesTest {
 		RegularExpression id = RegularExpressionExamples.getId();
 		Automaton automaton = id.getAutomaton();
 		
-		assertEquals(15, automaton.getCountStates());
+		assertEquals(13, automaton.getCountStates());
 		
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(6, automaton.getCountStates());
@@ -96,7 +94,7 @@ public class ExamplesTest {
 	public void testJavaUnicodeEscape() {
 		RegularExpression regex = RegularExpressionExamples.getJavaUnicodeEscape();
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(34, automaton.getCountStates());
+		assertEquals(30, automaton.getCountStates());
 		
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(37, automaton.getCountStates());
@@ -109,11 +107,11 @@ public class ExamplesTest {
 	public void testCharacter() {
 		RegularExpression regex = RegularExpressionExamples.getCharacter();
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(15, automaton.getCountStates());
-		
+		assertEquals(13, automaton.getCountStates());
+
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(7, automaton.getCountStates());
-		
+
 		Matcher matcher = new DFAMatcher(automaton);
 		assertTrue(matcher.match(Input.fromString("'ab'")));
 	}
@@ -122,8 +120,8 @@ public class ExamplesTest {
 	public void testStringPart() {
 		RegularExpression regex = RegularExpressionExamples.getStringPart();
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(18, automaton.getCountStates());
-		
+		assertEquals(15, automaton.getCountStates());
+
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(7, automaton.getCountStates());
 		
@@ -136,8 +134,23 @@ public class ExamplesTest {
 	
 	@Test
 	public void testMultilineComment() {
-		Automaton a = RegularExpressionExamples.getMultilineComment().getAutomaton();
-		
+		Automaton automaton = RegularExpressionExamples.getMultilineComment().getAutomaton();
+//		assertEquals(9, automaton.getCountStates());
+
+		try {
+			iguana.regex.utils.AutomatonToDot.toDot(automaton).generate("/Users/afroozeh/automaton.pdf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		automaton = AutomatonOperations.makeDeterministic(automaton);
+
+		try {
+			iguana.regex.utils.AutomatonToDot.toDot(automaton).generate("/Users/afroozeh/dfa.pdf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+//		assertEquals(5, automaton.getCountStates());
 //		assertTrue(matcher.match(Input.fromString("/*a*/")));
 	}	
 }

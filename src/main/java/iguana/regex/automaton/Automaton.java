@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toSet;
+
 /**
  * 
  * @author Ali Afroozeh
@@ -89,6 +91,10 @@ public class Automaton implements Serializable {
 	public CharRange[] getAlphabet() {
 		return alphabet;
 	}
+
+	public Set<RegularExpression> getRegularExpressions() {
+		return finalStates.stream().flatMap(state -> state.getRegularExpressions().stream()).collect(toSet());
+	}
 	
 	public boolean isDeterministic() {
 		return deterministic;
@@ -105,19 +111,6 @@ public class Automaton implements Serializable {
 		return AutomatonBuilder.getCharacters(this);
 	}
 	
-	/**
-	 * Adds the given regular expression to the final states of this
-	 * automaton.
-	 * 
-	 * @param regex the given regular expression
-	 */
-	public Automaton setRegularExpression(RegularExpression regex) {
-		for (State state : finalStates) {
-			state.addRegularExpression(regex);
-		}
-		return this;
-	}
-	
 	public Automaton copy() {
 		
 		final Map<State, State> newStates = new HashMap<>();
@@ -129,6 +122,7 @@ public class Automaton implements Serializable {
 			
 			newStates.put(state, newState);
 			newState.setStateType(state.getStateType());
+			newState.addRegularExpressions(state.getRegularExpressions());
 			
 			if(state == startState) {
 				newStartState[0] = newState;
@@ -232,8 +226,5 @@ public class Automaton implements Serializable {
 	public static AutomatonBuilder builder(State startState) {
 		return new AutomatonBuilder(startState);
 	}
-	
-	public String toJavaCode() {
-		return AutomatonBuilder.toJavaCode(this);
-	}	
+
 }
