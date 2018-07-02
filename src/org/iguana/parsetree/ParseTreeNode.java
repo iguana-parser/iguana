@@ -28,7 +28,7 @@ public interface ParseTreeNode {
                 return node;
             }
         }
-        throw null;
+        return null;
     }
 
     default List<ParseTreeNode> getChildrenWithName(String name) {
