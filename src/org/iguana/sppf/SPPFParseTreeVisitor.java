@@ -11,18 +11,25 @@ import org.iguana.traversal.SPPFVisitor;
 import java.util.*;
 import java.util.List;
 
+import static java.util.Collections.emptySet;
 import static org.iguana.parsetree.VisitResult.*;
 
 public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
+    private Set<Symbol> ignoreList;
     private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, VisitResult> convertedNodes;
 
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 
     public SPPFParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
+        this(parseTreeBuilder, emptySet());
+    }
+
+    public SPPFParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<Symbol> ignoreList) {
         this.parseTreeBuilder = parseTreeBuilder;
+        this.ignoreList = ignoreList;
         this.convertedNodes = new HashMap<>();
         this.visitedNodes = new LinkedHashSet<>();
         this.createNodeVisitor = new VisitResult.CreateParseTreeVisitor<>(parseTreeBuilder);
@@ -30,6 +37,9 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
     @Override
     public VisitResult visit(TerminalNode node) {
+        if (ignoreList.contains(node.getGrammarSlot().getTerminal())) {
+            return empty();
+        }
         return convertedNodes.computeIfAbsent(node, key -> {
                     if (node.getLeftExtent() == node.getIndex()) return empty();
                     Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());
@@ -40,6 +50,10 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
     @Override
     public VisitResult visit(org.iguana.sppf.NonterminalNode node) {
+        if (ignoreList.contains(node.getGrammarSlot().getNonterminal())) {
+            return empty();
+        }
+
         VisitResult result = convertedNodes.get(node);
         if (result != null) return result;
 

@@ -1,11 +1,10 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 
-import java.util.Collections;
-import static java.util.Objects.*;
-import static iguana.utils.Assert.*;
+import static iguana.utils.Assert.requireNonNegative;
+import static java.util.Objects.hash;
+import static java.util.Objects.requireNonNull;
 
 public class TerminalNode implements ParseTreeNode {
 
@@ -20,23 +19,18 @@ public class TerminalNode implements ParseTreeNode {
     }
 
     @Override
-    public int start() {
+    public int getStart() {
         return start;
     }
 
     @Override
-    public int end() {
+    public int getEnd() {
         return end;
     }
 
     @Override
-    public String text(Input input) {
-        return input.subString(start, end);
-    }
-
-    @Override
-    public Iterable<ParseTreeNode> children() {
-        return Collections.emptyList();
+    public String getName() {
+        return terminal.getName();
     }
 
     @Override
@@ -45,7 +39,7 @@ public class TerminalNode implements ParseTreeNode {
     }
 
     @Override
-    public Terminal definition() {
+    public Terminal getGrammarDefinition() {
         return terminal;
     }
 
