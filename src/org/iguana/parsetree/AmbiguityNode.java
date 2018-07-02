@@ -1,40 +1,41 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Rule;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import static iguana.utils.Assert.requireNonEmpty;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
-import static iguana.utils.Assert.*;
 
 public class AmbiguityNode implements ParseTreeNode {
 
-    private final Set<ParseTreeNode> alternatives;
+    private final List<ParseTreeNode> alternatives;
 
     public AmbiguityNode(Set<ParseTreeNode> alternatives) {
-        this.alternatives = requireNonNull(alternatives);
+        this.alternatives = new ArrayList<>(requireNonNull(alternatives));
         requireNonEmpty(alternatives);
     }
 
     @Override
-    public int start() {
-        return alternatives.iterator().next().start();
+    public int getStart() {
+        return alternatives.iterator().next().getStart();
     }
 
     @Override
-    public int end() {
-        return alternatives.iterator().next().end();
+    public int getEnd() {
+        return alternatives.iterator().next().getEnd();
     }
 
     @Override
-    public String text(Input input) {
-        return input.subString(start(), end());
+    public String getName() {
+        return null;
     }
 
     @Override
-    public Iterable<ParseTreeNode> children() {
+    public List<ParseTreeNode> children() {
         return alternatives;
     }
 
@@ -44,7 +45,7 @@ public class AmbiguityNode implements ParseTreeNode {
     }
 
     @Override
-    public Rule definition() {
+    public Rule getGrammarDefinition() {
         return null;
     }
 
