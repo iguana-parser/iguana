@@ -65,7 +65,7 @@ public class MetaSymbolNode implements ParseTreeNode {
     }
 
     @Override
-    public Object getGrammarDefinition() {
+    public Symbol getGrammarDefinition() {
         return symbol;
     }
 }

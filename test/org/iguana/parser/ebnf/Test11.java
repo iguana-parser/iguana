@@ -15,6 +15,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.ParseStatistics;
+import org.iguana.util.serialization.JsonSerializer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -33,18 +34,26 @@ import static org.junit.Assert.assertTrue;
  */
 public class Test11 {
 
+    /**
+     * S ::= 's' A (B+ | (B+ C))
+     * A ::= 'a'
+     * B ::= 'b'
+     * C ::= 'c'
+     */
+
     static Nonterminal S = Nonterminal.withName("S");
     static Nonterminal A = Nonterminal.withName("A");
     static Nonterminal B = Nonterminal.withName("B");
-    static Nonterminal L = Nonterminal.withName("L");
+    static Nonterminal C = Nonterminal.withName("C");
     static Terminal a = Terminal.from(Char.from('a'));
     static Terminal b = Terminal.from(Char.from('b'));
-    static Terminal l = Terminal.from(Char.from('l'));
+    static Terminal c = Terminal.from(Char.from('c'));
+    static Terminal s = Terminal.from(Char.from('s'));
 
-    static Rule r1 = Rule.withHead(S).addSymbols(Plus.from(A), L, Plus.from(B)).build();
+    static Rule r1 = Rule.withHead(S).addSymbols(s, A, Alt.from(Plus.from(B), Sequence.from(Star.from(B), C))).build();
     static Rule r2 = Rule.withHead(A).addSymbols(a).build();
     static Rule r3 = Rule.withHead(B).addSymbols(b).build();
-    static Rule r4 = Rule.withHead(L).addSymbols(Star.from(l)).build();
+    static Rule r4 = Rule.withHead(C).addSymbols(c).build();
 
     static Start start = Start.from(S);
     private static Grammar grammar = EBNFToBNF.convert(new DesugarStartSymbol().transform(Grammar.builder().addRules(r1, r2, r3, r4).setStartSymbol(start).build()));
@@ -54,6 +63,7 @@ public class Test11 {
 
     @Test
     public void testParser1() {
+        System.out.println(JsonSerializer.toJSON(grammar));
         ParseResult result = Iguana.parse(input1, grammar, S);
         assertTrue(result.isParseSuccess());
         GrammarGraph graph = GrammarGraph.from(grammar);
