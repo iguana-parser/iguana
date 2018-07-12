@@ -1,5 +1,6 @@
 package org.iguana.sppf;
 
+import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.List;
 
 import static java.util.Collections.emptySet;
+import static java.util.Collections.singletonList;
 import static org.iguana.parsetree.VisitResult.*;
 
 public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
@@ -117,7 +119,15 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
                 case Start: {
                     Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
                     VisitResult visitResult = packedNode.accept(this);
-                    result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getIndex()));
+                    // This case handles X+ nodes under other EBNF nodes (See Test 14)
+                    if (visitResult instanceof VisitResult.List && visitResult.getValues().size() == 1 && visitResult.getValues().get(0) instanceof VisitResult.EBNF) {
+                        VisitResult.EBNF ebnfChild = (VisitResult.EBNF) visitResult.getValues().get(0);
+                        T ebnfResult = parseTreeBuilder.metaSymbolNode(ebnfChild.getSymbol(), (List<T>) ebnfChild.getValues(), node.getLeftExtent(), node.getRightExtent());
+                        result = single(parseTreeBuilder.metaSymbolNode(symbol, singletonList(ebnfResult), node.getLeftExtent(), node.getRightExtent()));
+                    } else {
+                        result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                    }
+
                     break;
                 }
             }
