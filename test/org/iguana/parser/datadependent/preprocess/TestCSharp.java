@@ -30,13 +30,10 @@ package org.iguana.parser.datadependent.preprocess;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.Configuration;
 import org.junit.Test;
 
 import java.io.File;
@@ -59,14 +56,17 @@ public class TestCSharp {
 	}
 
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
-	private static Start start = Start.from(Nonterminal.withName("CompilationUnit"));
+	private static Nonterminal start = Nonterminal.withName("CompilationUnit");
 	
 	@Test
 	public void test1() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test1.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar);
-		System.out.println(result);
-		
+
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, start);
+
+        assertTrue(result);
+
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 //		NonterminalNodeVisitor.create(n -> {
@@ -77,16 +77,16 @@ public class TestCSharp {
 //			}
 //		}).visit(result.asParseSuccess().getResult());
 		
-
-		assertTrue(result.isParseSuccess());
-//		assertTrue(nodes.isEmpty());
 	}
 	
 	@Test
 	public void test2() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test2.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar);
-		System.out.println(result);
+
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
+
+        assertTrue(result);
 
 		Map<String, NonterminalNode> nodes = new HashMap<>();
 		
@@ -99,16 +99,18 @@ public class TestCSharp {
 //		}).visit(result.asParseSuccess().getResult());
 		
 
-		assertTrue(result.isParseSuccess());
 //		assertTrue(nodes.isEmpty());
 	}
 
 	@Test
 	public void test3() throws Exception {
 		Input input = Input.fromPath(getClass().getResource("examples/Test7.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar);
-		System.out.println(result);
-		
+
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
+
+        assertTrue(result);
+
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 //		NonterminalNodeVisitor.create(n -> {
@@ -118,10 +120,7 @@ public class TestCSharp {
 //				nodes.put(yield, n);
 //			}
 //		}).visit(result.asParseSuccess().getResult());
-		
 
-		assertTrue(result.isParseSuccess());
-//		assertTrue(nodes.isEmpty());
 	}
 	
 }

@@ -32,7 +32,7 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSNode;
 
 
-public class ParseError implements ParseResult {
+public class ParseError {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
@@ -58,25 +58,4 @@ public class ParseError implements ParseResult {
 		
 		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
 	}
-
-	@Override
-	public boolean isParseError() {
-		return true;
-	}
-
-	@Override
-	public boolean isParseSuccess() {
-		return false;
-	}
-
-	@Override
-	public ParseError asParseError() {
-		return this;
-	}
-
-	@Override
-	public ParseSuccess asParseSuccess() {
-		throw new RuntimeException("Cannot call getParseSuccess on ParseError.");
-	}
-
 }

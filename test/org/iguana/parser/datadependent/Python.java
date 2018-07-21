@@ -42,7 +42,7 @@
 //import org.iguana.grammar.symbol.*;
 //import org.iguana.regex.Character;
 //import org.iguana.regex.CharacterRange;
-//import org.iguana.parser.Iguana;
+//import org.iguana.parser.IguanaParser;
 //import org.iguana.parser.ParseResult;
 //import org.iguana.regex.Sequence;
 //import org.iguana.util.Configuration;
@@ -697,7 +697,7 @@
 //				                     + "   w=0   "   + "\n");
 //
 //		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-//		ParseResult result = Iguana.parse(input, graph, Nonterminal.withName("IfStmt"));
+//		ParseResult result = IguanaParser.parse(input, graph, Nonterminal.withName("IfStmt"));
 //	}
 //
 //}

@@ -1,13 +1,12 @@
-package org.iguana.sppf;
+package org.iguana.traversal;
 
-import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
-import org.iguana.traversal.SPPFVisitor;
+import org.iguana.sppf.*;
 
 import java.util.*;
 import java.util.List;
@@ -16,7 +15,7 @@ import static java.util.Collections.emptySet;
 import static java.util.Collections.singletonList;
 import static org.iguana.parsetree.VisitResult.*;
 
-public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
+public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
     private Set<Symbol> ignoreList;
@@ -25,11 +24,11 @@ public class SPPFParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 
-    public SPPFParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
+    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
         this(parseTreeBuilder, emptySet());
     }
 
-    public SPPFParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<Symbol> ignoreList) {
+    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<Symbol> ignoreList) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.ignoreList = ignoreList;
         this.convertedNodes = new HashMap<>();

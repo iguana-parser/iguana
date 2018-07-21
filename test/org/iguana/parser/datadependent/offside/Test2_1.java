@@ -51,7 +51,7 @@
 //import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 //import org.iguana.grammar.transformation.EBNFToBNF;
 //import org.iguana.grammar.transformation.LayoutWeaver;
-//import org.iguana.parser.Iguana;
+//import org.iguana.parser.IguanaParser;
 //import org.iguana.parser.ParseResult;
 //import org.iguana.regex.Alt;
 //import org.iguana.regex.Plus;
@@ -124,7 +124,7 @@
 //
 //         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 //
-//         ParseResult result = Iguana.parse(input, graph, startSymbol);
+//         ParseResult result = IguanaParser.parse(input, graph, startSymbol);
 //
 //         Assert.assertTrue(result.isParseSuccess());
 //

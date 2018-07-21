@@ -4,20 +4,17 @@ import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.Assert.assertFalse;
 
 @SuppressWarnings("unused")
 public class iTest7_3 {
@@ -61,8 +58,9 @@ Grammar.builder()
 
          Input input = Input.fromString("a^a*a&a");
 
-         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
 
-         Assert.assertTrue(result.isParseError());
+        assertFalse(result);
     }
 }

@@ -65,7 +65,7 @@ public class GenerateParser {
             writer.println("import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;");
             writer.println("import org.iguana.grammar.transformation.EBNFToBNF;");
             writer.println("import org.iguana.grammar.transformation.LayoutWeaver;");
-            writer.println("import org.iguana.parser.Iguana;");
+            writer.println("import org.iguana.parser.IguanaParser;");
             writer.println("import org.iguana.parser.ParseResult;");
             writer.println("import org.iguana.traversal.idea.Names;");
             writer.println("import org.iguana.util.Configuration;");
@@ -89,7 +89,7 @@ public class GenerateParser {
             writer.println("            start = grammar.getStartSymbol(Nonterminal.withName(\"\"));");
             writer.println("            graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);");
             writer.println("        }");
-            writer.println("        ParseResult result = Iguana.parse(input, graph, start);");
+            writer.println("        ParseResult result = IguanaParser.parse(input, graph, start);");
             writer.println("        if (result.isParseSuccess()) {");
             writer.println("            System.out.println(\"Success...\");");
             writer.println("            NonterminalNode sppf = result.asParseSuccess().getResult();");

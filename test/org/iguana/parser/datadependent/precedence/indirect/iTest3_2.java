@@ -7,15 +7,15 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("unused")
 public class iTest3_2 {
@@ -50,10 +50,10 @@ Grammar.builder()
 
          Input input = Input.fromString("a+fa");
 
-         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
 
-         Assert.assertTrue(result.isParseSuccess());
-
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+        assertTrue(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
     }
 }

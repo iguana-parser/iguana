@@ -37,12 +37,11 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * 
@@ -77,16 +76,19 @@ public class FollowRestrictionTest2 {
 	@Test
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseError());
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
+
+        assertFalse(result);
 	}
 	
 	@Test
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseError());
-	}
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
 
+        assertFalse(result);
+	}
 
 }

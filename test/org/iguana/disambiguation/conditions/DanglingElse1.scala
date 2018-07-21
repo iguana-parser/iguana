@@ -4,7 +4,7 @@ import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
 import org.iguana.grammar.condition.RegularExpressionCondition
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
-import org.iguana.parser.{Iguana, ParseResult}
+import org.iguana.parser.{IguanaParser, ParseResult}
 import org.junit.Assert._
 
 class DanglingElse1 extends FunSuite {
@@ -27,7 +27,7 @@ class DanglingElse1 extends FunSuite {
 
   test("Parser") {
     val input: Input = Input.fromString("aasbs")
-    val result: ParseResult = Iguana.parse(input, grammar, Nonterminal.withName("S"))
+    val result: ParseResult = IguanaParser.parse(input, grammar, Nonterminal.withName("S"))
     assertTrue(result.isParseSuccess)
 //    println(TermToScalaCode.get(result.asParseSuccess.getTerm))
   }

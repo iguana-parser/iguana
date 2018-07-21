@@ -38,7 +38,7 @@
 //import org.iguana.grammar.symbol.Nonterminal;
 //import org.iguana.grammar.transformation.EBNFToBNF;
 //import org.iguana.grammar.transformation.LayoutWeaver;
-//import org.iguana.parser.Iguana;
+//import org.iguana.parser.IguanaParser;
 //import org.iguana.parser.ParseResult;
 //import org.iguana.util.Configuration;
 //import org.iguana.util.Tuple;
@@ -65,7 +65,7 @@
 //			System.out.println(variables);
 //			System.out.println(expected);
 //
-//			ParseResult result = Iguana.parse(input, grammar, Configuration.DEFAULT, start, variables);
+//			ParseResult result = IguanaParser.parse(input, grammar, Configuration.DEFAULT, start, variables);
 //
 //			Map<String, NonterminalNode> nodes = new HashMap<>();
 //

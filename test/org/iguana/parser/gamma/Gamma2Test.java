@@ -30,12 +30,9 @@ package org.iguana.parser.gamma;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.ParseSuccess;
-import org.iguana.util.ParseStatistics;
 
 /**
  * 
@@ -73,44 +70,44 @@ public class Gamma2Test {
 		return Input.fromString("bbbbb");
 	}
 	
-	private static ParseSuccess getNewParseResult1(GrammarGraph graph) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(31)
-				.setGSSNodesCount(4)
-				.setGSSEdgesCount(23)
-				.setNonterminalNodesCount(6)
-				.setTerminalNodesCount(3)
-				.setIntermediateNodesCount(3)
-				.setPackedNodesCount(12)
-				.setAmbiguousNodesCount(2).build();
-		return new ParseSuccess(null, statistics);
-	}
-	
-	private static ParseSuccess getNewParseResult2(GrammarGraph graph) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(50)
-				.setGSSNodesCount(5)
-				.setGSSEdgesCount(36)
-				.setNonterminalNodesCount(10)
-				.setTerminalNodesCount(4)
-				.setIntermediateNodesCount(6)
-				.setPackedNodesCount(28)
-				.setAmbiguousNodesCount(6).build();
-		return new ParseSuccess(null, statistics);
-	}
-	
-	private static ParseSuccess getNewParseResult3(GrammarGraph graph) {
-		ParseStatistics statistics = ParseStatistics.builder()
-				.setDescriptorsCount(74)
-				.setGSSNodesCount(6)
-				.setGSSEdgesCount(52)
-				.setNonterminalNodesCount(15)
-				.setTerminalNodesCount(5)
-				.setIntermediateNodesCount(10)
-				.setPackedNodesCount(55)
-				.setAmbiguousNodesCount(12).build();
-		return new ParseSuccess(null, statistics);
-	}
+//	private static ParseSuccess getNewParseResult1(GrammarGraph graph) {
+//		ParseStatistics statistics = ParseStatistics.builder()
+//				.setDescriptorsCount(31)
+//				.setGSSNodesCount(4)
+//				.setGSSEdgesCount(23)
+//				.setNonterminalNodesCount(6)
+//				.setTerminalNodesCount(3)
+//				.setIntermediateNodesCount(3)
+//				.setPackedNodesCount(12)
+//				.setAmbiguousNodesCount(2).build();
+//		return new ParseSuccess(null, statistics);
+//	}
+//
+//	private static ParseSuccess getNewParseResult2(GrammarGraph graph) {
+//		ParseStatistics statistics = ParseStatistics.builder()
+//				.setDescriptorsCount(50)
+//				.setGSSNodesCount(5)
+//				.setGSSEdgesCount(36)
+//				.setNonterminalNodesCount(10)
+//				.setTerminalNodesCount(4)
+//				.setIntermediateNodesCount(6)
+//				.setPackedNodesCount(28)
+//				.setAmbiguousNodesCount(6).build();
+//		return new ParseSuccess(null, statistics);
+//	}
+//
+//	private static ParseSuccess getNewParseResult3(GrammarGraph graph) {
+//		ParseStatistics statistics = ParseStatistics.builder()
+//				.setDescriptorsCount(74)
+//				.setGSSNodesCount(6)
+//				.setGSSEdgesCount(52)
+//				.setNonterminalNodesCount(15)
+//				.setTerminalNodesCount(5)
+//				.setIntermediateNodesCount(10)
+//				.setPackedNodesCount(55)
+//				.setAmbiguousNodesCount(12).build();
+//		return new ParseSuccess(null, statistics);
+//	}
 	
 //	private static NonterminalNode expectedSPPF1(GrammarGraph graph) {
 //		SPPFNodeFactory factory = new SPPFNodeFactory(graph);

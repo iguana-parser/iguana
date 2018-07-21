@@ -36,7 +36,7 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 import java.util.*;
@@ -90,7 +90,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Result> T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env, Runtime<T> runtime) {
+	public <T extends Result> T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env, IguanaRuntime<T> runtime) {
 		if (isFirst())
 			return rightResult;
 
@@ -124,7 +124,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return variable;
 	}
 	
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
         for (int i = 0; i < getTransitions().size(); i++) {
             Transition transition = getTransitions().get(i);
             transition.execute(input, u, result, env, runtime);
