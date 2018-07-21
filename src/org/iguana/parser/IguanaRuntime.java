@@ -5,22 +5,27 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
-import org.iguana.util.ParseStatistics;
 import org.iguana.util.ParserLogger;
+import org.iguana.util.RunningTime;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Map;
 
-public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
+public class IguanaRuntime<T extends Result> {
 
     /**
      * The grammar slot at which a parse error is occurred.
@@ -49,12 +54,69 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
 
     private final ResultOps<T> resultOps;
 
-    AbstractRuntime(Configuration config, ResultOps<T> resultOps) {
+    private RunningTime runningTime;
+
+    public IguanaRuntime(Configuration config, ResultOps<T> resultOps) {
         this.config = config;
         this.resultOps = resultOps;
         this.descriptorsStack = new ArrayDeque<>(512);
         this.descriptorPool = new ArrayDeque<>(512);
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
+    }
+
+    public Result run(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, Object> map, boolean global) {
+        EnvironmentPool.clean();
+
+        IEvaluatorContext ctx = getEvaluatorContext();
+
+        if (global)
+            map.forEach(ctx::declareGlobalVariable);
+
+        NonterminalGrammarSlot startSymbol = grammarGraph.getHead(nonterminal);
+
+        if (startSymbol == null) {
+            throw new RuntimeException("No nonterminal named " + nonterminal + " found");
+        }
+
+        Environment env = ctx.getEmptyEnvironment();
+
+        GSSNode<T> startGSSNode;
+
+        if (!global && !map.isEmpty()) {
+            Object[] arguments = new Object[map.size()];
+
+            int i = 0;
+            for (String parameter : nonterminal.getParameters())
+                arguments[i++] = map.get(parameter);
+
+            startGSSNode = startSymbol.getGSSNode(0, arguments);
+            env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
+        } else {
+            startGSSNode = startSymbol.getGSSNode(0);
+        }
+
+        ParserLogger logger = ParserLogger.getInstance();
+        logger.reset();
+
+        Timer timer = new Timer();
+        timer.start();
+
+        for (BodyGrammarSlot slot : startSymbol.getFirstSlots()) {
+            scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
+        }
+
+        while (hasDescriptor()) {
+            Descriptor<T> descriptor = nextDescriptor();
+            logger.processDescriptor(descriptor);
+            descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
+        }
+
+        Result root = startGSSNode.getResult(input.length() - 1);
+
+        runningTime = new RunningTime(timer.getNanoTime(), timer.getUserTime(), timer.getSystemTime());
+        timer.stop();
+
+        return root;
     }
 
     /**
@@ -64,7 +126,6 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
      * the next position of input.
      *
      */
-    @Override
     public void recordParseError(int i, GrammarSlot slot, GSSNode<T> u) {
         if (i >= this.errorIndex) {
             logger.error(slot, i);
@@ -74,19 +135,16 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
         }
     }
 
-    @Override
     public boolean hasDescriptor() {
         return !descriptorsStack.isEmpty();
     }
 
-    @Override
     public Descriptor<T> nextDescriptor() {
         Descriptor<T> descriptor = descriptorsStack.pop();
         descriptorPool.push(descriptor);
         return descriptor;
     }
 
-    @Override
     public void scheduleDescriptor(BodyGrammarSlot grammarSlot, GSSNode<T> gssNode, T result, Environment env) {
         Descriptor<T> descriptor;
         if (!descriptorPool.isEmpty()) {
@@ -99,27 +157,22 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
         logger.descriptorAdded(descriptor);
     }
 
-    @Override
     public IEvaluatorContext getEvaluatorContext() {
         return ctx;
     }
 
-    @Override
     public Environment getEnvironment() {
         return ctx.getEnvironment();
     }
 
-    @Override
     public void setEnvironment(Environment env) {
         ctx.setEnvironment(env);
     }
 
-    @Override
     public Environment getEmptyEnvironment() {
         return ctx.getEmptyEnvironment();
     }
 
-    @Override
     public void evaluate(Statement[] statements, Environment env, Input input) {
         assert statements.length > 1;
 
@@ -132,13 +185,11 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
         }
     }
 
-    @Override
     public Object evaluate(Expression expression, Environment env, Input input) {
         ctx.setEnvironment(env);
         return expression.interpret(ctx, input);
     }
 
-    @Override
     public Object[] evaluate(Expression[] arguments, Environment env, Input input) {
         if (arguments == null) return null;
 
@@ -155,19 +206,12 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
         return values;
     }
 
-    @Override
     public ParseError getParseError() {
         return new ParseError(errorSlot, errorIndex, errorGSSNode);
     }
 
-    @Override
-    public ParseStatistics getParseStatistics(Timer timer, Input input) {
+    public ParseStatistics getParseStatistics() {
         return ParseStatistics.builder()
-                              .setNanoTime(timer.getNanoTime())
-                              .setUserTime(timer.getUserTime())
-                              .setSystemTime(timer.getSystemTime())
-                              .setMemoryUsed(getMemoryUsed())
-                              .setInputLength(input.length())
                               .setDescriptorsCount(logger.getDescriptorsCount())
                               .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
                               .setGSSEdgesCount(logger.getCountGSSEdges())
@@ -179,23 +223,24 @@ public abstract class AbstractRuntime<T extends Result> implements Runtime<T> {
                               .build();
     }
 
-    private static int getMemoryUsed() {
+    public int getMemoryUsed() {
         int mb = 1024 * 1024;
         java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
         return (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
     }
 
-    @Override
+    public RunningTime getRunningTime() {
+        return runningTime;
+    }
+
     public Configuration getConfiguration() {
         return config;
     }
 
-    @Override
     public int getDescriptorPoolSize() {
         return descriptorPool.size();
     }
 
-    @Override
     public ResultOps<T> getResultOps() {
         return resultOps;
     }

@@ -3,17 +3,12 @@ package org.iguana;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.parsetree.DefaultParseTreeBuilder;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parser.IguanaRecognizer;
+import org.iguana.parser.ParseStatistics;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.parsetree.SPPFToParseTree;
-import org.iguana.result.RecognizerResult;
 import org.iguana.sppf.CyclicGrammarException;
-import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.ParseStatistics;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.SPPFJsonSerializer;
@@ -76,10 +71,12 @@ public class GrammarTest {
                 }
 
                 String parserTestName = "Parser test " + category + " " + testName;
-                DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, grammarPath, grammar, i, input));
+                IguanaParser parser = new IguanaParser(grammar);
+                DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, grammarPath, parser, i, input));
 
                 String recognizerTestName = "Recognizer test " + category + " " + testName;
-                DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, grammar, i, input));
+                IguanaRecognizer recognizer = new IguanaRecognizer(grammar);
+                DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
                 grammarTests.add(dynamicParserTest);
                 grammarTests.add(dynamicRecognizerTest);
@@ -89,66 +86,66 @@ public class GrammarTest {
         return grammarTests;
     }
 
-    private Executable getRecognizerTest(String testPath, Grammar grammar, int j, Input input) {
+    private Executable getRecognizerTest(String testPath, IguanaRecognizer recognizer, int j, Input input) {
         return () -> {
-            ParseResult<RecognizerResult> result = Iguana.recognize(input, grammar);
-
-            Assert.assertTrue(result.isParseSuccess());
+            Assert.assertTrue(recognizer.recognize(input));
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
             ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
 
-            assertEquals(expectedStatistics, result.asParseSuccess().getStatistics());
+            assertEquals(expectedStatistics, recognizer.getStatistics());
         };
     }
 
-    private Executable getParserTest(String testPath, String grammarPath, Grammar grammar, int j, Input input) {
+    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input) {
         return () -> {
-            ParseResult<NonPackedNode> result = Iguana.parse(input, grammar);
-
-            Assert.assertTrue(result.isParseSuccess());
+            Assert.assertTrue(parser.parse(input));
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
             String sppfPath = testPath + "/sppf" + j + ".json";
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
             if (!new File(statisticsPath).exists()) {
-                record(grammar, result, grammarPath, statisticsPath, sppfPath, parseTreePath);
+                record(parser, grammarPath, statisticsPath, sppfPath, parseTreePath);
                 return;
             }
 
             ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
 
-            GrammarGraph grammarGraph = GrammarGraph.from(grammar);
-            NonterminalNode expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), grammarGraph);
+            NonterminalNode expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), parser.getGrammarGraph());
 
-            assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize((NonterminalNode) result.asParseSuccess().getResult()));
+            assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize(parser.getSPPF()));
 
             try {
-                ParseTreeNode actualParseTree = SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
+                ParseTreeNode actualParseTree;
+                try {
+                    actualParseTree = parser.getParseTree();
+                } catch (Exception e) {
+                    actualParseTree = parser.getParseTree(true);
+                }
                 ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(parseTreePath), ParseTreeNode.class);
 
                 assertEquals(expectedParseTree, actualParseTree);
             } catch (CyclicGrammarException e) {
             }
 
-            assertEquals(expectedStatistics, result.asParseSuccess().getStatistics());
+            assertEquals(expectedStatistics, parser.getStatistics());
         };
     }
 
-    private static void record(Grammar grammar, ParseResult<NonPackedNode> result, String grammarPath, String statisticsPath, String sppfPath, String parseTreePath) throws IOException {
-        String jsonGrammar = JsonSerializer.toJSON(grammar);
+    private static void record(IguanaParser parser, String grammarPath, String statisticsPath, String sppfPath, String parseTreePath) throws IOException {
+        String jsonGrammar = JsonSerializer.toJSON(parser.getGrammar());
         FileUtils.writeFile(jsonGrammar, grammarPath);
 
-        ParseStatistics statistics = result.asParseSuccess().getStatistics();
+        ParseStatistics statistics = parser.getStatistics();
         String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
         FileUtils.writeFile(jsonStatistics, statisticsPath);
 
-        String jsonSPPF = SPPFJsonSerializer.serialize((NonterminalNode) result.asParseSuccess().getResult());
+        String jsonSPPF = SPPFJsonSerializer.serialize(parser.getSPPF());
         FileUtils.writeFile(jsonSPPF, sppfPath);
 
         try {
-            ParseTreeNode parseTree = SPPFToParseTree.toParseTree((NonterminalNode) result.asParseSuccess().getResult(), new DefaultParseTreeBuilder());
+            ParseTreeNode parseTree = parser.getParseTree();
             String jsonTree = JsonSerializer.toJSON(parseTree);
             FileUtils.writeFile(jsonTree, parseTreePath);
         } catch (Exception e) {

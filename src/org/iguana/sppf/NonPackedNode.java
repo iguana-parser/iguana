@@ -46,6 +46,9 @@ public abstract class NonPackedNode implements SPPFNode {
     }
 
     @Override
+    public abstract PackedNode getChildAt(int index);
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof NonPackedNode)) return false;

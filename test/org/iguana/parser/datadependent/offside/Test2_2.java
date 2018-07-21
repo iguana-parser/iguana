@@ -40,15 +40,14 @@ import org.iguana.grammar.transformation.DesugarAlignAndOffside;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static iguana.utils.collections.CollectionsUtil.set;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.Assert.assertFalse;
 
 @SuppressWarnings("unused")
 public class Test2_2 {
@@ -104,11 +103,11 @@ Grammar.builder()
 						                + "        +            \n"
 						                + "       a             \n"
 						                + "  +                  \n"
-						                + "     a               \n");         
-         
-         ParseResult result = Iguana.parse(input, grammar);
+						                + "     a               \n");
 
-         Assert.assertTrue(result.isParseError());
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
 
+        assertFalse(result);
     }
 }

@@ -4,7 +4,7 @@ import iguana.utils.input.Input
 import org.iguana.IGGY
 import org.iguana.grammar.symbol.Nonterminal
 import org.iguana.iggy.IggyParser
-import org.iguana.parser.Iguana
+import org.iguana.parser.IguanaParser
 
 /**
   * Created by Anastasia Izmaylova
@@ -54,14 +54,14 @@ class Test13 extends FunSuite {
 
   test("Parser") {
     val input = Input.fromString("a + if a then a else a + a")
-    val result = Iguana.parse(input, originalGrammar, start)
+    val result = IguanaParser.parse(input, originalGrammar, start)
     assert(result.isParseSuccess)
     assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
   }
 
 //  test("DDParser") {
 //    val input = Input.fromString("a + if a then a else a + a")
-//    val result = Iguana.parse(input, desugaredGrammar, start)
+//    val result = IguanaParser.parse(input, desugaredGrammar, start)
 //    assert(result.isParseSuccess)
 //    assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
 //  }

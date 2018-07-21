@@ -9,8 +9,8 @@ import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.ParserRuntime;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
@@ -23,7 +23,6 @@ import static org.junit.Assert.*;
 
 public class GSSNodeTest {
 
-    private Runtime runtime;
     private Input input;
     private SPPFNodeFactory sppfFactory;
     private GrammarGraph grammarGraph;
@@ -35,7 +34,6 @@ public class GSSNodeTest {
 
         grammarGraph = GrammarGraph.from(grammar);
         sppfFactory = new SPPFNodeFactory(grammarGraph);
-        runtime = new ParserRuntime(Configuration.load());
         input = Input.fromString("Test");
     }
 
@@ -49,6 +47,8 @@ public class GSSNodeTest {
         TerminalNode terminalNode01 = sppfFactory.createTerminalNode("a", 0, 1);
         TerminalNode terminalNode02 = sppfFactory.createTerminalNode("a", 0, 2);
         TerminalNode terminalNode03 = sppfFactory.createTerminalNode("a", 0, 3);
+
+        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(Configuration.load(), new ParserResultOps());
 
         // Pop ("a", 0, 1)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));

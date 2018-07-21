@@ -32,7 +32,7 @@ import org.iguana.grammar.patterns.{ExceptPattern, PrecedencePattern}
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
 import org.iguana.iggy.IggyParser
-import org.iguana.parser.{Iguana, ParseResult}
+import org.iguana.parser.{IguanaParser, ParseResult}
 
 /**
   *
@@ -84,20 +84,20 @@ class PrecedenceTest8 extends FunSuite {
 
   test("Parser 1") {
     val input: Input = Input.fromString("a+a[a+a]")
-    val result: ParseResult = Iguana.parse(input, grammar, Nonterminal.withName("E"))
+    val result: ParseResult = IguanaParser.parse(input, grammar, Nonterminal.withName("E"))
     assert(result.isParseSuccess)
     assert(result.asParseSuccess.getStatistics.getCountAmbiguousNodes == 0)
   }
 
   test("Parser 2") {
     val input: Input = Input.fromString("a+a*a+[a+a]")
-    val result: ParseResult = Iguana.parse(input, grammar, Nonterminal.withName("E"))
+    val result: ParseResult = IguanaParser.parse(input, grammar, Nonterminal.withName("E"))
     assert(result.isParseError)
   }
 
   test("Parser 3") {
     val input: Input = Input.fromString("a[a][a+a]")
-    val result: ParseResult = Iguana.parse(input, grammar, Nonterminal.withName("E"))
+    val result: ParseResult = IguanaParser.parse(input, grammar, Nonterminal.withName("E"))
     assert(result.isParseError)
   }
 

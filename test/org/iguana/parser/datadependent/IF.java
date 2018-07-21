@@ -5,15 +5,12 @@ import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
 public class IF {
@@ -41,10 +38,9 @@ Grammar.builder()
 
          Input input = Input.fromString("ca");
 
-         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
 
-         Assert.assertTrue(result.isParseSuccess());
-
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
+        assertTrue(result);
     }
 }

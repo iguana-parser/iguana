@@ -32,7 +32,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
@@ -45,12 +45,12 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
 		execute(input, u, result, (Object) null, runtime);
 	}
 	
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		if (getNonterminal().testFollow(input.charAtIgnoreLayout(i)))

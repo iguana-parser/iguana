@@ -5,102 +5,17 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "B+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "B+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        }
-      ],
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "B+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        }
-      ],
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "B+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "B+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "definition" : {
-        "kind" : "Star",
-        "name" : "B*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "B*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(B* C)",
+        "name" : "(A B C)",
         "nodeType" : "Seq"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "B*",
-          "nodeType" : "Star"
+          "name" : "A"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
         },
         {
           "kind" : "Nonterminal",
@@ -109,15 +24,15 @@
       ],
       "definition" : {
         "kind" : "Sequence",
-        "name" : "(B* C)",
+        "name" : "(A B C)",
         "symbols" : [
           {
-            "kind" : "Star",
-            "name" : "B*",
-            "s" : {
-              "kind" : "Nonterminal",
-              "name" : "B"
-            }
+            "kind" : "Nonterminal",
+            "name" : "A"
+          },
+          {
+            "kind" : "Nonterminal",
+            "name" : "B"
           },
           {
             "kind" : "Nonterminal",
@@ -130,119 +45,13 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(B+ | (B* C))",
-        "nodeType" : "Alt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "B+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "definition" : {
-        "kind" : "Alt",
-        "name" : "(B+ | (B* C))",
-        "symbols" : [
-          {
-            "kind" : "Plus",
-            "name" : "B+",
-            "s" : {
-              "kind" : "Nonterminal",
-              "name" : "B"
-            }
-          },
-          {
-            "kind" : "Sequence",
-            "name" : "(B* C)",
-            "symbols" : [
-              {
-                "kind" : "Star",
-                "name" : "B*",
-                "s" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B"
-                }
-              },
-              {
-                "kind" : "Nonterminal",
-                "name" : "C"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(B+ | (B* C))",
-        "nodeType" : "Alt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B* C)",
-          "nodeType" : "Seq"
-        }
-      ],
-      "definition" : {
-        "kind" : "Alt",
-        "name" : "(B+ | (B* C))",
-        "symbols" : [
-          {
-            "kind" : "Plus",
-            "name" : "B+",
-            "s" : {
-              "kind" : "Nonterminal",
-              "name" : "B"
-            }
-          },
-          {
-            "kind" : "Sequence",
-            "name" : "(B* C)",
-            "symbols" : [
-              {
-                "kind" : "Star",
-                "name" : "B*",
-                "s" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B"
-                }
-              },
-              {
-                "kind" : "Nonterminal",
-                "name" : "C"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "S"
       },
       "body" : [
         {
-          "kind" : "Terminal",
-          "name" : "s",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 115
-          }
-        },
-        {
           "kind" : "Nonterminal",
-          "name" : "A"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B+ | (B* C))",
-          "nodeType" : "Alt"
+          "name" : "(A B C)",
+          "nodeType" : "Seq"
         }
       ]
     },

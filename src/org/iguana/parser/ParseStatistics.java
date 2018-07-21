@@ -25,19 +25,12 @@
  *
  */
 
-package org.iguana.util;
-
+package org.iguana.parser;
 
 import iguana.utils.collections.hash.MurmurHash3;
 
 public class ParseStatistics {
 
-    private final long nanoTime;
-    private final long systemTime;
-    private final long userTime;
-    private final int memoryUsed;
-
-    private final int inputLength;
     private final int descriptorsCount;
     private final int gssNodesCount;
     private final int gssEdgesCount;
@@ -48,25 +41,15 @@ public class ParseStatistics {
     private final int ambiguousNodesCount;
 
     private ParseStatistics(
-        long nanoTime,
-        long systemTime,
-        long userTime,
-        int memoryUsed,
-        int inputLength,
-        int descriptorsCount,
-        int gssNodesCount,
-        int gssEdgesCount,
-        int nonterminalNodesCount,
-        int terminalNodesCount,
-        int intermediateNodesCount,
-        int packedNodesCount,
-        int ambiguousNodesCount
+            int descriptorsCount,
+            int gssNodesCount,
+            int gssEdgesCount,
+            int nonterminalNodesCount,
+            int terminalNodesCount,
+            int intermediateNodesCount,
+            int packedNodesCount,
+            int ambiguousNodesCount
     ) {
-        this.nanoTime = nanoTime;
-        this.systemTime = systemTime;
-        this.userTime = userTime;
-        this.memoryUsed = memoryUsed;
-        this.inputLength = inputLength;
         this.descriptorsCount = descriptorsCount;
         this.gssNodesCount = gssNodesCount;
         this.gssEdgesCount = gssEdgesCount;
@@ -78,11 +61,6 @@ public class ParseStatistics {
     }
 
     public ParseStatistics(Builder builder) {
-        this.nanoTime = builder.nanoTime;
-        this.systemTime = builder.systemTime;
-        this.userTime = builder.userTime;
-        this.memoryUsed = builder.memoryUsed;
-        this.inputLength = builder.inputLength;
         this.descriptorsCount = builder.descriptorsCount;
         this.gssNodesCount = builder.gssNodesCount;
         this.gssEdgesCount = builder.gssEdgesCount;
@@ -91,26 +69,6 @@ public class ParseStatistics {
         this.intermediateNodesCount = builder.intermediateNodesCount;
         this.packedNodesCount = builder.packedNodesCount;
         this.ambiguousNodesCount = builder.ambiguousNodesCount;
-    }
-
-    public long getNanoTime() {
-        return nanoTime;
-    }
-
-    public long getSystemTime() {
-        return systemTime;
-    }
-
-    public long getUserTime() {
-        return userTime;
-    }
-
-    public int getMemoryUsed() {
-        return memoryUsed;
-    }
-
-    public int getInputLength() {
-        return inputLength;
     }
 
     public int getDescriptorsCount() {
@@ -167,8 +125,7 @@ public class ParseStatistics {
 
         ParseStatistics other = (ParseStatistics) obj;
 
-        return  inputLength == other.inputLength &&
-                descriptorsCount == other.descriptorsCount &&
+        return descriptorsCount == other.descriptorsCount &&
                 gssNodesCount == other.gssNodesCount &&
                 gssEdgesCount == other.gssEdgesCount &&
                 nonterminalNodesCount == other.nonterminalNodesCount &&
@@ -180,12 +137,7 @@ public class ParseStatistics {
 
     @Override
     public String toString() {
-        return "Parsing Time (nano time): " + nanoTime / 1000_000 + " ms" + "\n" +
-                "Parsing Time (user time): " + userTime / 1000_000 + " ms" + "\n" +
-                "Parsing Time (system time): " + systemTime / 1000_000 + " ms" + "\n" +
-                "Memory used: " + memoryUsed + " mb" + "\n" +
-                "Input length" + inputLength + "\n" +
-                "Descriptors: " + descriptorsCount + "\n" +
+        return "Descriptors: " + descriptorsCount + "\n" +
                 "GSS Nodes: " + gssNodesCount + "\n" +
                 "GSS Edges: " + gssEdgesCount + "\n" +
                 "Nonterminal nodes: " + nonterminalNodesCount + "\n" +
@@ -199,7 +151,6 @@ public class ParseStatistics {
         long nanoTime;
         long systemTime;
         long userTime;
-        int memoryUsed;
 
         int inputLength;
         int descriptorsCount;
@@ -223,11 +174,6 @@ public class ParseStatistics {
 
         public Builder setUserTime(long userTime) {
             this.userTime = userTime;
-            return this;
-        }
-
-        public Builder setMemoryUsed(int memoryUsed) {
-            this.memoryUsed = memoryUsed;
             return this;
         }
 

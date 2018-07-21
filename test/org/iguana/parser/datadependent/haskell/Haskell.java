@@ -55,7 +55,7 @@
 //import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 //import org.iguana.grammar.transformation.EBNFToBNF;
 //import org.iguana.grammar.transformation.LayoutWeaver;
-//import org.iguana.parser.Iguana;
+//import org.iguana.parser.IguanaParser;
 //import org.iguana.parser.ParseResult;
 //import org.iguana.regex.Alt;
 //import org.iguana.regex.Opt;
@@ -1006,7 +1006,7 @@
 //
 //         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);
 //
-//         ParseResult result = Iguana.parse(input, graph, Start.from(Nonterminal.withName("Module")));
+//         ParseResult result = IguanaParser.parse(input, graph, Start.from(Nonterminal.withName("Module")));
 //
 //         System.out.println(result);
 //

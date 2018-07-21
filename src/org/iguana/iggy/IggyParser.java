@@ -2,22 +2,20 @@ package org.iguana.iggy;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.parsetree.ParseTreeBuilder;
-import org.iguana.parsetree.SPPFToParseTree;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.*;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static iguana.utils.io.FileUtils.readFile;
@@ -47,90 +45,69 @@ public class IggyParser {
 
     public static Grammar getGrammar(String path) throws IOException {
         Input input = Input.fromPath(path);
-        ParseResult<NonPackedNode> parseResult = Iguana.parse(input, iggyGrammar());
+        Grammar iggyGrammar = iggyGrammar();
+        IguanaParser parser = new IguanaParser(iggyGrammar);
 
-        if (parseResult.isParseError()) {
+        if (!parser.parse(input)) {
             throw new RuntimeException("Parse error");
         }
 
-        NonterminalNode result = (NonterminalNode) parseResult.asParseSuccess().getResult();
+        Set<Symbol> ignoreSet = new HashSet<>();
+        ignoreSet.add(Nonterminal.withName("Layout"));
+        ignoreSet.add(Nonterminal.withName("WhiteSpaceOrComment"));
 
-        Grammar grammar = (Grammar) SPPFToParseTree.toParseTree(result, new ParseTreeBuilder<Object>() {
+        ParseTreeNode node = parser.getParseTree();
 
-            private Start start;
-
-            @Override
-            public Object terminalNode(Terminal terminal, int leftExtent, int rightExtent) {
-                return input.subString(leftExtent, rightExtent);
-            }
+        ParseTreeVisitor<Object> parseTreeVisitor = new ParseTreeVisitor<Object>() {
 
             @Override
-            public Object nonterminalNode(Rule rule, List<Object> children, int leftExtent, int rightExtent) {
-                if (rule.isLayout()) return null;
-
-                switch (rule.getHead().getName()) {
-
+            public Object visit(org.iguana.parsetree.NonterminalNode node) {
+                switch (node.getName()) {
                     case "Definition": {
                         Grammar.Builder builder = Grammar.builder();
-                        List<Rule> rules = (List<Rule>) children.get(0);
+                        List<Rule> rules = (List<Rule>) node.children().get(0);
                         rules.forEach(r -> builder.addRule(r));
-                        return builder.setStartSymbol(start).build();
+                        return builder.build();
                     }
 
                     case "Rule":
-                        switch (rule.getLabel()) {
+                        switch (node.getGrammarDefinition().getLabel()) {
 
                             case "Syntax":
-                                Nonterminal head = (Nonterminal) getByName(rule, children, "NontName");
-                                Optional<String> tag = getOption("Tag?", rule, children);
-                                if (tag.isPresent()) {
-                                    switch (tag.get()) {
-                                        case "@Start":
-                                            start = Start.from(head);
-                                            break;
-                                    }
+                                Nonterminal head = (Nonterminal) node.getChildWithName("NontName");
+                                Object tag = node.getChildWithName("Tag?").accept(this);
+                                if (tag != null) {
                                 }
-                                List<Symbol> body = (List<Symbol>) getByName(rule, children, "Body");
+                                List<Symbol> body = (List<Symbol>) node.getChildWithName("Body").accept(this);
                                 return new Rule.Builder(head).addSymbols(body).build();
                         }
                         break;
 
-                    case "Body":
-                        return children.get(0);
-
-                    case "NontName":
-                        return Nonterminal.withName((String) children.get(0));
-
                     case "Identifier":
-                        return input.subString(leftExtent, rightExtent);
-
-                    case "Layout":
-                    case "WhiteSpaceOrComment":
-                        return null;
+                        return input.subString(node.getStart(), node.getEnd());
                 }
-                throw new RuntimeException("Should not reach here " + rule.getHead().getName());
+
+                throw new RuntimeException("Should not reach here");
             }
 
             @Override
-            public Object ambiguityNode(Set<Object> node) {
-                throw new RuntimeException("Grammar cannot be ambiguous");
+            public Object visit(AmbiguityNode node) {
+                return null;
             }
 
             @Override
-            public Object metaSymbolNode(Symbol symbol, List<Object> children, int leftExtent, int rightExtent) {
-                if (symbol instanceof Start) {
-                    return children.get(1);
-                }
-                return children;
+            public Object visit(TerminalNode node) {
+                return null;
             }
 
-            private Optional<String> getOption(String name, Rule rule, List<Object> children) {
-                List<String> values = (List<String>) getByName(rule, children, name);
-                if (values.size() == 0) return Optional.empty();
-                if (values.size() == 1) return Optional.of(values.get(0));
-                throw new RuntimeException("There are more than one values for an optional symbol");
+            @Override
+            public Object visit(MetaSymbolNode node) {
+                return null;
             }
-        });
+        };
+
+
+        Grammar grammar = (Grammar) node.accept(parseTreeVisitor);
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();

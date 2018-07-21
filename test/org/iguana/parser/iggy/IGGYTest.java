@@ -6,14 +6,14 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.sppf.NonterminalNode;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IGGYTest {
 	
@@ -31,9 +31,11 @@ public class IGGYTest {
 		grammar = precedenceAndAssociativity.transform(grammar);
 		grammar = new LayoutWeaver().transform(grammar);
 
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("Definition"));
-		
-		Assert.assertTrue(result.isParseSuccess());
+        IguanaParser parser = new IguanaParser(grammar);
+        boolean result = parser.parse(input, Nonterminal.withName("S"));
+
+        assertTrue(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 	}
 
 }
