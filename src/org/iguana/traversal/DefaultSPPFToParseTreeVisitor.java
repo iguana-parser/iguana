@@ -13,9 +13,9 @@ import static java.util.Collections.emptyList;
 public class DefaultSPPFToParseTreeVisitor<T> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
-    private final Set<Symbol> ignoreList;
+    private final Set<String> ignoreList;
 
-    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<Symbol> ignoreList) {
+    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<String> ignoreList) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.ignoreList = ignoreList;
     }
@@ -25,7 +25,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             throw new RuntimeException("Ambiguity found: " + node);
         }
 
-        if (ignoreList.contains(node.getGrammarSlot().getNonterminal())) {
+        if (ignoreList.contains(node.getGrammarSlot().getNonterminal().getName())) {
             return null;
         }
 
@@ -45,7 +45,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                     }
                 }
 
-                return parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), toList(children), packedNode.getLeftExtent(), packedNode.getRightExtent());
+                return parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), toList(children), node.getLeftExtent(), node.getRightExtent());
             }
 
             case Star: {
@@ -79,7 +79,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                     } else {
                         T result = convert(pNode.getLeftChild());
                         if (result != null) {
-                            children.addFirst(convert(pNode.getLeftChild()));
+                            children.addFirst(result);
                         }
                         break;
                     }
@@ -175,7 +175,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             return convertUnderPlus(plus, (IntermediateNode) leftChild, children);
         }
         else {
-            if (leftChild instanceof NonterminalNode && plus.equals(leftChild.getChildAt(0).getGrammarSlot().getRule().getDefinition())) {
+            if (leftChild instanceof NonterminalNode && plus.getName().equals(leftChild.getChildAt(0).getGrammarSlot().getRule().getDefinition().getName())) {
                 return (NonterminalNode) leftChild;
             }
             result = convert(leftChild);
@@ -187,7 +187,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     private T convert(TerminalNode node) {
-        if (ignoreList.contains(node.getGrammarSlot().getTerminal())) {
+        if (ignoreList.contains(node.getGrammarSlot().getTerminal().getName())) {
             return null;
         }
         return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());

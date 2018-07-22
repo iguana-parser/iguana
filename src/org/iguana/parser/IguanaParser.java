@@ -112,11 +112,11 @@ public class IguanaParser {
         return getParseTree(emptySet(), ambiguous);
     }
 
-    public ParseTreeNode getParseTree(Set<Symbol> ignoreSet) {
-        return getParseTree(emptySet(), false);
+    public ParseTreeNode getParseTree(Set<String> ignoreSet) {
+        return getParseTree(ignoreSet, false);
     }
 
-    public ParseTreeNode getParseTree(Set<Symbol> ignoreSet, boolean ambiguous) {
+    public ParseTreeNode getParseTree(Set<String> ignoreSet, boolean ambiguous) {
         if (ambiguous) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(), ignoreSet);
             return (ParseTreeNode) root.accept(visitor).getValues().get(0);

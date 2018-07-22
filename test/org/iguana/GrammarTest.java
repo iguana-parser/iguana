@@ -36,7 +36,7 @@ public class GrammarTest {
 
     @TestFactory
     Collection<DynamicTest> grammarTests() {
-        String path = Paths.get("test/resources/grammars/ebnf").toAbsolutePath().toString();
+        String path = Paths.get("test/resources/grammars").toAbsolutePath().toString();
 
         List<Path> tests = getTests(path).stream().map(test -> Paths.get(test)).collect(Collectors.toList());
 

@@ -41,17 +41,10 @@ import java.util.List;
 public class TerminalNode extends NonPackedNode {
 
 	private TerminalGrammarSlot slot;
-	private int leftExtent;
 
 	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		super(rightExtent);
+		super(leftExtent, rightExtent);
 		this.slot = slot;
-		this.leftExtent = leftExtent;
-	}
-
-	@Override
-	public int getLeftExtent() {
-		return leftExtent;
 	}
 
 	@Override
