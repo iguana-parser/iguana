@@ -66,6 +66,7 @@ public class IguanaRuntime<T extends Result> {
 
     public Result run(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, Object> map, boolean global) {
         EnvironmentPool.clean();
+        grammarGraph.reset(input);
 
         IEvaluatorContext ctx = getEvaluatorContext();
 
@@ -113,8 +114,8 @@ public class IguanaRuntime<T extends Result> {
 
         Result root = startGSSNode.getResult(input.length() - 1);
 
-        runningTime = new RunningTime(timer.getNanoTime(), timer.getUserTime(), timer.getSystemTime());
         timer.stop();
+        runningTime = new RunningTime(timer.getNanoTime(), timer.getUserTime(), timer.getSystemTime());
 
         return root;
     }
