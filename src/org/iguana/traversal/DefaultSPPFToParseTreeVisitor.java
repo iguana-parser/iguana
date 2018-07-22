@@ -1,5 +1,7 @@
 package org.iguana.traversal;
 
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.sppf.*;
@@ -31,21 +33,19 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         switch (node.getGrammarSlot().getNodeType()) {
             case Layout:
             case Basic: {
-                Deque<T> children;
+                Deque<T> children = new ArrayDeque<>();
 
                 NonPackedNode child = packedNode.getLeftChild();
                 if (child instanceof IntermediateNode) {
-                    children = new ArrayDeque<>();
                     convert((IntermediateNode) child, children);
                 } else {
-                    children = new ArrayDeque<>(1);
                     T result = convert(child);
                     if (result != null) {
                         children.addFirst(result);
                     }
                 }
 
-                return parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), new ArrayList<>(children), packedNode.getLeftExtent(), packedNode.getRightExtent());
+                return parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), toList(children), packedNode.getLeftExtent(), packedNode.getRightExtent());
             }
 
             case Star: {
@@ -57,49 +57,65 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                 } else {
                     children = parseTreeBuilder.getChildren(convert(node.getChildAt(0).getLeftChild()));
                 }
-                return parseTreeBuilder.metaSymbolNode(symbol, new ArrayList<>(children), node.getLeftExtent(), node.getRightExtent());
+                return parseTreeBuilder.metaSymbolNode(symbol, children, node.getLeftExtent(), node.getRightExtent());
             }
 
+
             case Plus: {
-                Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
-                Deque<T> children = new ArrayDeque<>();
+                Plus symbol = (Plus) packedNode.getGrammarSlot().getRule().getDefinition();
 
                 PackedNode pNode = node.getChildAt(0);
 
+                Deque<T> children = new ArrayDeque<>();
+
                 while (true) {
                     if (pNode.getLeftChild() instanceof IntermediateNode) {
-                        children.addFirst(convert(pNode.getLeftChild().getChildAt(0).getRightChild()));
-                        if (pNode.getLeftChild().getChildAt(0).getLeftChild() instanceof IntermediateNode) { // + with separator
-                            children.addFirst(convert(pNode.getLeftChild().getChildAt(0).getLeftChild().getChildAt(0).getRightChild()));
-                            pNode = pNode.getLeftChild().getChildAt(0).getLeftChild().getChildAt(0).getLeftChild().getChildAt(0);
+                        NonterminalNode nextPlusNode = convertUnderPlus(symbol, (IntermediateNode) pNode.getLeftChild(), children);
+                        if (nextPlusNode == null) {
+                            break;
                         } else {
-                            pNode = pNode.getLeftChild().getChildAt(0).getLeftChild().getChildAt(0);
+                            pNode = nextPlusNode.getChildAt(0);
                         }
                     } else {
-                        children.addFirst(convert(pNode.getLeftChild()));
+                        T result = convert(pNode.getLeftChild());
+                        if (result != null) {
+                            children.addFirst(convert(pNode.getLeftChild()));
+                        }
                         break;
                     }
                 }
 
-                return parseTreeBuilder.metaSymbolNode(symbol, new ArrayList<>(children), node.getLeftExtent(), node.getRightExtent());
+                return parseTreeBuilder.metaSymbolNode(symbol, toList(children), node.getLeftExtent(), node.getRightExtent());
             }
 
             case Seq: {
-                Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
+                Sequence symbol = (Sequence) packedNode.getGrammarSlot().getRule().getDefinition();
                 NonPackedNode child = node.getChildAt(0).getLeftChild();
-                Deque<T> children;
+                Deque<T> children = new ArrayDeque<>();
                 if (child instanceof IntermediateNode) {
-                    children = new ArrayDeque<>();
                     convert((IntermediateNode) child, children);
                 } else {
-                    children = new ArrayDeque<>();
                     children.addFirst(convert(child));
                 }
-                return parseTreeBuilder.metaSymbolNode(symbol, new ArrayList<>(children), node.getLeftExtent(), node.getRightExtent());
+                return parseTreeBuilder.metaSymbolNode(symbol, toList(children), node.getLeftExtent(), node.getRightExtent());
             }
 
+            case Start: {
+                Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
+                Deque<T> children = new ArrayDeque<>();
+                if (packedNode.getLeftChild() instanceof IntermediateNode) {
+                    convert((IntermediateNode) packedNode.getLeftChild(), children);
+                } else {
+                    T result = convert(packedNode.getLeftChild());
+                    if (result != null) {
+                        children.add(result);
+                    }
+                }
+                return parseTreeBuilder.metaSymbolNode(symbol, toList(children), node.getLeftExtent(), node.getRightExtent());
+            }
+
+
             case Alt:
-            case Start:
             case Opt: {
                 Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
                 List<T> children;
@@ -107,7 +123,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                 if (result == null) {
                     children = emptyList();
                 } else {
-                    children = new ArrayList<>();
+                    children = new ArrayList<>(1);
                     children.add(result);
                 }
                 return parseTreeBuilder.metaSymbolNode(symbol, children, node.getLeftExtent(), node.getRightExtent());
@@ -142,6 +158,34 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         }
     }
 
+    private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, Deque<T> children) {
+        if (node.isAmbiguous()) {
+            throw new RuntimeException("Ambiguity found: " + node);
+        }
+
+        NonPackedNode leftChild = node.getChildAt(0).getLeftChild();
+        NonPackedNode rightChild = node.getChildAt(0).getRightChild();
+
+        T result = convert(rightChild);
+        if (result != null) {
+            children.addFirst(result);
+        }
+
+        if (leftChild instanceof IntermediateNode) {
+            return convertUnderPlus(plus, (IntermediateNode) leftChild, children);
+        }
+        else {
+            if (leftChild instanceof NonterminalNode && plus.equals(leftChild.getChildAt(0).getGrammarSlot().getRule().getDefinition())) {
+                return (NonterminalNode) leftChild;
+            }
+            result = convert(leftChild);
+            if (result != null) {
+                children.addFirst(result);
+            }
+        }
+        return null;
+    }
+
     private T convert(TerminalNode node) {
         if (ignoreList.contains(node.getGrammarSlot().getTerminal())) {
             return null;
@@ -156,6 +200,10 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             return convert((NonterminalNode) node);
         }
         throw new RuntimeException("Can only be a terminal or nonterminal node");
+    }
+
+    private List<T> toList(Deque<T> deque) {
+        return deque.size() == 0 ? emptyList() : new ArrayList<>(deque);
     }
 
 }
