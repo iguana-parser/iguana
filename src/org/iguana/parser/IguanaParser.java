@@ -43,6 +43,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
+import org.iguana.util.RunningTime;
 
 import java.util.Map;
 import java.util.Set;
@@ -94,6 +95,10 @@ public class IguanaParser {
 
     public ParseError getParseError() {
         return runtime.getParseError();
+    }
+
+    public RunningTime getRunningTime() {
+        return runtime.getRunningTime();
     }
 
     public ParseStatistics getStatistics() {
