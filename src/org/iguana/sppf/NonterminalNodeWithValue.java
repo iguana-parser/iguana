@@ -6,8 +6,8 @@ public class NonterminalNodeWithValue extends NonterminalNode {
 
     private final Object value;
 
-    public NonterminalNodeWithValue(NonterminalGrammarSlot slot, int rightExtent, Object value) {
-        super(slot, rightExtent);
+    public NonterminalNodeWithValue(NonterminalGrammarSlot slot, int leftExtent, int rightExtent, Object value) {
+        super(slot, leftExtent, rightExtent);
         this.value = value;
     }
 
