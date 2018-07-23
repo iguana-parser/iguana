@@ -55,7 +55,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                 if (result == null) {
                     children = emptyList();
                 } else {
-                    children = parseTreeBuilder.getChildren(convert(node.getChildAt(0).getLeftChild()));
+                    children = parseTreeBuilder.getChildren(result);
                 }
                 return parseTreeBuilder.metaSymbolNode(symbol, children, node.getLeftExtent(), node.getRightExtent());
             }
