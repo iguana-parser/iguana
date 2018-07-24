@@ -35,7 +35,7 @@ public class TerminalNode implements ParseTreeNode {
 
     @Override
     public <R> R accept(ParseTreeVisitor<R> visitor) {
-        return visitor.visit(this);
+        return visitor.visitTerminalNode(this);
     }
 
     @Override

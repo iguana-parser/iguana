@@ -61,7 +61,7 @@ public class IggyParser {
         ParseTreeVisitor<Object> parseTreeVisitor = new ParseTreeVisitor<Object>() {
 
             @Override
-            public Object visit(org.iguana.parsetree.NonterminalNode node) {
+            public Object visitNonterminalNode(org.iguana.parsetree.NonterminalNode node) {
                 switch (node.getName()) {
                     case "Definition": {
                         Grammar.Builder builder = Grammar.builder();
@@ -91,17 +91,17 @@ public class IggyParser {
             }
 
             @Override
-            public Object visit(AmbiguityNode node) {
+            public Object visitAmbiguityNode(AmbiguityNode node) {
                 return null;
             }
 
             @Override
-            public Object visit(TerminalNode node) {
+            public Object visitTerminalNode(TerminalNode node) {
                 return null;
             }
 
             @Override
-            public Object visit(MetaSymbolNode node) {
+            public Object visitMetaSymbolNode(MetaSymbolNode node) {
                 return null;
             }
         };
