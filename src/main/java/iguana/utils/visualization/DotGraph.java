@@ -223,8 +223,8 @@ public class DotGraph {
                    "style = solid, " +
                    "penwidth = 0.5, " +
                    "arrowsize = 0.7, " + "" +
-                   "label = \"" + label + "\"" +
-                    "];\n";
+                   "label = \"" + (label == null ? "" : label) + "\"" +
+                   "];\n";
         }
     }
 }

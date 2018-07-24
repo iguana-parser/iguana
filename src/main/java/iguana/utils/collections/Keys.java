@@ -21,6 +21,8 @@ public class Keys {
 
     public static Key from(int a, int b, Object object) { return new IntIntObjectKey(a, b, object); }
 
+    public static Key from(int a, int b, int c, Object object) { return new IntIntIntObjectKey(a, b, c, object); }
+
     public static Key from(IntFunction2 f, int a, int b) {
         return new IntKey2(a, b, f.apply(a, b));
     }
