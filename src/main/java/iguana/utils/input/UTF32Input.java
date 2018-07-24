@@ -78,19 +78,4 @@ class UTF32Input extends AbstractInput {
         return subString(0, characters.length - 1);
     }
 
-    @Override
-    int[] calculateLineLengths(int lineCount) {
-        int[] lineStarts = new int[lineCount];
-        lineStarts[0] = 0;
-        int j = 0;
-
-        for (int i = 0; i < characters.length; i++) {
-            if (characters[i] == '\n') {
-                if (i + 1 < characters.length)
-                    lineStarts[++j] = i + 1;
-            }
-        }
-        return lineStarts;
-    }
-
 }

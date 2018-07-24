@@ -8,27 +8,23 @@ public class DefaultInput extends AbstractInput {
 
     DefaultInput(String s, int lineCount, URI uri) {
         super(lineCount, uri);
-        this.s = s + EOF;
+        this.s = s;
     }
 
     @Override
     public int charAt(int index) {
+        if (index == s.length()) return EOF;
         return s.charAt(index);
     }
 
     @Override
     public int length() {
-        return s.length();
-    }
-    
-    @Override
-    public String subString(int start, int end) {
-        return null;
+        return s.length() + 1;
     }
 
     @Override
-    int[] calculateLineLengths(int lineCount) {
-        return new int[0];
+    public String subString(int start, int end) {
+        return s.substring(start, end);
     }
 
 }

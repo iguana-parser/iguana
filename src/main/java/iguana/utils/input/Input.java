@@ -66,9 +66,24 @@ public interface Input {
 	}
 
 	static Input createInput(String s, URI uri) {
-		int[] characters = new int[s.length() + 1];
+		boolean hasSurrogatePair = false;
 
 		int lineCount = 0;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (isHighSurrogate(c)) {
+				hasSurrogatePair = true;
+			}
+			if (c == '\n') {
+				lineCount++;
+			}
+		}
+
+		if (!hasSurrogatePair) {
+			return new DefaultInput(s, lineCount + 1, uri);
+		}
+
+		int[] characters = new int[s.length() + 1];
 
 		int i = 0;
 		int j = 0;
@@ -76,9 +91,7 @@ public interface Input {
 			char c = s.charAt(i);
 			if (!Character.isHighSurrogate(c)) {
 				characters[j++] = c;
-				if (c == '\n') {
-					lineCount++;
-				}
+
 				i++;
 			} else {
 				if (i < s.length() - 1) {
@@ -106,7 +119,21 @@ public interface Input {
 		}
 	}
 
-    /**
+	default int[] calculateLineLengths(int lineCount) {
+		int[] lineStarts = new int[lineCount];
+		lineStarts[0] = 0;
+		int j = 0;
+
+		for (int i = 0; i < length(); i++) {
+			if (charAt(i) == '\n') {
+				if (i + 1 < length())
+					lineStarts[++j] = i + 1;
+			}
+		}
+		return lineStarts;
+	}
+
+	/**
      * The length is one more than the actual characters in the input as the last input character is considered EOF.
      */
 	int length();
