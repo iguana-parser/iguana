@@ -27,8 +27,6 @@
 
 package iguana.utils.input;
 
-import iguana.utils.collections.tuple.IntTuple;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -36,9 +34,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -48,60 +43,29 @@ import java.util.List;
  * @author Ali Afroozeh
  *
  */
-public class Input {
+public interface Input {
 
-    private static final int EOF = -1;
+    int EOF = -1;
 
-	private final int[] characters;
-
-	private int[] lineStarts;
-
-	private final int lineCount;
-
-	private final int length;
-	
-	private final URI uri;
-
-	private final int hash;
-
-	public static Input fromString(String s) {
-		return new Input(s, null);
+	static Input fromString(String s) {
+		return createInput(s, null);
 	}
 
-	public static Input fromPath(String path) throws IOException {
-		return fromPath(path, StandardCharsets.UTF_8);
-	}
-
-	public static Input fromPath(String path, Charset charset) throws IOException {
-		return new Input(new String(Files.readAllBytes(Paths.get(path)), charset), URI.create(path));
-	}
-
-	public static Input fromFile(File file) throws IOException {
+	static Input fromFile(File file) throws IOException {
 		return fromFile(file, StandardCharsets.UTF_8);
 	}
 
-	public static Input fromFile(File file, Charset charset) throws IOException {
-		return new Input(new String(Files.readAllBytes(Paths.get(file.toURI())), charset), file.toURI());
+	static Input fromFile(File file, Charset charset) throws IOException {
+		return createInput(new String(Files.readAllBytes(Paths.get(file.toURI())), charset), file.toURI());
 	}
 
-	public static Input empty() {
+	static Input empty() {
 		return fromString("");
 	}
 
-	private Input(String s, URI uri) {
-		this.uri = uri;
+	static Input createInput(String s, URI uri) {
+		int[] characters = new int[s.length() + 1];
 
-		this.characters = new int[s.length() + 1];
-
-		IntTuple result = convertStringToIntArray(s, characters);
-
-		this.length = result.first();
-		this.lineCount = result.second();
-
-		this.hash = Arrays.hashCode(characters);
-	}
-
-	private static IntTuple convertStringToIntArray(String s, int[] characters) {
 		int lineCount = 0;
 
 		int i = 0;
@@ -124,221 +88,41 @@ public class Input {
 			}
 		}
 
-		characters[j++] = EOF;
+		characters[j] = EOF;
 
-		return IntTuple.of(j, lineCount + 1);
+		return new UTF32Input(characters, j + 1, lineCount + 1, uri);
 	}
 
-	private static int[] calculateLineLengths(int lineCount, int[] characters) {
-		int[] lineStarts = new int[lineCount];
-		lineStarts[0] = 0;
-		int j = 0;
+	int charAt(int index);
 
-		for (int i = 0; i < characters.length; i++) {
-			if (characters[i] == '\n') {
-				if (i + 1 < characters.length)
-					lineStarts[++j] = i + 1;
-			}
-		}
-		return lineStarts;
-	}
-	
-	public int charAt(int index) {
-		return characters[index];
-	}
-
-	public int charAtIgnoreLayout(int index) {
-		while (true) {
-			int c = characters[index++];
-			if (c == EOF) return EOF;
-			if (!Character.isWhitespace(c))
-				return c;
-		}
-	}
+	int charAtIgnoreLayout(int index);
 
     /**
      * The length is one more than the actual characters in the input as the last input character is considered EOF.
      */
-	public int length() {
-		return length;
-	}
+	int length();
 	
-	public boolean match(int start, int end, String target) {
-		return match(start, end, toIntArray(target));
-	}
+	boolean match(int start, int end, String target);
 	
-	public boolean match(int start, int end, int[] target) {
-		if(target.length != end - start) {
-			return false;
-		}
-	 	
-		int i = 0;
-		while(i < target.length) {
-			if(target[i] != characters[start + i]) {
-				return false;
-			}
-			i++;
-		}
-		
-		return true;
-	}
-
-	public boolean match(int from, String target) {
-		return match(from, toIntArray(target));
-	}
+	boolean match(int from, String target);
 	
-	public boolean matchBackward(int start, String target) {
-		return matchBackward(start, toIntArray(target));
-	}
+	boolean matchBackward(int start, String target);
 	
-	public boolean matchBackward(int start, int[] target) {
-		if(start - target.length < 0) {
-			return false;
-		}
-		
-		int i = target.length - 1;
-		int j = start - 1;
-		while(i >= 0) {
-			if(target[i] != characters[j]) {
-				return false;
-			}
-			i--;
-			j--;
-		}
-		
-		return true;
-	}
+	int getLineNumber(int inputIndex);
+
+	int getColumnNumber(int inputIndex);
+
+	String subString(int start, int end);
+
+	int getLineCount();
 	
-	public boolean match(int from, int[] target) {
-		if (target.length > length() - from) {
-			return false;
-		}
-		
-		int i = 0;
-		while (i < target.length) {
-			if(target[i] != characters[from + i]) {
-				return false;
-			}
-			i++;
-		}
-		
-		return true;
-	}
-
-	public int getLineNumber(int inputIndex) {
-        checkBounds(inputIndex, length());
-		checkLineStartsInitialized();
-
-        int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
-        if (lineStart >= 0) return lineStart + 1;
-        return -lineStart - 1;
-	}
-
-	public int getColumnNumber(int inputIndex) {
-        checkBounds(inputIndex, length());
-		checkLineStartsInitialized();
-
-        int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
-        if (lineStart >= 0) return 1;
-        return inputIndex - lineStarts[-lineStart - 1 - 1] + 1;
-	}
-
-	private void checkLineStartsInitialized() {
-		if (lineStarts == null) {
-			lineStarts = calculateLineLengths(getLineCount(), characters);
-		}
-	}
-
-	@Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-
-		if (!(obj instanceof Input)) return false;
-
-		Input other = (Input) obj;
-
-		return this.length() == other.length() &&
-               this.hash == other.hash &&
-               Arrays.equals(characters, other.characters);
-	}
-
-	/**
-	 * Returns a string representation of this input instance from the
-	 * given start (including) and end (excluding) indices.
-	 *  
-	 */
-	public String subString(int start, int end) {
-		List<Character> charList = new ArrayList<>();
-		
-		for(int i = start; i < end; i++) {
-			if (characters[i] == -1) continue;
-			char[] chars = Character.toChars(characters[i]);
-			for(char c : chars) {
-				charList.add(c);
-			}			
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for(char c : charList) {
-			sb.append(c);
-		}
-		
-		return sb.toString();
-	}
-
-	@Override
-	public String toString() {
-		return subString(0, characters.length - 1);
-	}
+	boolean isEmpty();
 	
-	public int getLineCount() {
-		return this.lineCount;
-	}
+	URI getURI();
+
+    boolean isStartOfLine(int inputIndex);
+
+	boolean isEndOfLine(int inputIndex);
 	
-	public boolean isEmpty() {
-		return length() == 1;
-	}
-	
-	public URI getURI() {
-		return uri;
-	}
-
-    public boolean isStartOfLine(int inputIndex) {
-        checkBounds(inputIndex, length());
-        checkLineStartsInitialized();
-
-        return Arrays.binarySearch(lineStarts, inputIndex) >= 0;
-    }
-
-	public boolean isEndOfLine(int inputIndex) {
-        checkBounds(inputIndex, length());
-
-        return charAt(inputIndex) == '\n' || charAt(inputIndex) == EOF;
-	}
-	
-	public boolean isEndOfFile(int inputIndex) {
-        checkBounds(inputIndex, length());
-
-		return characters[inputIndex] == -1;
-	}
-
-    private static void checkBounds(int index, int length) {
-        if (index < 0 || index >= length) {
-            throw new IndexOutOfBoundsException("index must be greater than or equal to 0 and smaller than the input length (" + length + ")");
-        }
-    }
-
-    private static int[] toIntArray(String s) {
-        int[] array = new int[s.codePointCount(0, s.length())];
-        for(int i = 0; i < array.length; i++) {
-            array[i] = s.codePointAt(i);
-        }
-        return array;
-    }
-
+	boolean isEndOfFile(int inputIndex);
 }
