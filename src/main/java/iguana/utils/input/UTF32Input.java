@@ -1,60 +1,27 @@
 package iguana.utils.input;
 
-import iguana.utils.collections.tuple.IntTuple;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class UTF32Input implements Input {
+class UTF32Input extends AbstractInput {
 
     private static final int EOF = -1;
 
     private final int[] characters;
 
-    private int[] lineStarts;
-
-    private final int lineCount;
-
     private final int length;
 
-    private final URI uri;
-
     UTF32Input(int[] characters, int length, int lineCount, URI uri) {
-        this.uri = uri;
+        super(lineCount, uri);
         this.characters = characters;
         this.length = length;
-        this.lineCount = lineCount;
-    }
-
-    private static int[] calculateLineLengths(int lineCount, int[] characters) {
-        int[] lineStarts = new int[lineCount];
-        lineStarts[0] = 0;
-        int j = 0;
-
-        for (int i = 0; i < characters.length; i++) {
-            if (characters[i] == '\n') {
-                if (i + 1 < characters.length)
-                    lineStarts[++j] = i + 1;
-            }
-        }
-        return lineStarts;
     }
 
     @Override
     public int charAt(int index) {
         return characters[index];
-    }
-
-    @Override
-    public int charAtIgnoreLayout(int index) {
-        while (true) {
-            int c = characters[index++];
-            if (c == EOF) return EOF;
-            if (!Character.isWhitespace(c))
-                return c;
-        }
     }
 
     /**
@@ -63,97 +30,6 @@ class UTF32Input implements Input {
     @Override
     public int length() {
         return length;
-    }
-
-    @Override
-    public boolean match(int start, int end, String target) {
-        return match(start, end, toIntArray(target));
-    }
-
-    public boolean match(int start, int end, int[] target) {
-        if(target.length != end - start) {
-            return false;
-        }
-
-        int i = 0;
-        while(i < target.length) {
-            if(target[i] != characters[start + i]) {
-                return false;
-            }
-            i++;
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean match(int from, String target) {
-        return match(from, toIntArray(target));
-    }
-
-    @Override
-    public boolean matchBackward(int start, String target) {
-        return matchBackward(start, toIntArray(target));
-    }
-
-    public boolean matchBackward(int start, int[] target) {
-        if(start - target.length < 0) {
-            return false;
-        }
-
-        int i = target.length - 1;
-        int j = start - 1;
-        while(i >= 0) {
-            if(target[i] != characters[j]) {
-                return false;
-            }
-            i--;
-            j--;
-        }
-
-        return true;
-    }
-
-    public boolean match(int from, int[] target) {
-        if (target.length > length() - from) {
-            return false;
-        }
-
-        int i = 0;
-        while (i < target.length) {
-            if(target[i] != characters[from + i]) {
-                return false;
-            }
-            i++;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int getLineNumber(int inputIndex) {
-        checkBounds(inputIndex, length());
-        checkLineStartsInitialized();
-
-        int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
-        if (lineStart >= 0) return lineStart + 1;
-        return -lineStart - 1;
-    }
-
-    @Override
-    public int getColumnNumber(int inputIndex) {
-        checkBounds(inputIndex, length());
-        checkLineStartsInitialized();
-
-        int lineStart = Arrays.binarySearch(lineStarts, inputIndex);
-        if (lineStart >= 0) return 1;
-        return inputIndex - lineStarts[-lineStart - 1 - 1] + 1;
-    }
-
-    private void checkLineStartsInitialized() {
-        if (lineStarts == null) {
-            lineStarts = calculateLineLengths(getLineCount(), characters);
-        }
     }
 
     @Override
@@ -202,49 +78,19 @@ class UTF32Input implements Input {
         return subString(0, characters.length - 1);
     }
 
-    public int getLineCount() {
-        return this.lineCount;
-    }
+    @Override
+    int[] calculateLineLengths(int lineCount) {
+        int[] lineStarts = new int[lineCount];
+        lineStarts[0] = 0;
+        int j = 0;
 
-    public boolean isEmpty() {
-        return length() == 1;
-    }
-
-    public URI getURI() {
-        return uri;
-    }
-
-    public boolean isStartOfLine(int inputIndex) {
-        checkBounds(inputIndex, length());
-        checkLineStartsInitialized();
-
-        return Arrays.binarySearch(lineStarts, inputIndex) >= 0;
-    }
-
-    public boolean isEndOfLine(int inputIndex) {
-        checkBounds(inputIndex, length());
-
-        return charAt(inputIndex) == '\n' || charAt(inputIndex) == EOF;
-    }
-
-    public boolean isEndOfFile(int inputIndex) {
-        checkBounds(inputIndex, length());
-
-        return characters[inputIndex] == -1;
-    }
-
-    private static void checkBounds(int index, int length) {
-        if (index < 0 || index >= length) {
-            throw new IndexOutOfBoundsException("index must be greater than or equal to 0 and smaller than the input length (" + length + ")");
+        for (int i = 0; i < characters.length; i++) {
+            if (characters[i] == '\n') {
+                if (i + 1 < characters.length)
+                    lineStarts[++j] = i + 1;
+            }
         }
-    }
-
-    private static int[] toIntArray(String s) {
-        int[] array = new int[s.codePointCount(0, s.length())];
-        for(int i = 0; i < array.length; i++) {
-            array[i] = s.codePointAt(i);
-        }
-        return array;
+        return lineStarts;
     }
 
 }

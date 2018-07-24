@@ -189,8 +189,8 @@ public class InputTest {
 	
 	@Test
 	public void testMatch2() {
-		assertTrue(input5.match(0, 2, "We"));
-		assertTrue(input5.match(3, 11, "are just"));
+		assertTrue(input5.match(0, "We"));
+		assertTrue(input5.match(3, "are just"));
 	}
 	
 	@Test

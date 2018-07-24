@@ -35,6 +35,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static java.lang.Character.*;
+
 
 /**
  * 
@@ -95,19 +97,65 @@ public interface Input {
 
 	int charAt(int index);
 
-	int charAtIgnoreLayout(int index);
+	default int charAtIgnoreLayout(int index) {
+		while (true) {
+			int c = charAt(index++);
+			if (c == EOF) return EOF;
+			if (!isWhitespace(c))
+				return c;
+		}
+	}
 
     /**
      * The length is one more than the actual characters in the input as the last input character is considered EOF.
      */
 	int length();
 	
-	boolean match(int start, int end, String target);
+	default boolean match(int index, String target) {
+		int end = index + target.length();
+		int i = index;
+		while (i < end) {
+			char c = target.charAt(i - index);
+			int targetVal = c;
+			if (isHighSurrogate(c) && i < target.length()) {
+				targetVal = toCodePoint(c, target.charAt(i + 1));
+				i++;
+			}
+			if (targetVal != charAt(i)) {
+				return false;
+			}
+			i++;
+		}
+
+		return true;
+	}
 	
-	boolean match(int from, String target);
-	
-	boolean matchBackward(int start, String target);
-	
+	default boolean matchBackward(int index, String target) {
+		int i = index - 1;
+		int j = target.length() - 1;
+
+		while (j >= 0) {
+			char c = target.charAt(j);
+			int targetVal = c;
+			if (isLowSurrogate(c) && i > 0) {
+				targetVal = toCodePoint(c, target.charAt(j - 1));
+				i--;
+				j--;
+			}
+			if (targetVal != charAt(i)) {
+				return false;
+			}
+			i--;
+			j--;
+		}
+
+		return true;
+	}
+
+	default boolean isEmpty() {
+		return length() == 1;
+	}
+
 	int getLineNumber(int inputIndex);
 
 	int getColumnNumber(int inputIndex);
@@ -115,8 +163,6 @@ public interface Input {
 	String subString(int start, int end);
 
 	int getLineCount();
-	
-	boolean isEmpty();
 	
 	URI getURI();
 
