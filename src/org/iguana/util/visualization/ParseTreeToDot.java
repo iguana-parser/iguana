@@ -33,7 +33,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public Integer visit(NonterminalNode node) {
+    public Integer visitNonterminalNode(NonterminalNode node) {
         int id = nextId();
         String label = String.format("(%s, %d, %d)", node.getGrammarDefinition().getHead().getName(), node.getStart(), node.getEnd());
         dotGraph.addNode(newNode(id, label));
@@ -43,7 +43,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public Integer visit(MetaSymbolNode node) {
+    public Integer visitMetaSymbolNode(MetaSymbolNode node) {
         int id = nextId();
         String label = String.format("%s", node.getName());
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));
@@ -53,7 +53,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public Integer visit(AmbiguityNode node) {
+    public Integer visitAmbiguityNode(AmbiguityNode node) {
         int id = nextId();
         dotGraph.addNode(newNode(id).setShape(DotGraph.Shape.DIAMOND).setColor(DotGraph.Color.RED));
 
@@ -62,7 +62,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public Integer visit(TerminalNode node) {
+    public Integer visitTerminalNode(TerminalNode node) {
         if (exclude.contains(node.getGrammarDefinition().getName())) return null;
 
         String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarDefinition().getName(), node.getStart(), node.getEnd(), node.getText(input));
