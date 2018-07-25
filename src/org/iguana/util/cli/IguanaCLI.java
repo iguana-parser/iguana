@@ -40,6 +40,7 @@ import org.iguana.util.serialization.SPPFJsonSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
 import org.iguana.util.visualization.SPPFToDot;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
@@ -63,7 +64,7 @@ public class IguanaCLI {
 
             if (line.hasOption("input")) {
                 try {
-                    input = Input.fromPath(line.getOptionValue("input"));
+                    input = Input.fromFile(new File(line.getOptionValue("input")));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

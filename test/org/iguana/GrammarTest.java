@@ -65,7 +65,7 @@ public class GrammarTest {
 
                 Input input;
                 try {
-                    input = Input.fromPath(inputPath);
+                    input = Input.fromFile(new File(inputPath));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

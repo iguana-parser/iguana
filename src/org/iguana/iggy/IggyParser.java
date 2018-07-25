@@ -13,6 +13,7 @@ import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.*;
 import org.iguana.util.serialization.JsonSerializer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,7 @@ public class IggyParser {
     }
 
     public static Grammar getGrammar(String path) throws IOException {
-        Input input = Input.fromPath(path);
+        Input input = Input.fromFile(new File(path));
         Grammar iggyGrammar = iggyGrammar();
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
