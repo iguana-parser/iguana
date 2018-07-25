@@ -1,7 +1,5 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,10 +11,6 @@ public interface ParseTreeNode {
     Object getGrammarDefinition();
 
     <R> R accept(ParseTreeVisitor<R> visitor);
-
-    default String getText(Input input) {
-        return input.subString(getStart(), getEnd());
-    }
 
     default List<ParseTreeNode> children() {
         return Collections.emptyList();
