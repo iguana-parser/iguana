@@ -60,7 +60,7 @@ public class TestCSharp {
 	
 	@Test
 	public void test1() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test1.cs").getPath());
+		Input input = Input.fromFile(new File(getClass().getResource("examples/Test1.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
         boolean result = parser.parse(input, start);
@@ -81,7 +81,7 @@ public class TestCSharp {
 	
 	@Test
 	public void test2() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test2.cs").getPath());
+		Input input = Input.fromFile(new File(getClass().getResource("examples/Test2.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
         boolean result = parser.parse(input, Nonterminal.withName("S"));
@@ -104,7 +104,7 @@ public class TestCSharp {
 
 	@Test
 	public void test3() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test7.cs").getPath());
+		Input input = Input.fromFile(new File(getClass().getResource("examples/Test7.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
         boolean result = parser.parse(input, Nonterminal.withName("S"));
