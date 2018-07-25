@@ -65,7 +65,8 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     public Integer visitTerminalNode(TerminalNode node) {
         if (exclude.contains(node.getGrammarDefinition().getName())) return null;
 
-        String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarDefinition().getName(), node.getStart(), node.getEnd(), node.getText(input));
+        String text = input.subString(node.getStart(), node.getEnd());
+        String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarDefinition().getName(), node.getStart(), node.getEnd(), text);
         int id = nextId();
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));
         return id;
