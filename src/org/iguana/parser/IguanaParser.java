@@ -34,7 +34,6 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Symbol;
 import org.iguana.gss.GSSNode;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -58,6 +57,7 @@ public class IguanaParser {
     private final GrammarGraph grammarGraph;
     private final IguanaRuntime runtime;
 
+    private Input input;
     private NonterminalNode root;
 
     public IguanaParser(Grammar grammar) {
@@ -82,6 +82,7 @@ public class IguanaParser {
         EnvironmentPool.clean();
         grammarGraph.reset(input);
         root = (NonterminalNode) runtime.run(input, grammarGraph, nonterminal, map, global);
+        this.input = input;
         return root != null;
     }
 
@@ -123,10 +124,10 @@ public class IguanaParser {
 
     public ParseTreeNode getParseTree(Set<String> ignoreSet, boolean ambiguous) {
         if (ambiguous) {
-            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(), ignoreSet);
+            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), ignoreSet);
             return (ParseTreeNode) root.accept(visitor).getValues().get(0);
         }
-        DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(), ignoreSet);
+        DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), ignoreSet);
         return (ParseTreeNode) converter.convert(root);
     }
 

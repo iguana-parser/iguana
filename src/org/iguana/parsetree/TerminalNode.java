@@ -11,11 +11,13 @@ public class TerminalNode implements ParseTreeNode {
     private final Terminal terminal;
     private final int start;
     private final int end;
+    private final String text;
 
-    public TerminalNode(Terminal terminal, int start, int end) {
+    public TerminalNode(Terminal terminal, int start, int end, String text) {
         this.terminal = requireNonNull(terminal);
         this.start = requireNonNegative(start);
         this.end = requireNonNegative(end);
+        this.text = requireNonNull(text);
     }
 
     @Override
@@ -41,6 +43,11 @@ public class TerminalNode implements ParseTreeNode {
     @Override
     public Terminal getGrammarDefinition() {
         return terminal;
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override
