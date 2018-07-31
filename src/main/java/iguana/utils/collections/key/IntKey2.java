@@ -31,12 +31,10 @@ public class IntKey2 implements Key, Comparable<IntKey2> {
 
     private final int k1;
     private final int k2;
-    private final int hash;
 
-    public IntKey2(int k1, int k2, int hash) {
+    public IntKey2(int k1, int k2) {
         this.k1 = k1;
         this.k2 = k2;
-        this.hash = hash;
     }
 
     @Override
@@ -48,12 +46,12 @@ public class IntKey2 implements Key, Comparable<IntKey2> {
             return false;
 
         IntKey2 other = (IntKey2) obj;
-        return hash == other.hash && k1 == other.k1 && k2 == other.k2;
+        return k1 == other.k1 && k2 == other.k2;
     }
 
     @Override
     public int hashCode() {
-        return hash;
+        return k1 * 31 + k2;
     }
 
     @Override
