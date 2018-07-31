@@ -9,6 +9,7 @@ public interface ParseTreeNode {
     int getEnd();
     String getName();
     Object getGrammarDefinition();
+    String getText();
 
     <R> R accept(ParseTreeVisitor<R> visitor);
 

@@ -54,6 +54,17 @@ public class NonterminalNode implements ParseTreeNode {
     }
 
     @Override
+    public String getText() {
+        if (children.size() == 1) return children.get(0).getText();
+
+        StringBuilder sb = new StringBuilder();
+        for (ParseTreeNode child : children) {
+            sb.append(child.getText());
+        }
+        return sb.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof NonterminalNode)) return false;

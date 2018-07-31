@@ -68,4 +68,13 @@ public class MetaSymbolNode implements ParseTreeNode {
     public Symbol getGrammarDefinition() {
         return symbol;
     }
+
+    @Override
+    public String getText() {
+        StringBuilder sb = new StringBuilder();
+        for (ParseTreeNode child : children) {
+            sb.append(child.getText());
+        }
+        return sb.toString();
+    }
 }

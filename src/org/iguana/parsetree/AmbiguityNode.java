@@ -6,17 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static iguana.utils.Assert.requireNonEmpty;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 
 public class AmbiguityNode implements ParseTreeNode {
 
-    private final List<ParseTreeNode> alternatives;
+    private final Set<ParseTreeNode> alternatives;
 
     public AmbiguityNode(Set<ParseTreeNode> alternatives) {
-        this.alternatives = new ArrayList<>(requireNonNull(alternatives));
-        requireNonEmpty(alternatives);
+        this.alternatives = requireNonNull(alternatives);
     }
 
     @Override
@@ -36,7 +34,7 @@ public class AmbiguityNode implements ParseTreeNode {
 
     @Override
     public List<ParseTreeNode> children() {
-        return alternatives;
+        return new ArrayList<>(alternatives);
     }
 
     @Override
@@ -47,6 +45,12 @@ public class AmbiguityNode implements ParseTreeNode {
     @Override
     public Rule getGrammarDefinition() {
         return null;
+    }
+
+    @Override
+    public String getText() {
+        if (alternatives.size() == 0) return "";
+        return children().get(0).getText();
     }
 
     @Override
