@@ -29,6 +29,7 @@ package org.iguana.grammar.symbol;
 
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractSymbol {
@@ -36,6 +37,8 @@ public class Terminal extends AbstractSymbol {
 	private static final long serialVersionUID = 1L;
 
 	private final Category category;
+
+	private final TerminalNodeType nodeType;
 
 	private final RegularExpression regex;
 
@@ -47,26 +50,27 @@ public class Terminal extends AbstractSymbol {
 		Category(String value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public String toString() {
 			return value;
 		}
 	}
-	
+
     private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
 
     public static Terminal epsilon() {
         return epsilon;
     }
-	
+
 	public static Terminal from(RegularExpression regex) {
 		return builder(regex).build();
 	}
-	
+
 	public Terminal(Builder builder) {
 		super(builder);
 		this.regex = builder.regex;
+		this.nodeType = builder.nodeType;
 		this.category = builder.category;
 	}
 
@@ -74,40 +78,45 @@ public class Terminal extends AbstractSymbol {
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
+
 	public RegularExpression getRegularExpression() {
 		return regex;
 	}
-	
+
+	public TerminalNodeType getNodeType() {
+		return nodeType;
+	}
+
 	public Category getCategory() {
 		return category;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return regex.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		
+
 		if (obj == this)
 			return true;
-		
+
 		if (!(obj instanceof Terminal))
 			return false;
-		
+
 		Terminal other = (Terminal) obj;
-		
+
 		return regex.equals(other.regex);
 	}
-	
+
 	public static Builder builder(RegularExpression regex) {
 		return new Builder(regex);
 	}
-	
+
 	public static class Builder extends SymbolBuilder<Terminal> {
-		
+
+		private TerminalNodeType nodeType;
 		private RegularExpression regex;
 
 		private Category category = Category.Regex;
@@ -117,17 +126,23 @@ public class Terminal extends AbstractSymbol {
 		}
 
 		public Builder() {}
-		
+
 		public Builder(Terminal terminal) {
 			super(terminal);
 			this.regex = terminal.regex;
+			this.nodeType = terminal.getNodeType();
             this.category = terminal.getCategory();
 		}
-		
+
 		public Builder setCategory(Category category) {
             this.category = category;
             return this;
         }
+
+		public Builder setNodeType(TerminalNodeType nodeType) {
+			this.nodeType = nodeType;
+			return this;
+		}
 
 		@Override
 		public Terminal build() {
