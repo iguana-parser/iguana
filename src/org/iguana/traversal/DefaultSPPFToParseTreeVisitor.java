@@ -1,5 +1,7 @@
 package org.iguana.traversal;
 
+import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Symbol;
@@ -13,11 +15,11 @@ import static java.util.Collections.emptyList;
 public class DefaultSPPFToParseTreeVisitor<T> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
-    private final Set<String> ignoreList;
+    private final boolean ignoreLayout;
 
     public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<String> ignoreList) {
         this.parseTreeBuilder = parseTreeBuilder;
-        this.ignoreList = ignoreList;
+        this.ignoreLayout = !ignoreList.isEmpty();
     }
 
     public T convert(NonterminalNode node) {
@@ -25,7 +27,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             throw new RuntimeException("Ambiguity found: " + node);
         }
 
-        if (ignoreList.contains(node.getGrammarSlot().getNonterminal().getName())) {
+        if (ignoreLayout && node.getGrammarSlot().getNonterminal().getNodeType() == NonterminalNodeType.Layout) {
             return null;
         }
 
@@ -187,7 +189,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     private T convert(TerminalNode node) {
-        if (ignoreList.contains(node.getGrammarSlot().getTerminal().getName())) {
+        if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
             return null;
         }
         return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());
