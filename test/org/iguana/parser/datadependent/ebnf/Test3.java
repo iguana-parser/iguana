@@ -39,10 +39,10 @@ import org.iguana.parser.IguanaParser;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * 
@@ -86,9 +86,8 @@ public class Test3 {
 		Input input = Input.fromString("abbb");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("X"));
+        assertNotNull(parser.parse(input, Nonterminal.withName("X")));
 
-        assertTrue(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 	}
 

@@ -32,7 +32,7 @@ import org.iguana.grammar.patterns.{ExceptPattern, PrecedencePattern}
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
 import org.iguana.iggy.IggyParser
-import org.iguana.parser.{IguanaParser, ParseResult}
+import org.iguana.parser.IguanaParser
 
 /**
   *

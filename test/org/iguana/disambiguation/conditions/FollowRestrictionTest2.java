@@ -38,10 +38,11 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -77,18 +78,18 @@ public class FollowRestrictionTest2 {
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertFalse(result);
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertFalse(result);
+        assertNotNull(result);
 	}
 
 }

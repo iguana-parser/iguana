@@ -34,10 +34,11 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -88,9 +89,9 @@ public class IndirectRecursion1Test {
 	public void testParser() {
 		Input input = Input.fromString("bc");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 //	private SPPFNode expectedSPPF(GrammarGraph registry) {

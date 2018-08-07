@@ -34,11 +34,12 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("unused")
 public class Test8_2 {
@@ -72,9 +73,9 @@ Grammar.builder()
          Input input = Input.fromString("--a");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
     }
 }

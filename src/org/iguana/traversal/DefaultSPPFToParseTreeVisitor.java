@@ -1,5 +1,6 @@
 package org.iguana.traversal;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Plus;
@@ -7,24 +8,30 @@ import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.sppf.*;
+import org.iguana.traversal.exception.AmbiguityException;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
 
 public class DefaultSPPFToParseTreeVisitor<T> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
+    private final Input input;
     private final boolean ignoreLayout;
 
-    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<String> ignoreList) {
+    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Input input, boolean ignoreLayout) {
         this.parseTreeBuilder = parseTreeBuilder;
-        this.ignoreLayout = !ignoreList.isEmpty();
+        this.input = input;
+        this.ignoreLayout = ignoreLayout;
     }
 
     public T convert(NonterminalNode node) {
         if (node.isAmbiguous()) {
-            throw new RuntimeException("Ambiguity found: " + node);
+            throw new AmbiguityException(node, input);
         }
 
         if (ignoreLayout && node.getGrammarSlot().getNonterminal().getNodeType() == NonterminalNodeType.Layout) {
@@ -138,7 +145,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
     private void convert(IntermediateNode node, Deque<T> children) {
         if (node.isAmbiguous()) {
-            throw new RuntimeException("Ambiguity found: " + node);
+            throw new AmbiguityException(node, input);
         }
 
         NonPackedNode leftChild = node.getChildAt(0).getLeftChild();

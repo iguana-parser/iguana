@@ -36,10 +36,10 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
-import org.iguana.parser.ParseStatistics;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -76,8 +76,8 @@ public class LayoutTest1 {
 		Grammar grammar = getGrammar();
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
     }
 }

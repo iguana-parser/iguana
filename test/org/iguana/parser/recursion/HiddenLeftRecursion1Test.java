@@ -34,10 +34,11 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -86,45 +87,45 @@ public class HiddenLeftRecursion1Test {
 	public void test1() {
 		Input input = Input.fromString("xca");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void test2() {
 		Input input = Input.fromString("ycb");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void test3() {
 		Input input = Input.fromString("cababaab");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void test4() {
 		Input input = Input.fromString("xcabbbbb");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void test5() {
 		Input input = Input.fromString("ycaaaabaaaa");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 //	private SPPFNode getSPPFNode1(GrammarGraph registry) {

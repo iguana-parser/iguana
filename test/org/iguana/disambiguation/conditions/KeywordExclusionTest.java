@@ -40,10 +40,11 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 
 /**
@@ -78,9 +79,9 @@ public class KeywordExclusionTest {
 	public void testWhen() {
 		Input input = Input.fromString("when");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("Id"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("Id"));
 
-        assertFalse(result);
+        assertNull(result);
 	}
 	
 	@Test
@@ -88,9 +89,9 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("if");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("Id"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("Id"));
 
-        assertFalse(result);
+        assertNull(result);
 	}
 	
 	@Test
@@ -98,9 +99,9 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("do");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("Id"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("Id"));
 
-        assertFalse(result);
+        assertNull(result);
 	}
 	
 	@Test
@@ -108,9 +109,9 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("while");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertFalse(result);
+        assertNull(result);
 	}
 
 }

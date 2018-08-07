@@ -7,6 +7,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("unused")
 public class Test14_2 {
@@ -46,15 +48,15 @@ Grammar.builder()
          Input input = Input.fromString("a-&a-a-a");
 
          IguanaParser parser = new IguanaParser(grammar);
-         boolean result = parser.parse(input, Nonterminal.withName("S"));
+         ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-         Assert.assertTrue(result);
+         assertNotNull(result);
 
 //         NonterminalNode node = result.asParseSuccess().getResult();
 //         boolean hasAmbiguousIntermediateNode = false;
 //         for (PackedNode pnode : node.getChildren().get(0).getChildAt(0).getChildren()) {
 //        	 NonPackedNode first = pnode.getChildAt(0);
-//			 if (first instanceof IntermediateNode && first.isAmbiguous())
+//			 if (first instanceof IntermediateNode && first.ambiguous())
 //				 hasAmbiguousIntermediateNode = true;
 //         }
 //

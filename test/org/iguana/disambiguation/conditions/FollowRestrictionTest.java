@@ -39,11 +39,11 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -80,9 +80,9 @@ public class FollowRestrictionTest {
 	public void testParser() {
 		Input input = Input.fromString("abc:");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertFalse(result);
+        assertNotNull(result);
 	}
 
 
@@ -124,9 +124,9 @@ public class FollowRestrictionTest {
         public void test() {
             Input input = Input.fromString("aasb");
             IguanaParser parser = new IguanaParser(grammar);
-            boolean result = parser.parse(input, Nonterminal.withName("S"));
+            ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-            assertTrue(result);
+            assertNotNull(result);
     //		assertTrue(result.asParseSuccess().getResult().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));
         }
 

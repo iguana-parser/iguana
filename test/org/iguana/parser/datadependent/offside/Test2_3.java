@@ -41,12 +41,13 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static iguana.utils.collections.CollectionsUtil.set;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 import static org.junit.Assert.assertEquals;
 
@@ -108,9 +109,9 @@ Grammar.builder()
 
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input);
+        ParseTreeNode result = parser.parse(input);
 
-        assertTrue(result);
+        assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 
     }

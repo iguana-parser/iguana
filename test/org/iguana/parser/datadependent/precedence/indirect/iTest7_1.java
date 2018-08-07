@@ -13,9 +13,9 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("unused")
 public class iTest7_1 {
@@ -59,9 +59,8 @@ Grammar.builder()
          Input input = Input.fromString("a^a*a&aa+a"); // ((a^a)((*a)&a)a)+a
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        assertNotNull(parser.parse(input, Nonterminal.withName("S")));
 
-        assertTrue(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
     }
 }

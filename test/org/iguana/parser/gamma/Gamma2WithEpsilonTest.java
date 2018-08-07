@@ -35,11 +35,12 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parser.ParseStatistics;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -74,9 +75,9 @@ public class Gamma2WithEpsilonTest {
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 
         ParseStatistics parseStatistics = parser.getStatistics();
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
@@ -91,9 +92,9 @@ public class Gamma2WithEpsilonTest {
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 
         ParseStatistics parseStatistics = parser.getStatistics();
 		assertEquals(374, parseStatistics.getDescriptorsCount());
@@ -107,9 +108,9 @@ public class Gamma2WithEpsilonTest {
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 
         ParseStatistics parseStatistics = parser.getStatistics();
 		assertEquals(26159, parseStatistics.getDescriptorsCount());

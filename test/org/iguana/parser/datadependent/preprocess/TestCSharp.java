@@ -33,6 +33,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.NonterminalNode;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 public class TestCSharp {
 	
@@ -63,9 +64,9 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test1.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, start);
+        ParseTreeNode result = parser.parse(input, start);
 
-        assertTrue(result);
+        assertNotNull(result);
 
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
@@ -84,9 +85,9 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test2.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 
 		Map<String, NonterminalNode> nodes = new HashMap<>();
 		
@@ -107,9 +108,9 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test7.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //

@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -77,19 +77,19 @@ Grammar.builder()
          Input input = Input.fromString("a+a*a*a*a*a*a");
 
         IguanaParser parser1 = new IguanaParser(grammar1);
-        assertTrue(parser1.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser1.parse(input, Nonterminal.withName("S")));
         assertEquals(0, parser1.getStatistics().getAmbiguousNodesCount());
 
         IguanaParser parser2 = new IguanaParser(grammar2);
-        assertTrue(parser2.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser2.parse(input, Nonterminal.withName("S")));
         assertEquals(0, parser2.getStatistics().getAmbiguousNodesCount());
 
         IguanaParser parser3 = new IguanaParser(grammar3);
-        assertTrue(parser3.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser3.parse(input, Nonterminal.withName("S")));
         assertEquals(0, parser3.getStatistics().getAmbiguousNodesCount());
 
         IguanaParser parser4 = new IguanaParser(grammar4);
-        assertTrue(parser1.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser1.parse(input, Nonterminal.withName("S")));
         assertEquals(0, parser4.getStatistics().getAmbiguousNodesCount());
 
     }
