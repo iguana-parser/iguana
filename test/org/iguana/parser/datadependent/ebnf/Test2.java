@@ -33,10 +33,11 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.datadependent.ast.AST.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -92,9 +93,9 @@ public class Test2 {
 		Input input = Input.fromString("acdbcd");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("X"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("X"));
 
-        assertTrue(result);
+        assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 	}
 

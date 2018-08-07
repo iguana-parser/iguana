@@ -34,10 +34,11 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * 
@@ -87,17 +88,17 @@ public class IndirectRecursion3Test {
 	public void test1() {
 		Input input = Input.fromString("efcfc");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("A"));
-        assertTrue(result);
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void test2() {
 		Input input = Input.fromString("egdgdgd");
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 	@Test
@@ -105,9 +106,9 @@ public class IndirectRecursion3Test {
 		Input input = Input.fromString("egdfcgd");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 	
 //	private SPPFNode getSPPFNode1(GrammarGraph registry) {

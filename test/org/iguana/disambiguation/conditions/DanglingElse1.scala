@@ -4,7 +4,7 @@ import iguana.utils.input.Input
 import org.iguana.grammar.Grammar
 import org.iguana.grammar.condition.RegularExpressionCondition
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
-import org.iguana.parser.{IguanaParser, ParseResult}
+import org.iguana.parser.IguanaParser
 import org.junit.Assert._
 
 class DanglingElse1 extends FunSuite {

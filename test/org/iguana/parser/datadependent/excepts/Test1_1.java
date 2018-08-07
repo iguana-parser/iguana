@@ -34,10 +34,10 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
-import org.junit.Assert;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
 @SuppressWarnings("unused")
@@ -69,8 +69,8 @@ Grammar.builder()
          Input input = Input.fromString("a+a-");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
     }
 }

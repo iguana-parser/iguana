@@ -1,36 +1,33 @@
 package org.iguana.traversal;
 
 import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
 import org.iguana.sppf.*;
+import org.iguana.traversal.exception.CyclicGrammarException;
 
 import java.util.*;
 import java.util.List;
 
-import static java.util.Collections.emptySet;
 import static java.util.Collections.singletonList;
 import static org.iguana.parsetree.VisitResult.*;
 
 public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
-    private Set<String> ignoreList;
     private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, VisitResult> convertedNodes;
+    private final boolean ignoreLayout;
 
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 
-    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
-        this(parseTreeBuilder, emptySet());
-    }
-
-    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Set<String> ignoreList) {
+    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, boolean ignoreLayout) {
         this.parseTreeBuilder = parseTreeBuilder;
-        this.ignoreList = ignoreList;
+        this.ignoreLayout = ignoreLayout;
         this.convertedNodes = new HashMap<>();
         this.visitedNodes = new LinkedHashSet<>();
         this.createNodeVisitor = new VisitResult.CreateParseTreeVisitor<>(parseTreeBuilder);
@@ -38,7 +35,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
 
     @Override
     public VisitResult visit(TerminalNode node) {
-        if (ignoreList.contains(node.getGrammarSlot().getTerminal().getName())) {
+        if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
             return empty();
         }
         return convertedNodes.computeIfAbsent(node, key -> {
@@ -51,7 +48,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
 
     @Override
     public VisitResult visit(org.iguana.sppf.NonterminalNode node) {
-        if (ignoreList.contains(node.getGrammarSlot().getNonterminal().getName())) {
+        if (ignoreLayout && node.getGrammarSlot().getNonterminal().getNodeType() == NonterminalNodeType.Layout) {
             return empty();
         }
 

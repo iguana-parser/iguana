@@ -37,9 +37,9 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("unused")
 public class Test2_2 {
@@ -75,9 +75,8 @@ Grammar.builder()
          GrammarGraph graph = GrammarGraph.from(grammar);
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        assertNotNull(parser.parse(input, Nonterminal.withName("S")));
 
-        assertTrue(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 
     }

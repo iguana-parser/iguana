@@ -7,12 +7,13 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IGGYTest {
@@ -32,9 +33,9 @@ public class IGGYTest {
 		grammar = new LayoutWeaver().transform(grammar);
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertTrue(result);
+        assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 	}
 

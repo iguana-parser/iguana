@@ -41,13 +41,14 @@ import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static iguana.utils.collections.CollectionsUtil.set;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-import static org.junit.Assert.assertFalse;
 
 @SuppressWarnings("unused")
 public class Test1_4 {
@@ -93,8 +94,8 @@ Grammar.builder()
                                         "        a");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertFalse(result);
+        assertNotNull(result);
     }
 }

@@ -17,6 +17,7 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
+import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParserLogger;
 import org.iguana.util.RunningTime;
@@ -56,6 +57,10 @@ public class IguanaRuntime<T extends Result> {
 
     private RunningTime runningTime;
 
+    private GSSNode<T> startGSSNode;
+
+    private int inputLength;
+
     public IguanaRuntime(Configuration config, ResultOps<T> resultOps) {
         this.config = config;
         this.resultOps = resultOps;
@@ -79,9 +84,9 @@ public class IguanaRuntime<T extends Result> {
             throw new RuntimeException("No nonterminal named " + nonterminal + " found");
         }
 
-        Environment env = ctx.getEmptyEnvironment();
+        inputLength = input.length() - 1;
 
-        GSSNode<T> startGSSNode;
+        Environment env = ctx.getEmptyEnvironment();
 
         if (!global && !map.isEmpty()) {
             Object[] arguments = new Object[map.size()];
@@ -112,12 +117,16 @@ public class IguanaRuntime<T extends Result> {
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
         }
 
-        Result root = startGSSNode.getResult(input.length() - 1);
+        Result root = startGSSNode.getResult(inputLength);
 
         timer.stop();
         runningTime = new RunningTime(timer.getNanoTime(), timer.getUserTime(), timer.getSystemTime());
 
         return root;
+    }
+
+    public NonterminalNode getRootSPPFNode() {
+        return (NonterminalNode) startGSSNode.getResult(inputLength);
     }
 
     /**

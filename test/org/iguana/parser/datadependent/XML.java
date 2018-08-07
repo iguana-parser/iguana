@@ -12,11 +12,11 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
-import org.junit.Assert;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import static iguana.utils.collections.CollectionsUtil.set;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
 @SuppressWarnings("unused")
@@ -70,8 +70,8 @@ Grammar.builder()
 
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input,  Nonterminal.withName("Element"));
+        ParseTreeNode result = parser.parse(input,  Nonterminal.withName("Element"));
 
-        assertTrue(result);
+        assertNotNull(result);
     }
 }

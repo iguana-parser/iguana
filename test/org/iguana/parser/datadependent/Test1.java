@@ -35,10 +35,11 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.datadependent.ast.AST.*;
 
 /**
@@ -88,9 +89,9 @@ public class Test1 {
 		Input input = Input.fromString("ab");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("X"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("X"));
 
-        assertTrue(result);
+        assertNotNull(result);
 	}
 
 }

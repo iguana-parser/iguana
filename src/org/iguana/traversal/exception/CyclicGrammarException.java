@@ -1,4 +1,4 @@
-package org.iguana.sppf;
+package org.iguana.traversal.exception;
 
 import org.iguana.grammar.symbol.Nonterminal;
 

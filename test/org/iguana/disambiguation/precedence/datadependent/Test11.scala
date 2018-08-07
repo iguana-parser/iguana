@@ -1,7 +1,6 @@
 package org.iguana.disambiguation.precedence.datadependent
 
 import iguana.utils.input.Input
-import org.iguana.IGGY
 import org.iguana.grammar.symbol.Nonterminal
 import org.iguana.iggy.IggyParser
 import org.iguana.parser.IguanaParser

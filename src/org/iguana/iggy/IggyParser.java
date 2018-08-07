@@ -49,15 +49,10 @@ public class IggyParser {
         Grammar iggyGrammar = iggyGrammar();
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
-        if (!parser.parse(input)) {
+        ParseTreeNode parseTree = parser.parse(input);
+        if (parseTree == null) {
             throw new RuntimeException("Parse error");
         }
-
-        Set<Symbol> ignoreSet = new HashSet<>();
-        ignoreSet.add(Nonterminal.withName("Layout"));
-        ignoreSet.add(Nonterminal.withName("WhiteSpaceOrComment"));
-
-        ParseTreeNode node = parser.getParseTree();
 
         ParseTreeVisitor<Object> parseTreeVisitor = new ParseTreeVisitor<Object>() {
 
@@ -108,7 +103,7 @@ public class IggyParser {
         };
 
 
-        Grammar grammar = (Grammar) node.accept(parseTreeVisitor);
+        Grammar grammar = (Grammar) parseTree.accept(parseTreeVisitor);
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();

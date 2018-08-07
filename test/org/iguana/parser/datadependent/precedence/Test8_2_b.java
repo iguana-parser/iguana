@@ -7,10 +7,12 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
-import org.junit.Assert;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unused")
 public class Test8_2_b {
@@ -43,10 +45,10 @@ Grammar.builder()
          Input input = Input.fromString("--a");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        Assert.assertTrue(result);
-        Assert.assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
+        assertNotNull(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 
     }
 }

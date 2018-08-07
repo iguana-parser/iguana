@@ -8,13 +8,14 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 @SuppressWarnings("unused")
 public class iTest7_3 {
@@ -59,8 +60,8 @@ Grammar.builder()
          Input input = Input.fromString("a^a*a&a");
 
         IguanaParser parser = new IguanaParser(grammar);
-        boolean result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
 
-        assertFalse(result);
+        assertNull(result);
     }
 }
