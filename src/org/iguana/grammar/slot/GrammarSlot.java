@@ -43,7 +43,7 @@ import iguana.utils.input.Input;
  */
 public interface GrammarSlot {
 
-	void reset(Input input);
+	void reset();
 	
 	void addTransition(Transition transition);
 	

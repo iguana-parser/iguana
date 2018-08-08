@@ -75,7 +75,7 @@ Grammar.builder()
          GrammarGraph graph = GrammarGraph.from(grammar);
 
         IguanaParser parser = new IguanaParser(grammar);
-        assertNotNull(parser.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser.getParserTree(input, Nonterminal.withName("S")));
 
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 

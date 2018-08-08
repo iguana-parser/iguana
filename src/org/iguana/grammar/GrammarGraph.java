@@ -471,8 +471,8 @@ public class GrammarGraph implements Serializable {
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
     }
 
-    public void reset(Input input) {
-        slots.forEach(s -> s.reset(input));
+    public void reset() {
+        slots.forEach(GrammarSlot::reset);
     }
 
     private Conditions getConditions(Set<Condition> conditions) {

@@ -15,9 +15,7 @@ import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static iguana.utils.io.FileUtils.readFile;
 
@@ -49,7 +47,7 @@ public class IggyParser {
         Grammar iggyGrammar = iggyGrammar();
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
-        ParseTreeNode parseTree = parser.parse(input);
+        ParseTreeNode parseTree = parser.getParserTree(input);
         if (parseTree == null) {
             throw new RuntimeException("Parse error");
         }

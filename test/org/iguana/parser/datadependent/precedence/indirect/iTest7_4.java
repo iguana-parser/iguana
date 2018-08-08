@@ -59,10 +59,10 @@ Grammar.builder()
          System.out.println(grammar.toString());
 
          Input input = Input.fromString("a^*aa");
-         // Input input = Input.fromString("a*a"); // should be parse error
+         // Input input = Input.fromString("a*a"); // should be getParserTree error
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());

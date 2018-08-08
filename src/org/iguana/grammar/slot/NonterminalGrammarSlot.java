@@ -133,7 +133,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	@Override
-	public void reset(Input input) {
+	public void reset() {
 		gssNodes = new HashMap<>();
 	}
 	

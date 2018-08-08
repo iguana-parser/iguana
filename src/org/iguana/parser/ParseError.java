@@ -36,23 +36,28 @@ public class ParseError {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
-    private final GSSNode gssNode;
+	private final String message;
 
-    public ParseError(GrammarSlot slot, int inputIndex, GSSNode gssNode) {
+    public ParseError(GrammarSlot slot, Input input, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-        this.gssNode = gssNode;
+		this.message = getMessage(input, inputIndex);
     }
 	
 	public int getInputIndex() {
 		return inputIndex;
 	}
 
-	public GrammarSlot getSlot() {
+	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
-	
-	public static String getMessage(Input input, int inputIndex) {		
+
+    @Override
+    public String toString() {
+        return message;
+    }
+
+    private static String getMessage(Input input, int inputIndex) {
 		int lineNumber = input.getLineNumber(inputIndex);
 		int columnNumber = input.getColumnNumber(inputIndex);
 		

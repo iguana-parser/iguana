@@ -106,10 +106,10 @@ public class GrammarTest {
             ParseTreeNode node = null;
 
             try {
-                node = parser.parse(input);
+                node = parser.getParserTree(input);
             } catch (AmbiguityException e) {
                 try {
-                    node = parser.parse(input, new ParseOptions.Builder().setAmbiguous(true).build());
+                    node = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
                 } catch (CyclicGrammarException ee) {
                     // Ignore it
                 }
@@ -124,7 +124,7 @@ public class GrammarTest {
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
             if (!new File(statisticsPath).exists()) {
-                record(parser, node, grammarPath, statisticsPath, sppfPath, parseTreePath);
+                record(parser, node, input, grammarPath, statisticsPath, sppfPath, parseTreePath);
                 return;
             }
 
@@ -132,13 +132,13 @@ public class GrammarTest {
 
             NonterminalNode expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), parser.getGrammarGraph());
 
-            assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize(parser.getSPPF()));
+            assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize(parser.getSPPF(input)));
 
             assertEquals(expectedStatistics, parser.getStatistics());
         };
     }
 
-    private static void record(IguanaParser parser, ParseTreeNode parseTree, String grammarPath, String statisticsPath, String sppfPath, String parseTreePath) throws IOException {
+    private static void record(IguanaParser parser, ParseTreeNode parseTree, Input input, String grammarPath, String statisticsPath, String sppfPath, String parseTreePath) throws IOException {
         String jsonGrammar = JsonSerializer.toJSON(parser.getGrammar());
         FileUtils.writeFile(jsonGrammar, grammarPath);
 
@@ -146,7 +146,7 @@ public class GrammarTest {
         String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
         FileUtils.writeFile(jsonStatistics, statisticsPath);
 
-        String jsonSPPF = SPPFJsonSerializer.serialize(parser.getSPPF());
+        String jsonSPPF = SPPFJsonSerializer.serialize(parser.getSPPF(input));
         FileUtils.writeFile(jsonSPPF, sppfPath);
 
         try {

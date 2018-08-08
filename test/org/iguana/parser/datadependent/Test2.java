@@ -108,7 +108,7 @@ public class Test2 {
 //		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 //		
 //		IguanaParser parser = ParserFactory.getParser();
-//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+//		ParseResult result = parser.getParserTree(input, graph, Nonterminal.withName("X"));
 //		
 //		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
 //		

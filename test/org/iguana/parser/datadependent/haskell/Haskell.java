@@ -1006,7 +1006,7 @@
 //
 //         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/haskell/", graph);
 //
-//         ParseResult result = IguanaParser.parse(input, graph, Start.from(Nonterminal.withName("Module")));
+//         ParseResult result = IguanaParser.getParserTree(input, graph, Start.from(Nonterminal.withName("Module")));
 //
 //         System.out.println(result);
 //

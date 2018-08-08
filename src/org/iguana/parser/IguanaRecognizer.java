@@ -30,7 +30,7 @@ public class IguanaRecognizer {
         this.grammar = grammar;
         this.grammarGraph = GrammarGraph.from(grammar, config);
         this.config = config;
-        this.runtime = new IguanaRuntime(config, new RecognizerResultOps());
+        this.runtime = new IguanaRuntime<>(config, new RecognizerResultOps());
     }
 
     public boolean recognize(Input input) {
@@ -38,8 +38,6 @@ public class IguanaRecognizer {
     }
 
     public boolean recognize(Input input, Nonterminal nonterminal, Map<String, Object> map, boolean global) {
-        EnvironmentPool.clean();
-        grammarGraph.reset(input);
         root = (RecognizerResult) runtime.run(input, grammarGraph, nonterminal, map, global);
         return root.getIndex() == input.length() - 1;
     }

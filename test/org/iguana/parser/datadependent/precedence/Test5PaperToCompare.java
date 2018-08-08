@@ -70,15 +70,15 @@ Grammar.builder()
          Input input = Input.fromString("a*+a*a+a--a/a");
 
         IguanaParser parser1 = new IguanaParser(grammar1, Configuration.builder().setEnvironmentImpl(EnvironmentImpl.TRIE).build());
-        assertNotNull(parser1.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser1.getParserTree(input, Nonterminal.withName("S")));
         assertEquals(0, parser1.getStatistics().getAmbiguousNodesCount());
 
         IguanaParser parser2 = new IguanaParser(grammar2);
-        assertNotNull(parser2.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser2.getParserTree(input, Nonterminal.withName("S")));
         assertEquals(0, parser2.getStatistics().getAmbiguousNodesCount());
 
         IguanaParser parser3 = new IguanaParser(grammar3);
-        assertNotNull(parser3.parse(input, Nonterminal.withName("S")));
+        assertNotNull(parser3.getParserTree(input, Nonterminal.withName("S")));
         assertEquals(0, parser3.getStatistics().getAmbiguousNodesCount());
     }
 }

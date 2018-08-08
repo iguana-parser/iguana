@@ -697,7 +697,7 @@
 //				                     + "   w=0   "   + "\n");
 //
 //		GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
-//		ParseResult result = IguanaParser.parse(input, graph, Nonterminal.withName("IfStmt"));
+//		ParseResult result = IguanaParser.getParserTree(input, graph, Nonterminal.withName("IfStmt"));
 //	}
 //
 //}

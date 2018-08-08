@@ -65,12 +65,12 @@
 //			System.out.println(variables);
 //			System.out.println(expected);
 //
-//			ParseResult result = IguanaParser.parse(input, grammar, Configuration.DEFAULT, start, variables);
+//			ParseResult result = IguanaParser.getParserTree(input, grammar, Configuration.DEFAULT, start, variables);
 //
 //			Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 ////			NonterminalNodeVisitor.create(n -> {
-////				if (n.getSlot().getNonterminal().getName().equals("Id")) {
+////				if (n.getGrammarSlot().getNonterminal().getName().equals("Id")) {
 ////					String yield = input.subString(n.getLeftExtent(), n.getIndex());
 ////					nodes.put(yield, n);
 ////				}

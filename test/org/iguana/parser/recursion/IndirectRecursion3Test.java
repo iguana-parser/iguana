@@ -88,7 +88,7 @@ public class IndirectRecursion3Test {
 	public void test1() {
 		Input input = Input.fromString("efcfc");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("A"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("A"));
         assertNotNull(result);
 	}
 	
@@ -96,7 +96,7 @@ public class IndirectRecursion3Test {
 	public void test2() {
 		Input input = Input.fromString("egdgdgd");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 	}
@@ -106,7 +106,7 @@ public class IndirectRecursion3Test {
 		Input input = Input.fromString("egdfcgd");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 	}

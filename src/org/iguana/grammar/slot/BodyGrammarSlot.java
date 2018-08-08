@@ -112,7 +112,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	@Override
-	public void reset(Input input) {
+	public void reset() {
 		intermediateNodes = new HashMap<>();
 	}
 
