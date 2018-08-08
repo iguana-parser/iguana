@@ -43,7 +43,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Terminal terminal;
 	private final Matcher matcher;
-	private final IntHashMap<Object> terminalNodes;
+	private IntHashMap<Object> terminalNodes;
 
 	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
 		super(Collections.emptyList());
@@ -67,7 +67,6 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	public int countTerminalNodes() {
-		System.out.println(terminalNodes);
 		return terminalNodes.size();
 	}
 
@@ -91,8 +90,8 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
     @Override
-	public void reset(Input input) {
-		terminalNodes.clear();
+	public void reset() {
+		terminalNodes = new OpenAddressingIntHashMap<>();
 	}
 
 	@Override

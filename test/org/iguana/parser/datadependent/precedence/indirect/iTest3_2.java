@@ -52,7 +52,7 @@ Grammar.builder()
          Input input = Input.fromString("a+fa");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());

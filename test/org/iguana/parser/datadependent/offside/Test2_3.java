@@ -109,7 +109,7 @@ Grammar.builder()
 
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input);
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());

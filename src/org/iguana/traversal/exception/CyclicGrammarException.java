@@ -18,6 +18,6 @@ public class CyclicGrammarException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "The SPPF is cyclic, no parse tree can be produced.";
+        return "The SPPF is cyclic, no getParserTree tree can be produced.";
     }
 }

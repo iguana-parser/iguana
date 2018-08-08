@@ -64,15 +64,15 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test1.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, start);
+        ParseTreeNode result = parser.getParserTree(input, start);
 
         assertNotNull(result);
 
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 //		NonterminalNodeVisitor.create(n -> {
-//			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
-//				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
+//			if (n.getGrammarSlot().getNonterminal().getName().equals("DPpConditional") ||
+//				n.getGrammarSlot().getNonterminal().getName().equals("PpConditional")) {
 //				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
@@ -85,15 +85,15 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test2.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 
 		Map<String, NonterminalNode> nodes = new HashMap<>();
 		
 //		NonterminalNodeVisitor.create(n -> {
-//			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
-//				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
+//			if (n.getGrammarSlot().getNonterminal().getName().equals("DPpConditional") ||
+//				n.getGrammarSlot().getNonterminal().getName().equals("PpConditional")) {
 //				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
@@ -108,15 +108,15 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test7.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 //		NonterminalNodeVisitor.create(n -> {
-//			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
-//				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
+//			if (n.getGrammarSlot().getNonterminal().getName().equals("DPpConditional") ||
+//				n.getGrammarSlot().getNonterminal().getName().equals("PpConditional")) {
 //				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}

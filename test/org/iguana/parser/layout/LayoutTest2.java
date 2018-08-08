@@ -93,7 +93,7 @@ public class LayoutTest2 {
 	public void test() {
 		Input input = Input.fromString("a c");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
         assertEquals(getParseResult(), parser.getStatistics());

@@ -79,7 +79,7 @@ public class KeywordExclusionTest {
 	public void testWhen() {
 		Input input = Input.fromString("when");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("Id"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("Id"));
 
         assertNull(result);
 	}
@@ -89,7 +89,7 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("if");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("Id"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("Id"));
 
         assertNull(result);
 	}
@@ -99,7 +99,7 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("do");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("Id"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("Id"));
 
         assertNull(result);
 	}
@@ -109,7 +109,7 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("while");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNull(result);
 	}

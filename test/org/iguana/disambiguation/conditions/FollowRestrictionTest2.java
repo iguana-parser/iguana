@@ -78,7 +78,7 @@ public class FollowRestrictionTest2 {
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 	}
@@ -87,7 +87,7 @@ public class FollowRestrictionTest2 {
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 	}

@@ -124,7 +124,7 @@
 //
 //         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 //
-//         ParseResult result = IguanaParser.parse(input, graph, startSymbol);
+//         ParseResult result = IguanaParser.getParserTree(input, graph, startSymbol);
 //
 //         Assert.assertTrue(result.isParseSuccess());
 //

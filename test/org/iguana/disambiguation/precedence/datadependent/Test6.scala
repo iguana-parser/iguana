@@ -48,7 +48,7 @@ class Test6 extends FunSuite {
 
 //  test("DDParser") {
 //    val input = Input.fromString("-*a+a")
-//    val result = IguanaParser.parse(input, desugaredGrammar, start)
+//    val result = IguanaParser.getParserTree(input, desugaredGrammar, start)
 //    assert(result.isParseSuccess)
 //    assertResult(0)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
 //  }

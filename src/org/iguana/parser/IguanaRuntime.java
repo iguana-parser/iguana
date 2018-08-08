@@ -1,11 +1,9 @@
 package org.iguana.parser;
 
-import iguana.utils.benchmark.Timer;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
@@ -17,10 +15,8 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParserLogger;
-import org.iguana.util.RunningTime;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -29,7 +25,7 @@ import java.util.Map;
 public class IguanaRuntime<T extends Result> {
 
     /**
-     * The grammar slot at which a parse error is occurred.
+     * The grammar slot at which a getParserTree error is occurred.
      */
     private GrammarSlot errorSlot;
 
@@ -37,11 +33,6 @@ public class IguanaRuntime<T extends Result> {
      * The last input index at which an error is occurred.
      */
     private int errorIndex;
-
-    /**
-     * The current GSS node at which an error is occurred.
-     */
-    private GSSNode<T> errorGSSNode;
 
     private final Deque<Descriptor<T>> descriptorPool;
 
@@ -55,11 +46,7 @@ public class IguanaRuntime<T extends Result> {
 
     private final ResultOps<T> resultOps;
 
-    private RunningTime runningTime;
-
-    private GSSNode<T> startGSSNode;
-
-    private int inputLength;
+    private Input input;
 
     public IguanaRuntime(Configuration config, ResultOps<T> resultOps) {
         this.config = config;
@@ -70,8 +57,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public Result run(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, Object> map, boolean global) {
-        EnvironmentPool.clean();
-        grammarGraph.reset(input);
+        this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
 
@@ -84,9 +70,11 @@ public class IguanaRuntime<T extends Result> {
             throw new RuntimeException("No nonterminal named " + nonterminal + " found");
         }
 
-        inputLength = input.length() - 1;
+        int inputLength = input.length() - 1;
 
         Environment env = ctx.getEmptyEnvironment();
+
+        GSSNode<T> startGSSNode;
 
         if (!global && !map.isEmpty()) {
             Object[] arguments = new Object[map.size()];
@@ -104,9 +92,6 @@ public class IguanaRuntime<T extends Result> {
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
 
-        Timer timer = new Timer();
-        timer.start();
-
         for (BodyGrammarSlot slot : startSymbol.getFirstSlots()) {
             scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
         }
@@ -117,21 +102,16 @@ public class IguanaRuntime<T extends Result> {
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
         }
 
-        Result root = startGSSNode.getResult(inputLength);
+        grammarGraph.reset();
+        descriptorPool.clear();
+        descriptorsStack.clear();
 
-        timer.stop();
-        runningTime = new RunningTime(timer.getNanoTime(), timer.getUserTime(), timer.getSystemTime());
-
-        return root;
-    }
-
-    public NonterminalNode getRootSPPFNode() {
-        return (NonterminalNode) startGSSNode.getResult(inputLength);
+        return startGSSNode.getResult(inputLength);
     }
 
     /**
-     * Replaces the previously reported parse error with the new one if the
-     * inputIndex of the new parse error is greater than the previous one. In
+     * Replaces the previously reported getParserTree error with the new one if the
+     * inputIndex of the new getParserTree error is greater than the previous one. In
      * other words, we throw away an error if we find an error which happens at
      * the next position of input.
      *
@@ -141,7 +121,6 @@ public class IguanaRuntime<T extends Result> {
             logger.error(slot, i);
             this.errorIndex = i;
             this.errorSlot = slot;
-            this.errorGSSNode = u;
         }
     }
 
@@ -217,7 +196,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public ParseError getParseError() {
-        return new ParseError(errorSlot, errorIndex, errorGSSNode);
+        return new ParseError(errorSlot, input, errorIndex);
     }
 
     public ParseStatistics getParseStatistics() {
@@ -231,16 +210,6 @@ public class IguanaRuntime<T extends Result> {
                               .setPackedNodesCount(logger.getCountPackedNodes())
                               .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())
                               .build();
-    }
-
-    public int getMemoryUsed() {
-        int mb = 1024 * 1024;
-        java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
-        return (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
-    }
-
-    public RunningTime getRunningTime() {
-        return runningTime;
     }
 
     public Configuration getConfiguration() {

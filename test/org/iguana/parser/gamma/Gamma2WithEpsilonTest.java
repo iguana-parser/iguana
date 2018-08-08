@@ -75,7 +75,7 @@ public class Gamma2WithEpsilonTest {
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 
@@ -92,7 +92,7 @@ public class Gamma2WithEpsilonTest {
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 
@@ -108,7 +108,7 @@ public class Gamma2WithEpsilonTest {
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.parse(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
         assertNotNull(result);
 

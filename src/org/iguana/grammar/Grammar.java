@@ -334,8 +334,10 @@ public class Grammar implements Serializable {
 	}
 
 	public static Grammar load(File file) throws FileNotFoundException {
-		return load(new FileInputStream(file), "binary");
-	}
+        FileInputStream fis = new FileInputStream(file);
+        Grammar binary = load(fis, "binary");
+        return binary;
+    }
 
     public static Grammar load(File file, String format) throws FileNotFoundException {
 		return load(new FileInputStream(file), format);
