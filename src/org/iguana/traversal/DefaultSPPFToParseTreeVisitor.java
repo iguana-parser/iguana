@@ -10,9 +10,7 @@ import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.sppf.*;
 import org.iguana.traversal.exception.AmbiguityException;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -69,7 +67,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     private T convertBasicAndLayout(PackedNode packedNode, int leftExtent, int rightExtent) {
-        Deque<T> children = new ArrayDeque<>();
+        List<T> children = new ArrayList<>();
 
         NonPackedNode child = packedNode.getLeftChild();
         if (child instanceof IntermediateNode) {
@@ -77,11 +75,12 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         } else {
             T result = convertPackedNode(child);
             if (result != null) {
-                children.addFirst(result);
+                children.add(result);
             }
         }
 
-        return parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), toList(children), leftExtent, rightExtent);
+        reverse(children);
+        return parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), children, leftExtent, rightExtent);
     }
 
     private T convertStar(PackedNode packedNode, int leftExtent, int rightExtent) {
@@ -101,7 +100,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
         PackedNode pNode = packedNode;
 
-        Deque<T> children = new ArrayDeque<>();
+        List<T> children = new ArrayList<>();
 
         while (true) {
             if (pNode.getLeftChild() instanceof IntermediateNode) {
@@ -114,31 +113,33 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             } else {
                 T result = convertPackedNode(pNode.getLeftChild());
                 if (result != null) {
-                    children.addFirst(result);
+                    children.add(result);
                 }
                 break;
             }
         }
 
-        return parseTreeBuilder.metaSymbolNode(symbol, toList(children), leftExtent, rightExtent);
+        reverse(children);
+        return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
     private T convertSeq(PackedNode packedNode, int leftExtent, int rightExtent) {
         Sequence symbol = (Sequence) packedNode.getGrammarSlot().getRule().getDefinition();
         NonPackedNode child = packedNode.getLeftChild();
-        Deque<T> children = new ArrayDeque<>();
+        List<T> children = new ArrayList<>();
         if (child instanceof IntermediateNode) {
             convertIntermediateNode((IntermediateNode) child, children);
         } else {
-            children.addFirst(convertPackedNode(child));
+            children.add(convertPackedNode(child));
         }
 
-        return parseTreeBuilder.metaSymbolNode(symbol, toList(children), leftExtent, rightExtent);
+        reverse(children);
+        return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
     private T convertStart(PackedNode packedNode, int leftExtent, int rightExtent) {
         Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
-        Deque<T> children = new ArrayDeque<>();
+        List<T> children = new ArrayList<>();
         if (packedNode.getLeftChild() instanceof IntermediateNode) {
             convertIntermediateNode((IntermediateNode) packedNode.getLeftChild(), children);
         } else {
@@ -147,7 +148,9 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                 children.add(result);
             }
         }
-        return parseTreeBuilder.metaSymbolNode(symbol, toList(children), leftExtent, rightExtent);
+
+        reverse(children);
+        return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
     private T convertAltOpt(PackedNode packedNode, int leftExtent, int rightExtent) {
@@ -163,7 +166,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
-    private void convertIntermediateNode(IntermediateNode node, Deque<T> children) {
+    private void convertIntermediateNode(IntermediateNode node, List<T> children) {
         if (node.isAmbiguous()) {
             throw new AmbiguityException(node, input);
         }
@@ -173,7 +176,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
         T result = convertPackedNode(rightChild);
         if (result != null) {
-            children.addFirst(result);
+            children.add(result);
         }
 
         if (leftChild instanceof IntermediateNode) {
@@ -182,12 +185,12 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         else {
             result = convertPackedNode(leftChild);
             if (result != null) {
-                children.addFirst(result);
+                children.add(result);
             }
         }
     }
 
-    private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, Deque<T> children) {
+    private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, List<T> children) {
         if (node.isAmbiguous()) {
             throw new RuntimeException("Ambiguity found: " + node);
         }
@@ -197,7 +200,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
         T result = convertPackedNode(rightChild);
         if (result != null) {
-            children.addFirst(result);
+            children.add(result);
         }
 
         if (leftChild instanceof IntermediateNode) {
@@ -209,7 +212,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             }
             result = convertPackedNode(leftChild);
             if (result != null) {
-                children.addFirst(result);
+                children.add(result);
             }
         }
         return null;
@@ -231,8 +234,13 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         throw new RuntimeException("Can only be a terminal or nonterminal node");
     }
 
-    private List<T> toList(Deque<T> deque) {
-        return deque.size() == 0 ? emptyList() : new ArrayList<>(deque);
+    private void reverse(List<T> list) {
+        int size = list.size();
+        for (int i = 0; i < size / 2; i++) {
+            T tmp = list.get(size - i - 1);
+            list.set(size - i - 1, list.get(i));
+            list.set(i, tmp);
+        }
     }
 
 }
