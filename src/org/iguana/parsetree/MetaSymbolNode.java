@@ -60,7 +60,7 @@ public class MetaSymbolNode implements ParseTreeNode {
     }
 
     @Override
-    public <R> R accept(ParseTreeVisitor<R> visitor) {
+    public Object accept(ParseTreeVisitor visitor) {
         return visitor.visitMetaSymbolNode(this);
     }
 

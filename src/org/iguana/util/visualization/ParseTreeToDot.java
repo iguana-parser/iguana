@@ -10,7 +10,7 @@ import java.util.Set;
 import static iguana.utils.visualization.DotGraph.newEdge;
 import static iguana.utils.visualization.DotGraph.newNode;
 
-public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
+public class ParseTreeToDot implements ParseTreeVisitor {
 
     private DotGraph dotGraph;
     private final Input input;
@@ -84,7 +84,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     private void visitChildren(ParseTreeNode node, int nodeId) {
         for (ParseTreeNode child : node.children()) {
             if (child != null) {
-                Integer childId = child.accept(this);
+                Integer childId = (Integer) child.accept(this);
                 if (childId != null)
                     addEdgeToChild(nodeId, childId);
             }
