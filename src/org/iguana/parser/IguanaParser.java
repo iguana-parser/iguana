@@ -93,7 +93,7 @@ public class IguanaParser {
         }
 
         DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, options.ignoreLayout());
-        return (ParseTreeNode) converter.convert(root);
+        return (ParseTreeNode) converter.convertNonterminalNode(root);
     }
 
     public Grammar getGrammar() {

@@ -52,7 +52,7 @@ public class IggyParser {
             throw new RuntimeException("Parse error");
         }
 
-        ParseTreeVisitor<Object> parseTreeVisitor = new ParseTreeVisitor<Object>() {
+        ParseTreeVisitor parseTreeVisitor = new ParseTreeVisitor() {
 
             @Override
             public Object visitNonterminalNode(org.iguana.parsetree.NonterminalNode node) {
