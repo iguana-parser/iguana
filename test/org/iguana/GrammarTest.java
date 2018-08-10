@@ -103,38 +103,42 @@ public class GrammarTest {
     private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input) {
         return () -> {
 
-            ParseTreeNode node = null;
+            ParseTreeNode actualParseTree = null;
+            boolean isCyclic = false;
 
             try {
-                node = parser.getParserTree(input);
+                actualParseTree = parser.getParserTree(input);
             } catch (AmbiguityException e) {
                 try {
-                    node = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
+                    actualParseTree = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
                 } catch (CyclicGrammarException ee) {
-                    // Ignore it
+                    isCyclic = true;
                 }
             } catch (CyclicGrammarException e) {
-                // Ignore it
+                isCyclic = true;
             }
-
-            assertNotNull("Parse Error: " + parser.getParseError(), node);
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
             String sppfPath = testPath + "/sppf" + j + ".json";
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
             if (!new File(statisticsPath).exists()) {
-                record(parser, node, input, grammarPath, statisticsPath, sppfPath, parseTreePath);
+                record(parser, actualParseTree, input, grammarPath, statisticsPath, sppfPath, parseTreePath);
                 return;
             }
 
             ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
-
-            NonterminalNode expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), parser.getGrammarGraph());
-
-            assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize(parser.getSPPF(input)));
-
             assertEquals(expectedStatistics, parser.getStatistics());
+
+            if (!isCyclic) {
+                assertNotNull("Parse Error: " + parser.getParseError(), actualParseTree);
+
+                NonterminalNode expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), parser.getGrammarGraph());
+                ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(parseTreePath), ParseTreeNode.class);
+
+                assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize(parser.getSPPF(input)));
+                assertEquals(expectedParseTree, actualParseTree);
+            }
         };
     }
 

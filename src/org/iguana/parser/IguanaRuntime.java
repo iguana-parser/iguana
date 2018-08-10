@@ -46,6 +46,8 @@ public class IguanaRuntime<T extends Result> {
 
     private final ResultOps<T> resultOps;
 
+    private boolean hasParseError;
+
     private Input input;
 
     public IguanaRuntime(Configuration config, ResultOps<T> resultOps) {
@@ -106,7 +108,9 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
-        return startGSSNode.getResult(inputLength);
+        T result = startGSSNode.getResult(inputLength);
+        hasParseError = result == null;
+        return result;
     }
 
     /**
@@ -196,6 +200,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public ParseError getParseError() {
+        if (!hasParseError) return null;
         return new ParseError(errorSlot, input, errorIndex);
     }
 

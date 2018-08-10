@@ -101,7 +101,8 @@
                         }
                       },
                       "start" : 0,
-                      "end" : 1
+                      "end" : 1,
+                      "text" : "a"
                     }
                   ],
                   "start" : 0,
@@ -118,7 +119,8 @@
                     }
                   },
                   "start" : 1,
-                  "end" : 2
+                  "end" : 2,
+                  "text" : "+"
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -151,7 +153,8 @@
                         }
                       },
                       "start" : 2,
-                      "end" : 3
+                      "end" : 3,
+                      "text" : "a"
                     }
                   ],
                   "start" : 2,
@@ -172,7 +175,8 @@
                 }
               },
               "start" : 3,
-              "end" : 4
+              "end" : 4,
+              "text" : "+"
             },
             {
               "kind" : "NonterminalNode",
@@ -205,7 +209,8 @@
                     }
                   },
                   "start" : 4,
-                  "end" : 5
+                  "end" : 5,
+                  "text" : "a"
                 }
               ],
               "start" : 4,
@@ -274,7 +279,8 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1
+                  "end" : 1,
+                  "text" : "a"
                 }
               ],
               "start" : 0,
@@ -291,7 +297,8 @@
                 }
               },
               "start" : 1,
-              "end" : 2
+              "end" : 2,
+              "text" : "+"
             },
             {
               "kind" : "NonterminalNode",
@@ -352,7 +359,8 @@
                         }
                       },
                       "start" : 2,
-                      "end" : 3
+                      "end" : 3,
+                      "text" : "a"
                     }
                   ],
                   "start" : 2,
@@ -369,7 +377,8 @@
                     }
                   },
                   "start" : 3,
-                  "end" : 4
+                  "end" : 4,
+                  "text" : "+"
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -402,7 +411,8 @@
                         }
                       },
                       "start" : 4,
-                      "end" : 5
+                      "end" : 5,
+                      "text" : "a"
                     }
                   ],
                   "start" : 4,
