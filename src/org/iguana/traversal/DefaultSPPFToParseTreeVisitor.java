@@ -207,7 +207,9 @@ public class DefaultSPPFToParseTreeVisitor<T> {
             return convertUnderPlus(plus, (IntermediateNode) leftChild, children);
         }
         else {
-            if (leftChild instanceof NonterminalNode && plus.getName().equals(leftChild.getChildAt(0).getGrammarSlot().getRule().getDefinition().getName())) {
+            if (leftChild instanceof NonterminalNode &&
+                leftChild.getChildAt(0).getGrammarSlot().getRule().getDefinition() != null &&
+                plus.getName().equals(leftChild.getChildAt(0).getGrammarSlot().getRule().getDefinition().getName())) {
                 return (NonterminalNode) leftChild;
             }
             result = convertPackedNode(leftChild);

@@ -702,7 +702,8 @@ public class JsonSerializer {
         TerminalNodeMixIn(
                 @JsonProperty("terminal") Terminal terminal,
                 @JsonProperty("start") int start,
-                @JsonProperty("end") int end) {}
+                @JsonProperty("end") int end,
+                @JsonProperty("text") String text) {}
     }
 
     abstract static class NonterminalNodeMixIn {
