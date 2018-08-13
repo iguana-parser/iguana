@@ -19,11 +19,13 @@ public interface ParseTreeVisitor {
     }
 
     default Object visitMetaSymbolNode(MetaSymbolNode node) {
-        Symbol definition = node.getGrammarDefinition();
+        Symbol symbol = node.getGrammarDefinition();
+
+        boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Sequence;
 
         // Flatten sequence inside star and plus
-        if (shouldBeFlattened(definition)) {
-            if (definition instanceof Opt) {
+        if (shouldBeFlattened) {
+            if (symbol instanceof Opt) {
                 if (node.children().size() == 0) {
                     return null;
                 }
@@ -43,7 +45,7 @@ public interface ParseTreeVisitor {
             }
         }
 
-        if (definition instanceof Star || definition instanceof Plus || definition instanceof Sequence) {
+        if (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Sequence) {
             List<Object> result = new ArrayList<>(node.children().size());
             for (int i = 0; i < node.children().size(); i++) {
                 ParseTreeNode child = node.childAt(i);
@@ -53,7 +55,7 @@ public interface ParseTreeVisitor {
                 }
             }
             return result;
-        } else if (definition instanceof Alt) {
+        } else if (symbol instanceof Alt) {
             return node.childAt(0).accept(this);
         } else { // Opt
             if (node.children().size() == 0) {
@@ -89,10 +91,6 @@ public interface ParseTreeVisitor {
         }
 
         return result;
-    }
-
-    static boolean shouldBeFlattened(Symbol symbol) {
-        return (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Sequence;
     }
 
     static Symbol getSymbol(Symbol symbol) {
