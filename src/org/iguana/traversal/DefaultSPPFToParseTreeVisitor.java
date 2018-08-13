@@ -70,12 +70,19 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         List<T> children = new ArrayList<>();
 
         NonPackedNode child = packedNode.getLeftChild();
-        if (child instanceof IntermediateNode) {
-            convertIntermediateNode((IntermediateNode) child, children);
-        } else {
-            T result = convertPackedNode(child);
-            if (result != null) {
-                children.add(result);
+
+        while (true) {
+            if (child instanceof IntermediateNode) {
+                child = convertUnderIntermediateNode((IntermediateNode) child, children);
+                if (child == null) {
+                    break;
+                }
+            } else {
+                T result = convertPackedNode(child);
+                if (result != null) {
+                    children.add(result);
+                }
+                break;
             }
         }
 
@@ -190,6 +197,22 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         }
     }
 
+    private NonPackedNode convertUnderIntermediateNode(IntermediateNode node, List<T> children) {
+        if (node.isAmbiguous()) {
+            throw new AmbiguityException(node, input);
+        }
+
+        NonPackedNode leftChild = node.getChildAt(0).getLeftChild();
+        NonPackedNode rightChild = node.getChildAt(0).getRightChild();
+
+        T result = convertPackedNode(rightChild);
+        if (result != null) {
+            children.add(result);
+        }
+
+        return leftChild;
+    }
+
     private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, List<T> children) {
         if (node.isAmbiguous()) {
             throw new RuntimeException("Ambiguity found: " + node);
@@ -238,6 +261,9 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
     private void reverse(List<T> list) {
         int size = list.size();
+        if (size == 0 || size == 1) {
+            return;
+        }
         for (int i = 0; i < size / 2; i++) {
             T tmp = list.get(size - i - 1);
             list.set(size - i - 1, list.get(i));
