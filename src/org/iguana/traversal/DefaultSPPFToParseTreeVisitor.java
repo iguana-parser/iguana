@@ -67,7 +67,11 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     private T convertBasicAndLayout(PackedNode packedNode, int leftExtent, int rightExtent) {
-        List<T> children = new ArrayList<>();
+        int bodySize = packedNode.getGrammarSlot().getRule().getBody().size();
+        if (ignoreLayout) { // Layout is insert between symbols in the body of a rule
+            bodySize /= 2 + 1;
+        }
+        List<T> children = new ArrayList<>(bodySize);
 
         NonPackedNode child = packedNode.getLeftChild();
 
@@ -146,7 +150,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
     private T convertStart(PackedNode packedNode, int leftExtent, int rightExtent) {
         Symbol symbol = packedNode.getGrammarSlot().getRule().getDefinition();
-        List<T> children = new ArrayList<>();
+        List<T> children = new ArrayList<>(ignoreLayout ? 3 : 1); // Layout is inserted before and after the start symbol
         if (packedNode.getLeftChild() instanceof IntermediateNode) {
             convertIntermediateNode((IntermediateNode) packedNode.getLeftChild(), children);
         } else {
