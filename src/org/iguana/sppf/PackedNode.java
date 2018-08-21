@@ -83,11 +83,11 @@ public class PackedNode implements SPPFNode {
         return visitAction.visit(this);
     }
 
-    NonPackedNode getLeftChild() {
+    public NonPackedNode getLeftChild() {
         return leftChild;
     }
 
-    NonPackedNode getRightChild() {
+    public NonPackedNode getRightChild() {
         return rightChild;
     }
 

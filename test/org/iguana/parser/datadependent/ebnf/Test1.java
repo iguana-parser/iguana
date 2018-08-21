@@ -30,15 +30,15 @@ package org.iguana.parser.datadependent.ebnf;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * 
@@ -93,17 +93,12 @@ public class Test1 {
 		
 		Input input = Input.fromString("acd");
 
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
-		
-		Assert.assertTrue(result.isParseSuccess());
-		
-		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-		// 		result.asParseSuccess().getResult(), input);
-		
-		Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
-		
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("X"));
+
+        assertNotNull(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
+
 	}
 
 }

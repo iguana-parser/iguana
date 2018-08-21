@@ -36,12 +36,11 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,11 +133,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	@Override
-	public void reset(Input input) {
+	public void reset() {
 		gssNodes = new HashMap<>();
 	}
 	
-	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
         Key key;

@@ -30,16 +30,15 @@ package org.iguana.parser.datadependent;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
@@ -101,8 +100,10 @@ public class Test5 {
 	public void test() {
 		Input input = Input.fromString("a+-a+a");
 
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
+        assertNotNull(result);
 	}
 
 }

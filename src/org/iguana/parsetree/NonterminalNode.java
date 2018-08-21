@@ -1,13 +1,13 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Rule;
 
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.Objects.*;
-import static iguana.utils.Assert.*;
+import static iguana.utils.Assert.requireNonNegative;
+import static java.util.Objects.hash;
+import static java.util.Objects.requireNonNull;
 
 public class NonterminalNode implements ParseTreeNode {
 
@@ -23,42 +23,45 @@ public class NonterminalNode implements ParseTreeNode {
         this.end = requireNonNegative(end);
     }
 
-    ParseTreeNode childAt(int i) {
-        return children.get(i);
-    }
-
-    ParseTreeNode childWithName(String name) {
-        throw new UnsupportedOperationException();
+    @Override
+    public String getName() {
+        return rule.getHead().getName();
     }
 
     @Override
-    public int start() {
+    public int getStart() {
         return start;
     }
 
     @Override
-    public int end() {
+    public int getEnd() {
         return end;
     }
 
     @Override
-    public String text(Input input) {
-        return input.subString(start, end);
-    }
-
-    @Override
-    public Iterable<ParseTreeNode> children() {
+    public List<ParseTreeNode> children() {
         return children;
     }
 
     @Override
-    public <R> R accept(ParseTreeVisitor<R> visitor) {
-        return visitor.visit(this);
+    public Object accept(ParseTreeVisitor visitor) {
+        return visitor.visitNonterminalNode(this);
     }
 
     @Override
-    public Rule definition() {
+    public Rule getGrammarDefinition() {
         return rule;
+    }
+
+    @Override
+    public String getText() {
+        if (children.size() == 1) return children.get(0).getText();
+
+        StringBuilder sb = new StringBuilder();
+        for (ParseTreeNode child : children) {
+            sb.append(child.getText());
+        }
+        return sb.toString();
     }
 
     @Override

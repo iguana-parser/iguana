@@ -4,12 +4,10 @@ import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("unused")
 public class Test14_2 {
@@ -43,29 +42,26 @@ Grammar.builder()
 
          DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          precedenceAndAssociativity.setOP2();
-         
+
 		 grammar = precedenceAndAssociativity.transform(grammar);
-         System.out.println(grammar.toString());
 
          Input input = Input.fromString("a-&a-a-a");
 
-         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+         IguanaParser parser = new IguanaParser(grammar);
+         ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
-         Assert.assertTrue(result.isParseSuccess());
+         assertNotNull(result);
 
-//         Visualization.generateSPPFGraph("test/org/iguana/parser/datadependent/precedence/",
-//                           result.asParseSuccess().getResult(), input);
-//
 //         NonterminalNode node = result.asParseSuccess().getResult();
 //         boolean hasAmbiguousIntermediateNode = false;
 //         for (PackedNode pnode : node.getChildren().get(0).getChildAt(0).getChildren()) {
 //        	 NonPackedNode first = pnode.getChildAt(0);
-//			 if (first instanceof IntermediateNode && first.isAmbiguous())
+//			 if (first instanceof IntermediateNode && first.ambiguous())
 //				 hasAmbiguousIntermediateNode = true;
 //         }
 //
 //         Assert.assertTrue(hasAmbiguousIntermediateNode);
 
-         Assert.assertEquals(4, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+         Assert.assertEquals(4, parser.getStatistics().getAmbiguousNodesCount());
     }
 }

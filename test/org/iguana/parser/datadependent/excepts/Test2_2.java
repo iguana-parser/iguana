@@ -34,12 +34,12 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Test;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("unused")
 public class Test2_2 {
@@ -74,10 +74,10 @@ Grammar.builder()
          Input input = Input.fromString("+a^a");
          GrammarGraph graph = GrammarGraph.from(grammar);
 
-         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        IguanaParser parser = new IguanaParser(grammar);
+        assertNotNull(parser.getParserTree(input, Nonterminal.withName("S")));
 
-         Assert.assertTrue(result.isParseSuccess());
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
     }
 }

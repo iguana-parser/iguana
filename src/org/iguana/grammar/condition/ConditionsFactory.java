@@ -32,7 +32,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
 
@@ -49,7 +49,7 @@ public class ConditionsFactory {
 	public static Conditions DEFAULT = new Conditions() {
 
 		@Override
-		public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, Runtime<T> runtime) {
+		public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IguanaRuntime<T> runtime) {
 			return false;
 		}
 
@@ -78,12 +78,12 @@ public class ConditionsFactory {
 			return new Conditions() {
 
 				@Override
-				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i,  Runtime<T> runtime) {
+				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i,  IguanaRuntime<T> runtime) {
 					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
 				}
 				
 				@Override
-				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, Runtime<T> runtime) {
+				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
 					for (int j = 0; j < actions.size(); j++) {
 						SlotAction slotAction = actions.get(j);
 					    if (slotAction.execute(input, u, i, ctx)) {
@@ -106,7 +106,7 @@ public class ConditionsFactory {
 		return new Conditions() {
 
 			@Override
-			public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, Runtime<T> runtime) {
+			public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IguanaRuntime<T> runtime) {
 				for (int j = 0; j < actions.size(); j++) {
 					SlotAction slotAction = actions.get(j);
 		            if (slotAction.execute(input, u, i)) {

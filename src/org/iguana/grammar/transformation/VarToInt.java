@@ -188,7 +188,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public Symbol visit(Terminal symbol) {
-        return Terminal.builder(symbol.getRegularExpression()).setCategory(symbol.getCategory()).setName(symbol.getName()).build();
+        return Terminal.builder(symbol.getRegularExpression()).setCategory(symbol.getCategory()).setNodeType(symbol.getNodeType()).setName(symbol.getName()).build();
     }
 
     @Override

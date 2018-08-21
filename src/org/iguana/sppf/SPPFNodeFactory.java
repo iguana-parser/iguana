@@ -40,7 +40,7 @@ public class SPPFNodeFactory {
 	public NonterminalNode createNonterminalNode(String head, String slot, NonPackedNode child) {
 		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(child);
-		NonterminalNode node = new NonterminalNode(grammarGraph.getNonterminalGrammarSlot(head), child.getIndex());
+		NonterminalNode node = new NonterminalNode(grammarGraph.getNonterminalGrammarSlot(head), child.getLeftExtent(), child.getIndex());
 		node.addPackedNode(packedNode);
 		return node;
 	}
@@ -49,8 +49,9 @@ public class SPPFNodeFactory {
 		PackedNode packedNode = new PackedNode(grammarGraph.getBodyGrammarSlot(slot));
 		packedNode.setLeftChild(leftChild);
 		packedNode.setRightChild(rightChild);
+		int leftExtent = leftChild.getLeftExtent();
 		int rightExtent = (rightChild != null) ? rightChild.getIndex() : leftChild.getIndex();
-		IntermediateNode node = new IntermediateNode(rightExtent);
+		IntermediateNode node = new IntermediateNode(leftExtent, rightExtent);
 		node.addPackedNode(packedNode);
 		return node;
 	}

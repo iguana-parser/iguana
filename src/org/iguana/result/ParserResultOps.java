@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ParserResultOps implements ResultOps<NonPackedNode> {
 
-    private static final NonPackedNode dummyNode = new NonPackedNode(-1) {
+    private static final NonPackedNode dummyNode = new NonPackedNode(-1, -1) {
         @Override
         public PackedNode getChildAt(int index) {  throw new UnsupportedOperationException(); }
 
@@ -68,12 +68,13 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         packedNode.setLeftChild(result1);
         packedNode.setRightChild(result2);
 
+        int leftExtent = result1.getLeftExtent();
         int rightExtent = (result2 != null) ? result2.getIndex() : result1.getIndex();
 
         logger.packedNodeAdded(packedNode);
 
         if (current == null) {
-            current = new IntermediateNode(rightExtent);
+            current = new IntermediateNode(leftExtent, rightExtent);
             IntermediateNode intermediateNode = (IntermediateNode) current;
             intermediateNode.addPackedNode(packedNode);
             logger.intermediateNodeAdded(intermediateNode);
@@ -96,9 +97,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
         if (current == null) {
             if (value == null)
-                current = new NonterminalNode(slot.getNonterminal(), result.getIndex());
+                current = new NonterminalNode(slot.getNonterminal(), result.getLeftExtent(), result.getIndex());
             else
-                current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getIndex(), value);
+                current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getLeftExtent(), result.getIndex(), value);
 
             NonterminalNode nonterminalNode = (NonterminalNode) current;
             nonterminalNode.addPackedNode(packedNode);

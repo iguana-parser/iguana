@@ -34,13 +34,13 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  *	S ::= a S 
@@ -89,9 +89,13 @@ public class Gamma0Test {
 	@Test
 	public void test() {
 		Input input = Input.fromString("aad");
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-		assertEquals(1, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
-		assertTrue(result.isParseSuccess());
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
+        assertEquals(1, parser.getStatistics().getAmbiguousNodesCount());
+
 //		assertTrue(result.asParseSuccess().getResult().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 	

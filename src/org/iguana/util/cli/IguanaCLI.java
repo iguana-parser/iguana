@@ -40,6 +40,7 @@ import org.iguana.util.serialization.SPPFJsonSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
 import org.iguana.util.visualization.SPPFToDot;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
@@ -63,7 +64,7 @@ public class IguanaCLI {
 
             if (line.hasOption("input")) {
                 try {
-                    input = Input.fromPath(line.getOptionValue("input"));
+                    input = Input.fromFile(new File(line.getOptionValue("input")));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -159,7 +160,7 @@ public class IguanaCLI {
 //
 //                try {
 //                    for (String inputPath : inputPaths) {
-//                        parse(startSymbol, grammar, Input.fromPath(inputPath), config);
+//                        getParserTree(startSymbol, grammar, Input.fromPath(inputPath), config);
 //                    }
 //                } catch (Exception e) {
 //                    e.printStackTrace();
@@ -170,7 +171,7 @@ public class IguanaCLI {
 //                try {
 //                    String commandLineInput = in.readLine();
 //                    System.out.println(commandLineInput);
-//                    parse(startSymbol, grammar, Input.fromString(commandLineInput), config);
+//                    getParserTree(startSymbol, grammar, Input.fromString(commandLineInput), config);
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
@@ -222,7 +223,7 @@ public class IguanaCLI {
                 .build();
 
         Option visualizeTree = Option.builder("visTree")
-                .desc("visualizes the parse tree")
+                .desc("visualizes the getParserTree tree")
                 .numberOfArgs(3)
                 .optionalArg(true)
                 .argName("content> <output> <exclude")

@@ -33,14 +33,14 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.ParseStatistics;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parser.ParseStatistics;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -74,11 +74,15 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers1() {
         Input input = Input.fromString(getBs(5));
-        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-        assertTrue(result.isParseSuccess());
-        ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
-		assertEquals(129, parseStatistics.getDescriptorsCount());
-		assertEquals(21, parseStatistics.getNonterminalNodesCount());
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
+
+        ParseStatistics parseStatistics = parser.getStatistics();
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
+        assertEquals(129, parseStatistics.getDescriptorsCount());
+        assertEquals(21, parseStatistics.getNonterminalNodesCount());
 		assertEquals(21, parseStatistics.getIntermediateNodesCount());
 		assertEquals(11, parseStatistics.getTerminalNodesCount());
 		assertEquals(179, parseStatistics.getPackedNodesCount());
@@ -87,9 +91,12 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers2() {
         Input input = Input.fromString(getBs(10));
-        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-        assertTrue(result.isParseSuccess());
-        ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
+
+        ParseStatistics parseStatistics = parser.getStatistics();
 		assertEquals(374, parseStatistics.getDescriptorsCount());
 		assertEquals(66, parseStatistics.getNonterminalNodesCount());
 		assertEquals(66, parseStatistics.getIntermediateNodesCount());
@@ -100,9 +107,12 @@ public class Gamma2WithEpsilonTest {
     @Test
     public void testParsers3() {
         Input input = Input.fromString(getBs(100));
-        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-        assertTrue(result.isParseSuccess());
-        ParseStatistics parseStatistics = result.asParseSuccess().getStatistics();
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
+
+        ParseStatistics parseStatistics = parser.getStatistics();
 		assertEquals(26159, parseStatistics.getDescriptorsCount());
 		assertEquals(5151, parseStatistics.getNonterminalNodesCount());
 		assertEquals(5151, parseStatistics.getIntermediateNodesCount());

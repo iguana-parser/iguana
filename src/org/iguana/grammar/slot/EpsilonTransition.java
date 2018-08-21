@@ -35,7 +35,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.util.Tuple;
 
@@ -86,7 +86,7 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
 
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 

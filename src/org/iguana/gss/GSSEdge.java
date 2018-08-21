@@ -32,7 +32,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class GSSEdge<T extends Result> {
@@ -98,7 +98,7 @@ public class GSSEdge<T extends Result> {
 	 * (2.2) if no, creates one and returns it
 	 *
 	 */
-	T addDescriptor(Input input, GSSNode<T> source, T result, Runtime<T> runtime) {
+	T addDescriptor(Input input, GSSNode<T> source, T result, IguanaRuntime<T> runtime) {
 		int inputIndex = result.getIndex();
 
 		BodyGrammarSlot returnSlot = getReturnSlot();

@@ -35,12 +35,12 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -80,8 +80,10 @@ public class PrecedeRestrictionTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("forall");
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
 	}
 
 }

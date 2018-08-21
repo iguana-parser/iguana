@@ -32,7 +32,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class ConditionalTransition extends AbstractTransition {
@@ -61,7 +61,7 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
 		
 		Object value = runtime.evaluate(condition, env, input);
 		

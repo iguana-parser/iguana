@@ -82,7 +82,8 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1
+                  "end" : 1,
+                  "text" : "a"
                 }
               ],
               "start" : 0,
@@ -100,8 +101,8 @@
               "name" : "B"
             }
           },
-          "start" : 0,
-          "end" : 10,
+          "start" : 1,
+          "end" : 5,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -134,7 +135,8 @@
                     }
                   },
                   "start" : 1,
-                  "end" : 2
+                  "end" : 2,
+                  "text" : "b"
                 }
               ],
               "start" : 1,
@@ -171,7 +173,8 @@
                     }
                   },
                   "start" : 2,
-                  "end" : 3
+                  "end" : 3,
+                  "text" : "b"
                 }
               ],
               "start" : 2,
@@ -208,7 +211,8 @@
                     }
                   },
                   "start" : 3,
-                  "end" : 4
+                  "end" : 4,
+                  "text" : "b"
                 }
               ],
               "start" : 3,
@@ -245,7 +249,8 @@
                     }
                   },
                   "start" : 4,
-                  "end" : 5
+                  "end" : 5,
+                  "text" : "b"
                 }
               ],
               "start" : 4,
@@ -297,7 +302,8 @@
                     }
                   },
                   "start" : 5,
-                  "end" : 6
+                  "end" : 6,
+                  "text" : "c"
                 }
               ],
               "start" : 5,
@@ -334,7 +340,8 @@
                     }
                   },
                   "start" : 6,
-                  "end" : 7
+                  "end" : 7,
+                  "text" : "c"
                 }
               ],
               "start" : 6,
@@ -371,7 +378,8 @@
                     }
                   },
                   "start" : 7,
-                  "end" : 8
+                  "end" : 8,
+                  "text" : "c"
                 }
               ],
               "start" : 7,
@@ -408,7 +416,8 @@
                     }
                   },
                   "start" : 8,
-                  "end" : 9
+                  "end" : 9,
+                  "text" : "c"
                 }
               ],
               "start" : 8,
@@ -445,7 +454,8 @@
                     }
                   },
                   "start" : 9,
-                  "end" : 10
+                  "end" : 10,
+                  "text" : "c"
                 }
               ],
               "start" : 9,

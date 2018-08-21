@@ -1,10 +1,9 @@
 package org.iguana.disambiguation.precedence.datadependent
 
 import iguana.utils.input.Input
-import org.iguana.IGGY
 import org.iguana.grammar.symbol.Nonterminal
 import org.iguana.iggy.IggyParser
-import org.iguana.parser.Iguana
+import org.iguana.parser.IguanaParser
 
 /**
   * Created by Anastasia Izmaylova
@@ -77,13 +76,13 @@ class Test15 extends FunSuite {
 //  test("DDParser4") { runDesugared(Input.fromString("a+a-a+a+-a*a"), 1) }
 
   private def runOriginal(input: Input, amb: Int) = {
-    val result = Iguana.parse(input, originalGrammar, start)
+    val result = IguanaParser.parse(input, originalGrammar, start)
     assert(result.isParseSuccess)
     assertResult(amb)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
   }
 
   private def runDesugared(input: Input, amb: Int) = {
-    val result = Iguana.parse(input, desugaredGrammar, start)
+    val result = IguanaParser.parse(input, desugaredGrammar, start)
     assert(result.isParseSuccess)
     assertResult(amb)(result.asParseSuccess.getStatistics.getCountAmbiguousNodes)
   }

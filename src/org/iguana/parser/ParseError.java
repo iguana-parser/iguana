@@ -32,51 +32,35 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSNode;
 
 
-public class ParseError implements ParseResult {
+public class ParseError {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
-    private final GSSNode gssNode;
+	private final String message;
 
-    public ParseError(GrammarSlot slot, int inputIndex, GSSNode gssNode) {
+    public ParseError(GrammarSlot slot, Input input, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-        this.gssNode = gssNode;
+		this.message = getMessage(input, inputIndex);
     }
 	
 	public int getInputIndex() {
 		return inputIndex;
 	}
 
-	public GrammarSlot getSlot() {
+	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
-	
-	public static String getMessage(Input input, int inputIndex) {		
+
+    @Override
+    public String toString() {
+        return message;
+    }
+
+    private static String getMessage(Input input, int inputIndex) {
 		int lineNumber = input.getLineNumber(inputIndex);
 		int columnNumber = input.getColumnNumber(inputIndex);
 		
 		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
 	}
-
-	@Override
-	public boolean isParseError() {
-		return true;
-	}
-
-	@Override
-	public boolean isParseSuccess() {
-		return false;
-	}
-
-	@Override
-	public ParseError asParseError() {
-		return this;
-	}
-
-	@Override
-	public ParseSuccess asParseSuccess() {
-		throw new RuntimeException("Cannot call getParseSuccess on ParseError.");
-	}
-
 }

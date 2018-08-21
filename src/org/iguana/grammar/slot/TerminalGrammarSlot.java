@@ -33,19 +33,17 @@ import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	
 	private final Terminal terminal;
 	private final Matcher matcher;
-	private final IntHashMap<Object> terminalNodes;
+	private IntHashMap<Object> terminalNodes;
 
 	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
 		super(Collections.emptyList());
@@ -54,7 +52,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
         this.terminalNodes = new OpenAddressingIntHashMap<>();
     }
 
-	public <T extends Result> T getResult(Input input, int i, Runtime<T> runtime) {
+	public <T extends Result> T getResult(Input input, int i, IguanaRuntime<T> runtime) {
 		T node = (T) terminalNodes.get(i);
 		if (node == null) {
 			int length = matcher.match(input, i);
@@ -69,7 +67,6 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	public int countTerminalNodes() {
-		System.out.println(terminalNodes);
 		return terminalNodes.size();
 	}
 
@@ -93,8 +90,8 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
     @Override
-	public void reset(Input input) {
-		terminalNodes.clear();
+	public void reset() {
+		terminalNodes = new OpenAddressingIntHashMap<>();
 	}
 
 	@Override
