@@ -32,7 +32,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class TerminalTransition extends AbstractTransition {
@@ -60,7 +60,7 @@ public class TerminalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T node, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T node, Environment env, IguanaRuntime<T> runtime) {
         int i = node.isDummy() ? u.getInputIndex() : node.getIndex();
 
 		runtime.setEnvironment(env);

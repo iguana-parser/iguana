@@ -32,7 +32,7 @@ import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
 import org.iguana.iggy.IggyParser
-import org.iguana.parser.{Iguana, ParseResult}
+import org.iguana.parser.IguanaParser
 
 /**
   *
@@ -76,7 +76,7 @@ class PrecedenceTest4 extends FunSuite {
 
   test("Associativity and Priority") {
     val input: Input = Input.fromString("xawz")
-    val result: ParseResult = Iguana.parse(input, grammar, Nonterminal.withName("E"))
+    val result: ParseResult = IguanaParser.parse(input, grammar, Nonterminal.withName("E"))
     assert(result.isParseSuccess)
     assert(result.asParseSuccess.getStatistics.getCountAmbiguousNodes == 0)
   }

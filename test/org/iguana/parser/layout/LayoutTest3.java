@@ -37,11 +37,11 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * 
@@ -82,7 +82,10 @@ public class LayoutTest3 {
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
 		Grammar grammar = getGrammar();
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
 	}
 }

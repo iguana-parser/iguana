@@ -30,21 +30,19 @@ package org.iguana.parser.datadependent.ebnf;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * 
@@ -87,12 +85,10 @@ public class Test3 {
 
 		Input input = Input.fromString("abbb");
 
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
-		
-		Assert.assertTrue(result.isParseSuccess());
-		
-		Assert.assertTrue(result.asParseSuccess().getStatistics().getAmbiguousNodesCount() == 0);
-		
+        IguanaParser parser = new IguanaParser(grammar);
+        assertNotNull(parser.getParserTree(input, Nonterminal.withName("X")));
+
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 	}
 
 }

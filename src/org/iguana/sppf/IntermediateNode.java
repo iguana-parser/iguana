@@ -32,8 +32,8 @@ import org.iguana.traversal.SPPFVisitor;
 
 public class IntermediateNode extends NonterminalOrIntermediateNode {
 
-    public IntermediateNode(int rightExtent) {
-        super(rightExtent);
+    public IntermediateNode(int leftExtent, int rightExtent) {
+        super(leftExtent, rightExtent);
     }
 
     @Override

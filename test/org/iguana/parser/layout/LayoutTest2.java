@@ -30,25 +30,23 @@ package org.iguana.parser.layout;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParseSuccess;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parser.ParseStatistics;
+import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.IntermediateNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.SPPFNodeFactory;
 import org.iguana.sppf.TerminalNode;
-import org.iguana.util.ParseStatistics;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -94,14 +92,15 @@ public class LayoutTest2 {
 	@Test
 	public void test() {
 		Input input = Input.fromString("a c");
-        ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-        assertTrue(result.isParseSuccess());
-        GrammarGraph graph = GrammarGraph.from(grammar);
-        assertEquals(getParseResult(graph, input), result);
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
+        assertEquals(getParseResult(), parser.getStatistics());
     }
 
-    public ParseSuccess getParseResult(GrammarGraph graph, Input input) {
-        ParseStatistics statistics = ParseStatistics.builder()
+    private ParseStatistics getParseResult() {
+        return ParseStatistics.builder()
                 .setDescriptorsCount(15)
                 .setGSSNodesCount(7)
                 .setGSSEdgesCount(7)
@@ -110,7 +109,6 @@ public class LayoutTest2 {
                 .setIntermediateNodesCount(6)
                 .setPackedNodesCount(15)
                 .setAmbiguousNodesCount(1).build();
-        return new ParseSuccess(getSPPFNode(new SPPFNodeFactory(graph), input), statistics);
     }
 
 

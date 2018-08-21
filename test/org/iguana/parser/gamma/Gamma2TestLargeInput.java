@@ -30,21 +30,12 @@ package org.iguana.parser.gamma;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParseSuccess;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.util.IguanaRunner;
-import org.iguana.util.ParseStatistics;
-import org.junit.Assert;
-import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -63,52 +54,40 @@ public class Gamma2TestLargeInput {
 		return new DesugarStartSymbol().transform(Grammar.builder().addRules(rule1, rule2, rule3).setStartSymbol(Start.from(S)).build());
 	}
 
-	@Test
-	public void test() throws InterruptedException {
-		IguanaRunner runner = IguanaRunner.builder(getGrammar())
-				.addFile("/Users/afroozeh/b.txt")
-				.setRunCount(100)
-				.build();
-		runner.run();
-	}
-
 	private static Nonterminal getStartSymbol() {
 		return Nonterminal.withName("S");
 	}
 
-	private static Function<GrammarGraph, ParseResult> getNewParseResult(int i) {
-		return results.get(i);
-	}
 
-	static List<Function<GrammarGraph, ParseResult>> results = new ArrayList<>();
-
-	static {
-
-		// 50
-		results.add((GrammarGraph registry) -> new ParseSuccess(null,
-				ParseStatistics.builder()
-							   .setDescriptorsCount(6329)
-							   .setGSSNodesCount(51)
-							   .setGSSEdgesCount(3877)
-							   .setNonterminalNodesCount(1275)
-							   .setTerminalNodesCount(50)
-							   .setIntermediateNodesCount(1225)
-							   .setPackedNodesCount(61300)
-							   .setAmbiguousNodesCount(2352)
-							   .build()));
-
-		// 100
-		results.add((GrammarGraph registry) -> new ParseSuccess(null,
-				ParseStatistics.builder()
-							   .setDescriptorsCount(25154)
-							   .setGSSNodesCount(101)
-							   .setGSSEdgesCount(15252)
-							   .setNonterminalNodesCount(5050)
-							   .setTerminalNodesCount(100)
-							   .setIntermediateNodesCount(4950)
-							   .setPackedNodesCount(495100)
-							   .setAmbiguousNodesCount(9702)
-							   .build()));
+//	static List<Function<GrammarGraph, ParseResult>> results = new ArrayList<>();
+//
+//	static {
+//
+//		// 50
+//		results.add((GrammarGraph registry) -> new ParseSuccess(null,
+//				ParseStatistics.builder()
+//							   .setDescriptorsCount(6329)
+//							   .setGSSNodesCount(51)
+//							   .setGSSEdgesCount(3877)
+//							   .setNonterminalNodesCount(1275)
+//							   .setTerminalNodesCount(50)
+//							   .setIntermediateNodesCount(1225)
+//							   .setPackedNodesCount(61300)
+//							   .setAmbiguousNodesCount(2352)
+//							   .build()));
+//
+//		// 100
+//		results.add((GrammarGraph registry) -> new ParseSuccess(null,
+//				ParseStatistics.builder()
+//							   .setDescriptorsCount(25154)
+//							   .setGSSNodesCount(101)
+//							   .setGSSEdgesCount(15252)
+//							   .setNonterminalNodesCount(5050)
+//							   .setTerminalNodesCount(100)
+//							   .setIntermediateNodesCount(4950)
+//							   .setPackedNodesCount(495100)
+//							   .setAmbiguousNodesCount(9702)
+//							   .build()));
 
 		// 150
 //		results.add((GrammarRegistry registry) -> new ParseSuccess(null, 
@@ -136,5 +115,4 @@ public class Gamma2TestLargeInput {
 //							   .setAmbiguousNodesCount(39402) 
 //							   .build()));
 
-	}
 }

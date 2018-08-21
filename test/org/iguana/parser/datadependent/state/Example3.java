@@ -8,15 +8,16 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("unused")
 public class Example3 {
@@ -67,11 +68,11 @@ Grammar.builder()
         		 break;
         	 }
          }
-         
-         ParseResult result = Iguana.parse(input, grammar, start, inits, false);
 
-         Assert.assertTrue(result.isParseSuccess());
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
-         Assert.assertEquals(0, result.asParseSuccess().getStatistics().getAmbiguousNodesCount());
+        assertNotNull(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
     }
 }

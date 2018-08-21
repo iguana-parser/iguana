@@ -102,13 +102,13 @@ public class SPPFJsonSerializer {
 
                 switch (kind) {
                     case "NonterminalNode":
-                        sppfNode = new NonterminalNode(getGrammarSlot(child), rightExtent);
+                        sppfNode = new NonterminalNode(getGrammarSlot(child), leftExtent, rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         addChildren(child, childrenMap);
                         break;
 
                     case "IntermediateNode":
-                        sppfNode = new IntermediateNode(rightExtent);
+                        sppfNode = new IntermediateNode(leftExtent, rightExtent);
                         idToNodeMap.put(id, sppfNode);
                         addChildren(child, childrenMap);
                         break;

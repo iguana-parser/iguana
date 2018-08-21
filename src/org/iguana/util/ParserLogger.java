@@ -43,7 +43,7 @@ public class ParserLogger {
         if (config.getLogLevel() == LogLevel.NONE)
             logger = IguanaLogger.DEFAULT;
         else
-            logger = new JavaUtilIguanaLogger("Iguana Logger", config.getLogLevel());
+            logger = new JavaUtilIguanaLogger("IguanaParser Logger", config.getLogLevel());
     }
 
     public void reset() {

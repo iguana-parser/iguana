@@ -30,13 +30,11 @@ package org.iguana.parser.datadependent.preprocess;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.Configuration;
 import org.junit.Test;
 
 import java.io.File;
@@ -44,7 +42,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 public class TestCSharp {
 	
@@ -59,69 +57,71 @@ public class TestCSharp {
 	}
 
 	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
-	private static Start start = Start.from(Nonterminal.withName("CompilationUnit"));
+	private static Nonterminal start = Nonterminal.withName("CompilationUnit");
 	
 	@Test
 	public void test1() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test1.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar);
-		System.out.println(result);
-		
+		Input input = Input.fromFile(new File(getClass().getResource("examples/Test1.cs").getPath()));
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, start);
+
+        assertNotNull(result);
+
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 //		NonterminalNodeVisitor.create(n -> {
-//			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
-//				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
+//			if (n.getGrammarSlot().getNonterminal().getName().equals("DPpConditional") ||
+//				n.getGrammarSlot().getNonterminal().getName().equals("PpConditional")) {
 //				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
 //		}).visit(result.asParseSuccess().getResult());
 		
-
-		assertTrue(result.isParseSuccess());
-//		assertTrue(nodes.isEmpty());
 	}
 	
 	@Test
 	public void test2() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test2.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar);
-		System.out.println(result);
+		Input input = Input.fromFile(new File(getClass().getResource("examples/Test2.cs").getPath()));
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
 
 		Map<String, NonterminalNode> nodes = new HashMap<>();
 		
 //		NonterminalNodeVisitor.create(n -> {
-//			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
-//				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
+//			if (n.getGrammarSlot().getNonterminal().getName().equals("DPpConditional") ||
+//				n.getGrammarSlot().getNonterminal().getName().equals("PpConditional")) {
 //				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
 //		}).visit(result.asParseSuccess().getResult());
 		
 
-		assertTrue(result.isParseSuccess());
 //		assertTrue(nodes.isEmpty());
 	}
 
 	@Test
 	public void test3() throws Exception {
-		Input input = Input.fromPath(getClass().getResource("examples/Test7.cs").getPath());
-		ParseResult result = Iguana.parse(input, grammar);
-		System.out.println(result);
-		
+		Input input = Input.fromFile(new File(getClass().getResource("examples/Test7.cs").getPath()));
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
+
 //		Map<String, NonterminalNode> nodes = new HashMap<>();
 //
 //		NonterminalNodeVisitor.create(n -> {
-//			if (n.getSlot().getNonterminal().getName().equals("DPpConditional") ||
-//				n.getSlot().getNonterminal().getName().equals("PpConditional")) {
+//			if (n.getGrammarSlot().getNonterminal().getName().equals("DPpConditional") ||
+//				n.getGrammarSlot().getNonterminal().getName().equals("PpConditional")) {
 //				String yield = input.subString(n.getLeftExtent(), n.getIndex());
 //				nodes.put(yield, n);
 //			}
 //		}).visit(result.asParseSuccess().getResult());
-		
 
-		assertTrue(result.isParseSuccess());
-//		assertTrue(nodes.isEmpty());
 	}
 	
 }

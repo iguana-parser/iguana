@@ -1,13 +1,13 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Rule;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
-import static iguana.utils.Assert.*;
 
 public class AmbiguityNode implements ParseTreeNode {
 
@@ -15,37 +15,42 @@ public class AmbiguityNode implements ParseTreeNode {
 
     public AmbiguityNode(Set<ParseTreeNode> alternatives) {
         this.alternatives = requireNonNull(alternatives);
-        requireNonEmpty(alternatives);
     }
 
     @Override
-    public int start() {
-        return alternatives.iterator().next().start();
+    public int getStart() {
+        return alternatives.iterator().next().getStart();
     }
 
     @Override
-    public int end() {
-        return alternatives.iterator().next().end();
+    public int getEnd() {
+        return alternatives.iterator().next().getEnd();
     }
 
     @Override
-    public String text(Input input) {
-        return input.subString(start(), end());
-    }
-
-    @Override
-    public Iterable<ParseTreeNode> children() {
-        return alternatives;
-    }
-
-    @Override
-    public <R> R accept(ParseTreeVisitor<R> visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
-    public Rule definition() {
+    public String getName() {
         return null;
+    }
+
+    @Override
+    public List<ParseTreeNode> children() {
+        return new ArrayList<>(alternatives);
+    }
+
+    @Override
+    public Object accept(ParseTreeVisitor visitor) {
+        return visitor.visitAmbiguityNode(this);
+    }
+
+    @Override
+    public Rule getGrammarDefinition() {
+        return null;
+    }
+
+    @Override
+    public String getText() {
+        if (alternatives.size() == 0) return "";
+        return children().get(0).getText();
     }
 
     @Override

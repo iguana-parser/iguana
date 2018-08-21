@@ -1,6 +1,5 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.Collections;
@@ -23,8 +22,9 @@ public class MetaSymbolNode implements ParseTreeNode {
         this.end = end;
     }
 
-    public Symbol getSymbol() {
-        return symbol;
+    @Override
+    public String getName() {
+        return symbol.getName();
     }
 
     public List<ParseTreeNode> getChildren() {
@@ -45,32 +45,36 @@ public class MetaSymbolNode implements ParseTreeNode {
     }
 
     @Override
-    public int start() {
+    public int getStart() {
         return start;
     }
 
     @Override
-    public int end() {
+    public int getEnd() {
         return end;
     }
 
     @Override
-    public String text(Input input) {
-        return input.subString(start, end);
-    }
-
-    @Override
-    public Iterable<ParseTreeNode> children() {
+    public List<ParseTreeNode> children() {
         return children;
     }
 
     @Override
-    public <R> R accept(ParseTreeVisitor<R> visitor) {
-        return visitor.visit(this);
+    public Object accept(ParseTreeVisitor visitor) {
+        return visitor.visitMetaSymbolNode(this);
     }
 
     @Override
-    public Object definition() {
+    public Symbol getGrammarDefinition() {
         return symbol;
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder sb = new StringBuilder();
+        for (ParseTreeNode child : children) {
+            sb.append(child.getText());
+        }
+        return sb.toString();
     }
 }

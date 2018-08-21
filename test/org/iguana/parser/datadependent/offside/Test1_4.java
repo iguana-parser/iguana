@@ -33,7 +33,6 @@ import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
@@ -41,15 +40,14 @@ import org.iguana.grammar.transformation.DesugarAlignAndOffside;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static iguana.utils.collections.CollectionsUtil.set;
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 
 @SuppressWarnings("unused")
@@ -95,9 +93,9 @@ Grammar.builder()
                                         "         a +       \n" +
                                         "        a");
 
-         ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
 
-         Assert.assertTrue(result.isParseError());
-
+        assertNotNull(result);
     }
 }

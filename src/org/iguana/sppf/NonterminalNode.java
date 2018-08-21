@@ -34,12 +34,12 @@ public class NonterminalNode extends NonterminalOrIntermediateNode {
 
 	private NonterminalGrammarSlot slot;
 
-	public NonterminalNode(NonterminalGrammarSlot slot, int rightExtent) {
-		super(rightExtent);
+	public NonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
+		super(leftExtent, rightExtent);
 		this.slot = slot;
 	}
 
-	@Override
+    @Override
 	public NonterminalGrammarSlot getGrammarSlot() {
 		return slot;
 	}

@@ -36,8 +36,8 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 	protected PackedNode first;
 	private List<PackedNode> rest;
 
-	public NonterminalOrIntermediateNode(int rightExtent) {
-		super(rightExtent);
+	public NonterminalOrIntermediateNode(int leftExtent, int rightExtent) {
+		super(leftExtent, rightExtent);
 	}
 
 	/*
@@ -57,11 +57,6 @@ public abstract class NonterminalOrIntermediateNode extends NonPackedNode {
 			rest.add(node);
 			return false;
 		}
-	}
-
-	@Override
-	public int getLeftExtent() {
-		return first.getLeftExtent();
 	}
 
 	@Override

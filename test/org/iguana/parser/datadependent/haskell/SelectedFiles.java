@@ -84,8 +84,8 @@ public class SelectedFiles {
 	
 //	public static NonterminalNodeVisitor getVisitor(Input input) {
 //		return NonterminalNodeVisitor.create(n -> {
-//						if (target.contains(n.getSlot().getNonterminal().getName())) {
-//							System.out.println(n.getSlot().getNonterminal().getName() + ": "
+//						if (target.contains(n.getGrammarSlot().getNonterminal().getName())) {
+//							System.out.println(n.getGrammarSlot().getNonterminal().getName() + ": "
 //											   + input.getLineNumber(n.getLeftExtent()) + ":"
 //											   + input.getColumnNumber(n.getLeftExtent()) + " "
 //											   + input.getLineNumber(n.getIndex()) + ":"

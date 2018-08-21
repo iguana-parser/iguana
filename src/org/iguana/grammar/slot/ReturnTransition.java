@@ -31,7 +31,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.gss.GSSNode;
-import org.iguana.parser.Runtime;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class ReturnTransition extends AbstractTransition {
@@ -49,7 +49,7 @@ public class ReturnTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, Runtime<T> runtime) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
 		Object value = runtime.evaluate(expression, env, input);
 		((EndGrammarSlot) dest).execute(input, u, result, value, runtime);
 	}

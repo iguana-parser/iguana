@@ -34,13 +34,12 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
-import org.iguana.util.Configuration;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 
 /**
@@ -99,8 +98,10 @@ public class Gamma1Test {
 	@Test
 	public void testSPPF() {
 		Input input = Input.fromString("aad");
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+
+        assertNotNull(result);
 //		assertTrue(result.asParseSuccess().getResult().deepEquals(getSPPF(parser.getGrammarGraph())));
 	}
 	

@@ -34,11 +34,12 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.Iguana;
-import org.iguana.parser.ParseResult;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
@@ -105,7 +106,10 @@ public class Test10 {
 		
 		Input input = Input.fromString("a    b");
 
-		ParseResult result = Iguana.parse(input, grammar, Nonterminal.withName("X"));
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("X"));
+
+        assertNotNull(result);
 	}
 
 }

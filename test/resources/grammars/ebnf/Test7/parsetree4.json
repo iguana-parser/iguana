@@ -82,7 +82,8 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1
+                  "end" : 1,
+                  "text" : "a"
                 }
               ],
               "start" : 0,
@@ -100,8 +101,8 @@
               "name" : "B"
             }
           },
-          "start" : 0,
-          "end" : 3,
+          "start" : 1,
+          "end" : 2,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -134,7 +135,8 @@
                     }
                   },
                   "start" : 1,
-                  "end" : 2
+                  "end" : 2,
+                  "text" : "b"
                 }
               ],
               "start" : 1,
@@ -186,7 +188,8 @@
                     }
                   },
                   "start" : 2,
-                  "end" : 3
+                  "end" : 3,
+                  "text" : "c"
                 }
               ],
               "start" : 2,

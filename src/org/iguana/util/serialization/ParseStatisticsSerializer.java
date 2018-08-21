@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.iguana.util.ParseStatistics;
+import org.iguana.parser.ParseStatistics;
 
 import java.io.IOException;
 

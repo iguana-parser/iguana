@@ -56,7 +56,8 @@
                 }
               },
               "start" : 0,
-              "end" : 1
+              "end" : 1,
+              "text" : "a"
             },
             {
               "kind" : "TerminalNode",
@@ -69,7 +70,8 @@
                 }
               },
               "start" : 1,
-              "end" : 2
+              "end" : 2,
+              "text" : "a"
             }
           ]
         }
