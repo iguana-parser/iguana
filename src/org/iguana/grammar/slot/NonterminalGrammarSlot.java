@@ -41,10 +41,9 @@ import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Collections.*;
 
 
 public class NonterminalGrammarSlot extends AbstractGrammarSlot {
@@ -61,8 +60,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
-		this.gssNodes = new HashMap<>();
-		this.firstSlots = new ArrayList<>();
+        this.firstSlots = new ArrayList<>();
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {
@@ -102,6 +100,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	public int countGSSNodes() {
+	    if (gssNodes == null) {
+	        return 0;
+        }
 		return gssNodes.size();
 	}
 	
@@ -121,6 +122,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
     }
 
     public GSSNode getGSSNode(int i) {
+	    if (gssNodes == null) {
+	        return new GSSNode(this, i);
+        }
 		return gssNodes.computeIfAbsent(Keys.from(i), key -> new GSSNode(this, i));
 	}
 
@@ -129,6 +133,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public Iterable<GSSNode> getGSSNodes() {
+	    if (gssNodes == null) {
+	        return emptyList();
+        }
 		return gssNodes.values();
 	}
 
@@ -150,7 +157,13 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
         	key = Keys.from(i, data);
 		}
 
-		GSSNode<T> gssNode = gssNodes.get(key);
+        GSSNode<T> gssNode = null;
+
+		if (gssNodes == null) {
+		    gssNodes = new HashMap<>();
+        } else {
+            gssNode = gssNodes.get(key);
+        }
 
 		if (gssNode == null) {
 			gssNode = new GSSNode<>(this, i, data);
