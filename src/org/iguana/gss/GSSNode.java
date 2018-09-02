@@ -239,13 +239,6 @@ public class GSSNode<T extends Result> {
 		return poppedElements;
 	}
 
-	public int getCountGSSEdges() {
-		int count = 0;
-		if (firstGSSEdge != null) count++;
-		if (restGSSEdges != null) count += restGSSEdges.size();
-		return count;
-	}
-
 	public String toString() {
 		String s = String.format("(%s, %d)", slot, inputIndex);
 		if (data != null) {

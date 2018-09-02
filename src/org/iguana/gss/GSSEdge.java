@@ -27,7 +27,6 @@
 
 package org.iguana.gss;
 
-import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.EnvironmentPool;
@@ -62,29 +61,6 @@ public class GSSEdge<T extends Result> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-
-		if (this == obj)
-			return true;
-
-		if (!(obj instanceof GSSEdge))
-			return false;
-
-		GSSEdge<?> other = (GSSEdge<?>) obj;
-
-		// Because destination.getInputIndex() == node.getLeftExtent, and
-		// node.getRightExtent() == source.getLeftExtent we don't use them here.
-		return 	returnSlot == other.getReturnSlot()
-				&& destination.getInputIndex() == other.getDestination().getInputIndex()
-				&& destination.getGrammarSlot() == other.getDestination().getGrammarSlot();
-	}
-
-	@Override
-	public int hashCode() {
-		return MurmurHash3.fn().apply(returnSlot, destination.getInputIndex(), destination.getGrammarSlot());
-	}
-
-	@Override
 	public String toString() {
 		return String.format("(%s, %s, %s)", returnSlot, result, destination);
 	}
@@ -101,9 +77,6 @@ public class GSSEdge<T extends Result> {
 	T addDescriptor(Input input, GSSNode<T> source, T result, IguanaRuntime<T> runtime) {
 		int inputIndex = result.getIndex();
 
-		BodyGrammarSlot returnSlot = getReturnSlot();
-		GSSNode<T> destination = getDestination();
-
 		Environment env = this.env;
 
 		if (returnSlot.requiresBinding())
@@ -118,7 +91,7 @@ public class GSSEdge<T extends Result> {
 
 		env = runtime.getEnvironment();
 
-		return returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env, runtime);
+		return returnSlot.getIntermediateNode(getResult(), destination.getInputIndex(), result, env, runtime);
 	}
 
 }

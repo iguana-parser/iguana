@@ -141,7 +141,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	@Override
 	public void reset() {
-		gssNodes = new HashMap<>();
+		gssNodes = null;
 	}
 	
 	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, IguanaRuntime<T> runtime) {
