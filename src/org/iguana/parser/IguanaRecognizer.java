@@ -1,7 +1,6 @@
 package org.iguana.parser;
 
 import iguana.utils.input.Input;
-import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -42,8 +41,8 @@ public class IguanaRecognizer {
         return root.getIndex() == input.length() - 1;
     }
 
-    public ParseStatistics getStatistics() {
-        return runtime.getParseStatistics();
+    public RecognizerStatistics getStatistics() {
+        return runtime.getStatistics();
     }
 
     public ParseError getParseError() {

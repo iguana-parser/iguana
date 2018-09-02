@@ -29,31 +29,16 @@ package org.iguana.sppf;
 
 public abstract class NonPackedNode implements SPPFNode {
 
-    private final int leftExtent;
-    private final int rightExtent;
+    public abstract void setAmbiguous(boolean ambiguous);
 
-    public NonPackedNode(int leftExtent, int rightExtent) {
-        this.leftExtent = leftExtent;
-        this.rightExtent = rightExtent;
-    }
+    public abstract boolean isAmbiguous();
+
+    public abstract PackedNode getFirstPackedNode();
 
     @Override
     public String toString() {
         return String.format("(%s, %d, %d)", getGrammarSlot(), getLeftExtent(), getIndex());
     }
-
-    @Override
-    public int getIndex() {
-        return rightExtent;
-    }
-
-    @Override
-    public int getLeftExtent() {
-        return leftExtent;
-    }
-
-    @Override
-    public abstract PackedNode getChildAt(int index);
 
     @Override
     public boolean equals(Object obj) {

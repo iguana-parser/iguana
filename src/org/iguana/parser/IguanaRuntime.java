@@ -14,6 +14,7 @@ import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.result.ParserResultOps;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
@@ -206,17 +207,26 @@ public class IguanaRuntime<T extends Result> {
         return new ParseError(errorSlot, input, errorIndex);
     }
 
-    public ParseStatistics getParseStatistics() {
-        return ParseStatistics.builder()
-                              .setDescriptorsCount(logger.getDescriptorsCount())
-                              .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
-                              .setGSSEdgesCount(logger.getCountGSSEdges())
-                              .setNonterminalNodesCount(logger.getCountNonterminalNodes())
-                              .setTerminalNodesCount(logger.getCountTerminalNodes())
-                              .setIntermediateNodesCount(logger.getCountIntermediateNodes())
-                              .setPackedNodesCount(logger.getCountPackedNodes())
-                              .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())
-                              .build();
+    public RecognizerStatistics getStatistics() {
+        if (resultOps instanceof ParserResultOps) {
+            return ParseStatistics.builder()
+                    .setDescriptorsCount(logger.getDescriptorsCount())
+                    .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
+                    .setGSSEdgesCount(logger.getCountGSSEdges())
+                    .setNonterminalNodesCount(logger.getCountNonterminalNodes())
+                    .setTerminalNodesCount(logger.getCountTerminalNodes())
+                    .setIntermediateNodesCount(logger.getCountIntermediateNodes())
+                    .setPackedNodesCount(logger.getCountPackedNodes())
+                    .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())
+                    .build();
+        } else {
+            return RecognizerStatistics.builder()
+                    .setDescriptorsCount(logger.getDescriptorsCount())
+                    .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
+                    .setGSSEdgesCount(logger.getCountGSSEdges())
+                    .build();
+        }
+
     }
 
     public Configuration getConfiguration() {
