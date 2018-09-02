@@ -83,7 +83,7 @@ public class IguanaParser {
         }
 
         if (options.ambiguous()) {
-            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout());
+            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
             return (ParseTreeNode) root.accept(visitor).getValues().get(0);
         }
 
@@ -104,7 +104,7 @@ public class IguanaParser {
     }
 
     public ParseStatistics getStatistics() {
-        return runtime.getParseStatistics();
+        return (ParseStatistics) runtime.getStatistics();
     }
 
 }

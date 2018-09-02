@@ -7,6 +7,7 @@ import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.*;
 import org.iguana.traversal.exception.CyclicGrammarException;
 
@@ -22,12 +23,14 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
     private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, VisitResult> convertedNodes;
     private final boolean ignoreLayout;
+    private ParserResultOps resultOps;
 
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 
-    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, boolean ignoreLayout) {
+    public AmbiguousSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, boolean ignoreLayout, ParserResultOps resultOps) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.ignoreLayout = ignoreLayout;
+        this.resultOps = resultOps;
         this.convertedNodes = new HashMap<>();
         this.visitedNodes = new LinkedHashSet<>();
         this.createNodeVisitor = new VisitResult.CreateParseTreeVisitor<>(parseTreeBuilder);
@@ -77,13 +80,13 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
 
         if (node.isAmbiguous()) {
             Set<T> children = new HashSet<>();
-            for (PackedNode packedNode : node.getChildren()) {
+            for (PackedNode packedNode : resultOps.getPackedNodes(node)) {
                 VisitResult visitResult = packedNode.accept(this);
                 children.addAll(visitResult.accept(createNodeVisitor, packedNode));
             }
             result = single(parseTreeBuilder.ambiguityNode(children));
         } else {
-            PackedNode packedNode = node.getChildAt(0);
+            PackedNode packedNode = node.getFirstPackedNode();
             switch (node.getGrammarSlot().getNodeType()) {
                 case Basic:
                 case Layout: {
@@ -140,11 +143,11 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
 
         if (node.isAmbiguous()) {
             result = empty();
-            for (PackedNode packedNode : node.getChildren()) {
+            for (PackedNode packedNode : resultOps.getPackedNodes(node)) {
                 result = result.merge(packedNode.accept(this));
             }
         } else {
-            PackedNode packedNode = node.getChildAt(0);
+            PackedNode packedNode = node.getFirstPackedNode();
             result = packedNode.accept(this);
         }
         convertedNodes.put(node, result);

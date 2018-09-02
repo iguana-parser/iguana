@@ -37,8 +37,6 @@ public interface SPPFNode extends Result {
 	
 	SPPFNode getChildAt(int index);
 
-	List<? extends SPPFNode> getChildren();
-		
 	int childrenCount();
 
 	GrammarSlot getGrammarSlot();

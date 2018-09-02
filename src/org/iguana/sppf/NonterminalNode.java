@@ -27,35 +27,100 @@
 
 package org.iguana.sppf;
 
+import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.symbol.Rule;
 import org.iguana.traversal.SPPFVisitor;
 
-public class NonterminalNode extends NonterminalOrIntermediateNode {
+public class NonterminalNode extends NonPackedNode {
 
-	private NonterminalGrammarSlot slot;
+	private final EndGrammarSlot slot;
 
-	public NonterminalNode(NonterminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		super(leftExtent, rightExtent);
+	private final NonPackedNode child;
+
+	private final int leftExtent;
+
+	private final int rightExtent;
+
+    private final Object value;
+
+    private boolean ambiguous;
+
+    public NonterminalNode(EndGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {
+        this(slot, child, leftExtent, rightExtent, null);
+    }
+
+	public NonterminalNode(EndGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent, Object value) {
 		this.slot = slot;
+		this.child = child;
+		this.leftExtent = leftExtent;
+		this.rightExtent = rightExtent;
+		this.value = value;
 	}
 
     @Override
+    public SPPFNode getChildAt(int index) {
+	    if (index == 0) {
+	        return child;
+        }
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public int childrenCount() {
+        return 1;
+    }
+
+    @Override
 	public NonterminalGrammarSlot getGrammarSlot() {
-		return slot;
+		return slot.getNonterminal();
 	}
+
+	public EndGrammarSlot getEndGrammarSlot() {
+        return slot;
+    }
+
+    public Rule getRule() {
+        return slot.getRule();
+    }
 
 	@Override
 	public <R> R accept(SPPFVisitor<R> visitAction) {
 		return visitAction.visit(this);
 	}
 
-	@Override
+    @Override
+    public int getLeftExtent() {
+        return leftExtent;
+    }
+
+    @Override
+    public void setAmbiguous(boolean ambiguous) {
+        this.ambiguous = ambiguous;
+    }
+
+    @Override
+    public boolean isAmbiguous() {
+        return ambiguous;
+    }
+
+    @Override
 	public String toString() {
 		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getIndex());
 	}
 
-	public Object getValue() {
-		return null;
+    @Override
+    public int getIndex() {
+        return rightExtent;
+    }
+
+    @Override
+    public Object getValue() {
+		return value;
 	}
 
+    @Override
+    public PackedNode getFirstPackedNode() {
+        return new PackedNode(slot, child);
+    }
 }

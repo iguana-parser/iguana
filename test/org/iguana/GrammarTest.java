@@ -3,17 +3,13 @@ package org.iguana;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
-import org.iguana.parser.IguanaParser;
-import org.iguana.parser.IguanaRecognizer;
-import org.iguana.parser.ParseOptions;
-import org.iguana.parser.ParseStatistics;
+import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.exception.AmbiguityException;
 import org.iguana.traversal.exception.CyclicGrammarException;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
-import org.iguana.util.serialization.SPPFJsonSerializer;
+import org.iguana.util.serialization.RecognizerStatisticsSerializer;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -94,7 +90,7 @@ public class GrammarTest {
             Assert.assertTrue(recognizer.recognize(input));
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
-            ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
+            RecognizerStatistics expectedStatistics = RecognizerStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
 
             assertEquals(expectedStatistics, recognizer.getStatistics());
         };
@@ -119,39 +115,33 @@ public class GrammarTest {
             }
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
-            String sppfPath = testPath + "/sppf" + j + ".json";
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
             if (!new File(statisticsPath).exists()) {
-                record(parser, actualParseTree, input, grammarPath, statisticsPath, sppfPath, parseTreePath);
+                record(parser, actualParseTree, input, grammarPath, statisticsPath, parseTreePath);
                 return;
             }
 
-            ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath), ParseStatistics.class);
+            ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
             assertEquals(expectedStatistics, parser.getStatistics());
 
             if (!isCyclic) {
                 assertNotNull("Parse Error: " + parser.getParseError(), actualParseTree);
 
-                NonterminalNode expectedSPPFNode = SPPFJsonSerializer.deserialize(readFile(sppfPath), parser.getGrammarGraph());
                 ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(parseTreePath), ParseTreeNode.class);
 
-                assertEquals(SPPFJsonSerializer.serialize(expectedSPPFNode), SPPFJsonSerializer.serialize(parser.getSPPF(input)));
                 assertEquals(expectedParseTree, actualParseTree);
             }
         };
     }
 
-    private static void record(IguanaParser parser, ParseTreeNode parseTree, Input input, String grammarPath, String statisticsPath, String sppfPath, String parseTreePath) throws IOException {
+    private static void record(IguanaParser parser, ParseTreeNode parseTree, Input input, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
         String jsonGrammar = JsonSerializer.toJSON(parser.getGrammar());
         FileUtils.writeFile(jsonGrammar, grammarPath);
 
         ParseStatistics statistics = parser.getStatistics();
         String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
         FileUtils.writeFile(jsonStatistics, statisticsPath);
-
-        String jsonSPPF = SPPFJsonSerializer.serialize(parser.getSPPF(input));
-        FileUtils.writeFile(jsonSPPF, sppfPath);
 
         try {
             String jsonTree = JsonSerializer.toJSON(parseTree);
