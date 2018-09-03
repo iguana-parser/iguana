@@ -78,7 +78,11 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     private T convertBasicAndLayout(BodyGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {
-        List<T> children = new ArrayList<>();
+        int bodySize = slot.getRule().getBody().size();
+        if (ignoreLayout) { // Layout is insert between symbols in the body of a rule
+            bodySize /= 2 + 1;
+        }
+        List<T> children = new ArrayList<>(bodySize);
 
         if (child instanceof IntermediateNode) {
             convertIntermediateNode((IntermediateNode) child, children);
