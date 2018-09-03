@@ -49,7 +49,6 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		super(Collections.emptyList());
 		this.terminal = terminal;
 		this.matcher = factory.getMatcher(terminal.getRegularExpression());
-        this.terminalNodes = null;
     }
 
 	public <T extends Result> T getResult(Input input, int i, IguanaRuntime<T> runtime) {
@@ -94,7 +93,7 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 
     @Override
 	public void reset() {
-		terminalNodes = new OpenAddressingIntHashMap<>();
+		terminalNodes = null;
 	}
 
 	@Override

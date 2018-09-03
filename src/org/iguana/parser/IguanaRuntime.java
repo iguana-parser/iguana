@@ -20,9 +20,7 @@ import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParserLogger;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class IguanaRuntime<T extends Result> {
@@ -261,6 +259,22 @@ public class IguanaRuntime<T extends Result> {
             else
                 System.out.printf("GSS Edges (min: %d, max: %d, mean: %.2f)%n", (int) gssEdgesStats[0], (int) gssEdgesStats[1], gssEdgesStats[2]);
             System.out.println("---------------");
+        }
+    }
+
+    private static void printGSSInfo(GrammarGraph grammarGraph) {
+        Comparator<GSSNode<?>> edgeComparator = (node1, node2) -> node2.countGSSEdges() - node1.countGSSEdges();
+        List<GSSNode<?>> gssNodes = new ArrayList<>();
+        for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {
+            for (GSSNode<?> gssNode : slot.getGSSNodes()) {
+                gssNodes.add(gssNode);
+            }
+        }
+
+        gssNodes.sort(edgeComparator);
+
+        for (GSSNode<?> gssNode : gssNodes) {
+            System.out.println(gssNode + ", edges: " + gssNode.countGSSEdges() + ", poppedElements: " + gssNode.countPoppedElements());
         }
     }
 
