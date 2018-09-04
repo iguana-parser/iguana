@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.input.Input;
@@ -160,7 +161,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
         GSSNode<T> gssNode = null;
 
 		if (gssNodes == null) {
-		    gssNodes = new HashMap<>();
+		    gssNodes = new OpenAddressingHashMap<>();
         } else {
             gssNode = gssNodes.get(key);
         }
