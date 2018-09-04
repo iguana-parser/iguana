@@ -1,27 +1,36 @@
 package iguana.utils.collections;
 
-import java.util.Iterator;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class OpenAddressingHashMap {
+public class OpenAddressingHashMap<K, T> implements Map<K, T> {
 
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 
+    private final int initialCapacity;
     private final float loadFactor;
+
+    private int capacity;
 
     private int size;
 
     private int threshold;
 
-    private Object[] table;
+    /**
+     * capacity - 1
+     * The bitMask is used to adj the p most-significant bytes of the multiplicaiton.
+     */
+    private int bitMask;
+
+    private K[] keys;
+
+    private T[] values;
 
     public OpenAddressingHashMap() {
         this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
-    }
-
-    public OpenAddressingHashMap(float loadFactor) {
-        this(DEFAULT_INITIAL_CAPACITY, loadFactor);
     }
 
     public OpenAddressingHashMap(int initalCapacity) {
@@ -29,188 +38,203 @@ public class OpenAddressingHashMap {
     }
 
     public OpenAddressingHashMap(int initialCapacity, float loadFactor) {
-        if (initialCapacity < 0) throw new IllegalArgumentException("Initial capacity cannot be negative");
-        if (loadFactor < 0 || loadFactor > 1.0f) throw new IllegalArgumentException("Load factor must be between 0 and 1");
+        this.initialCapacity = initialCapacity < 0 ? DEFAULT_INITIAL_CAPACITY : initialCapacity;
+        this.loadFactor = (loadFactor < 0 || loadFactor > 1) ? DEFAULT_LOAD_FACTOR : loadFactor;
+        init();
+    }
 
-        int capacity = 1;
-
-        // Find the smallest power of 2 that is greater than or equal to initial capacity
+    @SuppressWarnings("unchecked")
+    private void init() {
+        capacity = 1;
         while (capacity < initialCapacity) capacity <<= 1;
 
+        bitMask = capacity - 1;
+
         threshold = (int) (loadFactor * capacity);
-        table = new Object[capacity * 2];
-        this.loadFactor = (loadFactor < 0 || loadFactor > 1) ? DEFAULT_LOAD_FACTOR : loadFactor;
+        keys = (K[]) new Object[capacity];
+
+        values = (T[]) new Object[capacity];
+
+        size = 0;
     }
 
-//    public Object computeIfAbsent(Key key, BiFunction<? super K, ? super V, ? extends V> f) {
-//        int j = 0;
-//        int index = hash(key, j);
-//
-//        do {
-//            if (table[index] == null) {
-//                table[index] = new Entry<>(key, f.apply(key));
-//                size++;
-//                if (size >= threshold) {
-//                    rehash();
-//                }
-//                return val;
-//            } else if (table[index] == key) {
-//                return values[index];
-//            }
-//
-//            index = hash(key, ++j);
-//
-//        } while (true);
-//    }
+    @Override
+    public T put(K key, T value) {
+        int j = 0;
+        int index = hash(key, j);
 
-    public Object compute(Object key, Function<Object, Object> f) {
-//        int j = 0;
-//        int index = hash(key, j);
-//
-//        do {
-//            if (table[index] == -1) {    // Key is not in the map
-//                table[index] = key;
-//                K val = f.apply(key, null);
-//                values[index] = val;
-//                size++;
-//                if (size >= threshold) {
-//                    rehash();
-//                }
-//                return val;
-//            } else if (table[index] == key) {
-//                K val = values[index];
-//                val = f.apply(key, val);
-//                values[index] = val;
-//                return null;
-//            }
-//
-//            collisionsCount++;
-//
-//            index = hash(key, ++j);
-//
-//        } while (true);
-        return null;
-    }
-
-    public Object get(Object key) {
-        Object[] table = this.table;
-        int length = table.length;
-        int i = hash(key, length);
-        while (true) {
-            Object item = table[i];
-            if (item == null)
-                return null;
-            if (item.equals(key))
-                return table[i + 1];
-            i = nextKeyIndex(i, length);
-        }
-    }
-
-    private static int nextKeyIndex(int i, int length) {
-        return (i + 2 < length ? i + 2 : 0);
-    }
-
-
-    public Object put(Object key, Object object) {
-        Object[] table = this.table;
-        int length = table.length;
-        int i = hash(key, length);
-
-        while (true) {
-            Object item = table[i];
-            if (table[i] == null) {
-                table[i] = key;
-                table[i + 1] = object;
+        do {
+            if (keys[index] == null) {
+                keys[index] = key;
+                values[index] = value;
                 size++;
-                if (size > threshold) {
-                    resize();
+                if (size >= threshold) {
+                    rehash();
                 }
                 return null;
-            }
-            if (item.equals(key)) {
-                Object oldValue = table[i + 1];
-                table[i + 1] = object;
+            } else if (keys[index].equals(key)) {
+                T oldValue = values[index];
+                values[index] = value;
                 return oldValue;
             }
 
-            i = nextKeyIndex(i, length);
-        }
+            index = hash(key, ++j);
+
+        } while (true);
     }
 
-    private void resize() {
-        int length = table.length;
+    @Override
+    public T remove(Object key) {
+        return null;
+    }
 
-        int newLength = length * 2;
-        Object[] newTable = new Object[newLength];
+    @Override
+    public void putAll(Map<? extends K, ? extends T> m) {
 
-        for (int i = 0; i < length; i += 2) {
-            Object key = table[i];
-            if (table[i] != null) {
-                int index = hash(key, newLength);
-                newTable[index] = key;
-                newTable[index + 1] = table[i + 1];
+    }
+
+    @SuppressWarnings("unchecked")
+    private void rehash() {
+        capacity <<= 1;
+        bitMask = capacity - 1;
+
+        K[] newKeys = (K[]) new Object[capacity];
+        T[] newValues = (T[]) new Object[capacity];
+
+        label:
+        for (int i = 0; i < keys.length; i++) {
+            int j = 0;
+            K key = keys[i];
+
+            T value = values[i];
+
+            if (key != null) {
+
+                int index = hash(key, j);
+
+                do {
+                    if (newKeys[index] == null) {
+                        newKeys[index] = key;
+                        newValues[index] = value;
+                        continue label;
+                    }
+
+                    index = hash(key, ++j);
+
+                } while (true);
             }
         }
 
-        table = newTable;
-        threshold = (int) (loadFactor * length);
+        keys = newKeys;
+        values = newValues;
+        threshold = (int) (loadFactor * capacity);
+    }
+
+    public T get(Object key) {
+        int j = 0;
+        int index = hash(key, j);
+        while (keys[index] != null && !keys[index].equals(key)) {
+            index = hash(key, ++j);
+        }
+        return values[index];
     }
 
     public int size() {
         return size;
     }
 
-    public int getCapacity() {
-        return table.length / 2;
+    public int getInitialCapacity() {
+        return initialCapacity;
     }
 
     public boolean isEmpty() {
         return size == 0;
     }
 
-    public Iterable<Object> values() {
-        return () -> valueIterator.reset();
+    @Override
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
     }
 
-    private ValueIterator valueIterator = new ValueIterator();
+    @Override
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
 
-    private class ValueIterator implements Iterator<Object> {
+    public void clear() {
+        init();
+    }
 
-        int current = 0;
-        int count = 0;
+    public String toString() {
+        if (isEmpty()) return "{ }";
 
-        @Override
-        public boolean hasNext() {
-            return count < size;
-        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
 
-        @Override
-        public Object next() {
-            int length = table.length;
 
-            while (true) {
-                if (table[current] != null) {
-                    count++;
-                    Object next = table[current + 1];
-                    current = nextKeyIndex(current, length);
-                    return next;
-                }
-                current = nextKeyIndex(current, length);
+        for (Entry<K,T> entry : entrySet()) {
+            if (entry.getKey() != null) {
+                sb.append("(" + entry.getKey() + ", " + entry.getValue() + ")");
+                sb.append(", ");
             }
         }
 
-        private ValueIterator reset() {
-            count = 0;
-            return this;
+        sb.delete(sb.length() - 2, sb.length());
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+    private int hash(Object key, int j) {
+        return (key.hashCode() + j) & bitMask;
+    }
+
+    @Override
+    public Set<K> keySet() {
+        Set<K> keySet = new HashSet<>();
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != null) keySet.add(keys[i]);
         }
+        return keySet;
     }
 
-    private int hash(Object key, int length) {
-        int h = key.hashCode();
-        return ((h << 1) - (h << 8)) & (length - 1);
+    @Override
+    public Collection<T> values() {
+        Set<T> values = new HashSet<>(size);
+
+        for (int i = 0; i < this.values.length; i++) {
+            if (this.values[i] != null) values.add(this.values[i]);
+        }
+
+        return values;
     }
 
-    public int getThreshold() {
-        return threshold;
+    @Override
+    public Set<Entry<K, T>> entrySet() {
+        Set<Entry<K, T>> entrySet = new HashSet<>();
+
+        for (int i = 0; i < keys.length; i++) {
+            final K key = keys[i];
+            final T value = values[i];
+
+            entrySet.add(new Entry<K, T>() {
+                @Override
+                public K getKey() {
+                    return key;
+                }
+
+                @Override
+                public T getValue() {
+                    return value;
+                }
+
+                @Override
+                public T setValue(T value) {
+                    return null;
+                }
+            });
+        }
+
+        return entrySet;
     }
 }

@@ -18,10 +18,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
     private int threshold;
 
-    private int rehashCount;
-
-    private int collisionsCount;
-
     /**
      * capacity - 1
      * The bitMask is used to adj the p most-significant bytes of the multiplicaiton.
@@ -60,8 +56,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
         values = (T[]) new Object[capacity];
 
         size = 0;
-        rehashCount = 0;
-        collisionsCount = 0;
     }
 
     @Override
@@ -87,8 +81,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
             } else if (keys[index] == key) {
                 return values[index];
             }
-
-            collisionsCount++;
 
             index = hash(key, ++j);
 
@@ -117,8 +109,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
                 return null;
             }
 
-            collisionsCount++;
-
             index = hash(key, ++j);
 
         } while (true);
@@ -144,8 +134,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
                 return oldValue;
             }
 
-            collisionsCount++;
-
             index = hash(key, ++j);
 
         } while (true);
@@ -167,7 +155,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
     }
 
     private void rehash() {
-
         capacity <<= 1;
 
         bitMask = capacity - 1;
@@ -186,7 +173,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
             T value = values[i];
 
             if (key != -1) {
-
                 int index = hash(key, j);
 
                 do {
@@ -204,9 +190,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
         keys = newKeys;
         values = newValues;
-
         threshold = (int) (loadFactor * capacity);
-        rehashCount++;
     }
 
     @Override
@@ -230,11 +214,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
     }
 
     @Override
-    public int getEnlargeCount() {
-        return rehashCount;
-    }
-
-    @Override
     public boolean isEmpty() {
         return size == 0;
     }
@@ -242,10 +221,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
     @Override
     public void clear() {
         init();
-    }
-
-    public int getCollisionCount() {
-        return collisionsCount++;
     }
 
     public String toString() {

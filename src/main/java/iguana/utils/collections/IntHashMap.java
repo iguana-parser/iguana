@@ -29,14 +29,10 @@ public interface IntHashMap<T> extends Iterable<Entry<T>> {
 	
 	int getInitialCapacity();
 	
-	int getEnlargeCount();
-
 	boolean isEmpty();
 
 	void clear();
 
-	int getCollisionCount();
-	
 	Iterable<T> values();
 
 }

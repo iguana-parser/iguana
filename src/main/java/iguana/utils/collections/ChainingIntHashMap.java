@@ -220,11 +220,6 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 	}
 	
 	@Override
-	public int getEnlargeCount() {
-		return rehashCount;
-	}
-
-	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
