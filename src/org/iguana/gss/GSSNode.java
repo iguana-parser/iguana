@@ -28,6 +28,7 @@
 package org.iguana.gss;
 
 import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
@@ -75,7 +76,9 @@ public class GSSNode<T extends Result> {
 		if (firstGSSEdge == null) {
 			firstGSSEdge = edge;
 		} else {
-			if (restGSSEdges == null) restGSSEdges = new ArrayList<>(4);
+            if (restGSSEdges == null) {
+                restGSSEdges = new ArrayList<>(4);
+            }
 			restGSSEdges.add(edge);
 		}
 
@@ -113,7 +116,7 @@ public class GSSNode<T extends Result> {
 				Key key = value == null ? Keys.from(rightIndex) : Keys.from(rightIndex, value);
 
 				if (restPoppedElements == null) {
-					restPoppedElements = new HashMap<>(8);
+					restPoppedElements = new OpenAddressingHashMap<>();
 					T poppedElement = ops.convert(null, child, slot, value);
 					restPoppedElements.put(key, poppedElement);
 					return poppedElement;

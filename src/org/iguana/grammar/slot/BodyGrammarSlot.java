@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
@@ -96,7 +97,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		Key key = Keys.from(destinationIndex, rightResult.getIndex(), env);
 
 		if (intermediateNodes == null) {
-		    intermediateNodes = new HashMap<>();
+		    intermediateNodes = new OpenAddressingHashMap<>();
         }
 
 		Object value = intermediateNodes.get(key);
