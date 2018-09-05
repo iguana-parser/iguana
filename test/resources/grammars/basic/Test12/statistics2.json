@@ -5,6 +5,6 @@
   "nonterminalNodesCount" : 2,
   "terminalNodesCount" : 1,
   "intermediateNodesCount" : 1,
-  "packedNodesCount" : 4,
+  "packedNodesCount" : 2,
   "ambiguousNodesCount" : 1
 }

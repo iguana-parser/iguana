@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
@@ -73,7 +74,6 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		this.variable = variable;
 		this.i2 = i2;
 		this.state = state;
-		this.intermediateNodes = new HashMap<>();
 	}
 	
 	@Override
@@ -90,11 +90,15 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Result> T getIntermediateNode2(T leftResult, int destinationIndex, T rightResult, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> T getIntermediateNode(T leftResult, int destinationIndex, T rightResult, Environment env, IguanaRuntime<T> runtime) {
 		if (isFirst())
 			return rightResult;
 
 		Key key = Keys.from(destinationIndex, rightResult.getIndex(), env);
+
+		if (intermediateNodes == null) {
+		    intermediateNodes = new OpenAddressingHashMap<>();
+        }
 
 		Object value = intermediateNodes.get(key);
 		if (value == null) {
@@ -113,7 +117,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 
 	@Override
 	public void reset() {
-		intermediateNodes = new HashMap<>();
+		intermediateNodes = null;
 	}
 
 	public String getLabel() {

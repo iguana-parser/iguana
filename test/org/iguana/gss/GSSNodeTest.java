@@ -53,7 +53,7 @@ public class GSSNodeTest {
         // Pop ("a", 0, 1)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));
 
-        NonterminalNode expected = sppfFactory.createNonterminalNode("A", "A ::= a .", terminalNode01);
+        NonterminalNode expected = sppfFactory.createNonterminalNode("A ::= a .", terminalNode01);
         assertEquals(expected, gssNode.getPoppedElements().get(0));
 
         // Pop ("a", 0, 1)

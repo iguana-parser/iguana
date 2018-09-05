@@ -27,12 +27,8 @@
 
 package org.iguana.gss;
 
-import iguana.utils.collections.hash.MurmurHash3;
-import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class GSSEdge<T extends Result> {
@@ -61,64 +57,13 @@ public class GSSEdge<T extends Result> {
 		return destination;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
+    public Environment getEnv() {
+        return env;
+    }
 
-		if (this == obj)
-			return true;
-
-		if (!(obj instanceof GSSEdge))
-			return false;
-
-		GSSEdge<?> other = (GSSEdge<?>) obj;
-
-		// Because destination.getInputIndex() == node.getLeftExtent, and
-		// node.getRightExtent() == source.getLeftExtent we don't use them here.
-		return 	returnSlot == other.getReturnSlot()
-				&& destination.getInputIndex() == other.getDestination().getInputIndex()
-				&& destination.getGrammarSlot() == other.getDestination().getGrammarSlot();
-	}
-
-	@Override
-	public int hashCode() {
-		return MurmurHash3.fn().apply(returnSlot, destination.getInputIndex(), destination.getGrammarSlot());
-	}
-
-	@Override
+    @Override
 	public String toString() {
 		return String.format("(%s, %s, %s)", returnSlot, result, destination);
-	}
-
-	/*
-	 *
-	 * Does the following:
-	 * (1) checks conditions associated with the return slot
-	 * (2) checks whether the descriptor to be created has been already created (and scheduled) before
-	 * (2.1) if yes, returns null
-	 * (2.2) if no, creates one and returns it
-	 *
-	 */
-	T addDescriptor(Input input, GSSNode<T> source, T result, IguanaRuntime<T> runtime) {
-		int inputIndex = result.getIndex();
-
-		BodyGrammarSlot returnSlot = getReturnSlot();
-		GSSNode<T> destination = getDestination();
-
-		Environment env = this.env;
-
-		if (returnSlot.requiresBinding())
-			env = returnSlot.doBinding(result, env);
-
-		runtime.setEnvironment(env);
-
-		if (returnSlot.getConditions().execute(input, source, inputIndex, runtime.getEvaluatorContext(), runtime)) {
-			EnvironmentPool.returnToPool(env);
-			return null;
-		}
-
-		env = runtime.getEnvironment();
-
-		return returnSlot.getIntermediateNode2(getResult(), destination.getInputIndex(), result, env, runtime);
 	}
 
 }

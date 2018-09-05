@@ -28,6 +28,7 @@
 package org.iguana.grammar.slot;
 
 import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.input.Input;
@@ -41,10 +42,9 @@ import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Collections.*;
 
 
 public class NonterminalGrammarSlot extends AbstractGrammarSlot {
@@ -61,8 +61,7 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 
 	public NonterminalGrammarSlot(Nonterminal nonterminal) {
 		this.nonterminal = nonterminal;
-		this.gssNodes = new HashMap<>();
-		this.firstSlots = new ArrayList<>();
+        this.firstSlots = new ArrayList<>();
 	}
 	
 	public void addFirstSlot(BodyGrammarSlot slot) {
@@ -102,6 +101,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 
 	public int countGSSNodes() {
+	    if (gssNodes == null) {
+	        return 0;
+        }
 		return gssNodes.size();
 	}
 	
@@ -121,6 +123,9 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
     }
 
     public GSSNode getGSSNode(int i) {
+	    if (gssNodes == null) {
+	        return new GSSNode(this, i);
+        }
 		return gssNodes.computeIfAbsent(Keys.from(i), key -> new GSSNode(this, i));
 	}
 
@@ -129,12 +134,15 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public Iterable<GSSNode> getGSSNodes() {
+	    if (gssNodes == null) {
+	        return emptyList();
+        }
 		return gssNodes.values();
 	}
 
 	@Override
 	public void reset() {
-		gssNodes = new HashMap<>();
+		gssNodes = null;
 	}
 	
 	public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, IguanaRuntime<T> runtime) {
@@ -150,9 +158,20 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
         	key = Keys.from(i, data);
 		}
 
-		GSSNode<T> gssNode = gssNodes.get(key);
+        GSSNode<T> gssNode = null;
+
+		if (gssNodes == null) {
+		    gssNodes = new OpenAddressingHashMap<>();
+        } else {
+            gssNode = gssNodes.get(key);
+        }
 
 		if (gssNode == null) {
+
+            List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
+            if (firstSlots == null || firstSlots.isEmpty()) {
+                return;
+            }
 			gssNode = new GSSNode<>(this, i, data);
 
 			ParserLogger.getInstance().gssNodeAdded(gssNode, data);
@@ -166,21 +185,18 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);
 			}
 
-			List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
-			if (firstSlots != null) {
-				for (int j = 0; j < firstSlots.size(); j++) {
-					BodyGrammarSlot slot = firstSlots.get(j);
+            for (int j = 0; j < firstSlots.size(); j++) {
+                BodyGrammarSlot slot = firstSlots.get(j);
 
-					runtime.setEnvironment(newEnv);
+                runtime.setEnvironment(newEnv);
 
-					if (slot.getLabel() != null)
-						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
+                if (slot.getLabel() != null)
+                    runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-					if (!slot.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
-						runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
+                if (!slot.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
+                    runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
 
-				}
-			}
+            }
 
 			gssNodes.put(key, gssNode);
 		}

@@ -8,16 +8,16 @@ import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
 
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ParserResultOps implements ResultOps<NonPackedNode> {
 
-    private static final NonPackedNode dummyNode = new NonPackedNode(-1, -1) {
+    private static final NonPackedNode dummyNode = new NonPackedNode() {
         @Override
         public PackedNode getChildAt(int index) {  throw new UnsupportedOperationException(); }
-
-        @Override
-        public List<PackedNode> getChildren() { throw new UnsupportedOperationException(); }
 
         @Override
         public int childrenCount() { throw new UnsupportedOperationException(); }
@@ -40,6 +40,20 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
 
         @Override
+        public void setAmbiguous(boolean ambiguous) {
+        }
+
+        @Override
+        public boolean isAmbiguous() {
+            return false;
+        }
+
+        @Override
+        public PackedNode getFirstPackedNode() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public String toString() {
             return "$";
         }
@@ -47,13 +61,15 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     private ParserLogger logger = ParserLogger.getInstance();
 
+    private Map<NonPackedNode, List<PackedNode>> packedNodesMap = new IdentityHashMap<>();
+
     @Override
     public NonPackedNode dummy() {
         return dummyNode;
     }
 
     @Override
-    public NonPackedNode base(TerminalGrammarSlot slot, int start, int end) {
+    public TerminalNode base(TerminalGrammarSlot slot, int start, int end) {
         TerminalNode node = new TerminalNode(slot, start, end);
         logger.terminalNodeAdded(node);
         return node;
@@ -64,25 +80,24 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         if (result1 == dummyNode)
             return result2;
 
-        PackedNode packedNode = new PackedNode(slot);
-        packedNode.setLeftChild(result1);
-        packedNode.setRightChild(result2);
-
-        int leftExtent = result1.getLeftExtent();
-        int rightExtent = (result2 != null) ? result2.getIndex() : result1.getIndex();
-
-        logger.packedNodeAdded(packedNode);
-
         if (current == null) {
-            current = new IntermediateNode(leftExtent, rightExtent);
-            IntermediateNode intermediateNode = (IntermediateNode) current;
-            intermediateNode.addPackedNode(packedNode);
-            logger.intermediateNodeAdded(intermediateNode);
+            current = new IntermediateNode(slot, result1, result2);
+            logger.intermediateNodeAdded((IntermediateNode) current);
         } else {
-            ((IntermediateNode) current).addPackedNode(packedNode);
-            if (current.getChildren().size() == 2) {
+            List<PackedNode> packedNodes = packedNodesMap.computeIfAbsent(current, key -> new ArrayList<>());
+
+            if (!current.isAmbiguous()) {
+                PackedNode firstPackedNode = current.getFirstPackedNode();
+                logger.packedNodeAdded(firstPackedNode);
+                packedNodes.add(firstPackedNode);
+
+                current.setAmbiguous(true);
                 logger.ambiguousNodeAdded(current);
             }
+
+            PackedNode packedNode = new PackedNode(slot, result1, result2);
+            packedNodes.add(packedNode);
+            logger.packedNodeAdded(packedNode);
         }
 
         return current;
@@ -90,28 +105,31 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     @Override
     public NonPackedNode convert(NonPackedNode current, NonPackedNode result, EndGrammarSlot slot, Object value) {
-        PackedNode packedNode = new PackedNode(slot);
-        packedNode.setLeftChild(result);
-
-        logger.packedNodeAdded(packedNode);
-
         if (current == null) {
-            if (value == null)
-                current = new NonterminalNode(slot.getNonterminal(), result.getLeftExtent(), result.getIndex());
-            else
-                current = new NonterminalNodeWithValue(slot.getNonterminal(), result.getLeftExtent(), result.getIndex(), value);
-
-            NonterminalNode nonterminalNode = (NonterminalNode) current;
-            nonterminalNode.addPackedNode(packedNode);
-            logger.nonterminalNodeAdded(nonterminalNode);
+            current = new NonterminalNode(slot, result, result.getLeftExtent(), result.getIndex(), value);
+            logger.nonterminalNodeAdded((NonterminalNode) current);
         } else {
-            ((NonterminalOrIntermediateNode) current).addPackedNode(packedNode);
-            if (current.getChildren().size() == 2) {
+            List<PackedNode> packedNodes = packedNodesMap.computeIfAbsent(current, key -> new ArrayList<>());
+
+            if (!current.isAmbiguous()) {
+                PackedNode firstPackedNode = current.getFirstPackedNode();
+                logger.packedNodeAdded(firstPackedNode);
+                packedNodes.add(firstPackedNode);
+
+                current.setAmbiguous(true);
                 logger.ambiguousNodeAdded(current);
             }
+
+            PackedNode packedNode = new PackedNode(slot, result);
+            packedNodes.add(packedNode);
+            logger.packedNodeAdded(packedNode);
         }
 
         return current;
+    }
+
+    public List<PackedNode> getPackedNodes(NonPackedNode node) {
+        return packedNodesMap.get(node);
     }
 
 }

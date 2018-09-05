@@ -141,9 +141,9 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 	}
 	
 	private void addEdgesToChildren(SPPFNode node) {
-		for (SPPFNode child : node.getChildren()) {
-			addEdgeToChild(node, child);
-		}
+	    for (int i = 0; i < node.childrenCount(); i++) {
+            addEdgeToChild(node, node.getChildAt(i));
+        }
 	}
 	
 	private void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
@@ -151,9 +151,9 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 	}
 	
 	private void visitChildren(SPPFNode node) {
-		for (SPPFNode child : node.getChildren()) {
-			child.accept(this);
-		}
+        for (int i = 0; i < node.childrenCount(); i++) {
+            node.getChildAt(i).accept(this);
+        }
 	}
 
 	private int getId(SPPFNode node) {

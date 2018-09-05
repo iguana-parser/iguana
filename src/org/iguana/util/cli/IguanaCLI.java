@@ -32,16 +32,11 @@ import iguana.utils.io.FileUtils;
 import iguana.utils.visualization.DotGraph;
 import org.apache.commons.cli.*;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.util.serialization.JsonSerializer;
-import org.iguana.util.serialization.SPPFJsonSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
-import org.iguana.util.visualization.SPPFToDot;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -103,25 +98,6 @@ public class IguanaCLI {
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(node, input, excludeSet);
                     dotGraph.generate(outputFile);
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return;
-            }
-
-            if (line.hasOption("visSPPF")) {
-                if (input == null) throw new RuntimeException("Input is not specified");
-                if (grammar == null) throw new RuntimeException("Grammar is not specified");
-
-                String[] values = line.getOptionValues("visSPPF");
-                try {
-                    String contentPath = values[0];
-                    String outputFile = values[1];
-
-                    NonterminalNode sppf = SPPFJsonSerializer.deserialize(new FileInputStream(contentPath), GrammarGraph.from(grammar));
-                    DotGraph dotGraph = SPPFToDot.getDotGraph(sppf, input);
-                    dotGraph.generate(outputFile);
-                    System.out.println("SPPF is successfully visualized in " + outputFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

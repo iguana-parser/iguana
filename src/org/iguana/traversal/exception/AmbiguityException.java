@@ -1,19 +1,19 @@
 package org.iguana.traversal.exception;
 
 import iguana.utils.input.Input;
-import org.iguana.sppf.NonterminalOrIntermediateNode;
+import org.iguana.sppf.NonPackedNode;
 
 public class AmbiguityException extends RuntimeException {
 
-    private final NonterminalOrIntermediateNode node;
+    private final NonPackedNode node;
     private Input input;
 
-    public AmbiguityException(NonterminalOrIntermediateNode node, Input input) {
+    public AmbiguityException(NonPackedNode node, Input input) {
         this.node = node;
         this.input = input;
     }
 
-    public NonterminalOrIntermediateNode getNode() {
+    public NonPackedNode getNode() {
         return node;
     }
 
