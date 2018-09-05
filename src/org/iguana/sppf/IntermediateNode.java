@@ -30,10 +30,24 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-public class IntermediateNode extends NonterminalOrIntermediateNode {
+public class IntermediateNode extends NonPackedNode {
 
-    public IntermediateNode(int leftExtent, int rightExtent) {
-        super(leftExtent, rightExtent);
+    private NonPackedNode leftChild;
+
+    private NonPackedNode rightChild;
+
+    private final BodyGrammarSlot slot;
+
+    private boolean ambiguous;
+
+    public IntermediateNode(BodyGrammarSlot slot, NonPackedNode child) {
+        this(slot, child, null);
+    }
+
+    public IntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+        this.slot = slot;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
     }
 
     @Override
@@ -42,7 +56,49 @@ public class IntermediateNode extends NonterminalOrIntermediateNode {
     }
 
     @Override
+    public SPPFNode getChildAt(int index) {
+        if (index == 0) {
+            return leftChild;
+        }
+        if (index == 1) {
+            if (rightChild == null) throw new ArrayIndexOutOfBoundsException();
+            return rightChild;
+        }
+        throw new ArrayIndexOutOfBoundsException();
+    }
+
+    @Override
+    public int childrenCount() {
+        return rightChild == null ? 1 : 2;
+    }
+
+    @Override
     public BodyGrammarSlot getGrammarSlot() {
-        return first.getGrammarSlot();
+        return slot;
+    }
+
+    @Override
+    public int getLeftExtent() {
+        return leftChild.getLeftExtent();
+    }
+
+    @Override
+    public int getIndex() {
+        return rightChild == null ? leftChild.getRightExtent() : rightChild.getRightExtent();
+    }
+
+    @Override
+    public void setAmbiguous(boolean ambiguous) {
+        this.ambiguous = ambiguous;
+    }
+
+    @Override
+    public boolean isAmbiguous() {
+        return ambiguous;
+    }
+
+    @Override
+    public PackedNode getFirstPackedNode() {
+        return new PackedNode(slot, leftChild, rightChild);
     }
 }

@@ -30,10 +30,6 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 public class PackedNode implements SPPFNode {
 
     private final BodyGrammarSlot slot;
@@ -44,6 +40,16 @@ public class PackedNode implements SPPFNode {
 
     public PackedNode(BodyGrammarSlot slot) {
         this.slot = slot;
+    }
+
+    public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild) {
+        this(slot, leftChild, null);
+    }
+
+    public PackedNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
+        this.slot = slot;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
     }
 
     public void setLeftChild(NonPackedNode leftChild) {
@@ -104,14 +110,6 @@ public class PackedNode implements SPPFNode {
     @Override
     public int childrenCount() {
         return (rightChild == null) ? 1 : 2;
-    }
-
-    @Override
-    public List<NonPackedNode> getChildren() {
-        if (rightChild == null)
-            return Collections.singletonList(leftChild);
-        else
-            return Arrays.asList(leftChild, rightChild);
     }
 
     @Override

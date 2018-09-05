@@ -28,10 +28,12 @@
 package org.iguana.gss;
 
 import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
+import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
@@ -75,7 +77,9 @@ public class GSSNode<T extends Result> {
 		if (firstGSSEdge == null) {
 			firstGSSEdge = edge;
 		} else {
-			if (restGSSEdges == null) restGSSEdges = new ArrayList<>(4);
+            if (restGSSEdges == null) {
+                restGSSEdges = new ArrayList<>(4);
+            }
 			restGSSEdges.add(edge);
 		}
 
@@ -113,7 +117,7 @@ public class GSSNode<T extends Result> {
 				Key key = value == null ? Keys.from(rightIndex) : Keys.from(rightIndex, value);
 
 				if (restPoppedElements == null) {
-					restPoppedElements = new HashMap<>(8);
+					restPoppedElements = new OpenAddressingHashMap<>();
 					T poppedElement = ops.convert(null, child, slot, value);
 					restPoppedElements.put(key, poppedElement);
 					return poppedElement;
@@ -146,7 +150,7 @@ public class GSSNode<T extends Result> {
 	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
 		BodyGrammarSlot returnSlot = edge.getReturnSlot();
 		if (returnSlot.testFollow(input.charAt(poppedElement.getIndex()))) {
-			T result = edge.addDescriptor(input, this, poppedElement, runtime);
+			T result = addDescriptor(input, this, poppedElement, edge, runtime);
 			if (result != null) {
 				runtime.scheduleDescriptor(returnSlot, destination, result, env);
 			}
@@ -167,12 +171,43 @@ public class GSSNode<T extends Result> {
 	private void processEdge(Input input, T node, GSSEdge<T> edge, IguanaRuntime<T> runtime) {
 		if (!edge.getReturnSlot().testFollow(input.charAt(node.getIndex()))) return;
 
-		T result = edge.addDescriptor(input, this, node, runtime);
+		T result = addDescriptor(input, this, node, edge, runtime);
 		if (result != null) {
 			Environment env = runtime.getEnvironment();
 			runtime.scheduleDescriptor(edge.getReturnSlot(), edge.getDestination(), result, env);
 		}
 	}
+
+    /*
+     *
+     * Does the following:
+     * (1) checks conditions associated with the return slot
+     * (2) checks whether the descriptor to be created has been already created (and scheduled) before
+     * (2.1) if yes, returns null
+     * (2.2) if no, creates one and returns it
+     *
+     */
+    T addDescriptor(Input input, GSSNode<T> source, T result, GSSEdge<T> edge, IguanaRuntime<T> runtime) {
+        int inputIndex = result.getIndex();
+
+        Environment env = edge.getEnv();
+        BodyGrammarSlot returnSlot = edge.getReturnSlot();
+        GSSNode<T> destination = edge.getDestination();
+
+        if (edge.getReturnSlot().requiresBinding())
+            env = returnSlot.doBinding(result, env);
+
+        runtime.setEnvironment(env);
+
+        if (returnSlot.getConditions().execute(input, source, inputIndex, runtime.getEvaluatorContext(), runtime)) {
+            EnvironmentPool.returnToPool(env);
+            return null;
+        }
+
+        env = runtime.getEnvironment();
+
+        return returnSlot.getIntermediateNode(edge.getResult(), destination.getInputIndex(), result, env, runtime);
+    }
 
 	public T getResult(int j) {
 		if (firstPoppedElement != null && firstPoppedElement.getIndex() == j)
@@ -237,13 +272,6 @@ public class GSSNode<T extends Result> {
 			poppedElements.addAll(restPoppedElements.values());
 
 		return poppedElements;
-	}
-
-	public int getCountGSSEdges() {
-		int count = 0;
-		if (firstGSSEdge != null) count++;
-		if (restGSSEdges != null) count += restGSSEdges.size();
-		return count;
 	}
 
 	public String toString() {

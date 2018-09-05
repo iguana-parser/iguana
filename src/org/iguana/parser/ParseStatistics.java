@@ -27,60 +27,22 @@
 
 package org.iguana.parser;
 
-import iguana.utils.collections.hash.MurmurHash3;
+import java.util.Objects;
 
-public class ParseStatistics {
-
-    private final int descriptorsCount;
-    private final int gssNodesCount;
-    private final int gssEdgesCount;
+public class ParseStatistics extends RecognizerStatistics {
     private final int nonterminalNodesCount;
     private final int terminalNodesCount;
     private final int intermediateNodesCount;
     private final int packedNodesCount;
     private final int ambiguousNodesCount;
 
-    private ParseStatistics(
-            int descriptorsCount,
-            int gssNodesCount,
-            int gssEdgesCount,
-            int nonterminalNodesCount,
-            int terminalNodesCount,
-            int intermediateNodesCount,
-            int packedNodesCount,
-            int ambiguousNodesCount
-    ) {
-        this.descriptorsCount = descriptorsCount;
-        this.gssNodesCount = gssNodesCount;
-        this.gssEdgesCount = gssEdgesCount;
-        this.nonterminalNodesCount = nonterminalNodesCount;
-        this.terminalNodesCount = terminalNodesCount;
-        this.intermediateNodesCount = intermediateNodesCount;
-        this.packedNodesCount = packedNodesCount;
-        this.ambiguousNodesCount = ambiguousNodesCount;
-    }
-
     public ParseStatistics(Builder builder) {
-        this.descriptorsCount = builder.descriptorsCount;
-        this.gssNodesCount = builder.gssNodesCount;
-        this.gssEdgesCount = builder.gssEdgesCount;
+        super(builder);
         this.nonterminalNodesCount = builder.nonterminalNodesCount;
         this.terminalNodesCount = builder.terminalNodesCount;
         this.intermediateNodesCount = builder.intermediateNodesCount;
         this.packedNodesCount = builder.packedNodesCount;
         this.ambiguousNodesCount = builder.ambiguousNodesCount;
-    }
-
-    public int getDescriptorsCount() {
-        return descriptorsCount;
-    }
-
-    public int getGssNodesCount() {
-        return gssNodesCount;
-    }
-
-    public int getGssEdgesCount() {
-        return gssEdgesCount;
     }
 
     public int getNonterminalNodesCount() {
@@ -109,8 +71,7 @@ public class ParseStatistics {
 
     @Override
     public int hashCode() {
-        return MurmurHash3.fn().apply(descriptorsCount,
-                gssNodesCount, gssEdgesCount, nonterminalNodesCount,
+        return Objects.hash(super.hashCode(), nonterminalNodesCount,
                 terminalNodesCount, intermediateNodesCount, packedNodesCount,
                 ambiguousNodesCount);
     }
@@ -125,62 +86,30 @@ public class ParseStatistics {
 
         ParseStatistics other = (ParseStatistics) obj;
 
-        return descriptorsCount == other.descriptorsCount &&
-                gssNodesCount == other.gssNodesCount &&
-                gssEdgesCount == other.gssEdgesCount &&
+        return super.equals(obj) &&
                 nonterminalNodesCount == other.nonterminalNodesCount &&
                 terminalNodesCount == other.terminalNodesCount &&
                 intermediateNodesCount == other.intermediateNodesCount &&
-                packedNodesCount == other.packedNodesCount;
-//			   ambiguousNodesCount == other.ambiguousNodesCount;
+                packedNodesCount == other.packedNodesCount &&
+                ambiguousNodesCount == other.ambiguousNodesCount;
     }
 
     @Override
     public String toString() {
-        return "Descriptors: " + descriptorsCount + "\n" +
-                "GSS Nodes: " + gssNodesCount + "\n" +
-                "GSS Edges: " + gssEdgesCount + "\n" +
-                "Nonterminal nodes: " + nonterminalNodesCount + "\n" +
-                "Terminal nodes: " + terminalNodesCount + "\n" +
-                "Intermediate nodes: " + intermediateNodesCount + "\n" +
-                "Packed nodes: " + packedNodesCount + "\n" +
-                "Ambiguities: " + ambiguousNodesCount + "\n";
+        return super.toString() +
+               "Nonterminal nodes: " + nonterminalNodesCount + "\n" +
+               "Terminal nodes: " + terminalNodesCount + "\n" +
+               "Intermediate nodes: " + intermediateNodesCount + "\n" +
+               "Packed nodes: " + packedNodesCount + "\n" +
+               "Ambiguities: " + ambiguousNodesCount + "\n";
     }
 
-    public static class Builder {
-        long nanoTime;
-        long systemTime;
-        long userTime;
-
-        int inputLength;
-        int descriptorsCount;
-        int gssNodesCount;
-        int gssEdgesCount;
+    public static class Builder extends RecognizerStatistics.Builder<Builder> {
         int nonterminalNodesCount;
         int terminalNodesCount;
         int intermediateNodesCount;
         int packedNodesCount;
         int ambiguousNodesCount;
-
-        public Builder setNanoTime(long nanoTime) {
-            this.nanoTime = nanoTime;
-            return this;
-        }
-
-        public Builder setSystemTime(long systemTime) {
-            this.systemTime = systemTime;
-            return this;
-        }
-
-        public Builder setUserTime(long userTime) {
-            this.userTime = userTime;
-            return this;
-        }
-
-        public Builder setInputLength(int inputLength) {
-            this.inputLength = inputLength;
-            return this;
-        }
 
         public Builder setDescriptorsCount(int descriptorsCount) {
             this.descriptorsCount = descriptorsCount;

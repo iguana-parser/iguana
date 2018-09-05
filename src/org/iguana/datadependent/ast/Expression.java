@@ -33,7 +33,7 @@ import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNodeWithValue;
+import org.iguana.sppf.NonterminalNode;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -1410,13 +1410,11 @@ public abstract class Expression extends AbstractAST {
                 throw new UndeclaredVariableException(label);
             }
 
-            if (!(value instanceof NonterminalNodeWithValue)) {
+            if (!(value instanceof NonterminalNode) || ((NonterminalNode) value).getValue() == null) {
                 throw new UnexpectedTypeOfArgumentException(this);
             }
 
-            NonterminalNodeWithValue node = (NonterminalNodeWithValue) value;
-
-            return node.getValue();
+            return ((NonterminalNode) value).getValue();
         }
 
         @Override

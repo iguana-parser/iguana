@@ -30,21 +30,18 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-import java.util.Collections;
-import java.util.List;
-
-/**
- *
- * @author Ali Afroozeh
- *
- */
 public class TerminalNode extends NonPackedNode {
 
 	private TerminalGrammarSlot slot;
 
+	private int leftExtent;
+
+	private int rightExtent;
+
 	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
-		super(leftExtent, rightExtent);
 		this.slot = slot;
+		this.leftExtent = leftExtent;
+		this.rightExtent = rightExtent;
 	}
 
 	@Override
@@ -67,9 +64,28 @@ public class TerminalNode extends NonPackedNode {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public List<PackedNode> getChildren() {
-		return Collections.emptyList();
-	}
+    @Override
+    public int getLeftExtent() {
+        return leftExtent;
+    }
 
+    @Override
+    public int getIndex() {
+        return rightExtent;
+    }
+
+    @Override
+    public void setAmbiguous(boolean ambiguous) {
+
+    }
+
+    @Override
+    public boolean isAmbiguous() {
+        return false;
+    }
+
+    @Override
+    public PackedNode getFirstPackedNode() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -1,7 +1,6 @@
 package org.iguana.util.serialization;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -35,9 +34,9 @@ public class ParseStatisticsSerializer {
         }
     }
 
-    public static ParseStatistics deserialize(String s, Class<ParseStatistics> clazz) {
+    public static ParseStatistics deserialize(String s) {
         try {
-            return mapper.readValue(s, clazz);
+            return mapper.readValue(s, ParseStatistics.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,14 +44,6 @@ public class ParseStatisticsSerializer {
 
     @JsonDeserialize(builder = ParseStatistics.Builder.class)
     abstract static class ParseStatisticsMixIn {
-        @JsonIgnore
-        long nanoTime;
-        @JsonIgnore
-        long systemTime;
-        @JsonIgnore
-        long userTime;
-        @JsonIgnore
-        int memoryUsed;
     }
 
 }

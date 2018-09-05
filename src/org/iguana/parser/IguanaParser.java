@@ -30,10 +30,7 @@ package org.iguana.parser;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.gss.GSSNode;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
@@ -41,8 +38,6 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
-
-import java.util.function.Function;
 
 public class IguanaParser {
 
@@ -88,7 +83,7 @@ public class IguanaParser {
         }
 
         if (options.ambiguous()) {
-            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout());
+            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
             return (ParseTreeNode) root.accept(visitor).getValues().get(0);
         }
 
@@ -109,47 +104,7 @@ public class IguanaParser {
     }
 
     public ParseStatistics getStatistics() {
-        return runtime.getParseStatistics();
+        return (ParseStatistics) runtime.getStatistics();
     }
 
-    private static void printStats(GrammarGraph grammarGraph) {
-        for (TerminalGrammarSlot slot : grammarGraph.getTerminalGrammarSlots()) {
-            System.out.println(slot.getTerminal().getName() + " : " + slot.countTerminalNodes());
-        }
-
-        for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {
-            System.out.print(slot.getNonterminal().getName());
-            System.out.println(" GSS nodes: " + slot.countGSSNodes());
-            double[] poppedElementStats = stats(slot.getGSSNodes(), GSSNode::countPoppedElements);
-            double[] gssEdgesStats = stats(slot.getGSSNodes(), GSSNode::countGSSEdges);
-            if (poppedElementStats == null)
-                System.out.println("Popped Elements: empty");
-            else
-                System.out.printf("Popped Elements (min: %d, max: %d, mean: %.2f)%n", (int) poppedElementStats[0], (int) poppedElementStats[1], poppedElementStats[2]);
-
-            if (gssEdgesStats == null)
-                System.out.println("GSS Edges: empty");
-            else
-                System.out.printf("GSS Edges (min: %d, max: %d, mean: %.2f)%n", (int) gssEdgesStats[0], (int) gssEdgesStats[1], gssEdgesStats[2]);
-            System.out.println("---------------");
-        }
-    }
-
-    private static double[] stats(Iterable<GSSNode> gssNodes, Function<GSSNode, Integer> f) {
-        if (!gssNodes.iterator().hasNext()) return null;
-
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        int sum = 0;
-        int count = 0;
-
-        for (GSSNode gssNode : gssNodes) {
-            min = Integer.min(min, f.apply(gssNode));
-            max = Integer.max(max, f.apply(gssNode));
-            sum += f.apply(gssNode);
-            count++;
-        }
-
-        return new double[]{min, max, (double) sum / count};
-    }
 }
