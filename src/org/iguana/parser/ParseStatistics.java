@@ -105,9 +105,6 @@ public class ParseStatistics extends RecognizerStatistics {
     }
 
     public static class Builder extends RecognizerStatistics.Builder<Builder> {
-        int descriptorsCount;
-        int gssNodesCount;
-        int gssEdgesCount;
         int nonterminalNodesCount;
         int terminalNodesCount;
         int intermediateNodesCount;

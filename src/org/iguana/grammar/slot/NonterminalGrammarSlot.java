@@ -167,6 +167,11 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
         }
 
 		if (gssNode == null) {
+
+            List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
+            if (firstSlots == null || firstSlots.isEmpty()) {
+                return;
+            }
 			gssNode = new GSSNode<>(this, i, data);
 
 			ParserLogger.getInstance().gssNodeAdded(gssNode, data);
@@ -180,21 +185,18 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 					newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);
 			}
 
-			List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
-			if (firstSlots != null) {
-				for (int j = 0; j < firstSlots.size(); j++) {
-					BodyGrammarSlot slot = firstSlots.get(j);
+            for (int j = 0; j < firstSlots.size(); j++) {
+                BodyGrammarSlot slot = firstSlots.get(j);
 
-					runtime.setEnvironment(newEnv);
+                runtime.setEnvironment(newEnv);
 
-					if (slot.getLabel() != null)
-						runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
+                if (slot.getLabel() != null)
+                    runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-					if (!slot.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
-						runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
+                if (!slot.getConditions().execute(input, gssNode, i, runtime.getEvaluatorContext(), runtime))
+                    runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
 
-				}
-			}
+            }
 
 			gssNodes.put(key, gssNode);
 		}
