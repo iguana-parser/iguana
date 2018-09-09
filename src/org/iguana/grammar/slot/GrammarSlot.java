@@ -27,8 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.utils.input.Input;
-
 /**
  * A GrammarSlot is a position immediately before or after
  * a symbol in the body of a production rule. 
@@ -45,22 +43,4 @@ public interface GrammarSlot {
 
 	void reset();
 	
-	void addTransition(Transition transition);
-	
-	Iterable<Transition> getTransitions();
-
-    int getPosition();
-
-	/*
-	 * Corresponds to a grammar position A ::= B . \alpha
-	 */
-	default boolean isFirst() { return getPosition() == 1; }
-
-	/*
-	 * Corresponds to a grammar position A ::= . \alpha
-	 */
-	default boolean isStart() { return getPosition() == 0; }
-
-	default boolean isEnd() { return false; }
-
 }
