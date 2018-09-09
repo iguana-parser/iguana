@@ -36,6 +36,8 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.gss.DefaultGSSNode;
+import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
@@ -113,18 +115,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 	public String toString() {
 		return nonterminal.toString();
 	}
-	
-    public GSSNode getGSSNode(int i) {
-	    if (gssNodes == null) {
-	        return new GSSNode(this, i);
-        }
-		return gssNodes.computeIfAbsent(Keys.from(i), key -> new GSSNode(this, i));
-	}
 
-	public GSSNode getGSSNode(int i, Object[] data) {
-		return gssNodes.computeIfAbsent(Keys.from(i, data), key -> new GSSNode(this, i, data));
-	}
-	
 	public Iterable<GSSNode> getGSSNodes() {
 	    if (gssNodes == null) {
 	        return emptyList();
@@ -164,9 +155,12 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             if (firstSlots == null || firstSlots.isEmpty()) {
                 return;
             }
-			gssNode = new GSSNode<>(this, i, data);
 
-			ParserLogger.getInstance().gssNodeAdded(gssNode, data);
+            GSSEdge<T> gssEdge = runtime.createGSSEdge(returnSlot, result, i, u, env);
+            gssNode = new DefaultGSSNode<>(gssEdge);
+
+            ParserLogger.getInstance().gssNodeAdded(gssNode, data);
+            ParserLogger.getInstance().gssEdgeAdded(gssEdge);
 
 			Environment newEnv = runtime.getEnvironment();
 
@@ -191,9 +185,10 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             }
 
 			gssNodes.put(key, gssNode);
-		}
+		} else {
+            gssNode.addGSSEdge(input, returnSlot, i, u, result, env, runtime);
+        }
 
-		gssNode.createGSSEdge(input, returnSlot, u, result, env, runtime);
 	}
 
 }

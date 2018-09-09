@@ -25,32 +25,54 @@
  *
  */
 
-package org.iguana.sppf;
+package org.iguana.gss;
 
-import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.result.Result;
-import org.iguana.traversal.SPPFVisitor;
 
-import java.util.List;
+public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
 
-public interface SPPFNode extends Result {
-	
-	SPPFNode getChildAt(int index);
+	private final BodyGrammarSlot returnSlot;
+	private final T result;
+	private final GSSNode<T> destination;
+	private final Environment env;
 
-	int childrenCount();
-
-	GrammarSlot getGrammarSlot();
-
-	int getLeftExtent();
-
-	default int getRightExtent() {
-		return getIndex();
+	public DefaultGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> destination, Environment env) {
+		this.returnSlot = returnSlot;
+		this.result = result;
+		this.destination = destination;
+		this.env = env;
 	}
 
-	<R> R accept(SPPFVisitor<R> visitAction);
-
-	default Object getValue() {
-		return null;
+	@Override
+	public T getResult() {
+		return result;
 	}
-	default boolean isDummy() { return false; }
+
+    @Override
+    public int getInputIndex() {
+        return result.getIndex();
+    }
+
+    @Override
+	public BodyGrammarSlot getReturnSlot() {
+		return returnSlot;
+	}
+
+    @Override
+	public GSSNode<T> getDestination() {
+		return destination;
+	}
+
+    @Override
+    public Environment getEnv() {
+        return env;
+    }
+
+    @Override
+	public String toString() {
+		return String.format("(%s, %s, %s)", returnSlot, result, destination);
+	}
+
 }

@@ -24,6 +24,11 @@ class SimpleRecognizerResult implements RecognizerResult {
     }
 
     @Override
+    public int getLeftExtent() {
+        return index;
+    }
+
+        @Override
     public boolean isDummy() {
         return false;
     }
@@ -46,6 +51,11 @@ class DataDependentRecognizerResult implements RecognizerResult {
 
     @Override
     public int getIndex() {
+        return index;
+    }
+
+    @Override
+    public int getLeftExtent() {
         return index;
     }
 

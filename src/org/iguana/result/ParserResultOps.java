@@ -29,7 +29,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         public int getLeftExtent() { throw new UnsupportedOperationException(); }
 
         @Override
-        public int getIndex() { throw new UnsupportedOperationException(); }
+        public int getIndex() {
+            throw new UnsupportedOperationException();
+        }
 
         @Override
         public boolean isDummy() {

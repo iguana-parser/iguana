@@ -35,10 +35,10 @@ import org.iguana.result.Result;
 
 
 public interface Transition {
+
+    BodyGrammarSlot destination();
 	
-	GrammarSlot destination();
-	
-	GrammarSlot origin();
+	BodyGrammarSlot origin();
 
 	String getLabel();
 
