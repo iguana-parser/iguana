@@ -40,9 +40,12 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class BodyGrammarSlot extends AbstractGrammarSlot {
+public class BodyGrammarSlot implements GrammarSlot {
 	
 	protected final Position position;
 	
@@ -61,6 +64,8 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	private final Set<String> state;
 	
 	private FollowTest followTest;
+
+	private Transition transition;
 
 	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions) {
 		this(position, label, -1, variable, -1, state, conditions);
@@ -129,10 +134,7 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	}
 	
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-        for (int i = 0; i < getTransitions().size(); i++) {
-            Transition transition = getTransitions().get(i);
-            transition.execute(input, u, result, env, runtime);
-        }
+        transition.execute(input, u, result, env, runtime);
 	}
 		
 	public boolean requiresBinding() {
@@ -191,8 +193,33 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return position.getPosition();
 	}
 
-	public Rule getRule() {
+    public Rule getRule() {
 		return position.getRule();
 	}
 
+    public Transition getTransition() {
+        return transition;
+    }
+
+    public void setTransition(Transition transition) {
+        this.transition = transition;
+    }
+
+    /*
+     * Corresponds to a grammar position A ::= B . \alpha
+     */
+    public boolean isFirst() {
+        return getPosition() == 1;
+    }
+
+    /*
+     * Corresponds to a grammar position A ::= . \alpha
+     */
+    public boolean isStart() {
+        return getPosition() == 0;
+    }
+
+    public boolean isEnd() {
+        return false;
+    }
 }

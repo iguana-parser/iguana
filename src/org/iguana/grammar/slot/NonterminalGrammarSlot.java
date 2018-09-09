@@ -42,12 +42,14 @@ import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 
 
-public class NonterminalGrammarSlot extends AbstractGrammarSlot {
+public class NonterminalGrammarSlot implements GrammarSlot {
 	
 	private final Nonterminal nonterminal;
 	
@@ -112,16 +114,6 @@ public class NonterminalGrammarSlot extends AbstractGrammarSlot {
 		return nonterminal.toString();
 	}
 	
-	@Override
-	public boolean isFirst() {
-		return true;
-	}
-
-    @Override
-    public int getPosition() {
-        throw new UnsupportedOperationException();
-    }
-
     public GSSNode getGSSNode(int i) {
 	    if (gssNodes == null) {
 	        return new GSSNode(this, i);

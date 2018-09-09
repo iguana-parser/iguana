@@ -35,8 +35,6 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
@@ -65,16 +63,6 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	
 	public Object getObject() {
 		return null;
-	}
-	
-	@Override
-	public List<Transition> getTransitions() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public void addTransition(Transition transition) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
