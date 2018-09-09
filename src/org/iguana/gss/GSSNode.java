@@ -149,7 +149,7 @@ public class GSSNode<T extends Result> {
 
 	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
 		BodyGrammarSlot returnSlot = edge.getReturnSlot();
-		if (returnSlot.testFollow(input.charAt(poppedElement.getIndex()))) {
+		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getIndex()))) {
 			T result = addDescriptor(input, this, poppedElement, edge, runtime);
 			if (result != null) {
 				runtime.scheduleDescriptor(returnSlot, destination, result, env);
