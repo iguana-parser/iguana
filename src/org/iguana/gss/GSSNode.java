@@ -1,285 +1,32 @@
-/*
- * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde & Informatica (CWI)
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice, this
- *    list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this
- *    list of conditions and the following disclaimer in the documentation and/or
- *    other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGE.
- *
- */
-
 package org.iguana.gss;
 
-import iguana.utils.collections.Keys;
-import iguana.utils.collections.OpenAddressingHashMap;
-import iguana.utils.collections.hash.MurmurHash3;
-import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.env.EnvironmentPool;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
-import org.iguana.result.ResultOps;
-import org.iguana.util.ParserLogger;
 
-import java.util.*;
+public interface GSSNode<T extends Result> {
 
-public class GSSNode<T extends Result> {
+    NonterminalGrammarSlot getGrammarSlot();
 
-	private final NonterminalGrammarSlot slot;
+    int getInputIndex();
 
-	private final int inputIndex;
+    Object[] getData();
 
-	private GSSEdge<T> firstGSSEdge;
+    void addGSSEdge(Input input, BodyGrammarSlot returnSlot, int i, GSSNode<T> destination, T w, Environment env, IguanaRuntime<T> runtime);
 
-	private List<GSSEdge<T>> restGSSEdges;
+    boolean pop(Input input, EndGrammarSlot slot, T child, IguanaRuntime<T> runtime);
 
-	private T firstPoppedElement;
+    boolean pop(Input input, EndGrammarSlot slot, T result, Object value, IguanaRuntime<T> runtime);
 
-	private Map<Key, T> restPoppedElements;
+    int countGSSEdges();
 
-	private final Object[] data;
+    int countPoppedElements();
 
-	public GSSNode(NonterminalGrammarSlot slot, int inputIndex) {
-		this(slot, inputIndex, null);
-	}
+    Iterable<GSSEdge<T>> getGSSEdges();
 
-	public GSSNode(NonterminalGrammarSlot slot, int inputIndex, Object[] data) {
-		this.slot = slot;
-		this.inputIndex = inputIndex;
-		this.data = data;
-	}
-
-	public void createGSSEdge(Input input, BodyGrammarSlot returnSlot, GSSNode<T> destination, T w, Environment env, IguanaRuntime<T> runtime) {
-		GSSEdge<T> edge = new GSSEdge<>(returnSlot, w, destination, env);
-		ParserLogger.getInstance().gssEdgeAdded(edge);
-
-		if (firstGSSEdge == null) {
-			firstGSSEdge = edge;
-		} else {
-            if (restGSSEdges == null) {
-                restGSSEdges = new ArrayList<>(4);
-            }
-			restGSSEdges.add(edge);
-		}
-
-		iterateOverPoppedElements(edge, destination, input, env, runtime);
-	}
-
-	public boolean pop(Input input, EndGrammarSlot slot, T child, IguanaRuntime<T> runtime) {
-		return pop(input, slot, child, null, runtime);
-	}
-
-	public boolean pop(Input input, EndGrammarSlot slot, T child, Object value, IguanaRuntime<T> runtime) {
-		ParserLogger.getInstance().pop(this, inputIndex, child, value);
-		T node = addPoppedElements(slot, child, value, runtime.getResultOps());
-		if (node != null)
-			iterateOverEdges(input, node, runtime);
-		return node != null;
-	}
-
-	/**
-	 * Returns the newly created popped element, or null if the node already exists
-	 */
-	private T addPoppedElements(EndGrammarSlot slot, T child, Object value, ResultOps<T> ops) {
-		// No node added yet
-		if (firstPoppedElement == null) {
-			firstPoppedElement = ops.convert(null, child, slot, value);
-			return firstPoppedElement;
-		} else {
-			int rightIndex = child.getIndex();
-
-			// Only one node is added and there is an ambiguity
-			if (rightIndex == firstPoppedElement.getIndex() && Objects.equals(value, firstPoppedElement.getValue())) {
-				ops.convert(firstPoppedElement, child, slot, value);
-				return null;
-			} else {
-				Key key = value == null ? Keys.from(rightIndex) : Keys.from(rightIndex, value);
-
-				if (restPoppedElements == null) {
-					restPoppedElements = new OpenAddressingHashMap<>();
-					T poppedElement = ops.convert(null, child, slot, value);
-					restPoppedElements.put(key, poppedElement);
-					return poppedElement;
-				}
-
-				T poppedElement = restPoppedElements.get(key);
-				if (poppedElement == null) {
-					poppedElement = ops.convert(null, child, slot, value);
-					restPoppedElements.put(key, poppedElement);
-					return poppedElement;
-				}
-
-				ops.convert(poppedElement, child, slot, value);
-				return null;
-			}
-		}
-	}
-
-	private void iterateOverPoppedElements(GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
-		if (firstPoppedElement != null)
-			processPoppedElement(firstPoppedElement, edge, destination, input, env, runtime);
-
-		if (restPoppedElements != null) {
-			for (T poppedElement: restPoppedElements.values()) {
-				processPoppedElement(poppedElement, edge, destination, input, env, runtime);
-			}
-		}
-	}
-
-	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
-		BodyGrammarSlot returnSlot = edge.getReturnSlot();
-		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getIndex()))) {
-			T result = addDescriptor(input, this, poppedElement, edge, runtime);
-			if (result != null) {
-				runtime.scheduleDescriptor(returnSlot, destination, result, env);
-			}
-		}
-	}
-
-	private void iterateOverEdges(Input input, T result, IguanaRuntime<T> runtime) {
-		if (firstGSSEdge != null)
-			processEdge(input, result, firstGSSEdge, runtime);
-
-		if (restGSSEdges != null)
-			for (int i = 0; i < restGSSEdges.size(); i++) {
-				GSSEdge<T> edge = restGSSEdges.get(i);
-				processEdge(input, result, edge, runtime);
-			}
-	}
-
-	private void processEdge(Input input, T node, GSSEdge<T> edge, IguanaRuntime<T> runtime) {
-		if (!edge.getReturnSlot().testFollow(input.charAt(node.getIndex()))) return;
-
-		T result = addDescriptor(input, this, node, edge, runtime);
-		if (result != null) {
-			Environment env = runtime.getEnvironment();
-			runtime.scheduleDescriptor(edge.getReturnSlot(), edge.getDestination(), result, env);
-		}
-	}
-
-    /*
-     *
-     * Does the following:
-     * (1) checks conditions associated with the return slot
-     * (2) checks whether the descriptor to be created has been already created (and scheduled) before
-     * (2.1) if yes, returns null
-     * (2.2) if no, creates one and returns it
-     *
-     */
-    T addDescriptor(Input input, GSSNode<T> source, T result, GSSEdge<T> edge, IguanaRuntime<T> runtime) {
-        int inputIndex = result.getIndex();
-
-        Environment env = edge.getEnv();
-        BodyGrammarSlot returnSlot = edge.getReturnSlot();
-        GSSNode<T> destination = edge.getDestination();
-
-        if (edge.getReturnSlot().requiresBinding())
-            env = returnSlot.doBinding(result, env);
-
-        runtime.setEnvironment(env);
-
-        if (returnSlot.getConditions().execute(input, source, inputIndex, runtime.getEvaluatorContext(), runtime)) {
-            EnvironmentPool.returnToPool(env);
-            return null;
-        }
-
-        env = runtime.getEnvironment();
-
-        return returnSlot.getIntermediateNode(edge.getResult(), destination.getInputIndex(), result, env, runtime);
-    }
-
-	public T getResult(int j) {
-		if (firstPoppedElement != null && firstPoppedElement.getIndex() == j)
-			return firstPoppedElement;
-
-		if (restPoppedElements != null) {
-			return restPoppedElements.get(Keys.from(j));
-		}
-		return null;
-	}
-
-	public NonterminalGrammarSlot getGrammarSlot() {
-		return slot;
-	}
-
-	public int getInputIndex() {
-		return inputIndex;
-	}
-
-	public Object[] getData() {
-		return data;
-	}
-
-	public int countGSSEdges() {
-		int count = 0;
-		count += firstGSSEdge == null ? 0 : 1;
-		count += restGSSEdges == null ? 0 : restGSSEdges.size();
-		return count;
-	}
-
-	public int countPoppedElements() {
-		int count = 0;
-		if (firstPoppedElement != null) count++;
-		if (restPoppedElements != null) count += restPoppedElements.size();
-		return count;
-	}
-
-	public Iterable<GSSEdge<T>> getGSSEdges() {
-		return restGSSEdges;
-	}
-
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-
-		if (!(obj instanceof GSSNode)) return false;
-
-		GSSNode<?> other = (GSSNode<?>) obj;
-
-		return  slot == other.getGrammarSlot() &&
-				inputIndex == other.getInputIndex() &&
-				Arrays.equals(data, other.data);
-	}
-
-	public int hashCode() {
-		return MurmurHash3.fn().apply(slot.hashCode(), getInputIndex(), data);
-	}
-
-	public List<Result> getPoppedElements() {
-		List<Result> poppedElements = new ArrayList<>(countPoppedElements());
-		if (firstPoppedElement != null) poppedElements.add(firstPoppedElement);
-		if (restPoppedElements != null)
-			poppedElements.addAll(restPoppedElements.values());
-
-		return poppedElements;
-	}
-
-	public String toString() {
-		String s = String.format("(%s, %d)", slot, inputIndex);
-		if (data != null) {
-			s += String.format("(%s)", data);
-		}
-		return s;
-	}
-
+    Iterable<T> getPoppedElements();
 }

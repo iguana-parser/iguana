@@ -74,7 +74,7 @@ public class GrammarGraphToDot {
 		}
 		
 		// TODO: improve this code
-        Transition t = slot.getTransition();
+        Transition t = slot.getOutTransition();
         if(t instanceof ConditionalTransition) {
             dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
 
@@ -86,7 +86,7 @@ public class GrammarGraphToDot {
             dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
         }
 
-		toDot((BodyGrammarSlot) t.destination(), dotGraph);
+		toDot(t.destination(), dotGraph);
 	}
 
 

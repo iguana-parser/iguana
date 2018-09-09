@@ -65,7 +65,9 @@ public class BodyGrammarSlot implements GrammarSlot {
 	
 	private FollowTest followTest;
 
-	private Transition transition;
+	private Transition outTransition;
+
+	private Transition inTransition;
 
 	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions) {
 		this(position, label, -1, variable, -1, state, conditions);
@@ -134,7 +136,7 @@ public class BodyGrammarSlot implements GrammarSlot {
 	}
 	
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-        transition.execute(input, u, result, env, runtime);
+        outTransition.execute(input, u, result, env, runtime);
 	}
 		
 	public boolean requiresBinding() {
@@ -197,13 +199,19 @@ public class BodyGrammarSlot implements GrammarSlot {
 		return position.getRule();
 	}
 
-    public Transition getTransition() {
-        return transition;
+    public void setOutTransition(Transition outTransition) {
+        this.outTransition = outTransition;
     }
 
-    public void setTransition(Transition transition) {
-        this.transition = transition;
+    public void setInTransition(Transition inTransition) {
+        this.inTransition = inTransition;
     }
+
+    public Transition getOutTransition() {
+        return outTransition;
+    }
+
+    public Transition getInTransition() { return inTransition; }
 
     /*
      * Corresponds to a grammar position A ::= B . \alpha
@@ -222,4 +230,5 @@ public class BodyGrammarSlot implements GrammarSlot {
     public boolean isEnd() {
         return false;
     }
+
 }
