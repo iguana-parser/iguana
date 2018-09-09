@@ -27,7 +27,6 @@
 
 package org.iguana.datadependent.env;
 
-import iguana.utils.input.Input;
 import org.iguana.datadependent.env.array.ArrayEvaluatorContext;
 import org.iguana.datadependent.env.intarray.IntArrayEvaluatorContext;
 import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;

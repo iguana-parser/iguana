@@ -175,7 +175,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
     T addDescriptor(Input input, GSSNode<T> source, T result, GSSEdge<T> edge, IguanaRuntime<T> runtime) {
         int inputIndex = result.getIndex();
 
-        Environment env = edge.getEnv();
+        Environment env = edge.getEnv() == null ? runtime.getEmptyEnvironment() : edge.getEnv();
         BodyGrammarSlot returnSlot = edge.getReturnSlot();
         GSSNode<T> destination = edge.getDestination();
 

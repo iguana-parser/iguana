@@ -9,13 +9,11 @@ public class DummyGSSEdge<T extends Result> implements GSSEdge<T> {
     private final BodyGrammarSlot returnSlot;
     private final int inputIndex;
     private final GSSNode<T> destination;
-    private final Environment env;
 
-    public DummyGSSEdge(BodyGrammarSlot returnSlot, int inputIndex, GSSNode<T> destination, Environment env) {
+    public DummyGSSEdge(BodyGrammarSlot returnSlot, int inputIndex, GSSNode<T> destination) {
         this.returnSlot = returnSlot;
         this.inputIndex = inputIndex;
         this.destination = destination;
-        this.env = env;
     }
 
     @Override
@@ -35,7 +33,7 @@ public class DummyGSSEdge<T extends Result> implements GSSEdge<T> {
 
     @Override
     public Environment getEnv() {
-        return env;
+        return null;
     }
 
     @Override

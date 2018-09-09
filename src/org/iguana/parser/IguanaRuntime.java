@@ -169,9 +169,18 @@ public class IguanaRuntime<T extends Result> {
 
     public GSSEdge<T> createGSSEdge(BodyGrammarSlot returnSlot, T result, int inputIndex, GSSNode<T> gssNode, Environment env) {
         if (result.isDummy()) {
-            return new DummyGSSEdge<>(returnSlot, inputIndex, gssNode, env);
+            if (env.isEmpty()) {
+                return new DummyGSSEdge<>(returnSlot, inputIndex, gssNode);
+            } else {
+                return new DummyGSSEdgeWithEnv<>(returnSlot, inputIndex, gssNode, env);
+            }
         }
-        return new DefaultGSSEdge<>(returnSlot, result, gssNode, env);
+
+        if (env.isEmpty()) {
+            return new DefaultGSSEdge<>(returnSlot, result, gssNode);
+        } else {
+            return new DefaultGSSEdgeWithEnv<>(returnSlot, result, gssNode, env);
+        }
     }
 
     public void evaluate(Statement[] statements, Environment env, Input input) {
