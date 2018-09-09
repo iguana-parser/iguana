@@ -51,8 +51,8 @@ public class PersistentEnvironment implements Environment {
 	public boolean isEmpty() {
 		return bindings.isEmpty() && (parent == null || parent.isEmpty());
 	}
-	
-	@Override
+
+    @Override
 	public Environment pop() {
 		return parent;
 	}

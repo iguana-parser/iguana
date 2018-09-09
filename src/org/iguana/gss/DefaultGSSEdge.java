@@ -36,13 +36,11 @@ public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
 	private final BodyGrammarSlot returnSlot;
 	private final T result;
 	private final GSSNode<T> destination;
-	private final Environment env;
 
-	public DefaultGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> destination, Environment env) {
+	public DefaultGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> destination) {
 		this.returnSlot = returnSlot;
 		this.result = result;
 		this.destination = destination;
-		this.env = env;
 	}
 
 	@Override
@@ -67,7 +65,7 @@ public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
 
     @Override
     public Environment getEnv() {
-        return env;
+        return null;
     }
 
     @Override
