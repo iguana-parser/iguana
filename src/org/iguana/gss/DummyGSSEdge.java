@@ -4,6 +4,9 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.result.Result;
 
+/**
+ * GSSEdge that has the dummy node as its result
+ */
 public class DummyGSSEdge<T extends Result> implements GSSEdge<T> {
 
     private final BodyGrammarSlot returnSlot;

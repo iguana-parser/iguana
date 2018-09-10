@@ -108,7 +108,11 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     @Override
     public NonPackedNode convert(NonPackedNode current, NonPackedNode result, EndGrammarSlot slot, Object value) {
         if (current == null) {
-            current = new NonterminalNode(slot, result, result.getLeftExtent(), result.getIndex(), value);
+            if (value == null)
+                current = new NonterminalNode(slot, result, result.getLeftExtent(), result.getRightExtent());
+            else
+                current = new NonterminalNodeWithValue(slot, result, result.getLeftExtent(), result.getRightExtent(), value);
+
             logger.nonterminalNodeAdded((NonterminalNode) current);
         } else {
             List<PackedNode> packedNodes = packedNodesMap.computeIfAbsent(current, key -> new ArrayList<>());

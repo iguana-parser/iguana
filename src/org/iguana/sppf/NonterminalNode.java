@@ -42,20 +42,13 @@ public class NonterminalNode extends NonPackedNode {
 
 	private final int rightExtent;
 
-    private final Object value;
-
     private boolean ambiguous;
 
-    public NonterminalNode(EndGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {
-        this(slot, child, leftExtent, rightExtent, null);
-    }
-
-	public NonterminalNode(EndGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent, Object value) {
+	public NonterminalNode(EndGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {
 		this.slot = slot;
 		this.child = child;
 		this.leftExtent = leftExtent;
 		this.rightExtent = rightExtent;
-		this.value = value;
 	}
 
     @Override
@@ -113,11 +106,6 @@ public class NonterminalNode extends NonPackedNode {
     public int getIndex() {
         return rightExtent;
     }
-
-    @Override
-    public Object getValue() {
-		return value;
-	}
 
     @Override
     public PackedNode getFirstPackedNode() {
