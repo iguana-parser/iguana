@@ -7,15 +7,12 @@ import java.util.Arrays;
 
 public class ArrayEnvironment implements Environment {
 
-	public static int count;
-	
 	private final Object[] values;
 	private int hashCode;
 	
 	static final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
 	
 	private ArrayEnvironment(Object[] values, int hashCode) {
-		count++;
 		this.values = values;
 		this.hashCode = hashCode;
 	}
@@ -44,7 +41,7 @@ public class ArrayEnvironment implements Environment {
 		return values.length == 0;
 	}
 
-	@Override
+    @Override
 	public Environment pop() {
 		throw new RuntimeException("Unsupported with this type of environment!");
 	}

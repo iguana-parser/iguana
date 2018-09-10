@@ -66,7 +66,7 @@ public class GrammarGraphToDot {
 		slot.getFirstSlots().forEach(s -> toDot(s, dotGraph));
 	}
 	
-	private static void toDot(GrammarSlot slot, DotGraph dotGraph) {
+	private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph) {
 		if (slot instanceof EndGrammarSlot) {
 			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.DOUBLE_CIRCLE));
 		} else {
@@ -74,20 +74,19 @@ public class GrammarGraphToDot {
 		}
 		
 		// TODO: improve this code
-		slot.getTransitions().forEach(t -> { 
-			if(t instanceof ConditionalTransition) {
-				dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
+        Transition t = slot.getOutTransition();
+        if(t instanceof ConditionalTransition) {
+            dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
 
-				BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
-				if (ifFalse != null)
-					dotGraph.addEdge(newEdge(getId(slot), getId(ifFalse), t.getLabel()));
-			}
-			else {
-				dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
-			}
-		});
+            BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
+            if (ifFalse != null)
+                dotGraph.addEdge(newEdge(getId(slot), getId(ifFalse), t.getLabel()));
+        }
+        else {
+            dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
+        }
 
-		slot.getTransitions().forEach(t -> toDot(t.destination(), dotGraph));
+		toDot(t.destination(), dotGraph);
 	}
 
 

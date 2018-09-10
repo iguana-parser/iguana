@@ -36,17 +36,13 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
-import java.util.Collections;
-import java.util.List;
-
-public class TerminalGrammarSlot extends AbstractGrammarSlot {
+public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private final Terminal terminal;
 	private final Matcher matcher;
 	private IntHashMap<Object> terminalNodes;
 
 	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
-		super(Collections.emptyList());
 		this.terminal = terminal;
 		this.matcher = factory.getMatcher(terminal.getRegularExpression());
     }
@@ -76,16 +72,6 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
         return terminal;
     }
 
-    @Override
-	public List<Transition> getTransitions() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public void addTransition(Transition transition) {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public String toString() {
 		return terminal.toString();
@@ -96,8 +82,4 @@ public class TerminalGrammarSlot extends AbstractGrammarSlot {
 		terminalNodes = null;
 	}
 
-	@Override
-	public int getPosition() {
-		throw new UnsupportedOperationException();
-	}
 }

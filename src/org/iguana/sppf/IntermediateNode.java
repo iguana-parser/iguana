@@ -40,10 +40,6 @@ public class IntermediateNode extends NonPackedNode {
 
     private boolean ambiguous;
 
-    public IntermediateNode(BodyGrammarSlot slot, NonPackedNode child) {
-        this(slot, child, null);
-    }
-
     public IntermediateNode(BodyGrammarSlot slot, NonPackedNode leftChild, NonPackedNode rightChild) {
         this.slot = slot;
         this.leftChild = leftChild;
@@ -61,7 +57,6 @@ public class IntermediateNode extends NonPackedNode {
             return leftChild;
         }
         if (index == 1) {
-            if (rightChild == null) throw new ArrayIndexOutOfBoundsException();
             return rightChild;
         }
         throw new ArrayIndexOutOfBoundsException();
@@ -69,7 +64,7 @@ public class IntermediateNode extends NonPackedNode {
 
     @Override
     public int childrenCount() {
-        return rightChild == null ? 1 : 2;
+        return 2;
     }
 
     @Override
@@ -84,7 +79,7 @@ public class IntermediateNode extends NonPackedNode {
 
     @Override
     public int getIndex() {
-        return rightChild == null ? leftChild.getRightExtent() : rightChild.getRightExtent();
+        return rightChild.getRightExtent();
     }
 
     @Override

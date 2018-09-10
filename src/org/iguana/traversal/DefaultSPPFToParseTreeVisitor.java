@@ -18,11 +18,9 @@ import static java.util.Collections.emptyList;
  *
  * Unambiguous Nonterminal nodes have only one child:
  *
- * Unambiguous Intermediate nodes can have one or two child(ren):
- *  - If there is only child child, it's a nonterminal or terminal node
- *  - If there are two children, it's either:
- *      - The left child is an intermediate node and the right child a nonterminal or terminal node
- *      - Both left and right children are nonterminal or terminal nodes
+ * Unambiguous Intermediate nodes two child:
+ *  - The left child is an intermediate node and the right child a nonterminal or terminal node
+ *  - Both left and right children are nonterminal or terminal nodes
  *
  */
 public class DefaultSPPFToParseTreeVisitor<T> {

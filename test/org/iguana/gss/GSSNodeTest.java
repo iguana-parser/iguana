@@ -19,6 +19,8 @@ import org.iguana.util.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 public class GSSNodeTest {
@@ -39,8 +41,7 @@ public class GSSNodeTest {
 
     @Test
     public void test() {
-        NonterminalGrammarSlot nonterminalGrammarSlot = grammarGraph.getNonterminalGrammarSlot("A");
-        GSSNode gssNode = new GSSNode(nonterminalGrammarSlot, 0);
+        GSSNode gssNode = new DefaultGSSNode(null);
 
         EndGrammarSlot endGrammarSlot = grammarGraph.getEndGrammarSlot("A ::= a .");
 
@@ -54,31 +55,36 @@ public class GSSNodeTest {
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));
 
         NonterminalNode expected = sppfFactory.createNonterminalNode("A ::= a .", terminalNode01);
-        assertEquals(expected, gssNode.getPoppedElements().get(0));
+        Iterator<NonPackedNode> it = gssNode.getPoppedElements().iterator();
+        assertEquals(expected, it.next());
 
         // Pop ("a", 0, 1)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));
         assertEquals(1, gssNode.countPoppedElements());
-        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
+        it = gssNode.getPoppedElements().iterator();
+        assertEquals(2, (it.next()).childrenCount());
 
         // Pop ("a", 0, 2)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(2, gssNode.countPoppedElements());
-        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
-        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(1)).childrenCount());
+        it = gssNode.getPoppedElements().iterator();
+        assertEquals(2, it.next().childrenCount());
+        assertEquals(1, it.next().childrenCount());
 
         // Pop ("a", 0, 3)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode03, runtime));
         assertEquals(3, gssNode.countPoppedElements());
-        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
-        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(1)).childrenCount());
-        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(2)).childrenCount());
+        it = gssNode.getPoppedElements().iterator();
+        assertEquals(2, it.next().childrenCount());
+        assertEquals(1, it.next().childrenCount());
+        assertEquals(1, it.next().childrenCount());
 
         // Pop ("a", 0, 2)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(3, gssNode.countPoppedElements());
-        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(0)).childrenCount());
-        assertEquals(2, ((NonPackedNode) gssNode.getPoppedElements().get(1)).childrenCount());
-        assertEquals(1, ((NonPackedNode) gssNode.getPoppedElements().get(2)).childrenCount());
+        it = gssNode.getPoppedElements().iterator();
+        assertEquals(2, it.next().childrenCount());
+        assertEquals(2, it.next().childrenCount());
+        assertEquals(1, it.next().childrenCount());
     }
 }

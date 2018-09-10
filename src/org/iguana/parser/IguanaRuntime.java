@@ -12,7 +12,7 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.gss.GSSNode;
+import org.iguana.gss.*;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.ParserResultOps;
 import org.iguana.result.Result;
@@ -77,20 +77,20 @@ public class IguanaRuntime<T extends Result> {
 
         Environment env = ctx.getEmptyEnvironment();
 
-        GSSNode<T> startGSSNode;
-
-        if (!global && !map.isEmpty()) {
-            Object[] arguments = new Object[map.size()];
-
-            int i = 0;
-            for (String parameter : nonterminal.getParameters())
-                arguments[i++] = map.get(parameter);
-
-            startGSSNode = startSymbol.getGSSNode(0, arguments);
-            env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
-        } else {
-            startGSSNode = startSymbol.getGSSNode(0);
-        }
+        StartGSSNode<T> startGSSNode = new StartGSSNode<>(startSymbol, 0);
+//
+//        if (!global && !map.isEmpty()) {
+//            Object[] arguments = new Object[map.size()];
+//
+//            int i = 0;
+//            for (String parameter : nonterminal.getParameters())
+//                arguments[i++] = map.get(parameter);
+//
+//            startGSSNode =  startSymbol.getGSSNode(0, arguments);
+//            env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
+//        } else {
+//            startGSSNode = startSymbol.getGSSNode(0);
+//        }
 
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
@@ -165,6 +165,22 @@ public class IguanaRuntime<T extends Result> {
 
     public Environment getEmptyEnvironment() {
         return ctx.getEmptyEnvironment();
+    }
+
+    public GSSEdge<T> createGSSEdge(BodyGrammarSlot returnSlot, T result, int inputIndex, GSSNode<T> gssNode, Environment env) {
+        if (result.isDummy()) {
+            if (env.isEmpty()) {
+                return new DummyGSSEdge<>(returnSlot, gssNode);
+            } else {
+                return new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env);
+            }
+        }
+
+        if (env.isEmpty()) {
+            return new DefaultGSSEdge<>(returnSlot, result, gssNode);
+        } else {
+            return new DefaultGSSEdgeWithEnv<>(returnSlot, result, gssNode, env);
+        }
     }
 
     public void evaluate(Statement[] statements, Environment env, Input input) {

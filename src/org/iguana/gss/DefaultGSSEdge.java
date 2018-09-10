@@ -25,33 +25,52 @@
  *
  */
 
-package org.iguana.grammar.slot;
+package org.iguana.gss;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.result.Result;
 
+public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
 
-public abstract class AbstractGrammarSlot implements GrammarSlot {
+	private final BodyGrammarSlot returnSlot;
+	private final T result;
+	private final GSSNode<T> destination;
 
-	protected final List<Transition> transitions;
-
-	public AbstractGrammarSlot() {
-		this(Collections.emptyList());
-	}
-	
-	public AbstractGrammarSlot(List<Transition> transitions) {
-		this.transitions = new ArrayList<>(transitions);
-	}
-
-	@Override
-	public void addTransition(Transition transition) {
-		transitions.add(transition);
+	public DefaultGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> destination) {
+		this.returnSlot = returnSlot;
+		this.result = result;
+		this.destination = destination;
 	}
 
 	@Override
-	public List<Transition> getTransitions() {
-		return transitions;
+	public T getResult() {
+		return result;
+	}
+
+    @Override
+    public int getInputIndex() {
+        return result.getIndex();
+    }
+
+    @Override
+	public BodyGrammarSlot getReturnSlot() {
+		return returnSlot;
+	}
+
+    @Override
+	public GSSNode<T> getDestination() {
+		return destination;
+	}
+
+    @Override
+    public Environment getEnv() {
+        return null;
+    }
+
+    @Override
+	public String toString() {
+		return String.format("(%s, %s, %s)", returnSlot, result, destination);
 	}
 
 }

@@ -52,6 +52,5 @@ public interface SPPFNode extends Result {
 	default Object getValue() {
 		return null;
 	}
-
 	default boolean isDummy() { return false; }
 }

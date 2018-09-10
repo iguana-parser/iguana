@@ -13,6 +13,11 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
         }
 
         @Override
+        public int getLeftExtent() {
+            return -1;
+        }
+
+        @Override
         public boolean isDummy() {
             return true;
         }

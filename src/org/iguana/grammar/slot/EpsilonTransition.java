@@ -87,7 +87,6 @@ public class EpsilonTransition extends AbstractTransition {
 
 	@Override
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		runtime.setEnvironment(env);

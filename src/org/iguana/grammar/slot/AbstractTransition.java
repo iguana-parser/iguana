@@ -40,12 +40,12 @@ public abstract class AbstractTransition implements Transition {
 	}
 
 	@Override
-	public GrammarSlot destination() {
+	public BodyGrammarSlot destination() {
 		return dest;
 	}
 
 	@Override
-	public GrammarSlot origin() {
+	public BodyGrammarSlot origin() {
 		return origin;
 	}
 	
