@@ -155,17 +155,19 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private void iterateOverEdges(Input input, T result, IguanaRuntime<T> runtime) {
 		if (firstGSSEdge instanceof CyclicDummyGSSEdges<?>) {
-            for (BodyGrammarSlot returnSlot : ((CyclicDummyGSSEdges<?>) firstGSSEdge).getReturnSlots()) {
-                processEdge(input, result, firstGSSEdge, returnSlot, runtime);
-			}
+            List<BodyGrammarSlot> returnSlots = ((CyclicDummyGSSEdges<?>) firstGSSEdge).getReturnSlots();
+            for (int i = 0; i < returnSlots.size(); i++) {
+                processEdge(input, result, firstGSSEdge, returnSlots.get(i), runtime);
+            }
 		} else {
 			processEdge(input, result, firstGSSEdge, firstGSSEdge.getReturnSlot(), runtime);
 		}
 
 		if (restGSSEdges != null)
-			for (GSSEdge<T> edge : restGSSEdges) {
-				processEdge(input, result, edge, edge.getReturnSlot(), runtime);
-			}
+            for (int i = 0; i < restGSSEdges.size(); i++) {
+                GSSEdge<T> edge = restGSSEdges.get(i);
+                processEdge(input, result, edge, edge.getReturnSlot(), runtime);
+            }
 	}
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
