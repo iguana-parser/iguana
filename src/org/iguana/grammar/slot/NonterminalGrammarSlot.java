@@ -186,9 +186,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                     newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);
             }
 
-            for (int j = 0; j < firstSlots.size(); j++) {
-                BodyGrammarSlot slot = firstSlots.get(j);
-
+            for (BodyGrammarSlot slot : firstSlots) {
                 runtime.setEnvironment(newEnv);
 
                 if (slot.getLabel() != null)
