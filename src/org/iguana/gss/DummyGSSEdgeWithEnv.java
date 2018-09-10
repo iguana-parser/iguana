@@ -8,8 +8,8 @@ public class DummyGSSEdgeWithEnv<T extends Result> extends DummyGSSEdge<T> {
 
     private final Environment env;
 
-    public DummyGSSEdgeWithEnv(BodyGrammarSlot returnSlot, int inputIndex, GSSNode<T> destination, Environment env) {
-        super(returnSlot, inputIndex, destination);
+    public DummyGSSEdgeWithEnv(BodyGrammarSlot returnSlot, GSSNode<T> destination, Environment env) {
+        super(returnSlot, destination);
         this.env = env;
     }
 
