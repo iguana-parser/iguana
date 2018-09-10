@@ -60,7 +60,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
     @Override
 	public void addGSSEdge(Input input, BodyGrammarSlot returnSlot, int i, GSSNode<T> destination, T w, Environment env, IguanaRuntime<T> runtime) {
-		GSSEdge<T> edge = runtime.createGSSEdge(returnSlot, w, i, destination, env);
+		GSSEdge<T> edge = runtime.createGSSEdge(returnSlot, w, destination, env);
 		ParserLogger.getInstance().gssEdgeAdded(edge);
 
         if (restGSSEdges == null) {

@@ -171,7 +171,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                 return;
             }
 
-            GSSEdge<T> gssEdge = runtime.createGSSEdge(returnSlot, result, i, u, env);
+            GSSEdge<T> gssEdge = runtime.createGSSEdge(returnSlot, result, u, env);
             gssNode = new DefaultGSSNode<>(gssEdge);
 
             ParserLogger.getInstance().gssNodeAdded(gssNode, data);
