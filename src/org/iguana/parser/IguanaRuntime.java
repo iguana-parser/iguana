@@ -170,9 +170,9 @@ public class IguanaRuntime<T extends Result> {
     public GSSEdge<T> createGSSEdge(BodyGrammarSlot returnSlot, T result, int inputIndex, GSSNode<T> gssNode, Environment env) {
         if (result.isDummy()) {
             if (env.isEmpty()) {
-                return new DummyGSSEdge<>(returnSlot, inputIndex, gssNode);
+                return new DummyGSSEdge<>(returnSlot, gssNode);
             } else {
-                return new DummyGSSEdgeWithEnv<>(returnSlot, inputIndex, gssNode, env);
+                return new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env);
             }
         }
 
