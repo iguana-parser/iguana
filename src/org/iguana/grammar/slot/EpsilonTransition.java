@@ -94,7 +94,7 @@ public class EpsilonTransition extends AbstractTransition {
 		switch(type) {
 		
             case DUMMY:
-                if (conditions.execute(input, origin, u, result, runtime.getEvaluatorContext(), runtime))
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -102,14 +102,14 @@ public class EpsilonTransition extends AbstractTransition {
                 break;
 
             case OPEN:
-                if (conditions.execute(input, origin, u, result, runtime.getEvaluatorContext(), runtime))
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 runtime.getEvaluatorContext().pushEnvironment();
                 break;
 
             case CLOSE:
                 runtime.getEvaluatorContext().popEnvironment();
-                if (conditions.execute(input, origin, u, result, runtime.getEvaluatorContext(), runtime))
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -117,7 +117,7 @@ public class EpsilonTransition extends AbstractTransition {
                 runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
                 runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
 
-                if (conditions.execute(input, origin, u, result, runtime.getEvaluatorContext(), runtime))
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
 
@@ -134,7 +134,7 @@ public class EpsilonTransition extends AbstractTransition {
 
                 runtime.getEvaluatorContext().storeVariable(label, Tuple.of(lhs, i));
 
-                if (conditions.execute(input, origin, u, result, runtime.getEvaluatorContext(), runtime))
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
                     return;
                 break;
             }

@@ -28,6 +28,7 @@
 package org.iguana.grammar.condition;
 
 import iguana.utils.input.Input;
+import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
@@ -35,9 +36,14 @@ import org.iguana.result.Result;
 
 @FunctionalInterface
 public interface SlotAction {
-	<T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result);
+
+    <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx);
+
+	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int inputIndex) {
+	    return execute(input, slot, gssNode, inputIndex, inputIndex, GLLEvaluator.getDefaultEvaluatorContext());
+    }
 	
-	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result, IEvaluatorContext ctx) {
-		return execute(input, slot, gssNode, result);
+	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int inputIndex, IEvaluatorContext ctx) {
+		return execute(input, slot, gssNode, inputIndex, inputIndex, ctx);
 	}
 }

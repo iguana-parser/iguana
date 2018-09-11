@@ -57,19 +57,14 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 	@Override
 	public SlotAction visit(DataDependentCondition condition) {
 		return new SlotAction() {
-			
-			@Override
-			public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result, IEvaluatorContext ctx) {
-				Object value = condition.getExpression().interpret(ctx, input);
-				if (!(value instanceof Boolean)) 
-					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
-				return (!(Boolean) value);
-			}
+
+            @Override
+            public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                Object value = condition.getExpression().interpret(ctx, input);
+                if (!(value instanceof Boolean))
+                    throw new RuntimeException("Data dependent condition should evaluate to a boolean value.");
+                return (!(Boolean) value);
+            }
 			
 			@Override
 			public String toString() {
@@ -87,30 +82,31 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		switch (condition.getType()) {				
 			case START_OF_LINE:
 				return new SlotAction() {
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-					    int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-						return !input.isStartOfLine(inputIndex);
-					}
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return !input.isStartOfLine(rightExtent);
+                    }
 				};
 
 
 			case END_OF_LINE:
 				return new SlotAction() {
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-						return !input.isEndOfLine(inputIndex);
-					}
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return !input.isEndOfLine(rightExtent);
+                    }
+
 				};
 
 			case END_OF_FILE:
 				return new SlotAction() {
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-						return !input.isEndOfFile(inputIndex);
-					}
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return !input.isEndOfFile(rightExtent);
+                    }
 				};
 
 
@@ -131,13 +127,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		    case FOLLOW_IGNORE_LAYOUT:		    	
 		    	return new SlotAction() {
 		    		Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-					
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-					    return matcher.match(input, inputIndex) == -1;
-					}
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) == -1;
+                    }
+
 					@Override
 					public String toString() {
 					    return condition.toString();
@@ -148,13 +143,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		    case NOT_FOLLOW_IGNORE_LAYOUT: 
 			    return new SlotAction() {
 			    	Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-			    	
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-					    return matcher.match(input, inputIndex) >= 0;
-					}
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) >= 0;
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
@@ -165,12 +159,13 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			case NOT_MATCH: 
 				return new SlotAction() {
 					Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-					
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> node, T result) {
-					    return matcher.match(input, result.getLeftExtent(), result.getIndex());
-					}
-					
+
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, leftExtent, rightExtent);
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
@@ -178,13 +173,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			case NOT_PRECEDE: 
 				return new SlotAction() {
 					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
-					
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-					    return matcher.match(input, inputIndex) >= 0;
-					}
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) >= 0;
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
@@ -192,13 +186,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			case PRECEDE:
 				return new SlotAction() {
 					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
-					
-					@Override
-					public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result) {
-                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-					    return matcher.match(input, inputIndex) == -1;
-					}
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) == -1;
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};

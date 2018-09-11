@@ -191,6 +191,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
      *
      */
     private T addDescriptor(Input input, GSSNode<T> source, T result, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
+        int inputIndex = result.isDummy() ? source.getInputIndex() : result.getIndex();
         Environment env = edge.getEnv() == null ? runtime.getEmptyEnvironment() : edge.getEnv();
         GSSNode<T> destination = edge.getDestination() != null ? edge.getDestination() : source;
 
@@ -199,7 +200,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
         runtime.setEnvironment(env);
 
-        if (returnSlot.getConditions().execute(input, returnSlot, source, result, runtime.getEvaluatorContext(), runtime)) {
+        if (returnSlot.getConditions().execute(input, returnSlot, source, inputIndex, runtime.getEvaluatorContext(), runtime)) {
             EnvironmentPool.returnToPool(env);
             return null;
         }
