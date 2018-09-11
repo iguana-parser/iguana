@@ -37,10 +37,10 @@ import org.iguana.result.Result;
 @FunctionalInterface
 public interface Conditions {
 
-	<T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IguanaRuntime<T> runtime);
+	<T extends Result> boolean execute(Input input, GSSNode<T> u, T result, IguanaRuntime<T> runtime);
 	
-	default <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
-		return execute(input, u, i, runtime);
+	default <T extends Result> boolean execute(Input input, GSSNode<T> u, T result, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+		return execute(input, u, result, runtime);
 	}
 	
 }

@@ -76,7 +76,7 @@ public class NonterminalTransition extends AbstractTransition {
 		
 		runtime.setEnvironment(env);
 		
-		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
+		if (preConditions.execute(input, u, result, runtime.getEvaluatorContext(), runtime))
 			return;
 				
 		nonterminal.create(input, dest, u, result, arguments, runtime.getEnvironment(), runtime);

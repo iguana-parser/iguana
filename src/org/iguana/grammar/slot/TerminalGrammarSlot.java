@@ -42,6 +42,8 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	private final Matcher matcher;
 	private IntHashMap<Object> terminalNodes;
 
+	private static final Object failure = "failure";
+
 	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
 		this.terminal = terminal;
 		this.matcher = factory.getMatcher(terminal.getRegularExpression());
@@ -51,17 +53,23 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	    if (terminalNodes == null) {
 	        terminalNodes = new OpenAddressingIntHashMap<>();
         }
-		T node = (T) terminalNodes.get(i);
+		Object node = terminalNodes.get(i);
+	    if (node == failure) {
+	        return null;
+        }
+
 		if (node == null) {
 			int length = matcher.match(input, i);
 			if (length < 0) {
 				node = null;
+                // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
+				terminalNodes.put(i, failure);
 			} else {
 				node = runtime.getResultOps().base(this, i, i + length);
 				terminalNodes.put(i, node);
 			}
 		}
-		return node;
+		return (T) node;
 	}
 
 	public int countTerminalNodes() {

@@ -49,7 +49,7 @@ public class ConditionsFactory {
 	public static Conditions DEFAULT = new Conditions() {
 
 		@Override
-		public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IguanaRuntime<T> runtime) {
+		public <T extends Result> boolean execute(Input input, GSSNode<T> u, T result, IguanaRuntime<T> runtime) {
 			return false;
 		}
 
@@ -78,17 +78,17 @@ public class ConditionsFactory {
 			return new Conditions() {
 
 				@Override
-				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i,  IguanaRuntime<T> runtime) {
-					return execute(input, u, i, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
+				public <T extends Result> boolean execute(Input input, GSSNode<T> u, T result,  IguanaRuntime<T> runtime) {
+					return execute(input, u, result, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
 				}
 				
 				@Override
-				public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+				public <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, T result, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
 					for (int j = 0; j < actions.size(); j++) {
 						SlotAction slotAction = actions.get(j);
-					    if (slotAction.execute(input, u, i, ctx)) {
-//			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
-                            runtime.recordParseError(i, u.getGrammarSlot(), u);
+					    if (slotAction.execute(input, gssNode, result, ctx)) {
+					        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
+                            runtime.recordParseError(inputIndex, null, gssNode);
 			                return true;
 			            }
 			        }
@@ -106,11 +106,12 @@ public class ConditionsFactory {
 		return new Conditions() {
 
 			@Override
-			public <T extends Result> boolean execute(Input input, GSSNode<T> u, int i, IguanaRuntime<T> runtime) {
+			public <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, T result, IguanaRuntime<T> runtime) {
 				for (int j = 0; j < actions.size(); j++) {
 					SlotAction slotAction = actions.get(j);
-		            if (slotAction.execute(input, u, i)) {
-                        runtime.recordParseError(i, u.getGrammarSlot(), u);
+		            if (slotAction.execute(input, gssNode, result)) {
+                        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
+                        runtime.recordParseError(inputIndex, null, gssNode);
 		                return true;
 		            }
 		        }

@@ -60,15 +60,15 @@ public class TerminalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T node, Environment env, IguanaRuntime<T> runtime) {
-        int i = node.isDummy() ? u.getInputIndex() : node.getIndex();
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		runtime.setEnvironment(env);
 		
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-		if (preConditions.execute(input, u, i, runtime.getEvaluatorContext(), runtime))
+		if (preConditions.execute(input, u, result, runtime.getEvaluatorContext(), runtime))
 			return;
 		
 		T cr = slot.getResult(input, i, runtime);
@@ -81,10 +81,10 @@ public class TerminalTransition extends AbstractTransition {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, u, cr.getIndex(), runtime.getEvaluatorContext(), runtime))
+		if (postConditions.execute(input, u, cr, runtime.getEvaluatorContext(), runtime))
 			return;
 		
-		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, node, cr, dest);
+		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
 				
 		dest.execute(input, u, n, runtime.getEnvironment(), runtime);
 	}

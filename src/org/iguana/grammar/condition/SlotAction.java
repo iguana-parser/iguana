@@ -34,9 +34,9 @@ import org.iguana.result.Result;
 
 @FunctionalInterface
 public interface SlotAction {
-	<T extends Result> boolean execute(Input input, GSSNode<T> gssNode, int inputIndex);
+	<T extends Result> boolean execute(Input input, GSSNode<T> gssNode, T result);
 	
-	default <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, int inputIndex, IEvaluatorContext ctx) {
-		return execute(input, gssNode, inputIndex);
+	default <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, T result, IEvaluatorContext ctx) {
+		return execute(input, gssNode, result);
 	}
 }
