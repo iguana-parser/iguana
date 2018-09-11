@@ -29,6 +29,7 @@ package org.iguana.grammar.condition;
 
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
@@ -37,10 +38,10 @@ import org.iguana.result.Result;
 @FunctionalInterface
 public interface Conditions {
 
-	<T extends Result> boolean execute(Input input, GSSNode<T> u, T result, IguanaRuntime<T> runtime);
+	<T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, T result, IguanaRuntime<T> runtime);
 	
-	default <T extends Result> boolean execute(Input input, GSSNode<T> u, T result, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
-		return execute(input, u, result, runtime);
+	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, T result, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+		return execute(input, slot, u, result, runtime);
 	}
 	
 }

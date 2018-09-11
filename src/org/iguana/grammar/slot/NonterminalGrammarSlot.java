@@ -193,7 +193,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                 if (slot.getLabel() != null)
                     runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-                if (!slot.getConditions().execute(input, gssNode, result, runtime.getEvaluatorContext(), runtime))
+                if (!slot.getConditions().execute(input, returnSlot, gssNode, result, runtime.getEvaluatorContext(), runtime))
                     runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
 
             }

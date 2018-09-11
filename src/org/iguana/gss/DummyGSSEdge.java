@@ -43,4 +43,9 @@ public class DummyGSSEdge<T extends Result> implements GSSEdge<T> {
     public int getInputIndex() {
         return destination.getInputIndex();
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %s, %s)", returnSlot, "$", destination);
+    }
 }

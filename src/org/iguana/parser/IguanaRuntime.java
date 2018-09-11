@@ -126,6 +126,7 @@ public class IguanaRuntime<T extends Result> {
             logger.error(slot, i);
             this.errorIndex = i;
             this.errorSlot = slot;
+            logger.error(errorSlot, errorIndex);
         }
     }
 

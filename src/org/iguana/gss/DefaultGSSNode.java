@@ -33,10 +33,7 @@ import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.EnvironmentPool;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.NonterminalTransition;
+import org.iguana.grammar.slot.*;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
@@ -44,6 +41,10 @@ import org.iguana.util.ParserLogger;
 
 import java.util.*;
 
+/**
+ * If there is a cyclic GSSEdge, it's always the first one. If there is a cyclic GSS edge, there is always
+ * a second GSS edge which is stored in restGSSEdges.
+ */
 public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private GSSEdge<T> firstGSSEdge;
@@ -198,7 +199,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
         runtime.setEnvironment(env);
 
-        if (returnSlot.getConditions().execute(input, source, result, runtime.getEvaluatorContext(), runtime)) {
+        if (returnSlot.getConditions().execute(input, returnSlot, source, result, runtime.getEvaluatorContext(), runtime)) {
             EnvironmentPool.returnToPool(env);
             return null;
         }
@@ -209,7 +210,13 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
     }
 
 	public NonterminalGrammarSlot getGrammarSlot() {
-        return ((NonterminalTransition) firstGSSEdge.getReturnSlot().getInTransition()).getSlot();
+        NonterminalTransition transition;
+        if (firstGSSEdge instanceof CyclicDummyGSSEdges) {
+            transition = (NonterminalTransition) restGSSEdges.get(0).getReturnSlot().getInTransition();
+        } else {
+            transition = (NonterminalTransition) firstGSSEdge.getReturnSlot().getInTransition();
+        }
+        return transition.getSlot();
 	}
 
 	public int getInputIndex() {

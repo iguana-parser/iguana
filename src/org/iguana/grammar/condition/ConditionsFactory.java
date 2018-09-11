@@ -31,6 +31,7 @@ import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
@@ -49,7 +50,7 @@ public class ConditionsFactory {
 	public static Conditions DEFAULT = new Conditions() {
 
 		@Override
-		public <T extends Result> boolean execute(Input input, GSSNode<T> u, T result, IguanaRuntime<T> runtime) {
+		public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, T result, IguanaRuntime<T> runtime) {
 			return false;
 		}
 
@@ -78,15 +79,15 @@ public class ConditionsFactory {
 			return new Conditions() {
 
 				@Override
-				public <T extends Result> boolean execute(Input input, GSSNode<T> u, T result,  IguanaRuntime<T> runtime) {
-					return execute(input, u, result, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
+				public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, T result,  IguanaRuntime<T> runtime) {
+					return execute(input, slot, u, result, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
 				}
 				
 				@Override
-				public <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, T result, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+				public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
 					for (int j = 0; j < actions.size(); j++) {
 						SlotAction slotAction = actions.get(j);
-					    if (slotAction.execute(input, gssNode, result, ctx)) {
+					    if (slotAction.execute(input, slot, gssNode, result, ctx)) {
 					        int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
                             runtime.recordParseError(inputIndex, null, gssNode);
 			                return true;
@@ -106,10 +107,10 @@ public class ConditionsFactory {
 		return new Conditions() {
 
 			@Override
-			public <T extends Result> boolean execute(Input input, GSSNode<T> gssNode, T result, IguanaRuntime<T> runtime) {
+			public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, T result, IguanaRuntime<T> runtime) {
 				for (int j = 0; j < actions.size(); j++) {
 					SlotAction slotAction = actions.get(j);
-		            if (slotAction.execute(input, gssNode, result)) {
+		            if (slotAction.execute(input, slot, gssNode, result)) {
                         int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
                         runtime.recordParseError(inputIndex, null, gssNode);
 		                return true;

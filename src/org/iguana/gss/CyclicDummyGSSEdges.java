@@ -51,4 +51,9 @@ public class CyclicDummyGSSEdges<T extends Result> implements GSSEdge<T> {
     void addReturnSlot(BodyGrammarSlot slot) {
         returnSlots.add(slot);
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %s, %s)", returnSlots, "$", "");
+    }
 }
