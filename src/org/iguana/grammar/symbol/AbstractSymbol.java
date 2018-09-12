@@ -50,8 +50,8 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
 		this.name = builder.name;
 		this.label = builder.label;
-		this.preConditions = builder.preConditions; // TODO: Dangerous move: ImmutableSet.copyOf(builder.preConditions);
-		this.postConditions = Collections.unmodifiableSet(builder.postConditions);
+		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptySet() : builder.preConditions;
+		this.postConditions = builder.postConditions.isEmpty() ? Collections.emptySet() : builder.postConditions;
 	}
 	
 	@Override

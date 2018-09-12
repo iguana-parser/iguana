@@ -107,7 +107,7 @@ public abstract class SymbolBuilder<T extends Symbol> {
  	public SymbolBuilder<T> removePostConditions(Collection<Condition> conditions) {
  		postConditions.removeAll(conditions);
  		return this;
- 	} 	
+ 	}
  	
 	public abstract T build();
 	
