@@ -70,8 +70,8 @@ public class TerminalTransition extends AbstractTransition {
 
 		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
-		
-		T cr = slot.getResult(input, i, runtime);
+
+		T cr = slot.getResult(input, i, origin, u, runtime);
 		
 		if (cr == null) {
 			runtime.recordParseError(i, origin, u);
@@ -83,7 +83,7 @@ public class TerminalTransition extends AbstractTransition {
 
 		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getIndex(), runtime.getEvaluatorContext(), runtime))
 			return;
-		
+
 		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
 				
 		dest.execute(input, u, n, runtime.getEnvironment(), runtime);

@@ -78,7 +78,7 @@ public class GrammarGraph implements Serializable {
 
     private TerminalGrammarSlot epsilonSlot;
 
-    public static  GrammarGraph from(Grammar grammar) {
+    public static GrammarGraph from(Grammar grammar) {
         return from(grammar, Configuration.load());
     }
 
@@ -93,7 +93,7 @@ public class GrammarGraph implements Serializable {
 
         this.firstFollow = new FirstFollowSets(this.grammar);
 
-        epsilonSlot = new TerminalGrammarSlot(Terminal.from(Epsilon.getInstance()), matcherFactory);
+        epsilonSlot = new TerminalGrammarSlot(Terminal.from(Epsilon.getInstance()), matcherFactory, ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);
 
         terminalsMap.put(Terminal.from(Epsilon.getInstance()), epsilonSlot);
 
@@ -336,7 +336,7 @@ public class GrammarGraph implements Serializable {
             else
                 slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), symbol.getLabel(), null, null);
 
-            Set<Condition> preConditions = (i == 0 && j == -1) ? new HashSet<>() : symbol.getPreConditions();
+            Set<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptySet() : symbol.getPreConditions();
             TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions, symbol.getPostConditions());
             setTransition(transition);
             currentSlot = slot;
@@ -414,7 +414,9 @@ public class GrammarGraph implements Serializable {
     }
 
     private TerminalGrammarSlot getTerminalGrammarSlot(Terminal t) {
-        TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot(t, matcherFactory));
+        Conditions preConditions = getConditions(t.getTerminalPreConditions());
+        Conditions postConditions = getConditions(t.getTerminalPostConditions());
+        TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot(t, matcherFactory, preConditions, postConditions));
         add(terminalSlot);
         return terminalSlot;
     }

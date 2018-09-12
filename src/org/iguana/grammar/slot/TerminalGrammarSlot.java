@@ -32,24 +32,31 @@ import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
+import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private final Terminal terminal;
-	private final Matcher matcher;
+    private final Matcher matcher;
 	private IntHashMap<Object> terminalNodes;
+    private final Conditions preConditions;
+    private final Conditions postConditions;
 
+    // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
 	private static final Object failure = "failure";
 
-	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, Conditions preConditions, Conditions postConditions) {
 		this.terminal = terminal;
-		this.matcher = factory.getMatcher(terminal.getRegularExpression());
+        this.preConditions = preConditions;
+        this.postConditions = postConditions;
+        this.matcher = factory.getMatcher(terminal.getRegularExpression());
     }
 
-	public <T extends Result> T getResult(Input input, int i, IguanaRuntime<T> runtime) {
+	public <T extends Result> T getResult(Input input, int i, BodyGrammarSlot slot, GSSNode<T> gssNode, IguanaRuntime<T> runtime) {
 	    if (terminalNodes == null) {
 	        terminalNodes = new OpenAddressingIntHashMap<>();
         }
@@ -58,13 +65,21 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	        return null;
         }
 
+        if (preConditions.execute(input, slot, gssNode, i, runtime)) {
+            terminalNodes.put(i, failure);
+            return null;
+        }
+
 		if (node == null) {
 			int length = matcher.match(input, i);
 			if (length < 0) {
 				node = null;
-                // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
 				terminalNodes.put(i, failure);
 			} else {
+                if (postConditions.execute(input, slot, gssNode, i, i + length, runtime)) {
+                    terminalNodes.put(i, failure);
+                    return null;
+                }
 				node = runtime.getResultOps().base(this, i, i + length);
 				terminalNodes.put(i, node);
 			}

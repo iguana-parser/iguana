@@ -54,7 +54,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		if (getNonterminal().testFollow(input.charAtIgnoreLayout(i)))
-            u.pop(input, this, epsilonSlot.getResult(input, i, runtime), value, runtime);
+            u.pop(input, this, epsilonSlot.getResult(input, i, this, u, runtime), value, runtime);
 	}
 
 }
