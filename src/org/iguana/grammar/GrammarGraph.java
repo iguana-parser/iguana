@@ -73,9 +73,9 @@ public class GrammarGraph implements Serializable {
 
     private Map<String, Integer> current;
 
-    private MatcherFactory matcherFactory;
+    private static MatcherFactory matcherFactory = new DFAMatcherFactory();
 
-    private TerminalGrammarSlot epsilonSlot;
+    public static final TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), matcherFactory, ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);;
 
     public static GrammarGraph from(Grammar grammar) {
         return from(grammar, Configuration.load());
@@ -88,11 +88,7 @@ public class GrammarGraph implements Serializable {
     }
 
     private void convert() {
-        matcherFactory = new DFAMatcherFactory();
-
         this.firstFollow = new FirstFollowSets(this.grammar);
-
-        epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), matcherFactory, ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);
 
         terminalsMap.put(Terminal.epsilon(), epsilonSlot);
 

@@ -32,12 +32,9 @@ import org.iguana.traversal.SPPFVisitor;
 
 public abstract class TerminalNode extends NonPackedNode {
 
-	private TerminalGrammarSlot slot;
-
 	private int leftExtent;
 
-	public TerminalNode(TerminalGrammarSlot slot, int leftExtent) {
-		this.slot = slot;
+	public TerminalNode(int leftExtent) {
 		this.leftExtent = leftExtent;
 	}
 
@@ -52,9 +49,7 @@ public abstract class TerminalNode extends NonPackedNode {
 	}
 
 	@Override
-	public TerminalGrammarSlot getGrammarSlot() {
-		return slot;
-	}
+	public abstract TerminalGrammarSlot getGrammarSlot();
 
 	@Override
 	public PackedNode getChildAt(int index) {

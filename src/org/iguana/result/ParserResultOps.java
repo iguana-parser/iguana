@@ -1,6 +1,7 @@
 package org.iguana.result;
 
 import org.iguana.grammar.slot.*;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
@@ -74,7 +75,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
             node = new EmptyTerminalNode(slot, start);
         } else if (slot.getTerminal().getNodeType() == TerminalNodeType.Keyword) {
             node = new KeywordTerminalNode(slot, start);
-        } else {
+        } else if (slot.getTerminal() == Terminal.epsilon())
+            return new EpsilonTerminalNode(start);
+        else {
             node = new DefaultTerminalNode(slot, start, end);
         }
         logger.terminalNodeAdded(node);
