@@ -30,18 +30,15 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
 
-public class TerminalNode extends NonPackedNode {
+public abstract class TerminalNode extends NonPackedNode {
 
 	private TerminalGrammarSlot slot;
 
 	private int leftExtent;
 
-	private int rightExtent;
-
-	public TerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
+	public TerminalNode(TerminalGrammarSlot slot, int leftExtent) {
 		this.slot = slot;
 		this.leftExtent = leftExtent;
-		this.rightExtent = rightExtent;
 	}
 
 	@Override
@@ -70,13 +67,8 @@ public class TerminalNode extends NonPackedNode {
     }
 
     @Override
-    public int getIndex() {
-        return rightExtent;
-    }
-
-    @Override
     public void setAmbiguous(boolean ambiguous) {
-
+		throw new UnsupportedOperationException();
     }
 
     @Override

@@ -115,7 +115,6 @@ public class Terminal extends AbstractSymbol {
 
 	@Override
 	public boolean equals(Object obj) {
-
 		if (obj == this)
 			return true;
 

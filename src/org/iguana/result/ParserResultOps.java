@@ -1,9 +1,6 @@
 package org.iguana.result;
 
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.slot.*;
 import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
@@ -72,7 +69,14 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     @Override
     public TerminalNode base(TerminalGrammarSlot slot, int start, int end) {
-        TerminalNode node = new TerminalNode(slot, start, end);
+        TerminalNode node;
+        if (start == end) {
+            node = new EmptyTerminalNode(slot, start);
+        } else if (slot.getTerminal().getNodeType() == TerminalNodeType.Keyword) {
+            node = new KeywordTerminalNode(slot, start);
+        } else {
+            node = new DefaultTerminalNode(slot, start, end);
+        }
         logger.terminalNodeAdded(node);
         return node;
     }

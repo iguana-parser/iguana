@@ -28,6 +28,8 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.slot.TerminalNodeType;
 
 public class SPPFNodeFactory {
 
@@ -45,8 +47,18 @@ public class SPPFNodeFactory {
 		return new IntermediateNode(grammarGraph.getBodyGrammarSlot(slot), leftChild, rightChild);
 	}
 	
-	public TerminalNode createTerminalNode(String slot, int leftExtent, int rightExtent) {
-		return new TerminalNode(grammarGraph.getTerminalGrammarSlot(slot), leftExtent, rightExtent);
+	public TerminalNode createTerminalNode(String s, int leftExtent, int rightExtent) {
+		TerminalGrammarSlot slot = grammarGraph.getTerminalGrammarSlot(s);
+		TerminalNode node;
+		if (leftExtent == rightExtent) {
+			node = new EmptyTerminalNode(slot, leftExtent);
+		} else if (slot.getTerminal().getNodeType() == TerminalNodeType.Keyword) {
+			node = new KeywordTerminalNode(slot, leftExtent);
+		} else {
+			node = new DefaultTerminalNode(slot, leftExtent, rightExtent);
+		}
+
+		return node;
 	}
 
 	public PackedNode createPackedNode(String slot, NonPackedNode leftChild) {
