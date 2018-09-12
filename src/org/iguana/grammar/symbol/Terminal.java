@@ -29,8 +29,12 @@ package org.iguana.grammar.symbol;
 
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
+import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
+
+import java.util.Collections;
+import java.util.Set;
 
 public class Terminal extends AbstractSymbol {
 
@@ -41,6 +45,9 @@ public class Terminal extends AbstractSymbol {
 	private final TerminalNodeType nodeType;
 
 	private final RegularExpression regex;
+
+	private final Set<Condition> terminalPreConditions;
+	private final Set<Condition> terminalPostConditions;
 
     public enum Category {
 		Regex("Regex"), Keyword("Keyword"), Layout("Layout");
@@ -72,6 +79,8 @@ public class Terminal extends AbstractSymbol {
 		this.regex = builder.regex;
 		this.nodeType = builder.nodeType;
 		this.category = builder.category;
+		this.terminalPreConditions = builder.terminalPreConditions;
+		this.terminalPostConditions = builder.terminalPostConditions;
 	}
 
     @Override
@@ -89,6 +98,14 @@ public class Terminal extends AbstractSymbol {
 
 	public Category getCategory() {
 		return category;
+	}
+
+	public Set<Condition> getTerminalPostConditions() {
+		return terminalPostConditions;
+	}
+
+	public Set<Condition> getTerminalPreConditions() {
+		return terminalPreConditions;
 	}
 
 	@Override
@@ -118,6 +135,8 @@ public class Terminal extends AbstractSymbol {
 
 		private TerminalNodeType nodeType;
 		private RegularExpression regex;
+		private Set<Condition> terminalPreConditions;
+		private Set<Condition> terminalPostConditions;
 
 		private Category category = Category.Regex;
 
@@ -132,6 +151,8 @@ public class Terminal extends AbstractSymbol {
 			this.regex = terminal.regex;
 			this.nodeType = terminal.getNodeType();
             this.category = terminal.getCategory();
+            this.terminalPreConditions = terminal.getTerminalPreConditions();
+            this.terminalPostConditions = terminal.getTerminalPostConditions();
 		}
 
 		public Builder setCategory(Category category) {
@@ -144,10 +165,26 @@ public class Terminal extends AbstractSymbol {
 			return this;
 		}
 
+		public Builder setTerminalPreConditions(Set<Condition> conditions) {
+			this.terminalPreConditions = conditions;
+			return this;
+		}
+
+		public Builder setTerminalPostConditions(Set<Condition> conditions) {
+			this.terminalPostConditions = conditions;
+			return this;
+		}
+
 		@Override
 		public Terminal build() {
 			if (name == null)
 				name = regex.toString();
+			if (terminalPreConditions == null) {
+				terminalPreConditions = Collections.emptySet();
+			}
+			if (terminalPostConditions == null) {
+				terminalPostConditions = Collections.emptySet();
+			}
 			return new Terminal(this);
 		}
 	}
