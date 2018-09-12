@@ -18,7 +18,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
 
     @Override
     public TerminalNode terminalNode(Terminal terminal, int leftExtent, int rightExtent) {
-        if (leftExtent == rightExtent) return null;
+        if (terminal == Terminal.epsilon()) return null;
         return new TerminalNode(terminal, leftExtent, rightExtent, input.subString(leftExtent, rightExtent));
     }
 

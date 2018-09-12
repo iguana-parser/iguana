@@ -76,15 +76,6 @@ public class EBNFToBNF implements GrammarTransformation {
 		return newRules;
 	}
 	
-	public static boolean isEBNF(Symbol s) {
-		return s instanceof Star ||
-			   s instanceof Plus ||
-			   s instanceof Opt ||
-			   s instanceof Sequence ||
-			   s instanceof Alt;
-	}
-
-	
 	public Rule rewrite(Rule rule, Set<Rule> newRules) {
 
 		if (rule.getBody() == null)

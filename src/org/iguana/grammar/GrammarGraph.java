@@ -28,7 +28,6 @@
 package org.iguana.grammar;
 
 import iguana.regex.CharRange;
-import iguana.regex.Epsilon;
 import iguana.regex.matcher.DFAMatcherFactory;
 import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.collections.rangemap.RangeMap;
@@ -93,9 +92,9 @@ public class GrammarGraph implements Serializable {
 
         this.firstFollow = new FirstFollowSets(this.grammar);
 
-        epsilonSlot = new TerminalGrammarSlot(Terminal.from(Epsilon.getInstance()), matcherFactory, ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);
+        epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), matcherFactory, ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);
 
-        terminalsMap.put(Terminal.from(Epsilon.getInstance()), epsilonSlot);
+        terminalsMap.put(Terminal.epsilon(), epsilonSlot);
 
         add(epsilonSlot);
 
