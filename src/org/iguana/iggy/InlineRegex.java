@@ -30,6 +30,7 @@ import iguana.regex.Char;
 import iguana.regex.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.GrammarValidationException;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Alt;
 import org.iguana.grammar.symbol.Opt;
@@ -37,6 +38,7 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.transformation.GrammarTransformation;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
@@ -167,7 +169,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
             throw new GrammarValidationException(new HashSet<>(Arrays.asList(new RuntimeException("Regex definitions must not be recursive: " + symbol.getName()))));
         if (definitions.containsKey(symbol.getName())) {
             return Terminal.builder(definitions.get(symbol.getName()))
-                    .setCategory(Terminal.Category.Regex)
+                    .setNodeType(TerminalNodeType.Keyword)
                     .setName(symbol.getName())
                     .build();
         }

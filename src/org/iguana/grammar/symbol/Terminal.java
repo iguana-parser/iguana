@@ -40,29 +40,12 @@ public class Terminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Category category;
-
 	private final TerminalNodeType nodeType;
 
 	private final RegularExpression regex;
 
 	private final Set<Condition> terminalPreConditions;
 	private final Set<Condition> terminalPostConditions;
-
-    public enum Category {
-		Regex("Regex"), Keyword("Keyword"), Layout("Layout");
-
-		private String value;
-
-		Category(String value) {
-			this.value = value;
-		}
-
-		@Override
-		public String toString() {
-			return value;
-		}
-	}
 
     private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
 
@@ -78,7 +61,6 @@ public class Terminal extends AbstractSymbol {
 		super(builder);
 		this.regex = builder.regex;
 		this.nodeType = builder.nodeType;
-		this.category = builder.category;
 		this.terminalPreConditions = builder.terminalPreConditions;
 		this.terminalPostConditions = builder.terminalPostConditions;
 	}
@@ -94,10 +76,6 @@ public class Terminal extends AbstractSymbol {
 
 	public TerminalNodeType getNodeType() {
 		return nodeType;
-	}
-
-	public Category getCategory() {
-		return category;
 	}
 
 	public Set<Condition> getTerminalPostConditions() {
@@ -137,8 +115,6 @@ public class Terminal extends AbstractSymbol {
 		private Set<Condition> terminalPreConditions;
 		private Set<Condition> terminalPostConditions;
 
-		private Category category = Category.Regex;
-
 		public Builder(RegularExpression regex) {
 			this.regex = regex;
 		}
@@ -149,15 +125,9 @@ public class Terminal extends AbstractSymbol {
 			super(terminal);
 			this.regex = terminal.regex;
 			this.nodeType = terminal.getNodeType();
-            this.category = terminal.getCategory();
             this.terminalPreConditions = terminal.getTerminalPreConditions();
             this.terminalPostConditions = terminal.getTerminalPostConditions();
 		}
-
-		public Builder setCategory(Category category) {
-            this.category = category;
-            return this;
-        }
 
 		public Builder setNodeType(TerminalNodeType nodeType) {
 			this.nodeType = nodeType;

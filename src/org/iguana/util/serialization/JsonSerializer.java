@@ -528,15 +528,6 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = Terminal.Builder.class)
     abstract static class TerminalMixIn {
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = CategoryFilter.class)
-        Terminal.Category category;
-
-        static class CategoryFilter {
-            @Override
-            public boolean equals(Object obj) {
-                return obj == Terminal.Category.Regex;
-            }
-        }
     }
 
     @JsonDeserialize(builder = Return.Builder.class)

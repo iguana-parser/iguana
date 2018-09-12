@@ -29,6 +29,7 @@ package org.iguana.traversal.idea;
 
 import iguana.regex.RegularExpression;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -111,9 +112,9 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     public Void visit(Terminal symbol) {
         RegularExpression regex = symbol.getRegularExpression();
 
-        if (symbol.getCategory() == Terminal.Category.Regex) {
+        if (symbol.getNodeType() == TerminalNodeType.Regex) {
             terminals.put("|regex|:" + symbol.getName(), regex);
-        } else if (symbol.getCategory() == Terminal.Category.Keyword)
+        } else if (symbol.getNodeType() == TerminalNodeType.Keyword)
             terminals.put("|keyword|:" + symbol.getName(), regex);
         else
             terminals.put(symbol.getName(), regex);
