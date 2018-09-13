@@ -62,7 +62,7 @@ Grammar.builder()
          // Input input = Input.fromString("a*a"); // should be getParserTree error
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());

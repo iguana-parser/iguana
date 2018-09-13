@@ -70,7 +70,7 @@ Grammar.builder()
 
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input,  Nonterminal.withName("Element"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
     }

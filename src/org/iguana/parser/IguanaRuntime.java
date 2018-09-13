@@ -59,7 +59,7 @@ public class IguanaRuntime<T extends Result> {
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
     }
 
-    public Result run(Input input, GrammarGraph grammarGraph, Nonterminal nonterminal, Map<String, Object> map, boolean global) {
+    public Result run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -67,11 +67,7 @@ public class IguanaRuntime<T extends Result> {
         if (global)
             map.forEach(ctx::declareGlobalVariable);
 
-        NonterminalGrammarSlot startSymbol = grammarGraph.getHead(nonterminal);
-
-        if (startSymbol == null) {
-            throw new RuntimeException("No nonterminal named " + nonterminal + " found");
-        }
+        NonterminalGrammarSlot startSymbol = grammarGraph.getStartSlot();
 
         int inputLength = input.length() - 1;
 
@@ -105,7 +101,7 @@ public class IguanaRuntime<T extends Result> {
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
         }
 
-        grammarGraph.reset();
+        grammarGraph.clear();
         descriptorPool.clear();
         descriptorsStack.clear();
 

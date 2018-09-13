@@ -95,7 +95,7 @@ public class Test4 {
 		Input input = Input.fromString("abcbcbc");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("X"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());

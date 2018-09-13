@@ -107,7 +107,7 @@ Grammar.builder()
 						                + "     a               \n");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
     }

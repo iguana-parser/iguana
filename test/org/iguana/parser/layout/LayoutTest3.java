@@ -84,7 +84,7 @@ public class LayoutTest3 {
 		Grammar grammar = getGrammar();
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
 	}

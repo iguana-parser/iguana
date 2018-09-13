@@ -4,6 +4,7 @@ import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
+import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -31,7 +32,7 @@ public class GSSNodeTest {
         Rule rule = Rule.withHead(Nonterminal.withName("A")).addSymbol(Terminal.from(Seq.from("a"))).build();
         Grammar grammar = Grammar.builder().addRule(rule).build();
 
-        grammarGraph = GrammarGraph.from(grammar);
+        grammarGraph = GrammarGraphBuilder.from(grammar);
         input = Input.fromString("Test");
     }
 

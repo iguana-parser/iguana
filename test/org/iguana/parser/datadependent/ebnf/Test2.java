@@ -93,7 +93,7 @@ public class Test2 {
 		Input input = Input.fromString("acdbcd");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("X"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());

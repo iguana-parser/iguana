@@ -91,7 +91,7 @@ public class Gamma0Test {
 		Input input = Input.fromString("aad");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input, Nonterminal.withName("S"));
+        ParseTreeNode result = parser.getParserTree(input);
 
         assertNotNull(result);
         assertEquals(1, parser.getStatistics().getAmbiguousNodesCount());

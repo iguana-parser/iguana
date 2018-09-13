@@ -3,7 +3,7 @@ package org.iguana.parser;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
@@ -15,29 +15,23 @@ import static java.util.Collections.emptyMap;
 public class IguanaRecognizer {
 
     private final GrammarGraph grammarGraph;
-    private final Configuration config;
     private final IguanaRuntime runtime;
-    private final Grammar grammar;
-
-    private RecognizerResult root;
 
     public IguanaRecognizer(Grammar grammar) {
         this(grammar, Configuration.load());
     }
 
     public IguanaRecognizer(Grammar grammar, Configuration config) {
-        this.grammar = grammar;
-        this.grammarGraph = GrammarGraph.from(grammar, config);
-        this.config = config;
+        this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.runtime = new IguanaRuntime<>(config, new RecognizerResultOps());
     }
 
     public boolean recognize(Input input) {
-        return recognize(input, Nonterminal.withName(grammar.getStartSymbol().getName()), emptyMap(), true);
+        return recognize(input, emptyMap(), true);
     }
 
-    public boolean recognize(Input input, Nonterminal nonterminal, Map<String, Object> map, boolean global) {
-        root = (RecognizerResult) runtime.run(input, grammarGraph, nonterminal, map, global);
+    public boolean recognize(Input input, Map<String, Object> map, boolean global) {
+        RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
         return root.getIndex() == input.length() - 1;
     }
 

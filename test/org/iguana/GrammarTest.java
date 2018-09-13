@@ -71,7 +71,7 @@ public class GrammarTest {
 
                 String parserTestName = "Parser test " + category + " " + testName;
                 IguanaParser parser = new IguanaParser(grammar);
-                DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, grammarPath, parser, i, input));
+                DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, grammarPath, parser, i, input, grammar));
 
                 String recognizerTestName = "Recognizer test " + category + " " + testName;
                 IguanaRecognizer recognizer = new IguanaRecognizer(grammar);
@@ -96,7 +96,7 @@ public class GrammarTest {
         };
     }
 
-    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input) {
+    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input, Grammar grammar) {
         return () -> {
 
             ParseTreeNode actualParseTree = null;
@@ -118,7 +118,7 @@ public class GrammarTest {
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
             if (!new File(statisticsPath).exists()) {
-                record(parser, actualParseTree, input, grammarPath, statisticsPath, parseTreePath);
+                record(parser, actualParseTree, input, grammar, grammarPath, statisticsPath, parseTreePath);
                 return;
             }
 
@@ -135,8 +135,8 @@ public class GrammarTest {
         };
     }
 
-    private static void record(IguanaParser parser, ParseTreeNode parseTree, Input input, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
-        String jsonGrammar = JsonSerializer.toJSON(parser.getGrammar());
+    private static void record(IguanaParser parser, ParseTreeNode parseTree, Input input, Grammar grammar, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
+        String jsonGrammar = JsonSerializer.toJSON(grammar);
         FileUtils.writeFile(jsonGrammar, grammarPath);
 
         ParseStatistics statistics = parser.getStatistics();

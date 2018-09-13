@@ -72,10 +72,9 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("+a^a");
-         GrammarGraph graph = GrammarGraph.from(grammar);
 
         IguanaParser parser = new IguanaParser(grammar);
-        assertNotNull(parser.getParserTree(input, Nonterminal.withName("S")));
+        assertNotNull(parser.getParserTree(input));
 
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 
