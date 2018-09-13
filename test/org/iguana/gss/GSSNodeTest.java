@@ -41,7 +41,7 @@ public class GSSNodeTest {
 
     @Test
     public void test() {
-        GSSNode gssNode = new DefaultGSSNode(null);
+        GSSNode gssNode = new DefaultGSSNode(null, 0);
 
         EndGrammarSlot endGrammarSlot = grammarGraph.getEndGrammarSlot("A ::= a .");
 

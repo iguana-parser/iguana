@@ -47,6 +47,8 @@ import java.util.*;
  */
 public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
+	private final int inputIndex;
+
 	private GSSEdge<T> firstGSSEdge;
 
 	private List<GSSEdge<T>> restGSSEdges;
@@ -55,8 +57,9 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private Map<Key, T> restPoppedElements;
 
-	public DefaultGSSNode(GSSEdge<T> firstGSSEdge) {
+	public DefaultGSSNode(GSSEdge<T> firstGSSEdge, int inputIndex) {
 	    this.firstGSSEdge = firstGSSEdge;
+	    this.inputIndex = inputIndex;
     }
 
     @Override
@@ -221,7 +224,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public int getInputIndex() {
-        return !(firstGSSEdge instanceof CyclicDummyGSSEdges<?>)? firstGSSEdge.getInputIndex() : this.restGSSEdges.get(0).getInputIndex();
+        return inputIndex;
 	}
 
 	// TODO: find a way to evaluate the environment and the passed arguments
