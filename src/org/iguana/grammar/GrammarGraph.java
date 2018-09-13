@@ -59,8 +59,6 @@ public class GrammarGraph implements Serializable {
 
     private Map<Terminal, TerminalGrammarSlot> terminalsMap;
 
-    private final Map<String, GrammarSlot> names;
-
     private List<GrammarSlot> slots;
 
     private FirstFollowSets firstFollow;
@@ -120,44 +118,11 @@ public class GrammarGraph implements Serializable {
         this.config = config;
         this.nonterminalsMap = new LinkedHashMap<>();
         this.terminalsMap = new LinkedHashMap<>();
-        this.names = new HashMap<>();
         this.slots = new ArrayList<>();
     }
 
     public NonterminalGrammarSlot getHead(Nonterminal start) {
         return nonterminalsMap.get(start);
-    }
-
-    public NonterminalGrammarSlot getNonterminalGrammarSlot(String s) {
-        GrammarSlot slot = names.get(s);
-        if (!(slot instanceof NonterminalGrammarSlot))
-            throw new RuntimeException(s + " does not represent a nonterminal grammar slot");
-        return (NonterminalGrammarSlot) slot;
-    }
-
-    public TerminalGrammarSlot getTerminalGrammarSlot(String s) {
-        GrammarSlot slot = names.get(s);
-        if (!(slot instanceof TerminalGrammarSlot))
-            throw new RuntimeException(s + " does not represent a terminal grammar slot");
-        return (TerminalGrammarSlot) slot;
-    }
-
-    public BodyGrammarSlot getBodyGrammarSlot(String s) {
-        GrammarSlot slot = names.get(s);
-        if (!(slot instanceof BodyGrammarSlot))
-            throw new RuntimeException(s + " does not represent a body grammar slot");
-        return (BodyGrammarSlot) slot;
-    }
-
-    public EndGrammarSlot getEndGrammarSlot(String s) {
-        GrammarSlot slot = names.get(s);
-        if (!(slot instanceof BodyGrammarSlot))
-            throw new RuntimeException(s + " does not represent an end grammar slot");
-        return (EndGrammarSlot) slot;
-    }
-
-    public GrammarSlot getSlot(String s) {
-        return names.get(s);
     }
 
     public Collection<NonterminalGrammarSlot> getNonterminalGrammarSlots() {
@@ -470,7 +435,6 @@ public class GrammarGraph implements Serializable {
     }
 
     private void add(GrammarSlot slot) {
-        names.put(slot.toString(), slot);
         slots.add(slot);
     }
 
