@@ -133,7 +133,7 @@ public class JsonSerializer {
         if (gzip) {
             out = new GZIPOutputStream(out);
         }
-        try (Writer writer = new OutputStreamWriter(out)){
+        try (Writer writer = new OutputStreamWriter(out)) {
             DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
             pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
             mapper.writer(pp).writeValue(writer, obj);
@@ -203,7 +203,7 @@ public class JsonSerializer {
         private String getId(Object value) {
             if (value.getClass() == iguana.regex.Star.class) return "regex.Star";
             if (value.getClass() == iguana.regex.Plus.class) return "regex.Plus";
-            if (value.getClass() == iguana.regex.Alt.class)  return "regex.Alt";
+            if (value.getClass() == iguana.regex.Alt.class) return "regex.Alt";
             if (value.getClass() == Expression.IfThenElse.class) return "IfThenElseExpr";
 
             String id = value.getClass().getSimpleName();
@@ -216,11 +216,16 @@ public class JsonSerializer {
         @Override
         public JavaType typeFromId(DatabindContext context, String id) {
             switch (id) {
-                case "regex.Star":      return context.constructType(iguana.regex.Star.class);
-                case "regex.Plus":      return context.constructType(iguana.regex.Plus.class);
-                case "regex.Alt":       return context.constructType(iguana.regex.Alt.class);
-                case "regex.Opt":       return context.constructType(iguana.regex.Opt.class);
-                case "IfThenElseExpr":  return context.constructType(Expression.IfThenElse.class);
+                case "regex.Star":
+                    return context.constructType(iguana.regex.Star.class);
+                case "regex.Plus":
+                    return context.constructType(iguana.regex.Plus.class);
+                case "regex.Alt":
+                    return context.constructType(iguana.regex.Alt.class);
+                case "regex.Opt":
+                    return context.constructType(iguana.regex.Opt.class);
+                case "IfThenElseExpr":
+                    return context.constructType(Expression.IfThenElse.class);
             }
 
             String[] packages = {
@@ -509,128 +514,157 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Star.Builder.class)
-    abstract static class StarMixIn {}
+    abstract static class StarMixIn {
+    }
 
     @JsonDeserialize(builder = Start.Builder.class)
-    abstract static class StartMixIn {}
+    abstract static class StartMixIn {
+    }
 
     @JsonDeserialize(builder = Plus.Builder.class)
-    abstract static class PlusMixIn {}
+    abstract static class PlusMixIn {
+    }
 
     @JsonDeserialize(builder = Opt.Builder.class)
-    abstract static class OptMixIn {}
+    abstract static class OptMixIn {
+    }
 
     @JsonDeserialize(builder = Alt.Builder.class)
-    abstract static class AltMixIn {}
+    abstract static class AltMixIn {
+    }
 
     @JsonDeserialize(builder = Sequence.Builder.class)
-    abstract static class SequenceMixIn {}
+    abstract static class SequenceMixIn {
+    }
 
     @JsonDeserialize(builder = Terminal.Builder.class)
     abstract static class TerminalMixIn {
     }
 
     @JsonDeserialize(builder = Return.Builder.class)
-    abstract static class ReturnMixIn {}
+    abstract static class ReturnMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.Seq.Builder.class)
-    abstract static class SeqMixIn {}
+    abstract static class SeqMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.Alt.Builder.class)
-    abstract static class RegexAltMixIn {}
+    abstract static class RegexAltMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.Star.Builder.class)
-    abstract static class RegexStarMixIn {}
+    abstract static class RegexStarMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.Plus.Builder.class)
-    abstract static class RegexPlusMixIn {}
+    abstract static class RegexPlusMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.Opt.Builder.class)
-    abstract static class RegexOptMixIn {}
+    abstract static class RegexOptMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.Char.Builder.class)
-    abstract static class CharMixIn {}
+    abstract static class CharMixIn {
+    }
 
     @JsonDeserialize(builder = iguana.regex.CharRange.Builder.class)
-    abstract static class CharRangeMixIn {}
+    abstract static class CharRangeMixIn {
+    }
 
     abstract static class ExpressionMixIn {
 
         abstract static class IntegerMixIn {
             @JsonCreator
-            IntegerMixIn(@JsonProperty("value") Integer value) {}
+            IntegerMixIn(@JsonProperty("value") Integer value) {
+            }
         }
 
         public class RealMixIn {
             @JsonCreator
-            RealMixIn(@JsonProperty("value") Float value) {}
+            RealMixIn(@JsonProperty("value") Float value) {
+            }
         }
 
         public class StringMixIn {
             @JsonCreator
-            StringMixIn(@JsonProperty("value") String value) {}
+            StringMixIn(@JsonProperty("value") String value) {
+            }
         }
 
         abstract static class NameMixIn {
             @JsonCreator
-            NameMixIn(@JsonProperty("name") String name) {}
+            NameMixIn(@JsonProperty("name") String name) {
+            }
         }
 
         public class AssignmentMixIn {
             @JsonCreator
-            AssignmentMixIn(@JsonProperty("id") String id, @JsonProperty("exp") Expression exp) {}
+            AssignmentMixIn(@JsonProperty("id") String id, @JsonProperty("exp") Expression exp) {
+            }
         }
 
         abstract static class TupleMixIn {
             @JsonCreator
-            TupleMixIn(@JsonProperty("elements") Expression... elements) {}
+            TupleMixIn(@JsonProperty("elements") Expression... elements) {
+            }
         }
 
         abstract static class GreaterThanEqualMixIn {
             @JsonCreator
-            GreaterThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            GreaterThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class LShiftANDEqZeroMixIn {
             @JsonCreator
-            LShiftANDEqZeroMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            LShiftANDEqZeroMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class GreaterMixIn {
             @JsonCreator
-            GreaterMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            GreaterMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class OrMixIn {
             @JsonCreator
-            OrMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            OrMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class LessThanEqualMixIn {
             @JsonCreator
-            LessThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            LessThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class LessMixIn {
             @JsonCreator
-            LessMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            LessMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class IfThenElseMixIn {
             @JsonCreator
             IfThenElseMixIn(@JsonProperty("condition") Expression condition,
                             @JsonProperty("thenPart") Expression thenPart,
-                            @JsonProperty("elsePart") Expression elsePart) {}
+                            @JsonProperty("elsePart") Expression elsePart) {
+            }
         }
 
         abstract static class EqualMixIn {
             @JsonCreator
-            EqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            EqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class NotEqualMixIn {
             @JsonCreator
-            NotEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            NotEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class OrIndentMixIn {
@@ -638,63 +672,69 @@ public class JsonSerializer {
             OrIndentMixIn(@JsonProperty("index") Expression index,
                           @JsonProperty("ind") Expression ind,
                           @JsonProperty("first") Expression first,
-                          @JsonProperty("lExt") Expression lExt) {}
+                          @JsonProperty("lExt") Expression lExt) {
+            }
         }
 
         abstract static class AndIndentMixIn {
             @JsonCreator
             AndIndentMixIn(@JsonProperty("index") Expression index,
                            @JsonProperty("first") Expression first,
-                           @JsonProperty("lExt") Expression lExt) {}
+                           @JsonProperty("lExt") Expression lExt) {
+            }
         }
 
         abstract static class AndMixIn {
             @JsonCreator
-            AndMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
+            AndMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {
+            }
         }
 
         abstract static class LeftExtentMixIn {
             @JsonCreator
-            LeftExtentMixIn(@JsonProperty("label") String label) {}
+            LeftExtentMixIn(@JsonProperty("label") String label) {
+            }
         }
 
         abstract static class RightExtentMixIn {
             @JsonCreator
-            RightExtentMixIn(@JsonProperty("label") String label) {}
+            RightExtentMixIn(@JsonProperty("label") String label) {
+            }
         }
 
         abstract static class YieldMixIn {
             @JsonCreator
-            YieldMixIn(@JsonProperty("label") String label) {}
+            YieldMixIn(@JsonProperty("label") String label) {
+            }
         }
 
         abstract static class ValMixIn {
             @JsonCreator
-            ValMixIn(@JsonProperty("label") String label) {}
+            ValMixIn(@JsonProperty("label") String label) {
+            }
         }
 
         abstract static class EndOfFileMixIn {
             @JsonCreator
-            EndOfFileMixIn(@JsonProperty("index") Expression index) {}
+            EndOfFileMixIn(@JsonProperty("index") Expression index) {
+            }
         }
     }
 
     abstract static class RegularExpressionConditionMixIn {
         @JsonCreator
-        RegularExpressionConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("regularExpression") RegularExpression regularExpression) {}
+        RegularExpressionConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("regularExpression") RegularExpression regularExpression) {
+        }
     }
 
     abstract static class DataDependentConditionMixIn {
         @JsonCreator
-        DataDependentConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("expression") Expression expression) {}
+        DataDependentConditionMixIn(@JsonProperty("type") ConditionType type, @JsonProperty("expression") Expression expression) {
+        }
     }
 
+    @JsonDeserialize(builder = TerminalNodeBuilder.class)
     abstract static class TerminalNodeMixIn {
-        TerminalNodeMixIn(
-                @JsonProperty("terminal") Terminal terminal,
-                @JsonProperty("start") int start,
-                @JsonProperty("end") int end,
-                @JsonProperty("text") String text) {}
     }
 
     abstract static class NonterminalNodeMixIn {
@@ -702,7 +742,8 @@ public class JsonSerializer {
                 @JsonProperty("rule") Rule rule,
                 @JsonProperty("children") List<ParseTreeNode> children,
                 @JsonProperty("start") int start,
-                @JsonProperty("end") int end) {}
+                @JsonProperty("end") int end) {
+        }
     }
 
     abstract static class MetaSymbolNodeMixIn {
@@ -710,16 +751,55 @@ public class JsonSerializer {
                 @JsonProperty("symbol") Symbol symbol,
                 @JsonProperty("symbols") List<ParseTreeNode> symbols,
                 @JsonProperty("start") int start,
-                @JsonProperty("end") int end) {}
+                @JsonProperty("end") int end) {
+        }
     }
 
     abstract static class AmbiguityNodeMixIn {
-        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) {}
+        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) {
+        }
     }
 
     abstract static class AbstractAttrsMixIn {
         @JsonIgnore
         ImmutableSet<String> env;
+    }
+
+    static class TerminalNodeBuilder {
+        private int start;
+        private int end;
+        private String text;
+        private Terminal terminal;
+
+        public TerminalNodeBuilder setTerminal(Terminal terminal) {
+            this.terminal = terminal;
+            return this;
+        }
+
+        public TerminalNodeBuilder setStart(int start) {
+            this.start = start;
+            return this;
+        }
+
+        public TerminalNodeBuilder setEnd(int end) {
+            this.end = end;
+            return this;
+        }
+
+        public TerminalNodeBuilder setStart(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public TerminalNode build() {
+            return new TerminalNode(terminal, start, end) {
+
+                @Override
+                public String getText() {
+                    return text;
+                }
+            };
+        }
     }
 
 }

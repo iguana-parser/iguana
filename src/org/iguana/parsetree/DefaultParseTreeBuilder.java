@@ -1,6 +1,7 @@
 package org.iguana.parsetree;
 
 import iguana.utils.input.Input;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
@@ -19,7 +20,10 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     @Override
     public TerminalNode terminalNode(Terminal terminal, int leftExtent, int rightExtent) {
         if (terminal == Terminal.epsilon()) return null;
-        return new TerminalNode(terminal, leftExtent, rightExtent, input.subString(leftExtent, rightExtent));
+        if (terminal.getNodeType() == TerminalNodeType.Keyword) {
+            return new KeywordTerminalNode(terminal, leftExtent, rightExtent);
+        }
+        return new DefaultTerminalNode(terminal, leftExtent, rightExtent, input);
     }
 
     @Override
