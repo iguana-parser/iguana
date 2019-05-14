@@ -215,7 +215,6 @@ public class GrammarGraphBuilder implements Serializable {
         }
 
         public Void visit(Nonterminal symbol) {
-
             NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(symbol);
 
             BodyGrammarSlot slot;
@@ -440,8 +439,8 @@ public class GrammarGraphBuilder implements Serializable {
     }
 
     static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
-        String[] parameters = nonterminal.getParameters();
-        if ((parameters == null && arguments == null) || (Objects.requireNonNull(parameters).length == arguments.length)) return;
+        List<String> parameters = nonterminal.getParameters();
+        if ((parameters == null && arguments == null) || (Objects.requireNonNull(parameters).size() == arguments.length)) return;
 
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
     }

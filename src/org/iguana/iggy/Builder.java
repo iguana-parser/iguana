@@ -51,13 +51,13 @@ public abstract class Builder {
 		return builder.build();
 	}
 	
-	public List<Rule> rule(List<Object> tag, Object name, List<Object> params, List<Object> body) { // TODO: Add the logic of handling precedence
+	public List<Rule> rule(List<Object> tag, Object name, List<String> params, List<Object> body) { // TODO: Add the logic of handling precedence
 		List<Rule> rules = new ArrayList<>();
 		body.forEach(elem -> {
 			((PrecGroup)elem).alts.forEach(alt -> {
 				final Nonterminal head = params.isEmpty() ? Nonterminal.withName((String)name)
                         : Nonterminal.builder((String)name)
-                              .addParameters(params.stream().map(p -> (String)p).toArray(String[]::new))
+                              .addParameters(params)
                               .build();
 				if (alt instanceof Sequence) {
 					org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);

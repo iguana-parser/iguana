@@ -45,10 +45,7 @@ import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
@@ -76,7 +73,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		ImmutableSet<java.lang.String> env = TrieSet.of();
 		
-		java.lang.String[] parameters = rule.getHead().getParameters();
+		List<java.lang.String> parameters = rule.getHead().getParameters();
 		if (parameters != null) {
 			for (java.lang.String parameter : parameters)
 				env = env.__insert(parameter);

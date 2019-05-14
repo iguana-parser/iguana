@@ -54,7 +54,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     public Rule transform(Rule rule) {
         current = new HashMap<>();
 
-        java.lang.String[] parameters = rule.getHead().getParameters();
+        List<java.lang.String> parameters = rule.getHead().getParameters();
 
         if (parameters != null) {
             for (java.lang.String parameter : parameters)

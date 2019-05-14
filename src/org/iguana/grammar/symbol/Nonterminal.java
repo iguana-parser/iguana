@@ -32,10 +32,7 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static iguana.utils.string.StringUtil.listToString;
 
@@ -51,7 +48,7 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final Set<String> state;
 	
-	private final String[] parameters; // Only head
+	private final List<String> parameters; // Only head
 	
 	private final Expression[] arguments;
 	
@@ -83,15 +80,12 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	public boolean isEbnfList() {
-		if (ebnfList == true) {
+		if (ebnfList) {
 			return true;
 		} else {
-			if(name.startsWith("List")) {
-				return true;
-			}
+			return name.startsWith("List");
 		}
 
-		return false;
 	}
 	
 	public int getIndex() {
@@ -106,7 +100,7 @@ public class Nonterminal extends AbstractSymbol {
 		return state;
 	}
 	
-	public String[] getParameters() {
+	public List<String> getParameters() {
 		return parameters;
 	}
 	
@@ -151,7 +145,7 @@ public class Nonterminal extends AbstractSymbol {
 		return getEffectiveName().equals(other.getEffectiveName());
 	}
 
-    public String getEffectiveName() {
+    private String getEffectiveName() {
         return name + (index > 0 ? index : "");
     }
 
@@ -183,7 +177,7 @@ public class Nonterminal extends AbstractSymbol {
 		
 		private Set<String> state;
 		
-		private String[] parameters; // Only head
+		private List<String> parameters; // Only head
 		
 		private Expression[] arguments;
 		
@@ -233,28 +227,17 @@ public class Nonterminal extends AbstractSymbol {
 			this.ebnfList = ebnfList;
 			return this;
 		}
-		
-		public Builder addParameters(String... parameters) {
-			if (parameters.length == 0)
-				return this;
-			
-			if (this.parameters == null) {
-				this.parameters = parameters;
-				return this;
-			}
-			
-			String[] params = new String[this.parameters.length + parameters.length];
-			int i = 0;
-			for (String parameter : this.parameters)
-				params[i++] = parameter;
-			
-			for (String parameter : parameters)
-				params[i++] = parameter;
-			
-			this.parameters = params;
+
+		public Builder addParameters(String...parameters) {
+			Collections.addAll(this.parameters, parameters);
 			return this;
 		}
-		
+
+		public Builder addParameters(List<String> parameters) {
+			this.parameters.addAll(parameters);
+			return this;
+		}
+
 		public Builder apply(Expression... arguments) {
 			if (arguments.length == 0)
 				return this;
