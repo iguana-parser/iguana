@@ -30,7 +30,6 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -651,12 +650,12 @@ public class GrammarBuilder {
         }
 
         @Override
-        public ImmutableSet<String> getEnv() {
+        public io.usethesource.capsule.Set.Immutable<String> getEnv() {
             return null;
         }
 
         @Override
-        public void setEnv(ImmutableSet<String> env) {}
+        public void setEnv(io.usethesource.capsule.Set.Immutable<String> env) {}
 
         @Override
         public void setEmpty() {}

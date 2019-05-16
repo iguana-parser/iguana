@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.attrs.AbstractAttrs;
@@ -762,7 +761,7 @@ public class JsonSerializer {
 
     abstract static class AbstractAttrsMixIn {
         @JsonIgnore
-        ImmutableSet<String> env;
+        io.usethesource.capsule.Set.Immutable<String> env;
     }
 
     static class TerminalNodeBuilder {
