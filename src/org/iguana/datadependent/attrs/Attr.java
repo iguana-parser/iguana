@@ -27,12 +27,12 @@
 
 package org.iguana.datadependent.attrs;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
+import io.usethesource.capsule.Set;
 
 public interface Attr {
 	
-	ImmutableSet<String> getEnv();
-	void setEnv(ImmutableSet<String> env);
+	Set.Immutable<String> getEnv();
+	void setEnv(Set.Immutable<String> env);
 	void setEmpty();
 
 }
