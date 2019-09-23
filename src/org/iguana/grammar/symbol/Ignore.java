@@ -40,7 +40,7 @@ private static final long serialVersionUID = 1L;
 		this.symbol = builder.symbol;
 	}
 	
-	public static Ignore ignore(Symbol symbol) {
+	public static Ignore from(Symbol symbol) {
 		return builder(symbol).build();
 	}
 	
@@ -65,7 +65,7 @@ private static final long serialVersionUID = 1L;
 	
 	@Override
 	public String toString(int j) {
-		return String.format("ignore %s", symbol.toString(j));
+		return String.format("from %s", symbol.toString(j));
 	}
 	
 	public static Builder builder(Symbol symbol) {
@@ -82,7 +82,7 @@ private static final long serialVersionUID = 1L;
 		}
 		
 		public Builder(Symbol symbol) {
-			super(String.format("ignore %s", symbol.toString()));
+			super(String.format("from %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 

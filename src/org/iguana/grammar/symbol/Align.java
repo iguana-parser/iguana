@@ -40,7 +40,7 @@ public class Align extends AbstractSymbol {
 		this.symbol = builder.symbol;
 	}
 	
-	public static Align align(Symbol symbol) {
+	public static Align from(Symbol symbol) {
 		return builder(symbol).build();
 	}
 	
@@ -65,7 +65,7 @@ public class Align extends AbstractSymbol {
 	
 	@Override
 	public String toString(int j) {
-		return String.format("align %s", symbol.toString(j));
+		return String.format("from %s", symbol.toString(j));
 	}
 	
 	public static Builder builder(Symbol symbol) {
@@ -82,7 +82,7 @@ public class Align extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol) {
-			super(String.format("align %s", symbol.toString()));
+			super(String.format("from %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 

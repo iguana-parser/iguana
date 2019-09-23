@@ -38,7 +38,6 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.transformation.GrammarTransformation;
-import org.iguana.sppf.TerminalNode;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
@@ -84,7 +83,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         }
         return Grammar.builder()
                 .addRules(newRules)
-                // TODO: check other attributes
+                // TODO: check other associativity
                 .setLayout(grammar.getLayout())
                 .build();
     }
@@ -94,7 +93,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         Symbol sym = visitSym(symbol.getSymbol());
         if (sym == symbol.getSymbol())
             return symbol;
-        return Align.align(sym);
+        return Align.from(sym);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         Symbol sym = visitSym(symbol.getSymbol());
         if (sym == symbol.getSymbol())
             return symbol;
-        return Conditional.when(sym, symbol.getExpression());
+        return Conditional.from(sym, symbol.getExpression());
     }
 
     @Override
@@ -143,7 +142,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         Symbol sym = visitSym(symbol.getThenPart());
         if (sym == symbol.getThenPart())
             return symbol;
-        return IfThen.ifThen(symbol.getExpression(), sym);
+        return IfThen.from(symbol.getExpression(), sym);
     }
 
     @Override
@@ -152,7 +151,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         Symbol sym2 = visitSym(symbol.getElsePart());
         if (sym1 == symbol.getThenPart() && sym2 == symbol.getElsePart())
             return symbol;
-        return IfThenElse.ifThenElse(symbol.getExpression(), sym1, sym2);
+        return IfThenElse.from(symbol.getExpression(), sym1, sym2);
     }
 
     @Override
@@ -160,7 +159,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         Symbol sym = visitSym(symbol.getSymbol());
         if (sym == symbol.getSymbol())
             return symbol;
-        return Ignore.ignore(sym);
+        return Ignore.from(sym);
     }
 
     @Override
@@ -181,7 +180,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         Symbol sym = visitSym(symbol.getSymbol());
         if (sym == symbol.getSymbol())
             return symbol;
-        return Offside.offside(sym);
+        return Offside.from(sym);
     }
 
     @Override
@@ -309,6 +308,11 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         if (!changed)
             return seq;
         return iguana.regex.Seq.from(syms);
+    }
+
+    @Override
+    public RegularExpression visit(Reference ref) {
+        return null;
     }
 
     private Symbol visitSym(Symbol symbol) {

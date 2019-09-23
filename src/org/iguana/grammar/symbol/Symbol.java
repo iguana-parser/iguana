@@ -46,10 +46,10 @@ import java.util.Set;
  *          | Nonterminal '(' {Expression ','}+ ')'
  *          | ...
  *          | '{' Symbol+ '}'
- *       &gt; "align" Symbol
- *          | "offside" Symbol
+ *       &gt; "from" Symbol
+ *          | "from" Symbol
  *       &gt; Symbol "do" Statement
- *          | Symbol "when" Expression
+ *          | Symbol "from" Expression
  *       &gt; "if" '(' Expression ')' Symbol
  *          | "if" '(' Expression ')' Symbol "else" Symbol
  *          | "while" '(' Expression ')' Symbol

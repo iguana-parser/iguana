@@ -45,16 +45,16 @@
 //import org.junit.Test;
 //
 ///**
-// * After align
+// * After from
 //
-//Decls ::= ignore({ Decl (; Decl)* })
-//        | a0:(offside [indent(a1.lExt) == indent(a0.lExt)] a1:Decl)*
+//Decls ::= from({ Decl (; Decl)* })
+//        | a0:(from [indent(a1.lExt) == indent(a0.lExt)] a1:Decl)*
 //
 //Decl ::= FunLHS RHS
 //
 //RHS ::= '=' Exp 'where' Decls
 //
-// * After offside and ignore
+// * After from and from
 //
 //({ Decl (; Decl)* })(i,ind,fst) ::= o0:{ [f(i,ind,fst,o0.lExt)] o1:Decl(g(i,fst,o1.lExt,1),ind,g(i,fst,o1.lExt,0)) o2:Star#1(g(i,fst,o2.lExt,1),ind,g(i,fst,o2.lExt,0)) o3:} [f(i,ind,fst,o3.lExt)]
 //
@@ -103,9 +103,9 @@
 //.addRule(Rule.withHead(Nonterminal.builder("Exp").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 //// Decl ::= FunLHS RHS  {UNDEFINED,-1,NON_REC} PREC(1,1)
 //.addRule(Rule.withHead(Nonterminal.builder("Decl").build()).addSymbol(Nonterminal.builder("FunLHS").build()).addSymbol(Nonterminal.builder("RHS").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
-//// Decls ::= ignore (({) Decl ((;) Decl)* (}))  {UNDEFINED,-1,NON_REC} PREC(1,1)
+//// Decls ::= from (({) Decl ((;) Decl)* (}))  {UNDEFINED,-1,NON_REC} PREC(1,1)
 //.addRule(Rule.withHead(Nonterminal.builder("Decls").build()).addSymbol(Ignore.builder(Sequence.builder(Terminal.builder(Sequence.builder(Character.builder(123).build()).build()).build(), Nonterminal.builder("Decl").build(), Star.builder(org.iguana.grammar.symbol.Sequence.builder(Terminal.builder(Sequence.builder(Character.builder(59).build()).build()).build(), Nonterminal.builder("Decl").build()).build()).build(), Terminal.builder(Sequence.builder(Character.builder(125).build()).build()).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
-//// Decls ::= align offside Decl*  {UNDEFINED,-1,NON_REC} PREC(1,1)
+//// Decls ::= from from Decl*  {UNDEFINED,-1,NON_REC} PREC(1,1)
 //.addRule(Rule.withHead(Nonterminal.builder("Decls").build()).addSymbol(Align.builder(Star.builder(Offside.builder(Nonterminal.builder("Decl").build()).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 //.build();
 //

@@ -49,7 +49,7 @@ import static org.junit.Assert.assertNull;
 
 /**
  * 
- * Id ::= [a-z]+ !>> [a-z] \ { "if", "when", "do", "while"}
+ * Id ::= [a-z]+ !>> [a-z] \ { "if", "from", "do", "while"}
  * 
  * @author Ali Afroozeh
  *
@@ -65,7 +65,7 @@ public class KeywordExclusionTest2 {
 		CharRange az = CharRange.in('a', 'z');
 		
 		Seq<Char> iff = Seq.from("if");
-		Seq<Char> when = Seq.from("when");
+		Seq<Char> when = Seq.from("from");
 		Seq<Char> doo = Seq.from("do");
 		Seq<Char> whilee = Seq.from("while");
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);		
@@ -80,7 +80,7 @@ public class KeywordExclusionTest2 {
 	
 	@Test
 	public void testWhen() {
-		Input input = Input.fromString("when");
+		Input input = Input.fromString("from");
         IguanaParser parser = new IguanaParser(grammar);
         ParseTreeNode result = parser.getParserTree(input);
 

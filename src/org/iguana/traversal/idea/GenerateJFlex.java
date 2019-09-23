@@ -293,6 +293,11 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
         return "(" + symbols.stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")";
     }
 
+    @Override
+    public String visit(iguana.regex.Reference reference) {
+        throw new RuntimeException();
+    }
+
     private boolean isCharClass(RegularExpression s) {
         if (!s.getLookaheads().isEmpty()) return false;
         return s instanceof Char || s instanceof CharRange;

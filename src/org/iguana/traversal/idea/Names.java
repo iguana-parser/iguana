@@ -89,7 +89,7 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Align symbol) {
-            return Align.align(visitSymbol(symbol.getSymbol()));
+            return Align.from(visitSymbol(symbol.getSymbol()));
         }
 
         @Override
@@ -104,22 +104,22 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Conditional symbol) {
-            return Conditional.when(visitSymbol(symbol.getSymbol()), symbol.getExpression());
+            return Conditional.from(visitSymbol(symbol.getSymbol()), symbol.getExpression());
         }
 
         @Override
         public Symbol visit(IfThen symbol) {
-            return IfThen.ifThen(symbol.getExpression(), visitSymbol(symbol.getThenPart()));
+            return IfThen.from(symbol.getExpression(), visitSymbol(symbol.getThenPart()));
         }
 
         @Override
         public Symbol visit(IfThenElse symbol) {
-            return IfThenElse.ifThenElse(symbol.getExpression(), visitSymbol(symbol.getThenPart()), visitSymbol(symbol.getElsePart()));
+            return IfThenElse.from(symbol.getExpression(), visitSymbol(symbol.getThenPart()), visitSymbol(symbol.getElsePart()));
         }
 
         @Override
         public Symbol visit(Ignore symbol) {
-            return Ignore.ignore(visitSymbol(symbol.getSymbol()));
+            return Ignore.from(visitSymbol(symbol.getSymbol()));
         }
 
         @Override
@@ -160,7 +160,7 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Offside symbol) {
-            return Offside.offside(visitSymbol(symbol.getSymbol()));
+            return Offside.from(visitSymbol(symbol.getSymbol()));
         }
 
         @Override

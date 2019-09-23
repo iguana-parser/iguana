@@ -66,13 +66,13 @@ public class GrammarBuilder {
             ListIterator<Alternates> altsIt = body.listIterator(body.size());
             while (altsIt.hasPrevious()) {
                 Alternates group = altsIt.previous();
-                ListIterator<Alternate> altIt = group.alternates.listIterator(group.alternates.size());
+                ListIterator<Alternative> altIt = group.alternatives.listIterator(group.alternatives.size());
                 while (altIt.hasPrevious()) {
-                    Alternate alternate = altIt.previous();
-                    if (alternate.rest != null) { // Associativity group
-                        AssociativityGroup assocGroup = new AssociativityGroup(getAssociativity(alternate.associativity), level);
-                        List<Sequence> sequences = new ArrayList<>(Arrays.asList(alternate.first));
-                        sequences.addAll(alternate.rest);
+                    Alternative alternative = altIt.previous();
+                    if (alternative.rest != null) { // Associativity group
+                        AssociativityGroup assocGroup = new AssociativityGroup(getAssociativity(alternative.associativity), level);
+                        List<Sequence> sequences = new ArrayList<>(Arrays.asList(alternative.first));
+                        sequences.addAll(alternative.rest);
                         ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                         while (seqIt.hasPrevious()) {
                             Sequence sequence = seqIt.previous();
@@ -81,7 +81,7 @@ public class GrammarBuilder {
                             if (sequence.rest != null)
                                 addAll(symbols, sequence.rest);
                             symbols.addAll(sequence.ret);
-                            List<Attribute> attributes = new ArrayList<>(Arrays.asList(alternate.associativity));
+                            List<Attribute> attributes = new ArrayList<>(Arrays.asList(alternative.associativity));
                             if (sequence.attributes != null)
                                 attributes.addAll(sequence.attributes);
                             else
@@ -95,12 +95,12 @@ public class GrammarBuilder {
                         level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                     } else {
                         List<org.iguana.grammar.symbol.Symbol> symbols = new ArrayList<>();
-                        symbols.add(alternate.first.first);
-                        if (alternate.first.rest != null)
-                            addAll(symbols, alternate.first.rest);
-                        symbols.addAll(alternate.first.ret);
+                        symbols.add(alternative.first.first);
+                        if (alternative.first.rest != null)
+                            addAll(symbols, alternative.first.rest);
+                        symbols.addAll(alternative.first.ret);
                         org.iguana.grammar.symbol.Rule rule = getRule(head, symbols,
-                                alternate.first.attributes != null? alternate.first.attributes : alternate.first.label,
+                                alternative.first.attributes != null? alternative.first.attributes : alternative.first.label,
                                 tag);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
@@ -189,40 +189,40 @@ public class GrammarBuilder {
     public static RegexRule regexrule() { return new RegexRule(); }
 
     public static class Alternates {
-        public final List<Alternate> alternates;
-        public Alternates(List<Alternate> alternates) {
-            this.alternates = alternates;
+        public final List<Alternative> alternatives;
+        public Alternates(List<Alternative> alternatives) {
+            this.alternatives = alternatives;
         }
 
-        public static Alternates prec(List<Alternate> alternates) { return new Alternates(alternates); }
+        public static Alternates prec(List<Alternative> alternatives) { return new Alternates(alternatives); }
     }
 
     public static Alternates alternates() { return new Alternates(null); }
 
-    public static class Alternate {
+    public static class Alternative {
 
         public final Sequence first;
         public final List<Sequence> rest;
         public final Attribute associativity;
 
-        public Alternate(Sequence sequence) {
+        public Alternative(Sequence sequence) {
             this.first = sequence;
             this.rest = null;
             this.associativity = null;
         }
-        public Alternate(Sequence sequence, List<Sequence> sequences, Attribute associativity) {
+        public Alternative(Sequence sequence, List<Sequence> sequences, Attribute associativity) {
             this.first = sequence;
             this.rest = sequences;
             this.associativity = associativity;
         }
 
-        public static Alternate sequence(Sequence sequence) { return new Alternate(sequence); }
-        public static Alternate assoc(Sequence sequence, List<Sequence> sequences, Attribute associativity) {
-            return new Alternate(sequence, sequences, associativity);
+        public static Alternative sequence(Sequence sequence) { return new Alternative(sequence); }
+        public static Alternative assoc(Sequence sequence, List<Sequence> sequences, Attribute associativity) {
+            return new Alternative(sequence, sequences, associativity);
         }
     }
 
-    public static Alternate alternate() { return new Alternate(null); }
+    public static Alternative alternate() { return new Alternative(null); }
 
     public static class Sequence {
 
@@ -345,16 +345,16 @@ public class GrammarBuilder {
             return nt.copyBuilder().apply(arguments.stream().toArray(org.iguana.datadependent.ast.Expression[]::new)).build();
         }
         public static org.iguana.grammar.symbol.Symbol align(org.iguana.grammar.symbol.Symbol symbol) {
-            return Align.align(symbol);
+            return Align.from(symbol);
         }
         public static org.iguana.grammar.symbol.Symbol offside(org.iguana.grammar.symbol.Symbol symbol) {
-            return Offside.offside(symbol);
+            return Offside.from(symbol);
         }
         public static org.iguana.grammar.symbol.Symbol ignore(org.iguana.grammar.symbol.Symbol symbol) {
-            return Ignore.ignore(symbol);
+            return Ignore.from(symbol);
         }
         public static org.iguana.grammar.symbol.Symbol conditional(org.iguana.datadependent.ast.Expression expression, org.iguana.grammar.symbol.Symbol thenPart, org.iguana.grammar.symbol.Symbol elsePart) {
-            return IfThenElse.ifThenElse(expression, thenPart, elsePart);
+            return IfThenElse.from(expression, thenPart, elsePart);
         }
         public static org.iguana.grammar.symbol.Symbol variable(Identifier name, org.iguana.grammar.symbol.Symbol symbol) {
             Nonterminal nt = (Nonterminal) symbol;

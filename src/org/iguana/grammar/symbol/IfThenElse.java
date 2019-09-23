@@ -45,7 +45,7 @@ public class IfThenElse extends AbstractSymbol {
 		this.elsePart = builder.elsePart;
 	}
 	
-	public static IfThenElse ifThenElse(Expression expression, Symbol thenPart, Symbol elsePart) {
+	public static IfThenElse from(Expression expression, Symbol thenPart, Symbol elsePart) {
 		return builder(expression, thenPart, elsePart).build();
 	}
 	

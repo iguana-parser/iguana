@@ -43,7 +43,7 @@ public class Conditional extends AbstractSymbol {
 		this.expression = builder.expression;
 	}
 	
-	public static Conditional when(Symbol symbol, Expression expression) {
+	public static Conditional from(Symbol symbol, Expression expression) {
 		return builder(symbol, expression).build();
 	}
 	
@@ -67,12 +67,12 @@ public class Conditional extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("%s when %s", symbol.toString(), expression.toString());
+		return String.format("%s from %s", symbol.toString(), expression.toString());
 	}
 	
 	@Override
 	public String toString(int j) {
-		return String.format(" %s when %s", symbol.toString(j), expression.toString());
+		return String.format(" %s from %s", symbol.toString(j), expression.toString());
 	}
 	
 	public static Builder builder(Symbol symbol, Expression expression) {
@@ -91,7 +91,7 @@ public class Conditional extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol, Expression expression) {
-			super(String.format("%s when %s;", symbol.toString(), expression.toString()));
+			super(String.format("%s from %s;", symbol.toString(), expression.toString()));
 			this.symbol = symbol;
 			this.expression = expression;
 		}

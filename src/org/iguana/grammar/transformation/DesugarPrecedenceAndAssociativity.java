@@ -49,7 +49,7 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 public class DesugarPrecedenceAndAssociativity implements GrammarTransformation {
 	
-	private Set<String> leftOrRightRecursiveNonterminals; // when operator precedence and associativity applies
+	private Set<String> leftOrRightRecursiveNonterminals; // from operator precedence and associativity applies
 	
 	private Map<String, Map<String, Integer>> headsWithLabeledRules; // excepts
 	

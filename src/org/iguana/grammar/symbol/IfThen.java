@@ -44,7 +44,7 @@ public class IfThen extends AbstractSymbol {
 		this.thenPart = builder.thenPart;
 	}
 	
-	public static IfThen ifThen(Expression expression, Symbol thenPart) {
+	public static IfThen from(Expression expression, Symbol thenPart) {
 		return builder(expression, thenPart).build();
 	}
 	
