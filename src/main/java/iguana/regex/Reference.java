@@ -51,7 +51,7 @@ public class Reference extends AbstractRegularExpression {
         return null;
     }
 
-    static class Builder extends RegexBuilder<Reference> {
+    public static class Builder extends RegexBuilder<Reference> {
 
         private String name;
 

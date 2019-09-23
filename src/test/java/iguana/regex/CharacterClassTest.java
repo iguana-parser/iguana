@@ -66,7 +66,7 @@ public class CharacterClassTest {
 	}
 	
 	@Test
-	public void test2() throws Exception {
+	public void test2() {
 		RegularExpression regex = Alt.from(CharRange.in('1', '5'), CharRange.in('1', '7'), CharRange.in('3', '8'));
 
 		Automaton automaton = regex.getAutomaton();
