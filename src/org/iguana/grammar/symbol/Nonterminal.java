@@ -229,12 +229,17 @@ public class Nonterminal extends AbstractSymbol {
 		}
 
 		public Builder addParameters(String...parameters) {
-			Collections.addAll(this.parameters, parameters);
+			addParameters(Arrays.asList(parameters));
 			return this;
 		}
 
 		public Builder addParameters(List<String> parameters) {
-			this.parameters.addAll(parameters);
+			if (parameters.isEmpty()) return this;
+			if (this.parameters == null) {
+				this.parameters = parameters;
+ 			} else {
+				this.parameters.addAll(parameters);
+			}
 			return this;
 		}
 

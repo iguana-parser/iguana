@@ -2,9 +2,6 @@ package org.iguana.iggy;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -15,7 +12,6 @@ import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static iguana.utils.io.FileUtils.readFile;
 
@@ -31,7 +27,7 @@ public class IggyParser {
     }
 
     public static void main(String[] args) throws IOException {
-        Grammar g = Grammar.load(new java.io.File("/Users/afroozeh/iggy"));
+        Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
 
@@ -52,60 +48,11 @@ public class IggyParser {
             throw new RuntimeException("Parse error");
         }
 
-        ParseTreeVisitor parseTreeVisitor = new ParseTreeVisitor() {
-
-            @Override
-            public Object visitNonterminalNode(org.iguana.parsetree.NonterminalNode node) {
-                switch (node.getName()) {
-                    case "Definition": {
-                        Grammar.Builder builder = Grammar.builder();
-                        List<Rule> rules = (List<Rule>) node.children().get(0);
-                        rules.forEach(r -> builder.addRule(r));
-                        return builder.build();
-                    }
-
-                    case "Rule":
-                        switch (node.getGrammarDefinition().getLabel()) {
-
-                            case "Syntax":
-                                Nonterminal head = (Nonterminal) node.getChildWithName("NontName");
-                                Object tag = node.getChildWithName("Tag?").accept(this);
-                                if (tag != null) {
-                                }
-                                List<Symbol> body = (List<Symbol>) node.getChildWithName("Body").accept(this);
-                                return new Rule.Builder(head).addSymbols(body).build();
-                        }
-                        break;
-
-                    case "Identifier":
-                        return input.subString(node.getStart(), node.getEnd());
-                }
-
-                throw new RuntimeException("Should not reach here");
-            }
-
-            @Override
-            public Object visitAmbiguityNode(AmbiguityNode node) {
-                return null;
-            }
-
-            @Override
-            public Object visitTerminalNode(TerminalNode node) {
-                return null;
-            }
-
-            @Override
-            public Object visitMetaSymbolNode(MetaSymbolNode node) {
-                return null;
-            }
-        };
-
-
-        Grammar grammar = (Grammar) parseTree.accept(parseTreeVisitor);
+        Grammar grammar = (Grammar) parseTree.accept(new IggyToGrammarVisitor());
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
-//        grammar = precedenceAndAssociativity.transform(grammar);
+        grammar = precedenceAndAssociativity.transform(grammar);
 
         grammar = new EBNFToBNF().transform(grammar);
         grammar = new LayoutWeaver().transform(grammar);

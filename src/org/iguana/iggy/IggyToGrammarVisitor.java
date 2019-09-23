@@ -400,9 +400,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
     }
 
-    // CharClass
-    //  : '[' Range* ']'    #Chars
-    //  | '[^' Range* ']'   #NotChars
+    /*
+     * CharClass
+     *   : '[' Range* ']'    #Chars
+     *   | '[^' Range* ']'   #NotChars
+     *   ;
+     */
     private iguana.regex.Alt visitCharClass(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Chars":
@@ -416,9 +419,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
     }
 
-    // Range
-    //  : RangeChar "-" RangeChar #Range
-    //  | RangeChar               #Character
+    /*
+     * Range
+     *  : RangeChar "-" RangeChar #Range
+     *  | RangeChar               #Character
+     *  ;
+     */
     private RegularExpression visitRange(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Range": {
