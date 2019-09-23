@@ -304,7 +304,6 @@ public class Rule implements Serializable {
 
         private Nonterminal head;
         private List<Symbol> body;
-        private Serializable object;
         private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
         private Symbol layout;
 
@@ -381,12 +380,7 @@ public class Rule implements Serializable {
             this.layoutStrategy = layoutStrategy;
             return this;
         }
-
-        public Builder setObject(Serializable object) {
-            this.object = object;
-            return this;
-        }
-
+        
         public Builder setLayout(Symbol layout) {
             this.layout = layout;
             return this;

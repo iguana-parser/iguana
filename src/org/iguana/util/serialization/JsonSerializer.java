@@ -103,6 +103,7 @@ public class JsonSerializer {
         mapper.addMixIn(iguana.regex.Opt.class, RegexOptMixIn.class);
         mapper.addMixIn(iguana.regex.Char.class, CharMixIn.class);
         mapper.addMixIn(iguana.regex.CharRange.class, CharRangeMixIn.class);
+        mapper.addMixIn(iguana.regex.Reference.class, ReferenceMixIn.class);
 
         // Parse tree
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
@@ -204,6 +205,7 @@ public class JsonSerializer {
             if (value.getClass() == iguana.regex.Star.class) return "regex.Star";
             if (value.getClass() == iguana.regex.Plus.class) return "regex.Plus";
             if (value.getClass() == iguana.regex.Alt.class) return "regex.Alt";
+            if (value.getClass() == iguana.regex.Opt.class) return "regex.Opt";
             if (value.getClass() == Expression.IfThenElse.class) return "IfThenElseExpr";
 
             String id = value.getClass().getSimpleName();
@@ -571,6 +573,11 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = iguana.regex.CharRange.Builder.class)
     abstract static class CharRangeMixIn {
+    }
+
+    @JsonDeserialize(builder = iguana.regex.Reference.Builder.class)
+    abstract static class ReferenceMixIn {
+
     }
 
     abstract static class ExpressionMixIn {
