@@ -6160,6 +6160,125 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "Parameters?",
+        "nodeType" : "Opt"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Parameters"
+        }
+      ],
+      "layout" : {
+        "kind" : "Nonterminal",
+        "name" : "Layout",
+        "nodeType" : "Layout"
+      },
+      "definition" : {
+        "kind" : "Opt",
+        "name" : "Parameters?",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "Parameters"
+        }
+      }
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Parameters?",
+        "nodeType" : "Opt"
+      },
+      "definition" : {
+        "kind" : "Opt",
+        "name" : "Parameters?",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "Parameters"
+        }
+      }
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Rule"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Identifier"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Parameters?",
+          "nodeType" : "Opt"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ":",
+          "nodeType" : "Keyword",
+          "regex" : {
+            "kind" : "Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 58
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Body"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ";",
+          "nodeType" : "Keyword",
+          "regex" : {
+            "kind" : "Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 59
+              }
+            ]
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Nonterminal",
+        "name" : "Layout",
+        "nodeType" : "Layout"
+      },
+      "label" : "Syntax"
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Rule"
       },
       "body" : [
@@ -6282,78 +6401,6 @@
         {
           "kind" : "Nonterminal",
           "name" : "RegexBody"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "label" : "Lexical"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Parameters?",
-        "nodeType" : "Opt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Parameters"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Parameters?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Parameters"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Parameters?",
-        "nodeType" : "Opt"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Parameters?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Parameters"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Rule"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Parameters?",
-          "nodeType" : "Opt"
         },
         {
           "kind" : "Nonterminal",
@@ -6362,26 +6409,17 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ":",
+          "name" : ";",
           "nodeType" : "Keyword",
           "regex" : {
             "kind" : "Seq",
             "symbols" : [
               {
                 "kind" : "Char",
-                "val" : 58
+                "val" : 59
               }
             ]
           }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Body"
         }
       ],
       "layout" : {
@@ -6389,7 +6427,7 @@
         "name" : "Layout",
         "nodeType" : "Layout"
       },
-      "label" : "Syntax"
+      "label" : "Lexical"
     },
     {
       "kind" : "Rule",

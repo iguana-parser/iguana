@@ -152,7 +152,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private Sequence visitSequence(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "MoreThanOne": {
-                Associativity associativity = getAssociativity(node.childAt(0).childAt(0));
+                Associativity associativity = null;
+                if (!node.childAt(0).children().isEmpty()) {
+                    associativity = getAssociativity(node.childAt(0).childAt(0));
+                }
                 Symbol first = (Symbol) node.childAt(1).accept(this);
                 List<Symbol> rest = (List<Symbol>) node.childAt(2).accept(this);
                 Expression returnExpression = (Expression) node.childAt(3).accept(this);
@@ -307,7 +310,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Nont":
-                getIdentifier(node);
+                return Nonterminal.withName(getIdentifier(node).id);
 
             case "String":
             case "Character":
@@ -450,7 +453,16 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     private Associativity getAssociativity(ParseTreeNode node) {
         if (node == null) return null;
-        return getAssociativity(node.getText());
+        switch (node.getText()) {
+            case "left":
+                return Associativity.LEFT;
+            case "right":
+                return Associativity.RIGHT;
+            case "non-assoc":
+                return Associativity.NON_ASSOC;
+            default:
+                return Associativity.UNDEFINED;
+        }
     }
 
     private Identifier getIdentifier(ParseTreeNode node) {
@@ -490,7 +502,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     symbols.add(alternative.first.first);
                     if (alternative.first.rest != null)
                         addAll(symbols, alternative.first.rest);
-                    symbols.addAll(alternative.first.rest);
                     Rule rule = getRule(head, symbols, alternative.first.associativity, alternative.first.label);
                     int precedence = level.getPrecedence(rule);
                     rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
@@ -545,19 +556,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 }
             }
             i++;
-        }
-    }
-
-    private static Associativity getAssociativity(String associativity) {
-        switch (associativity) {
-            case "left":
-                return Associativity.LEFT;
-            case "right":
-                return Associativity.RIGHT;
-            case "non-assoc":
-                return Associativity.NON_ASSOC;
-            default:
-                return Associativity.UNDEFINED;
         }
     }
 

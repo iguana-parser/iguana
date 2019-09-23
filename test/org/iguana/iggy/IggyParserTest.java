@@ -19,14 +19,14 @@ public class IggyParserTest {
         Path grammarPath = Paths.get("test/resources/Grammar.iggy");
         Grammar grammar = IggyParser.getGrammar(grammarPath);
 
+        System.out.println(grammar);
+        System.out.println(JsonSerializer.serialize(grammar));
+
         String expectedJson = getFileContent(Paths.get("test/resources/Grammar.json"));
         assertEquals(expectedJson.trim(), JsonSerializer.serialize(grammar).trim());
 
         Grammar expectedGrammar = JsonSerializer.deserialize(expectedJson, Grammar.class);
         assertEquals(expectedGrammar, grammar);
-
-        System.out.println(grammar);
-        System.out.println(JsonSerializer.serialize(grammar));
     }
 
     private static String getFileContent(Path path) throws IOException {

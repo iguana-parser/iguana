@@ -22,6 +22,32 @@
           }
         }
       ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 98
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }
