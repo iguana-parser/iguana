@@ -9,10 +9,10 @@ public class Reference extends AbstractRegularExpression {
     private String name;
 
     public static Reference from(String name) {
-        return new ReferenceBuilder(name).build();
+        return new Builder(name).build();
     }
 
-    public Reference(ReferenceBuilder builder) {
+    public Reference(Builder builder) {
         super(builder);
         this.name = builder.name;
     }
@@ -51,11 +51,11 @@ public class Reference extends AbstractRegularExpression {
         return null;
     }
 
-    static class ReferenceBuilder extends RegexBuilder<Reference> {
+    static class Builder extends RegexBuilder<Reference> {
 
         private String name;
 
-        ReferenceBuilder(String name) {
+        Builder(String name) {
             this.name = name;
         }
 
