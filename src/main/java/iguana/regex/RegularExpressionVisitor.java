@@ -15,9 +15,11 @@ public interface RegularExpressionVisitor<T> {
 	T visit(Plus p);
 	
 	T visit(Opt o);
-	
+
 	<E extends RegularExpression> T visit(Alt<E> alt);
 	
     <E extends RegularExpression> T visit(Seq<E> seq);
+
+    T visit(Reference ref);
 
 }

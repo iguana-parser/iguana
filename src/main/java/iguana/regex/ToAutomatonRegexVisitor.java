@@ -175,4 +175,9 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 		return automaton;
 	}
 
+	@Override
+	public Automaton visit(Reference ref) {
+		throw new RuntimeException("References should be resolved first");
+	}
+
 }

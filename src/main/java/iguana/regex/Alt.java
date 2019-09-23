@@ -120,21 +120,27 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	public List<T> getSymbols() {
 		return symbols;
 	}
-	
-	public static Alt<CharRange> not(Char...chars) {
-		List<CharRange> ranges = Arrays.stream(chars).map(c -> CharRange.in(c.getValue(), c.getValue())).collect(Collectors.toList());
-		return not(ranges);
+
+	public static Alt<CharRange> not(RegularExpression...rs) {
+		return not(Arrays.asList(rs));
 	}
-	
-	public static Alt<CharRange> not(CharRange...ranges) {
-		return not(Arrays.asList(ranges));
+
+	public static Alt<CharRange> not(List<RegularExpression> rs) {
+		List<CharRange> charRanges = new ArrayList<>();
+		for (RegularExpression r : rs) {
+			if (r instanceof CharRange ) {
+				charRanges.add((CharRange) r);
+			} else if (r instanceof Char) {
+				charRanges.add(CharRange.in(((Char) r).getValue(), ((Char) r).getValue()));
+			}
+			else {
+				throw new RuntimeException("Can only be a character or a character range");
+			}
+		}
+		return makeNot(charRanges);
 	}
-	
-	public static Alt<CharRange> not(Alt<CharRange> alt) {
-		return not(alt.symbols);
-	}
-	
-	public static Alt<CharRange> not(List<CharRange> ranges) {
+
+	private static Alt<CharRange> makeNot(List<CharRange> ranges) {
 		List<CharRange> newRanges = new ArrayList<>();
 		
 		int i = 0;

@@ -27,7 +27,6 @@
 
 package iguana.regex;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,10 +43,6 @@ public abstract class RegexBuilder<T extends RegularExpression> {
 
     public RegexBuilder() {}
 	
-	public RegexBuilder<T> setName(String name) {
-		return this;
-	}
-
     public RegexBuilder<T> addLookbehind(Char c) {
         lookbehinds.add(CharRange.from(c.getValue()));
         return this;
@@ -68,26 +63,6 @@ public abstract class RegexBuilder<T extends RegularExpression> {
 		return this;
 	}	
 
- 	public RegexBuilder<T> addLookbehinds(Iterable<CharRange> it) {
- 		it.forEach(c -> lookbehinds.add(c));
-		return this;
-	}
-
- 	public RegexBuilder<T> addLookaheads(Iterable<CharRange> it) {
- 		it.forEach(c -> lookaheads.add(c));
-		return this;
-	}
-
- 	public RegexBuilder<T> removeLookbehinds(Collection<CharRange> c) {
- 		lookbehinds.removeAll(c);
- 		return this;
- 	}
- 	
- 	public RegexBuilder<T> removeLookaheads(Collection<CharRange> c) {
- 		lookaheads.removeAll(c);
- 		return this;
- 	} 	
- 	
 	public abstract T build();
 	
 }
