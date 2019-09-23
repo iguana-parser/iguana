@@ -37,9 +37,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Parameters":
                 return visitParameters(node);
 
-            case "Body":
-                return visitBody(node);
-
             case "Alternatives":
                 return visitAlternatives(node);
 
@@ -73,7 +70,17 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      */
     private Grammar visitDefinition(NonterminalNode node) {
         Grammar.Builder builder = Grammar.builder();
-        builder.addRules((Iterable<Rule>) node.childAt(0).accept(this));
+        List<Rule> rules = new ArrayList<>();
+        // Each rule in the textual syntax may represent multiple grammar rules in our symbol definition,
+        // as we don't natively support alternatives.
+        for (Object obj : (List<?>) node.childAt(0).accept(this)) {
+            if (obj instanceof List<?>) {
+                rules.addAll((List<Rule>) obj);
+            } else {
+                rules.add((Rule) obj);
+            }
+        }
+        builder.addRules(rules);
         return builder.build();
     }
 
@@ -87,6 +94,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Syntax":
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
                 List<Identifier> parameters = (List<Identifier>) node.childAt(1).accept(this);
+                if (parameters == null) parameters = Collections.emptyList();
                 List<Alternatives> body = (List<Alternatives>) node.getChildWithName("Body").accept(this);
                 return getRules(nonterminalName, parameters, body);
 
@@ -107,13 +115,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      */
     private List<Identifier> visitParameters(NonterminalNode node) {
         return (List<Identifier>) node.childAt(1).accept(this);
-    }
-
-    /*
-     * Body: { Alternatives '>' }*
-     */
-    private List<Alternatives> visitBody(NonterminalNode node) {
-        return null;
     }
 
     /*
@@ -197,8 +198,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   > "align" Symbol                   %Align
      *   | "ignore" Symbol                  %Ignore
      *   | Expression "?" Symbol ":" Symbol %IfThenElse
-     *   > Identifier "=" Symbol            %Variable
-     *   | Identifier ":" Symbol            %Labeled
+     *   > Identifier ":" Symbol            %Labeled
      *   | "[" {Expression ","}+ "]"        %Constraints
      *   | "{" {Binding ","}+ "}"           %Bindings
      *   | Regex "<<" Symbol                %Precede
@@ -213,8 +213,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   ;
      */
     private Symbol visitSymbol(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
+        String label = node.getGrammarDefinition().getLabel();
 
+        switch (label) {
             case "Call": {
                 Expression[] expressions = ((List<Expression>) node.childAt(0).accept(this)).toArray(new Expression[]{});
                 return Nonterminal.builder(getIdentifier(node.childAt(0)).id).apply(expressions).build();
@@ -305,8 +306,15 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return symbol.copyBuilder().addExcept(getIdentifier(node.childAt(2)).id).build();
             }
 
+            case "Nont":
+                getIdentifier(node);
+
+            case "String":
+            case "Character":
+                return Terminal.from(getCharsRegex(node.getText()));
+
             default:
-                throw new RuntimeException("Unexpected label");
+                throw new RuntimeException("Unexpected label: " + label);
         }
     }
 
@@ -378,10 +386,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return (iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this);
 
             // String: '"' Character* '"'
-            case "String": {
-                String s = node.childAt(1).getText();
-                return Seq.from(getChars(s.substring(1, s.length() - 1)));
-            }
+            case "String":
+                return getCharsRegex(node.childAt(1).getText());
 
             // Char = '\'' Character* '\''
             case "Char": {
@@ -551,9 +557,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "non-assoc":
                 return Associativity.NON_ASSOC;
             default:
-                ;
+                return Associativity.UNDEFINED;
         }
-        return Associativity.UNDEFINED;
     }
 
     private static class Alternatives {
@@ -603,6 +608,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "\\ ": return ' ';
         }
         return s.charAt(0);
+    }
+
+    private RegularExpression getCharsRegex(String s) {
+        return Seq.from(getChars(s.substring(1, s.length() - 1)));
     }
 
     private static int[] getChars(String s) {

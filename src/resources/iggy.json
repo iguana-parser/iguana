@@ -6343,7 +6343,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "NontName"
+          "name" : "Identifier"
         },
         {
           "kind" : "Nonterminal",

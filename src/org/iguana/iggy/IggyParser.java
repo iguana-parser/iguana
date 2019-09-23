@@ -12,6 +12,7 @@ import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static iguana.utils.io.FileUtils.readFile;
 
@@ -36,6 +37,10 @@ public class IggyParser {
         g = new LayoutWeaver().transform(g);
         g = new DesugarStartSymbol().transform(g);
         System.out.println(JsonSerializer.toJSON(g));
+    }
+
+    public static Grammar getGrammar(Path path) throws IOException {
+        return getGrammar(path.toAbsolutePath().toString());
     }
 
     public static Grammar getGrammar(String path) throws IOException {
