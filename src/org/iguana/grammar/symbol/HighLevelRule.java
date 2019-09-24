@@ -10,7 +10,7 @@ public class HighLevelRule implements Serializable {
     private static final long serialVersionUID = 1L;
 
     final List<Alternatives> alternativesList;
-    final String head;
+    final Nonterminal head;
     final List<String> parameters;
 
     public HighLevelRule(Builder builder) {
@@ -19,19 +19,34 @@ public class HighLevelRule implements Serializable {
         this.alternativesList = builder.alternativesList;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(head).append("\n  : ");
+        if (alternativesList.isEmpty()) {
+            sb.append("\n");
+        }
+        for (Alternatives alternatives : alternativesList) {
+            sb.append(alternatives).append("  > ");
+        }
+        sb.delete(sb.length() - 4, sb.length());
+        sb.append("  ;");
+        return sb.toString();
+    }
+
     public static class Builder {
         List<Alternatives> alternativesList;
-        String head;
+        Nonterminal head;
         List<String> parameters;
 
         public Builder() {}
 
-        public Builder(String head, List<String> parameters) {
+        public Builder(Nonterminal head, List<String> parameters) {
             this.head = head;
             this.parameters = parameters;
         }
 
-        public Builder(String head, List<String> parameters, List<Alternatives> alternativesList) {
+        public Builder(Nonterminal head, List<String> parameters, List<Alternatives> alternativesList) {
             this.head = head;
             this.parameters = parameters;
             this.alternativesList = alternativesList;
