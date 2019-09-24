@@ -305,7 +305,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 												  // fst & (lExt - index == 0) or 0 after non-nullable
 												  andIndent(index_exp, first_exp, lExt(l)))
 												  .setLabel(l).build();
-			} else if (offsided.contains(symbol.getName())) // A ::= from B; B ::= D; C ::= B or C ::= D
+			} else if (offsided.contains(symbol.getName())) // A ::= offside B; B ::= D; C ::= B or C ::= D
 				return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
 			else
 				return symbol;
@@ -334,7 +334,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				}
 			}
 				
-			// Otherwise, from 'from'
+			// Otherwise, ignore 'ignore'
 			sym = sym.accept(this);
 			return sym.copyBuilder().addConditions(symbol).build();
 		}
@@ -382,7 +382,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				}
 			} 
 			
-			// Otherwise, from from
+			// Otherwise, ignore offside
 			sym = sym.accept(this);
 			return sym.copyBuilder().addConditions(symbol).build();
 		}

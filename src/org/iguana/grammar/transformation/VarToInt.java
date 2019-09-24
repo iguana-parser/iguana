@@ -110,7 +110,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public Symbol visit(Align symbol) {
-        return Align.from(visit(symbol.getSymbol()));
+        return Align.align(visit(symbol.getSymbol()));
     }
 
     @Override
@@ -134,7 +134,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     @Override
     public Symbol visit(Conditional symbol) {
         Symbol sym = visit(symbol.getSymbol());
-        return Conditional.from(sym, (org.iguana.datadependent.ast.Expression) symbol.getExpression().accept(this));
+        return Conditional.when(sym, (org.iguana.datadependent.ast.Expression) symbol.getExpression().accept(this));
     }
 
     @Override
@@ -149,7 +149,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public Symbol visit(Ignore symbol) {
-        return Ignore.from(visit(symbol.getSymbol()));
+        return Ignore.ignore(visit(symbol.getSymbol()));
     }
 
     @Override
@@ -183,7 +183,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public Symbol visit(Offside symbol) {
-        return Offside.from(visit(symbol.getSymbol()));
+        return Offside.offside(visit(symbol.getSymbol()));
     }
 
     @Override

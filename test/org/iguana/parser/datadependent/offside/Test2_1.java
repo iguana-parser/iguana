@@ -25,7 +25,7 @@
 // *
 // */
 //
-//package org.iguana.parser.datadependent.from;
+//package org.iguana.parser.datadependent.offside;
 //
 //import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
 //import static org.iguana.util.CollectionsUtil.set;
@@ -84,7 +84,7 @@
 //.addRule(Rule.withHead(Nonterminal.builder("Layout").build()).addSymbol(Star.builder(Nonterminal.builder("WhiteSpace").build()).addPostConditions(set(new RegularExpressionCondition(ConditionType.NOT_FOLLOW, Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(32, 32).build()).build()))).build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 //// WhiteSpace ::= (\u0009-\\u000A | \u000C-\\u000D | \\u001A | \\u0020)  {UNDEFINED,-1,NON_REC} PREC(1,1)
 //.addRule(Rule.withHead(Nonterminal.builder("WhiteSpace").build()).addSymbol(Alt.builder(CharacterRange.builder(9, 10).build(), CharacterRange.builder(12, 13).build(), CharacterRange.builder(26, 26).build(), CharacterRange.builder(32, 32).build()).build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
-//// S ::= from from Stat+  {UNDEFINED,-1,NON_REC} PREC(1,1)
+//// S ::= align offside Stat+  {UNDEFINED,-1,NON_REC} PREC(1,1)
 //.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Align.builder(Plus.builder(Offside.builder(Nonterminal.builder("Stat").build()).build()).addSeparators(Arrays.asList(Terminal.builder(Sequence.builder(Character.builder(59).build()).build()).build())).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 //.build();
 //
@@ -122,13 +122,13 @@
 //
 //         GrammarGraph graph = GrammarGraph.from(grammar, input, Configuration.DEFAULT);
 //
-//         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/from/", graph);
+//         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/", graph);
 //
 //         ParseResult result = IguanaParser.getParserTree(input, graph, startSymbol);
 //
 //         Assert.assertTrue(result.isParseSuccess());
 //
-//         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/from/",
+//         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/offside/",
 //         //                   result.asParseSuccess().getResult(), input);
 //
 //         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);

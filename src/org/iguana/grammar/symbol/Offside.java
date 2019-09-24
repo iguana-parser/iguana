@@ -40,7 +40,7 @@ public class Offside extends AbstractSymbol {
 		this.symbol = builder.symbol;
 	}
 	
-	public static Offside from(Symbol symbol) {
+	public static Offside offside(Symbol symbol) {
 		return builder(symbol).build();
 	}
 	
@@ -65,7 +65,7 @@ public class Offside extends AbstractSymbol {
 	
 	@Override
 	public String toString(int j) {
-		return String.format("from %s", symbol.toString(j));
+		return String.format("offside %s", symbol.toString(j));
 	}
 	
 	public static Builder builder(Symbol symbol) {
@@ -82,7 +82,7 @@ public class Offside extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol) {
-			super(String.format("from %s", symbol.toString()));
+			super(String.format("offside %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 

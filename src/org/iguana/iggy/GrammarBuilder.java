@@ -345,16 +345,16 @@ public class GrammarBuilder {
             return nt.copyBuilder().apply(arguments.stream().toArray(org.iguana.datadependent.ast.Expression[]::new)).build();
         }
         public static org.iguana.grammar.symbol.Symbol align(org.iguana.grammar.symbol.Symbol symbol) {
-            return Align.from(symbol);
+            return Align.align(symbol);
         }
         public static org.iguana.grammar.symbol.Symbol offside(org.iguana.grammar.symbol.Symbol symbol) {
-            return Offside.from(symbol);
+            return Offside.offside(symbol);
         }
         public static org.iguana.grammar.symbol.Symbol ignore(org.iguana.grammar.symbol.Symbol symbol) {
-            return Ignore.from(symbol);
+            return Ignore.ignore(symbol);
         }
         public static org.iguana.grammar.symbol.Symbol conditional(org.iguana.datadependent.ast.Expression expression, org.iguana.grammar.symbol.Symbol thenPart, org.iguana.grammar.symbol.Symbol elsePart) {
-            return IfThenElse.from(expression, thenPart, elsePart);
+            return IfThenElse.ifThenElse(expression, thenPart, elsePart);
         }
         public static org.iguana.grammar.symbol.Symbol variable(Identifier name, org.iguana.grammar.symbol.Symbol symbol) {
             Nonterminal nt = (Nonterminal) symbol;

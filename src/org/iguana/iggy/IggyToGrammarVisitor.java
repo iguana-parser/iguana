@@ -232,7 +232,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Offside":
-                return Offside.from((Symbol) node.childAt(0).accept(this));
+                return Offside.offside((Symbol) node.childAt(0).accept(this));
 
             case "Star":
                 return Star.from((Symbol) node.childAt(0).accept(this));
@@ -244,13 +244,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return Opt.from((Symbol) node.childAt(0).accept(this));
 
             case "Align":
-                return Align.from((Symbol) node.childAt(0).accept(this));
+                return Align.align((Symbol) node.childAt(0).accept(this));
 
             case "Ignore":
-                return Ignore.from((Symbol) node.childAt(0).accept(this));
+                return Ignore.ignore((Symbol) node.childAt(0).accept(this));
 
             case "IfThenElse":
-                return IfThenElse.from(
+                return IfThenElse.ifThenElse(
                         (Expression) node.childAt(0).accept(this),
                         (Symbol) node.childAt(1).accept(this),
                         (Symbol) node.childAt(2).accept(this)
