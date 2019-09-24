@@ -98,7 +98,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 List<Alternatives> body = (List<Alternatives>) node.getChildWithName("Body").accept(this);
                 if (body.isEmpty()) {
                     Rule rule = Rule.withHead(Nonterminal.withName(nonterminalName.id))
-                            .addSymbol(Terminal.epsilon())
                             .setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
                             .build();
                     return Arrays.asList(rule);

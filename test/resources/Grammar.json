@@ -27,6 +27,13 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "E"
+      }
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "B"
       },
       "body" : [
@@ -43,6 +50,32 @@
               {
                 "kind" : "Char",
                 "val" : 98
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "c",
+          "regex" : {
+            "kind" : "Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 99
               }
             ]
           }

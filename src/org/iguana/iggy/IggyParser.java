@@ -29,10 +29,9 @@ public class IggyParser {
 
     public static void main(String[] args) throws IOException {
         Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
+        g = new EBNFToBNF().transform(g);
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
-
-        g = new EBNFToBNF().transform(g);
         g = precedenceAndAssociativity.transform(g);
         g = new LayoutWeaver().transform(g);
         g = new DesugarStartSymbol().transform(g);
