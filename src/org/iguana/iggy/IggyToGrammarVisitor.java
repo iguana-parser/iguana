@@ -496,7 +496,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        Rule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
+                        Rule rule = getRule(head, sequence.getSymbols(), sequence.associativity);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                         rules.add(rule);
@@ -505,13 +505,20 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                 } else {
                     List<Symbol> symbols = new ArrayList<>();
-                    symbols.add(alternative.first.first);
-                    if (alternative.first.rest != null)
-                        addAll(symbols, alternative.first.rest);
-                    Rule rule = getRule(head, symbols, alternative.first.associativity, alternative.first.label);
-                    int precedence = level.getPrecedence(rule);
-                    rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
-                    rules.add(rule);
+                    if (alternative.first == null) { // Empty alternative
+                        Rule rule = getRule(head, symbols, Associativity.UNDEFINED);
+                        int precedence = level.getPrecedence(rule);
+                        rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rules.add(rule);
+                    } else {
+                        symbols.add(alternative.first.first);
+                        if (alternative.first.rest != null)
+                            addAll(symbols, alternative.first.rest);
+                        Rule rule = getRule(head, symbols, alternative.first.associativity);
+                        int precedence = level.getPrecedence(rule);
+                        rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rules.add(rule);
+                    }
                 }
             }
             level.setUndefinedIfNeeded();
@@ -573,7 +580,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
     }
 
-    private static Rule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label) {
+    private static Rule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity) {
         // TODO: The first and the last symbol should be visited!
         boolean isLeft = !symbols.isEmpty() && symbols.get(0).getName().equals(head.getName());
         boolean isRight = !symbols.isEmpty() && symbols.get(symbols.size() - 1).getName().equals(head.getName());

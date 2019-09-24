@@ -10,12 +10,56 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Alternative"
+        "name" : "Sequence?",
+        "nodeType" : "Opt"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "Sequence"
+        }
+      ],
+      "layout" : {
+        "kind" : "Nonterminal",
+        "name" : "Layout",
+        "nodeType" : "Layout"
+      },
+      "definition" : {
+        "kind" : "Opt",
+        "name" : "Sequence?",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "Sequence"
+        }
+      }
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Sequence?",
+        "nodeType" : "Opt"
+      },
+      "definition" : {
+        "kind" : "Opt",
+        "name" : "Sequence?",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "Sequence"
+        }
+      }
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Alternative"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Sequence?",
+          "nodeType" : "Opt"
         }
       ],
       "layout" : {
@@ -8925,89 +8969,13 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Alternatives, >, null}*",
-        "nodeType" : "Star"
+        "name" : "Body"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "{Alternatives, >, null}+",
           "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Alternatives*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Alternatives"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ">",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 62
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Alternatives, >, null}*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Alternatives*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Alternatives"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ">",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 62
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Body"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Alternatives, >, null}*",
-          "nodeType" : "Star"
         }
       ],
       "layout" : {
