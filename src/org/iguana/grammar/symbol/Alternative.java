@@ -2,6 +2,7 @@ package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class Alternative implements Serializable {
 
@@ -23,6 +24,16 @@ public class Alternative implements Serializable {
         this.first = sequence;
         this.rest = sequences;
         this.associativity = associativity;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Alternative)) return false;
+        Alternative other = (Alternative) obj;
+        return Objects.equals(this.first, other.first) &&
+                Objects.equals(this.rest, other.rest) &&
+                Objects.equals(this.associativity, other.associativity);
     }
 
     @Override

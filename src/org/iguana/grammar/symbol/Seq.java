@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Seq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     public Symbol first;
-    public List<Symbol> rest;
+    public List<Symbol> rest = new ArrayList<>();
     public Associativity associativity;
     public String label;
 
@@ -31,6 +32,15 @@ public class Seq implements Serializable {
             symbols.addAll(rest);
         }
         return symbols;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Seq)) return false;
+        Seq other = (Seq) obj;
+        return Objects.equals(this.first, other.first) && Objects.equals(this.rest, other.rest) &&
+                Objects.equals(this.associativity, other.associativity) && Objects.equals(this.label, other.label);
     }
 
     @Override

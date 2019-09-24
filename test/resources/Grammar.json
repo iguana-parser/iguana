@@ -1,110 +1,122 @@
 {
-  "kind" : "Grammar",
+  "kind" : "HighLevelGrammar",
   "rules" : [
     {
-      "kind" : "Rule",
+      "kind" : "HighLevelRule",
+      "alternativesList" : [
+        {
+          "kind" : "Alternatives",
+          "alternatives" : [
+            {
+              "kind" : "Alternative",
+              "first" : {
+                "kind" : "Seq",
+                "first" : {
+                  "kind" : "Terminal",
+                  "name" : "a",
+                  "regex" : {
+                    "kind" : "regex.Seq",
+                    "symbols" : [
+                      {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
       "head" : {
         "kind" : "Nonterminal",
         "name" : "A"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "a",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 97
-              }
-            ]
-          }
-        }
-      ]
+      }
     },
     {
-      "kind" : "Rule",
+      "kind" : "HighLevelRule",
+      "alternativesList" : [
+        {
+          "kind" : "Alternatives",
+          "alternatives" : [
+            {
+              "kind" : "Alternative"
+            }
+          ]
+        }
+      ],
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E"
       }
     },
     {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B"
-      },
-      "body" : [
+      "kind" : "HighLevelRule",
+      "alternativesList" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "b",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 98
+          "kind" : "Alternatives",
+          "alternatives" : [
+            {
+              "kind" : "Alternative",
+              "first" : {
+                "kind" : "Seq",
+                "first" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "rest" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "b",
+                    "regex" : {
+                      "kind" : "regex.Seq",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "E"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "c",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 99
+            },
+            {
+              "kind" : "Alternative",
+              "first" : {
+                "kind" : "Seq",
+                "first" : {
+                  "kind" : "Nonterminal",
+                  "name" : "E"
+                },
+                "rest" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "regex.Seq",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 99
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
-            ]
-          }
+            },
+            {
+              "kind" : "Alternative"
+            }
+          ]
         }
-      ]
-    },
-    {
-      "kind" : "Rule",
+      ],
       "head" : {
         "kind" : "Nonterminal",
         "name" : "B"
       }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "C"
-      },
-      "body" : [
-        {
-          "kind" : "Plus",
-          "name" : "A+",
-          "s" : {
-            "kind" : "Nonterminal",
-            "name" : "A"
-          }
-        }
-      ]
     }
   ]
 }

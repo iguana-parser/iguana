@@ -20,6 +20,14 @@ public class HighLevelRule implements Serializable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof HighLevelRule)) return false;
+        HighLevelRule other = (HighLevelRule) obj;
+        return this.head.equals(other.head) && this.parameters.equals(other.parameters) && this.alternativesList.equals(other.alternativesList);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(head).append("\n  : ");

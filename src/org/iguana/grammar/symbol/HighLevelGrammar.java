@@ -97,6 +97,24 @@ public class HighLevelGrammar implements Serializable {
         return grammar;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof HighLevelGrammar)) return false;
+        HighLevelGrammar other = (HighLevelGrammar) obj;
+        return this.rules.equals(other.rules) && Objects.equals(this.layout, other.layout)
+                && Objects.equals(this.startSymbol, other.startSymbol);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (HighLevelRule rule : rules) {
+            sb.append(rule).append("\n");
+        }
+        return sb.toString();
+    }
+
     public static class Builder {
         private List<HighLevelRule> rules = new ArrayList<>();
         private Start startSymbol;

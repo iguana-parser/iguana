@@ -18,6 +18,14 @@ public class Alternatives implements Serializable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Alternatives)) return false;
+        Alternatives other = (Alternatives) obj;
+        return this.alternatives.equals(other.alternatives);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Alternative alternative : alternatives) {
