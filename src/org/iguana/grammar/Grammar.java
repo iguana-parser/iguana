@@ -28,12 +28,10 @@
 package org.iguana.grammar;
 
 import iguana.regex.RegularExpression;
-import iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
-import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
 import org.iguana.util.serialization.JsonSerializer;
@@ -53,10 +51,8 @@ import static iguana.utils.string.StringUtil.listToString;
  * @author Anastasia Izmaylova
  *
  */
-public class Grammar implements Serializable {
+public class Grammar {
 
-	private static final long serialVersionUID = 1L;
-	
 	private final Map<Nonterminal, List<Rule>> definitions;
 	
 	private final List<PrecedencePattern> precedencePatterns;
@@ -325,53 +321,6 @@ public class Grammar implements Serializable {
 		}
 	}
 
-	public static Grammar load(URI uri, String format) throws FileNotFoundException {
-		return load(new File(uri), format);
-	}
-
-	public static Grammar load(String path, String format) throws FileNotFoundException {
-		return load(new File(path), format);
-	}
-
-	public static Grammar load(File file) throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        Grammar binary = load(fis, "binary");
-        return binary;
-    }
-
-    public static Grammar load(File file, String format) throws FileNotFoundException {
-		return load(new FileInputStream(file), format);
-    }
-
-	public static Grammar load(InputStream inputStream) {
-		return load(inputStream, "binary");
-	}
-
-	public static Grammar load(InputStream inputStream, String format) {
-		Grammar grammar;
-		switch (format) {
-			case "binary":
-				try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
-					grammar = (Grammar) in.readObject();
-				} catch (IOException | ClassNotFoundException e) {
-					throw new RuntimeException(e);
-				}
-				break;
-
-			case "json":
-				try {
-					grammar = JsonSerializer.deserialize(inputStream, Grammar.class);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				break;
-
-			default:
-				throw new RuntimeException("Unsupported format exception");
-		}
-		return grammar;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

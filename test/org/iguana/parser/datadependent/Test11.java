@@ -65,7 +65,7 @@ public class Test11 {
 		
 		Nonterminal NoNL = Nonterminal.withName("NoNL");
 		
-		Nonterminal S = Nonterminal.withName("S");		
+		Nonterminal S = Nonterminal.withName("S");
 		
 		Rule r0 = Rule.withHead(X).addSymbol(S).build();
 		

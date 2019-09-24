@@ -804,7 +804,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression[] lret;
 		private Expression[] rret;
 		
-		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, 
+		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules,
 					   Map<String, Configuration> configs, OP config_op) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;

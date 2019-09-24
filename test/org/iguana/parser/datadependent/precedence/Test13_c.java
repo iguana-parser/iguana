@@ -74,21 +74,21 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
          
-         Grammar grammar2 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test13_c"));
+         Grammar grammar2 = HighLevelGrammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test13_c")).toGrammar();
 
          DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-         
+
          desugarPrecedenceAndAssociativity.setOP1();
-         
+
 		 Grammar grammar1 = desugarPrecedenceAndAssociativity.transform(grammar);
          System.out.println(grammar1.toStringWithOrderByPrecedence());
 
          grammar2 = new OperatorPrecedence(grammar2.getPrecedencePatterns(), grammar2.getExceptPatterns()).transform(grammar2);
-         
+
          System.out.println(grammar2);
-         
+
          desugarPrecedenceAndAssociativity.setOP2();
-         
+
          Grammar grammar3 = desugarPrecedenceAndAssociativity.transform(grammar);
          System.out.println(grammar3.toStringWithOrderByPrecedence());
 

@@ -58,7 +58,7 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
          
-         Grammar grammar2 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test10_1_c"));
+         Grammar grammar2 = HighLevelGrammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test10_1_c")).toGrammar();
 
          DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          

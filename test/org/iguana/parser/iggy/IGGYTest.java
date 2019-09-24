@@ -2,6 +2,7 @@ package org.iguana.parser.iggy;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.HighLevelGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -23,7 +24,7 @@ public class IGGYTest {
 		
 		Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/examples/Example1.iggy"));
 		
-		Grammar grammar = Grammar.load(new File("test/org/iguana/parser/iggy/IGGY"));
+		Grammar grammar = HighLevelGrammar.load(new File("test/org/iguana/parser/iggy/IGGY")).toGrammar();
 		
 		DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
 		precedenceAndAssociativity.setOP2();

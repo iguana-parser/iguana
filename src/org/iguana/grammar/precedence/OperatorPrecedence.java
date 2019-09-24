@@ -318,7 +318,7 @@ public class OperatorPrecedence {
 				continue;
 			}
 
-			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
+			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1);
 			
 			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {
@@ -350,7 +350,7 @@ public class OperatorPrecedence {
 				continue;
 			}
 
-			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
+			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1);
 			
 			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {

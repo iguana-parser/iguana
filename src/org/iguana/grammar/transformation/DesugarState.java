@@ -97,7 +97,7 @@ public class DesugarState implements GrammarTransformation {
 		for (Nonterminal head : grammar.getNonterminals()) {
 			FreeVariableVisitor visitor = new FreeVariableVisitor(uses, updates, returns);
 			
-			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>(); 
+			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>();
 			bindings.put(head, nonterminal_bindings);
 			
 			for (Rule rule : grammar.getAlternatives(head))	

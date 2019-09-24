@@ -71,7 +71,7 @@ public class Test1 {
 		Rule r0 = Rule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
 		
 		Rule r1 = Rule.withHead(S)
-					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(), 
+					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(),
 											stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		

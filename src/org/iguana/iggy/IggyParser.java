@@ -2,6 +2,7 @@ package org.iguana.iggy;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.HighLevelGrammar;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -17,22 +18,22 @@ import static iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 
-    private static Grammar rawIggyGrammar() {
+    private static HighLevelGrammar highLevelIggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
-            return JsonSerializer.deserialize(content, Grammar.class);
+            return JsonSerializer.deserialize(content, HighLevelGrammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) throws IOException {
-        Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
+        HighLevelGrammar g = HighLevelGrammar.load(new File("/Users/afroozeh/iggy"));
         System.out.println(JsonSerializer.toJSON(g));
     }
 
-    public static Grammar getRawGrammar(String path) throws IOException {
-        Grammar iggyGrammar = transform(rawIggyGrammar());
+    public static HighLevelGrammar getHighLevelGrammar(String path) throws IOException {
+        Grammar iggyGrammar = transform(highLevelIggyGrammar());
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
         Input input = Input.fromFile(new File(path));
@@ -41,11 +42,11 @@ public class IggyParser {
             throw new RuntimeException("Parse error");
         }
 
-        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+        return (HighLevelGrammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 
-    public static Grammar transform(Grammar rawGrammar) {
-        Grammar grammar = new EBNFToBNF().transform(rawGrammar);
+    public static Grammar transform(HighLevelGrammar highLevelGrammar) {
+        Grammar grammar = new EBNFToBNF().transform(highLevelGrammar.toGrammar());
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
@@ -57,7 +58,7 @@ public class IggyParser {
     }
 
     public static Grammar getGrammar(String path) throws IOException {
-        return transform(getRawGrammar(path));
+        return transform(getHighLevelGrammar(path));
     }
 
 }

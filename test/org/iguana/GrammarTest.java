@@ -3,6 +3,7 @@ package org.iguana;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.HighLevelGrammar;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.traversal.exception.AmbiguityException;
@@ -49,9 +50,9 @@ public class GrammarTest {
 
             String grammarPath = testPath + "/grammar.json";
 
-            Grammar grammar;
+            HighLevelGrammar grammar;
             try {
-                grammar = Grammar.load(grammarPath, "json");
+                grammar = HighLevelGrammar.load(grammarPath, "json");
             } catch (FileNotFoundException e) {
                 throw new RuntimeException("No grammar.json file is present");
             }
@@ -70,11 +71,11 @@ public class GrammarTest {
                 }
 
                 String parserTestName = "Parser test " + category + " " + testName;
-                IguanaParser parser = new IguanaParser(grammar);
+                IguanaParser parser = new IguanaParser(grammar.toGrammar());
                 DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, grammarPath, parser, i, input, grammar));
 
                 String recognizerTestName = "Recognizer test " + category + " " + testName;
-                IguanaRecognizer recognizer = new IguanaRecognizer(grammar);
+                IguanaRecognizer recognizer = new IguanaRecognizer(grammar.toGrammar());
                 DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
                 grammarTests.add(dynamicParserTest);
@@ -96,7 +97,7 @@ public class GrammarTest {
         };
     }
 
-    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input, Grammar grammar) {
+    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input, HighLevelGrammar grammar) {
         return () -> {
 
             ParseTreeNode actualParseTree = null;
@@ -118,7 +119,7 @@ public class GrammarTest {
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
             if (!new File(statisticsPath).exists()) {
-                record(parser, actualParseTree, input, grammar, grammarPath, statisticsPath, parseTreePath);
+                record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
                 return;
             }
 
@@ -135,7 +136,7 @@ public class GrammarTest {
         };
     }
 
-    private static void record(IguanaParser parser, ParseTreeNode parseTree, Input input, Grammar grammar, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
+    private static void record(IguanaParser parser, ParseTreeNode parseTree, HighLevelGrammar grammar, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
         String jsonGrammar = JsonSerializer.toJSON(grammar);
         FileUtils.writeFile(jsonGrammar, grammarPath);
 
