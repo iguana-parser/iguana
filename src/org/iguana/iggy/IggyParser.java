@@ -38,11 +38,7 @@ public class IggyParser {
         System.out.println(JsonSerializer.toJSON(g));
     }
 
-    public static Grammar getGrammar(Path path) throws IOException {
-        return getGrammar(path.toAbsolutePath().toString());
-    }
-
-    public static Grammar getGrammar(String path) throws IOException {
+    public static Grammar getRawGrammar(String path) throws IOException {
         Input input = Input.fromFile(new File(path));
         Grammar iggyGrammar = iggyGrammar();
         IguanaParser parser = new IguanaParser(iggyGrammar);
@@ -52,13 +48,17 @@ public class IggyParser {
             throw new RuntimeException("Parse error");
         }
 
-        Grammar grammar = (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+    }
+
+    public static Grammar getGrammar(String path) throws IOException {
+        Grammar grammar = getRawGrammar(path);
+        grammar = new EBNFToBNF().transform(grammar);
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
         grammar = precedenceAndAssociativity.transform(grammar);
 
-        grammar = new EBNFToBNF().transform(grammar);
         grammar = new LayoutWeaver().transform(grammar);
         grammar = new DesugarStartSymbol().transform(grammar);
         return grammar;

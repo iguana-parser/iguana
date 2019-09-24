@@ -88,6 +88,23 @@
         "kind" : "Nonterminal",
         "name" : "B"
       }
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "body" : [
+        {
+          "kind" : "Plus",
+          "name" : "A+",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "A"
+          }
+        }
+      ]
     }
   ]
 }

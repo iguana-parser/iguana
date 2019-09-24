@@ -237,7 +237,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return Star.from((Symbol) node.childAt(0).accept(this));
 
             case "Plus":
-                return Plus.from((Plus) node.childAt(0).accept(this));
+                return Plus.from((Symbol) node.childAt(0).accept(this));
 
             case "Option":
                 return Opt.from((Symbol) node.childAt(0).accept(this));
