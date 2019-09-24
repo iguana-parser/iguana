@@ -51,7 +51,7 @@ public interface ParseTreeVisitor {
                 ParseTreeNode child = node.childAt(i);
                 Object childResult = child.accept(this);
                 if (childResult != null) {
-                    result.add(child.accept(this));
+                    result.add(childResult);
                 }
             }
             return result;
