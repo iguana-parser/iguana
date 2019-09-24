@@ -10,232 +10,19 @@
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Sequence?",
-        "nodeType" : "Opt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Sequence"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Sequence?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Sequence"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Sequence?",
-        "nodeType" : "Opt"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Sequence?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Sequence"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "Alternative"
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "Sequence?",
-          "nodeType" : "Opt"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "label" : "Sequence"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Sequence)",
-        "nodeType" : "Seq"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "|",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 124
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Sequence"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Sequence",
-        "name" : "(| Sequence)",
-        "symbols" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          },
-          {
+          "s" : {
             "kind" : "Nonterminal",
             "name" : "Sequence"
           }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Sequence)+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Sequence)+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Sequence)",
-          "nodeType" : "Seq"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(| Sequence)+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(| Sequence)",
-          "symbols" : [
-            {
-              "kind" : "Terminal",
-              "name" : "|",
-              "nodeType" : "Keyword",
-              "regex" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 124
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "Sequence"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Sequence)+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Sequence)",
-          "nodeType" : "Seq"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(| Sequence)+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(| Sequence)",
-          "symbols" : [
-            {
-              "kind" : "Terminal",
-              "name" : "|",
-              "nodeType" : "Keyword",
-              "regex" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 124
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "Sequence"
-            }
-          ]
-        }
-      }
+      "label" : "Sequence"
     },
     {
       "kind" : "Rule",
@@ -341,11 +128,6 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
           "kind" : "Terminal",
           "name" : "(",
           "nodeType" : "Keyword",
@@ -361,27 +143,35 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Sequence"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "(| Sequence)+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Sequence",
+            "name" : "(| Sequence)",
+            "symbols" : [
+              {
+                "kind" : "Terminal",
+                "name" : "|",
+                "nodeType" : "Keyword",
+                "regex" : {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Char",
+                      "val" : 124
+                    }
+                  ]
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "Sequence"
+              }
+            ]
+          }
         },
         {
           "kind" : "Terminal",
@@ -398,180 +188,7 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Assoc"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Regexs)",
-        "nodeType" : "Seq"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "|",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 124
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Regexs"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Sequence",
-        "name" : "(| Regexs)",
-        "symbols" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          },
-          {
-            "kind" : "Nonterminal",
-            "name" : "Regexs"
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Regexs)+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Regexs)+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Regexs)",
-          "nodeType" : "Seq"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(| Regexs)+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(| Regexs)",
-          "symbols" : [
-            {
-              "kind" : "Terminal",
-              "name" : "|",
-              "nodeType" : "Keyword",
-              "regex" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 124
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "Regexs"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Regexs)+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Regexs)",
-          "nodeType" : "Seq"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(| Regexs)+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(| Regexs)",
-          "symbols" : [
-            {
-              "kind" : "Terminal",
-              "name" : "|",
-              "nodeType" : "Keyword",
-              "regex" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 124
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "Regexs"
-            }
-          ]
-        }
-      }
     },
     {
       "kind" : "Rule",
@@ -596,27 +213,35 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Regexs"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "(| Regexs)+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Sequence",
+            "name" : "(| Regexs)",
+            "symbols" : [
+              {
+                "kind" : "Terminal",
+                "name" : "|",
+                "nodeType" : "Keyword",
+                "regex" : {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Char",
+                      "val" : 124
+                    }
+                  ]
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "Regexs"
+              }
+            ]
+          }
         },
         {
           "kind" : "Terminal",
@@ -633,11 +258,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Alternation"
     },
     {
@@ -652,11 +272,6 @@
           "name" : "NontName"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Nont"
     },
     {
@@ -671,76 +286,7 @@
           "name" : "CharClass"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "CharClass"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Regex+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Regex+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Regex"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Regex+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Regex"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Regex+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Regex"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Regex+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Regex"
-        }
-      }
     },
     {
       "kind" : "Rule",
@@ -765,27 +311,15 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Regex"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "Regex+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Regex"
+          }
         },
         {
           "kind" : "Terminal",
@@ -802,11 +336,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Sequence"
     },
     {
@@ -819,11 +348,6 @@
         {
           "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -840,11 +364,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Option"
     },
     {
@@ -870,17 +389,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -897,11 +406,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Bracket"
     },
     {
@@ -914,11 +418,6 @@
         {
           "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -935,11 +434,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Star"
     },
     {
@@ -1042,11 +536,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Character"
     },
     {
@@ -1059,11 +548,6 @@
         {
           "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -1080,11 +564,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Plus"
     },
     {
@@ -1187,31 +666,18 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "String"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -1230,31 +696,15 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "LExtent"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
@@ -1287,41 +737,20 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Number"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -1340,71 +769,34 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "RExtent"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Name"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -1439,100 +831,20 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Yield"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 1
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -1554,112 +866,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 2
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{1}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 1
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "And"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 1
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -1681,43 +902,16 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 2
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{1}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 1
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Or"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
@@ -1736,23 +930,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -1767,100 +945,20 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Bracket"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 2
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 3
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -1882,112 +980,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 3
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{2}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 2
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Equal"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 2
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 3
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2009,112 +1016,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 3
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{2}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 2
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "NotEqual"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2132,112 +1048,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 4
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{3}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 3
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Greater"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2255,112 +1080,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 4
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{3}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 3
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Less"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2382,112 +1116,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 4
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{3}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 3
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "GreaterEq"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2509,112 +1152,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 4
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{3}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 3
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "LessEq"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2632,112 +1184,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 5
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{4}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 4
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Minus"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2755,112 +1216,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 5
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{4}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 4
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Plus"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 5
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 5
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -2878,112 +1248,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 6
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{5}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 5
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Multiplication"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 5
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 5
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -3001,131 +1280,27 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 6
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{5}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 5
-          }
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Division"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Expression",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Expression"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 6
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 6
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Nonterminal",
           "name" : "Arguments"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Call"
     },
     {
@@ -3133,85 +1308,19 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "$default$"
-      }
+      },
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 1
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -3233,106 +1342,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Follow"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 1
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -3365,67 +1389,30 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Label"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Except"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "NontName"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Nont"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -3519,31 +1506,15 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Character"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -3637,100 +1608,20 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "String"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 1
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -3756,106 +1647,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "NotFollow"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 1
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -3873,164 +1679,16 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Exclude"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Expression, ,, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Expression, ,, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : ",",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 44
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Expression+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Expression"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Expression, ,, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Expression+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Expression"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -4048,19 +1706,28 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Expression, ,, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "kind" : "Plus",
+          "name" : "Expression+",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Expression"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : ",",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 44
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "kind" : "Terminal",
@@ -4075,146 +1742,15 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Constraints"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Binding, ,, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Binding, ,, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : ",",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 44
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Binding"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Binding+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Binding"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Binding, ,, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Binding"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Binding+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Binding"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -4232,19 +1768,28 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Binding, ,, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "kind" : "Plus",
+          "name" : "Binding+",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Binding"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : ",",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 44
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "kind" : "Terminal",
@@ -4259,41 +1804,20 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Bindings"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -4311,53 +1835,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 2
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{2}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 2
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Labeled"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -4379,53 +1871,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 2
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{2}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 2
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Precede"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "Regex"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -4451,53 +1911,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 2
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{2}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 2
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "NotPrecede"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -4515,43 +1943,16 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 2
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{2}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 2
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Variable"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -4590,90 +1991,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "variable" : "r",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 3
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{(r <= 0)? 3 : min(r,3)}",
-          "expression" : {
-            "kind" : "IfThenElseExpr",
-            "condition" : {
-              "kind" : "LessThanEqual",
-              "lhs" : {
-                "kind" : "Name",
-                "name" : "r",
-                "i" : -1
-              },
-              "rhs" : {
-                "kind" : "Integer",
-                "value" : 0
-              }
-            },
-            "thenPart" : {
-              "kind" : "Integer",
-              "value" : 3
-            },
-            "elsePart" : {
-              "kind" : "Call",
-              "fun" : "min",
-              "arguments" : [
-                {
-                  "kind" : "Name",
-                  "name" : "r",
-                  "i" : -1
-                },
-                {
-                  "kind" : "Integer",
-                  "value" : 3
-                }
-              ]
-            }
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Ignore"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -4691,23 +2023,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -4725,74 +2041,16 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "variable" : "r",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 3
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{(r <= 0)? 3 : min(r,3)}",
-          "expression" : {
-            "kind" : "IfThenElseExpr",
-            "condition" : {
-              "kind" : "LessThanEqual",
-              "lhs" : {
-                "kind" : "Name",
-                "name" : "r",
-                "i" : -1
-              },
-              "rhs" : {
-                "kind" : "Integer",
-                "value" : 0
-              }
-            },
-            "thenPart" : {
-              "kind" : "Integer",
-              "value" : 3
-            },
-            "elsePart" : {
-              "kind" : "Call",
-              "fun" : "min",
-              "arguments" : [
-                {
-                  "kind" : "Name",
-                  "name" : "r",
-                  "i" : -1
-                },
-                {
-                  "kind" : "Integer",
-                  "value" : 3
-                }
-              ]
-            }
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Conditional"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -4827,143 +2085,21 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "variable" : "r",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 3
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{(r <= 0)? 3 : min(r,3)}",
-          "expression" : {
-            "kind" : "IfThenElseExpr",
-            "condition" : {
-              "kind" : "LessThanEqual",
-              "lhs" : {
-                "kind" : "Name",
-                "name" : "r",
-                "i" : -1
-              },
-              "rhs" : {
-                "kind" : "Integer",
-                "value" : 0
-              }
-            },
-            "thenPart" : {
-              "kind" : "Integer",
-              "value" : 3
-            },
-            "elsePart" : {
-              "kind" : "Call",
-              "fun" : "min",
-              "arguments" : [
-                {
-                  "kind" : "Name",
-                  "name" : "r",
-                  "i" : -1
-                },
-                {
-                  "kind" : "Integer",
-                  "value" : 3
-                }
-              ]
-            }
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Align"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -4978,100 +2114,20 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Plus"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -5086,100 +2142,70 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Star"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "(",
+          "nodeType" : "Keyword",
+          "regex" : {
+            "kind" : "Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 40
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Symbol"
+        },
+        {
+          "kind" : "Star",
+          "name" : "Symbol*",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Symbol"
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ")",
+          "nodeType" : "Keyword",
+          "regex" : {
+            "kind" : "Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 41
+              }
+            ]
+          }
+        }
+      ],
+      "label" : "Sequence"
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 4
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Terminal",
@@ -5194,199 +2220,15 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Option"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(| Symbols)",
-        "nodeType" : "Seq"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "|",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 124
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbols"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Sequence",
-        "name" : "(| Symbols)",
-        "symbols" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          },
-          {
-            "kind" : "Nonterminal",
-            "name" : "Symbols"
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Symbols)+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Symbols)+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Symbols)",
-          "nodeType" : "Seq"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(| Symbols)+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(| Symbols)",
-          "symbols" : [
-            {
-              "kind" : "Terminal",
-              "name" : "|",
-              "nodeType" : "Keyword",
-              "regex" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 124
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "Symbols"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(| Symbols)+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(| Symbols)",
-          "nodeType" : "Seq"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(| Symbols)+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(| Symbols)",
-          "symbols" : [
-            {
-              "kind" : "Terminal",
-              "name" : "|",
-              "nodeType" : "Keyword",
-              "regex" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 124
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "Symbols"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -5405,27 +2247,35 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Symbols"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "(| Symbols)+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Sequence",
+            "name" : "(| Symbols)",
+            "symbols" : [
+              {
+                "kind" : "Terminal",
+                "name" : "|",
+                "nodeType" : "Keyword",
+                "regex" : {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Char",
+                      "val" : 124
+                    }
+                  ]
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "Symbols"
+              }
+            ]
+          }
         },
         {
           "kind" : "Terminal",
@@ -5440,191 +2290,15 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Alternation"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Symbol+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Symbol"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Symbol+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Symbol"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "(",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 40
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : ")",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 41
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "label" : "Sequence"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
@@ -5667,207 +2341,28 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "variable" : "r",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 5
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{(r <= 0)? 5 : min(r,5)}",
-          "expression" : {
-            "kind" : "IfThenElseExpr",
-            "condition" : {
-              "kind" : "LessThanEqual",
-              "lhs" : {
-                "kind" : "Name",
-                "name" : "r",
-                "i" : -1
-              },
-              "rhs" : {
-                "kind" : "Integer",
-                "value" : 0
-              }
-            },
-            "thenPart" : {
-              "kind" : "Integer",
-              "value" : 5
-            },
-            "elsePart" : {
-              "kind" : "Call",
-              "fun" : "min",
-              "arguments" : [
-                {
-                  "kind" : "Name",
-                  "name" : "r",
-                  "i" : -1
-                },
-                {
-                  "kind" : "Integer",
-                  "value" : 5
-                }
-              ]
-            }
-          }
+          "name" : "Symbol"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Offside"
     },
     {
       "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Symbol",
-        "parameters" : [
-          "p"
-        ]
+        "name" : "Symbol"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "preConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 6
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            }
-          ],
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "l",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 6
-                  }
-                }
-              }
-            }
-          ],
-          "variable" : "l",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
           "kind" : "Nonterminal",
           "name" : "Arguments"
-        },
-        {
-          "kind" : "Return",
-          "name" : "{0}",
-          "expression" : {
-            "kind" : "Integer",
-            "value" : 0
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Call"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Symbol*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Symbol"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Symbol*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Symbol*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Symbol"
-        }
-      }
     },
     {
       "kind" : "Rule",
@@ -5877,16 +2372,14 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Star",
           "name" : "Symbol*",
-          "nodeType" : "Star"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Symbol"
+          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Sequence"
     },
     {
@@ -5900,7 +2393,8 @@
           "kind" : "Nonterminal",
           "name" : "Identifier"
         }
-      ]
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
@@ -5913,7 +2407,8 @@
           "kind" : "Nonterminal",
           "name" : "Identifier"
         }
-      ]
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
@@ -6000,11 +2495,6 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
           "kind" : "Terminal",
           "name" : "-",
           "nodeType" : "Keyword",
@@ -6017,11 +2507,6 @@
               }
             ]
           }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -6101,11 +2586,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Range"
     },
     {
@@ -6193,55 +2673,7 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Character"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Parameters?",
-        "nodeType" : "Opt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Parameters"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Parameters?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Parameters"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Parameters?",
-        "nodeType" : "Opt"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Parameters?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Parameters"
-        }
-      }
     },
     {
       "kind" : "Rule",
@@ -6255,19 +2687,12 @@
           "name" : "Identifier"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "Parameters?",
-          "nodeType" : "Opt"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Parameters"
+          }
         },
         {
           "kind" : "Terminal",
@@ -6285,17 +2710,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "Body"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -6312,11 +2727,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Syntax"
     },
     {
@@ -6363,11 +2773,6 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
           "kind" : "Terminal",
           "name" : "terminal",
           "nodeType" : "Keyword",
@@ -6411,17 +2816,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "NontName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -6439,17 +2834,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "RegexBody"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -6466,11 +2851,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Lexical"
     },
     {
@@ -6498,71 +2878,8 @@
           "kind" : "Nonterminal",
           "name" : "Identifier"
         }
-      ]
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Rule+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Rule+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Rule"
-        }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Rule+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Rule"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Rule+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Rule"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Rule+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Rule"
-        }
-      }
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
@@ -6572,227 +2889,14 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "Rule+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "WhiteSpaceOrComment+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment"
-        }
-      ],
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "WhiteSpaceOrComment+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "WhiteSpaceOrComment+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "WhiteSpaceOrComment+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "WhiteSpaceOrComment*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "definition" : {
-        "kind" : "Star",
-        "name" : "WhiteSpaceOrComment*",
-        "postConditions" : [
-          {
-            "kind" : "RegularExpressionCondition",
-            "type" : "NOT_FOLLOW",
-            "regularExpression" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                }
-              ]
-            }
-          },
-          {
-            "kind" : "RegularExpressionCondition",
-            "type" : "NOT_FOLLOW",
-            "regularExpression" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 42
-                }
-              ]
-            }
-          },
-          {
-            "kind" : "RegularExpressionCondition",
-            "type" : "NOT_FOLLOW",
-            "regularExpression" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "CharRange",
-                  "start" : 9,
-                  "end" : 10
-                },
-                {
-                  "kind" : "CharRange",
-                  "start" : 12,
-                  "end" : 13
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 32
-                }
-              ]
-            }
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Rule"
           }
-        ],
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment"
         }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "WhiteSpaceOrComment*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "WhiteSpaceOrComment*",
-        "postConditions" : [
-          {
-            "kind" : "RegularExpressionCondition",
-            "type" : "NOT_FOLLOW",
-            "regularExpression" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                }
-              ]
-            }
-          },
-          {
-            "kind" : "RegularExpressionCondition",
-            "type" : "NOT_FOLLOW",
-            "regularExpression" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 42
-                }
-              ]
-            }
-          },
-          {
-            "kind" : "RegularExpressionCondition",
-            "type" : "NOT_FOLLOW",
-            "regularExpression" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "CharRange",
-                  "start" : 9,
-                  "end" : 10
-                },
-                {
-                  "kind" : "CharRange",
-                  "start" : 12,
-                  "end" : 13
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 32
-                }
-              ]
-            }
-          }
-        ],
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "WhiteSpaceOrComment"
-        }
-      }
+      ]
     },
     {
       "kind" : "Rule",
@@ -6803,7 +2907,7 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Star",
           "name" : "WhiteSpaceOrComment*",
           "postConditions" : [
             {
@@ -6864,9 +2968,13 @@
               }
             }
           ],
-          "nodeType" : "Star"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "WhiteSpaceOrComment"
+          }
         }
-      ]
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
@@ -6879,12 +2987,7 @@
           "kind" : "Nonterminal",
           "name" : "Identifier"
         }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      }
+      ]
     },
     {
       "kind" : "Rule",
@@ -7019,7 +3122,8 @@
             ]
           }
         }
-      ]
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
@@ -7054,83 +3158,8 @@
             }
           }
         }
-      ]
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Expression, ,, null}*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Expression, ,, null}+",
-          "nodeType" : "Plus"
-        }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Expression*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Expression"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Expression, ,, null}*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Expression*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Expression"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
+      "layoutStrategy" : "NO_LAYOUT"
     },
     {
       "kind" : "Rule",
@@ -7154,19 +3183,28 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Expression, ,, null}*",
-          "nodeType" : "Star"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "kind" : "Star",
+          "name" : "Expression*",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Expression"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : ",",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 44
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "kind" : "Terminal",
@@ -7182,203 +3220,7 @@
             ]
           }
         }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{RegexSequence, |, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{RegexSequence, |, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "|",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 124
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "RegexSequence"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "RegexSequence+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "RegexSequence"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{RegexSequence, |, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "RegexSequence"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "RegexSequence+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "RegexSequence"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{RegexSequence, |, null}*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{RegexSequence, |, null}+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "RegexSequence*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "RegexSequence"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{RegexSequence, |, null}*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "RegexSequence*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "RegexSequence"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          }
-        ]
-      }
+      ]
     },
     {
       "kind" : "Rule",
@@ -7388,16 +3230,30 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "{RegexSequence, |, null}*",
-          "nodeType" : "Star"
+          "kind" : "Star",
+          "name" : "RegexSequence*",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "RegexSequence"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : "|",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 124
+                  }
+                ]
+              }
+            }
+          ]
         }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      }
+      ]
     },
     {
       "kind" : "Rule",
@@ -7407,16 +3263,14 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "Regex+",
-          "nodeType" : "Plus"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Regex"
+          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Sequence"
     },
     {
@@ -7442,23 +3296,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Expression"
         },
         {
           "kind" : "Terminal",
@@ -7475,203 +3313,7 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "ReturnExpression"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Identifier, ,, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Identifier, ,, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : ",",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 44
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Identifier+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Identifier, ,, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Identifier+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Identifier, ,, null}*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Identifier, ,, null}+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Identifier*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Identifier, ,, null}*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Identifier*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Identifier"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ",",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 44
-                }
-              ]
-            }
-          }
-        ]
-      }
     },
     {
       "kind" : "Rule",
@@ -7695,19 +3337,28 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Identifier, ,, null}*",
-          "nodeType" : "Star"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "kind" : "Star",
+          "name" : "Identifier*",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Identifier"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : ",",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 44
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "kind" : "Terminal",
@@ -7723,12 +3374,7 @@
             ]
           }
         }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      }
+      ]
     },
     {
       "kind" : "Rule",
@@ -7738,422 +3384,15 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "Regex+",
-          "nodeType" : "Plus"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Regex"
+          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Sequence"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Associativity?",
-        "nodeType" : "Opt"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "Associativity",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 114
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 105
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 103
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 104
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 116
-                  }
-                ]
-              },
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 108
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 101
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 102
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 116
-                  }
-                ]
-              },
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 110
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 111
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 110
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 45
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 97
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 115
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 115
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 111
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 99
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Associativity?",
-        "s" : {
-          "kind" : "Terminal",
-          "name" : "Associativity",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 114
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 105
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 103
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 104
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 116
-                  }
-                ]
-              },
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 108
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 101
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 102
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 116
-                  }
-                ]
-              },
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 110
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 111
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 110
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 45
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 97
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 115
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 115
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 111
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 99
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Associativity?",
-        "nodeType" : "Opt"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Associativity?",
-        "s" : {
-          "kind" : "Terminal",
-          "name" : "Associativity",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 114
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 105
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 103
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 104
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 116
-                  }
-                ]
-              },
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 108
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 101
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 102
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 116
-                  }
-                ]
-              },
-              {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 110
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 111
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 110
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 45
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 97
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 115
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 115
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 111
-                  },
-                  {
-                    "kind" : "Char",
-                    "val" : 99
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "ReturnExpression?",
-        "nodeType" : "Opt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "ReturnExpression"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "ReturnExpression?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "ReturnExpression"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "ReturnExpression?",
-        "nodeType" : "Opt"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "ReturnExpression?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "ReturnExpression"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Label?",
-        "nodeType" : "Opt"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Label"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Label?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Label"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Label?",
-        "nodeType" : "Opt"
-      },
-      "definition" : {
-        "kind" : "Opt",
-        "name" : "Label?",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Label"
-        }
-      }
     },
     {
       "kind" : "Rule",
@@ -8163,61 +3402,134 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "Associativity?",
-          "nodeType" : "Opt"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
+          "s" : {
+            "kind" : "Terminal",
+            "name" : "Associativity",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Char",
+                      "val" : 114
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 105
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 103
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 104
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 116
+                    }
+                  ]
+                },
+                {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Char",
+                      "val" : 108
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 101
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 102
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 116
+                    }
+                  ]
+                },
+                {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Char",
+                      "val" : 110
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 111
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 110
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 45
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 97
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 115
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 115
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 111
+                    },
+                    {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  ]
+                }
+              ]
             }
-          ]
+          }
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "name" : "Symbol"
         },
         {
-          "kind" : "Nonterminal",
+          "kind" : "Plus",
           "name" : "Symbol+",
-          "nodeType" : "Plus"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Symbol"
+          }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "ReturnExpression?",
-          "nodeType" : "Opt"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "ReturnExpression"
+          }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "Label?",
-          "nodeType" : "Opt"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Label"
+          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "MoreThanOne"
     },
     {
@@ -8229,40 +3541,25 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Symbol",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
+          "name" : "Symbol"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "ReturnExpression?",
-          "nodeType" : "Opt"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "ReturnExpression"
+          }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Opt",
           "name" : "Label?",
-          "nodeType" : "Opt"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Label"
+          }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Single"
     },
     {
@@ -8620,115 +3917,8 @@
           }
         }
       ],
+      "layoutStrategy" : "NO_LAYOUT",
       "label" : "Ident"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Range+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Range+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Range"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Range+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Range"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Range+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Range"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Range+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Range"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Range*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Range+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Range*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Range"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Range*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "Range*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Range"
-        }
-      }
     },
     {
       "kind" : "Rule",
@@ -8756,19 +3946,12 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Star",
           "name" : "Range*",
-          "nodeType" : "Star"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Range"
+          }
         },
         {
           "kind" : "Terminal",
@@ -8785,11 +3968,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "NotChars"
     },
     {
@@ -8814,19 +3992,12 @@
           }
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
+          "kind" : "Star",
           "name" : "Range*",
-          "nodeType" : "Star"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Range"
+          }
         },
         {
           "kind" : "Terminal",
@@ -8843,127 +4014,7 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Chars"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Alternatives, >, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Alternatives, >, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : ">",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 62
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Alternatives"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Alternatives+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Alternatives"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ">",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 62
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Alternatives, >, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Alternatives"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Alternatives+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Alternatives"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : ">",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 62
-                }
-              ]
-            }
-          }
-        ]
-      }
     },
     {
       "kind" : "Rule",
@@ -8973,16 +4024,47 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "{Alternatives, >, null}+",
-          "nodeType" : "Plus"
+          "kind" : "Plus",
+          "name" : "Alternatives+",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Alternatives"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : ">",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 62
+                  }
+                ]
+              }
+            }
+          ]
         }
-      ],
-      "layout" : {
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
         "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      }
+        "name" : "Definition"
+      },
+      "body" : [
+        {
+          "kind" : "Plus",
+          "name" : "Rule+",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Rule"
+          }
+        }
+      ]
     },
     {
       "kind" : "Rule",
@@ -8994,11 +4076,6 @@
         {
           "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -9016,25 +4093,9 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Assign"
     },
     {
@@ -9068,17 +4129,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "VarName"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
         },
         {
           "kind" : "Terminal",
@@ -9096,141 +4147,10 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Expression",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ]
+          "name" : "Expression"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Declare"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Alternative, |, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "{Alternative, |, null}+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "|",
-          "nodeType" : "Keyword",
-          "regex" : {
-            "kind" : "Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 124
-              }
-            ]
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Alternative"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Alternative+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Alternative"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "{Alternative, |, null}+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Alternative"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "Alternative+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "Alternative"
-        },
-        "separators" : [
-          {
-            "kind" : "Terminal",
-            "name" : "|",
-            "nodeType" : "Keyword",
-            "regex" : {
-              "kind" : "Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 124
-                }
-              ]
-            }
-          }
-        ]
-      }
     },
     {
       "kind" : "Rule",
@@ -9240,49 +4160,31 @@
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "{Alternative, |, null}+",
-          "nodeType" : "Plus"
+          "kind" : "Plus",
+          "name" : "Alternative+",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Alternative"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : "|",
+              "nodeType" : "Keyword",
+              "regex" : {
+                "kind" : "Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 124
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "label" : "Prec"
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Start(Definition)",
-        "nodeType" : "Start"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Definition"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        }
-      ],
-      "definition" : {
-        "kind" : "Start",
-        "name" : "Start(Definition)",
-        "nonterminal" : {
-          "kind" : "Nonterminal",
-          "name" : "Definition"
-        }
-      }
     }
   ],
   "startSymbol" : {

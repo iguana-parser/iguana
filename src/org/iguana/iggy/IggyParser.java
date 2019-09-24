@@ -12,13 +12,12 @@ import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import static iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 
-    private static Grammar iggyGrammar() {
+    private static Grammar rawIggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
             return JsonSerializer.deserialize(content, Grammar.class);
@@ -29,20 +28,14 @@ public class IggyParser {
 
     public static void main(String[] args) throws IOException {
         Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
-        g = new EBNFToBNF().transform(g);
-        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-        precedenceAndAssociativity.setOP2();
-        g = precedenceAndAssociativity.transform(g);
-        g = new LayoutWeaver().transform(g);
-        g = new DesugarStartSymbol().transform(g);
         System.out.println(JsonSerializer.toJSON(g));
     }
 
     public static Grammar getRawGrammar(String path) throws IOException {
-        Input input = Input.fromFile(new File(path));
-        Grammar iggyGrammar = iggyGrammar();
+        Grammar iggyGrammar = transform(rawIggyGrammar());
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
+        Input input = Input.fromFile(new File(path));
         ParseTreeNode parseTree = parser.getParserTree(input);
         if (parseTree == null) {
             throw new RuntimeException("Parse error");
@@ -51,9 +44,8 @@ public class IggyParser {
         return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 
-    public static Grammar getGrammar(String path) throws IOException {
-        Grammar grammar = getRawGrammar(path);
-        grammar = new EBNFToBNF().transform(grammar);
+    public static Grammar transform(Grammar rawGrammar) {
+        Grammar grammar = new EBNFToBNF().transform(rawGrammar);
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
@@ -62,6 +54,10 @@ public class IggyParser {
         grammar = new LayoutWeaver().transform(grammar);
         grammar = new DesugarStartSymbol().transform(grammar);
         return grammar;
+    }
+
+    public static Grammar getGrammar(String path) throws IOException {
+        return transform(getRawGrammar(path));
     }
 
 }

@@ -239,6 +239,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Plus":
                 return Plus.from((Symbol) node.childAt(0).accept(this));
 
+            case "Sequence":
+//                return org.iguana.grammar.symbol.Sequence.from()
+
             case "Option":
                 return Opt.from((Symbol) node.childAt(0).accept(this));
 
