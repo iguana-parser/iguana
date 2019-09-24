@@ -81,6 +81,13 @@
           }
         }
       ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      }
     }
   ]
 }
