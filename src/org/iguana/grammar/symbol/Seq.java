@@ -25,12 +25,12 @@ public class Seq implements Serializable {
         this.label = label;
     }
 
-    public Symbol getFirst() {
+    public Symbol first() {
         if (symbols == null || symbols.isEmpty()) return null;
         return symbols.get(0);
     }
 
-    public List<Symbol> getRest() {
+    public List<Symbol> rest() {
         if (symbols == null || symbols.isEmpty() || symbols.size() == 1) return null;
         return symbols.subList(1, symbols.size());
     }

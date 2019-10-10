@@ -13,24 +13,26 @@
           "alternatives" : [
             {
               "kind" : "Alternative",
-              "first" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "a",
-                    "regex" : {
-                      "kind" : "regex.Seq",
-                      "symbols" : [
-                        {
-                          "kind" : "Char",
-                          "val" : 97
-                        }
-                      ]
+              "seqs" : [
+                {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          }
+                        ]
+                      }
                     }
-                  }
-                ]
-              }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -65,53 +67,57 @@
           "alternatives" : [
             {
               "kind" : "Alternative",
-              "first" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Nonterminal",
-                    "name" : "A"
-                  },
-                  {
-                    "kind" : "Terminal",
-                    "name" : "b",
-                    "regex" : {
-                      "kind" : "regex.Seq",
-                      "symbols" : [
-                        {
-                          "kind" : "Char",
-                          "val" : 98
-                        }
-                      ]
+              "seqs" : [
+                {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "A"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 98
+                          }
+                        ]
+                      }
                     }
-                  }
-                ]
-              }
+                  ]
+                }
+              ]
             },
             {
               "kind" : "Alternative",
-              "first" : {
-                "kind" : "Seq",
-                "symbols" : [
-                  {
-                    "kind" : "Nonterminal",
-                    "name" : "E"
-                  },
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "regex.Seq",
-                      "symbols" : [
-                        {
-                          "kind" : "Char",
-                          "val" : 99
-                        }
-                      ]
+              "seqs" : [
+                {
+                  "kind" : "Seq",
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "E"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "c",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 99
+                          }
+                        ]
+                      }
                     }
-                  }
-                ]
-              }
+                  ]
+                }
+              ]
             },
             {
               "kind" : "Alternative"

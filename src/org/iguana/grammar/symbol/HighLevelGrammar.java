@@ -157,10 +157,10 @@ public class HighLevelGrammar implements Serializable {
             ListIterator<Alternative> altIt = group.alternatives.listIterator(group.alternatives.size());
             while (altIt.hasPrevious()) {
                 Alternative alternative = altIt.previous();
-                if (alternative.rest != null) { // Associativity group
+                if (alternative.rest() != null) { // Associativity group
                     AssociativityGroup assocGroup = new AssociativityGroup(alternative.associativity, level);
-                    List<Seq> sequences = new ArrayList<>(Arrays.asList(alternative.first));
-                    sequences.addAll(alternative.rest);
+                    List<Seq> sequences = new ArrayList<>(Arrays.asList(alternative.first()));
+                    sequences.addAll(alternative.rest());
                     ListIterator<Seq> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Seq sequence = seqIt.previous();
@@ -173,16 +173,16 @@ public class HighLevelGrammar implements Serializable {
                     level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                 } else {
                     List<Symbol> symbols = new ArrayList<>();
-                    if (alternative.first == null) { // Empty alternative
+                    if (alternative.first() == null) { // Empty alternative
                         Rule rule = getRule(head, symbols, Associativity.UNDEFINED, null);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
                     } else {
-                        symbols.add(alternative.first.getFirst());
-                        if (alternative.first.getRest() != null)
-                            addAll(symbols, alternative.first.getRest());
-                        Rule rule = getRule(head, symbols, alternative.first.associativity, alternative.first.label);
+                        symbols.add(alternative.first().first());
+                        if (alternative.first().rest() != null)
+                            addAll(symbols, alternative.first().rest());
+                        Rule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
