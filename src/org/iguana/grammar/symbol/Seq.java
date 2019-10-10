@@ -10,27 +10,33 @@ public class Seq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Symbol first;
-    public List<Symbol> rest = new ArrayList<>();
+    private List<Symbol> symbols;
+
     public Associativity associativity;
     public String label;
 
     public Seq() { }
 
     public Seq(Symbol symbol, List<Symbol> rest, Associativity associativity, String label) {
-        this.first = symbol;
-        this.rest = rest;
+        this.symbols = new ArrayList<>();
+        if (symbol != null) symbols.add(symbol);
+        if (rest != null) symbols.addAll(rest);
         this.associativity = associativity;
         this.label = label;
     }
 
+    public Symbol getFirst() {
+        if (symbols == null || symbols.isEmpty()) return null;
+        return symbols.get(0);
+    }
+
+    public List<Symbol> getRest() {
+        if (symbols == null || symbols.isEmpty() || symbols.size() == 1) return null;
+        return symbols.subList(1, symbols.size());
+    }
+
     public List<Symbol> getSymbols() {
-        if (first == null) return Collections.emptyList();
-        List<Symbol> symbols = new ArrayList<>();
-        symbols.add(first);
-        if (rest != null) {
-            symbols.addAll(rest);
-        }
+        if (symbols == null) return Collections.emptyList();
         return symbols;
     }
 
@@ -39,8 +45,9 @@ public class Seq implements Serializable {
         if (this == obj) return true;
         if (!(obj instanceof Seq)) return false;
         Seq other = (Seq) obj;
-        return Objects.equals(this.first, other.first) && Objects.equals(this.rest, other.rest) &&
-                Objects.equals(this.associativity, other.associativity) && Objects.equals(this.label, other.label);
+        return Objects.equals(this.symbols, other.symbols) &&
+               Objects.equals(this.associativity, other.associativity) &&
+               Objects.equals(this.label, other.label);
     }
 
     @Override

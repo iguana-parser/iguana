@@ -9,8 +9,8 @@ public class HighLevelRule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    final List<Alternatives> alternativesList;
     final Nonterminal head;
+    final List<Alternatives> alternativesList;
     final List<String> parameters;
 
     public HighLevelRule(Builder builder) {

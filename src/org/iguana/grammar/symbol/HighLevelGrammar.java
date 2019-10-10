@@ -179,9 +179,9 @@ public class HighLevelGrammar implements Serializable {
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
                     } else {
-                        symbols.add(alternative.first.first);
-                        if (alternative.first.rest != null)
-                            addAll(symbols, alternative.first.rest);
+                        symbols.add(alternative.first.getFirst());
+                        if (alternative.first.getRest() != null)
+                            addAll(symbols, alternative.first.getRest());
                         Rule rule = getRule(head, symbols, alternative.first.associativity, alternative.first.label);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();

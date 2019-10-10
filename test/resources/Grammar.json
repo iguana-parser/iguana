@@ -3,6 +3,10 @@
   "rules" : [
     {
       "kind" : "HighLevelRule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
       "alternativesList" : [
         {
           "kind" : "Alternatives",
@@ -11,31 +15,33 @@
               "kind" : "Alternative",
               "first" : {
                 "kind" : "Seq",
-                "first" : {
-                  "kind" : "Terminal",
-                  "name" : "a",
-                  "regex" : {
-                    "kind" : "regex.Seq",
-                    "symbols" : [
-                      {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    ]
+                "symbols" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "a",
+                    "regex" : {
+                      "kind" : "regex.Seq",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      ]
+                    }
                   }
-                }
+                ]
               }
             }
           ]
         }
-      ],
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "A"
-      }
+      ]
     },
     {
       "kind" : "HighLevelRule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E"
+      },
       "alternativesList" : [
         {
           "kind" : "Alternatives",
@@ -45,14 +51,14 @@
             }
           ]
         }
-      ],
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "E"
-      }
+      ]
     },
     {
       "kind" : "HighLevelRule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
       "alternativesList" : [
         {
           "kind" : "Alternatives",
@@ -61,11 +67,11 @@
               "kind" : "Alternative",
               "first" : {
                 "kind" : "Seq",
-                "first" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                },
-                "rest" : [
+                "symbols" : [
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "A"
+                  },
                   {
                     "kind" : "Terminal",
                     "name" : "b",
@@ -86,11 +92,11 @@
               "kind" : "Alternative",
               "first" : {
                 "kind" : "Seq",
-                "first" : {
-                  "kind" : "Nonterminal",
-                  "name" : "E"
-                },
-                "rest" : [
+                "symbols" : [
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "E"
+                  },
                   {
                     "kind" : "Terminal",
                     "name" : "c",
@@ -112,11 +118,7 @@
             }
           ]
         }
-      ],
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B"
-      }
+      ]
     }
   ]
 }
