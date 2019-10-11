@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
@@ -16,6 +16,7 @@ import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
@@ -41,11 +42,10 @@ public class JsonSerializer {
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
 
-        TypeResolverBuilder<?> typeResolverBuilder = new CustomTypeResolverBuilder();
-        typeResolverBuilder.init(JsonTypeInfo.Id.CUSTOM, new MyTypeIdResolver());
-        typeResolverBuilder.inclusion(JsonTypeInfo.As.PROPERTY);
-        typeResolverBuilder.typeProperty("kind");
-        mapper.setDefaultTyping(typeResolverBuilder);
+//        TypeResolverBuilder<?> typeResolverBuilder = new CustomTypeResolverBuilder();
+//        typeResolverBuilder.init(JsonTypeInfo.Id.CUSTOM, new MyTypeIdResolver());
+//        typeResolverBuilder.inclusion(JsonTypeInfo.As.PROPERTY);
+//        mapper.setDefaultTyping(typeResolverBuilder);
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
@@ -53,6 +53,7 @@ public class JsonSerializer {
         mapper.addMixIn(HighLevelGrammar.class, HighLevelGrammarMixIn.class);
         mapper.addMixIn(HighLevelRule.class, HighLevelRuleMixIn.class);
 
+        mapper.addMixIn(Symbol.class, SymbolMixIn.class);
         mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
         mapper.addMixIn(Terminal.class, TerminalMixIn.class);
         mapper.addMixIn(Star.class, StarMixIn.class);
@@ -65,10 +66,13 @@ public class JsonSerializer {
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
         mapper.addMixIn(Return.class, ReturnMixIn.class);
 
+        // Conditions
+        mapper.addMixIn(Condition.class, ConditionMixIn.class);
         mapper.addMixIn(RegularExpressionCondition.class, RegularExpressionConditionMixIn.class);
         mapper.addMixIn(DataDependentCondition.class, DataDependentConditionMixIn.class);
 
         // Expression
+        mapper.addMixIn(Expression.class, ExpressionMixIn.class);
         mapper.addMixIn(Expression.Integer.class, ExpressionMixIn.IntegerMixIn.class);
         mapper.addMixIn(Expression.Real.class, ExpressionMixIn.RealMixIn.class);
         mapper.addMixIn(Expression.String.class, ExpressionMixIn.StringMixIn.class);
@@ -94,6 +98,7 @@ public class JsonSerializer {
         mapper.addMixIn(Expression.IfThenElse.class, ExpressionMixIn.IfThenElseMixIn.class);
 
         // Regex
+        mapper.addMixIn(iguana.regex.RegularExpression.class, RegularExpressionMixIn.class);
         mapper.addMixIn(iguana.regex.Seq.class, SeqMixIn.class);
         mapper.addMixIn(iguana.regex.Alt.class, RegexAltMixIn.class);
         mapper.addMixIn(iguana.regex.Star.class, RegexStarMixIn.class);
@@ -104,6 +109,7 @@ public class JsonSerializer {
         mapper.addMixIn(iguana.regex.Reference.class, ReferenceMixIn.class);
 
         // Parse tree
+        mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
         mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
         mapper.addMixIn(MetaSymbolNode.class, MetaSymbolNodeMixIn.class);
@@ -449,14 +455,33 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = HighLevelGrammar.Builder.class)
-    abstract class HighLevelGrammarMixIn {
+    abstract static class HighLevelGrammarMixIn {
         @JsonIgnore
         Grammar grammar;
     }
 
     @JsonDeserialize(builder = HighLevelRule.Builder.class)
-    abstract class HighLevelRuleMixIn {
-    }
+    abstract static class HighLevelRuleMixIn { }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value=Nonterminal.class, name="Nonterminal"),
+        @JsonSubTypes.Type(value=Terminal.class, name="Terminal"),
+        @JsonSubTypes.Type(value=Star.class, name="Star"),
+        @JsonSubTypes.Type(value=Plus.class, name="Plus"),
+        @JsonSubTypes.Type(value=Opt.class, name="Opt"),
+        @JsonSubTypes.Type(value=Alt.class, name="Alt"),
+        @JsonSubTypes.Type(value=Sequence.class, name="Sequence"),
+        @JsonSubTypes.Type(value=Start.class, name="Start"),
+    })
+    abstract static class SymbolMixIn { }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM,  property = "kind")
+    @JsonTypeIdResolver(MyTypeIdResolver.class)
+    abstract static class RegularExpressionMixIn { }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    abstract static class ParseTreeNodeMixIn { }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)
     abstract static class NonterminalMixIn {
@@ -482,70 +507,61 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Star.Builder.class)
-    abstract static class StarMixIn {
-    }
+    abstract static class StarMixIn { }
 
     @JsonDeserialize(builder = Start.Builder.class)
-    abstract static class StartMixIn {
-    }
+    abstract static class StartMixIn { }
 
     @JsonDeserialize(builder = Plus.Builder.class)
-    abstract static class PlusMixIn {
-    }
+    abstract static class PlusMixIn { }
 
     @JsonDeserialize(builder = Opt.Builder.class)
-    abstract static class OptMixIn {
-    }
+    abstract static class OptMixIn { }
 
     @JsonDeserialize(builder = Alt.Builder.class)
-    abstract static class AltMixIn {
-    }
+    abstract static class AltMixIn { }
 
     @JsonDeserialize(builder = Sequence.Builder.class)
-    abstract static class SequenceMixIn {
-    }
+    abstract static class SequenceMixIn { }
 
     @JsonDeserialize(builder = Terminal.Builder.class)
-    abstract static class TerminalMixIn {
-    }
+    abstract static class TerminalMixIn { }
 
     @JsonDeserialize(builder = Return.Builder.class)
-    abstract static class ReturnMixIn {
-    }
+    abstract static class ReturnMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Seq.Builder.class)
-    abstract static class SeqMixIn {
-    }
+    abstract static class SeqMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Alt.Builder.class)
-    abstract static class RegexAltMixIn {
-    }
+    abstract static class RegexAltMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Star.Builder.class)
-    abstract static class RegexStarMixIn {
-    }
+    abstract static class RegexStarMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Plus.Builder.class)
-    abstract static class RegexPlusMixIn {
-    }
+    abstract static class RegexPlusMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Opt.Builder.class)
-    abstract static class RegexOptMixIn {
-    }
+    abstract static class RegexOptMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Char.Builder.class)
-    abstract static class CharMixIn {
-    }
+    abstract static class CharMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.CharRange.Builder.class)
-    abstract static class CharRangeMixIn {
-    }
+    abstract static class CharRangeMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Reference.Builder.class)
-    abstract static class ReferenceMixIn {
+    abstract static class ReferenceMixIn { }
 
-    }
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value=RegularExpressionCondition.class, name="RegularExpressionCondition"),
+        @JsonSubTypes.Type(value=DataDependentCondition.class, name="DataDependentCondition")
+    })
+    abstract static class ConditionMixIn { }
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     abstract static class ExpressionMixIn {
 
         abstract static class IntegerMixIn {

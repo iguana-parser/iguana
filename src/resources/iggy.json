@@ -1,21 +1,16 @@
 {
-  "kind" : "HighLevelGrammar",
   "rules" : [
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Alternative"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Opt",
@@ -32,10 +27,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -204,20 +197,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Regex"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -286,10 +275,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -302,10 +289,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -318,10 +303,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -370,10 +353,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -400,10 +381,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -444,10 +423,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -474,10 +451,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -578,10 +553,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -608,10 +581,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -716,20 +687,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Expression"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -760,10 +727,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -803,10 +768,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -837,10 +800,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -853,10 +814,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -903,10 +862,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -939,7 +896,6 @@
                   "label" : "And"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -975,10 +931,8 @@
               "associativity" : "LEFT"
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -1021,13 +975,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1060,7 +1011,6 @@
                   "label" : "Equal"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1098,13 +1048,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1133,7 +1080,6 @@
                   "label" : "Greater"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1162,7 +1108,6 @@
                   "label" : "Less"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1195,7 +1140,6 @@
                   "label" : "GreaterEq"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1233,13 +1177,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1268,7 +1209,6 @@
                   "label" : "Minus"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1302,13 +1242,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1337,7 +1274,6 @@
                   "label" : "Multiplication"
                 },
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1371,13 +1307,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1398,20 +1331,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "$default$"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "associativity" : "UNDEFINED"
                 }
               ]
@@ -1421,20 +1350,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Symbol"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1469,10 +1394,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1518,10 +1441,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1534,10 +1455,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -1638,10 +1557,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -1742,10 +1659,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1784,10 +1699,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1820,13 +1733,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -1887,10 +1797,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -1951,10 +1859,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -1985,10 +1891,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2023,10 +1927,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2065,10 +1967,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2101,13 +2001,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2154,10 +2051,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2206,10 +2101,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2254,13 +2147,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2287,10 +2177,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2317,10 +2205,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2369,10 +2255,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2399,10 +2283,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2473,13 +2355,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2532,13 +2411,10 @@
           ]
         },
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2559,20 +2435,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Symbols"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Star",
@@ -2593,20 +2465,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "VarName"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2622,20 +2490,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "NontName"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -2651,20 +2515,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Range"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2841,10 +2701,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -2934,20 +2792,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Rule"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -3000,10 +2854,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Opt",
@@ -3132,20 +2984,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Label"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -3175,20 +3023,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Definition"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Plus",
@@ -3208,7 +3052,6 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Layout",
@@ -3216,13 +3059,10 @@
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Star",
@@ -3301,20 +3141,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Label"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -3330,20 +3166,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "WhiteSpaceOrComment"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -3477,10 +3309,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -3518,20 +3348,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Arguments"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -3595,20 +3421,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "RegexBody"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Star",
@@ -3644,20 +3466,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "RegexSequence"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Plus",
@@ -3678,20 +3496,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "ReturnExpression"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -3736,20 +3550,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Parameters"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -3813,20 +3623,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Regexs"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Plus",
@@ -3847,20 +3653,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Sequence"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Opt",
@@ -3997,10 +3799,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -4033,20 +3833,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Identifier"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -4406,20 +4202,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "CharClass"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -4468,10 +4260,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -4520,20 +4310,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Body"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Plus",
@@ -4569,20 +4355,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Definition"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Plus",
@@ -4602,20 +4384,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Binding"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -4646,10 +4424,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -4706,20 +4482,16 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Alternatives"
       },
       "alternativesList" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Plus",
