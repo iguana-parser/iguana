@@ -25,7 +25,9 @@
  *
  */
 
-package org.iguana.grammar.symbol;
+package org.iguana.grammar.runtime;
+
+import org.iguana.grammar.symbol.Associativity;
 
 import java.io.Serializable;
 import java.util.Arrays;

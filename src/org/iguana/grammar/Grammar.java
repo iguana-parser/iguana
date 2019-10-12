@@ -1,10 +1,11 @@
-package org.iguana.grammar.symbol;
+package org.iguana.grammar;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.runtime.*;
+import org.iguana.grammar.symbol.*;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.*;
@@ -12,17 +13,17 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HighLevelGrammar implements Serializable {
+public class Grammar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<HighLevelRule> rules;
+    private final List<Rule> rules;
     private final Start startSymbol;
     private final Symbol layout;
 
     private RuntimeGrammar grammar;
 
-    HighLevelGrammar(Builder builder) {
+    Grammar(Builder builder) {
         this.rules = builder.rules;
         this.startSymbol = builder.startSymbol;
         this.layout = builder.layout;
@@ -39,9 +40,9 @@ public class HighLevelGrammar implements Serializable {
     public RuntimeGrammar toGrammar() {
         if (grammar == null) {
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
-            for (HighLevelRule highLevelRule : rules) {
-                if (highLevelRule.head.toString().equals("$default$")) continue;
-                grammarBuilder.addRules(getRules(highLevelRule));
+            for (Rule rule : rules) {
+                if (rule.getHead().toString().equals("$default$")) continue;
+                grammarBuilder.addRules(getRules(rule));
             }
             grammarBuilder.setStartSymbol(startSymbol);
             grammarBuilder.setLayout(layout);
@@ -51,33 +52,33 @@ public class HighLevelGrammar implements Serializable {
         return grammar;
     }
 
-    public static HighLevelGrammar load(URI uri, String format) throws FileNotFoundException {
+    public static Grammar load(URI uri, String format) throws FileNotFoundException {
         return load(new File(uri), format);
     }
 
-    public static HighLevelGrammar load(String path, String format) throws FileNotFoundException {
+    public static Grammar load(String path, String format) throws FileNotFoundException {
         return load(new File(path), format);
     }
 
-    public static HighLevelGrammar load(File file) throws FileNotFoundException {
+    public static Grammar load(File file) throws FileNotFoundException {
         FileInputStream fis = new FileInputStream(file);
         return load(fis, "binary");
     }
 
-    public static HighLevelGrammar load(File file, String format) throws FileNotFoundException {
+    public static Grammar load(File file, String format) throws FileNotFoundException {
         return load(new FileInputStream(file), format);
     }
 
-    public static HighLevelGrammar load(InputStream inputStream) {
+    public static Grammar load(InputStream inputStream) {
         return load(inputStream, "binary");
     }
 
-    public static HighLevelGrammar load(InputStream inputStream, String format) {
-        HighLevelGrammar grammar;
+    public static Grammar load(InputStream inputStream, String format) {
+        Grammar grammar;
         switch (format) {
             case "binary":
                 try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
-                    grammar = (HighLevelGrammar) in.readObject();
+                    grammar = (Grammar) in.readObject();
                 } catch (IOException | ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -85,7 +86,7 @@ public class HighLevelGrammar implements Serializable {
 
             case "json":
                 try {
-                    grammar = JsonSerializer.deserialize(inputStream, HighLevelGrammar.class);
+                    grammar = JsonSerializer.deserialize(inputStream, Grammar.class);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -100,8 +101,8 @@ public class HighLevelGrammar implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof HighLevelGrammar)) return false;
-        HighLevelGrammar other = (HighLevelGrammar) obj;
+        if (!(obj instanceof Grammar)) return false;
+        Grammar other = (Grammar) obj;
         return this.rules.equals(other.rules) && Objects.equals(this.layout, other.layout)
                 && Objects.equals(this.startSymbol, other.startSymbol);
     }
@@ -109,18 +110,18 @@ public class HighLevelGrammar implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (HighLevelRule rule : rules) {
+        for (Rule rule : rules) {
             sb.append(rule).append("\n");
         }
         return sb.toString();
     }
 
     public static class Builder {
-        private List<HighLevelRule> rules = new ArrayList<>();
+        private List<Rule> rules = new ArrayList<>();
         private Start startSymbol;
         private Symbol layout;
 
-        public Builder addHighLevelRule(HighLevelRule rule) {
+        public Builder addHighLevelRule(Rule rule) {
             this.rules.add(rule);
             return this;
         }
@@ -135,18 +136,18 @@ public class HighLevelGrammar implements Serializable {
             return this;
         }
 
-        public HighLevelGrammar build() {
-            return new HighLevelGrammar(this);
+        public Grammar build() {
+            return new Grammar(this);
         }
     }
 
-    private static List<RuntimeRule> getRules(HighLevelRule highLevelRule) {
-        List<String> parameters = highLevelRule.parameters;
-        List<PriorityGroup> alternativesList = highLevelRule.priorityGroups;
+    private static List<RuntimeRule> getRules(Rule highLevelRule) {
+        List<String> parameters = highLevelRule.getParameters();
+        List<PriorityGroup> alternativesList = highLevelRule.getPriorityGroups();
 
         List<RuntimeRule> rules = new ArrayList<>();
         PrecedenceLevel level = PrecedenceLevel.getFirst();
-        Nonterminal head = highLevelRule.head;
+        Nonterminal head = highLevelRule.getHead();
 
         if (!parameters.isEmpty())
             head = head.copyBuilder().addParameters(parameters).build();
@@ -154,7 +155,7 @@ public class HighLevelGrammar implements Serializable {
         ListIterator<PriorityGroup> altsIt = alternativesList.listIterator(alternativesList.size());
         while (altsIt.hasPrevious()) {
             PriorityGroup group = altsIt.previous();
-            ListIterator<Alternative> altIt = group.alternatives.listIterator(group.alternatives.size());
+            ListIterator<Alternative> altIt = group.getAlternatives().listIterator(group.getAlternatives().size());
             while (altIt.hasPrevious()) {
                 Alternative alternative = altIt.previous();
                 if (alternative.rest() != null) { // Associativity group

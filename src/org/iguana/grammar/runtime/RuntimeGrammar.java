@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.grammar;
+package org.iguana.grammar.runtime;
 
 import iguana.regex.RegularExpression;
 import org.iguana.grammar.exception.GrammarValidationException;

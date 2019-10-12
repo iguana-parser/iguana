@@ -25,12 +25,12 @@
  *
  */
 
-package org.iguana.grammar.symbol;
+package org.iguana.grammar.runtime;
 
 import iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.symbol.*;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -39,10 +39,8 @@ import java.util.*;
  * @author Anastasia Izmaylova
  *
  */
-public class RuntimeRule implements Serializable {
+public class RuntimeRule {
 	
-	private static final long serialVersionUID = 1L;
-
     private final Nonterminal head;
 
     private final List<Symbol> body;

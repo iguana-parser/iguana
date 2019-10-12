@@ -27,7 +27,10 @@
 
 package org.iguana.traversal.idea;
 
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.Recursion;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.GrammarTransformation;
 import org.iguana.traversal.ISymbolVisitor;

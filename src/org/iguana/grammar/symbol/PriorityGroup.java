@@ -19,6 +19,10 @@ public class PriorityGroup implements Serializable {
         this.alternatives = alternatives;
     }
 
+    public List<Alternative> getAlternatives() {
+        return alternatives;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

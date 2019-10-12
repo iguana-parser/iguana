@@ -16,27 +16,39 @@ import java.util.List;
  *   | G H
  *   ;
  */
-public class HighLevelRule implements Serializable {
+public class Rule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    final Nonterminal head;
+    private final Nonterminal head;
 
-    final List<PriorityGroup> priorityGroups;
+    private final List<PriorityGroup> priorityGroups;
 
-    final List<String> parameters;
+    private final List<String> parameters;
 
-    public HighLevelRule(Builder builder) {
+    public Rule(Builder builder) {
         this.head = builder.head;
         this.parameters = builder.parameters;
         this.priorityGroups = builder.alternativesList;
     }
 
+    public Nonterminal getHead() {
+        return head;
+    }
+
+    public List<PriorityGroup> getPriorityGroups() {
+        return priorityGroups;
+    }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof HighLevelRule)) return false;
-        HighLevelRule other = (HighLevelRule) obj;
+        if (!(obj instanceof Rule)) return false;
+        Rule other = (Rule) obj;
         return this.head.equals(other.head) && this.parameters.equals(other.parameters) && this.priorityGroups.equals(other.priorityGroups);
     }
 
@@ -81,10 +93,10 @@ public class HighLevelRule implements Serializable {
             return this;
         }
 
-        public HighLevelRule build() {
+        public Rule build() {
             if (alternativesList == null) alternativesList = Collections.emptyList();
             if (parameters == null) parameters = Collections.emptyList();
-            return new HighLevelRule(this);
+            return new Rule(this);
         }
     }
 }

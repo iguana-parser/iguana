@@ -15,11 +15,13 @@ import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.attrs.AbstractAttrs;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.*;
@@ -50,8 +52,8 @@ public class JsonSerializer {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
-        mapper.addMixIn(HighLevelGrammar.class, HighLevelGrammarMixIn.class);
-        mapper.addMixIn(HighLevelRule.class, HighLevelRuleMixIn.class);
+        mapper.addMixIn(Grammar.class, GrammarMixIn.class);
+        mapper.addMixIn(Rule.class, RuleMixIn.class);
 
         mapper.addMixIn(Symbol.class, SymbolMixIn.class);
         mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
@@ -116,12 +118,12 @@ public class JsonSerializer {
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(HighLevelGrammar.class, new GrammarDeserializer());
+        module.addDeserializer(Grammar.class, new GrammarDeserializer());
         module.addDeserializer(Expression.Call.class, new CallDeserializer());
         mapper.registerModule(module);
     }
 
-    public static String toJSON(HighLevelGrammar grammar) {
+    public static String toJSON(Grammar grammar) {
         return serialize(grammar);
     }
 
@@ -264,14 +266,14 @@ public class JsonSerializer {
         }
     }
 
-    static class GrammarDeserializer extends JsonDeserializer<HighLevelGrammar> {
+    static class GrammarDeserializer extends JsonDeserializer<Grammar> {
 
         @Override
-        public HighLevelGrammar deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+        public Grammar deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
             ObjectCodec codec = parser.getCodec();
             JsonNode node = codec.readTree(parser);
 
-            HighLevelGrammar.Builder builder = new HighLevelGrammar.Builder();
+            Grammar.Builder builder = new Grammar.Builder();
 
             builder.setLayout(getLayout(node));
             builder.setStartSymbol(getStartSymbol(node));
@@ -280,7 +282,7 @@ public class JsonSerializer {
 
             if (rulesNode.isArray()) {
                 for (JsonNode ruleNode : rulesNode) {
-                    HighLevelRule rule = mapper.readValue(ruleNode.toString(), HighLevelRule.class);
+                    Rule rule = mapper.readValue(ruleNode.toString(), Rule.class);
                     builder.addHighLevelRule(rule);
                 }
             }
@@ -454,14 +456,14 @@ public class JsonSerializer {
         }
     }
 
-    @JsonDeserialize(builder = HighLevelGrammar.Builder.class)
-    abstract static class HighLevelGrammarMixIn {
+    @JsonDeserialize(builder = Grammar.Builder.class)
+    abstract static class GrammarMixIn {
         @JsonIgnore
         RuntimeGrammar grammar;
     }
 
-    @JsonDeserialize(builder = HighLevelRule.Builder.class)
-    abstract static class HighLevelRuleMixIn { }
+    @JsonDeserialize(builder = Rule.Builder.class)
+    abstract static class RuleMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({

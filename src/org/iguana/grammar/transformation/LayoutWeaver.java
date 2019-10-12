@@ -27,11 +27,11 @@
 
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.Set;

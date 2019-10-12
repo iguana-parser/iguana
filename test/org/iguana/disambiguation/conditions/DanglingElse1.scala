@@ -3,7 +3,8 @@ package org.iguana.disambiguation.conditions
 import iguana.utils.input.Input
 import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.condition.RegularExpressionCondition
-import org.iguana.grammar.symbol.{Nonterminal, RuntimeRule, Terminal}
+import org.iguana.grammar.runtime.RuntimeRule
+import org.iguana.grammar.symbol.{Nonterminal, Terminal}
 import org.iguana.parser.IguanaParser
 import org.junit.Assert._
 

@@ -28,9 +28,10 @@
 package org.iguana.grammar.transformation;
 
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.operations.ReachabilityGraph;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 

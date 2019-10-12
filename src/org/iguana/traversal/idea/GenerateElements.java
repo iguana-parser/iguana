@@ -27,6 +27,7 @@
 
 package org.iguana.traversal.idea;
 
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 

@@ -30,7 +30,7 @@ package org.iguana.parser.datadependent.precedence;
 import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;

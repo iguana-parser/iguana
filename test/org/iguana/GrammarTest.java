@@ -2,7 +2,7 @@ package org.iguana;
 
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
-import org.iguana.grammar.symbol.HighLevelGrammar;
+import org.iguana.grammar.Grammar;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.traversal.exception.AmbiguityException;
@@ -49,9 +49,9 @@ public class GrammarTest {
 
             String grammarPath = testPath + "/grammar.json";
 
-            HighLevelGrammar grammar;
+            Grammar grammar;
             try {
-                grammar = HighLevelGrammar.load(grammarPath, "json");
+                grammar = Grammar.load(grammarPath, "json");
             } catch (FileNotFoundException e) {
                 throw new RuntimeException("No grammar.json file is present");
             }
@@ -96,7 +96,7 @@ public class GrammarTest {
         };
     }
 
-    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input, HighLevelGrammar grammar) {
+    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input, Grammar grammar) {
         return () -> {
 
             ParseTreeNode actualParseTree = null;
@@ -135,7 +135,7 @@ public class GrammarTest {
         };
     }
 
-    private static void record(IguanaParser parser, ParseTreeNode parseTree, HighLevelGrammar grammar, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
+    private static void record(IguanaParser parser, ParseTreeNode parseTree, Grammar grammar, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
         String jsonGrammar = JsonSerializer.toJSON(grammar);
         FileUtils.writeFile(jsonGrammar, grammarPath);
 

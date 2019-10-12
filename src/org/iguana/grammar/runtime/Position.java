@@ -25,7 +25,7 @@
  *
  */
 
-package org.iguana.grammar.symbol;
+package org.iguana.grammar.runtime;
 
 import java.util.Objects;
 

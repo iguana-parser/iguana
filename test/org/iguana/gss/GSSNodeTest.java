@@ -2,12 +2,12 @@ package org.iguana.gss;
 
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.ParserResultOps;

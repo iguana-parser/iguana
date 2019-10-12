@@ -3,8 +3,12 @@ package org.iguana.parser.datadependent.precedence;
 import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.Recursion;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.precedence.OperatorPrecedence;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
@@ -50,7 +54,7 @@ RuntimeGrammar.builder()
 .addRule(RuntimeRule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
          
-         RuntimeGrammar grammar2 = HighLevelGrammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test5PaperToCompare")).toGrammar();
+         RuntimeGrammar grammar2 = Grammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test5PaperToCompare")).toGrammar();
 
          DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          

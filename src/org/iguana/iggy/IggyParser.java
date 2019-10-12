@@ -1,8 +1,8 @@
 package org.iguana.iggy;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.RuntimeGrammar;
-import org.iguana.grammar.symbol.HighLevelGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -18,21 +18,21 @@ import static iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 
-    private static HighLevelGrammar highLevelIggyGrammar() {
+    private static Grammar highLevelIggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
-            return JsonSerializer.deserialize(content, HighLevelGrammar.class);
+            return JsonSerializer.deserialize(content, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) throws IOException {
-        HighLevelGrammar g = HighLevelGrammar.load(new File("/Users/afroozeh/iggy"));
+        Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
         System.out.println(JsonSerializer.toJSON(g));
     }
 
-    public static HighLevelGrammar getHighLevelGrammar(String path) throws IOException {
+    public static Grammar getHighLevelGrammar(String path) throws IOException {
         RuntimeGrammar iggyGrammar = transform(highLevelIggyGrammar());
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
@@ -42,10 +42,10 @@ public class IggyParser {
             throw new RuntimeException("Parse error");
         }
 
-        return (HighLevelGrammar) parseTree.accept(new IggyToGrammarVisitor());
+        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 
-    public static RuntimeGrammar transform(HighLevelGrammar highLevelGrammar) {
+    public static RuntimeGrammar transform(Grammar highLevelGrammar) {
         RuntimeGrammar grammar = new EBNFToBNF().transform(highLevelGrammar.toGrammar());
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();

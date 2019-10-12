@@ -1,6 +1,9 @@
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.Recursion;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 

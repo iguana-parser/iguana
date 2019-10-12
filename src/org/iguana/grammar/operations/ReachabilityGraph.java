@@ -27,7 +27,8 @@
 
 package org.iguana.grammar.operations;
 
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 

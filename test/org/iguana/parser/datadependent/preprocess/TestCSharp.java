@@ -28,8 +28,8 @@
 package org.iguana.parser.datadependent.preprocess;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.RuntimeGrammar;
-import org.iguana.grammar.symbol.HighLevelGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
@@ -51,7 +51,7 @@ public class TestCSharp {
 
 	static {
 		try {
-			originalGrammar = HighLevelGrammar.load(new File("grammars/csharp/csharp")).toGrammar();
+			originalGrammar = Grammar.load(new File("grammars/csharp/csharp")).toGrammar();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

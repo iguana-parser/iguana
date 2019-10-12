@@ -29,9 +29,9 @@ package org.iguana.parser.datadependent.ebnf;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;

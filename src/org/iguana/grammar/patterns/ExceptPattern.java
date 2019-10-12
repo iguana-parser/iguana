@@ -28,7 +28,7 @@
 package org.iguana.grammar.patterns;
 
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.List;

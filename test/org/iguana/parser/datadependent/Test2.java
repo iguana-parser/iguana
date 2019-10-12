@@ -28,10 +28,10 @@
 package org.iguana.parser.datadependent;
 
 import iguana.regex.Char;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.junit.Before;
 import org.junit.Test;

@@ -32,7 +32,8 @@ import iguana.utils.input.Input
 import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
-import org.iguana.grammar.symbol.{Nonterminal, RuntimeRule, Terminal}
+import org.iguana.grammar.runtime.RuntimeRule
+import org.iguana.grammar.symbol.{Nonterminal, Terminal}
 import org.iguana.iggy.IggyParser
 import org.iguana.parser.IguanaParser
 

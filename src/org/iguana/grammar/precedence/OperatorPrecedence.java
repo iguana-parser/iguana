@@ -27,13 +27,13 @@
 
 package org.iguana.grammar.precedence;
 
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.patterns.AbstractPattern;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.symbol.LayoutStrategy;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 

@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import org.iguana.grammar.symbol.RuntimeRule;
+import org.iguana.grammar.runtime.RuntimeRule;
 
 import java.util.Collections;
 import java.util.List;

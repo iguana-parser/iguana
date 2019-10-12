@@ -7,6 +7,7 @@ import iguana.regex.Seq;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.NonterminalNode;
@@ -63,13 +64,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     /*
      * Definition: Rule+;
      */
-    private HighLevelGrammar visitDefinition(NonterminalNode node) {
-        HighLevelGrammar.Builder builder = new HighLevelGrammar.Builder();
+    private Grammar visitDefinition(NonterminalNode node) {
+        Grammar.Builder builder = new Grammar.Builder();
         // Each rule in the textual syntax may represent multiple grammar rules in our symbol definition,
         // as we don't natively support alternatives.
         for (Object obj : (List<?>) node.childAt(0).accept(this)) {
             if (obj != null) {
-                builder.addHighLevelRule((HighLevelRule) obj);
+                builder.addHighLevelRule((Rule) obj);
             }
         }
 
@@ -81,7 +82,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *      | "layout"? "terminal" Identifier ":" RegexBody     %Lexical
      *      ;
      */
-    private HighLevelRule visitRule(NonterminalNode node) {
+    private Rule visitRule(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Syntax":
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
@@ -89,7 +90,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 if (parameters == null) parameters = Collections.emptyList();
                 List<PriorityGroup> body = (List<PriorityGroup>) node.getChildWithName("Body").accept(this);
                 List<String> stringParams = parameters.stream().map(p -> p.id).collect(Collectors.toList());
-                return new HighLevelRule.Builder(Nonterminal.withName(nonterminalName.id), stringParams, body).build();
+                return new Rule.Builder(Nonterminal.withName(nonterminalName.id), stringParams, body).build();
 
             case "Lexical":
                 RegularExpression regex = (RegularExpression) node.getChildWithName("RegexBody").accept(this);

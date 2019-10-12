@@ -30,9 +30,12 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.AssociativityGroup;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 

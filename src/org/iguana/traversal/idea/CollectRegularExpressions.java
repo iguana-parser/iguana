@@ -28,7 +28,8 @@
 package org.iguana.traversal.idea;
 
 import iguana.regex.RegularExpression;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;

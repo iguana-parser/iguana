@@ -29,7 +29,8 @@ package org.iguana.iggy;
 import iguana.regex.Char;
 import iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 
 import java.util.ArrayList;

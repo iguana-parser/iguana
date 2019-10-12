@@ -1,6 +1,6 @@
 package org.iguana.iggy;
 
-import org.iguana.grammar.symbol.HighLevelGrammar;
+import org.iguana.grammar.Grammar;
 import org.iguana.util.serialization.JsonSerializer;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class IggyParserTest {
     @Test
     public void test() throws Exception {
         Path grammarPath = Paths.get("test/resources/Grammar.iggy");
-        HighLevelGrammar grammar = IggyParser.getHighLevelGrammar(grammarPath.toAbsolutePath().toString());
+        Grammar grammar = IggyParser.getHighLevelGrammar(grammarPath.toAbsolutePath().toString());
 
         System.out.println(grammar);
         System.out.println(JsonSerializer.serialize(grammar));
@@ -25,7 +25,7 @@ public class IggyParserTest {
         String expectedJson = getFileContent(Paths.get("test/resources/Grammar.json"));
         assertEquals(expectedJson.trim(), JsonSerializer.serialize(grammar).trim());
 
-        HighLevelGrammar expectedGrammar = JsonSerializer.deserialize(expectedJson, HighLevelGrammar.class);
+        Grammar expectedGrammar = JsonSerializer.deserialize(expectedJson, Grammar.class);
         assertEquals(expectedGrammar, grammar);
     }
 
