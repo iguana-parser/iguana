@@ -194,8 +194,8 @@ public class Names implements GrammarTransformation {
         }
 
         @Override
-        public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
-            return Sequence.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
+        public <E extends Symbol> Symbol visit(Group<E> symbol) {
+            return Group.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
         }
 
         @Override

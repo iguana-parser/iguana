@@ -735,7 +735,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Sequence<E> symbol) {
+	public <E extends Symbol> Void visit(Group<E> symbol) {
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		

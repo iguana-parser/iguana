@@ -61,7 +61,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                 return convertPlus(firstChild, (Plus) node.getRule().getDefinition(), leftExtent, rightExtent);
 
             case Seq:
-                return convertSeq(firstChild, (Sequence<?>) node.getRule().getDefinition(), leftExtent, rightExtent);
+                return convertSeq(firstChild, (Group<?>) node.getRule().getDefinition(), leftExtent, rightExtent);
 
             case Start:
                 return convertStart(firstChild, (Start) node.getRule().getDefinition(), leftExtent, rightExtent);
@@ -132,7 +132,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
-    private T convertSeq(NonPackedNode node, Sequence<?> symbol, int leftExtent, int rightExtent) {
+    private T convertSeq(NonPackedNode node, Group<?> symbol, int leftExtent, int rightExtent) {
         List<T> children = new ArrayList<>();
         if (node instanceof IntermediateNode) {
             convertIntermediateNode((IntermediateNode) node, children);

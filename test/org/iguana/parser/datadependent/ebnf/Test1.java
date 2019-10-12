@@ -71,7 +71,7 @@ public class Test1 {
 		Rule r1 = Rule.withHead(X)
 					.addSymbol(Nonterminal.builder(A).build())
 					.addSymbol(Star.builder(Alt.builder(Nonterminal.builder(B).setLabel("b").build(),
-														Sequence.builder(Nonterminal.builder(C).setLabel("c").build(),
+														Group.builder(Nonterminal.builder(C).setLabel("c").build(),
 																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
 									.setLabel("s").build()).build();
 		

@@ -345,7 +345,7 @@ public class DesugarState implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public <E extends Symbol> Symbol visit(Group<E> symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
 

@@ -29,7 +29,7 @@ public class XML {
 Grammar.builder()
 .setLayout(Nonterminal.builder("L").build())
 // Content ::= CharData (Element CharData)*  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("Content").build()).addSymbol(Nonterminal.builder("CharData").build()).addSymbol(Star.builder(Sequence.builder(Nonterminal.builder("Element").build(), Nonterminal.builder("CharData").build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("Content").build()).addSymbol(Nonterminal.builder("CharData").build()).addSymbol(Star.builder(Group.builder(Nonterminal.builder("Element").build(), Nonterminal.builder("CharData").build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // STag ::= (<) n:Name Attribute* (>) n.yield  {UNDEFINED,-1,NON_REC} PREC(1,1) 

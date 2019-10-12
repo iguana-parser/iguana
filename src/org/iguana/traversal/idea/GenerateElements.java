@@ -332,7 +332,7 @@ public class GenerateElements {
         }
 
         @Override
-        public <E extends Symbol> String visit(Sequence<E> symbol) {
+        public <E extends Symbol> String visit(Group<E> symbol) {
             String type = typer.visit(symbol);
             if (type == null) return null;
             if (type.equals("PsiElement")) return "Element$Ebnf";
@@ -801,7 +801,7 @@ public class GenerateElements {
         }
 
         @Override
-        public <E extends Symbol> String visit(Sequence<E> symbol) {
+        public <E extends Symbol> String visit(Group<E> symbol) {
             String type = null;
             for (Symbol sym : symbol.getSymbols()) {
                 String res = sym.accept(this);

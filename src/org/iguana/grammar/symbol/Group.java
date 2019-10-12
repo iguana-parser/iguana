@@ -37,23 +37,23 @@ import java.util.stream.Collectors;
 
 import static iguana.utils.string.StringUtil.listToString;
 
-public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
+public class Group<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	private final List<T> symbols;
 	
-	public static <T extends Symbol> Sequence<T> from(List<T> symbols) {
+	public static <T extends Symbol> Group<T> from(List<T> symbols) {
 		return builder(symbols).build();
 	}
 	
 	@SafeVarargs
 	@SuppressWarnings("varargs")
-	public static <T extends Symbol> Sequence<T> from(T...elements) {
+	public static <T extends Symbol> Group<T> from(T...elements) {
 		return from(Arrays.asList(elements));
 	}
 	
-	private Sequence(Builder<T> builder) {
+	private Group(Builder<T> builder) {
 		super(builder);
 		this.symbols = builder.symbols;
 	}
@@ -75,10 +75,10 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 		if(obj == this)
 			return true;
 		
-		if(!(obj instanceof Sequence))
+		if(!(obj instanceof Group))
 			return false;
 		
-		Sequence<?> other = (Sequence<?>) obj;
+		Group<?> other = (Group<?>) obj;
 		
 		return symbols.equals(other.symbols);
 	}
@@ -129,7 +129,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 		return builder(Arrays.asList(symbols));
 	}
 	
-	public static class Builder<T extends Symbol> extends SymbolBuilder<Sequence<T>> {
+	public static class Builder<T extends Symbol> extends SymbolBuilder<Group<T>> {
 
 		private List<T> symbols = new ArrayList<>();
 
@@ -140,7 +140,7 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 			this.symbols = symbols;
 		}
 		
-		public Builder(Sequence<T> seq) {
+		public Builder(Group<T> seq) {
 			super(seq);
 			this.symbols = seq.symbols;
 		}
@@ -156,8 +156,8 @@ public class Sequence<T extends Symbol> extends AbstractSymbol implements Iterab
 		}
 		
 		@Override
-		public Sequence<T> build() {
-			return new Sequence<>(this);
+		public Group<T> build() {
+			return new Group<>(this);
 		}
 	}
 

@@ -218,7 +218,7 @@ public class ReachabilityGraph {
 		}
 
 		@Override
-		public <E extends Symbol> Boolean visit(Sequence<E> symbol) {
+		public <E extends Symbol> Boolean visit(Group<E> symbol) {
 			boolean changed = false;
 			for (Symbol s : symbol.getSymbols())
 				changed |= s.accept(this);

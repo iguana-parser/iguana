@@ -211,11 +211,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					s = getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2);
 					
 					return Star.builder(s).addSeparators(star.getSeparators()).setLabel(l1).addConditions(star).addConditions(symbol).build();
-				} else if (sym instanceof Sequence) {
+				} else if (sym instanceof Group) {
 					String l1 = getLabel(symbol, sym);
 					
 					@SuppressWarnings("unchecked")
-					Sequence<Symbol> seq = (Sequence<Symbol>) sym;
+                    Group<Symbol> seq = (Group<Symbol>) sym;
 					
 					List<Symbol> symbols = seq.getSymbols();
 					List<Symbol> syms = new ArrayList<>();
@@ -225,7 +225,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 						syms.add(getSymbol(s, predicate(equal(indent(lExt(l2)), indent(lExt(l1)))), l2));
 					}
 					
-					return Sequence.builder(syms).setLabel(l1)
+					return Group.builder(syms).setLabel(l1)
 							.addConditions(seq).addConditions(symbol).build();
 				} else 
 					return sym;
@@ -461,7 +461,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public <E extends Symbol> Symbol visit(Group<E> symbol) {
 			
 			List<? extends Symbol> symbols = symbol.getSymbols();
 			List<Symbol> syms = new ArrayList<>();
@@ -474,7 +474,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 					modified |= true;
 			}
 			
-			return modified? Sequence.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build() 
+			return modified? Group.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					       : symbol;
 		}
 
@@ -658,7 +658,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Void visit(Sequence<E> symbol) {
+		public <E extends Symbol> Void visit(Group<E> symbol) {
 			for (Symbol sym : symbol.getSymbols())
 				sym.accept(this);
 			return null;

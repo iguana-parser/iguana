@@ -35,7 +35,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Alt;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Sequence;
+import org.iguana.grammar.symbol.Group;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.transformation.GrammarTransformation;
 import org.iguana.traversal.ISymbolVisitor;
@@ -229,7 +229,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+    public <E extends Symbol> Symbol visit(Group<E> symbol) {
         boolean changed = false;
         List<Symbol> syms = new ArrayList<>();
         for (Symbol s : symbol.getSymbols()) {
@@ -239,7 +239,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         }
         if (!changed)
             return symbol;
-        return Sequence.from(syms);
+        return Group.from(syms);
     }
 
     @Override

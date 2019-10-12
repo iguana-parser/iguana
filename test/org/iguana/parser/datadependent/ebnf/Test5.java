@@ -69,7 +69,7 @@ public class Test5 {
 		
 		Rule r1 = Rule.withHead(X)
 					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
-					.addSymbol(Star.builder(Sequence.builder(Code.code(Nonterminal.builder(B).setLabel("b")
+					.addSymbol(Star.builder(Group.builder(Code.code(Nonterminal.builder(B).setLabel("b")
 																			.addPreCondition(predicate(greaterEq(lExt("b"), rExt("a")))).build(),
 																	   stat(println(lExt("b")))),
 															 

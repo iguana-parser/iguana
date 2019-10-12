@@ -61,7 +61,7 @@ public interface ISymbolVisitor<T> {
 	
 	T visit(Plus symbol);
 	
-	<E extends Symbol> T visit(Sequence<E> symbol);
+	<E extends Symbol> T visit(Group<E> symbol);
 	
 	T visit(Star symbol);
 

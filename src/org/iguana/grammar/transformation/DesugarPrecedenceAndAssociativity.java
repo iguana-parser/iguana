@@ -2926,7 +2926,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public <E extends Symbol> Symbol visit(Group<E> symbol) {
 			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 

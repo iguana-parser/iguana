@@ -60,7 +60,7 @@ public class JsonSerializer {
         mapper.addMixIn(Plus.class, PlusMixIn.class);
         mapper.addMixIn(Opt.class, OptMixIn.class);
         mapper.addMixIn(Alt.class, AltMixIn.class);
-        mapper.addMixIn(Sequence.class, SequenceMixIn.class);
+        mapper.addMixIn(Group.class, SequenceMixIn.class);
         mapper.addMixIn(Start.class, StartMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
@@ -471,7 +471,7 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Plus.class, name="Plus"),
         @JsonSubTypes.Type(value=Opt.class, name="Opt"),
         @JsonSubTypes.Type(value=Alt.class, name="Alt"),
-        @JsonSubTypes.Type(value=Sequence.class, name="Sequence"),
+        @JsonSubTypes.Type(value= Group.class, name="Sequence"),
         @JsonSubTypes.Type(value=Start.class, name="Start"),
     })
     abstract static class SymbolMixIn { }
@@ -521,7 +521,7 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Alt.Builder.class)
     abstract static class AltMixIn { }
 
-    @JsonDeserialize(builder = Sequence.Builder.class)
+    @JsonDeserialize(builder = Group.Builder.class)
     abstract static class SequenceMixIn { }
 
     @JsonDeserialize(builder = Terminal.Builder.class)

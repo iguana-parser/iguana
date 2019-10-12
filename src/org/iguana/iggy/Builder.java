@@ -126,7 +126,7 @@ public abstract class Builder {
 	}
 	
 	public Object seqGroup(List<Object> syms) {
-        return org.iguana.grammar.symbol.Sequence.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
+        return Group.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
 	}
 	
 	public Object altGroup(List<Object> elems) {
@@ -135,7 +135,7 @@ public abstract class Builder {
             if (elem instanceof Symbol)
                 syms.add((Symbol)elem);
             else if (elem instanceof Sequence)
-                syms.add(org.iguana.grammar.symbol.Sequence.from(((Sequence)elem).syms));
+                syms.add(Group.from(((Sequence)elem).syms));
         }
 		return Alt.from(syms);
 	}

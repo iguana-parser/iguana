@@ -293,14 +293,14 @@ public class EBNFToBNF implements GrammarTransformation {
 		 * (S) ::= S
 		 */
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public <E extends Symbol> Symbol visit(Group<E> symbol) {
 			List<Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
 			Expression[] arguments = null;
 			
-			Sequence.builder(symbols).build().accept(visitor);
+			Group.builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);

@@ -121,7 +121,7 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Sequence<E> symbol) {
+	public <E extends Symbol> Void visit(Group<E> symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 

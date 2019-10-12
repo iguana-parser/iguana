@@ -21,7 +21,7 @@ public interface ParseTreeVisitor {
     default Object visitMetaSymbolNode(MetaSymbolNode node) {
         Symbol symbol = node.getGrammarDefinition();
 
-        boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Sequence;
+        boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
 
         // Flatten sequence inside star and plus
         if (shouldBeFlattened) {
@@ -45,7 +45,7 @@ public interface ParseTreeVisitor {
             }
         }
 
-        if (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Sequence) {
+        if (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Group) {
             List<Object> result = new ArrayList<>(node.children().size());
             for (int i = 0; i < node.children().size(); i++) {
                 ParseTreeNode child = node.childAt(i);
