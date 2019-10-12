@@ -1,7 +1,7 @@
 package org.iguana.parser;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.result.RecognizerResult;
@@ -17,11 +17,11 @@ public class IguanaRecognizer {
     private final GrammarGraph grammarGraph;
     private final IguanaRuntime runtime;
 
-    public IguanaRecognizer(Grammar grammar) {
+    public IguanaRecognizer(RuntimeGrammar grammar) {
         this(grammar, Configuration.load());
     }
 
-    public IguanaRecognizer(Grammar grammar, Configuration config) {
+    public IguanaRecognizer(RuntimeGrammar grammar, Configuration config) {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.runtime = new IguanaRuntime<>(config, new RecognizerResultOps());
     }

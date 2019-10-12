@@ -30,7 +30,7 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
@@ -52,18 +52,18 @@ public class EBNFToBNF implements GrammarTransformation {
 	private Map<String, Set<String>> ebnfLefts;
 	private Map<String, Set<String>> ebnfRights;
 
-	public static Grammar convert(Grammar grammar) {
+	public static RuntimeGrammar convert(RuntimeGrammar grammar) {
         EBNFToBNF ebnfToBNF = new EBNFToBNF();
         return ebnfToBNF.transform(grammar);
     }
 
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Set<Rule> newRules = new LinkedHashSet<>();
 		ebnfLefts = grammar.getEBNFLefts();
 		ebnfRights = grammar.getEBNFRights();
 		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
-		return Grammar.builder().addRules(newRules)
+		return RuntimeGrammar.builder().addRules(newRules)
 				.addEBNFl(grammar.getEBNFLefts())
 				.addEBNFr(grammar.getEBNFRights())
 				.setLayout(grammar.getLayout())

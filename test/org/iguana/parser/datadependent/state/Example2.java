@@ -4,7 +4,7 @@ import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -23,9 +23,9 @@ public class Example2 {
 
     @Test
     public void test() {
-         Grammar grammar =
+         RuntimeGrammar grammar =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 
 // A ::= (a) do x = 999; (a) do y = 2; (;)  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("A").build()).addSymbol(Code.builder(Terminal.builder(Seq.builder(Char.builder(97).build()).build()).build(),AST.stat(AST.assign("x",AST.integer(999)))).build()).addSymbol(Code.builder(Terminal.builder(Seq.builder(Char.builder(97).build()).build()).build(),AST.stat(AST.assign("y",AST.integer(2)))).build()).addSymbol(Terminal.builder(Seq.builder(Char.builder(59).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())

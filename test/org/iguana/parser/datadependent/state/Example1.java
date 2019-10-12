@@ -4,7 +4,7 @@ import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarState;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -24,9 +24,9 @@ public class Example1 {
 
     @Test
     public void test() {
-         Grammar grammar =
+         RuntimeGrammar grammar =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 
 // A ::= a {x = 1;} a {y = 2;}
 // A ::= (a) do x = 1; (a) do y = 2; (;)  {UNDEFINED,-1,NON_REC} PREC(1,1)

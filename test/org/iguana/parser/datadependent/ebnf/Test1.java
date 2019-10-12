@@ -29,7 +29,7 @@ package org.iguana.parser.datadependent.ebnf;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -55,7 +55,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Test1 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -80,7 +80,7 @@ public class Test1 {
 		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
 		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('d'))).build();
 		
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4, r5).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4, r5).build();
 		
 	}
 	

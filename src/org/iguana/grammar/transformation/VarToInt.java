@@ -10,7 +10,7 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
@@ -34,7 +34,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
-    public Grammar transform(Grammar grammar) {
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
         mapping = new HashMap<>();
         Set<Rule> rules = new LinkedHashSet<>();
         int i = 0;
@@ -43,7 +43,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
             mapping.put(i, current);
             i++;
         }
-        return Grammar.builder()
+        return RuntimeGrammar.builder()
                 .addRules(rules)
                 .addEBNFl(grammar.getEBNFLefts())
                 .addEBNFr(grammar.getEBNFRights())

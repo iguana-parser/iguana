@@ -3,7 +3,7 @@ package org.iguana.parser.datadependent.precedence;
 import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.precedence.OperatorPrecedence;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
@@ -22,9 +22,9 @@ public class Test10_1_c {
 
     @Test
     public void test() throws FileNotFoundException {
-         Grammar grammar =
+         RuntimeGrammar grammar =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
@@ -38,9 +38,9 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
          
-         Grammar grammar4 =
+         RuntimeGrammar grammar4 =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
@@ -58,13 +58,13 @@ Grammar.builder()
 .addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())
 .build();
          
-         Grammar grammar2 = HighLevelGrammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test10_1_c")).toGrammar();
+         RuntimeGrammar grammar2 = HighLevelGrammar.load(new File("test/org/iguana/parser/datadependent/precedence/Test10_1_c")).toGrammar();
 
          DesugarPrecedenceAndAssociativity desugarPrecedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
          
          desugarPrecedenceAndAssociativity.setOP1();
          
-		 Grammar grammar1 = desugarPrecedenceAndAssociativity.transform(grammar);
+		 RuntimeGrammar grammar1 = desugarPrecedenceAndAssociativity.transform(grammar);
 
          grammar2 = new OperatorPrecedence(grammar2.getPrecedencePatterns(), grammar2.getExceptPatterns()).transform(grammar2);
          
@@ -72,7 +72,7 @@ Grammar.builder()
          
          desugarPrecedenceAndAssociativity.setOP2();
          
-         Grammar grammar3 = desugarPrecedenceAndAssociativity.transform(grammar);
+         RuntimeGrammar grammar3 = desugarPrecedenceAndAssociativity.transform(grammar);
 
          Input input = Input.fromString("a+a*a*a*a*a*a");
 

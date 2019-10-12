@@ -29,7 +29,7 @@ package org.iguana.parser.recursion;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
@@ -53,7 +53,7 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class HiddenLeftRecursion {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void createGrammar() {
@@ -66,7 +66,7 @@ public class HiddenLeftRecursion {
 		Rule r3 = Rule.withHead(B).addSymbols(Terminal.from(Char.from('b'))).build();
 		Rule r4 = Rule.withHead(B).build();
 		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
+		grammar = new RuntimeGrammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 	}
 	
 	@Test

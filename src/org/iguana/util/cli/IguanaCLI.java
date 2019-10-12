@@ -31,7 +31,7 @@ import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import iguana.utils.visualization.DotGraph;
 import org.apache.commons.cli.*;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
@@ -47,7 +47,7 @@ public class IguanaCLI {
 
         CommandLineParser commandLineParser = new DefaultParser();
         Input input = null;
-        Grammar grammar = null;
+        RuntimeGrammar grammar = null;
 
         try {
             CommandLine line = commandLineParser.parse(getOptions(), args);
@@ -69,7 +69,7 @@ public class IguanaCLI {
                 String grammarPath = line.getOptionValue("grammar");
                 try {
                     String jsonContent = FileUtils.readFile(grammarPath);
-                    grammar = JsonSerializer.deserialize(jsonContent, Grammar.class);
+                    grammar = JsonSerializer.deserialize(jsonContent, RuntimeGrammar.class);
                 } catch (IOException e) {
                     System.out.println("Could not load the grammar from " + grammarPath);
                     e.printStackTrace();

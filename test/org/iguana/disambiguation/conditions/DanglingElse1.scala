@@ -1,7 +1,7 @@
 package org.iguana.disambiguation.conditions
 
 import iguana.utils.input.Input
-import org.iguana.grammar.Grammar
+import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.condition.RegularExpressionCondition
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
 import org.iguana.parser.IguanaParser
@@ -15,7 +15,7 @@ class DanglingElse1 extends FunSuite {
   var b = Terminal.from(Character.from('b'))
 
   val grammar = {
-    val builder: Grammar.Builder = new Grammar.Builder
+    val builder: RuntimeGrammar.Builder = new RuntimeGrammar.Builder
     val rule1: Rule = Rule.withHead(S).addSymbols(a, Nonterminal.builder("S").addPreCondition(RegularExpressionCondition.notFollow(Character.from('b'))).build).build
     builder.addRule(rule1)
     val rule2: Rule = Rule.withHead(S).addSymbols(a, S, b, S).build

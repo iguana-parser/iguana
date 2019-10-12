@@ -31,7 +31,7 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -55,7 +55,7 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class PrecedeRestrictionTest1 {
 
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 	
 	private Nonterminal S = Nonterminal.withName("S");
 	private Terminal forr = Terminal.from(Seq.from("for"));
@@ -74,7 +74,7 @@ public class PrecedeRestrictionTest1 {
 		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
 		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 

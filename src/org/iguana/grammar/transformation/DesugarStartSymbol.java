@@ -1,17 +1,17 @@
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 
 public class DesugarStartSymbol implements GrammarTransformation {
 
     @Override
-    public Grammar transform(Grammar grammar) {
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
         Start startSymbol = grammar.getStartSymbol();
         if (startSymbol == null) return grammar;
 
-        Grammar.Builder builder = new Grammar.Builder(grammar);
+        RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder(grammar);
         Symbol layout = grammar.getLayout();
 
         Nonterminal startNonterminal = Nonterminal.builder(startSymbol.getName()).setNodeType(NonterminalNodeType.Start).build();

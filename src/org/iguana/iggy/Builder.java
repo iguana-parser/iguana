@@ -29,7 +29,7 @@ package org.iguana.iggy;
 import iguana.regex.Char;
 import iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ public abstract class Builder {
 
     private Map<String, Rule> regexs = new HashMap<>();
 	
-	public Grammar grammar(List<Object> rules) {
-		org.iguana.grammar.Grammar.Builder builder = Grammar.builder();
+	public RuntimeGrammar grammar(List<Object> rules) {
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder();
 		rules.forEach(rule -> builder.addRule((Rule) rule));
 		return builder.build();
 	}

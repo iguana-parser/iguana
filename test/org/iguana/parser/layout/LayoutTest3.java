@@ -29,7 +29,7 @@ package org.iguana.parser.layout;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
@@ -73,15 +73,15 @@ public class LayoutTest3 {
     static Rule layout = Rule.withHead(L).addSymbol(space).build();
 
 
-    private static Grammar getGrammar() {
-        Grammar grammar = Grammar.builder().addRules(r1, r2, r3, r4, layout).build();
+    private static RuntimeGrammar getGrammar() {
+        RuntimeGrammar grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4, layout).build();
         return new LayoutWeaver().transform(new EBNFToBNF().transform(grammar));
     }
 
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
-		Grammar grammar = getGrammar();
+		RuntimeGrammar grammar = getGrammar();
 
         IguanaParser parser = new IguanaParser(grammar);
         ParseTreeNode result = parser.getParserTree(input);

@@ -30,7 +30,7 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.exception.UnexpectedSymbol;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.*;
@@ -59,7 +59,7 @@ public class DesugarState implements GrammarTransformation {
 	private final Map<Nonterminal, List<Map<Nonterminal, Set<String>>>> bindings = new HashMap<>();
 
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Set<String> current_uses;
 		Set<String> current_updates;
 		for (Nonterminal head : grammar.getNonterminals()) {
@@ -146,7 +146,7 @@ public class DesugarState implements GrammarTransformation {
 				newRules.add(transform(rule, uses, nonterminal_bindings == null? new HashMap<>() : nonterminal_bindings.get(i++), returns));
 			}
 		}
-		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
+		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
 	private Rule transform(Rule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {

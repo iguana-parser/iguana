@@ -30,7 +30,7 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.symbol.*;
@@ -277,7 +277,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	}
 		
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		
 		leftOrRightRecursiveNonterminals = new HashSet<>();
 		headsWithLabeledRules = new HashMap<>();
@@ -751,7 +751,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		for (Rule rule :grammar.getRules())
 			rules.add(transform(rule));
 		
-		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).setStartSymbol(grammar.getStartSymbol()).build();
+		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).setStartSymbol(grammar.getStartSymbol()).build();
 	}
 	
 	public Rule transform(Rule rule) {

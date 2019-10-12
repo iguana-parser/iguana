@@ -2,7 +2,7 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.util.serialization.JsonSerializer;
@@ -20,7 +20,7 @@ public class HighLevelGrammar implements Serializable {
     private final Start startSymbol;
     private final Symbol layout;
 
-    private Grammar grammar;
+    private RuntimeGrammar grammar;
 
     HighLevelGrammar(Builder builder) {
         this.rules = builder.rules;
@@ -36,9 +36,9 @@ public class HighLevelGrammar implements Serializable {
         return layout;
     }
 
-    public Grammar toGrammar() {
+    public RuntimeGrammar toGrammar() {
         if (grammar == null) {
-            Grammar.Builder grammarBuilder = new Grammar.Builder();
+            RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (HighLevelRule highLevelRule : rules) {
                 if (highLevelRule.head.toString().equals("$default$")) continue;
                 grammarBuilder.addRules(getRules(highLevelRule));
@@ -142,7 +142,7 @@ public class HighLevelGrammar implements Serializable {
 
     private static List<Rule> getRules(HighLevelRule highLevelRule) {
         List<String> parameters = highLevelRule.parameters;
-        List<Alternatives> alternativesList = highLevelRule.alternativesList;
+        List<PriorityGroup> alternativesList = highLevelRule.priorityGroups;
 
         List<Rule> rules = new ArrayList<>();
         PrecedenceLevel level = PrecedenceLevel.getFirst();
@@ -151,19 +151,19 @@ public class HighLevelGrammar implements Serializable {
         if (!parameters.isEmpty())
             head = head.copyBuilder().addParameters(parameters).build();
 
-        ListIterator<Alternatives> altsIt = alternativesList.listIterator(alternativesList.size());
+        ListIterator<PriorityGroup> altsIt = alternativesList.listIterator(alternativesList.size());
         while (altsIt.hasPrevious()) {
-            Alternatives group = altsIt.previous();
+            PriorityGroup group = altsIt.previous();
             ListIterator<Alternative> altIt = group.alternatives.listIterator(group.alternatives.size());
             while (altIt.hasPrevious()) {
                 Alternative alternative = altIt.previous();
                 if (alternative.rest() != null) { // Associativity group
                     AssociativityGroup assocGroup = new AssociativityGroup(alternative.associativity, level);
-                    List<Seq> sequences = new ArrayList<>(Arrays.asList(alternative.first()));
+                    List<Sequence> sequences = new ArrayList<>(Arrays.asList(alternative.first()));
                     sequences.addAll(alternative.rest());
-                    ListIterator<Seq> seqIt = sequences.listIterator(sequences.size());
+                    ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
-                        Seq sequence = seqIt.previous();
+                        Sequence sequence = seqIt.previous();
                         Rule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();

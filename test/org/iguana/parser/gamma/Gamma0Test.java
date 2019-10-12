@@ -30,7 +30,7 @@ package org.iguana.parser.gamma;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
@@ -56,7 +56,7 @@ public class Gamma0Test {
     private Terminal a = Terminal.from(Char.from('a'));
     private Terminal d = Terminal.from(Char.from('d'));
 
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -65,7 +65,7 @@ public class Gamma0Test {
 		Rule r3 = Rule.withHead(S).build();
 		Rule r4 = Rule.withHead(A).addSymbols(a).build();
 		
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
 	}
 	
 //	@Test

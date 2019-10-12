@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.precedence;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.patterns.AbstractPattern;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
@@ -70,7 +70,7 @@ public class OperatorPrecedence {
 		exceptPatterns.forEach(x -> add(x));
 	}
 	
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		
 		Map<Nonterminal, List<Rule>> l = grammar.getDefinitions();
 		
@@ -93,7 +93,7 @@ public class OperatorPrecedence {
 			}
 		}
 		
-		Grammar.Builder builder = new Grammar.Builder();
+		RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder();
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			Nonterminal head = e.getKey();
 			for (int i = 0; i < e.getValue().size(); i++) {

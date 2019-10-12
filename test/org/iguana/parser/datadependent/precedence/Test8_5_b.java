@@ -3,7 +3,7 @@ package org.iguana.parser.datadependent.precedence;
 import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.parser.IguanaParser;
@@ -19,9 +19,9 @@ public class Test8_5_b {
 
     @Test
     public void test() {
-         Grammar grammar =
+         RuntimeGrammar grammar =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())

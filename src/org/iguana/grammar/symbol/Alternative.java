@@ -10,33 +10,34 @@ public class Alternative implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Seq> seqs;
+    private List<Sequence> seqs;
+    
     public Associativity associativity;
 
     public Alternative() { }
 
-    public Alternative(Seq sequence) {
+    public Alternative(Sequence sequence) {
         this(sequence, null, null);
     }
 
-    public Alternative(Seq sequence, List<Seq> sequences, Associativity associativity) {
+    public Alternative(Sequence sequence, List<Sequence> sequences, Associativity associativity) {
         seqs = new ArrayList<>();
         if (sequence != null) seqs.add(sequence);
         if (sequences != null) seqs.addAll(sequences);
         this.associativity = associativity;
     }
 
-    public Seq first() {
+    public Sequence first() {
         if (seqs == null || seqs.isEmpty()) return null;
         return seqs.get(0);
     }
 
-    public List<Seq> rest() {
+    public List<Sequence> rest() {
         if (seqs == null || seqs.size() < 2) return null;
         return seqs.subList(1, seqs.size());
     }
 
-    public List<Seq> seqs() {
+    public List<Sequence> seqs() {
         return seqs == null ? Collections.emptyList() : seqs;
     }
 
@@ -57,7 +58,7 @@ public class Alternative implements Serializable {
         if (associativity != null) {
             sb.append(associativity).append(": ");
         }
-        for (Seq seq : seqs) {
+        for (Sequence seq : seqs) {
             sb.append(seq.toString()).append(" ");
         }
         if (!seqs.isEmpty()) {

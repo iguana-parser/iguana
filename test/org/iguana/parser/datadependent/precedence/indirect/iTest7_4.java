@@ -3,7 +3,7 @@ package org.iguana.parser.datadependent.precedence.indirect;
 import iguana.regex.Char;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -23,9 +23,9 @@ public class iTest7_4 {
 
     @Test
     public void test() {
-         Grammar grammar =
+         RuntimeGrammar grammar =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 .addEBNFr("Arg+",new HashSet<String>(Arrays.asList("$E","$Arg","E","Arg")))
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setiRecursion(Recursion.NON_REC).setLeftEnd("").setRightEnd("").setLeftEnds(new HashSet<String>(Arrays.asList())).setRightEnds(new HashSet<String>(Arrays.asList())).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,new Integer[]{},false,new Integer[]{})).build())

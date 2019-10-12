@@ -31,7 +31,7 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -62,7 +62,7 @@ public class PrecedeRestrictionTest2 {
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Char ws = Char.from(' ');
 	private CharRange az = CharRange.in('a', 'z');
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 	private Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
 			                              .addPostCondition(RegularExpressionCondition.notPrecede(Seq.from("for"))).build();
 
@@ -73,7 +73,7 @@ public class PrecedeRestrictionTest2 {
 		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		Rule r4 = Rule.withHead(L).addSymbol(Terminal.from(ws)).build();
 
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 

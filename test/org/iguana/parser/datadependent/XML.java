@@ -5,7 +5,7 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
@@ -24,9 +24,9 @@ public class XML {
 
     @Test
     public void test() {
-         Grammar grammar =
+         RuntimeGrammar grammar =
 
-Grammar.builder()
+RuntimeGrammar.builder()
 .setLayout(Nonterminal.builder("L").build())
 // Content ::= CharData (Element CharData)*  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("Content").build()).addSymbol(Nonterminal.builder("CharData").build()).addSymbol(Star.builder(Group.builder(Nonterminal.builder("Element").build(), Nonterminal.builder("CharData").build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())

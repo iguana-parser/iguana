@@ -28,7 +28,7 @@
 package org.iguana.traversal.idea;
 
 import iguana.regex.RegularExpression;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
@@ -50,7 +50,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
         this.terminals = terminals;
     }
 
-    public void collect(Grammar grammar) {
+    public void collect(RuntimeGrammar grammar) {
         for (Rule rule : grammar.getRules()) {
             for (Symbol symbol : rule.getBody())
                 symbol.accept(this);

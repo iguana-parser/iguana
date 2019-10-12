@@ -4,24 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-// Alternatives represent priority groups
-public class Alternatives implements Serializable {
+/**
+ * A priority group is a list of alternatives.
+ */
+public class PriorityGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     List<Alternative> alternatives = new ArrayList<>();
 
-    public Alternatives() { }
+    public PriorityGroup() { }
 
-    public Alternatives(List<Alternative> alternatives) {
+    public PriorityGroup(List<Alternative> alternatives) {
         this.alternatives = alternatives;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Alternatives)) return false;
-        Alternatives other = (Alternatives) obj;
+        if (!(obj instanceof PriorityGroup)) return false;
+        PriorityGroup other = (PriorityGroup) obj;
         return this.alternatives.equals(other.alternatives);
     }
 

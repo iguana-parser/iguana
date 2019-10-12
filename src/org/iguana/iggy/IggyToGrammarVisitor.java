@@ -87,7 +87,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
                 List<Identifier> parameters = (List<Identifier>) node.childAt(1).accept(this);
                 if (parameters == null) parameters = Collections.emptyList();
-                List<Alternatives> body = (List<Alternatives>) node.getChildWithName("Body").accept(this);
+                List<PriorityGroup> body = (List<PriorityGroup>) node.getChildWithName("Body").accept(this);
                 List<String> stringParams = parameters.stream().map(p -> p.id).collect(Collectors.toList());
                 return new HighLevelRule.Builder(Nonterminal.withName(nonterminalName.id), stringParams, body).build();
 
@@ -113,8 +113,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     /*
      * Alternatives: { Alternative '|' }+
      */
-    private Alternatives visitAlternatives(NonterminalNode node) {
-        return new Alternatives((List<Alternative>) node.childAt(0).accept(this));
+    private PriorityGroup visitAlternatives(NonterminalNode node) {
+        return new PriorityGroup((List<Alternative>) node.childAt(0).accept(this));
     }
 
     /*
@@ -124,12 +124,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private Alternative visitAlternative(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Sequence":
-                return new Alternative((org.iguana.grammar.symbol.Seq) node.childAt(0).accept(this));
+                return new Alternative((Sequence) node.childAt(0).accept(this));
 
             case "Assoc":
                 Associativity associativity = getAssociativity(node.childAt(0).childAt(0));
-                org.iguana.grammar.symbol.Seq sequence = (org.iguana.grammar.symbol.Seq) node.childAt(2).accept(this);
-                List<org.iguana.grammar.symbol.Seq> rest = (List<org.iguana.grammar.symbol.Seq>) node.childAt(3).accept(this);
+                Sequence sequence = (Sequence) node.childAt(2).accept(this);
+                List<Sequence> rest = (List<Sequence>) node.childAt(3).accept(this);
                 return new Alternative(sequence, rest, associativity);
 
             default:
@@ -142,7 +142,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *         | Symbol ReturnExpression? Label?                            %Single
      *         ;
      */
-    private org.iguana.grammar.symbol.Seq visitSequence(NonterminalNode node) {
+    private Sequence visitSequence(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "MoreThanOne": {
                 Associativity associativity = null;
@@ -156,7 +156,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     rest.add(Return.ret(returnExpression));
                 }
                 String label = (String) node.childAt(4).accept(this);
-                return new org.iguana.grammar.symbol.Seq(first, rest, associativity, label);
+                return new Sequence(first, rest, associativity, label);
             }
 
             case "Single": {
@@ -167,7 +167,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     rest.add(Return.ret(returnExpression));
                 }
                 String label = (String) node.childAt(2).accept(this);
-                return new org.iguana.grammar.symbol.Seq(first, rest, null, label);
+                return new Sequence(first, rest, null, label);
             }
 
             default:

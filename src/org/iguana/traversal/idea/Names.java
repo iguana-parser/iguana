@@ -27,7 +27,7 @@
 
 package org.iguana.traversal.idea;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.GrammarTransformation;
 import org.iguana.traversal.ISymbolVisitor;
@@ -43,7 +43,7 @@ import java.util.*;
 public class Names implements GrammarTransformation {
 
     @Override
-    public Grammar transform(Grammar grammar) {
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
         List<Rule> rules = new ArrayList<>();
 
         NameVisitor visitor = new NameVisitor(rules, (Nonterminal) grammar.getLayout());
@@ -51,7 +51,7 @@ public class Names implements GrammarTransformation {
         for (Rule rule : grammar.getRules())
             rules.add(visitor.visitRule(rule));
 
-        return Grammar.builder()
+        return RuntimeGrammar.builder()
                 .addRules(rules)
                 .addEBNFl(grammar.getEBNFLefts())
                 .addEBNFr(grammar.getEBNFRights())

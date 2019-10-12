@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 
 import static iguana.utils.string.StringUtil.listToString;
 
+/**
+ * A group represents a grouping of symbols, e.g, (A B C) in the EBNF notation.
+ */
 public class Group<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
 
 	private static final long serialVersionUID = 1L;

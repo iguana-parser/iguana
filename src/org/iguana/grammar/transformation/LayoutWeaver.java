@@ -27,15 +27,13 @@
 
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 
-import java.lang.annotation.Inherited;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,10 +42,10 @@ import static org.iguana.grammar.symbol.LayoutStrategy.INHERITED;
 public class LayoutWeaver implements GrammarTransformation {
 
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Symbol layout = grammar.getLayout();
 		
-		Grammar.Builder builder = Grammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
 		
 		for (Rule rule : grammar.getRules()) {
 			

@@ -31,7 +31,7 @@ import iguana.regex.CharRange;
 import iguana.regex.EOF;
 import iguana.regex.Epsilon;
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
@@ -61,7 +61,7 @@ public class FirstFollowSets {
 	
 	private final ISymbolVisitor<Nonterminal> nonterminalVisitor;
 	
-	public FirstFollowSets(Grammar grammar) {
+	public FirstFollowSets(RuntimeGrammar grammar) {
 		this.definitions = grammar.getDefinitions();
 		this.firstSets = new HashMap<>();
 		this.nullableNonterminals = new HashSet<>();

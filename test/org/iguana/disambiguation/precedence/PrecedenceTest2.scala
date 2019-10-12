@@ -27,7 +27,7 @@
 package org.iguana.disambiguation.precedence
 
 import iguana.utils.input.Input
-import org.iguana.grammar.Grammar
+import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
@@ -54,7 +54,7 @@ class PrecedenceTest2 extends FunSuite {
   val minus = Terminal.from(Character.from('-'))
 
   val grammar = {
-    val builder: Grammar.Builder = new Grammar.Builder
+    val builder: RuntimeGrammar.Builder = new RuntimeGrammar.Builder
     val rule0: Rule = Rule.withHead(E).addSymbols(E, hat, E).build
     builder.addRule(rule0)
     val rule1: Rule = Rule.withHead(E).addSymbols(E, plus, E).build

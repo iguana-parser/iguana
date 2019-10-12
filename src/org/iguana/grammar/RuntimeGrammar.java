@@ -34,7 +34,6 @@ import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
-import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.*;
 import java.net.URI;
@@ -51,7 +50,7 @@ import static iguana.utils.string.StringUtil.listToString;
  * @author Anastasia Izmaylova
  *
  */
-public class Grammar {
+public class RuntimeGrammar {
 
 	private final Map<Nonterminal, List<Rule>> definitions;
 	
@@ -68,7 +67,7 @@ public class Grammar {
 
 	private final Start startSymbol;
 		
-	public Grammar(Builder builder) {
+	public RuntimeGrammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.precedencePatterns = builder.precedencePatterns;
 		this.exceptPatterns = builder.exceptPatterns;
@@ -208,7 +207,7 @@ public class Grammar {
 
         public Builder() { }
 
-        public Builder(Grammar grammar) {
+        public Builder(RuntimeGrammar grammar) {
             definitions.putAll(grammar.definitions);
             precedencePatterns.addAll(grammar.precedencePatterns);
             exceptPatterns.addAll(grammar.exceptPatterns);
@@ -219,14 +218,14 @@ public class Grammar {
             startSymbol = grammar.startSymbol;
         }
 		
-		public Grammar build() {
+		public RuntimeGrammar build() {
 			Set<RuntimeException> exceptions = validate(rules, definitions);
 			
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
 
-            return new Grammar(this);
+            return new RuntimeGrammar(this);
 		}
 
         public Builder addRule(Rule rule) {
@@ -326,10 +325,10 @@ public class Grammar {
 		if (this == obj)
 			return true;
 		
-		if (!(obj instanceof Grammar))
+		if (!(obj instanceof RuntimeGrammar))
 			return false;
 		
-		Grammar other = (Grammar) obj;
+		RuntimeGrammar other = (RuntimeGrammar) obj;
 
 		return definitions.equals(other.definitions);
 	}

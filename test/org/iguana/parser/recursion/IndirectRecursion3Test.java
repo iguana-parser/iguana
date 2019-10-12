@@ -29,7 +29,7 @@ package org.iguana.parser.recursion;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Terminal;
@@ -55,7 +55,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class IndirectRecursion3Test {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
@@ -74,7 +74,7 @@ public class IndirectRecursion3Test {
 		Rule r4 = Rule.withHead(B).addSymbols(A, f).build();
 		Rule r5 = Rule.withHead(C).addSymbols(A, g).build();
 		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
+		grammar = new RuntimeGrammar.Builder().addRule(r1).addRule(r2).addRule(r3)
 								    .addRule(r4).addRule(r5).build();
 	}
 	

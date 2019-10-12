@@ -6,18 +6,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Seq implements Serializable {
+public class Sequence implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private List<Symbol> symbols;
 
     public Associativity associativity;
+
     public String label;
 
-    public Seq() { }
+    public Sequence() { }
 
-    public Seq(Symbol symbol, List<Symbol> rest, Associativity associativity, String label) {
+    public Sequence(Symbol symbol, List<Symbol> rest, Associativity associativity, String label) {
         this.symbols = new ArrayList<>();
         if (symbol != null) symbols.add(symbol);
         if (rest != null) symbols.addAll(rest);
@@ -43,8 +44,8 @@ public class Seq implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Seq)) return false;
-        Seq other = (Seq) obj;
+        if (!(obj instanceof Sequence)) return false;
+        Sequence other = (Sequence) obj;
         return Objects.equals(this.symbols, other.symbols) &&
                Objects.equals(this.associativity, other.associativity) &&
                Objects.equals(this.label, other.label);

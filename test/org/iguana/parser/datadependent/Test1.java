@@ -29,7 +29,7 @@ package org.iguana.parser.datadependent;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -56,7 +56,7 @@ import static org.iguana.datadependent.ast.AST.*;
 
 public class Test1 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -78,7 +78,7 @@ public class Test1 {
 		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
 		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1, r2, r3).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1, r2, r3).build();
 		
 	}
 	

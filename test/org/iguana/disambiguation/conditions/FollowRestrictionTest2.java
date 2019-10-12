@@ -30,7 +30,7 @@ package org.iguana.disambiguation.conditions;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
@@ -56,7 +56,7 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class FollowRestrictionTest2 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 	
 	@Before
 	public void init() {
@@ -70,7 +70,7 @@ public class FollowRestrictionTest2 {
 		Rule r1 = Rule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
 		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 
-		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
+		grammar = RuntimeGrammar.builder().addRule(r1).addRule(r2).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 	

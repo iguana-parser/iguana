@@ -30,7 +30,7 @@ package org.iguana.parser.datadependent;
 import iguana.regex.Alt;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -59,7 +59,7 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 public class Test10 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -94,7 +94,7 @@ public class Test10 {
 										.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 										.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1, r2, r3, r4).build();
 		
 	}
 	

@@ -15,7 +15,7 @@ import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.attrs.AbstractAttrs;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
@@ -457,7 +457,7 @@ public class JsonSerializer {
     @JsonDeserialize(builder = HighLevelGrammar.Builder.class)
     abstract static class HighLevelGrammarMixIn {
         @JsonIgnore
-        Grammar grammar;
+        RuntimeGrammar grammar;
     }
 
     @JsonDeserialize(builder = HighLevelRule.Builder.class)

@@ -2,7 +2,6 @@ package org.iguana;
 
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
-import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.HighLevelGrammar;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;

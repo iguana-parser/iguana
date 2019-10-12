@@ -28,7 +28,7 @@
 package org.iguana.grammar.transformation;
 
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.symbol.*;
@@ -56,7 +56,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 	}
 	
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		
 		if (doAlign) {
 			DesugarAlignAndOffsideVisitor desugarAligns = new DesugarAlignAndOffsideVisitor(new HashSet<>());
@@ -67,7 +67,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			for (Rule rule : grammar.getRules())
 				rules.add(desugarAligns.transform(rule, grammar.getLayout()));
 			
-			return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
+			return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
 		}
 		
 		// After EBNF translation
@@ -89,7 +89,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		for (Rule rule : grammar.getRules())
 			rules.add(desugarOffsides.transform(rule, grammar.getLayout()));
 		
-		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
+		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
 	}
 	
 	private static class DesugarAlignAndOffsideVisitor implements ISymbolVisitor<Symbol> {
@@ -556,7 +556,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			return offsided;
 		}
 		
-		public void find(Grammar grammar) {
+		public void find(RuntimeGrammar grammar) {
 			
 			for (Rule rule : grammar.getRules()) {
 				if (rule.getBody() == null)

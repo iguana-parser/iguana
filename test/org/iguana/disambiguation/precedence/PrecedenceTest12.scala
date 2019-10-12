@@ -29,7 +29,7 @@ package org.iguana.disambiguation.precedence
 import java.util.Arrays
 
 import iguana.utils.input.Input
-import org.iguana.grammar.Grammar
+import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
 import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
@@ -55,10 +55,10 @@ class PrecedenceTest12 extends FunSuite {
   val minus = Terminal.from(Character.from('-'))
   val a = Terminal.from(Character.from('a'))
 
-  val grammar: Grammar = createGrammar
+  val grammar: RuntimeGrammar = createGrammar
 
   def createGrammar = {
-    val builder: Grammar.Builder = new Grammar.Builder
+    val builder: RuntimeGrammar.Builder = new RuntimeGrammar.Builder
     val rule1: Rule = Rule.withHead(E).addSymbols(minus, E).build
     val rule2: Rule = Rule.withHead(E).addSymbols(E, plus, E).build
     val rule3: Rule = Rule.withHead(E).addSymbols(star, E).build
@@ -88,7 +88,7 @@ class PrecedenceTest12 extends FunSuite {
     assert(result.isParseSuccess)
   }
 
-  private def getGrammar: Grammar = {
+  private def getGrammar: RuntimeGrammar = {
     val s = """
               | E1 ::= '-' E1
               |	    | '*' E

@@ -32,7 +32,7 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
@@ -56,7 +56,7 @@ import static org.junit.Assert.assertNull;
  */
 public class KeywordExclusionTest2 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -74,7 +74,7 @@ public class KeywordExclusionTest2 {
 		
 		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		
-		grammar = Grammar.builder().addRule(r1).build();
+		grammar = RuntimeGrammar.builder().addRule(r1).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 	

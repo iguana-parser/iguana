@@ -1,6 +1,6 @@
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -17,7 +17,7 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 		return labels;
 	}
 	
-	public void compute(Grammar grammar) {
+	public void compute(RuntimeGrammar grammar) {
 		for (Rule rule : grammar.getRules())
 			compute(rule);
 	}

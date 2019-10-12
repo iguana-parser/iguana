@@ -1,7 +1,7 @@
 package org.iguana.iggy;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.HighLevelGrammar;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
 import org.iguana.grammar.transformation.DesugarStartSymbol;
@@ -33,7 +33,7 @@ public class IggyParser {
     }
 
     public static HighLevelGrammar getHighLevelGrammar(String path) throws IOException {
-        Grammar iggyGrammar = transform(highLevelIggyGrammar());
+        RuntimeGrammar iggyGrammar = transform(highLevelIggyGrammar());
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
         Input input = Input.fromFile(new File(path));
@@ -45,8 +45,8 @@ public class IggyParser {
         return (HighLevelGrammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 
-    public static Grammar transform(HighLevelGrammar highLevelGrammar) {
-        Grammar grammar = new EBNFToBNF().transform(highLevelGrammar.toGrammar());
+    public static RuntimeGrammar transform(HighLevelGrammar highLevelGrammar) {
+        RuntimeGrammar grammar = new EBNFToBNF().transform(highLevelGrammar.toGrammar());
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
@@ -57,7 +57,7 @@ public class IggyParser {
         return grammar;
     }
 
-    public static Grammar getGrammar(String path) throws IOException {
+    public static RuntimeGrammar getGrammar(String path) throws IOException {
         return transform(getHighLevelGrammar(path));
     }
 

@@ -28,7 +28,7 @@ package org.iguana.iggy;
 
 import iguana.regex.Char;
 import iguana.regex.*;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
@@ -52,7 +52,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     private String head;
 
     @Override
-    public Grammar transform(Grammar grammar) {
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
 
         List<Rule> rules = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         for (Rule rule : rules) {
             newRules.add(rule.copyBuilder().setSymbols(rule.getBody().stream().map(s -> visitSym(s)).collect(Collectors.toList())).build());
         }
-        return Grammar.builder()
+        return RuntimeGrammar.builder()
                 .addRules(newRules)
                 // TODO: check other attributes
                 .setLayout(grammar.getLayout())

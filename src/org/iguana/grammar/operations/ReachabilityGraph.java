@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.operations;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -42,7 +42,7 @@ public class ReachabilityGraph {
 	
 	private final Set<String> layouts;
 	
-	public ReachabilityGraph(Grammar grammar) {
+	public ReachabilityGraph(RuntimeGrammar grammar) {
 		this.reachabilityGraph = new HashMap<>();
 		this.definitions = grammar.getDefinitions();
 		

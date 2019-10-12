@@ -28,7 +28,7 @@
 package org.iguana.parser.datadependent;
 
 import iguana.regex.Char;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -58,7 +58,7 @@ import static org.iguana.datadependent.ast.AST.*;
 
 public class Test2 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -94,7 +94,7 @@ public class Test2 {
 		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('a'))).build();
 		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r2_1, r2_2, r3_1, r3_2, r4, r5).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1_1, r1_2, r2_1, r2_2, r3_1, r3_2, r4, r5).build();
 		
 	}
 	

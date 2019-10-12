@@ -29,7 +29,7 @@ package org.iguana.parser.layout;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
@@ -52,7 +52,7 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class LayoutTest1 {
 
-	private static Grammar getGrammar() {
+	private static RuntimeGrammar getGrammar() {
 		Terminal a = Terminal.from(Char.from('a'));
 		Terminal b = Terminal.from(Char.from('b'));
 		Nonterminal S = Nonterminal.withName("S");
@@ -67,13 +67,13 @@ public class LayoutTest1 {
 
 		Rule layout = Rule.withHead(L).addSymbol(Terminal.from(Char.from(' '))).build();
 
-		return new LayoutWeaver().transform(Grammar.builder().addRules(r1, r2, r3, layout).build());
+		return new LayoutWeaver().transform(RuntimeGrammar.builder().addRules(r1, r2, r3, layout).build());
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b");
-		Grammar grammar = getGrammar();
+		RuntimeGrammar grammar = getGrammar();
 
         IguanaParser parser = new IguanaParser(grammar);
         ParseTreeNode result = parser.getParserTree(input);

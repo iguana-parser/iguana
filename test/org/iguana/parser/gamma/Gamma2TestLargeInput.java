@@ -29,7 +29,7 @@ package org.iguana.parser.gamma;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Start;
@@ -45,13 +45,13 @@ public class Gamma2TestLargeInput {
 		return Input.fromString(Stream.generate(() -> "b").limit(size).collect(Collectors.joining()));
 	}
 
-	private static Grammar getGrammar() {
+	private static RuntimeGrammar getGrammar() {
 		Nonterminal S = Nonterminal.withName("S");
 		Terminal b = Terminal.from(Char.from('b'));
 		Rule rule1 = Rule.withHead(S).addSymbols(S, S, S).build();
 		Rule rule2 = Rule.withHead(S).addSymbols(S, S).build();
 		Rule rule3 = Rule.withHead(S).addSymbols(b).build();
-		return new DesugarStartSymbol().transform(Grammar.builder().addRules(rule1, rule2, rule3).setStartSymbol(Start.from(S)).build());
+		return new DesugarStartSymbol().transform(RuntimeGrammar.builder().addRules(rule1, rule2, rule3).setStartSymbol(Start.from(S)).build());
 	}
 
 	private static Nonterminal getStartSymbol() {

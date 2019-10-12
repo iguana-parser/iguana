@@ -65,7 +65,7 @@ public class GrammarGraphBuilder implements Serializable {
 
     private FirstFollowSets firstFollow;
 
-    private Grammar grammar;
+    private RuntimeGrammar grammar;
 
     private Configuration config;
 
@@ -75,11 +75,11 @@ public class GrammarGraphBuilder implements Serializable {
 
     private static MatcherFactory matcherFactory = new DFAMatcherFactory();
 
-    public static GrammarGraph from(Grammar grammar) {
+    public static GrammarGraph from(RuntimeGrammar grammar) {
         return from(grammar, Configuration.load());
     }
 
-    public static GrammarGraph from(Grammar grammar, Configuration config) {
+    public static GrammarGraph from(RuntimeGrammar grammar, Configuration config) {
         GrammarGraphBuilder builder = new GrammarGraphBuilder(grammar, config);
         builder.convert();
         ((ArrayList) builder.slots).trimToSize();
@@ -106,7 +106,7 @@ public class GrammarGraphBuilder implements Serializable {
         nonterminals.forEach(this::setFirstFollowTests);
     }
 
-    private GrammarGraphBuilder(Grammar grammar, Configuration config) {
+    private GrammarGraphBuilder(RuntimeGrammar grammar, Configuration config) {
         if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {
             VarToInt transformer = new VarToInt();
             this.grammar = transformer.transform(grammar);
