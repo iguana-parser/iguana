@@ -36,9 +36,9 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     @Override
     public RuntimeGrammar transform(RuntimeGrammar grammar) {
         mapping = new HashMap<>();
-        Set<Rule> rules = new LinkedHashSet<>();
+        Set<RuntimeRule> rules = new LinkedHashSet<>();
         int i = 0;
-        for (Rule rule : grammar.getRules()) {
+        for (RuntimeRule rule : grammar.getRules()) {
             rules.add(transform(rule));
             mapping.put(i, current);
             i++;
@@ -51,7 +51,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
                 .build();
     }
 
-    public Rule transform(Rule rule) {
+    public RuntimeRule transform(RuntimeRule rule) {
         current = new HashMap<>();
 
         List<java.lang.String> parameters = rule.getHead().getParameters();
@@ -66,7 +66,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         for (Symbol symbol : rule.getBody())
             body.add(visit(symbol));
 
-        return Rule.withHead(rule.getHead())
+        return RuntimeRule.withHead(rule.getHead())
                 .addSymbols(body)
                 .setRecursion(rule.getRecursion())
                 .setAssociativity(rule.getAssociativity())

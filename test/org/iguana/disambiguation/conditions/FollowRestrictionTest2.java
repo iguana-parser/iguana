@@ -34,7 +34,7 @@ import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -67,8 +67,8 @@ public class FollowRestrictionTest2 {
 		CharRange zero_nine = CharRange.in('0', '9');
 		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
-		Rule r1 = Rule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
-		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
+		RuntimeRule r2 = RuntimeRule.withHead(Label).addSymbol(AZPlus).build();
 
 		grammar = RuntimeGrammar.builder().addRule(r1).addRule(r2).build();
         grammar = new EBNFToBNF().transform(grammar);

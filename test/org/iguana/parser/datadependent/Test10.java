@@ -73,9 +73,9 @@ public class Test10 {
 		Nonterminal B = Nonterminal.withName("B");
 		
 		
-		Rule r0 = Rule.withHead(X).addSymbol(S).build();
+		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(S).build();
 		
-		Rule r1 = Rule.withHead(S)
+		RuntimeRule r1 = RuntimeRule.withHead(S)
 					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(), 
 										 stat(println(rExt("a"), indent(rExt("a"))))))
@@ -86,10 +86,10 @@ public class Test10 {
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		Rule r4 = Rule.withHead(Nonterminal.builder("NoNL").build())
+		RuntimeRule r4 = RuntimeRule.withHead(Nonterminal.builder("NoNL").build())
 						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
 										.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 										.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();

@@ -31,7 +31,7 @@ import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.Set;
@@ -47,9 +47,9 @@ public class LayoutWeaver implements GrammarTransformation {
 		
 		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
 		
-		for (Rule rule : grammar.getRules()) {
+		for (RuntimeRule rule : grammar.getRules()) {
 			
-			Rule.Builder ruleBuilder = Rule.withHead(rule.getHead())
+			RuntimeRule.Builder ruleBuilder = RuntimeRule.withHead(rule.getHead())
 												.setRecursion(rule.getRecursion())
 												.setAssociativity(rule.getAssociativity())
 												.setAssociativityGroup(rule.getAssociativityGroup())
@@ -102,7 +102,7 @@ public class LayoutWeaver implements GrammarTransformation {
 		return builder.build();
 	}
 
-	private void addLayout(Symbol layout, Rule rule, Rule.Builder ruleBuilder, Symbol s) {
+	private void addLayout(Symbol layout, RuntimeRule rule, RuntimeRule.Builder ruleBuilder, Symbol s) {
 		switch (rule.getLayoutStrategy()) {
 			
 			case NO_LAYOUT:

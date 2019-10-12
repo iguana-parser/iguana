@@ -32,7 +32,7 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
@@ -61,11 +61,11 @@ public class LayoutTest1 {
 		
 		Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 		
-		Rule r1 = Rule.withHead(S).addSymbols(A, B).setLayout(L).build();
-		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
-		Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, B).setLayout(L).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(a).setLayout(L).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(b).setLayout(L).build();
 
-		Rule layout = Rule.withHead(L).addSymbol(Terminal.from(Char.from(' '))).build();
+		RuntimeRule layout = RuntimeRule.withHead(L).addSymbol(Terminal.from(Char.from(' '))).build();
 
 		return new LayoutWeaver().transform(RuntimeGrammar.builder().addRules(r1, r2, r3, layout).build());
 	}

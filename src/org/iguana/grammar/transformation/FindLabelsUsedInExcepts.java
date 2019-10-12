@@ -18,11 +18,11 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 	
 	public void compute(RuntimeGrammar grammar) {
-		for (Rule rule : grammar.getRules())
+		for (RuntimeRule rule : grammar.getRules())
 			compute(rule);
 	}
 	
-	public void compute(Rule rule) {
+	public void compute(RuntimeRule rule) {
 		
 		if (rule.getBody() == null)
 			return;

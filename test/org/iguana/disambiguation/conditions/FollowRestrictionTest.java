@@ -35,7 +35,7 @@ import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -68,8 +68,8 @@ public class FollowRestrictionTest {
 
 		RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder();
 		
-		Rule r1 = Rule.withHead(S).addSymbol(Label).build();		
-		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbol(Label).build();
+		RuntimeRule r2 = RuntimeRule.withHead(Label).addSymbol(AZPlus).build();
 		builder.addRule(r1).addRule(r2);
 
 		grammar = builder.build();
@@ -108,13 +108,13 @@ public class FollowRestrictionTest {
 
             RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder();
 
-            Rule rule1 = Rule.withHead(S).addSymbols(a, S, b).build();
+            RuntimeRule rule1 = RuntimeRule.withHead(S).addSymbols(a, S, b).build();
             builder.addRule(rule1);
 
-            Rule rule2 = Rule.withHead(S).addSymbols(a, S).build();
+            RuntimeRule rule2 = RuntimeRule.withHead(S).addSymbols(a, S).build();
             builder.addRule(rule2);
 
-            Rule rule3 = Rule.withHead(S).addSymbols(s).build();
+            RuntimeRule rule3 = RuntimeRule.withHead(S).addSymbols(s).build();
             builder.addRule(rule3);
 
             grammar = builder.build();

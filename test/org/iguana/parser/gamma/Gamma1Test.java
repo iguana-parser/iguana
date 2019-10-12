@@ -32,7 +32,7 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -64,13 +64,13 @@ public class Gamma1Test {
 	@Before
 	public void createGrammar() {
 		
-		Rule r1 = Rule.withHead(S).addSymbols(A, S, d).build();
-		Rule r2 = Rule.withHead(S).addSymbols(B, S).build();
-		Rule r3 = Rule.withHead(S).build();
-		Rule r4 = Rule.withHead(A).addSymbols(a).build();
-		Rule r5 = Rule.withHead(A).addSymbols(c).build();
-		Rule r6 = Rule.withHead(B).addSymbols(a).build();
-		Rule r7 = Rule.withHead(B).addSymbols(b).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, S, d).build();
+		RuntimeRule r2 = RuntimeRule.withHead(S).addSymbols(B, S).build();
+		RuntimeRule r3 = RuntimeRule.withHead(S).build();
+		RuntimeRule r4 = RuntimeRule.withHead(A).addSymbols(a).build();
+		RuntimeRule r5 = RuntimeRule.withHead(A).addSymbols(c).build();
+		RuntimeRule r6 = RuntimeRule.withHead(B).addSymbols(a).build();
+		RuntimeRule r7 = RuntimeRule.withHead(B).addSymbols(b).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4, r5, r6, r7).build();
 	}

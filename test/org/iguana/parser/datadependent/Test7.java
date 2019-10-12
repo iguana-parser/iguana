@@ -31,7 +31,7 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -69,28 +69,28 @@ public class Test7 {
 		Terminal hat = Terminal.from(Char.from('^'));
         Terminal plus = Terminal.from(Char.from('+'));
 		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_1 = Rule.withHead(E)
+		RuntimeRule r1_1 = RuntimeRule.withHead(E)
 					.addSymbol(Nonterminal.builder(E).apply(integer(5), integer(0))
 							.addPreCondition(predicate(greaterEq(integer(4), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(4), var("r")))).build())
 					.addSymbol(hat)
 					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
-		Rule r1_2 = Rule.withHead(E)
+		RuntimeRule r1_2 = RuntimeRule.withHead(E)
 				.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
 						.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 						.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
 				.addSymbol(plus)
 				.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
 		
-		Rule r1_3 = Rule.withHead(E)
+		RuntimeRule r1_3 = RuntimeRule.withHead(E)
 				.addSymbol(Terminal.builder(Char.from('-'))
 					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
 				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r1_4 = RuntimeRule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
 		

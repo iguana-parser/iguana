@@ -70,10 +70,10 @@ public class PrecedeRestrictionTest1 {
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
-		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
-		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
-		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
+		RuntimeRule r2 = RuntimeRule.withHead(S).addSymbol(forall).build();
+		RuntimeRule r3 = RuntimeRule.withHead(Id).addSymbol(AZPlus).build();
+		RuntimeRule r4 = RuntimeRule.withHead(L).addSymbol(ws).build();
 		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
         grammar = new EBNFToBNF().transform(grammar);
     }

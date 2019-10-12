@@ -72,7 +72,7 @@ public class DesugarState implements GrammarTransformation {
 			
 			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);
 			
-			for (Rule rule : grammar.getAlternatives(head))
+			for (RuntimeRule rule : grammar.getAlternatives(head))
 				visitor.compute(rule);
 			
 			if (!current_updates.isEmpty())
@@ -100,7 +100,7 @@ public class DesugarState implements GrammarTransformation {
 			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>();
 			bindings.put(head, nonterminal_bindings);
 			
-			for (Rule rule : grammar.getAlternatives(head))	
+			for (RuntimeRule rule : grammar.getAlternatives(head))
 				nonterminal_bindings.add(visitor.computeBindings(rule));
 		}
 		
@@ -138,24 +138,24 @@ public class DesugarState implements GrammarTransformation {
 				System.out.println("Returns: " + entry.getKey() + "    " + listToString(entry.getValue(), ";"));
 			}
 		
-		Set<Rule> newRules = new LinkedHashSet<>();
+		Set<RuntimeRule> newRules = new LinkedHashSet<>();
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			int i = 0;
 			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = bindings.get(nonterminal);
-			for (Rule rule : grammar.getAlternatives(nonterminal)) {
+			for (RuntimeRule rule : grammar.getAlternatives(nonterminal)) {
 				newRules.add(transform(rule, uses, nonterminal_bindings == null? new HashMap<>() : nonterminal_bindings.get(i++), returns));
 			}
 		}
 		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
 	}
 	
-	private Rule transform(Rule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
+	private RuntimeRule transform(RuntimeRule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
 		if (rule.getBody() == null)
 			return rule;
 		
 		Set<String> head_uses = uses.get(rule.getHead());
 		
-		Rule.Builder builder = null;
+		RuntimeRule.Builder builder = null;
 		if (!head_uses.isEmpty()) {
 			
 			String[] parameters = new String[head_uses.size()];

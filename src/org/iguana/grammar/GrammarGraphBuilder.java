@@ -97,7 +97,7 @@ public class GrammarGraphBuilder implements Serializable {
         nonterminals.forEach(this::getNonterminalSlot);
 
         int i = 0;
-        for (Rule r : this.grammar.getRules()) {
+        for (RuntimeRule r : this.grammar.getRules()) {
             current = mapping.get(i);
             convert(r);
             i++;
@@ -134,7 +134,7 @@ public class GrammarGraphBuilder implements Serializable {
         return terminalsMap.values();
     }
 
-    private void convert(Rule rule) {
+    private void convert(RuntimeRule rule) {
         Nonterminal nonterminal = rule.getHead();
         NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(nonterminal);
         addRule(nonterminalSlot, rule);
@@ -150,12 +150,12 @@ public class GrammarGraphBuilder implements Serializable {
         if (config.getLookAheadCount() == 0)
             return i -> nonterminalSlot.getFirstSlots();
 
-        List<Rule> alternatives = grammar.getAlternatives(nonterminal);
+        List<RuntimeRule> alternatives = grammar.getAlternatives(nonterminal);
 
         RangeMapBuilder<BodyGrammarSlot> builder = new RangeMapBuilder<>();
 
         for (int i = 0; i < alternatives.size(); i++) {
-            Rule rule = alternatives.get(i);
+            RuntimeRule rule = alternatives.get(i);
             BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);
             Set<CharRange> set = firstFollow.getPredictionSet(rule, 0);
             set.forEach(cr -> builder.put(cr, firstSlot));
@@ -171,14 +171,14 @@ public class GrammarGraphBuilder implements Serializable {
         return new RangeTreeFollowTest(firstFollow.getFollowSet(nonterminal));
     }
 
-    private FollowTest getFollowTest(Rule rule, int i) {
+    private FollowTest getFollowTest(RuntimeRule rule, int i) {
         if (config.getLookAheadCount() == 0)
             return FollowTest.DEFAULT;
 
         return new RangeTreeFollowTest(firstFollow.getPredictionSet(rule, i));
     }
 
-    private void addRule(NonterminalGrammarSlot head, Rule rule) {
+    private void addRule(NonterminalGrammarSlot head, RuntimeRule rule) {
         BodyGrammarSlot firstSlot = getFirstGrammarSlot(rule, head);
         head.addFirstSlot(firstSlot);
 
@@ -191,14 +191,14 @@ public class GrammarGraphBuilder implements Serializable {
     private class GrammarGraphSymbolVisitor extends AbstractGrammarGraphSymbolVisitor<Void> {
 
         private final NonterminalGrammarSlot head;
-        private final Rule rule;
+        private final RuntimeRule rule;
 
         private BodyGrammarSlot currentSlot;
         private int i = 0;
 
         private int j = -1;
 
-        GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, Rule rule, BodyGrammarSlot currentSlot) {
+        GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, RuntimeRule rule, BodyGrammarSlot currentSlot) {
             this.head = head;
             this.rule = rule;
             this.currentSlot = currentSlot;
@@ -388,7 +388,7 @@ public class GrammarGraphBuilder implements Serializable {
         return ntSlot;
     }
 
-    private BodyGrammarSlot getFirstGrammarSlot(Rule rule, NonterminalGrammarSlot nonterminal) {
+    private BodyGrammarSlot getFirstGrammarSlot(RuntimeRule rule, NonterminalGrammarSlot nonterminal) {
         BodyGrammarSlot slot;
 
         if (rule.size() == 0) {
@@ -404,7 +404,7 @@ public class GrammarGraphBuilder implements Serializable {
         return slot;
     }
 
-    private BodyGrammarSlot getBodyGrammarSlot(Rule rule, int i, Position position, String label, String variable, Set<String> state) {
+    private BodyGrammarSlot getBodyGrammarSlot(RuntimeRule rule, int i, Position position, String label, String variable, Set<String> state) {
         assert i < rule.size();
 
         BodyGrammarSlot slot;
@@ -419,7 +419,7 @@ public class GrammarGraphBuilder implements Serializable {
         return slot;
     }
 
-    private BodyGrammarSlot getEndSlot(Rule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
+    private BodyGrammarSlot getEndSlot(RuntimeRule rule, int i, Position position, NonterminalGrammarSlot nonterminal, String label, String variable, Set<String> state) {
         assert i == rule.size();
 
         BodyGrammarSlot slot;

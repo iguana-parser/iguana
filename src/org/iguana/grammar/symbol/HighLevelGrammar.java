@@ -140,11 +140,11 @@ public class HighLevelGrammar implements Serializable {
         }
     }
 
-    private static List<Rule> getRules(HighLevelRule highLevelRule) {
+    private static List<RuntimeRule> getRules(HighLevelRule highLevelRule) {
         List<String> parameters = highLevelRule.parameters;
         List<PriorityGroup> alternativesList = highLevelRule.priorityGroups;
 
-        List<Rule> rules = new ArrayList<>();
+        List<RuntimeRule> rules = new ArrayList<>();
         PrecedenceLevel level = PrecedenceLevel.getFirst();
         Nonterminal head = highLevelRule.head;
 
@@ -164,7 +164,7 @@ public class HighLevelGrammar implements Serializable {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        Rule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                         rules.add(rule);
@@ -174,7 +174,7 @@ public class HighLevelGrammar implements Serializable {
                 } else {
                     List<Symbol> symbols = new ArrayList<>();
                     if (alternative.first() == null) { // Empty alternative
-                        Rule rule = getRule(head, symbols, Associativity.UNDEFINED, null);
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, null);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -182,7 +182,7 @@ public class HighLevelGrammar implements Serializable {
                         symbols.add(alternative.first().first());
                         if (alternative.first().rest() != null)
                             addAll(symbols, alternative.first().rest());
-                        Rule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label);
+                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -197,7 +197,7 @@ public class HighLevelGrammar implements Serializable {
         return rules;
     }
 
-    private static Rule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label) {
+    private static RuntimeRule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label) {
         // TODO: The first and the last symbol should be visited!
         boolean isLeft = !symbols.isEmpty() && symbols.get(0).getName().equals(head.getName());
         boolean isRight = !symbols.isEmpty() && symbols.get(symbols.size() - 1).getName().equals(head.getName());
@@ -217,7 +217,7 @@ public class HighLevelGrammar implements Serializable {
         if (recursion == Recursion.NON_REC)
             associativity = Associativity.UNDEFINED;
 
-        Rule.Builder builder = Rule.withHead(head)
+        RuntimeRule.Builder builder = RuntimeRule.withHead(head)
                 .addSymbols(symbols)
                 .setRecursion(recursion)
                 .setLabel(label)

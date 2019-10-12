@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 public class ReachabilityGraph {
 
-	private final Map<Nonterminal, List<Rule>> definitions;
+	private final Map<Nonterminal, List<RuntimeRule>> definitions;
 	
 	private final Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 	
@@ -97,7 +97,7 @@ public class ReachabilityGraph {
 				
 				visitor.setHead(head);
 				
-				for (Rule rule : definitions.get(head)) {
+				for (RuntimeRule rule : definitions.get(head)) {
 					
 					List<Symbol> alternate = rule.getBody();
 					

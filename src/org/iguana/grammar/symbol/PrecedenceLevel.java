@@ -140,7 +140,7 @@ public class PrecedenceLevel implements Serializable {
 		return hasPostfixUnaryBelow;
 	}
 	
-	public int getPrecedence(Rule rule) {
+	public int getPrecedence(RuntimeRule rule) {
 		
 		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
@@ -155,7 +155,7 @@ public class PrecedenceLevel implements Serializable {
 			return index++;
 	}
 	
-	int getPrecedenceFromAssociativityGroup(Rule rule) {
+	int getPrecedenceFromAssociativityGroup(RuntimeRule rule) {
 		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		

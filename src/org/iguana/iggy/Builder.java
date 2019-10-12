@@ -43,16 +43,16 @@ import java.util.stream.Collectors;
  */
 public abstract class Builder {
 
-    private Map<String, Rule> regexs = new HashMap<>();
+    private Map<String, RuntimeRule> regexs = new HashMap<>();
 	
 	public RuntimeGrammar grammar(List<Object> rules) {
 		RuntimeGrammar.Builder builder = RuntimeGrammar.builder();
-		rules.forEach(rule -> builder.addRule((Rule) rule));
+		rules.forEach(rule -> builder.addRule((RuntimeRule) rule));
 		return builder.build();
 	}
 	
-	public List<Rule> rule(List<Object> tag, Object name, List<String> params, List<Object> body) { // TODO: Add the logic of handling precedence
-		List<Rule> rules = new ArrayList<>();
+	public List<RuntimeRule> rule(List<Object> tag, Object name, List<String> params, List<Object> body) { // TODO: Add the logic of handling precedence
+		List<RuntimeRule> rules = new ArrayList<>();
 		body.forEach(elem -> {
 			((PrecGroup)elem).alts.forEach(alt -> {
 				final Nonterminal head = params.isEmpty() ? Nonterminal.withName((String)name)
@@ -60,12 +60,12 @@ public abstract class Builder {
                               .addParameters(params)
                               .build();
 				if (alt instanceof Sequence) {
-					org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
+					RuntimeRule.Builder builder = RuntimeRule.withHead(head);
 					builder.addSymbols(((Sequence)alt).syms);
 					rules.add(builder.build());
 				} else if (alt instanceof AssocGroup) {
 					((AssocGroup)alt).seqs.forEach(seq -> {
-						org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
+						RuntimeRule.Builder builder = RuntimeRule.withHead(head);
 						builder.addSymbols(seq.syms);
 						rules.add(builder.build());
 					});
@@ -76,9 +76,9 @@ public abstract class Builder {
 	}
 	
 	public Object rule(Object name, Object body) {
-        Rule.Builder builder = Rule.withHead(Nonterminal.withName((String)name));
+        RuntimeRule.Builder builder = RuntimeRule.withHead(Nonterminal.withName((String)name));
         builder.addSymbol((Symbol)body);
-        Rule rule = builder.build();
+        RuntimeRule rule = builder.build();
         regexs.put((String)name, rule);
         return rule;
 	}

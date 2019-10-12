@@ -67,7 +67,7 @@ public class Test5 {
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		
-		Rule r1 = Rule.withHead(X)
+		RuntimeRule r1 = RuntimeRule.withHead(X)
 					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
 					.addSymbol(Star.builder(Group.builder(Code.code(Nonterminal.builder(B).setLabel("b")
 																			.addPreCondition(predicate(greaterEq(lExt("b"), rExt("a")))).build(),
@@ -77,9 +77,9 @@ public class Test5 {
 																	   stat(println(var("c"))))).build())
 									.setLabel("b").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
 		

@@ -54,9 +54,9 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     @Override
     public RuntimeGrammar transform(RuntimeGrammar grammar) {
 
-        List<Rule> rules = new ArrayList<>();
+        List<RuntimeRule> rules = new ArrayList<>();
 
-        for (Rule rule : grammar.getRules()) {
+        for (RuntimeRule rule : grammar.getRules()) {
             if (rule.getAttributes().containsKey("regex")) {
                 if (definitions.containsKey(rule.getHead().getName()))
                     throw new GrammarValidationException(new HashSet<>(Arrays.asList(new RuntimeException("Should not have happened."))));
@@ -77,8 +77,8 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         }
         head = "";
 
-        List<Rule> newRules = new ArrayList<>();
-        for (Rule rule : rules) {
+        List<RuntimeRule> newRules = new ArrayList<>();
+        for (RuntimeRule rule : rules) {
             newRules.add(rule.copyBuilder().setSymbols(rule.getBody().stream().map(s -> visitSym(s)).collect(Collectors.toList())).build());
         }
         return RuntimeGrammar.builder()

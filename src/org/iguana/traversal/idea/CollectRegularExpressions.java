@@ -51,7 +51,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     }
 
     public void collect(RuntimeGrammar grammar) {
-        for (Rule rule : grammar.getRules()) {
+        for (RuntimeRule rule : grammar.getRules()) {
             for (Symbol symbol : rule.getBody())
                 symbol.accept(this);
         }

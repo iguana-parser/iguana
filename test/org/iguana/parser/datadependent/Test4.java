@@ -31,7 +31,7 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -79,21 +79,21 @@ public class Test4 {
 		
 		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
 		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_1 = Rule.withHead(E)
+		RuntimeRule r1_1 = RuntimeRule.withHead(E)
 					.addSymbol(Nonterminal.builder(E).apply(integer(4), var("r"))
 							.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
 					.addSymbol(Terminal.from(Char.from('^')))
 					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(3)).build()).build();
 		
-		Rule r1_2 = Rule.withHead(E)
+		RuntimeRule r1_2 = RuntimeRule.withHead(E)
 				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0))
 						.addPreCondition(predicate(greaterEq(integer(2), var("r")))).build())
 				.addSymbol(Terminal.from(Char.from('-'))).build();
 		
-		Rule r1_3 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r1_3 = RuntimeRule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r0, r1_1, r1_2, r1_3).build();
 		

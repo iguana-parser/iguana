@@ -30,7 +30,7 @@ import iguana.utils.input.Input
 import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
-import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
+import org.iguana.grammar.symbol.{Nonterminal, RuntimeRule, Terminal}
 import org.iguana.iggy.IggyParser
 import org.iguana.parser.IguanaParser
 
@@ -61,19 +61,19 @@ class PrecedenceTest11 extends FunSuite {
 
   val grammar = {
     val builder: RuntimeGrammar.Builder = new RuntimeGrammar.Builder
-    val rule1: Rule = Rule.withHead(E).addSymbols(E, Y).build
+    val rule1: RuntimeRule = RuntimeRule.withHead(E).addSymbols(E, Y).build
     builder.addRule(rule1)
-    val rule2: Rule = Rule.withHead(E).addSymbols(E, semicolon, E).build
+    val rule2: RuntimeRule = RuntimeRule.withHead(E).addSymbols(E, semicolon, E).build
     builder.addRule(rule2)
-    val rule3: Rule = Rule.withHead(E).addSymbols(min, E).build
+    val rule3: RuntimeRule = RuntimeRule.withHead(E).addSymbols(min, E).build
     builder.addRule(rule3)
-    val rule4: Rule = Rule.withHead(E).addSymbols(a).build
+    val rule4: RuntimeRule = RuntimeRule.withHead(E).addSymbols(a).build
     builder.addRule(rule4)
-    val rule5: Rule = Rule.withHead(Y).addSymbols(X).build
+    val rule5: RuntimeRule = RuntimeRule.withHead(Y).addSymbols(X).build
     builder.addRule(rule5)
-    val rule6: Rule = Rule.withHead(X).addSymbols(X, comma, E).build
+    val rule6: RuntimeRule = RuntimeRule.withHead(X).addSymbols(X, comma, E).build
     builder.addRule(rule6)
-    val rule7: Rule = Rule.withHead(X).addSymbols(comma, E).build
+    val rule7: RuntimeRule = RuntimeRule.withHead(X).addSymbols(comma, E).build
     builder.addRule(rule7)
     val list: java.util.List[PrecedencePattern] = new java.util.ArrayList[PrecedencePattern]
     list.add(PrecedencePattern.from(rule1, 0, rule2))

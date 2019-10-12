@@ -28,7 +28,7 @@
 package org.iguana.grammar.patterns;
 
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.io.Serializable;
@@ -43,7 +43,7 @@ public class PrecedencePattern extends AbstractPattern implements Serializable {
 		super(nonteriminal, parent, position, child);
 	}
 	
-	public static PrecedencePattern from(Rule parent, int position, Rule child) {
+	public static PrecedencePattern from(RuntimeRule parent, int position, RuntimeRule child) {
 		return new PrecedencePattern(parent.getHead(), parent.getBody(), position, child.getBody());
 	}
 

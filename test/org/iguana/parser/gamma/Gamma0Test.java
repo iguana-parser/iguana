@@ -32,7 +32,7 @@ import iguana.regex.Char;
 import iguana.utils.input.Input;
 import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -60,10 +60,10 @@ public class Gamma0Test {
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.withHead(S).addSymbols(a, S).build();
-		Rule r2 = Rule.withHead(S).addSymbols(A, S, d).build();
-		Rule r3 = Rule.withHead(S).build();
-		Rule r4 = Rule.withHead(A).addSymbols(a).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(a, S).build();
+		RuntimeRule r2 = RuntimeRule.withHead(S).addSymbols(A, S, d).build();
+		RuntimeRule r3 = RuntimeRule.withHead(S).build();
+		RuntimeRule r4 = RuntimeRule.withHead(A).addSymbols(a).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
 	}

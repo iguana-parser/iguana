@@ -68,17 +68,17 @@ public class Test1 {
 		Nonterminal D = Nonterminal.withName("D");
 		
 		
-		Rule r1 = Rule.withHead(X)
+		RuntimeRule r1 = RuntimeRule.withHead(X)
 					.addSymbol(Nonterminal.builder(A).build())
 					.addSymbol(Star.builder(Alt.builder(Nonterminal.builder(B).setLabel("b").build(),
 														Group.builder(Nonterminal.builder(C).setLabel("c").build(),
 																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
 									.setLabel("s").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
-		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('d'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
+		RuntimeRule r5 = RuntimeRule.withHead(D).addSymbol(Terminal.from(Char.from('d'))).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4, r5).build();
 		

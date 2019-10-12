@@ -728,7 +728,7 @@ public class JsonSerializer {
 
     abstract static class NonterminalNodeMixIn {
         NonterminalNodeMixIn(
-                @JsonProperty("rule") Rule rule,
+                @JsonProperty("rule") RuntimeRule rule,
                 @JsonProperty("children") List<ParseTreeNode> children,
                 @JsonProperty("start") int start,
                 @JsonProperty("end") int end) {

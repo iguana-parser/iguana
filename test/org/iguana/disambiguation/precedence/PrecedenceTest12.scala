@@ -32,7 +32,7 @@ import iguana.utils.input.Input
 import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
-import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
+import org.iguana.grammar.symbol.{Nonterminal, RuntimeRule, Terminal}
 import org.iguana.iggy.IggyParser
 import org.iguana.parser.IguanaParser
 
@@ -59,10 +59,10 @@ class PrecedenceTest12 extends FunSuite {
 
   def createGrammar = {
     val builder: RuntimeGrammar.Builder = new RuntimeGrammar.Builder
-    val rule1: Rule = Rule.withHead(E).addSymbols(minus, E).build
-    val rule2: Rule = Rule.withHead(E).addSymbols(E, plus, E).build
-    val rule3: Rule = Rule.withHead(E).addSymbols(star, E).build
-    val rule4: Rule = Rule.withHead(E).addSymbol(a).build
+    val rule1: RuntimeRule = RuntimeRule.withHead(E).addSymbols(minus, E).build
+    val rule2: RuntimeRule = RuntimeRule.withHead(E).addSymbols(E, plus, E).build
+    val rule3: RuntimeRule = RuntimeRule.withHead(E).addSymbols(star, E).build
+    val rule4: RuntimeRule = RuntimeRule.withHead(E).addSymbol(a).build
 
     builder.addRule(rule1)
     builder.addRule(rule2)

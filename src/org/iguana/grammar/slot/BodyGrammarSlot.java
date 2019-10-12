@@ -35,7 +35,7 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
@@ -195,7 +195,7 @@ public class BodyGrammarSlot implements GrammarSlot {
 		return position.getPosition();
 	}
 
-    public Rule getRule() {
+    public RuntimeRule getRule() {
 		return position.getRule();
 	}
 

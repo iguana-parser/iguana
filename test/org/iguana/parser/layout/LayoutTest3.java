@@ -33,7 +33,7 @@ import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
@@ -65,12 +65,12 @@ public class LayoutTest3 {
     static Nonterminal C = Nonterminal.withName("C");
     static Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
-    static Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
-    static Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
-    static Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
-    static Rule r4 = Rule.withHead(C).addSymbol(c).setLayout(L).build();
+    static RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
+    static RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(a).setLayout(L).build();
+    static RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(b).setLayout(L).build();
+    static RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(c).setLayout(L).build();
 
-    static Rule layout = Rule.withHead(L).addSymbol(space).build();
+    static RuntimeRule layout = RuntimeRule.withHead(L).addSymbol(space).build();
 
 
     private static RuntimeGrammar getGrammar() {

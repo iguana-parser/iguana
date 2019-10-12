@@ -213,7 +213,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         }
         else {
             if (leftChild instanceof NonterminalNode) {
-                Rule rule = ((NonterminalNode) leftChild).getRule();
+                RuntimeRule rule = ((NonterminalNode) leftChild).getRule();
                 if (rule.getDefinition() != null && plus.getName().equals(rule.getDefinition().getName())) {
                     return (NonterminalNode) leftChild;
                 }

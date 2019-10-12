@@ -69,7 +69,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.nonterminal_bindings = null;
 	}
 	
-	public void compute(Rule rule) {
+	public void compute(RuntimeRule rule) {
 		
 		ImmutableSet<java.lang.String> env = TrieSet.of();
 		
@@ -110,7 +110,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.nonterminal_bindings = new HashMap<>();
 	}
 	
-	public Map<Nonterminal, Set<java.lang.String>> computeBindings(Rule rule) {
+	public Map<Nonterminal, Set<java.lang.String>> computeBindings(RuntimeRule rule) {
 		initBindings();
 		compute(rule);
 		return nonterminal_bindings;

@@ -28,7 +28,7 @@
 package org.iguana.grammar.patterns;
 
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class ExceptPattern extends AbstractPattern {
 		super(nonteriminal, parent, position, child);
 	}
 	
-	public static ExceptPattern from(Rule parent, int position, Rule child) {
+	public static ExceptPattern from(RuntimeRule parent, int position, RuntimeRule child) {
 		return new ExceptPattern(parent.getHead(), parent.getBody(), position, child.getBody());
 	}
 	

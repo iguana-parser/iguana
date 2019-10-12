@@ -32,7 +32,7 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -68,15 +68,15 @@ public class Test1 {
 		Nonterminal B = Nonterminal.withName("B");
 		
 		
-		Rule r0 = Rule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
 		
-		Rule r1 = Rule.withHead(S)
+		RuntimeRule r1 = RuntimeRule.withHead(S)
 					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(),
 											stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
 		grammar = RuntimeGrammar.builder().addRules(r0, r1, r2, r3).build();
 		

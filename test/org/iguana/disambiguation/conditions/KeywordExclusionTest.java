@@ -36,7 +36,7 @@ import org.iguana.grammar.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -70,7 +70,7 @@ public class KeywordExclusionTest {
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);
 		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(CharRange.in('a', 'z'))).addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
-		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
+		RuntimeRule r1 = RuntimeRule.withHead(Id).addSymbol(AZPlus).build();
 		grammar = RuntimeGrammar.builder().addRule(r1).build();
         grammar = new EBNFToBNF().transform(grammar);
     }

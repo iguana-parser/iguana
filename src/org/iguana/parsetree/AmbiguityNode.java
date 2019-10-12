@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class AmbiguityNode implements ParseTreeNode {
     }
 
     @Override
-    public Rule getGrammarDefinition() {
+    public RuntimeRule getGrammarDefinition() {
         return null;
     }
 

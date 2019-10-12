@@ -2,7 +2,7 @@ package org.iguana.parsetree;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.TerminalNodeType;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
 
@@ -27,7 +27,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     }
 
     @Override
-    public NonterminalNode nonterminalNode(Rule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
+    public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
         return new NonterminalNode(rule, children, leftExtent, rightExtent);
     }
 

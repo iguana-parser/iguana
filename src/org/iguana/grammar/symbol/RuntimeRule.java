@@ -32,7 +32,6 @@ import org.iguana.grammar.slot.NonterminalNodeType;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
  * @author Anastasia Izmaylova
  *
  */
-public class Rule implements Serializable {
+public class RuntimeRule implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -73,7 +72,7 @@ public class Rule implements Serializable {
 
     private final Symbol definition; // Used for converted EBNF nodes
 
-    public Rule(Builder builder) {
+    public RuntimeRule(Builder builder) {
         this.body = builder.body;
         this.head = builder.head;
         this.layout = builder.layout;
@@ -237,9 +236,9 @@ public class Rule implements Serializable {
 	
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		if (!(obj instanceof Rule)) return false;
+		if (!(obj instanceof RuntimeRule)) return false;
 		
-		Rule other = (Rule) obj;
+		RuntimeRule other = (RuntimeRule) obj;
 
 		return head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
 	}
@@ -333,7 +332,7 @@ public class Rule implements Serializable {
 
         public Builder() {}
 
-        public Builder(Rule rule) {
+        public Builder(RuntimeRule rule) {
             this.head = rule.head;
             this.body = rule.body;
             this.layoutStrategy = rule.layoutStrategy;
@@ -463,9 +462,9 @@ public class Rule implements Serializable {
             return this;
         }
 
-        public Rule build() {
+        public RuntimeRule build() {
             if (body == null) body = Collections.emptyList();
-            return new Rule(this);
+            return new RuntimeRule(this);
         }
     }
 	

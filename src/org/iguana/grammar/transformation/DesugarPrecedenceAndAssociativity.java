@@ -73,7 +73,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Map<Integer, Set<Integer>> iprefix_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
 		
-		public Map<String, Rule> right_rec_rules = new HashMap<>();
+		public Map<String, RuntimeRule> right_rec_rules = new HashMap<>();
 		
 		int prefixBelow = -1;
 		int postfixBelow = -1;
@@ -287,7 +287,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		configs = new HashMap<>();
 		
-		for (Rule rule : grammar.getRules()) {
+		for (RuntimeRule rule : grammar.getRules()) {
 			
 			Configuration config = configs.get(rule.getHead().getName());
 			
@@ -306,7 +306,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			config.rightEnds = rule.getRightEnds();
 		}
 		
-		for (Rule rule : grammar.getRules()) {
+		for (RuntimeRule rule : grammar.getRules()) {
 			
 			Nonterminal head = rule.getHead();
 			
@@ -518,7 +518,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
-		for (Rule rule: grammar.getRules()) {
+		for (RuntimeRule rule: grammar.getRules()) {
 			
 			if (config_op == OP._1) break;
 			
@@ -714,7 +714,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 			}
 			
-			for (Rule rule : grammar.getRules()) {
+			for (RuntimeRule rule : grammar.getRules()) {
 				
 				if (rule.getPrecedence() == -1 || !rule.isIRightRecursive()) 
 					continue;
@@ -747,20 +747,20 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}	
 		}
 		
-		Set<Rule> rules = new LinkedHashSet<>();
-		for (Rule rule :grammar.getRules())
+		Set<RuntimeRule> rules = new LinkedHashSet<>();
+		for (RuntimeRule rule :grammar.getRules())
 			rules.add(transform(rule));
 		
 		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).setStartSymbol(grammar.getStartSymbol()).build();
 	}
 	
-	public Rule transform(Rule rule) {
+	public RuntimeRule transform(RuntimeRule rule) {
 		return new Visitor(rule, leftOrRightRecursiveNonterminals, headsWithLabeledRules, configs, config_op).transform();
 	}
 
 	private static class Visitor implements ISymbolVisitor<Symbol> {
 		
-		private final Rule rule;
+		private final RuntimeRule rule;
 		
 		private final Set<String> leftOrRightRecursiveNonterminals;
 		
@@ -804,7 +804,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression[] lret;
 		private Expression[] rret;
 		
-		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules,
+		public Visitor(RuntimeRule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules,
 					   Map<String, Configuration> configs, OP config_op) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
@@ -2141,13 +2141,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		     		  		  min(rprec,integer(precedence)));
 		}
 		
-		public Rule transform() {
+		public RuntimeRule transform() {
 			
 			if (rule.getBody() == null)
 				return rule;
 			
 			List<Symbol> symbols = new ArrayList<>();
-			Rule.Builder builder = null;
+			RuntimeRule.Builder builder = null;
 			
 			String head = rule.getHead().getName();
 			
@@ -2481,7 +2481,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								if (c != null && !c.right_rec_rules.isEmpty()) {
 									
 									int n = 0;
-									for (Map.Entry<String, Rule> entry : c.right_rec_rules.entrySet()) {
+									for (Map.Entry<String, RuntimeRule> entry : c.right_rec_rules.entrySet()) {
 										if (rule.getPrecedence() != -1 && rule.getPrecedence() > entry.getValue().getPrecedenceLevel().getRhs()) {
 											n = 1 << labels.get(entry.getKey());
 										}

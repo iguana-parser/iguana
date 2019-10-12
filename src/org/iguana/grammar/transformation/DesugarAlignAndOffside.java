@@ -62,9 +62,9 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			DesugarAlignAndOffsideVisitor desugarAligns = new DesugarAlignAndOffsideVisitor(new HashSet<>());
 			desugarAligns.doAlign(doAlign);
 			
-			Set<Rule> rules = new LinkedHashSet<>();
+			Set<RuntimeRule> rules = new LinkedHashSet<>();
 			
-			for (Rule rule : grammar.getRules())
+			for (RuntimeRule rule : grammar.getRules())
 				rules.add(desugarAligns.transform(rule, grammar.getLayout()));
 			
 			return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
@@ -84,9 +84,9 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		DesugarAlignAndOffsideVisitor desugarOffsides = new DesugarAlignAndOffsideVisitor(offsided);
 		desugarOffsides.doAlign(doAlign);
 		
-		Set<Rule> rules = new LinkedHashSet<>();
+		Set<RuntimeRule> rules = new LinkedHashSet<>();
 		
-		for (Rule rule : grammar.getRules())
+		for (RuntimeRule rule : grammar.getRules())
 			rules.add(desugarOffsides.transform(rule, grammar.getLayout()));
 		
 		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
@@ -109,7 +109,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		
 		private final Set<String> offsided;
 		
-		private Rule rule;
+		private RuntimeRule rule;
 		private Symbol layout;
 		
 		private boolean isOffsided;
@@ -124,7 +124,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			this.doAlign = doAlign;
 		}
 		
-		public Rule transform(Rule rule, Symbol layout) {
+		public RuntimeRule transform(RuntimeRule rule, Symbol layout) {
 			this.rule = rule;
 			this.layout = layout;
 			this.isOffsided = false;
@@ -132,7 +132,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			if (doAlign) {
 				List<Symbol> symbols = new ArrayList<>();
-				Rule.Builder builder = rule.copyBuilder();
+				RuntimeRule.Builder builder = rule.copyBuilder();
 				
 				if (this.rule.getBody() != null) {
 					
@@ -161,7 +161,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			isOffsided = offsided.contains(this.rule.getHead().getName());
 			
-			Rule.Builder builder;
+			RuntimeRule.Builder builder;
 			
 			if (isOffsided)
 				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(index, ind, first).build());
@@ -558,7 +558,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		
 		public void find(RuntimeGrammar grammar) {
 			
-			for (Rule rule : grammar.getRules()) {
+			for (RuntimeRule rule : grammar.getRules()) {
 				if (rule.getBody() == null)
 					continue;
 				

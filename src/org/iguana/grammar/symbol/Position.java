@@ -36,22 +36,22 @@ import java.util.Objects;
  */
 public class Position {
 	
-	private final Rule rule;
+	private final RuntimeRule rule;
 	
 	private final int posInRule;
 	private final int posInSymbol;
 	
-	public Position(Rule rule, int posInRule) {
+	public Position(RuntimeRule rule, int posInRule) {
 		this(rule, posInRule, 0);
 	}
 	
-	public Position(Rule rule, int posInRule, int posInSymbol) {
+	public Position(RuntimeRule rule, int posInRule, int posInSymbol) {
 		this.rule = rule;
 		this.posInRule = posInRule;
 		this.posInSymbol = posInSymbol;
 	}
 	
-	public Rule getRule() {
+	public RuntimeRule getRule() {
 		return rule;
 	}
 	

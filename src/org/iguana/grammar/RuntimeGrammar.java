@@ -52,7 +52,7 @@ import static iguana.utils.string.StringUtil.listToString;
  */
 public class RuntimeGrammar {
 
-	private final Map<Nonterminal, List<Rule>> definitions;
+	private final Map<Nonterminal, List<RuntimeRule>> definitions;
 	
 	private final List<PrecedencePattern> precedencePatterns;
 	
@@ -60,7 +60,7 @@ public class RuntimeGrammar {
 	
 	private final Symbol layout;
 	
-	private final List<Rule> rules;
+	private final List<RuntimeRule> rules;
 	
 	private final Map<String, Set<String>> ebnfLefts;
 	private final Map<String, Set<String>> ebnfRights;
@@ -78,11 +78,11 @@ public class RuntimeGrammar {
 		this.ebnfRights = builder.ebnfRights;
 	}
 	
-	public Map<Nonterminal, List<Rule>> getDefinitions() {
+	public Map<Nonterminal, List<RuntimeRule>> getDefinitions() {
 		return definitions;
 	}
 	
-	public List<Rule> getAlternatives(Nonterminal nonterminal) {
+	public List<RuntimeRule> getAlternatives(Nonterminal nonterminal) {
 		return definitions.get(nonterminal);
 	}
 	
@@ -90,7 +90,7 @@ public class RuntimeGrammar {
 		return definitions.keySet();
 	}
 	
-	public List<Rule> getRules() {
+	public List<RuntimeRule> getRules() {
 		return rules;
 	}
 	
@@ -122,13 +122,13 @@ public class RuntimeGrammar {
 		return exceptPatterns;
 	}
 	
-	public Set<RegularExpression> getPredictionSet(Rule rule, int index) {
+	public Set<RegularExpression> getPredictionSet(RuntimeRule rule, int index) {
 		return null;
 	}
 	
-	private static Set<RuntimeException> validate(List<Rule> rules, Map<Nonterminal, List<Rule>> definitions) {
+	private static Set<RuntimeException> validate(List<RuntimeRule> rules, Map<Nonterminal, List<RuntimeRule>> definitions) {
 	    Set<RuntimeException> exceptions = new HashSet<>();
-        for (Rule rule : rules) {
+        for (RuntimeRule rule : rules) {
             if (rule.getBody() != null) {
                 for (Symbol s : rule.getBody()) {
                     if (s instanceof Nonterminal && !definitions.containsKey(s)) {
@@ -166,12 +166,12 @@ public class RuntimeGrammar {
 			sb.append(nonterminal).append(" ::= ");
 			
 			int precedence = -1;
-			List<Rule> rules = definitions.get(nonterminal);
+			List<RuntimeRule> rules = definitions.get(nonterminal);
 			
 			boolean found = true;
 			while(found) {
 				found = false;
-				for (Rule rule : rules) {
+				for (RuntimeRule rule : rules) {
 					if (rule.getPrecedence() == precedence) {
 						found = true;
 						sb.append(listToString(rule.getBody())).append(" {" + rule.getPrecedence() + "}" + "\n");
@@ -195,10 +195,10 @@ public class RuntimeGrammar {
  	
 	public static class Builder {
 		
-		private final Map<Nonterminal, List<Rule>> definitions = new HashMap<>();
+		private final Map<Nonterminal, List<RuntimeRule>> definitions = new HashMap<>();
 		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
-		private List<Rule> rules = new ArrayList<>();
+		private List<RuntimeRule> rules = new ArrayList<>();
 		private Symbol layout;
 		private Start startSymbol;
 		
@@ -228,8 +228,8 @@ public class RuntimeGrammar {
             return new RuntimeGrammar(this);
 		}
 
-        public Builder addRule(Rule rule) {
-			List<Rule> rules = definitions.get(rule.getHead());
+        public Builder addRule(RuntimeRule rule) {
+			List<RuntimeRule> rules = definitions.get(rule.getHead());
 			if (rules == null) {
 				rules = new ArrayList<>();
 				definitions.put(rule.getHead(), rules);
@@ -239,12 +239,12 @@ public class RuntimeGrammar {
 			return this;
 		}
 		
-		public Builder addRules(Iterable<Rule> rules) {
+		public Builder addRules(Iterable<RuntimeRule> rules) {
 			rules.forEach(r -> addRule(r));
 			return this;
 		}
 		
-		public Builder addRules(Rule...rules) {
+		public Builder addRules(RuntimeRule...rules) {
 			addRules(Arrays.asList(rules));
 			return this;
 		}
@@ -352,7 +352,7 @@ public class RuntimeGrammar {
 		return heads + bodySymbols;
 	}
 
-	private static String rulesToString(Iterable<Rule> rules) {
+	private static String rulesToString(Iterable<RuntimeRule> rules) {
 		return StreamSupport.stream(rules.spliterator(), false)
 				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r + ")")
 				.collect(Collectors.joining());
