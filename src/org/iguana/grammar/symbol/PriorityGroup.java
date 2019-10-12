@@ -11,7 +11,7 @@ public class PriorityGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    List<Alternative> alternatives = new ArrayList<>();
+    private List<Alternative> alternatives = new ArrayList<>();
 
     public PriorityGroup() { }
 

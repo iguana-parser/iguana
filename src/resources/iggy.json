@@ -5,7 +5,7 @@
         "kind" : "Nonterminal",
         "name" : "Alternative"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -201,7 +201,7 @@
         "kind" : "Nonterminal",
         "name" : "Regex"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -691,7 +691,7 @@
         "kind" : "Nonterminal",
         "name" : "Expression"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -1335,7 +1335,7 @@
         "kind" : "Nonterminal",
         "name" : "$default$"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -1354,7 +1354,7 @@
         "kind" : "Nonterminal",
         "name" : "Symbol"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -2439,7 +2439,7 @@
         "kind" : "Nonterminal",
         "name" : "Symbols"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -2469,7 +2469,7 @@
         "kind" : "Nonterminal",
         "name" : "VarName"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -2494,7 +2494,7 @@
         "kind" : "Nonterminal",
         "name" : "NontName"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -2519,7 +2519,7 @@
         "kind" : "Nonterminal",
         "name" : "Range"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -2796,7 +2796,7 @@
         "kind" : "Nonterminal",
         "name" : "Rule"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -2988,7 +2988,7 @@
         "kind" : "Nonterminal",
         "name" : "Label"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3027,7 +3027,7 @@
         "kind" : "Nonterminal",
         "name" : "Definition"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3057,7 +3057,7 @@
         "name" : "Layout",
         "nodeType" : "Layout"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3145,7 +3145,7 @@
         "kind" : "Nonterminal",
         "name" : "Label"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3170,7 +3170,7 @@
         "kind" : "Nonterminal",
         "name" : "WhiteSpaceOrComment"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3352,7 +3352,7 @@
         "kind" : "Nonterminal",
         "name" : "Arguments"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3425,7 +3425,7 @@
         "kind" : "Nonterminal",
         "name" : "RegexBody"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3470,7 +3470,7 @@
         "kind" : "Nonterminal",
         "name" : "RegexSequence"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3500,7 +3500,7 @@
         "kind" : "Nonterminal",
         "name" : "ReturnExpression"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3554,7 +3554,7 @@
         "kind" : "Nonterminal",
         "name" : "Parameters"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3627,7 +3627,7 @@
         "kind" : "Nonterminal",
         "name" : "Regexs"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3657,7 +3657,7 @@
         "kind" : "Nonterminal",
         "name" : "Sequence"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -3837,7 +3837,7 @@
         "kind" : "Nonterminal",
         "name" : "Identifier"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -4206,7 +4206,7 @@
         "kind" : "Nonterminal",
         "name" : "CharClass"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -4314,7 +4314,7 @@
         "kind" : "Nonterminal",
         "name" : "Body"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -4359,7 +4359,7 @@
         "kind" : "Nonterminal",
         "name" : "Definition"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -4388,7 +4388,7 @@
         "kind" : "Nonterminal",
         "name" : "Binding"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
@@ -4486,7 +4486,7 @@
         "kind" : "Nonterminal",
         "name" : "Alternatives"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
           "alternatives" : [
             {
