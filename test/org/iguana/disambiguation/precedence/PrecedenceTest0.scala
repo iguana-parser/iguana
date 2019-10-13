@@ -96,6 +96,6 @@ class PrecedenceTest0 extends FunSuite {
         |
       """.stripMargin
 
-    IggyParser.getGrammar(Input.fromString(s))
+    IggyParser.getRuntimeGrammar(Input.fromString(s))
   }
 }

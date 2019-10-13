@@ -3,6 +3,7 @@ package org.iguana;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
+import org.iguana.iggy.IggyParser;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.traversal.exception.AmbiguityException;
@@ -28,61 +29,84 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static iguana.utils.io.FileUtils.readFile;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class GrammarTest {
 
+    private static boolean REGENERATE_FILES = true;
+
+    static {
+        String regenerate = System.getenv("REGENERATE");
+        if (regenerate != null && regenerate.equals("true")) {
+            REGENERATE_FILES = true;
+        }
+    }
+
     @TestFactory
-    Collection<DynamicTest> grammarTests() {
+    Collection<DynamicTest> grammarTests() throws IOException {
         String path = Paths.get("test/resources/grammars").toAbsolutePath().toString();
 
-        List<Path> tests = getTests(path).stream().map(test -> Paths.get(test)).collect(Collectors.toList());
+        List<Path> testPaths = getTests(path).stream().map(test -> Paths.get(test)).collect(Collectors.toList());
 
         List<DynamicTest> grammarTests = new ArrayList<>();
 
-        for (Path test : tests) {
-            Path testName = test.getFileName();
-            Path category = test.getName(test.getNameCount() - 2);
+        for (Path test : testPaths) {
+            test(grammarTests, test);
+            break;
+        }
 
-            String testPath = test.toAbsolutePath().toString();
+        return grammarTests;
+    }
 
-            String grammarPath = testPath + "/grammar.json";
+    private void test(List<DynamicTest> grammarTests, Path test) throws IOException {
+        Path testName = test.getFileName();
+        Path category = test.getName(test.getNameCount() - 2);
 
-            Grammar grammar;
+        String testPath = test.toAbsolutePath().toString();
+
+        String grammarPath = test + "/grammar.iggy";
+        Grammar grammar = IggyParser.getGrammar(grammarPath);
+
+        String jsonGrammarPath = testPath + "/grammar.json";
+
+        if (REGENERATE_FILES) {
+            String jsonGrammar = JsonSerializer.toJSON(grammar);
+            FileUtils.writeFile(jsonGrammar, jsonGrammarPath);
+        } else {
+            Grammar jsonGrammar;
             try {
-                grammar = Grammar.load(grammarPath, "json");
+                jsonGrammar = Grammar.load(jsonGrammarPath, "json");
             } catch (FileNotFoundException e) {
                 throw new RuntimeException("No grammar.json file is present");
             }
 
-            File testDir = new File(testPath);
-            int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
-
-            for (int i = 1; i <= size; i++) {
-                String inputPath = testPath + "/input" + i + ".txt";
-
-                Input input;
-                try {
-                    input = Input.fromFile(new File(inputPath));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-                String parserTestName = "Parser test " + category + " " + testName;
-                IguanaParser parser = new IguanaParser(grammar.toGrammar());
-                DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, grammarPath, parser, i, input, grammar));
-
-                String recognizerTestName = "Recognizer test " + category + " " + testName;
-                IguanaRecognizer recognizer = new IguanaRecognizer(grammar.toGrammar());
-                DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
-
-                grammarTests.add(dynamicParserTest);
-                grammarTests.add(dynamicRecognizerTest);
-            }
+            assertEquals(grammar, jsonGrammar);
         }
 
-        return grammarTests;
+        File testDir = new File(testPath);
+        int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
+
+        for (int i = 1; i <= size; i++) {
+            String inputPath = testPath + "/input" + i + ".txt";
+
+            Input input;
+            try {
+                input = Input.fromFile(new File(inputPath));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            String parserTestName = "Parser test " + category + " " + testName;
+            IguanaParser parser = new IguanaParser(grammar.toGrammar());
+            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, jsonGrammarPath, parser, i, input, grammar));
+
+            String recognizerTestName = "Recognizer test " + category + " " + testName;
+            IguanaRecognizer recognizer = new IguanaRecognizer(grammar.toGrammar());
+            DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
+
+            grammarTests.add(dynamicParserTest);
+            grammarTests.add(dynamicRecognizerTest);
+        }
     }
 
     private Executable getRecognizerTest(String testPath, IguanaRecognizer recognizer, int j, Input input) {
@@ -117,7 +141,7 @@ public class GrammarTest {
             String statisticsPath = testPath + "/statistics" + j + ".json";
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
-            if (!new File(statisticsPath).exists()) {
+            if (REGENERATE_FILES) {
                 record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
                 return;
             }

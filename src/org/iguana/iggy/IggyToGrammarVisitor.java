@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     private Map<String, Terminal> terminalsMap = new HashMap<>();
+    private Nonterminal startNonterminal;
 
     @Override
     public Object visitNonterminalNode(NonterminalNode node) {
@@ -73,12 +74,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 builder.addHighLevelRule((Rule) obj);
             }
         }
-
+        builder.setStartSymbol(Start.from(startNonterminal));
         return builder.build();
     }
 
     /*
-     * Rule : Identifier Parameters? ":" Body                   %Syntax
+     * Rule : "start"? Identifier Parameters? ":" Body          %Syntax
      *      | "layout"? "terminal" Identifier ":" RegexBody     %Lexical
      *      ;
      */
@@ -90,7 +91,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 if (parameters == null) parameters = Collections.emptyList();
                 List<PriorityGroup> body = (List<PriorityGroup>) node.getChildWithName("Body").accept(this);
                 List<String> stringParams = parameters.stream().map(p -> p.id).collect(Collectors.toList());
-                return new Rule.Builder(Nonterminal.withName(nonterminalName.id), stringParams, body).build();
+                Nonterminal nonterminal = Nonterminal.withName(nonterminalName.id);
+                if (!node.childAt(0).children().isEmpty()) {
+                    startNonterminal = nonterminal;
+                }
+                return new Rule.Builder(nonterminal, stringParams, body).build();
 
             case "Lexical":
                 RegularExpression regex = (RegularExpression) node.getChildWithName("RegexBody").accept(this);

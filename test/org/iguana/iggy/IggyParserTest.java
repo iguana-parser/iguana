@@ -17,7 +17,7 @@ public class IggyParserTest {
     @Test
     public void test() throws Exception {
         Path grammarPath = Paths.get("test/resources/Grammar.iggy");
-        Grammar grammar = IggyParser.getHighLevelGrammar(grammarPath.toAbsolutePath().toString());
+        Grammar grammar = IggyParser.getGrammar(grammarPath.toAbsolutePath().toString());
 
         System.out.println(grammar);
         System.out.println(JsonSerializer.serialize(grammar));

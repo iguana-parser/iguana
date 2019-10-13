@@ -1,2 +1,4 @@
 
-@Start A :
+start A
+  :
+  ;

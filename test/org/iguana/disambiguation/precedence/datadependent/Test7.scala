@@ -20,7 +20,7 @@ class Test7 extends FunSuite {
         |     > E 'w'
         |     | 'a'
       """.stripMargin
-    IggyParser.getGrammar(s)
+    IggyParser.getRuntimeGrammar(s)
   }
 
   val start = Nonterminal.withName("S")
@@ -35,7 +35,7 @@ class Test7 extends FunSuite {
         |        | [1>=p] l=E(p) [l<=0||l>=1] 'w' {0}
         |        | 'a' {0}
       """.stripMargin
-    IggyParser.getGrammar(s)
+    IggyParser.getRuntimeGrammar(s)
   }
 
   test("Parser") {

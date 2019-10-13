@@ -18,7 +18,7 @@ import static iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 
-    private static Grammar highLevelIggyGrammar() {
+    private static Grammar iggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
             return JsonSerializer.deserialize(content, Grammar.class);
@@ -32,9 +32,8 @@ public class IggyParser {
         System.out.println(JsonSerializer.toJSON(g));
     }
 
-    public static Grammar getHighLevelGrammar(String path) throws IOException {
-        RuntimeGrammar iggyGrammar = transform(highLevelIggyGrammar());
-        IguanaParser parser = new IguanaParser(iggyGrammar);
+    public static Grammar getGrammar(String path) throws IOException {
+        IguanaParser parser = new IguanaParser(transform(iggyGrammar()));
 
         Input input = Input.fromFile(new File(path));
         ParseTreeNode parseTree = parser.getParserTree(input);
@@ -57,8 +56,8 @@ public class IggyParser {
         return grammar;
     }
 
-    public static RuntimeGrammar getGrammar(String path) throws IOException {
-        return transform(getHighLevelGrammar(path));
+    public static RuntimeGrammar getRuntimeGrammar(String path) throws IOException {
+        return transform(getGrammar(path));
     }
 
 }

@@ -19,7 +19,7 @@ class Test1 extends FunSuite {
         |     > E '-'
         |     | 'a'
       """.stripMargin
-    IggyParser.getGrammar(s)
+    IggyParser.getRuntimeGrammar(s)
   }
 
   val start = Nonterminal.withName("S")
@@ -33,7 +33,7 @@ class Test1 extends FunSuite {
         |        | [1>=p] l=E(p) [l<=0||l>=1] '-' {0}
         |        | 'a' {0}
       """.stripMargin
-    IggyParser.getGrammar(s)
+    IggyParser.getRuntimeGrammar(s)
   }
 
   test("Parser1") { runOriginal(Input.fromString("a^a^a")) }

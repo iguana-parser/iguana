@@ -2755,6 +2755,40 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Opt",
+                      "name" : "start?",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "start",
+                        "nodeType" : "Keyword",
+                        "regex" : {
+                          "kind" : "regex.Seq",
+                          "symbols" : [
+                            {
+                              "kind" : "Char",
+                              "val" : 115
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 116
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 97
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 114
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 116
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
                       "kind" : "Nonterminal",
                       "name" : "Identifier"
                     },
