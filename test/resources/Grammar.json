@@ -1,21 +1,16 @@
 {
-  "kind" : "HighLevelGrammar",
   "rules" : [
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "A"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Terminal",
@@ -39,37 +34,29 @@
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
-            {
-              "kind" : "Alternative"
-            }
+            { }
           ]
         }
       ]
     },
     {
-      "kind" : "HighLevelRule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "B"
       },
-      "alternativesList" : [
+      "priorityGroups" : [
         {
-          "kind" : "Alternatives",
           "alternatives" : [
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -93,10 +80,8 @@
               ]
             },
             {
-              "kind" : "Alternative",
               "seqs" : [
                 {
-                  "kind" : "Seq",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -119,9 +104,7 @@
                 }
               ]
             },
-            {
-              "kind" : "Alternative"
-            }
+            { }
           ]
         }
       ]

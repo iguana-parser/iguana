@@ -54,7 +54,6 @@ public class JsonSerializer {
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
         mapper.addMixIn(Rule.class, RuleMixIn.class);
-        mapper.addMixIn(PriorityGroup.class, PriorityGroupMixIn.class);
         mapper.addMixIn(Alternative.class, AlternativeMixIn.class);
         mapper.addMixIn(Sequence.class, SequenceMixIn.class);
 
@@ -467,11 +466,6 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = Rule.Builder.class)
     abstract static class RuleMixIn { }
-
-    abstract static class PriorityGroupMixIn {
-        @JsonValue
-        List<Alternative> alternatives;
-    }
 
     abstract static class AlternativeMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
