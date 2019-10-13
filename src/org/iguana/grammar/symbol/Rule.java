@@ -22,14 +22,14 @@ public class Rule implements Serializable {
 
     private final Nonterminal head;
 
-    private final List<PriorityGroup> priorityGroups;
-
     private final List<String> parameters;
+
+    private final List<PriorityGroup> priorityGroups;
 
     public Rule(Builder builder) {
         this.head = builder.head;
         this.parameters = builder.parameters;
-        this.priorityGroups = builder.alternativesList;
+        this.priorityGroups = builder.priorityGroups;
     }
 
     public Nonterminal getHead() {
@@ -68,7 +68,7 @@ public class Rule implements Serializable {
     }
 
     public static class Builder {
-        List<PriorityGroup> alternativesList;
+        List<PriorityGroup> priorityGroups;
         Nonterminal head;
         List<String> parameters;
 
@@ -79,22 +79,22 @@ public class Rule implements Serializable {
             this.parameters = parameters;
         }
 
-        public Builder(Nonterminal head, List<String> parameters, List<PriorityGroup> alternativesList) {
+        public Builder(Nonterminal head, List<String> parameters, List<PriorityGroup> priorityGroups) {
             this.head = head;
             this.parameters = parameters;
-            this.alternativesList = alternativesList;
+            this.priorityGroups = priorityGroups;
         }
 
-        public Builder addAlternative(PriorityGroup alternatives) {
-            if (alternativesList == null) {
-                alternativesList = new ArrayList<>();
+        public Builder addPriorityGroup(PriorityGroup priorityGroup) {
+            if (priorityGroups == null) {
+                priorityGroups = new ArrayList<>();
             }
-            this.alternativesList.add(alternatives);
+            this.priorityGroups.add(priorityGroup);
             return this;
         }
 
         public Rule build() {
-            if (alternativesList == null) alternativesList = Collections.emptyList();
+            if (priorityGroups == null) priorityGroups = Collections.emptyList();
             if (parameters == null) parameters = Collections.emptyList();
             return new Rule(this);
         }
