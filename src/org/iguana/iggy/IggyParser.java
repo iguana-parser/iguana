@@ -33,7 +33,7 @@ public class IggyParser {
     }
 
     public static Grammar getGrammar(String path) throws IOException {
-        IguanaParser parser = new IguanaParser(transform(iggyGrammar()));
+        IguanaParser parser = new IguanaParser(transform(iggyGrammar().toGrammar()));
 
         Input input = Input.fromFile(new File(path));
         ParseTreeNode parseTree = parser.getParserTree(input);
@@ -44,8 +44,8 @@ public class IggyParser {
         return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 
-    public static RuntimeGrammar transform(Grammar highLevelGrammar) {
-        RuntimeGrammar grammar = new EBNFToBNF().transform(highLevelGrammar.toGrammar());
+    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
+        RuntimeGrammar grammar = new EBNFToBNF().transform(runtimeGrammar);
 
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
@@ -57,7 +57,7 @@ public class IggyParser {
     }
 
     public static RuntimeGrammar getRuntimeGrammar(String path) throws IOException {
-        return transform(getGrammar(path));
+        return transform(getGrammar(path).toGrammar());
     }
 
 }

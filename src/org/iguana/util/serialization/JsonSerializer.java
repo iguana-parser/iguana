@@ -16,12 +16,11 @@ import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.*;
@@ -51,6 +50,8 @@ public class JsonSerializer {
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+
+        mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
         mapper.addMixIn(Rule.class, RuleMixIn.class);
@@ -458,6 +459,34 @@ public class JsonSerializer {
         }
     }
 
+    @JsonDeserialize(builder = RuntimeRule.Builder.class)
+    abstract static class RuntimeRuleMixIn {
+        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LayoutStrategyFilter.class)
+        LayoutStrategy layoutStrategy;
+        @JsonIgnore
+        Recursion recursion;
+        @JsonIgnore
+        Recursion irecursion;
+        @JsonIgnore
+        String leftEnd;
+        @JsonIgnore
+        String rightEnd;
+        @JsonIgnore
+        Set<String> leftEnds;
+        @JsonIgnore
+        Set<String> rightEnds;
+        @JsonIgnore
+        Associativity associativity;
+        @JsonIgnore
+        AssociativityGroup associativityGroup;
+        @JsonIgnore
+        int precedence;
+        @JsonIgnore
+        PrecedenceLevel precedenceLevel;
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
+
     @JsonDeserialize(builder = Grammar.Builder.class)
     abstract static class GrammarMixIn {
         @JsonIgnore
@@ -492,7 +521,7 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Plus.class, name="Plus"),
         @JsonSubTypes.Type(value=Opt.class, name="Opt"),
         @JsonSubTypes.Type(value=Alt.class, name="Alt"),
-        @JsonSubTypes.Type(value= Group.class, name="Sequence"),
+        @JsonSubTypes.Type(value=Group.class, name="Sequence"),
         @JsonSubTypes.Type(value=Start.class, name="Start"),
     })
     abstract static class SymbolMixIn { }
@@ -502,6 +531,12 @@ public class JsonSerializer {
     abstract static class RegularExpressionMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value=TerminalNode.class, name="TerminalNode"),
+        @JsonSubTypes.Type(value=NonterminalNode.class, name="NonterminalNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.class, name="MetaSymbolNode"),
+        @JsonSubTypes.Type(value=AmbiguityNode.class, name="AmbiguityNode")
+    })
     abstract static class ParseTreeNodeMixIn { }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)
