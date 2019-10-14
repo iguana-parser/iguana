@@ -1,57 +1,56 @@
 {
-  "kind" : "Grammar",
   "rules" : [
     {
-      "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "A"
       },
-      "body" : [
+      "priorityGroups" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "B"
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "B"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
     {
-      "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "B"
       },
-      "body" : [
+      "priorityGroups" : [
         {
-          "kind" : "Terminal",
-          "name" : "b",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 98
-          }
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Start(A)",
-        "nodeType" : "Start"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      ],
-      "definition" : {
-        "kind" : "Start",
-        "name" : "Start(A)",
-        "nonterminal" : {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      }
     }
   ],
   "startSymbol" : {
