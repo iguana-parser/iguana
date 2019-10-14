@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 
 public class GrammarTest {
 
-    private static boolean REGENERATE_FILES = false;
+    private static boolean REGENERATE_FILES = true;
 
     static {
         String regenerate = System.getenv("REGENERATE");
@@ -50,9 +50,12 @@ public class GrammarTest {
 
         List<DynamicTest> grammarTests = new ArrayList<>();
 
+        int i = 0;
         for (Path test : testPaths) {
+            System.out.println(i);
             test(grammarTests, test);
-            break;
+            i++;
+            if (i == 2) break;
         }
 
         return grammarTests;
@@ -69,14 +72,18 @@ public class GrammarTest {
 
         String jsonGrammarPath = testPath + "/grammar.json";
 
-        Grammar jsonGrammar;
-        try {
-            jsonGrammar = Grammar.load(jsonGrammarPath, "json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("No grammar.json file is present");
+        if (REGENERATE_FILES) {
+            String jsonGrammar = JsonSerializer.toJSON(grammar);
+            FileUtils.writeFile(jsonGrammar, jsonGrammarPath);
+        } else {
+            Grammar jsonGrammar;
+            try {
+                jsonGrammar = Grammar.load(jsonGrammarPath, "json");
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException("No grammar.json file is present");
+            }
+            assertEquals(grammar, jsonGrammar);
         }
-
-        assertEquals(grammar, jsonGrammar);
 
         File testDir = new File(testPath);
         int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
@@ -92,11 +99,11 @@ public class GrammarTest {
             }
 
             String parserTestName = "Parser test " + category + " " + testName;
-            IguanaParser parser = new IguanaParser(IggyParser.transform(jsonGrammar.toGrammar()));
-            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, jsonGrammarPath, parser, i, input, jsonGrammar));
+            IguanaParser parser = new IguanaParser(IggyParser.transform(grammar.toGrammar()));
+            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, jsonGrammarPath, parser, i, input, grammar));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
-            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(jsonGrammar.toGrammar()));
+            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(grammar.toGrammar()));
             DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
             grammarTests.add(dynamicParserTest);

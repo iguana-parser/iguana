@@ -238,7 +238,7 @@ public class RuntimeRule {
 		
 		RuntimeRule other = (RuntimeRule) obj;
 
-		return head.equals(other.head) && (body == null ? other.body == null : body.equals(other.body));
+		return head.equals(other.head) && Objects.equals(body, other.body);
 	}
 	
 	@Override
