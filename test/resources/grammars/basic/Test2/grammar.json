@@ -16,13 +16,8 @@
                       "kind" : "Terminal",
                       "name" : "a",
                       "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 97
-                          }
-                        ]
+                        "kind" : "Char",
+                        "val" : 97
                       }
                     }
                   ]

@@ -485,7 +485,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     private RegularExpression getCharsRegex(String s) {
-        return Seq.from(getChars(s.substring(1, s.length() - 1)));
+        int[] chars = getChars(s.substring(1, s.length() - 1));
+        if (chars.length == 1) {
+            return Char.from(chars[0]);
+        }
+        return Seq.from(chars);
     }
 
     private static int[] getChars(String s) {
