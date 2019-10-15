@@ -196,7 +196,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | Symbol "+"                       %Plus
      *   | Symbol "?"                       %Option
      *   | "(" Symbol Symbol+ ")"           %Sequence
-     *   | "(" Symbols ("|" Symbols)+ ")"   %Alternation
+     *   | "(" Symbol+ ("|" Symbol+)+ ")"   %Alternation
      *   > "align" Symbol                   %Align
      *   | "ignore" Symbol                  %Ignore
      *   | Expression "?" Symbol ":" Symbol %IfThenElse
@@ -212,6 +212,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | Identifier                       %Nont
      *   | String                           %String
      *   | Char                             %Character
+     *   | "{" Symbol Symbol+ "}" "*"        %StarSep
+         | "{" Symbol Symbol+ "}" "+"        %PlusSep
      *   ;
      */
     private Symbol visitSymbol(NonterminalNode node) {
@@ -232,8 +234,31 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Plus":
                 return Plus.from((Symbol) node.childAt(0).accept(this));
 
-            case "Sequence":
-//                return org.iguana.grammar.symbol.Sequence.from()
+            case "Sequence": {
+                List<Symbol> symbols = new ArrayList<>();
+                symbols.add((Symbol) node.childAt(1).accept(this));
+                symbols.addAll((List<? extends Symbol>) node.childAt(2).accept(this));
+                return Group.from(symbols);
+            }
+
+            case "Alternation": {
+                List<Symbol> symbols = new ArrayList<>();
+                List<Symbol> first = (List<Symbol>) node.childAt(1).accept(this);
+                List<List<Symbol>> second = (List<List<Symbol>>) node.childAt(2).accept(this);
+                if (first.size() == 1) {
+                    symbols.add(first.get(0));
+                } else {
+                    symbols.add(Group.from(first));
+                }
+                for (List<Symbol> list : second) {
+                    if (list.size() == 1) {
+                        symbols.add(list.get(0));
+                    } else {
+                        symbols.add(Group.from(list));
+                    }
+                }
+                return Alt.from(symbols);
+            }
 
             case "Option":
                 return Opt.from((Symbol) node.childAt(0).accept(this));
@@ -317,6 +342,18 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "String":
             case "Character":
                 return Terminal.from(getCharsRegex(node.getText()));
+
+            case "StarSep": {
+                Symbol symbol = (Symbol) node.childAt(1).accept(this);
+                List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
+                return Star.builder(symbol).addSeparators(seps).build();
+            }
+
+            case "PlusSep": {
+                Symbol symbol = (Symbol) node.childAt(1).accept(this);
+                List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
+                return Plus.builder(symbol).addSeparators(seps).build();
+            }
 
             default:
                 throw new RuntimeException("Unexpected label: " + label);

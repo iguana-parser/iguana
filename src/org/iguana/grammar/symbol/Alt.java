@@ -75,7 +75,6 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 	
 	@Override
 	public boolean equals(Object obj) {
-	
 		if(obj == this)
 			return true;
 		

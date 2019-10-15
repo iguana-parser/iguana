@@ -861,41 +861,6 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "Symbol"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ">>",
-                      "nodeType" : "Keyword",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 62
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 62
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Nonterminal",
-                      "name" : "Regex"
-                    }
-                  ],
-                  "label" : "Follow"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
                       "kind" : "Terminal",
                       "name" : "Char",
                       "regex" : {
@@ -1168,6 +1133,104 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Terminal",
+                      "name" : "{",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 123
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Symbol"
+                    },
+                    {
+                      "kind" : "Plus",
+                      "name" : "Symbol+",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "Symbol"
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "}",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 125
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "+",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 43
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "PlusSep"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Symbol"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ">>",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 62
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 62
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Regex"
+                    }
+                  ],
+                  "label" : "Follow"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
                       "kind" : "Nonterminal",
                       "name" : "Symbol"
                     },
@@ -1223,6 +1286,69 @@
                     }
                   ],
                   "label" : "Nont"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "{",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 123
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Symbol"
+                    },
+                    {
+                      "kind" : "Plus",
+                      "name" : "Symbol+",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "Symbol"
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "}",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 125
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "*",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 42
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "StarSep"
                 }
               ]
             }
@@ -1784,15 +1910,19 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "Symbols"
+                      "kind" : "Plus",
+                      "name" : "Symbol+",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "Symbol"
+                      }
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "(| Symbols)+",
+                      "name" : "(| Symbol+)+",
                       "s" : {
                         "kind" : "Sequence",
-                        "name" : "(| Symbols)",
+                        "name" : "(| Symbol+)",
                         "symbols" : [
                           {
                             "kind" : "Terminal",
@@ -1809,8 +1939,12 @@
                             }
                           },
                           {
-                            "kind" : "Nonterminal",
-                            "name" : "Symbols"
+                            "kind" : "Plus",
+                            "name" : "Symbol+",
+                            "s" : {
+                              "kind" : "Nonterminal",
+                              "name" : "Symbol"
+                            }
                           }
                         ]
                       }

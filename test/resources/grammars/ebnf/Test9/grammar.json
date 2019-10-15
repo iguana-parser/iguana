@@ -1,151 +1,68 @@
 {
-  "kind" : "Grammar",
   "rules" : [
     {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "A+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "A+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      ],
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "A+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "A+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      ],
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "A+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "A*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "A+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "definition" : {
-        "kind" : "Star",
-        "name" : "A*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "A*",
-        "nodeType" : "Star"
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "A*",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        }
-      }
-    },
-    {
-      "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "S"
       },
-      "body" : [
+      "priorityGroups" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "A*",
-          "nodeType" : "Star"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "A*",
-          "nodeType" : "Star"
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Star",
+                      "name" : "A*",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "A"
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "A*",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "A"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
     {
-      "kind" : "Rule",
       "head" : {
         "kind" : "Nonterminal",
         "name" : "A"
       },
-      "body" : [
+      "priorityGroups" : [
         {
-          "kind" : "Terminal",
-          "name" : "a",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 97
-          }
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
-    },
-    {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Start(S)",
-        "nodeType" : "Start"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "S"
-        }
-      ],
-      "definition" : {
-        "kind" : "Start",
-        "name" : "Start(S)",
-        "nonterminal" : {
-          "kind" : "Nonterminal",
-          "name" : "S"
-        }
-      }
     }
   ],
   "startSymbol" : {

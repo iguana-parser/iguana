@@ -55,7 +55,7 @@ public class GrammarTest {
             System.out.println(i);
             test(grammarTests, test);
             i++;
-            if (i == 20) break;
+            if (i == 35) break;
         }
 
         return grammarTests;
@@ -152,6 +152,7 @@ public class GrammarTest {
             assertEquals(expectedStatistics, parser.getStatistics());
 
             if (!isCyclic) {
+                // TODO: why is this check here?
                 assertNotNull("Parse Error: " + parser.getParseError(), actualParseTree);
 
                 ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(parseTreePath), ParseTreeNode.class);
