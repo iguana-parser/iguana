@@ -17,7 +17,6 @@
         {
           "kind" : "NonterminalNode",
           "rule" : {
-            "kind" : "Rule",
             "head" : {
               "kind" : "Nonterminal",
               "name" : "E"
@@ -45,7 +44,6 @@
             {
               "kind" : "NonterminalNode",
               "rule" : {
-                "kind" : "Rule",
                 "head" : {
                   "kind" : "Nonterminal",
                   "name" : "E"
@@ -97,7 +95,6 @@
             {
               "kind" : "NonterminalNode",
               "rule" : {
-                "kind" : "Rule",
                 "head" : {
                   "kind" : "Nonterminal",
                   "name" : "E"
@@ -125,7 +122,6 @@
                 {
                   "kind" : "NonterminalNode",
                   "rule" : {
-                    "kind" : "Rule",
                     "head" : {
                       "kind" : "Nonterminal",
                       "name" : "E"
@@ -177,7 +173,6 @@
                 {
                   "kind" : "NonterminalNode",
                   "rule" : {
-                    "kind" : "Rule",
                     "head" : {
                       "kind" : "Nonterminal",
                       "name" : "E"
@@ -223,7 +218,6 @@
         {
           "kind" : "NonterminalNode",
           "rule" : {
-            "kind" : "Rule",
             "head" : {
               "kind" : "Nonterminal",
               "name" : "E"
@@ -251,7 +245,6 @@
             {
               "kind" : "NonterminalNode",
               "rule" : {
-                "kind" : "Rule",
                 "head" : {
                   "kind" : "Nonterminal",
                   "name" : "E"
@@ -279,7 +272,6 @@
                 {
                   "kind" : "NonterminalNode",
                   "rule" : {
-                    "kind" : "Rule",
                     "head" : {
                       "kind" : "Nonterminal",
                       "name" : "E"
@@ -331,7 +323,6 @@
                 {
                   "kind" : "NonterminalNode",
                   "rule" : {
-                    "kind" : "Rule",
                     "head" : {
                       "kind" : "Nonterminal",
                       "name" : "E"
@@ -387,7 +378,6 @@
             {
               "kind" : "NonterminalNode",
               "rule" : {
-                "kind" : "Rule",
                 "head" : {
                   "kind" : "Nonterminal",
                   "name" : "E"

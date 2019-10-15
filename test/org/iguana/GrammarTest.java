@@ -55,7 +55,7 @@ public class GrammarTest {
             System.out.println(i);
             test(grammarTests, test);
             i++;
-            if (i == 10) break;
+            if (i == 20) break;
         }
 
         return grammarTests;
