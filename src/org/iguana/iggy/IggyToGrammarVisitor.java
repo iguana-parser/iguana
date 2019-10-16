@@ -34,8 +34,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Parameters":
                 return visitParameters(node);
 
-            case "Alternatives":
-                return visitAlternatives(node);
+            case "PriorityLevels":
+                return visitPriorityLevels(node);
 
             case "Alternative":
                 return visitAlternative(node);
@@ -89,13 +89,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
                 List<Identifier> parameters = (List<Identifier>) node.childAt(1).accept(this);
                 if (parameters == null) parameters = Collections.emptyList();
-                List<PriorityLevel> body = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
-                List<String> stringParams = parameters.stream().map(p -> p.id).collect(Collectors.toList());
-                Nonterminal nonterminal = Nonterminal.withName(nonterminalName.id);
+                List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
+                List<String> params = parameters.stream().map(p -> p.id).collect(Collectors.toList());
+                Nonterminal nonterminal = Nonterminal.builder(nonterminalName.id).addParameters(params).build();
                 if (!node.childAt(0).children().isEmpty()) {
                     startNonterminal = nonterminal;
                 }
-                return new Rule.Builder(nonterminal, stringParams, body).build();
+                return new Rule(nonterminal, priorityLevels);
 
             case "Lexical":
                 RegularExpression regex = (RegularExpression) node.getChildWithName("RegexBody").accept(this);
@@ -119,7 +119,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     /*
      * Alternatives: { Alternative '|' }+
      */
-    private PriorityLevel visitAlternatives(NonterminalNode node) {
+    private PriorityLevel visitPriorityLevels(NonterminalNode node) {
         return new PriorityLevel((List<Alternative>) node.childAt(0).accept(this));
     }
 

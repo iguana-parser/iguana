@@ -142,17 +142,13 @@ public class Grammar implements Serializable {
     }
 
     private static List<RuntimeRule> getRules(Rule highLevelRule) {
-        List<String> parameters = highLevelRule.getParameters();
-        List<PriorityLevel> alternativesList = highLevelRule.getPriorityLevels();
+        List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
         PrecedenceLevel level = PrecedenceLevel.getFirst();
         Nonterminal head = highLevelRule.getHead();
 
-        if (!parameters.isEmpty())
-            head = head.copyBuilder().addParameters(parameters).build();
-
-        ListIterator<PriorityLevel> altsIt = alternativesList.listIterator(alternativesList.size());
+        ListIterator<PriorityLevel> altsIt = priorityLevels.listIterator(priorityLevels.size());
         while (altsIt.hasPrevious()) {
             PriorityLevel group = altsIt.previous();
             ListIterator<Alternative> altIt = group.getAlternatives().listIterator(group.getAlternatives().size());

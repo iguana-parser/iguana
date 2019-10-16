@@ -1,13 +1,12 @@
 package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * A production rule is a group of priority groups, which are separated by > in the textual grammar notation.
- * For example, in the following example, there are two priority groups, one consisting of the alternative A B | C D,
+ * A rule is comprised of a list of priority levels, which are separated by > in the textual grammar notation.
+ * In the following example, there are two priority groups, one consisting of the alternative A B | C D,
  * and second of the alternative E F | G H.
  *
  * S : A B
@@ -20,16 +19,15 @@ public class Rule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Nonterminal head;
+    private Nonterminal head;
 
-    private final List<String> parameters;
+    private List<PriorityLevel> priorityLevels;
 
-    private final List<PriorityLevel> priorityLevels;
+    public Rule() { }
 
-    public Rule(Builder builder) {
-        this.head = builder.head;
-        this.parameters = builder.parameters;
-        this.priorityLevels = builder.priorityLevels;
+    public Rule(Nonterminal head, List<PriorityLevel> priorityLevels) {
+        this.head = head;
+        this.priorityLevels = priorityLevels;
     }
 
     public Nonterminal getHead() {
@@ -40,16 +38,17 @@ public class Rule implements Serializable {
         return priorityLevels;
     }
 
-    public List<String> getParameters() {
-        return parameters;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Rule)) return false;
         Rule other = (Rule) obj;
-        return this.head.equals(other.head) && this.parameters.equals(other.parameters) && this.priorityLevels.equals(other.priorityLevels);
+        return this.head.equals(other.head) && this.priorityLevels.equals(other.priorityLevels);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(head, priorityLevels);
     }
 
     @Override
@@ -67,36 +66,4 @@ public class Rule implements Serializable {
         return sb.toString();
     }
 
-    public static class Builder {
-        List<PriorityLevel> priorityLevels;
-        Nonterminal head;
-        List<String> parameters;
-
-        public Builder() {}
-
-        public Builder(Nonterminal head, List<String> parameters) {
-            this.head = head;
-            this.parameters = parameters;
-        }
-
-        public Builder(Nonterminal head, List<String> parameters, List<PriorityLevel> priorityLevels) {
-            this.head = head;
-            this.parameters = parameters;
-            this.priorityLevels = priorityLevels;
-        }
-
-        public Builder addPriorityGroup(PriorityLevel priorityLevel) {
-            if (priorityLevels == null) {
-                priorityLevels = new ArrayList<>();
-            }
-            this.priorityLevels.add(priorityLevel);
-            return this;
-        }
-
-        public Rule build() {
-            if (priorityLevels == null) priorityLevels = Collections.emptyList();
-            if (parameters == null) parameters = Collections.emptyList();
-            return new Rule(this);
-        }
-    }
 }

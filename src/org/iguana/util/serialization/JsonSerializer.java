@@ -47,7 +47,6 @@ public class JsonSerializer {
         mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
-        mapper.addMixIn(Rule.class, RuleMixIn.class);
         mapper.addMixIn(Alternative.class, AlternativeMixIn.class);
         mapper.addMixIn(Sequence.class, SequenceMixIn.class);
 
@@ -428,9 +427,6 @@ public class JsonSerializer {
         @JsonIgnore
         RuntimeGrammar grammar;
     }
-
-    @JsonDeserialize(builder = Rule.Builder.class)
-    abstract static class RuleMixIn { }
 
     abstract static class AlternativeMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)

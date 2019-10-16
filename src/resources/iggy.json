@@ -2655,6 +2655,51 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "PriorityLevels"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Plus",
+                      "name" : "Alternative+",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "Alternative"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : "|",
+                          "nodeType" : "Keyword",
+                          "regex" : {
+                            "kind" : "regex.Seq",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 124
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "label" : "Prec"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Layout",
         "nodeType" : "Layout"
       },
@@ -3891,10 +3936,10 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "Alternatives+",
+                      "name" : "PriorityLevels+",
                       "s" : {
                         "kind" : "Nonterminal",
-                        "name" : "Alternatives"
+                        "name" : "PriorityLevels"
                       },
                       "separators" : [
                         {
@@ -4518,51 +4563,6 @@
                     }
                   ],
                   "label" : "String"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Alternatives"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Plus",
-                      "name" : "Alternative+",
-                      "s" : {
-                        "kind" : "Nonterminal",
-                        "name" : "Alternative"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "|",
-                          "nodeType" : "Keyword",
-                          "regex" : {
-                            "kind" : "regex.Seq",
-                            "symbols" : [
-                              {
-                                "kind" : "Char",
-                                "val" : 124
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ],
-                  "label" : "Prec"
                 }
               ]
             }
