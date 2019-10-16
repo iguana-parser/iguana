@@ -170,8 +170,9 @@ public class Grammar implements Serializable {
                     level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                 } else {
                     List<Symbol> symbols = new ArrayList<>();
-                    if (alternative.first() == null) { // Empty alternative
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, null);
+                    if (alternative.first() == null || alternative.first().isEmpty()) { // Empty alternative
+                        String label = alternative.first() == null ? null : alternative.first().label;
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);

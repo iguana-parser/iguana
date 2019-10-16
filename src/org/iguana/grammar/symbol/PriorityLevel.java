@@ -32,6 +32,11 @@ public class PriorityLevel implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        return alternatives.hashCode();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Alternative alternative : alternatives) {

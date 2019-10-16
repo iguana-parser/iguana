@@ -124,19 +124,30 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     /*
-     * Alternative: Sequence                                             #Sequence
-     *            | Associativity "(" Sequence ("|" Sequence)+ ")"       #Assoc
+     * Alternative
+     *   : Sequence                                             %Sequence
+     *   | Associativity "(" Sequence ("|" Sequence)+ ")"       %Assoc
+     *   |                                                      %Empty
+     *   ;
      */
     private Alternative visitAlternative(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
-            case "Sequence":
-                return new Alternative((Sequence) node.childAt(0).accept(this));
+            case "Sequence": {
+                List<Sequence> seqs = new ArrayList<>();
+                seqs.add((Sequence) node.childAt(0).accept(this));
+                return new Alternative(seqs);
+            }
 
-            case "Assoc":
+            case "Assoc": {
                 Associativity associativity = getAssociativity(node.childAt(0).childAt(0));
-                Sequence sequence = (Sequence) node.childAt(2).accept(this);
-                List<Sequence> rest = (List<Sequence>) node.childAt(3).accept(this);
-                return new Alternative(sequence, rest, associativity);
+                List<Sequence> seqs = new ArrayList<>();
+                seqs.add((Sequence) node.childAt(2).accept(this));
+                seqs.addAll((List<Sequence>) node.childAt(3).accept(this));
+                return new Alternative(seqs, associativity);
+            }
+
+            case "Empty":
+                return new Alternative();
 
             default:
                 throw new RuntimeException("Unexpected label");

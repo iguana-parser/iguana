@@ -26,6 +26,10 @@ public class Sequence implements Serializable {
         this.label = label;
     }
 
+    public boolean isEmpty() {
+        return symbols == null || symbols.isEmpty();
+    }
+
     public Symbol first() {
         if (symbols == null || symbols.isEmpty()) return null;
         return symbols.get(0);

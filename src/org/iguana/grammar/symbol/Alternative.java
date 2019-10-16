@@ -1,7 +1,6 @@
 package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -16,14 +15,12 @@ public class Alternative implements Serializable {
 
     public Alternative() { }
 
-    public Alternative(Sequence sequence) {
-        this(sequence, null, null);
+    public Alternative(List<Sequence> sequences) {
+        this(sequences, Associativity.UNDEFINED);
     }
 
-    public Alternative(Sequence sequence, List<Sequence> sequences, Associativity associativity) {
-        seqs = new ArrayList<>();
-        if (sequence != null) seqs.add(sequence);
-        if (sequences != null) seqs.addAll(sequences);
+    public Alternative(List<Sequence> sequences, Associativity associativity) {
+        this.seqs = sequences;
         this.associativity = associativity;
     }
 

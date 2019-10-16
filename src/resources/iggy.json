@@ -13,15 +13,18 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Opt",
-                      "name" : "Sequence?",
-                      "s" : {
-                        "kind" : "Nonterminal",
-                        "name" : "Sequence"
-                      }
+                      "kind" : "Nonterminal",
+                      "name" : "Sequence"
                     }
                   ],
                   "label" : "Sequence"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "label" : "Empty"
                 }
               ]
             },
@@ -2068,8 +2071,7 @@
                         "name" : "Symbol"
                       }
                     }
-                  ],
-                  "label" : "Sequence"
+                  ]
                 }
               ]
             }
@@ -2688,8 +2690,7 @@
                         }
                       ]
                     }
-                  ],
-                  "label" : "Prec"
+                  ]
                 }
               ]
             }
@@ -2726,23 +2727,6 @@
                               },
                               {
                                 "kind" : "Char",
-                                "val" : 42
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "kind" : "RegularExpressionCondition",
-                          "type" : "NOT_FOLLOW",
-                          "regularExpression" : {
-                            "kind" : "regex.Seq",
-                            "symbols" : [
-                              {
-                                "kind" : "Char",
-                                "val" : 47
-                              },
-                              {
-                                "kind" : "Char",
                                 "val" : 47
                               }
                             ]
@@ -2767,6 +2751,23 @@
                               {
                                 "kind" : "Char",
                                 "val" : 32
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Seq",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 47
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 42
                               }
                             ]
                           }
@@ -3255,8 +3256,7 @@
                         "name" : "Regex"
                       }
                     }
-                  ],
-                  "label" : "Sequence"
+                  ]
                 }
               ]
             }
