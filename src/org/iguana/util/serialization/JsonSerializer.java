@@ -11,27 +11,25 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
+import iguana.utils.input.Input;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.*;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class JsonSerializer {
 
@@ -42,11 +40,6 @@ public class JsonSerializer {
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
-
-//        TypeResolverBuilder<?> typeResolverBuilder = new CustomTypeResolverBuilder();
-//        typeResolverBuilder.init(JsonTypeInfo.Id.CUSTOM, new MyTypeIdResolver());
-//        typeResolverBuilder.inclusion(JsonTypeInfo.As.PROPERTY);
-//        mapper.setDefaultTyping(typeResolverBuilder);
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
@@ -115,13 +108,9 @@ public class JsonSerializer {
 
         // Parse tree
         mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
-        mapper.addMixIn(TerminalNode.class, TerminalNodeMixIn.class);
-        mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
-        mapper.addMixIn(MetaSymbolNode.class, MetaSymbolNodeMixIn.class);
-        mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
+        mapper.addMixIn(DefaultTerminalNode.class, DefaultTerminalNodeMixIn.class);
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(Grammar.class, new GrammarDeserializer());
         module.addDeserializer(Expression.Call.class, new CallDeserializer());
         mapper.registerModule(module);
     }
@@ -140,9 +129,6 @@ public class JsonSerializer {
 
     public static void serialize(Object obj, String path, boolean gzip) throws IOException {
         OutputStream out = new FileOutputStream(path);
-        if (gzip) {
-            out = new GZIPOutputStream(out);
-        }
         try (Writer writer = new OutputStreamWriter(out)) {
             DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
             pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
@@ -166,31 +152,6 @@ public class JsonSerializer {
 
     public static <T> T deserialize(InputStream in, Class<T> clazz) throws IOException {
         return mapper.readValue(in, clazz);
-    }
-
-    public static InputStream getInputStream(InputStream in) throws IOException {
-        PushbackInputStream pb = new PushbackInputStream(in, 2);
-        byte[] signature = new byte[2];
-        int length = pb.read(signature);
-        pb.unread(signature, 0, length);
-
-        if (signature[0] == 0x1f && signature[1] == (byte) 0x8b)
-            return new GZIPInputStream(pb);
-
-        return pb;
-    }
-
-    static class CustomTypeResolverBuilder extends ObjectMapper.DefaultTypeResolverBuilder {
-
-        public CustomTypeResolverBuilder() {
-            super(ObjectMapper.DefaultTyping.NON_FINAL);
-        }
-
-        @Override
-        public boolean useForType(JavaType t) {
-            return !t.isEnumType() &&
-                    (t.getRawClass().getName().startsWith("org.iguana") || t.getRawClass().getName().startsWith("iguana"));
-        }
     }
 
     public static class MyTypeIdResolver extends TypeIdResolverBase {
@@ -266,31 +227,6 @@ public class JsonSerializer {
                 throw new RuntimeException("No JavaType for the given id (" + id + ") found.");
 
             return javaType;
-        }
-    }
-
-    static class GrammarDeserializer extends JsonDeserializer<Grammar> {
-
-        @Override
-        public Grammar deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
-            ObjectCodec codec = parser.getCodec();
-            JsonNode node = codec.readTree(parser);
-
-            Grammar.Builder builder = new Grammar.Builder();
-
-            builder.setLayout(getLayout(node));
-            builder.setStartSymbol(getStartSymbol(node));
-
-            JsonNode rulesNode = node.get("rules");
-
-            if (rulesNode.isArray()) {
-                for (JsonNode ruleNode : rulesNode) {
-                    Rule rule = mapper.readValue(ruleNode.toString(), Rule.class);
-                    builder.addHighLevelRule(rule);
-                }
-            }
-
-            return builder.build();
         }
     }
 
@@ -532,7 +468,8 @@ public class JsonSerializer {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value=TerminalNode.class, name="TerminalNode"),
+        @JsonSubTypes.Type(value=DefaultTerminalNode.class, name="TerminalNode"),
+        @JsonSubTypes.Type(value=KeywordTerminalNode.class, name="TerminalNode"),
         @JsonSubTypes.Type(value=NonterminalNode.class, name="NonterminalNode"),
         @JsonSubTypes.Type(value=MetaSymbolNode.class, name="MetaSymbolNode"),
         @JsonSubTypes.Type(value=AmbiguityNode.class, name="AmbiguityNode")
@@ -757,71 +694,14 @@ public class JsonSerializer {
                                     @JsonProperty("expression") Expression expression) { }
     }
 
-    @JsonDeserialize(builder = TerminalNodeBuilder.class)
-    abstract static class TerminalNodeMixIn {
-    }
-
-    abstract static class NonterminalNodeMixIn {
-        NonterminalNodeMixIn(
-                @JsonProperty("rule") RuntimeRule rule,
-                @JsonProperty("children") List<ParseTreeNode> children,
-                @JsonProperty("start") int start,
-                @JsonProperty("end") int end) { }
-    }
-
-    abstract static class MetaSymbolNodeMixIn {
-        MetaSymbolNodeMixIn(
-                @JsonProperty("symbol") Symbol symbol,
-                @JsonProperty("symbols") List<ParseTreeNode> symbols,
-                @JsonProperty("start") int start,
-                @JsonProperty("end") int end) { }
-    }
-
-    abstract static class AmbiguityNodeMixIn {
-        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) {
-        }
+    abstract static class DefaultTerminalNodeMixIn {
+        @JsonIgnore
+        Input input;
     }
 
     abstract static class AbstractAttrsMixIn {
         @JsonIgnore
         ImmutableSet<String> env;
-    }
-
-    static class TerminalNodeBuilder {
-        private int start;
-        private int end;
-        private String text;
-        private Terminal terminal;
-
-        public TerminalNodeBuilder setTerminal(Terminal terminal) {
-            this.terminal = terminal;
-            return this;
-        }
-
-        public TerminalNodeBuilder setStart(int start) {
-            this.start = start;
-            return this;
-        }
-
-        public TerminalNodeBuilder setEnd(int end) {
-            this.end = end;
-            return this;
-        }
-
-        public TerminalNodeBuilder setStart(String text) {
-            this.text = text;
-            return this;
-        }
-
-        public TerminalNode build() {
-            return new TerminalNode(terminal, start, end) {
-
-                @Override
-                public String getText() {
-                    return text;
-                }
-            };
-        }
     }
 
 }

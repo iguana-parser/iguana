@@ -8,8 +8,6 @@
       "name" : "S"
     }
   },
-  "start" : 0,
-  "end" : 1,
   "children" : [
     {
       "kind" : "AmbiguityNode",
@@ -40,6 +38,8 @@
               }
             ]
           },
+          "start" : 0,
+          "end" : 1,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -81,6 +81,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 1,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -93,12 +95,9 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1,
-                  "text" : "a"
+                  "end" : 1
                 }
-              ],
-              "start" : 0,
-              "end" : 1
+              ]
             },
             {
               "kind" : "NonterminalNode",
@@ -111,9 +110,7 @@
               "start" : 1,
               "end" : 1
             }
-          ],
-          "start" : 0,
-          "end" : 1
+          ]
         },
         {
           "kind" : "NonterminalNode",
@@ -141,6 +138,8 @@
               }
             ]
           },
+          "start" : 0,
+          "end" : 1,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -160,6 +159,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 1,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -172,12 +173,9 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1,
-                  "text" : "a"
+                  "end" : 1
                 }
-              ],
-              "start" : 0,
-              "end" : 1
+              ]
             },
             {
               "kind" : "NonterminalNode",
@@ -212,9 +210,7 @@
               "start" : 1,
               "end" : 1
             }
-          ],
-          "start" : 0,
-          "end" : 1
+          ]
         },
         {
           "kind" : "NonterminalNode",
@@ -242,6 +238,8 @@
               }
             ]
           },
+          "start" : 0,
+          "end" : 1,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -272,6 +270,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 1,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -284,12 +284,9 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1,
-                  "text" : "a"
+                  "end" : 1
                 }
-              ],
-              "start" : 0,
-              "end" : 1
+              ]
             },
             {
               "kind" : "NonterminalNode",
@@ -313,9 +310,7 @@
               "start" : 1,
               "end" : 1
             }
-          ],
-          "start" : 0,
-          "end" : 1
+          ]
         },
         {
           "kind" : "NonterminalNode",
@@ -343,6 +338,8 @@
               }
             ]
           },
+          "start" : 0,
+          "end" : 1,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -395,6 +392,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 1,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -407,18 +406,15 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1,
-                  "text" : "a"
+                  "end" : 1
                 }
-              ],
-              "start" : 0,
-              "end" : 1
+              ]
             }
-          ],
-          "start" : 0,
-          "end" : 1
+          ]
         }
       ]
     }
-  ]
+  ],
+  "start" : 0,
+  "end" : 1
 }

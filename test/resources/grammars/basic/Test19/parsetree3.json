@@ -8,8 +8,6 @@
       "name" : "E"
     }
   },
-  "start" : 0,
-  "end" : 9,
   "children" : [
     {
       "kind" : "AmbiguityNode",
@@ -43,6 +41,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 9,
               "children" : [
                 {
                   "kind" : "AmbiguityNode",
@@ -76,6 +76,8 @@
                               }
                             ]
                           },
+                          "start" : 0,
+                          "end" : 7,
                           "children" : [
                             {
                               "kind" : "AmbiguityNode",
@@ -106,6 +108,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 0,
+                                  "end" : 5,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -125,6 +129,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 0,
+                                      "end" : 1,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -137,12 +143,9 @@
                                             }
                                           },
                                           "start" : 0,
-                                          "end" : 1,
-                                          "text" : "a"
+                                          "end" : 1
                                         }
-                                      ],
-                                      "start" : 0,
-                                      "end" : 1
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -155,8 +158,7 @@
                                         }
                                       },
                                       "start" : 1,
-                                      "end" : 2,
-                                      "text" : "+"
+                                      "end" : 2
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -184,6 +186,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 2,
+                                      "end" : 5,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -203,6 +207,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 2,
+                                          "end" : 3,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -215,12 +221,9 @@
                                                 }
                                               },
                                               "start" : 2,
-                                              "end" : 3,
-                                              "text" : "a"
+                                              "end" : 3
                                             }
-                                          ],
-                                          "start" : 2,
-                                          "end" : 3
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -233,8 +236,7 @@
                                             }
                                           },
                                           "start" : 3,
-                                          "end" : 4,
-                                          "text" : "*"
+                                          "end" : 4
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -254,6 +256,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 4,
+                                          "end" : 5,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -266,20 +270,13 @@
                                                 }
                                               },
                                               "start" : 4,
-                                              "end" : 5,
-                                              "text" : "a"
+                                              "end" : 5
                                             }
-                                          ],
-                                          "start" : 4,
-                                          "end" : 5
+                                          ]
                                         }
-                                      ],
-                                      "start" : 2,
-                                      "end" : 5
+                                      ]
                                     }
-                                  ],
-                                  "start" : 0,
-                                  "end" : 5
+                                  ]
                                 },
                                 {
                                   "kind" : "NonterminalNode",
@@ -307,6 +304,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 0,
+                                  "end" : 5,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -334,6 +333,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 0,
+                                      "end" : 3,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -353,6 +354,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 0,
+                                          "end" : 1,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -365,12 +368,9 @@
                                                 }
                                               },
                                               "start" : 0,
-                                              "end" : 1,
-                                              "text" : "a"
+                                              "end" : 1
                                             }
-                                          ],
-                                          "start" : 0,
-                                          "end" : 1
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -383,8 +383,7 @@
                                             }
                                           },
                                           "start" : 1,
-                                          "end" : 2,
-                                          "text" : "+"
+                                          "end" : 2
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -404,6 +403,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 2,
+                                          "end" : 3,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -416,16 +417,11 @@
                                                 }
                                               },
                                               "start" : 2,
-                                              "end" : 3,
-                                              "text" : "a"
+                                              "end" : 3
                                             }
-                                          ],
-                                          "start" : 2,
-                                          "end" : 3
+                                          ]
                                         }
-                                      ],
-                                      "start" : 0,
-                                      "end" : 3
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -438,8 +434,7 @@
                                         }
                                       },
                                       "start" : 3,
-                                      "end" : 4,
-                                      "text" : "*"
+                                      "end" : 4
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -459,6 +454,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 4,
+                                      "end" : 5,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -471,16 +468,11 @@
                                             }
                                           },
                                           "start" : 4,
-                                          "end" : 5,
-                                          "text" : "a"
+                                          "end" : 5
                                         }
-                                      ],
-                                      "start" : 4,
-                                      "end" : 5
+                                      ]
                                     }
-                                  ],
-                                  "start" : 0,
-                                  "end" : 5
+                                  ]
                                 }
                               ]
                             },
@@ -495,8 +487,7 @@
                                 }
                               },
                               "start" : 5,
-                              "end" : 6,
-                              "text" : "+"
+                              "end" : 6
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -516,6 +507,8 @@
                                   }
                                 ]
                               },
+                              "start" : 6,
+                              "end" : 7,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -528,16 +521,11 @@
                                     }
                                   },
                                   "start" : 6,
-                                  "end" : 7,
-                                  "text" : "a"
+                                  "end" : 7
                                 }
-                              ],
-                              "start" : 6,
-                              "end" : 7
+                              ]
                             }
-                          ],
-                          "start" : 0,
-                          "end" : 7
+                          ]
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -565,6 +553,8 @@
                               }
                             ]
                           },
+                          "start" : 0,
+                          "end" : 7,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -584,6 +574,8 @@
                                   }
                                 ]
                               },
+                              "start" : 0,
+                              "end" : 1,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -596,12 +588,9 @@
                                     }
                                   },
                                   "start" : 0,
-                                  "end" : 1,
-                                  "text" : "a"
+                                  "end" : 1
                                 }
-                              ],
-                              "start" : 0,
-                              "end" : 1
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -614,8 +603,7 @@
                                 }
                               },
                               "start" : 1,
-                              "end" : 2,
-                              "text" : "+"
+                              "end" : 2
                             },
                             {
                               "kind" : "AmbiguityNode",
@@ -646,6 +634,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 2,
+                                  "end" : 7,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -665,6 +655,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 2,
+                                      "end" : 3,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -677,12 +669,9 @@
                                             }
                                           },
                                           "start" : 2,
-                                          "end" : 3,
-                                          "text" : "a"
+                                          "end" : 3
                                         }
-                                      ],
-                                      "start" : 2,
-                                      "end" : 3
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -695,8 +684,7 @@
                                         }
                                       },
                                       "start" : 3,
-                                      "end" : 4,
-                                      "text" : "*"
+                                      "end" : 4
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -724,6 +712,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 4,
+                                      "end" : 7,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -743,6 +733,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 4,
+                                          "end" : 5,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -755,12 +747,9 @@
                                                 }
                                               },
                                               "start" : 4,
-                                              "end" : 5,
-                                              "text" : "a"
+                                              "end" : 5
                                             }
-                                          ],
-                                          "start" : 4,
-                                          "end" : 5
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -773,8 +762,7 @@
                                             }
                                           },
                                           "start" : 5,
-                                          "end" : 6,
-                                          "text" : "+"
+                                          "end" : 6
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -794,6 +782,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 6,
+                                          "end" : 7,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -806,20 +796,13 @@
                                                 }
                                               },
                                               "start" : 6,
-                                              "end" : 7,
-                                              "text" : "a"
+                                              "end" : 7
                                             }
-                                          ],
-                                          "start" : 6,
-                                          "end" : 7
+                                          ]
                                         }
-                                      ],
-                                      "start" : 4,
-                                      "end" : 7
+                                      ]
                                     }
-                                  ],
-                                  "start" : 2,
-                                  "end" : 7
+                                  ]
                                 },
                                 {
                                   "kind" : "NonterminalNode",
@@ -847,6 +830,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 2,
+                                  "end" : 7,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -874,6 +859,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 2,
+                                      "end" : 5,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -893,6 +880,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 2,
+                                          "end" : 3,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -905,12 +894,9 @@
                                                 }
                                               },
                                               "start" : 2,
-                                              "end" : 3,
-                                              "text" : "a"
+                                              "end" : 3
                                             }
-                                          ],
-                                          "start" : 2,
-                                          "end" : 3
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -923,8 +909,7 @@
                                             }
                                           },
                                           "start" : 3,
-                                          "end" : 4,
-                                          "text" : "*"
+                                          "end" : 4
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -944,6 +929,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 4,
+                                          "end" : 5,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -956,16 +943,11 @@
                                                 }
                                               },
                                               "start" : 4,
-                                              "end" : 5,
-                                              "text" : "a"
+                                              "end" : 5
                                             }
-                                          ],
-                                          "start" : 4,
-                                          "end" : 5
+                                          ]
                                         }
-                                      ],
-                                      "start" : 2,
-                                      "end" : 5
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -978,8 +960,7 @@
                                         }
                                       },
                                       "start" : 5,
-                                      "end" : 6,
-                                      "text" : "+"
+                                      "end" : 6
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -999,6 +980,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 6,
+                                      "end" : 7,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -1011,22 +994,15 @@
                                             }
                                           },
                                           "start" : 6,
-                                          "end" : 7,
-                                          "text" : "a"
+                                          "end" : 7
                                         }
-                                      ],
-                                      "start" : 6,
-                                      "end" : 7
+                                      ]
                                     }
-                                  ],
-                                  "start" : 2,
-                                  "end" : 7
+                                  ]
                                 }
                               ]
                             }
-                          ],
-                          "start" : 0,
-                          "end" : 7
+                          ]
                         }
                       ]
                     },
@@ -1056,6 +1032,8 @@
                           }
                         ]
                       },
+                      "start" : 0,
+                      "end" : 7,
                       "children" : [
                         {
                           "kind" : "NonterminalNode",
@@ -1083,6 +1061,8 @@
                               }
                             ]
                           },
+                          "start" : 0,
+                          "end" : 3,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -1102,6 +1082,8 @@
                                   }
                                 ]
                               },
+                              "start" : 0,
+                              "end" : 1,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1114,12 +1096,9 @@
                                     }
                                   },
                                   "start" : 0,
-                                  "end" : 1,
-                                  "text" : "a"
+                                  "end" : 1
                                 }
-                              ],
-                              "start" : 0,
-                              "end" : 1
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -1132,8 +1111,7 @@
                                 }
                               },
                               "start" : 1,
-                              "end" : 2,
-                              "text" : "+"
+                              "end" : 2
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -1153,6 +1131,8 @@
                                   }
                                 ]
                               },
+                              "start" : 2,
+                              "end" : 3,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1165,16 +1145,11 @@
                                     }
                                   },
                                   "start" : 2,
-                                  "end" : 3,
-                                  "text" : "a"
+                                  "end" : 3
                                 }
-                              ],
-                              "start" : 2,
-                              "end" : 3
+                              ]
                             }
-                          ],
-                          "start" : 0,
-                          "end" : 3
+                          ]
                         },
                         {
                           "kind" : "TerminalNode",
@@ -1187,8 +1162,7 @@
                             }
                           },
                           "start" : 3,
-                          "end" : 4,
-                          "text" : "*"
+                          "end" : 4
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -1216,6 +1190,8 @@
                               }
                             ]
                           },
+                          "start" : 4,
+                          "end" : 7,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -1235,6 +1211,8 @@
                                   }
                                 ]
                               },
+                              "start" : 4,
+                              "end" : 5,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1247,12 +1225,9 @@
                                     }
                                   },
                                   "start" : 4,
-                                  "end" : 5,
-                                  "text" : "a"
+                                  "end" : 5
                                 }
-                              ],
-                              "start" : 4,
-                              "end" : 5
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -1265,8 +1240,7 @@
                                 }
                               },
                               "start" : 5,
-                              "end" : 6,
-                              "text" : "+"
+                              "end" : 6
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -1286,6 +1260,8 @@
                                   }
                                 ]
                               },
+                              "start" : 6,
+                              "end" : 7,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1298,20 +1274,13 @@
                                     }
                                   },
                                   "start" : 6,
-                                  "end" : 7,
-                                  "text" : "a"
+                                  "end" : 7
                                 }
-                              ],
-                              "start" : 6,
-                              "end" : 7
+                              ]
                             }
-                          ],
-                          "start" : 4,
-                          "end" : 7
+                          ]
                         }
-                      ],
-                      "start" : 0,
-                      "end" : 7
+                      ]
                     }
                   ]
                 },
@@ -1326,8 +1295,7 @@
                     }
                   },
                   "start" : 7,
-                  "end" : 8,
-                  "text" : "*"
+                  "end" : 8
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -1347,6 +1315,8 @@
                       }
                     ]
                   },
+                  "start" : 8,
+                  "end" : 9,
                   "children" : [
                     {
                       "kind" : "TerminalNode",
@@ -1359,16 +1329,11 @@
                         }
                       },
                       "start" : 8,
-                      "end" : 9,
-                      "text" : "a"
+                      "end" : 9
                     }
-                  ],
-                  "start" : 8,
-                  "end" : 9
+                  ]
                 }
-              ],
-              "start" : 0,
-              "end" : 9
+              ]
             },
             {
               "kind" : "NonterminalNode",
@@ -1396,6 +1361,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 9,
               "children" : [
                 {
                   "kind" : "NonterminalNode",
@@ -1423,6 +1390,8 @@
                       }
                     ]
                   },
+                  "start" : 0,
+                  "end" : 3,
                   "children" : [
                     {
                       "kind" : "NonterminalNode",
@@ -1442,6 +1411,8 @@
                           }
                         ]
                       },
+                      "start" : 0,
+                      "end" : 1,
                       "children" : [
                         {
                           "kind" : "TerminalNode",
@@ -1454,12 +1425,9 @@
                             }
                           },
                           "start" : 0,
-                          "end" : 1,
-                          "text" : "a"
+                          "end" : 1
                         }
-                      ],
-                      "start" : 0,
-                      "end" : 1
+                      ]
                     },
                     {
                       "kind" : "TerminalNode",
@@ -1472,8 +1440,7 @@
                         }
                       },
                       "start" : 1,
-                      "end" : 2,
-                      "text" : "+"
+                      "end" : 2
                     },
                     {
                       "kind" : "NonterminalNode",
@@ -1493,6 +1460,8 @@
                           }
                         ]
                       },
+                      "start" : 2,
+                      "end" : 3,
                       "children" : [
                         {
                           "kind" : "TerminalNode",
@@ -1505,16 +1474,11 @@
                             }
                           },
                           "start" : 2,
-                          "end" : 3,
-                          "text" : "a"
+                          "end" : 3
                         }
-                      ],
-                      "start" : 2,
-                      "end" : 3
+                      ]
                     }
-                  ],
-                  "start" : 0,
-                  "end" : 3
+                  ]
                 },
                 {
                   "kind" : "TerminalNode",
@@ -1527,8 +1491,7 @@
                     }
                   },
                   "start" : 3,
-                  "end" : 4,
-                  "text" : "*"
+                  "end" : 4
                 },
                 {
                   "kind" : "AmbiguityNode",
@@ -1559,6 +1522,8 @@
                           }
                         ]
                       },
+                      "start" : 4,
+                      "end" : 9,
                       "children" : [
                         {
                           "kind" : "NonterminalNode",
@@ -1578,6 +1543,8 @@
                               }
                             ]
                           },
+                          "start" : 4,
+                          "end" : 5,
                           "children" : [
                             {
                               "kind" : "TerminalNode",
@@ -1590,12 +1557,9 @@
                                 }
                               },
                               "start" : 4,
-                              "end" : 5,
-                              "text" : "a"
+                              "end" : 5
                             }
-                          ],
-                          "start" : 4,
-                          "end" : 5
+                          ]
                         },
                         {
                           "kind" : "TerminalNode",
@@ -1608,8 +1572,7 @@
                             }
                           },
                           "start" : 5,
-                          "end" : 6,
-                          "text" : "+"
+                          "end" : 6
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -1637,6 +1600,8 @@
                               }
                             ]
                           },
+                          "start" : 6,
+                          "end" : 9,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -1656,6 +1621,8 @@
                                   }
                                 ]
                               },
+                              "start" : 6,
+                              "end" : 7,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1668,12 +1635,9 @@
                                     }
                                   },
                                   "start" : 6,
-                                  "end" : 7,
-                                  "text" : "a"
+                                  "end" : 7
                                 }
-                              ],
-                              "start" : 6,
-                              "end" : 7
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -1686,8 +1650,7 @@
                                 }
                               },
                               "start" : 7,
-                              "end" : 8,
-                              "text" : "*"
+                              "end" : 8
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -1707,6 +1670,8 @@
                                   }
                                 ]
                               },
+                              "start" : 8,
+                              "end" : 9,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1719,20 +1684,13 @@
                                     }
                                   },
                                   "start" : 8,
-                                  "end" : 9,
-                                  "text" : "a"
+                                  "end" : 9
                                 }
-                              ],
-                              "start" : 8,
-                              "end" : 9
+                              ]
                             }
-                          ],
-                          "start" : 6,
-                          "end" : 9
+                          ]
                         }
-                      ],
-                      "start" : 4,
-                      "end" : 9
+                      ]
                     },
                     {
                       "kind" : "NonterminalNode",
@@ -1760,6 +1718,8 @@
                           }
                         ]
                       },
+                      "start" : 4,
+                      "end" : 9,
                       "children" : [
                         {
                           "kind" : "NonterminalNode",
@@ -1787,6 +1747,8 @@
                               }
                             ]
                           },
+                          "start" : 4,
+                          "end" : 7,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -1806,6 +1768,8 @@
                                   }
                                 ]
                               },
+                              "start" : 4,
+                              "end" : 5,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1818,12 +1782,9 @@
                                     }
                                   },
                                   "start" : 4,
-                                  "end" : 5,
-                                  "text" : "a"
+                                  "end" : 5
                                 }
-                              ],
-                              "start" : 4,
-                              "end" : 5
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -1836,8 +1797,7 @@
                                 }
                               },
                               "start" : 5,
-                              "end" : 6,
-                              "text" : "+"
+                              "end" : 6
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -1857,6 +1817,8 @@
                                   }
                                 ]
                               },
+                              "start" : 6,
+                              "end" : 7,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -1869,16 +1831,11 @@
                                     }
                                   },
                                   "start" : 6,
-                                  "end" : 7,
-                                  "text" : "a"
+                                  "end" : 7
                                 }
-                              ],
-                              "start" : 6,
-                              "end" : 7
+                              ]
                             }
-                          ],
-                          "start" : 4,
-                          "end" : 7
+                          ]
                         },
                         {
                           "kind" : "TerminalNode",
@@ -1891,8 +1848,7 @@
                             }
                           },
                           "start" : 7,
-                          "end" : 8,
-                          "text" : "*"
+                          "end" : 8
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -1912,6 +1868,8 @@
                               }
                             ]
                           },
+                          "start" : 8,
+                          "end" : 9,
                           "children" : [
                             {
                               "kind" : "TerminalNode",
@@ -1924,22 +1882,15 @@
                                 }
                               },
                               "start" : 8,
-                              "end" : 9,
-                              "text" : "a"
+                              "end" : 9
                             }
-                          ],
-                          "start" : 8,
-                          "end" : 9
+                          ]
                         }
-                      ],
-                      "start" : 4,
-                      "end" : 9
+                      ]
                     }
                   ]
                 }
-              ],
-              "start" : 0,
-              "end" : 9
+              ]
             }
           ]
         },
@@ -1972,6 +1923,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 9,
               "children" : [
                 {
                   "kind" : "AmbiguityNode",
@@ -2002,6 +1955,8 @@
                           }
                         ]
                       },
+                      "start" : 0,
+                      "end" : 5,
                       "children" : [
                         {
                           "kind" : "NonterminalNode",
@@ -2021,6 +1976,8 @@
                               }
                             ]
                           },
+                          "start" : 0,
+                          "end" : 1,
                           "children" : [
                             {
                               "kind" : "TerminalNode",
@@ -2033,12 +1990,9 @@
                                 }
                               },
                               "start" : 0,
-                              "end" : 1,
-                              "text" : "a"
+                              "end" : 1
                             }
-                          ],
-                          "start" : 0,
-                          "end" : 1
+                          ]
                         },
                         {
                           "kind" : "TerminalNode",
@@ -2051,8 +2005,7 @@
                             }
                           },
                           "start" : 1,
-                          "end" : 2,
-                          "text" : "+"
+                          "end" : 2
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -2080,6 +2033,8 @@
                               }
                             ]
                           },
+                          "start" : 2,
+                          "end" : 5,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -2099,6 +2054,8 @@
                                   }
                                 ]
                               },
+                              "start" : 2,
+                              "end" : 3,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2111,12 +2068,9 @@
                                     }
                                   },
                                   "start" : 2,
-                                  "end" : 3,
-                                  "text" : "a"
+                                  "end" : 3
                                 }
-                              ],
-                              "start" : 2,
-                              "end" : 3
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -2129,8 +2083,7 @@
                                 }
                               },
                               "start" : 3,
-                              "end" : 4,
-                              "text" : "*"
+                              "end" : 4
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -2150,6 +2103,8 @@
                                   }
                                 ]
                               },
+                              "start" : 4,
+                              "end" : 5,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2162,20 +2117,13 @@
                                     }
                                   },
                                   "start" : 4,
-                                  "end" : 5,
-                                  "text" : "a"
+                                  "end" : 5
                                 }
-                              ],
-                              "start" : 4,
-                              "end" : 5
+                              ]
                             }
-                          ],
-                          "start" : 2,
-                          "end" : 5
+                          ]
                         }
-                      ],
-                      "start" : 0,
-                      "end" : 5
+                      ]
                     },
                     {
                       "kind" : "NonterminalNode",
@@ -2203,6 +2151,8 @@
                           }
                         ]
                       },
+                      "start" : 0,
+                      "end" : 5,
                       "children" : [
                         {
                           "kind" : "NonterminalNode",
@@ -2230,6 +2180,8 @@
                               }
                             ]
                           },
+                          "start" : 0,
+                          "end" : 3,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -2249,6 +2201,8 @@
                                   }
                                 ]
                               },
+                              "start" : 0,
+                              "end" : 1,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2261,12 +2215,9 @@
                                     }
                                   },
                                   "start" : 0,
-                                  "end" : 1,
-                                  "text" : "a"
+                                  "end" : 1
                                 }
-                              ],
-                              "start" : 0,
-                              "end" : 1
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -2279,8 +2230,7 @@
                                 }
                               },
                               "start" : 1,
-                              "end" : 2,
-                              "text" : "+"
+                              "end" : 2
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -2300,6 +2250,8 @@
                                   }
                                 ]
                               },
+                              "start" : 2,
+                              "end" : 3,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2312,16 +2264,11 @@
                                     }
                                   },
                                   "start" : 2,
-                                  "end" : 3,
-                                  "text" : "a"
+                                  "end" : 3
                                 }
-                              ],
-                              "start" : 2,
-                              "end" : 3
+                              ]
                             }
-                          ],
-                          "start" : 0,
-                          "end" : 3
+                          ]
                         },
                         {
                           "kind" : "TerminalNode",
@@ -2334,8 +2281,7 @@
                             }
                           },
                           "start" : 3,
-                          "end" : 4,
-                          "text" : "*"
+                          "end" : 4
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -2355,6 +2301,8 @@
                               }
                             ]
                           },
+                          "start" : 4,
+                          "end" : 5,
                           "children" : [
                             {
                               "kind" : "TerminalNode",
@@ -2367,16 +2315,11 @@
                                 }
                               },
                               "start" : 4,
-                              "end" : 5,
-                              "text" : "a"
+                              "end" : 5
                             }
-                          ],
-                          "start" : 4,
-                          "end" : 5
+                          ]
                         }
-                      ],
-                      "start" : 0,
-                      "end" : 5
+                      ]
                     }
                   ]
                 },
@@ -2391,8 +2334,7 @@
                     }
                   },
                   "start" : 5,
-                  "end" : 6,
-                  "text" : "+"
+                  "end" : 6
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -2420,6 +2362,8 @@
                       }
                     ]
                   },
+                  "start" : 6,
+                  "end" : 9,
                   "children" : [
                     {
                       "kind" : "NonterminalNode",
@@ -2439,6 +2383,8 @@
                           }
                         ]
                       },
+                      "start" : 6,
+                      "end" : 7,
                       "children" : [
                         {
                           "kind" : "TerminalNode",
@@ -2451,12 +2397,9 @@
                             }
                           },
                           "start" : 6,
-                          "end" : 7,
-                          "text" : "a"
+                          "end" : 7
                         }
-                      ],
-                      "start" : 6,
-                      "end" : 7
+                      ]
                     },
                     {
                       "kind" : "TerminalNode",
@@ -2469,8 +2412,7 @@
                         }
                       },
                       "start" : 7,
-                      "end" : 8,
-                      "text" : "*"
+                      "end" : 8
                     },
                     {
                       "kind" : "NonterminalNode",
@@ -2490,6 +2432,8 @@
                           }
                         ]
                       },
+                      "start" : 8,
+                      "end" : 9,
                       "children" : [
                         {
                           "kind" : "TerminalNode",
@@ -2502,20 +2446,13 @@
                             }
                           },
                           "start" : 8,
-                          "end" : 9,
-                          "text" : "a"
+                          "end" : 9
                         }
-                      ],
-                      "start" : 8,
-                      "end" : 9
+                      ]
                     }
-                  ],
-                  "start" : 6,
-                  "end" : 9
+                  ]
                 }
-              ],
-              "start" : 0,
-              "end" : 9
+              ]
             },
             {
               "kind" : "NonterminalNode",
@@ -2543,6 +2480,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 9,
               "children" : [
                 {
                   "kind" : "NonterminalNode",
@@ -2562,6 +2501,8 @@
                       }
                     ]
                   },
+                  "start" : 0,
+                  "end" : 1,
                   "children" : [
                     {
                       "kind" : "TerminalNode",
@@ -2574,12 +2515,9 @@
                         }
                       },
                       "start" : 0,
-                      "end" : 1,
-                      "text" : "a"
+                      "end" : 1
                     }
-                  ],
-                  "start" : 0,
-                  "end" : 1
+                  ]
                 },
                 {
                   "kind" : "TerminalNode",
@@ -2592,8 +2530,7 @@
                     }
                   },
                   "start" : 1,
-                  "end" : 2,
-                  "text" : "+"
+                  "end" : 2
                 },
                 {
                   "kind" : "AmbiguityNode",
@@ -2624,6 +2561,8 @@
                           }
                         ]
                       },
+                      "start" : 2,
+                      "end" : 9,
                       "children" : [
                         {
                           "kind" : "NonterminalNode",
@@ -2651,6 +2590,8 @@
                               }
                             ]
                           },
+                          "start" : 2,
+                          "end" : 5,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -2670,6 +2611,8 @@
                                   }
                                 ]
                               },
+                              "start" : 2,
+                              "end" : 3,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2682,12 +2625,9 @@
                                     }
                                   },
                                   "start" : 2,
-                                  "end" : 3,
-                                  "text" : "a"
+                                  "end" : 3
                                 }
-                              ],
-                              "start" : 2,
-                              "end" : 3
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -2700,8 +2640,7 @@
                                 }
                               },
                               "start" : 3,
-                              "end" : 4,
-                              "text" : "*"
+                              "end" : 4
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -2721,6 +2660,8 @@
                                   }
                                 ]
                               },
+                              "start" : 4,
+                              "end" : 5,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2733,16 +2674,11 @@
                                     }
                                   },
                                   "start" : 4,
-                                  "end" : 5,
-                                  "text" : "a"
+                                  "end" : 5
                                 }
-                              ],
-                              "start" : 4,
-                              "end" : 5
+                              ]
                             }
-                          ],
-                          "start" : 2,
-                          "end" : 5
+                          ]
                         },
                         {
                           "kind" : "TerminalNode",
@@ -2755,8 +2691,7 @@
                             }
                           },
                           "start" : 5,
-                          "end" : 6,
-                          "text" : "+"
+                          "end" : 6
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -2784,6 +2719,8 @@
                               }
                             ]
                           },
+                          "start" : 6,
+                          "end" : 9,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -2803,6 +2740,8 @@
                                   }
                                 ]
                               },
+                              "start" : 6,
+                              "end" : 7,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2815,12 +2754,9 @@
                                     }
                                   },
                                   "start" : 6,
-                                  "end" : 7,
-                                  "text" : "a"
+                                  "end" : 7
                                 }
-                              ],
-                              "start" : 6,
-                              "end" : 7
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -2833,8 +2769,7 @@
                                 }
                               },
                               "start" : 7,
-                              "end" : 8,
-                              "text" : "*"
+                              "end" : 8
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -2854,6 +2789,8 @@
                                   }
                                 ]
                               },
+                              "start" : 8,
+                              "end" : 9,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2866,20 +2803,13 @@
                                     }
                                   },
                                   "start" : 8,
-                                  "end" : 9,
-                                  "text" : "a"
+                                  "end" : 9
                                 }
-                              ],
-                              "start" : 8,
-                              "end" : 9
+                              ]
                             }
-                          ],
-                          "start" : 6,
-                          "end" : 9
+                          ]
                         }
-                      ],
-                      "start" : 2,
-                      "end" : 9
+                      ]
                     },
                     {
                       "kind" : "AmbiguityNode",
@@ -2910,6 +2840,8 @@
                               }
                             ]
                           },
+                          "start" : 2,
+                          "end" : 9,
                           "children" : [
                             {
                               "kind" : "NonterminalNode",
@@ -2929,6 +2861,8 @@
                                   }
                                 ]
                               },
+                              "start" : 2,
+                              "end" : 3,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -2941,12 +2875,9 @@
                                     }
                                   },
                                   "start" : 2,
-                                  "end" : 3,
-                                  "text" : "a"
+                                  "end" : 3
                                 }
-                              ],
-                              "start" : 2,
-                              "end" : 3
+                              ]
                             },
                             {
                               "kind" : "TerminalNode",
@@ -2959,8 +2890,7 @@
                                 }
                               },
                               "start" : 3,
-                              "end" : 4,
-                              "text" : "*"
+                              "end" : 4
                             },
                             {
                               "kind" : "AmbiguityNode",
@@ -2991,6 +2921,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 4,
+                                  "end" : 9,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -3010,6 +2942,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 4,
+                                      "end" : 5,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -3022,12 +2956,9 @@
                                             }
                                           },
                                           "start" : 4,
-                                          "end" : 5,
-                                          "text" : "a"
+                                          "end" : 5
                                         }
-                                      ],
-                                      "start" : 4,
-                                      "end" : 5
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -3040,8 +2971,7 @@
                                         }
                                       },
                                       "start" : 5,
-                                      "end" : 6,
-                                      "text" : "+"
+                                      "end" : 6
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -3069,6 +2999,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 6,
+                                      "end" : 9,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -3088,6 +3020,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 6,
+                                          "end" : 7,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3100,12 +3034,9 @@
                                                 }
                                               },
                                               "start" : 6,
-                                              "end" : 7,
-                                              "text" : "a"
+                                              "end" : 7
                                             }
-                                          ],
-                                          "start" : 6,
-                                          "end" : 7
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -3118,8 +3049,7 @@
                                             }
                                           },
                                           "start" : 7,
-                                          "end" : 8,
-                                          "text" : "*"
+                                          "end" : 8
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -3139,6 +3069,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 8,
+                                          "end" : 9,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3151,20 +3083,13 @@
                                                 }
                                               },
                                               "start" : 8,
-                                              "end" : 9,
-                                              "text" : "a"
+                                              "end" : 9
                                             }
-                                          ],
-                                          "start" : 8,
-                                          "end" : 9
+                                          ]
                                         }
-                                      ],
-                                      "start" : 6,
-                                      "end" : 9
+                                      ]
                                     }
-                                  ],
-                                  "start" : 4,
-                                  "end" : 9
+                                  ]
                                 },
                                 {
                                   "kind" : "NonterminalNode",
@@ -3192,6 +3117,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 4,
+                                  "end" : 9,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -3219,6 +3146,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 4,
+                                      "end" : 7,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -3238,6 +3167,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 4,
+                                          "end" : 5,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3250,12 +3181,9 @@
                                                 }
                                               },
                                               "start" : 4,
-                                              "end" : 5,
-                                              "text" : "a"
+                                              "end" : 5
                                             }
-                                          ],
-                                          "start" : 4,
-                                          "end" : 5
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -3268,8 +3196,7 @@
                                             }
                                           },
                                           "start" : 5,
-                                          "end" : 6,
-                                          "text" : "+"
+                                          "end" : 6
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -3289,6 +3216,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 6,
+                                          "end" : 7,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3301,16 +3230,11 @@
                                                 }
                                               },
                                               "start" : 6,
-                                              "end" : 7,
-                                              "text" : "a"
+                                              "end" : 7
                                             }
-                                          ],
-                                          "start" : 6,
-                                          "end" : 7
+                                          ]
                                         }
-                                      ],
-                                      "start" : 4,
-                                      "end" : 7
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -3323,8 +3247,7 @@
                                         }
                                       },
                                       "start" : 7,
-                                      "end" : 8,
-                                      "text" : "*"
+                                      "end" : 8
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -3344,6 +3267,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 8,
+                                      "end" : 9,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -3356,22 +3281,15 @@
                                             }
                                           },
                                           "start" : 8,
-                                          "end" : 9,
-                                          "text" : "a"
+                                          "end" : 9
                                         }
-                                      ],
-                                      "start" : 8,
-                                      "end" : 9
+                                      ]
                                     }
-                                  ],
-                                  "start" : 4,
-                                  "end" : 9
+                                  ]
                                 }
                               ]
                             }
-                          ],
-                          "start" : 2,
-                          "end" : 9
+                          ]
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -3399,6 +3317,8 @@
                               }
                             ]
                           },
+                          "start" : 2,
+                          "end" : 9,
                           "children" : [
                             {
                               "kind" : "AmbiguityNode",
@@ -3429,6 +3349,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 2,
+                                  "end" : 7,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -3448,6 +3370,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 2,
+                                      "end" : 3,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -3460,12 +3384,9 @@
                                             }
                                           },
                                           "start" : 2,
-                                          "end" : 3,
-                                          "text" : "a"
+                                          "end" : 3
                                         }
-                                      ],
-                                      "start" : 2,
-                                      "end" : 3
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -3478,8 +3399,7 @@
                                         }
                                       },
                                       "start" : 3,
-                                      "end" : 4,
-                                      "text" : "*"
+                                      "end" : 4
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -3507,6 +3427,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 4,
+                                      "end" : 7,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -3526,6 +3448,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 4,
+                                          "end" : 5,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3538,12 +3462,9 @@
                                                 }
                                               },
                                               "start" : 4,
-                                              "end" : 5,
-                                              "text" : "a"
+                                              "end" : 5
                                             }
-                                          ],
-                                          "start" : 4,
-                                          "end" : 5
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -3556,8 +3477,7 @@
                                             }
                                           },
                                           "start" : 5,
-                                          "end" : 6,
-                                          "text" : "+"
+                                          "end" : 6
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -3577,6 +3497,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 6,
+                                          "end" : 7,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3589,20 +3511,13 @@
                                                 }
                                               },
                                               "start" : 6,
-                                              "end" : 7,
-                                              "text" : "a"
+                                              "end" : 7
                                             }
-                                          ],
-                                          "start" : 6,
-                                          "end" : 7
+                                          ]
                                         }
-                                      ],
-                                      "start" : 4,
-                                      "end" : 7
+                                      ]
                                     }
-                                  ],
-                                  "start" : 2,
-                                  "end" : 7
+                                  ]
                                 },
                                 {
                                   "kind" : "NonterminalNode",
@@ -3630,6 +3545,8 @@
                                       }
                                     ]
                                   },
+                                  "start" : 2,
+                                  "end" : 7,
                                   "children" : [
                                     {
                                       "kind" : "NonterminalNode",
@@ -3657,6 +3574,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 2,
+                                      "end" : 5,
                                       "children" : [
                                         {
                                           "kind" : "NonterminalNode",
@@ -3676,6 +3595,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 2,
+                                          "end" : 3,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3688,12 +3609,9 @@
                                                 }
                                               },
                                               "start" : 2,
-                                              "end" : 3,
-                                              "text" : "a"
+                                              "end" : 3
                                             }
-                                          ],
-                                          "start" : 2,
-                                          "end" : 3
+                                          ]
                                         },
                                         {
                                           "kind" : "TerminalNode",
@@ -3706,8 +3624,7 @@
                                             }
                                           },
                                           "start" : 3,
-                                          "end" : 4,
-                                          "text" : "*"
+                                          "end" : 4
                                         },
                                         {
                                           "kind" : "NonterminalNode",
@@ -3727,6 +3644,8 @@
                                               }
                                             ]
                                           },
+                                          "start" : 4,
+                                          "end" : 5,
                                           "children" : [
                                             {
                                               "kind" : "TerminalNode",
@@ -3739,16 +3658,11 @@
                                                 }
                                               },
                                               "start" : 4,
-                                              "end" : 5,
-                                              "text" : "a"
+                                              "end" : 5
                                             }
-                                          ],
-                                          "start" : 4,
-                                          "end" : 5
+                                          ]
                                         }
-                                      ],
-                                      "start" : 2,
-                                      "end" : 5
+                                      ]
                                     },
                                     {
                                       "kind" : "TerminalNode",
@@ -3761,8 +3675,7 @@
                                         }
                                       },
                                       "start" : 5,
-                                      "end" : 6,
-                                      "text" : "+"
+                                      "end" : 6
                                     },
                                     {
                                       "kind" : "NonterminalNode",
@@ -3782,6 +3695,8 @@
                                           }
                                         ]
                                       },
+                                      "start" : 6,
+                                      "end" : 7,
                                       "children" : [
                                         {
                                           "kind" : "TerminalNode",
@@ -3794,16 +3709,11 @@
                                             }
                                           },
                                           "start" : 6,
-                                          "end" : 7,
-                                          "text" : "a"
+                                          "end" : 7
                                         }
-                                      ],
-                                      "start" : 6,
-                                      "end" : 7
+                                      ]
                                     }
-                                  ],
-                                  "start" : 2,
-                                  "end" : 7
+                                  ]
                                 }
                               ]
                             },
@@ -3818,8 +3728,7 @@
                                 }
                               },
                               "start" : 7,
-                              "end" : 8,
-                              "text" : "*"
+                              "end" : 8
                             },
                             {
                               "kind" : "NonterminalNode",
@@ -3839,6 +3748,8 @@
                                   }
                                 ]
                               },
+                              "start" : 8,
+                              "end" : 9,
                               "children" : [
                                 {
                                   "kind" : "TerminalNode",
@@ -3851,28 +3762,23 @@
                                     }
                                   },
                                   "start" : 8,
-                                  "end" : 9,
-                                  "text" : "a"
+                                  "end" : 9
                                 }
-                              ],
-                              "start" : 8,
-                              "end" : 9
+                              ]
                             }
-                          ],
-                          "start" : 2,
-                          "end" : 9
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ],
-              "start" : 0,
-              "end" : 9
+              ]
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "start" : 0,
+  "end" : 9
 }

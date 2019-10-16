@@ -50,12 +50,8 @@ public class GrammarTest {
 
         List<DynamicTest> grammarTests = new ArrayList<>();
 
-        int i = 0;
         for (Path test : testPaths) {
-            System.out.println(i);
             test(grammarTests, test);
-            i++;
-            if (i == 35) break;
         }
 
         return grammarTests;
@@ -143,10 +139,10 @@ public class GrammarTest {
             String statisticsPath = testPath + "/statistics" + j + ".json";
             String parseTreePath = testPath + "/parsetree" + j + ".json";
 
-//            if (REGENERATE_FILES) {
-//                record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
-//                return;
-//            }
+            if (REGENERATE_FILES) {
+                record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
+                return;
+            }
 
             ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
             assertEquals(expectedStatistics, parser.getStatistics());

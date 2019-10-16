@@ -8,8 +8,6 @@
       "name" : "S"
     }
   },
-  "start" : 0,
-  "end" : 4,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -21,17 +19,19 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "{A a B C}+",
+            "name" : "{A, a, B, C, null}+",
             "nodeType" : "Plus"
           }
         ]
       },
+      "start" : 0,
+      "end" : 1,
       "children" : [
         {
           "kind" : "MetaSymbolNode",
           "symbol" : {
             "kind" : "Plus",
-            "name" : "{A a B C}+",
+            "name" : "A+",
             "s" : {
               "kind" : "Nonterminal",
               "name" : "A"
@@ -55,8 +55,6 @@
               }
             ]
           },
-          "start" : 0,
-          "end" : 4,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -76,6 +74,8 @@
                   }
                 ]
               },
+              "start" : 0,
+              "end" : 1,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -88,106 +88,17 @@
                     }
                   },
                   "start" : 0,
-                  "end" : 1,
-                  "text" : "a"
+                  "end" : 1
                 }
-              ],
-              "start" : 0,
-              "end" : 1
-            },
-            {
-              "kind" : "TerminalNode",
-              "terminal" : {
-                "kind" : "Terminal",
-                "name" : "a",
-                "regex" : {
-                  "kind" : "Char",
-                  "val" : 97
-                }
-              },
-              "start" : 1,
-              "end" : 2,
-              "text" : "a"
-            },
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "b",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 98
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "b",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 98
-                    }
-                  },
-                  "start" : 2,
-                  "end" : 3,
-                  "text" : "b"
-                }
-              ],
-              "start" : 2,
-              "end" : 3
-            },
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "C"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  },
-                  "start" : 3,
-                  "end" : 4,
-                  "text" : "c"
-                }
-              ],
-              "start" : 3,
-              "end" : 4
+              ]
             }
-          ]
+          ],
+          "start" : 0,
+          "end" : 1
         }
-      ],
-      "start" : 0,
-      "end" : 4
+      ]
     }
-  ]
+  ],
+  "start" : 0,
+  "end" : 1
 }

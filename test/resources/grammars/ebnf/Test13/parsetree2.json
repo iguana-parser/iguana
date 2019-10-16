@@ -8,8 +8,6 @@
       "name" : "S"
     }
   },
-  "start" : 0,
-  "end" : 8,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -38,6 +36,8 @@
           }
         ]
       },
+      "start" : 0,
+      "end" : 8,
       "children" : [
         {
           "kind" : "NonterminalNode",
@@ -57,6 +57,8 @@
               }
             ]
           },
+          "start" : 0,
+          "end" : 1,
           "children" : [
             {
               "kind" : "TerminalNode",
@@ -69,247 +71,7 @@
                 }
               },
               "start" : 0,
-              "end" : 1,
-              "text" : "a"
-            }
-          ],
-          "start" : 0,
-          "end" : 1
-        },
-        {
-          "kind" : "NonterminalNode",
-          "rule" : {
-            "head" : {
-              "kind" : "Nonterminal",
-              "name" : "A"
-            },
-            "body" : [
-              {
-                "kind" : "Terminal",
-                "name" : "b",
-                "regex" : {
-                  "kind" : "Char",
-                  "val" : 98
-                }
-              }
-            ]
-          },
-          "children" : [
-            {
-              "kind" : "TerminalNode",
-              "terminal" : {
-                "kind" : "Terminal",
-                "name" : "b",
-                "regex" : {
-                  "kind" : "Char",
-                  "val" : 98
-                }
-              },
-              "start" : 1,
-              "end" : 2,
-              "text" : "b"
-            }
-          ],
-          "start" : 1,
-          "end" : 2
-        },
-        {
-          "kind" : "MetaSymbolNode",
-          "symbol" : {
-            "kind" : "Plus",
-            "name" : "A+",
-            "s" : {
-              "kind" : "Nonterminal",
-              "name" : "A"
-            }
-          },
-          "start" : 2,
-          "end" : 7,
-          "children" : [
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  },
-                  "start" : 2,
-                  "end" : 3,
-                  "text" : "c"
-                }
-              ],
-              "start" : 2,
-              "end" : 3
-            },
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  },
-                  "start" : 3,
-                  "end" : 4,
-                  "text" : "c"
-                }
-              ],
-              "start" : 3,
-              "end" : 4
-            },
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  },
-                  "start" : 4,
-                  "end" : 5,
-                  "text" : "c"
-                }
-              ],
-              "start" : 4,
-              "end" : 5
-            },
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  },
-                  "start" : 5,
-                  "end" : 6,
-                  "text" : "c"
-                }
-              ],
-              "start" : 5,
-              "end" : 6
-            },
-            {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  }
-                ]
-              },
-              "children" : [
-                {
-                  "kind" : "TerminalNode",
-                  "terminal" : {
-                    "kind" : "Terminal",
-                    "name" : "c",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 99
-                    }
-                  },
-                  "start" : 6,
-                  "end" : 7,
-                  "text" : "c"
-                }
-              ],
-              "start" : 6,
-              "end" : 7
+              "end" : 1
             }
           ]
         },
@@ -323,6 +85,237 @@
             "body" : [
               {
                 "kind" : "Terminal",
+                "name" : "b",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 98
+                }
+              }
+            ]
+          },
+          "start" : 1,
+          "end" : 2,
+          "children" : [
+            {
+              "kind" : "TerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "b",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 98
+                }
+              },
+              "start" : 1,
+              "end" : 2
+            }
+          ]
+        },
+        {
+          "kind" : "MetaSymbolNode",
+          "symbol" : {
+            "kind" : "Plus",
+            "name" : "A+",
+            "s" : {
+              "kind" : "Nonterminal",
+              "name" : "A"
+            }
+          },
+          "children" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  }
+                ]
+              },
+              "start" : 2,
+              "end" : 3,
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  },
+                  "start" : 2,
+                  "end" : 3
+                }
+              ]
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  }
+                ]
+              },
+              "start" : 3,
+              "end" : 4,
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  },
+                  "start" : 3,
+                  "end" : 4
+                }
+              ]
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  }
+                ]
+              },
+              "start" : 4,
+              "end" : 5,
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  },
+                  "start" : 4,
+                  "end" : 5
+                }
+              ]
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  }
+                ]
+              },
+              "start" : 5,
+              "end" : 6,
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  },
+                  "start" : 5,
+                  "end" : 6
+                }
+              ]
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  }
+                ]
+              },
+              "start" : 6,
+              "end" : 7,
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "c",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 99
+                    }
+                  },
+                  "start" : 6,
+                  "end" : 7
+                }
+              ]
+            }
+          ],
+          "start" : 2,
+          "end" : 7
+        },
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "A"
+            },
+            "body" : [
+              {
+                "kind" : "Terminal",
                 "name" : "d",
                 "regex" : {
                   "kind" : "Char",
@@ -331,6 +324,8 @@
               }
             ]
           },
+          "start" : 7,
+          "end" : 8,
           "children" : [
             {
               "kind" : "TerminalNode",
@@ -343,16 +338,13 @@
                 }
               },
               "start" : 7,
-              "end" : 8,
-              "text" : "d"
+              "end" : 8
             }
-          ],
-          "start" : 7,
-          "end" : 8
+          ]
         }
-      ],
-      "start" : 0,
-      "end" : 8
+      ]
     }
-  ]
+  ],
+  "start" : 0,
+  "end" : 8
 }
