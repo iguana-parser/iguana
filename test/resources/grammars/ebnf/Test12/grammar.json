@@ -5,7 +5,7 @@
         "kind" : "Nonterminal",
         "name" : "S"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {
@@ -43,7 +43,7 @@
         "kind" : "Nonterminal",
         "name" : "A"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {

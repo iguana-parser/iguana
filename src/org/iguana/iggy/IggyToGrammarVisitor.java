@@ -89,7 +89,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
                 List<Identifier> parameters = (List<Identifier>) node.childAt(1).accept(this);
                 if (parameters == null) parameters = Collections.emptyList();
-                List<PriorityGroup> body = (List<PriorityGroup>) node.getChildWithName("Body").accept(this);
+                List<PriorityLevel> body = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
                 List<String> stringParams = parameters.stream().map(p -> p.id).collect(Collectors.toList());
                 Nonterminal nonterminal = Nonterminal.withName(nonterminalName.id);
                 if (!node.childAt(0).children().isEmpty()) {
@@ -119,8 +119,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     /*
      * Alternatives: { Alternative '|' }+
      */
-    private PriorityGroup visitAlternatives(NonterminalNode node) {
-        return new PriorityGroup((List<Alternative>) node.childAt(0).accept(this));
+    private PriorityLevel visitAlternatives(NonterminalNode node) {
+        return new PriorityLevel((List<Alternative>) node.childAt(0).accept(this));
     }
 
     /*

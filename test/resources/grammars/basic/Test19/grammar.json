@@ -5,7 +5,7 @@
         "kind" : "Nonterminal",
         "name" : "E"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {

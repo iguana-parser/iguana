@@ -7,15 +7,15 @@ import java.util.List;
 /**
  * A priority group is a list of alternatives.
  */
-public class PriorityGroup implements Serializable {
+public class PriorityLevel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private List<Alternative> alternatives = new ArrayList<>();
 
-    public PriorityGroup() { }
+    public PriorityLevel() { }
 
-    public PriorityGroup(List<Alternative> alternatives) {
+    public PriorityLevel(List<Alternative> alternatives) {
         this.alternatives = alternatives;
     }
 
@@ -26,8 +26,8 @@ public class PriorityGroup implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof PriorityGroup)) return false;
-        PriorityGroup other = (PriorityGroup) obj;
+        if (!(obj instanceof PriorityLevel)) return false;
+        PriorityLevel other = (PriorityLevel) obj;
         return this.alternatives.equals(other.alternatives);
     }
 

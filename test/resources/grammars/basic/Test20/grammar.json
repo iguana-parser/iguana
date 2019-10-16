@@ -5,7 +5,7 @@
         "kind" : "Nonterminal",
         "name" : "E"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {
@@ -33,7 +33,7 @@
         "kind" : "Nonterminal",
         "name" : "E1"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {
@@ -70,7 +70,7 @@
         "kind" : "Nonterminal",
         "name" : "T"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {
@@ -98,7 +98,7 @@
         "kind" : "Nonterminal",
         "name" : "T1"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {
@@ -135,7 +135,7 @@
         "kind" : "Nonterminal",
         "name" : "F"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {
@@ -175,7 +175,7 @@
         "kind" : "Nonterminal",
         "name" : "F"
       },
-      "priorityGroups" : [
+      "priorityLevels" : [
         {
           "alternatives" : [
             {

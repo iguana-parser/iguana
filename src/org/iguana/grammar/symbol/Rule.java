@@ -24,20 +24,20 @@ public class Rule implements Serializable {
 
     private final List<String> parameters;
 
-    private final List<PriorityGroup> priorityGroups;
+    private final List<PriorityLevel> priorityLevels;
 
     public Rule(Builder builder) {
         this.head = builder.head;
         this.parameters = builder.parameters;
-        this.priorityGroups = builder.priorityGroups;
+        this.priorityLevels = builder.priorityLevels;
     }
 
     public Nonterminal getHead() {
         return head;
     }
 
-    public List<PriorityGroup> getPriorityGroups() {
-        return priorityGroups;
+    public List<PriorityLevel> getPriorityLevels() {
+        return priorityLevels;
     }
 
     public List<String> getParameters() {
@@ -49,17 +49,17 @@ public class Rule implements Serializable {
         if (this == obj) return true;
         if (!(obj instanceof Rule)) return false;
         Rule other = (Rule) obj;
-        return this.head.equals(other.head) && this.parameters.equals(other.parameters) && this.priorityGroups.equals(other.priorityGroups);
+        return this.head.equals(other.head) && this.parameters.equals(other.parameters) && this.priorityLevels.equals(other.priorityLevels);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(head).append("\n  : ");
-        if (priorityGroups.isEmpty()) {
+        if (priorityLevels.isEmpty()) {
             sb.append("\n");
         }
-        for (PriorityGroup alternatives : priorityGroups) {
+        for (PriorityLevel alternatives : priorityLevels) {
             sb.append(alternatives).append("  > ");
         }
         sb.delete(sb.length() - 4, sb.length());
@@ -68,7 +68,7 @@ public class Rule implements Serializable {
     }
 
     public static class Builder {
-        List<PriorityGroup> priorityGroups;
+        List<PriorityLevel> priorityLevels;
         Nonterminal head;
         List<String> parameters;
 
@@ -79,22 +79,22 @@ public class Rule implements Serializable {
             this.parameters = parameters;
         }
 
-        public Builder(Nonterminal head, List<String> parameters, List<PriorityGroup> priorityGroups) {
+        public Builder(Nonterminal head, List<String> parameters, List<PriorityLevel> priorityLevels) {
             this.head = head;
             this.parameters = parameters;
-            this.priorityGroups = priorityGroups;
+            this.priorityLevels = priorityLevels;
         }
 
-        public Builder addPriorityGroup(PriorityGroup priorityGroup) {
-            if (priorityGroups == null) {
-                priorityGroups = new ArrayList<>();
+        public Builder addPriorityGroup(PriorityLevel priorityLevel) {
+            if (priorityLevels == null) {
+                priorityLevels = new ArrayList<>();
             }
-            this.priorityGroups.add(priorityGroup);
+            this.priorityLevels.add(priorityLevel);
             return this;
         }
 
         public Rule build() {
-            if (priorityGroups == null) priorityGroups = Collections.emptyList();
+            if (priorityLevels == null) priorityLevels = Collections.emptyList();
             if (parameters == null) parameters = Collections.emptyList();
             return new Rule(this);
         }
