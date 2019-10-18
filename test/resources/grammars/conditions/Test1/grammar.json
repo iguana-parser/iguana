@@ -1,0 +1,86 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Label",
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "Char",
+                            "val" : 58
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Label"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "id",
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "nonterminal" : {
+      "kind" : "Nonterminal",
+      "name" : "S"
+    }
+  }
+}

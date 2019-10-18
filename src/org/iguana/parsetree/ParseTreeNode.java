@@ -41,7 +41,8 @@ public interface ParseTreeNode {
     }
 
     default ParseTreeNode childAt(int i) {
-        if (i < 0 || i >= children().size()) throw new IndexOutOfBoundsException();
+        if (i < 0 || i >= children().size())
+            throw new IndexOutOfBoundsException();
         return children().get(i);
     }
 

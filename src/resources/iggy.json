@@ -1365,72 +1365,15 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "[",
+                      "name" : "{{",
                       "nodeType" : "Keyword",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
                           {
                             "kind" : "Char",
-                            "val" : 91
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Plus",
-                      "name" : "Expression+",
-                      "s" : {
-                        "kind" : "Nonterminal",
-                        "name" : "Expression"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "nodeType" : "Keyword",
-                          "regex" : {
-                            "kind" : "regex.Seq",
-                            "symbols" : [
-                              {
-                                "kind" : "Char",
-                                "val" : 44
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "]",
-                      "nodeType" : "Keyword",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  "label" : "Constraints"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "{",
-                      "nodeType" : "Keyword",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
+                            "val" : 123
+                          },
                           {
                             "kind" : "Char",
                             "val" : 123
@@ -1464,11 +1407,15 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "}",
+                      "name" : "}}",
                       "nodeType" : "Keyword",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 125
+                          },
                           {
                             "kind" : "Char",
                             "val" : 125
@@ -1478,6 +1425,75 @@
                     }
                   ],
                   "label" : "Bindings"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "[[",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 91
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 91
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Plus",
+                      "name" : "Expression+",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "Expression"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "nodeType" : "Keyword",
+                          "regex" : {
+                            "kind" : "regex.Seq",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 44
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "]]",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 93
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 93
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "Constraints"
                 }
               ]
             },
@@ -2416,93 +2432,6 @@
                   "symbols" : [
                     {
                       "kind" : "Opt",
-                      "name" : "start?",
-                      "s" : {
-                        "kind" : "Terminal",
-                        "name" : "start",
-                        "nodeType" : "Keyword",
-                        "regex" : {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 115
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 116
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 97
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 114
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 116
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "kind" : "Nonterminal",
-                      "name" : "Identifier"
-                    },
-                    {
-                      "kind" : "Opt",
-                      "name" : "Parameters?",
-                      "s" : {
-                        "kind" : "Nonterminal",
-                        "name" : "Parameters"
-                      }
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ":",
-                      "nodeType" : "Keyword",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 58
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Nonterminal",
-                      "name" : "Body"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ";",
-                      "nodeType" : "Keyword",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 59
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  "label" : "Syntax"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Opt",
                       "name" : "layout?",
                       "s" : {
                         "kind" : "Terminal",
@@ -2583,7 +2512,7 @@
                     },
                     {
                       "kind" : "Nonterminal",
-                      "name" : "NontName"
+                      "name" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -2619,6 +2548,93 @@
                     }
                   ],
                   "label" : "Lexical"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Opt",
+                      "name" : "start?",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "start",
+                        "nodeType" : "Keyword",
+                        "regex" : {
+                          "kind" : "regex.Seq",
+                          "symbols" : [
+                            {
+                              "kind" : "Char",
+                              "val" : 115
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 116
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 97
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 114
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 116
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Identifier"
+                    },
+                    {
+                      "kind" : "Opt",
+                      "name" : "Parameters?",
+                      "s" : {
+                        "kind" : "Nonterminal",
+                        "name" : "Parameters"
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ":",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 58
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "Body"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "nodeType" : "Keyword",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 59
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "Syntax"
                 }
               ]
             }
@@ -3051,8 +3067,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Star",
-                      "name" : "RegexSequence*",
+                      "kind" : "Plus",
+                      "name" : "RegexSequence+",
                       "s" : {
                         "kind" : "Nonterminal",
                         "name" : "RegexSequence"
@@ -3102,8 +3118,7 @@
                         "name" : "Regex"
                       }
                     }
-                  ],
-                  "label" : "Sequence"
+                  ]
                 }
               ]
             }

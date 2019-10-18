@@ -458,8 +458,18 @@ public class JsonSerializer {
     })
     abstract static class SymbolMixIn { }
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM,  property = "kind")
-    @JsonTypeIdResolver(MyTypeIdResolver.class)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+//    @JsonTypeIdResolver(MyTypeIdResolver.class)
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value=iguana.regex.Seq.class, name="regex.Seq"),
+        @JsonSubTypes.Type(value=iguana.regex.Alt.class, name="regex.Alt"),
+        @JsonSubTypes.Type(value=iguana.regex.Star.class, name="regex.Star"),
+        @JsonSubTypes.Type(value=iguana.regex.Plus.class, name="regex.Plus"),
+        @JsonSubTypes.Type(value=iguana.regex.Opt.class, name="regex.Opt"),
+        @JsonSubTypes.Type(value=iguana.regex.Char.class, name="Char"),
+        @JsonSubTypes.Type(value=iguana.regex.CharRange.class, name="CharRange"),
+        @JsonSubTypes.Type(value=iguana.regex.Reference.class, name="Reference")
+    })
     abstract static class RegularExpressionMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")

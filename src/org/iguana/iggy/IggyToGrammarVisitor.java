@@ -57,6 +57,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "CharClass":
                 return visitCharClass(node);
+
+            case "Range":
+                return visitRange(node);
         }
 
         return visitChildren(node);
@@ -97,9 +100,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 }
                 return new Rule(nonterminal, priorityLevels);
 
+            // RegexBody : { RegexSequence "|" }*;
+            // RegexSequence : Regex+;
             case "Lexical":
-                RegularExpression regex = (RegularExpression) node.getChildWithName("RegexBody").accept(this);
-                Terminal terminal = Terminal.builder(regex).build();
+                List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
+                Terminal terminal = Terminal.builder(getRegex(alts)).build();
                 Identifier name = getIdentifier(node.getChildWithName("Identifier"));
                 terminalsMap.put(name.id, terminal);
                 return null;
@@ -107,6 +112,24 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             default:
                 throw new RuntimeException("Unexpected label");
         }
+    }
+
+    private static RegularExpression getRegex(List<List<RegularExpression>> listOfList) {
+        if (listOfList.size() == 1) {
+            return getRegexOfList(listOfList.get(0));
+        }
+        iguana.regex.Alt.Builder<RegularExpression> builder = new iguana.regex.Alt.Builder<>();
+        for (List<RegularExpression> list : listOfList) {
+            builder.add(getRegexOfList(list));
+        }
+        return builder.build();
+    }
+
+    private static RegularExpression getRegexOfList(List<RegularExpression> list) {
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        return iguana.regex.Seq.from(list);
     }
 
     /*
@@ -327,19 +350,19 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Follow": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.follow(regex)).build();
+                return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.follow(regex)).build();
             }
 
             case "NotFollow": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.notFollow(regex)).build();
+                return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
             }
 
             case "Exclude": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.notMatch(regex)).build();
+                return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
             }
 
             case "Except": {
@@ -438,13 +461,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "CharClass":
                 return (iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this);
 
-            // String: '"' Character* '"'
+            // String: String
             case "String":
-                return getCharsRegex(node.childAt(1).getText());
+                return getCharsRegex(node.getText());
 
-            // Char = '\'' Character* '\''
-            case "Char": {
-                String s = node.childAt(1).getText();
+            // Char = Char
+            case "Character": {
+                String s = node.getText();
                 int[] chars = getChars(s.substring(1, s.length() - 1));
                 if (chars.length == 0) {
                     throw new RuntimeException("Length must be positive");
