@@ -65,24 +65,24 @@ public class Test2 {
 		
 		Nonterminal X = Nonterminal.withName("X");
 		
-		Nonterminal S = Nonterminal.builder("S").addParameters("a", "b").build();
+		Nonterminal S = new Nonterminal.Builder("S").addParameters("a", "b").build();
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		Nonterminal D = Nonterminal.withName("D");
 		
 		
-		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(new Nonterminal.Builder(S).apply(integer(1), integer(2)).build()).build();
 		
 		RuntimeRule r1_1 = RuntimeRule.withHead(S)
-					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(),
+					.addSymbol(Code.code(new Nonterminal.Builder(A).setLabel("l").setVariable("x").build(),
 										 stat(println(string("PRINT1: "), var("l"), var("a"), var("b")))))
 					
 					.addSymbol(B).build();
 		
 		RuntimeRule r1_2 = RuntimeRule.withHead(S)
-				.addSymbol(Nonterminal.builder(C).setLabel("l1").build())
-				.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l2").build(),
+				.addSymbol(new Nonterminal.Builder(C).setLabel("l1").build())
+				.addSymbol(Code.code(new Nonterminal.Builder(A).setLabel("l2").build(),
 									 stat(println(string("PRINT2: "), var("l1"), var("l2"), var("a"), var("b")))))
 				.addSymbol(D).build();
 		

@@ -2332,7 +2332,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2372,7 +2372,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2381,7 +2381,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2891,7 +2891,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2929,7 +2929,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Group<E> symbol) {
+		public Symbol visit(Group symbol) {
 			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 

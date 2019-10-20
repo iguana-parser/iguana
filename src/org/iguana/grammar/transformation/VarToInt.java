@@ -161,7 +161,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
             current.put(variable, current.size());
 
         if (symbol.getArguments() == null || symbol.getArguments().length == 0)
-            return Nonterminal.builder(symbol.getName())
+            return new Nonterminal.Builder(symbol.getName())
                     .setIndex(symbol.getIndex())
                     .setNodeType(symbol.getNodeType())
                     .setVariable(symbol.getVariable())
@@ -174,7 +174,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         for (org.iguana.datadependent.ast.Expression e : symbol.getArguments())
             arguments[i++] = (org.iguana.datadependent.ast.Expression) e.accept(this);
 
-        return Nonterminal.builder(symbol.getName())
+        return new Nonterminal.Builder(symbol.getName())
                 .setIndex(symbol.getIndex())
                 .apply(arguments)
                 .setVariable(symbol.getVariable())
@@ -223,7 +223,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Group<E> symbol) {
+    public Symbol visit(Group symbol) {
         throw new RuntimeException("Unsupported symbol: var-to-int!");
     }
 

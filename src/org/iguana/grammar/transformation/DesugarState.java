@@ -225,7 +225,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -239,7 +239,7 @@ public class DesugarState implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -247,7 +247,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -312,7 +312,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -346,7 +346,7 @@ public class DesugarState implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Group<E> symbol) {
+		public Symbol visit(Group symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
 

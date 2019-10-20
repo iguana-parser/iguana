@@ -1,6 +1,7 @@
 package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,15 +20,13 @@ public class Rule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Nonterminal head;
+    private final Nonterminal head;
 
-    private List<PriorityLevel> priorityLevels;
+    private final List<PriorityLevel> priorityLevels;
 
-    public Rule() { }
-
-    public Rule(Nonterminal head, List<PriorityLevel> priorityLevels) {
-        this.head = head;
-        this.priorityLevels = priorityLevels;
+    public Rule(Builder builder) {
+        this.head = builder.head;
+        this.priorityLevels = builder.priorityLevels;
     }
 
     public Nonterminal getHead() {
@@ -64,6 +63,31 @@ public class Rule implements Serializable {
         sb.delete(sb.length() - 4, sb.length());
         sb.append("  ;");
         return sb.toString();
+    }
+
+    public static class Builder {
+        private Nonterminal head;
+        private List<PriorityLevel> priorityLevels = new ArrayList<>();
+
+        public Builder() { }
+
+        public Builder(Nonterminal head) {
+            this.head = head;
+        }
+
+        public Builder addPriorityLevel(PriorityLevel priorityLevel) {
+            priorityLevels.add(priorityLevel);
+            return this;
+        }
+
+        public Builder addPriorityLevels(List<PriorityLevel> priorityLevels) {
+            priorityLevels.addAll(priorityLevels);
+            return this;
+        }
+
+        public Rule build() {
+            return new Rule(this);
+        }
     }
 
 }

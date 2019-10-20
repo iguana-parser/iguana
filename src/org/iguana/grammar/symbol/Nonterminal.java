@@ -63,7 +63,7 @@ public class Nonterminal extends AbstractSymbol {
 	private final NonterminalNodeType nodeType;
 	
 	public static Nonterminal withName(String name) {
-		return builder(name).build();
+		return new Builder(name).build();
 	}
 
 	protected Nonterminal(Builder builder) {
@@ -85,7 +85,6 @@ public class Nonterminal extends AbstractSymbol {
 		} else {
 			return name.startsWith("List");
 		}
-
 	}
 	
 	public int getIndex() {
@@ -154,14 +153,6 @@ public class Nonterminal extends AbstractSymbol {
 		return getEffectiveName().hashCode();
 	}
 	
-	public static Builder builder(String name) {
-		return new Builder(name);
-	}
-	
-	public static Builder builder(Nonterminal nonterminal) {
-		return new Builder(nonterminal);
-	}
-	
 	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
@@ -201,13 +192,11 @@ public class Nonterminal extends AbstractSymbol {
 		}
 
 		public Builder(String name) {
-			super(name);
+			this.name = name;
 		}
 
-		public Builder() {
-			super();
-		}
-		
+		public Builder() { }
+
 		public Builder setIndex(int index) {
 			this.index = index;
 			return this;

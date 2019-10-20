@@ -174,7 +174,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			String[] parameters = null;
 			Expression[] arguments = null;
 			
-			Alt.builder(symbols).build().accept(visitor);
+			new Alt.Builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
@@ -182,8 +182,8 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setNodeType(NonterminalNodeType.Alt).build()
-					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Alt).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(symbol.getName()).setNodeType(NonterminalNodeType.Alt).build()
+					            		: new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Alt).build();
 			
 			symbols.forEach(x -> addedRules.add(RuntimeRule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy)
 														.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
@@ -216,8 +216,8 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setNodeType(NonterminalNodeType.Opt).build()
-									: Nonterminal.builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Opt).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(symbol.getName()).setNodeType(NonterminalNodeType.Opt).build()
+									: new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Opt).build();
 			
 			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
@@ -263,11 +263,11 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			List<Symbol> seperators = symbol.getSeparators().stream().map(sep -> sep.accept(this)).collect(Collectors.toList());
 
-			Nonterminal newNt = parameters == null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").setNodeType(NonterminalNodeType.Plus).build()
-									: Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).setNodeType(NonterminalNodeType.Plus).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(getName(S, symbol.getSeparators(), layout) + "+").setNodeType(NonterminalNodeType.Plus).build()
+									: new Nonterminal.Builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).setNodeType(NonterminalNodeType.Plus).build();
 			
 			addedRules.add(RuntimeRule.withHead(newNt)
-									.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
+									.addSymbol(arguments != null? new Nonterminal.Builder(newNt).apply(arguments).build() : newNt)
 									.addSymbols(seperators)
 									.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED)
@@ -296,14 +296,14 @@ public class EBNFToBNF implements GrammarTransformation {
 		 * (S) ::= S
 		 */
 		@Override
-		public <E extends Symbol> Symbol visit(Group<E> symbol) {
+		public Symbol visit(Group symbol) {
 			List<Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
 			Expression[] arguments = null;
 			
-			Group.builder(symbols).build().accept(visitor);
+			new Group.Builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
@@ -311,8 +311,8 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setNodeType(NonterminalNodeType.Seq).build()
-									: Nonterminal.builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Seq).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(symbol.getName()).setNodeType(NonterminalNodeType.Seq).build()
+									: new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Seq).build();
 			
 			addedRules.add(RuntimeRule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)
 								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
@@ -351,8 +351,8 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			String base = getName(symbol.getSymbol(), symbol.getSeparators(), layout);
-			Nonterminal newNt = parameters != null? Nonterminal.builder(base + "*").addParameters(parameters).setNodeType(NonterminalNodeType.Star).build()
-						              : Nonterminal.builder(base + "*").setNodeType(NonterminalNodeType.Star).build();
+			Nonterminal newNt = parameters != null? new Nonterminal.Builder(base + "*").addParameters(parameters).setNodeType(NonterminalNodeType.Star).build()
+						              : new Nonterminal.Builder(base + "*").setNodeType(NonterminalNodeType.Star).build();
 			
 			addedRules.add(RuntimeRule.withHead(newNt).addSymbols(S)
 									.setLayout(layout).setLayoutStrategy(strategy)
@@ -421,7 +421,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = new Expression[] { cond };
 			}
 			
-			Nonterminal newNt = Nonterminal.builder("IF_" + counter++).addParameters(parameters).build();
+			Nonterminal newNt = new Nonterminal.Builder("IF_" + counter++).addParameters(parameters).build();
 			
 			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
@@ -481,7 +481,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = new Expression[] { cond };
 			}
 			
-			Nonterminal newNt = Nonterminal.builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
+			Nonterminal newNt = new Nonterminal.Builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
 			
 			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
@@ -509,7 +509,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -535,7 +535,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -544,7 +544,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -565,7 +565,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override

@@ -30,6 +30,10 @@ package org.iguana.grammar.symbol;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class IfThenElse extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -65,7 +69,12 @@ public class IfThenElse extends AbstractSymbol {
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Arrays.asList(thenPart, elsePart);
+	}
+
 	@Override
 	public String toString() {
 		return String.format("if (%s) %s else %s", expression.toString(), thenPart.toString(), elsePart.toString());
@@ -91,9 +100,9 @@ public class IfThenElse extends AbstractSymbol {
 	
 	public static class Builder extends SymbolBuilder<IfThenElse> {
 		
-		private final Expression expression;
-		private final Symbol thenPart;
-		private final Symbol elsePart;
+		private Expression expression;
+		private Symbol thenPart;
+		private Symbol elsePart;
 
 		public Builder(IfThenElse ifThenElse) {
 			super(ifThenElse);
@@ -103,14 +112,21 @@ public class IfThenElse extends AbstractSymbol {
 		}
 		
 		public Builder(Expression expression, Symbol thenPart, Symbol elsePart) {
-			super(String.format("if (%s) %s else %s;", expression.toString(), thenPart.toString(), elsePart.toString()));
 			this.expression = expression;
 			this.thenPart = thenPart;
 			this.elsePart = elsePart;
 		}
 
 		@Override
+		public SymbolBuilder<IfThenElse> setChildren(List<Symbol> symbols) {
+			this.thenPart = symbols.get(0);
+			this.elsePart = symbols.get(1);
+			return this;
+		}
+
+		@Override
 		public IfThenElse build() {
+			this.name = String.format("if (%s) %s else %s;", expression, thenPart, elsePart);
 			return new IfThenElse(this);
 		}
 		

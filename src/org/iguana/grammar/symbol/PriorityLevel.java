@@ -11,12 +11,10 @@ public class PriorityLevel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Alternative> alternatives = new ArrayList<>();
+    private final List<Alternative> alternatives;
 
-    public PriorityLevel() { }
-
-    public PriorityLevel(List<Alternative> alternatives) {
-        this.alternatives = alternatives;
+    public PriorityLevel(Builder builder) {
+        this.alternatives = builder.alternatives;
     }
 
     public List<Alternative> getAlternatives() {
@@ -46,5 +44,23 @@ public class PriorityLevel implements Serializable {
         }
         sb.delete(sb.length() - 4, sb.length());
         return sb.toString();
+    }
+
+    public static class Builder {
+        private List<Alternative> alternatives = new ArrayList<>();
+
+        public Builder addAlternative(Alternative alternative) {
+            alternatives.add(alternative);
+            return this;
+        }
+
+        public Builder addAlternatives(List<Alternative> alternatives) {
+            alternatives.addAll(alternatives);
+            return this;
+        }
+
+        public PriorityLevel build() {
+            return new PriorityLevel(this);
+        }
     }
 }

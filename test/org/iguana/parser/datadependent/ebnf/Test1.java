@@ -38,6 +38,8 @@ import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -70,10 +72,11 @@ public class Test1 {
 		
 		
 		RuntimeRule r1 = RuntimeRule.withHead(X)
-					.addSymbol(Nonterminal.builder(A).build())
-					.addSymbol(Star.builder(Alt.builder(Nonterminal.builder(B).setLabel("b").build(),
-														Group.builder(Nonterminal.builder(C).setLabel("c").build(),
-																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
+					.addSymbol(new Nonterminal.Builder(A).build())
+					.addSymbol(new Star.Builder(new Alt.Builder(Arrays.asList(new Nonterminal.Builder(B).setLabel("b").build(),
+														new Group.Builder(Arrays.asList(new Nonterminal.Builder(C).setLabel("c").build(),
+																         new Nonterminal.Builder(D).setLabel("d").build()))
+																.build())).build())
 									.setLabel("s").build()).build();
 		
 		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();

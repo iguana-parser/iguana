@@ -52,10 +52,6 @@ public class Plus extends AbstractSymbol {
 		this.separators = Collections.unmodifiableList(builder.separators);
 	}
 	
-	private static String getName(Symbol s) {
-		return s.getName() + "+";
-	}
-	
 	public List<Symbol> getSeparators() {
 		return separators;
 	}
@@ -63,6 +59,11 @@ public class Plus extends AbstractSymbol {
 	@Override
 	public SymbolBuilder<Plus> copyBuilder() {
 		return new Builder(this);
+	}
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Collections.singletonList(s);
 	}
 
 	public Symbol getSymbol() {
@@ -99,7 +100,6 @@ public class Plus extends AbstractSymbol {
 		private Builder() {}
 
 		public Builder(Symbol s) {
-			super(getName(s));
 			this.s = s;
 		}
 		
@@ -123,9 +123,16 @@ public class Plus extends AbstractSymbol {
 			separators.addAll(Arrays.asList(symbols));
 			return this;
 		}
-		
+
+		@Override
+		public SymbolBuilder<Plus> setChildren(List<Symbol> symbols) {
+			this.s = symbols.get(0);
+			return this;
+		}
+
 		@Override
 		public Plus build() {
+			this.name = s.getName() + "+";
 			return new Plus(this);
 		}
 	}

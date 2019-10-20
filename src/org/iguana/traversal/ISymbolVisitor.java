@@ -61,10 +61,14 @@ public interface ISymbolVisitor<T> {
 	
 	T visit(Plus symbol);
 	
-	<E extends Symbol> T visit(Group<E> symbol);
+	T visit(Group symbol);
 	
 	T visit(Star symbol);
 
 	T visit(Start start);
+
+	default T visit(Identifier identifier) {
+		throw new UnsupportedOperationException();
+	}
 
 }

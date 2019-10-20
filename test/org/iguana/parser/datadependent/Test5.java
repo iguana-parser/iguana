@@ -74,21 +74,21 @@ public class Test5 {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
+		Nonterminal E = new Nonterminal.Builder("E").addParameters("l", "r").build();
 		
-		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(new Nonterminal.Builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		RuntimeRule r1_1 = RuntimeRule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
+					.addSymbol(new Nonterminal.Builder(E).apply(integer(3), integer(0))
 							.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
 					.addSymbol(Terminal.from(Char.from('+')))
-					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
+					.addSymbol(new Nonterminal.Builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		RuntimeRule r1_2 = RuntimeRule.withHead(E)
 				.addSymbol(Terminal.builder(Char.from('-'))
 					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
-				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+				.addSymbol(new Nonterminal.Builder(E).apply(integer(0), integer(0)).build()).build();
 		
 		RuntimeRule r1_3 = RuntimeRule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		

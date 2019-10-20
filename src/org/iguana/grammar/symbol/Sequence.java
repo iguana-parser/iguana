@@ -10,13 +10,17 @@ public class Sequence implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Symbol> symbols;
+    private final List<Symbol> symbols;
 
-    public Associativity associativity;
+    public final Associativity associativity;
 
-    public String label;
+    public final String label;
 
-    public Sequence() { }
+    public Sequence(Builder builder) {
+        this.symbols = builder.symbols;
+        this.associativity = builder.associativity;
+        this.label = builder.label;
+    }
 
     public Sequence(Symbol symbol, List<Symbol> rest, Associativity associativity, String label) {
         this.symbols = new ArrayList<>();
@@ -66,5 +70,31 @@ public class Sequence implements Serializable {
             sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
+    }
+
+    public static class Builder {
+
+        private List<Symbol> symbols = new ArrayList<>();
+        public Associativity associativity = Associativity.UNDEFINED;
+        public String label;
+
+        public Builder addSymbol(Symbol symbol) {
+            symbols.add(symbol);
+            return this;
+        }
+
+        public Builder setAssociativity(Associativity associativity) {
+            this.associativity = associativity;
+            return this;
+        }
+
+        public Builder setLabel(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public Sequence build() {
+            return new Sequence(this);
+        }
     }
 }

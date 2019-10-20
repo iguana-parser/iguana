@@ -153,7 +153,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     }
 
     @Override
-    public <E extends Symbol> Void visit(Group<E> symbol) {
+    public Void visit(Group symbol) {
         for (Symbol sym : symbol.getSymbols())
             sym.accept(this);
         return null;

@@ -1,6 +1,7 @@
 package org.iguana.grammar.symbol;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -9,14 +10,13 @@ public class Alternative implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Sequence> seqs;
+    private final List<Sequence> seqs;
     
-    public Associativity associativity;
+    public final Associativity associativity;
 
-    public Alternative() { }
-
-    public Alternative(List<Sequence> sequences) {
-        this(sequences, Associativity.UNDEFINED);
+    public Alternative(Builder builder) {
+        this.seqs = builder.seqs;
+        this.associativity = builder.associativity;
     }
 
     public Alternative(List<Sequence> sequences, Associativity associativity) {
@@ -62,5 +62,24 @@ public class Alternative implements Serializable {
             sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
+    }
+
+    public static class Builder {
+        private List<Sequence> seqs = new ArrayList<>();
+        public Associativity associativity = Associativity.UNDEFINED;
+
+        public Builder addSequence(Sequence seq) {
+            seqs.add(seq);
+            return this;
+        }
+
+        public Builder setAssociativity(Associativity associativity) {
+            this.associativity = associativity;
+            return this;
+        }
+
+        public Alternative build() {
+            return new Alternative(this);
+        }
     }
 }

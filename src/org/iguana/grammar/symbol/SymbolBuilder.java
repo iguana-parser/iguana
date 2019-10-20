@@ -28,9 +28,11 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.grammar.condition.Condition;
+import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class SymbolBuilder<T extends Symbol> {
@@ -52,10 +54,6 @@ public abstract class SymbolBuilder<T extends Symbol> {
 		this.postConditions = new HashSet<>(symbol.getPostConditions());
 	}
 	
-	public SymbolBuilder(String name) {
-		this.name = name;
-	}
-
 	public SymbolBuilder() { }
 	
 	public SymbolBuilder<T> setLabel(String label) {
@@ -108,6 +106,10 @@ public abstract class SymbolBuilder<T extends Symbol> {
  		postConditions.removeAll(conditions);
  		return this;
  	}
+
+	public SymbolBuilder<T> setChildren(List<Symbol> symbols) {
+		return this;
+	}
  	
 	public abstract T build();
 	

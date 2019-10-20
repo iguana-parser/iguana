@@ -31,5 +31,5 @@ import org.iguana.grammar.runtime.RuntimeGrammar;
 
 @FunctionalInterface
 public interface GrammarTransformation {
-	public RuntimeGrammar transform(RuntimeGrammar grammar);
+	RuntimeGrammar transform(RuntimeGrammar grammar);
 }

@@ -68,8 +68,8 @@ public class Test3 {
 		Nonterminal B = Nonterminal.withName("B");
 		
 		RuntimeRule r1 = RuntimeRule.withHead(X)
-					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
-					.addSymbol(Star.builder(Nonterminal.builder(B).addPreCondition(predicate(equal(rExt("a"), lExt("b")))).build())
+					.addSymbol(new Nonterminal.Builder(A).setLabel("a").build())
+					.addSymbol(new Star.Builder(new Nonterminal.Builder(B).addPreCondition(predicate(equal(rExt("a"), lExt("b")))).build())
 									.setLabel("b").build()).build();
 		
 		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();

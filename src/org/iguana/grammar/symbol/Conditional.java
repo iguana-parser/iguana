@@ -30,6 +30,9 @@ package org.iguana.grammar.symbol;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Conditional extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -44,7 +47,7 @@ public class Conditional extends AbstractSymbol {
 	}
 	
 	public static Conditional when(Symbol symbol, Expression expression) {
-		return builder(symbol, expression).build();
+		return new Builder(symbol, expression).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -59,7 +62,12 @@ public class Conditional extends AbstractSymbol {
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Collections.singletonList(symbol);
+	}
+
 	@Override
 	public int size() {
 		return symbol.size();
@@ -75,14 +83,10 @@ public class Conditional extends AbstractSymbol {
 		return String.format(" %s when %s", symbol.toString(j), expression.toString());
 	}
 	
-	public static Builder builder(Symbol symbol, Expression expression) {
-		return new Builder(symbol, expression);
-	}
-	
 	public static class Builder extends SymbolBuilder<Conditional> {
 		
-		private final Symbol symbol;
-		private final Expression expression;
+		private Symbol symbol;
+		private Expression expression;
 
 		public Builder(Conditional conditional) {
 			super(conditional);
@@ -91,13 +95,19 @@ public class Conditional extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol, Expression expression) {
-			super(String.format("%s when %s;", symbol.toString(), expression.toString()));
 			this.symbol = symbol;
 			this.expression = expression;
 		}
 
 		@Override
+		public SymbolBuilder<Conditional> setChildren(List<Symbol> symbols) {
+			this.symbol = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public Conditional build() {
+			this.name = String.format("%s when %s;", symbol.toString(), expression.toString());
 			return new Conditional(this);
 		}
 		

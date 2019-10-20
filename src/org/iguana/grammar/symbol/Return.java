@@ -42,7 +42,7 @@ public class Return extends AbstractSymbol {
 	}
 	
 	public static Return ret(Expression expression) {
-		return builder(expression).build();
+		return new Builder(expression).build();
 	}
 	
 	public Expression getExpression() {
@@ -72,10 +72,6 @@ public class Return extends AbstractSymbol {
 		return this.expression.hashCode();
 	}
 
-	public static Builder builder(Expression expression) {
-		return new Builder(expression);
-	}
-	
 	public static class Builder extends SymbolBuilder<Return> {
 		
 		private Expression expression;
@@ -88,12 +84,12 @@ public class Return extends AbstractSymbol {
 		}
 		
 		public Builder(Expression expression) {
-			super(String.format("{%s}", expression.toString()));
 			this.expression = expression;
 		}
 
 		@Override
 		public Return build() {
+			this.name = String.format("{%s}", expression.toString());
 			return new Return(this);
 		}
 	}

@@ -69,31 +69,31 @@ public class Test6 {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
+		Nonterminal E = new Nonterminal.Builder("E").addParameters("p").build();
 		
 		Terminal hat = Terminal.from(Char.from('^'));
         Terminal star = Terminal.from(Char.from('*'));
         Terminal plus = Terminal.from(Char.from('+'));
 		
-		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(new Nonterminal.Builder(E).apply(integer(0)).build()).build();
 		
 		RuntimeRule r1_1 = RuntimeRule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(5))
+					.addSymbol(new Nonterminal.Builder(E).apply(integer(5))
 							.addPreCondition(predicate(greaterEq(integer(4), var("p")))).build())
 					.addSymbol(hat)
-					.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
+					.addSymbol(new Nonterminal.Builder(E).apply(integer(4)).build()).build();
 		
 		RuntimeRule r1_2 = RuntimeRule.withHead(E)
-						.addSymbol(Nonterminal.builder(E).apply(integer(3))
+						.addSymbol(new Nonterminal.Builder(E).apply(integer(3))
 								.addPreCondition(predicate(greaterEq(integer(3), var("p")))).build())
 						.addSymbol(star)
-						.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
+						.addSymbol(new Nonterminal.Builder(E).apply(integer(4)).build()).build();
 		
 		RuntimeRule r1_3 = RuntimeRule.withHead(E)
-				.addSymbol(Nonterminal.builder(E).apply(integer(2))
+				.addSymbol(new Nonterminal.Builder(E).apply(integer(2))
 						.addPreCondition(predicate(greaterEq(integer(2), var("p")))).build())
 				.addSymbol(plus)
-				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
+				.addSymbol(new Nonterminal.Builder(E).apply(integer(3)).build()).build();
 		
 		RuntimeRule r1_4 = RuntimeRule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		

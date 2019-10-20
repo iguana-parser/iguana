@@ -65,7 +65,7 @@ public class LayoutTest4 {
     static Terminal space = Terminal.from(Char.from(' '));
     static Terminal comma = Terminal.from(Char.from(','));
 
-    static Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
+    static Nonterminal L = new Nonterminal.Builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
     static RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, Plus.builder(B).addSeparator(comma).build(), C).setLayout(L).build();
     static RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(a).setLayout(L).build();

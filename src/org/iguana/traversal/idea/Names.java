@@ -197,13 +197,13 @@ public class Names implements GrammarTransformation {
         }
 
         @Override
-        public <E extends Symbol> Symbol visit(Group<E> symbol) {
+        public Symbol visit(Group symbol) {
             return Group.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
         }
 
         @Override
         public Symbol visit(Star symbol) {
-            return Star.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
+            return new Star.Builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
 
         @Override

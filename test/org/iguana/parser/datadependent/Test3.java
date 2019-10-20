@@ -69,22 +69,22 @@ public class Test3 {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("v").build();
+		Nonterminal E = new Nonterminal.Builder("E").addParameters("v").build();
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		
 		
-		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(new Nonterminal.Builder(E).apply(integer(0)).build()).build();
 		
 		RuntimeRule r1_1 = RuntimeRule.withHead(E)
 					.addSymbol(Terminal.builder(Char.from('a')).addPreCondition(predicate(greater(var("v"), integer(1)))).build())
 					.addSymbol(Terminal.from(Char.from('b'))).addSymbol(Terminal.from(Char.from('c'))).build();
 		
 		RuntimeRule r1_2 = RuntimeRule.withHead(E)
-				.addSymbol(Nonterminal.builder(A).addPreCondition(predicate(equal(var("v"), integer(0)))).build())
-				.addSymbol(Nonterminal.builder(B).build())
-				.addSymbol(Nonterminal.builder(C).build()).build();
+				.addSymbol(new Nonterminal.Builder(A).addPreCondition(predicate(equal(var("v"), integer(0)))).build())
+				.addSymbol(new Nonterminal.Builder(B).build())
+				.addSymbol(new Nonterminal.Builder(C).build()).build();
 		
 		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
 		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();

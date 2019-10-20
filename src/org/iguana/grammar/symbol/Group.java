@@ -40,31 +40,27 @@ import static iguana.utils.string.StringUtil.listToString;
 /**
  * A group represents a grouping of symbols, e.g, (A B C) in the EBNF notation.
  */
-public class Group<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
+public class Group extends AbstractSymbol implements Iterable<Symbol> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<T> symbols;
+	private final List<Symbol> symbols;
 	
-	public static <T extends Symbol> Group<T> from(List<T> symbols) {
-		return builder(symbols).build();
+	public static Group from(List<Symbol> symbols) {
+		return new Builder(symbols).build();
 	}
 	
 	@SafeVarargs
 	@SuppressWarnings("varargs")
-	public static <T extends Symbol> Group<T> from(T...elements) {
+	public static <T extends Symbol> Group from(T...elements) {
 		return from(Arrays.asList(elements));
 	}
 	
-	private Group(Builder<T> builder) {
+	private Group(Builder builder) {
 		super(builder);
 		this.symbols = builder.symbols;
 	}
 	
-	private static <T extends Symbol> String getName(List<T> elements) {
-		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" ")) + ")";
-	}
-
 	public int size() {
 		return symbols.size();
 	}
@@ -81,7 +77,7 @@ public class Group<T extends Symbol> extends AbstractSymbol implements Iterable<
 		if(!(obj instanceof Group))
 			return false;
 		
-		Group<?> other = (Group<?>) obj;
+		Group other = (Group) obj;
 		
 		return symbols.equals(other.symbols);
 	}
@@ -92,16 +88,21 @@ public class Group<T extends Symbol> extends AbstractSymbol implements Iterable<
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<Symbol> iterator() {
 		return symbols.iterator();
 	}
 	
 	@Override
-	public Builder<T> copyBuilder() {
-		return new Builder<T>(this);
+	public Builder copyBuilder() {
+		return new Builder(this);
 	}
-	
-	public List<T> getSymbols() {
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return symbols;
+	}
+
+	public List<Symbol> getSymbols() {
 		return symbols;
 	}
 	
@@ -117,50 +118,46 @@ public class Group<T extends Symbol> extends AbstractSymbol implements Iterable<
 			s += " " + listToString(postConditions);
 		return s;
 	}
-	
-	public static <T extends Symbol> Builder<T> builder(T s) {
-		return builder(Arrays.asList(s));
-	}
-	
-	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>(symbols);
-	}
-	
-	@SafeVarargs
-	@SuppressWarnings("varargs")
-	public static <T extends Symbol> Builder<T> builder(T...symbols) {
-		return builder(Arrays.asList(symbols));
-	}
-	
-	public static class Builder<T extends Symbol> extends SymbolBuilder<Group<T>> {
 
-		private List<T> symbols = new ArrayList<>();
+	public static class Builder extends SymbolBuilder<Group> {
 
-		private Builder() {}
+		private List<Symbol> symbols = new ArrayList<>();
 
-		public Builder(List<T> symbols) {
-			super(getName(symbols));
+		private Builder() { }
+
+		public Builder(Symbol...symbols) {
+			this(Arrays.asList(symbols));
+		}
+
+		public Builder(List<Symbol> symbols) {
 			this.symbols = symbols;
 		}
 		
-		public Builder(Group<T> seq) {
+		public Builder(Group seq) {
 			super(seq);
 			this.symbols = seq.symbols;
 		}
 		
-		public Builder<T> add(T s) {
+		public Builder add(Symbol s) {
 			symbols.add(s);
 			return this;
 		}
 		
-		public Builder<T> add(List<T> symbols) {
+		public Builder add(List<Symbol> symbols) {
 			this.symbols.addAll(symbols);
 			return this;
 		}
-		
+
 		@Override
-		public Group<T> build() {
-			return new Group<>(this);
+		public SymbolBuilder<Group> setChildren(List<Symbol> symbols) {
+			this.symbols = symbols;
+			return this;
+		}
+
+		@Override
+		public Group build() {
+			this.name = "(" + symbols.stream().map(Symbol::getName).collect(Collectors.joining(" ")) + ")";
+			return new Group(this);
 		}
 	}
 

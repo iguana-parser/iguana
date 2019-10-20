@@ -29,6 +29,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Align extends AbstractSymbol {
 	
 	private static final long serialVersionUID = 1L;
@@ -41,7 +44,7 @@ public class Align extends AbstractSymbol {
 	}
 	
 	public static Align align(Symbol symbol) {
-		return builder(symbol).build();
+		return new Builder(symbol).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -67,27 +70,34 @@ public class Align extends AbstractSymbol {
 	public String toString(int j) {
 		return String.format("align %s", symbol.toString(j));
 	}
-	
-	public static Builder builder(Symbol symbol) {
-		return new Builder(symbol);
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Collections.singletonList(symbol);
 	}
-	
+
 	public static class Builder extends SymbolBuilder<Align> {
 		
-		private final Symbol symbol;
+		private Symbol symbol;
 
 		public Builder(Align align) {
 			super(align);
 			this.symbol = align.symbol;
 		}
-		
+
 		public Builder(Symbol symbol) {
-			super(String.format("align %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 
 		@Override
+		public SymbolBuilder<Align> setChildren(List<Symbol> symbols) {
+			this.symbol = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public Align build() {
+			this.name = String.format("align %s", symbol.toString());
 			return new Align(this);
 		}
 		

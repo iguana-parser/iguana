@@ -1,5 +1,6 @@
 package org.iguana.grammar;
 
+import iguana.regex.RegularExpression;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
@@ -18,6 +19,7 @@ public class Grammar implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final List<Rule> rules;
+    private final Map<String, RegularExpression> terminals;
     private final Start startSymbol;
     private final Symbol layout;
 
@@ -25,8 +27,17 @@ public class Grammar implements Serializable {
 
     Grammar(Builder builder) {
         this.rules = builder.rules;
+        this.terminals = builder.terminals;
         this.startSymbol = builder.startSymbol;
         this.layout = builder.layout;
+    }
+
+    public List<Rule> getRules() {
+        return rules;
+    }
+
+    public Map<String, RegularExpression> getTerminals() {
+        return terminals;
     }
 
     public Start getStartSymbol() {
@@ -118,10 +129,11 @@ public class Grammar implements Serializable {
 
     public static class Builder {
         private List<Rule> rules = new ArrayList<>();
+        private Map<String, RegularExpression> terminals = new HashMap<>();
         private Start startSymbol;
         private Symbol layout;
 
-        public Builder addHighLevelRule(Rule rule) {
+        public Builder addRule(Rule rule) {
             this.rules.add(rule);
             return this;
         }
@@ -133,6 +145,11 @@ public class Grammar implements Serializable {
 
         public Builder setLayout(Symbol layout) {
             this.layout = layout;
+            return this;
+        }
+
+        public Builder addTerminal(String name, RegularExpression regularExpression) {
+            terminals.put(name, regularExpression);
             return this;
         }
 

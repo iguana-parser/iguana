@@ -69,12 +69,12 @@ public class Test5 {
 		Nonterminal C = Nonterminal.withName("C");
 		
 		RuntimeRule r1 = RuntimeRule.withHead(X)
-					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
-					.addSymbol(Star.builder(Group.builder(Code.code(Nonterminal.builder(B).setLabel("b")
+					.addSymbol(new Nonterminal.Builder(A).setLabel("a").build())
+					.addSymbol(new Star.Builder(new Group.Builder(Code.code(new Nonterminal.Builder(B).setLabel("b")
 																			.addPreCondition(predicate(greaterEq(lExt("b"), rExt("a")))).build(),
 																	   stat(println(lExt("b")))),
 															 
-															 Code.code(Nonterminal.builder(C).setLabel("c").build(),
+															 Code.code(new Nonterminal.Builder(C).setLabel("c").build(),
 																	   stat(println(var("c"))))).build())
 									.setLabel("b").build()).build();
 		

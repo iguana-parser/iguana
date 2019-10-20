@@ -77,11 +77,11 @@ public class Test10 {
 		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(S).build();
 		
 		RuntimeRule r1 = RuntimeRule.withHead(S)
-					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("a")
+					.addSymbol(Code.code(new Nonterminal.Builder(A).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(), 
 										 stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(NoNL) // TODO: Should be removed
-					.addSymbol(Code.code(Nonterminal.builder(B).setLabel("b")
+					.addSymbol(Code.code(new Nonterminal.Builder(B).setLabel("b")
 											.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					
@@ -90,8 +90,8 @@ public class Test10 {
 		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
 		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		RuntimeRule r4 = RuntimeRule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
+		RuntimeRule r4 = RuntimeRule.withHead(new Nonterminal.Builder("NoNL").build())
+						.addSymbol(new Star.Builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
 										.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 										.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
 		

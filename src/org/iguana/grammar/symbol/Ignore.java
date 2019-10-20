@@ -29,6 +29,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Ignore extends AbstractSymbol {
 	
 private static final long serialVersionUID = 1L;
@@ -52,7 +55,12 @@ private static final long serialVersionUID = 1L;
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Collections.singletonList(symbol);
+	}
+
 	@Override
 	public int size() {
 		return symbol.size();
@@ -74,7 +82,7 @@ private static final long serialVersionUID = 1L;
 	
 	public static class Builder extends SymbolBuilder<Ignore> {
 		
-		private final Symbol symbol;
+		private Symbol symbol;
 
 		public Builder(Ignore ignore) {
 			super(ignore);
@@ -82,12 +90,18 @@ private static final long serialVersionUID = 1L;
 		}
 		
 		public Builder(Symbol symbol) {
-			super(String.format("ignore %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 
 		@Override
+		public SymbolBuilder<Ignore> setChildren(List<Symbol> symbols) {
+			this.symbol = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public Ignore build() {
+			this.name = String.format("ignore %s", symbol.toString());
 			return new Ignore(this);
 		}
 		

@@ -30,6 +30,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Start extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -52,6 +55,11 @@ public class Start extends AbstractSymbol {
 	@Override
 	public Builder copyBuilder() {
 		return builder(nonterminal);
+	}
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Collections.singletonList(nonterminal);
 	}
 
     @Override
@@ -87,12 +95,18 @@ public class Start extends AbstractSymbol {
 		private Builder() {}
 
 		public Builder(Nonterminal nonterminal) {
-			super("Start(" + nonterminal.getName() + ")");
 			this.nonterminal = nonterminal;
 		}
 
 		@Override
+		public SymbolBuilder<Start> setChildren(List<Symbol> symbols) {
+			this.nonterminal = (Nonterminal) symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public Start build() {
+			this.name = "Start(" + nonterminal.getName() + ")";
 			return new Start(this);
 		}
 	}

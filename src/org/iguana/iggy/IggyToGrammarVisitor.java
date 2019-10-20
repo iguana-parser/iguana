@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
-    private Map<String, Terminal> terminalsMap = new HashMap<>();
+    private Map<String, RegularExpression> terminalsMap = new HashMap<>();
     private Nonterminal startNonterminal;
 
     @Override
@@ -70,12 +70,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      */
     private Grammar visitDefinition(NonterminalNode node) {
         Grammar.Builder builder = new Grammar.Builder();
-        // Each rule in the textual syntax may represent multiple grammar rules in our symbol definition,
-        // as we don't natively support alternatives.
-        for (Object obj : (List<?>) node.childAt(0).accept(this)) {
-            if (obj != null) {
-                builder.addHighLevelRule((Rule) obj);
-            }
+        for (Rule rule : (List<Rule>) node.childAt(0).accept(this)) {
+            builder.addRule(rule);
+        }
+        for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
+            builder.addTerminal(entry.getKey(), entry.getValue());
         }
         builder.setStartSymbol(Start.from(startNonterminal));
         return builder.build();
@@ -94,19 +93,18 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 if (parameters == null) parameters = Collections.emptyList();
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
                 List<String> params = parameters.stream().map(p -> p.id).collect(Collectors.toList());
-                Nonterminal nonterminal = Nonterminal.builder(nonterminalName.id).addParameters(params).build();
+                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.id).addParameters(params).build();
                 if (!node.childAt(0).children().isEmpty()) {
                     startNonterminal = nonterminal;
                 }
-                return new Rule(nonterminal, priorityLevels);
+                return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
 
             // RegexBody : { RegexSequence "|" }*;
             // RegexSequence : Regex+;
             case "Lexical":
                 List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
-                Terminal terminal = Terminal.builder(getRegex(alts)).build();
                 Identifier name = getIdentifier(node.getChildWithName("Identifier"));
-                terminalsMap.put(name.id, terminal);
+                terminalsMap.put(name.id, getRegex(alts));
                 return null;
 
             default:
@@ -143,7 +141,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * Alternatives: { Alternative '|' }+
      */
     private PriorityLevel visitPriorityLevels(NonterminalNode node) {
-        return new PriorityLevel((List<Alternative>) node.childAt(0).accept(this));
+        PriorityLevel.Builder builder = new PriorityLevel.Builder();
+        builder.addAlternatives((List<Alternative>) node.childAt(0).accept(this));
+        return builder.build();
     }
 
     /*
@@ -156,9 +156,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private Alternative visitAlternative(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Sequence": {
-                List<Sequence> seqs = new ArrayList<>();
-                seqs.add((Sequence) node.childAt(0).accept(this));
-                return new Alternative(seqs);
+                Alternative.Builder builder = new Alternative.Builder();
+                builder.addSequence((Sequence) node.childAt(0).accept(this));
+                return builder.build();
             }
 
             case "Assoc": {
@@ -170,7 +170,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Empty":
-                return new Alternative();
+                return new Alternative.Builder().build();
 
             default:
                 throw new RuntimeException("Unexpected label");
@@ -246,8 +246,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | Identifier                       %Nont
      *   | String                           %String
      *   | Char                             %Character
-     *   | "{" Symbol Symbol+ "}" "*"        %StarSep
-         | "{" Symbol Symbol+ "}" "+"        %PlusSep
+     *   | "{" Symbol Symbol+ "}" "*"       %StarSep
+     *   | "{" Symbol Symbol+ "}" "+"       %PlusSep
      *   ;
      */
     private Symbol visitSymbol(NonterminalNode node) {
@@ -256,7 +256,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         switch (label) {
             case "Call": {
                 Expression[] expressions = ((List<Expression>) node.childAt(0).accept(this)).toArray(new Expression[]{});
-                return Nonterminal.builder(getIdentifier(node.childAt(0)).id).apply(expressions).build();
+                return new Nonterminal.Builder(getIdentifier(node.childAt(0)).id).apply(expressions).build();
             }
 
             case "Offside":
@@ -371,7 +371,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Nont":
-                return Nonterminal.withName(getIdentifier(node).id);
+                return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).id);
 
             case "String":
             case "Character":
@@ -380,7 +380,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "StarSep": {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);
                 List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
-                return Star.builder(symbol).addSeparators(seps).build();
+                return new Star.Builder(symbol).addSeparators(seps).build();
             }
 
             case "PlusSep": {

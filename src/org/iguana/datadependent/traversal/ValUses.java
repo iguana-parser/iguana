@@ -126,7 +126,7 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Group<E> symbol) {
+	public Void visit(Group symbol) {
 		throw new UnexpectedSymbol(symbol, "val-uses traversal");
 	}
 

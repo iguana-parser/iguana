@@ -71,11 +71,11 @@ public class Test2 {
 		
 		
 		RuntimeRule r1 = RuntimeRule.withHead(X)
-					.addSymbol(Nonterminal.builder(A).build())
-					.addSymbol(Star.builder(Alt.builder(Nonterminal.builder(B).setLabel("b").build(),
-														Group.builder(Code.code(Nonterminal.builder(C).setLabel("c").build(),
+					.addSymbol(new Nonterminal.Builder(A).build())
+					.addSymbol(new Star.Builder(new Alt.Builder(new Nonterminal.Builder(B).setLabel("b").build(),
+														new Group.Builder(Code.code(new Nonterminal.Builder(C).setLabel("c").build(),
 																				   stat(println(lExt("s")))),
-																         Nonterminal.builder(D).setLabel("d").build()).build()).build())
+																         new Nonterminal.Builder(D).setLabel("d").build()).build()).build())
 									.setLabel("s").build()).build();
 		
 		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();

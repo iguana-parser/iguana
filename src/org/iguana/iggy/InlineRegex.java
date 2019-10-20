@@ -230,7 +230,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Group<E> symbol) {
+    public Symbol visit(Group symbol) {
         boolean changed = false;
         List<Symbol> syms = new ArrayList<>();
         for (Symbol s : symbol.getSymbols()) {

@@ -30,6 +30,9 @@ package org.iguana.grammar.symbol;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class While extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -59,7 +62,12 @@ public class While extends AbstractSymbol {
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return Collections.singletonList(body);
+	}
+
 	@Override
 	public int size() {
 		return body.size();
@@ -81,8 +89,8 @@ public class While extends AbstractSymbol {
 	
 	public static class Builder extends SymbolBuilder<While> {
 		
-		private final Expression expression;
-		private final Symbol body;
+		private Expression expression;
+		private Symbol body;
 
 		public Builder(While whileSymbol) {
 			super(whileSymbol);
@@ -91,16 +99,21 @@ public class While extends AbstractSymbol {
 		}
 		
 		public Builder(Expression expression, Symbol body) {
-			super(String.format("while (%s) %s", expression.toString(), body.toString()));
 			this.expression = expression;
 			this.body = body;
 		}
 
 		@Override
+		public SymbolBuilder<While> setChildren(List<Symbol> symbols) {
+			this.body = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public While build() {
+			this.name = String.format("while (%s) %s", expression.toString(), body.toString());
 			return new While(this);
 		}
-		
 	}
 
 	@Override

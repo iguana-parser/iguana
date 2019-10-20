@@ -63,15 +63,15 @@ public class Test1 {
 		
 		Nonterminal X = Nonterminal.withName("X");
 		
-		Nonterminal S = Nonterminal.builder("S").addParameters("a", "b").build();
+		Nonterminal S = new Nonterminal.Builder("S").addParameters("a", "b").build();
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		
 		
-		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(new Nonterminal.Builder(S).apply(integer(1), integer(2)).build()).build();
 		
 		RuntimeRule r1 = RuntimeRule.withHead(S)
-					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(),
+					.addSymbol(Code.code(new Nonterminal.Builder(A).setLabel("l").setVariable("x").build(),
 											stat(println(var("l"), var("a"), var("b")))))
 					.addSymbol(B).build();
 		

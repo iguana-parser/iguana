@@ -69,7 +69,7 @@
 //    Nonterminal B = Nonterminal.withName("B");
 //    Nonterminal C = Nonterminal.withName("C");
 //
-//    Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
+//    Nonterminal L = new Nonterminal.Builder("L").setNodeType(NonterminalNodeType.Layout).build();
 //
 //    Rule r1 = Rule.withHead(S).addSymbols(A, B, C).setLayout(L).build();
 //    Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();

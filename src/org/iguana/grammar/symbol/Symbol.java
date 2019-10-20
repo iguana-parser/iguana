@@ -33,6 +33,8 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -77,6 +79,10 @@ public interface Symbol extends Serializable, Attr {
 	String getLabel();
 	
 	SymbolBuilder<? extends Symbol> copyBuilder();
+
+	default List<? extends Symbol> getChildren() {
+		return Collections.emptyList();
+	}
 	
 	default int size() {
 		return 1;

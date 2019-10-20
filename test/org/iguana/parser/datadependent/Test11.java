@@ -81,8 +81,8 @@ public class Test11 {
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
-		RuntimeRule r2 = RuntimeRule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
+		RuntimeRule r2 = RuntimeRule.withHead(new Nonterminal.Builder("NoNL").build())
+						.addSymbol(new Star.Builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
 								.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 								.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
 		

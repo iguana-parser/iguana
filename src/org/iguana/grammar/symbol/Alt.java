@@ -53,13 +53,9 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 	}
 
 	public static <T extends Symbol> Alt<T> from(List<T> list) {
-		return builder(list).build();
+		return new Builder<>(list).build();
 	}
 	
-	private static <T extends Symbol> String getName(List<T> elements) {
-		return "(" + elements.stream().map(a -> a.getName()).collect(Collectors.joining(" | ")) + ")";
-	}
-
 	@Override
 	public Iterator<T> iterator() {
 		return symbols.iterator();
@@ -100,28 +96,22 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 		return symbols;
 	}
 
-	public static <T extends Symbol> Builder<T> builder(T t1, T t2) {
-		return builder(Arrays.asList(t1, t2));
+	@Override
+	public List<? extends Symbol> getChildren() {
+		return symbols;
 	}
-	
-	public static <T extends Symbol> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>(symbols);
-	}
-	
-	@SafeVarargs
-	@SuppressWarnings("varargs")
-	public static <T extends Symbol> Builder<T> builder(T...symbols) {
-		return new Builder<T>(Arrays.asList(symbols));
-	}
-	
+
 	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
 
-		List<T> symbols;
+		private List<T> symbols;
 
 		private Builder() {}
-		
+
+		public Builder(T...symbols) {
+			this(Arrays.asList(symbols));
+		}
+
 		public Builder(List<T> symbols) {
-			super(getName(symbols));
 			this.symbols = symbols;
 		}
 		
@@ -142,6 +132,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 
 		@Override
 		public Alt<T> build() {
+			this.name = "(" + symbols.stream().map(Symbol::getName).collect(Collectors.joining(" | ")) + ")";
 			return new Alt<>(this);
 		}
 	}

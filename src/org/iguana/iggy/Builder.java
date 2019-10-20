@@ -57,7 +57,7 @@ public abstract class Builder {
 		body.forEach(elem -> {
 			((PrecGroup)elem).alts.forEach(alt -> {
 				final Nonterminal head = params.isEmpty() ? Nonterminal.withName((String)name)
-                        : Nonterminal.builder((String)name)
+                        : new Nonterminal.Builder((String)name)
                               .addParameters(params)
                               .build();
 				if (alt instanceof Sequence) {
@@ -176,7 +176,7 @@ public abstract class Builder {
     }
 
 	public Nonterminal nontCall(Object sym, List<Object> args) {
-		org.iguana.grammar.symbol.Nonterminal.Builder builder = Nonterminal.builder((Nonterminal) sym);
+		org.iguana.grammar.symbol.Nonterminal.Builder builder = new Nonterminal.Builder((Nonterminal) sym);
 		if (args.isEmpty()) 
 			return builder.build();
 		return builder
@@ -185,15 +185,11 @@ public abstract class Builder {
 	}
 	
 	public Nonterminal variable(Object name, Object sym) {
-		return Nonterminal.builder(((Nonterminal)sym)).setVariable((String) name).build();
+		return new Nonterminal.Builder(((Nonterminal)sym)).setVariable((String) name).build();
 	}
 	
 	public Symbol label(Object name, Object sym) {
 		return ((Symbol)sym).copyBuilder().setLabel((String)name).build();
-	}
-	
-	public Nonterminal nont(Object name) {
-		return Nonterminal.withName((String)name);
 	}
 	
 	public iguana.regex.Seq<Char> string(Object obj) {
