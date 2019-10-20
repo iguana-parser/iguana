@@ -10,14 +10,17 @@ public class GrammarTransformer {
 
     public static Grammar transform(Grammar grammar, SymbolTransformation symbolTransformation) {
         Grammar.Builder grammarBuilder = new Grammar.Builder();
+
         for (Rule rule : grammar.getRules()) {
             Rule.Builder ruleBuilder = new Rule.Builder(rule.getHead());
             for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
                 PriorityLevel.Builder priorityLevelBuilder = new PriorityLevel.Builder();
                 for (Alternative alt : priorityLevel.getAlternatives()) {
                     Alternative.Builder altBuilder = new Alternative.Builder();
+                    altBuilder.setAssociativity(alt.getAssociativity());
                     for (Sequence sequence : alt.seqs()) {
                         Sequence.Builder seqBuilder = new Sequence.Builder();
+                        seqBuilder.setAssociativity(sequence.getAssociativity());
                         for (Symbol symbol : sequence.getSymbols()) {
                             seqBuilder.addSymbol(transform(symbol, symbolTransformation));
                         }
@@ -29,6 +32,7 @@ public class GrammarTransformer {
             }
             grammarBuilder.addRule(ruleBuilder.build());
         }
+
         return grammarBuilder
                 .setStartSymbol(grammar.getStartSymbol())
                 .addTerminals(grammar.getTerminals())

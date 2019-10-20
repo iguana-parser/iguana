@@ -49,6 +49,14 @@ public class Sequence implements Serializable {
         return symbols;
     }
 
+    public Associativity getAssociativity() {
+        return associativity;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -75,7 +83,7 @@ public class Sequence implements Serializable {
     public static class Builder {
 
         private List<Symbol> symbols = new ArrayList<>();
-        public Associativity associativity = Associativity.UNDEFINED;
+        public Associativity associativity;
         public String label;
 
         public Builder addSymbol(Symbol symbol) {

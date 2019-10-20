@@ -168,7 +168,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 List<Sequence> seqs = new ArrayList<>();
                 seqs.add((Sequence) node.childAt(2).accept(this));
                 seqs.addAll((List<Sequence>) node.childAt(3).accept(this));
-                return new Alternative(seqs, associativity);
+                return new Alternative.Builder(seqs, associativity).build();
             }
 
             case "Empty":

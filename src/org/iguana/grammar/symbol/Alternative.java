@@ -23,11 +23,6 @@ public class Alternative implements Serializable {
         this.associativity = builder.associativity;
     }
 
-    public Alternative(List<Sequence> sequences, Associativity associativity) {
-        this.seqs = sequences;
-        this.associativity = associativity;
-    }
-
     public Sequence first() {
         if (seqs == null || seqs.isEmpty()) return null;
         return seqs.get(0);
@@ -36,6 +31,10 @@ public class Alternative implements Serializable {
     public List<Sequence> rest() {
         if (seqs == null || seqs.size() < 2) return null;
         return seqs.subList(1, seqs.size());
+    }
+
+    public Associativity getAssociativity() {
+        return associativity;
     }
 
     public List<Sequence> seqs() {
@@ -71,6 +70,13 @@ public class Alternative implements Serializable {
     public static class Builder {
         private List<Sequence> seqs = new ArrayList<>();
         public Associativity associativity = Associativity.UNDEFINED;
+
+        public Builder() { }
+
+        public Builder(List<Sequence> sequences, Associativity associativity) {
+            this.seqs = sequences;
+            this.associativity = associativity;
+        }
 
         public Builder addSequence(Sequence seq) {
             seqs.add(seq);

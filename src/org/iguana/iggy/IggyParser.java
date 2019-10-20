@@ -73,6 +73,7 @@ public class IggyParser {
         Input input = Input.fromFile(new File(path));
         ParseTreeNode parseTree = parser.getParserTree(input);
         if (parseTree == null) {
+            System.out.println(parser.getParseError());
             throw new RuntimeException("Parse error");
         }
 
