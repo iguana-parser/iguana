@@ -48,7 +48,7 @@ public class Grammar implements Serializable {
         return layout;
     }
 
-    public RuntimeGrammar toGrammar() {
+    public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (Rule rule : rules) {

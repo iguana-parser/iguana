@@ -31,7 +31,6 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class IfThenElse extends AbstractSymbol {
@@ -50,7 +49,7 @@ public class IfThenElse extends AbstractSymbol {
 	}
 	
 	public static IfThenElse ifThenElse(Expression expression, Symbol thenPart, Symbol elsePart) {
-		return builder(expression, thenPart, elsePart).build();
+		return new Builder(expression, thenPart, elsePart).build();
 	}
 	
 	public Expression getExpression() {
@@ -92,10 +91,6 @@ public class IfThenElse extends AbstractSymbol {
 								thenPart.toString(j), 
 								j - thenPart.size() <= 1? elsePart.toString(j - thenPart.size())
 											           : elsePart.toString());
-	}
-	
-	public static Builder builder(Expression expression, Symbol thenPart, Symbol elsePart) {
-		return new Builder(expression, thenPart, elsePart);
 	}
 	
 	public static class Builder extends SymbolBuilder<IfThenElse> {

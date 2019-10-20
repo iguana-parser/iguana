@@ -66,7 +66,7 @@ public class PrecedeRestrictionTest1 {
 	private Terminal ws = Terminal.from(Char.from(' '));
 	private Terminal az = Terminal.from(CharRange.in('a', 'z'));
 	
-	private Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
+	private Plus AZPlus = new Plus.Builder(az).addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 			                              .addPreCondition(RegularExpressionCondition.notPrecede(CharRange.in('a', 'z'))).build();
 
 	@Before

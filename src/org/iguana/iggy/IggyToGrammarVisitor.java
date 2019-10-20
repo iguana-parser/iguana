@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     private Map<String, RegularExpression> terminalsMap = new HashMap<>();
-    private Nonterminal startNonterminal;
+    private String start;
 
     @Override
     public Object visitNonterminalNode(NonterminalNode node) {
@@ -76,7 +76,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
             builder.addTerminal(entry.getKey(), entry.getValue());
         }
-        builder.setStartSymbol(Start.from(startNonterminal));
+        builder.setStartSymbol(Start.from(start));
         return builder.build();
     }
 
@@ -93,10 +93,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 if (parameters == null) parameters = Collections.emptyList();
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
                 List<String> params = parameters.stream().map(p -> p.id).collect(Collectors.toList());
-                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.id).addParameters(params).build();
-                if (!node.childAt(0).children().isEmpty()) {
-                    startNonterminal = nonterminal;
+
+                if (!node.childAt(0).children().isEmpty()) { // start symbol
+                    start = nonterminalName.id;
                 }
+
+                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.id).addParameters(params).build();
                 return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
 
             // RegexBody : { RegexSequence "|" }*;
@@ -386,7 +388,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "PlusSep": {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);
                 List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
-                return Plus.builder(symbol).addSeparators(seps).build();
+                return new Plus.Builder(symbol).addSeparators(seps).build();
             }
 
             default:

@@ -78,7 +78,7 @@ public class Test3 {
 		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(new Nonterminal.Builder(E).apply(integer(0)).build()).build();
 		
 		RuntimeRule r1_1 = RuntimeRule.withHead(E)
-					.addSymbol(Terminal.builder(Char.from('a')).addPreCondition(predicate(greater(var("v"), integer(1)))).build())
+					.addSymbol(new Terminal.Builder(Char.from('a')).addPreCondition(predicate(greater(var("v"), integer(1)))).build())
 					.addSymbol(Terminal.from(Char.from('b'))).addSymbol(Terminal.from(Char.from('c'))).build();
 		
 		RuntimeRule r1_2 = RuntimeRule.withHead(E)

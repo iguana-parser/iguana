@@ -335,7 +335,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public Symbol visit(Star symbol) {
-			Symbol S = Plus.builder(symbol.getSymbol()).addSeparators(symbol.getSeparators()).build().accept(this);
+			Symbol S = new Plus.Builder(symbol.getSymbol()).addSeparators(symbol.getSeparators()).build().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -378,7 +378,8 @@ public class EBNFToBNF implements GrammarTransformation {
 
         @Override
         public Symbol visit(Start start) {
-            return start.getNonterminal().accept(this);
+			return start;
+//            return start.getNonterminal().accept(this);
         }
 
         /**
@@ -525,7 +526,7 @@ public class EBNFToBNF implements GrammarTransformation {
 					modified |= true;
 				j++;
 			}
-			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
+			return modified? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					: symbol;
 		}
 
@@ -552,7 +553,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -579,7 +580,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			if (body == symbol.getBody()) 
 				return symbol;
 			
-			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new While.Builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override

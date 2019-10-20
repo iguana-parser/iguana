@@ -44,7 +44,7 @@ public class Opt extends AbstractSymbol {
 	}
 
 	public static Opt from(Symbol s) {
-		return builder(s).build();
+		return new Builder(s).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -76,10 +76,6 @@ public class Opt extends AbstractSymbol {
 	@Override
 	public int hashCode() {
 		return name.hashCode();
-	}
-	
-	public static Builder builder(Symbol s) {
-		return new Builder(s);
 	}
 	
 	public static class Builder extends SymbolBuilder<Opt> {

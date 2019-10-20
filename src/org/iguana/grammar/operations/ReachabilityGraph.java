@@ -236,7 +236,8 @@ public class ReachabilityGraph {
 
         @Override
         public Boolean visit(Start start) {
-            return start.getNonterminal().accept(this);
+//            return start.getNonterminal().accept(this);
+			return false;
         }
 
     }

@@ -762,11 +762,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
     @Override
     public Void visit(Start start) {
-        Symbol sym = start.getNonterminal();
-
-        sym.setEnv(start.getEnv());
-        visitSymbol(sym);
-
+//        Symbol sym = start.getNonterminal();
+//
+//        sym.setEnv(start.getEnv());
+//        visitSymbol(sym);
+//
         return null;
     }
 

@@ -67,7 +67,7 @@ public class LayoutTest4 {
 
     static Nonterminal L = new Nonterminal.Builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
-    static RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, Plus.builder(B).addSeparator(comma).build(), C).setLayout(L).build();
+    static RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, new Plus.Builder(B).addSeparator(comma).build(), C).setLayout(L).build();
     static RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(a).setLayout(L).build();
     static RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(b).setLayout(L).build();
     static RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(c).setLayout(L).build();

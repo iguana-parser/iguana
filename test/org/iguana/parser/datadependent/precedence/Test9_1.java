@@ -59,11 +59,11 @@ RuntimeGrammar.builder()
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(RuntimeRule.withHead(new Nonterminal.Builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // E ::= E ('+') E  {LEFT,1,LEFT_RIGHT_REC} PREC(1,1) 
-.addRule(RuntimeRule.withHead(new Nonterminal.Builder("E").build()).addSymbol(new Nonterminal.Builder("E").build()).addSymbol(Terminal.builder(Seq.builder(Char.builder(43).build()).build()).build()).addSymbol(new Nonterminal.Builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(RuntimeRule.withHead(new Nonterminal.Builder("E").build()).addSymbol(new Nonterminal.Builder("E").build()).addSymbol(new Terminal.Builder(Seq.builder(Char.builder(43).build()).build()).build()).addSymbol(new Nonterminal.Builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // E ::= ('a')  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(RuntimeRule.withHead(new Nonterminal.Builder("E").build()).addSymbol(Terminal.builder(Seq.builder(Char.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(RuntimeRule.withHead(new Nonterminal.Builder("E").build()).addSymbol(new Terminal.Builder(Seq.builder(Char.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // S ::= E*  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(RuntimeRule.withHead(new Nonterminal.Builder("S").build()).addSymbol(new Star.Builder(new Nonterminal.Builder("E").build()).addSeparators(Arrays.asList(Terminal.builder(Seq.builder(Char.builder(59).build()).build()).build())).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(RuntimeRule.withHead(new Nonterminal.Builder("S").build()).addSymbol(new Star.Builder(new Nonterminal.Builder("E").build()).addSeparators(Arrays.asList(new Terminal.Builder(Seq.builder(Char.builder(59).build()).build()).build())).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 .build();
          grammar = new EBNFToBNF().transform(grammar);
          System.out.println(grammar);

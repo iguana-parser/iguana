@@ -46,7 +46,7 @@ public class Block extends AbstractSymbol {
 	}
 	
 	public static Block block(Symbol... symbols) {
-		return builder(symbols).build();
+		return new Builder(symbols).build();
 	}
 	
 	public Symbol[] getSymbols() {
@@ -88,10 +88,6 @@ public class Block extends AbstractSymbol {
 		}
 		
 		return String.format("{ %s }", listToString(strings, " "));
-	}
-	
-	public static Builder builder(Symbol... symbols) {
-		return new Builder(symbols);
 	}
 	
 	public static class Builder extends SymbolBuilder<Block> {

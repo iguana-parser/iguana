@@ -65,7 +65,7 @@ public class FollowRestrictionTest2 {
 		Nonterminal Label = new Nonterminal.Builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from("8"))).build();
 		CharRange az = CharRange.in('a', 'z');
 		CharRange zero_nine = CharRange.in('0', '9');
-		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
+		Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
 		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
 		RuntimeRule r2 = RuntimeRule.withHead(Label).addSymbol(AZPlus).build();

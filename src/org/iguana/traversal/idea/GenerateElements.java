@@ -824,7 +824,8 @@ public class GenerateElements {
 
         @Override
         public String visit(Start start) {
-            return start.getNonterminal().accept(this);
+            return null;
+//            return start.getNonterminal().accept(this);
         }
     }
 }

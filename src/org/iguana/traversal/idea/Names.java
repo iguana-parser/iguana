@@ -193,7 +193,7 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Plus symbol) {
-            return Plus.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
+            return new Plus.Builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
 
         @Override
@@ -208,7 +208,8 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Start start) {
-            return Start.from((Nonterminal) start.getNonterminal().accept(this));
+            return start;
+//            return Start.from((Nonterminal) start.getNonterminal().accept(this));
         }
     }
 }

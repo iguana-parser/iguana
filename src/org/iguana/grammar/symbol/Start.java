@@ -30,36 +30,21 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.Collections;
-import java.util.List;
-
 public class Start extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final Nonterminal nonterminal;
-
-    public static Start from(String s) {
-        return builder(Nonterminal.withName(s)).build();
+    public static Start from(String name) {
+        return new Builder(name).build();
     }
 
-	public static Start from(Nonterminal nonterminal) {
-		return builder(nonterminal).build();
-	}
-	
 	public Start(Builder builder) {
 		super(builder);
-		this.nonterminal = builder.nonterminal;
 	}
 
 	@Override
 	public Builder copy() {
-		return builder(nonterminal);
-	}
-
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(nonterminal);
+		return new Builder(name);
 	}
 
     @Override
@@ -67,48 +52,31 @@ public class Start extends AbstractSymbol {
         return visitor.visit(this);
     }
 
-    public Nonterminal getNonterminal() {
-		return nonterminal;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
     	if (this == obj) return true;
     	if (!(obj instanceof Start)) return false;
     	Start other = (Start) obj;
-    	return this.nonterminal.equals(other.nonterminal);
+    	return this.name.equals(other.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return nonterminal.hashCode();
+		return name.hashCode();
 	}
 
-	public static Builder builder(Nonterminal nonterminal) {
-		return new Builder(nonterminal);
-	}
-	
 	public static class Builder extends SymbolBuilder<Start> {
-
-		private Nonterminal nonterminal;
 
 		private Builder() {}
 
-		public Builder(Nonterminal nonterminal) {
-			this.nonterminal = nonterminal;
-		}
-
-		@Override
-		public SymbolBuilder<Start> setChildren(List<Symbol> symbols) {
-			this.nonterminal = (Nonterminal) symbols.get(0);
-			return this;
+		public Builder(String name) {
+			this.name = name;
 		}
 
 		@Override
 		public Start build() {
-			this.name = "Start(" + nonterminal.getName() + ")";
+			this.name = "Start(" + name + ")";
 			return new Start(this);
 		}
 	}
-	
 }

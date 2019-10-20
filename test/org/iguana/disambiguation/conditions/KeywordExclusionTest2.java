@@ -69,7 +69,7 @@ public class KeywordExclusionTest2 {
 		Seq<Char> doo = Seq.from("do");
 		Seq<Char> whilee = Seq.from("while");
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);		
-		Plus AZPlus = Plus.builder(Terminal.from(az)).addPostCondition(RegularExpressionCondition.notFollow(az))
+		Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPostCondition(RegularExpressionCondition.notFollow(az))
 									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
 		RuntimeRule r1 = RuntimeRule.withHead(Id).addSymbol(AZPlus).build();

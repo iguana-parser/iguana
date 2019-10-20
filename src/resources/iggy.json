@@ -13,7 +13,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Sequence"
                     }
                   ],
@@ -143,7 +143,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Sequence"
                     },
                     {
@@ -168,7 +168,7 @@
                             }
                           },
                           {
-                            "kind" : "Nonterminal",
+                            "kind" : "Identifier",
                             "name" : "Sequence"
                           }
                         ]
@@ -210,8 +210,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -281,8 +280,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -312,8 +310,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     }
                   ],
                   "label" : "Name"
@@ -325,8 +322,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -372,7 +368,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -394,7 +390,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -404,7 +400,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -426,7 +422,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -455,7 +451,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -486,7 +482,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -508,7 +504,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -518,7 +514,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -540,7 +536,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -559,7 +555,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -577,7 +573,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -587,7 +583,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -605,7 +601,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -615,7 +611,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -637,7 +633,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -647,7 +643,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -669,7 +665,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -688,7 +684,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -706,7 +702,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -716,7 +712,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -734,7 +730,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -753,7 +749,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -771,7 +767,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -781,7 +777,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -799,7 +795,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -818,11 +814,11 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Arguments"
                     }
                   ],
@@ -1066,7 +1062,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1092,7 +1088,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     }
                   ],
@@ -1105,7 +1101,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1123,7 +1119,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     }
                   ],
@@ -1150,14 +1146,14 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "Symbol+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Symbol"
                       }
                     },
@@ -1199,7 +1195,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1221,7 +1217,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     }
                   ],
@@ -1234,7 +1230,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1284,8 +1280,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "NontName"
+                      "kind" : "Identifier"
                     }
                   ],
                   "label" : "Nont"
@@ -1311,14 +1306,14 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "Symbol+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Symbol"
                       }
                     },
@@ -1385,7 +1380,7 @@
                       "kind" : "Plus",
                       "name" : "Binding+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Binding"
                       },
                       "separators" : [
@@ -1454,7 +1449,7 @@
                       "kind" : "Plus",
                       "name" : "Expression+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Expression"
                       },
                       "separators" : [
@@ -1502,8 +1497,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -1520,7 +1514,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1533,7 +1527,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
@@ -1555,7 +1549,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1568,7 +1562,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
@@ -1594,7 +1588,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1607,8 +1601,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -1625,7 +1618,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1676,7 +1669,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1689,7 +1682,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -1707,7 +1700,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1725,7 +1718,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1768,7 +1761,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -1785,7 +1778,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1812,7 +1805,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1853,14 +1846,14 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
                       "kind" : "Star",
                       "name" : "Symbol*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Symbol"
                       }
                     },
@@ -1888,7 +1881,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
@@ -1932,7 +1925,7 @@
                       "kind" : "Plus",
                       "name" : "Symbol+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Symbol"
                       }
                     },
@@ -1961,7 +1954,7 @@
                             "kind" : "Plus",
                             "name" : "Symbol+",
                             "s" : {
-                              "kind" : "Nonterminal",
+                              "kind" : "Identifier",
                               "name" : "Symbol"
                             }
                           }
@@ -2034,7 +2027,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     }
                   ],
@@ -2051,11 +2044,11 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Arguments"
                     }
                   ],
@@ -2083,7 +2076,7 @@
                       "kind" : "Star",
                       "name" : "Symbol*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Symbol"
                       }
                     }
@@ -2108,7 +2101,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Identifier"
                     }
                   ]
@@ -2132,7 +2125,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Identifier"
                     }
                   ]
@@ -2511,7 +2504,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Identifier"
                     },
                     {
@@ -2529,7 +2522,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "RegexBody"
                     },
                     {
@@ -2590,14 +2583,14 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Identifier"
                     },
                     {
                       "kind" : "Opt",
                       "name" : "Parameters?",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Parameters"
                       }
                     },
@@ -2616,7 +2609,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Body"
                     },
                     {
@@ -2658,7 +2651,7 @@
                       "kind" : "Plus",
                       "name" : "Rule+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Rule"
                       }
                     }
@@ -2686,7 +2679,7 @@
                       "kind" : "Plus",
                       "name" : "Alternative+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Alternative"
                       },
                       "separators" : [
@@ -2743,7 +2736,7 @@
                               },
                               {
                                 "kind" : "Char",
-                                "val" : 47
+                                "val" : 42
                               }
                             ]
                           }
@@ -2760,7 +2753,7 @@
                               },
                               {
                                 "kind" : "Char",
-                                "val" : 42
+                                "val" : 47
                               }
                             ]
                           }
@@ -2790,7 +2783,7 @@
                         }
                       ],
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "WhiteSpaceOrComment"
                       }
                     }
@@ -3012,7 +3005,7 @@
                       "kind" : "Star",
                       "name" : "Expression*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Expression"
                       },
                       "separators" : [
@@ -3070,7 +3063,7 @@
                       "kind" : "Plus",
                       "name" : "RegexSequence+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "RegexSequence"
                       },
                       "separators" : [
@@ -3114,7 +3107,7 @@
                       "kind" : "Plus",
                       "name" : "Regex+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Regex"
                       }
                     }
@@ -3153,7 +3146,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
@@ -3209,7 +3202,7 @@
                       "kind" : "Star",
                       "name" : "Identifier*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Identifier"
                       },
                       "separators" : [
@@ -3267,7 +3260,7 @@
                       "kind" : "Plus",
                       "name" : "Regex+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Regex"
                       }
                     }
@@ -3392,14 +3385,14 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "Symbol+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Symbol"
                       }
                     },
@@ -3407,7 +3400,7 @@
                       "kind" : "Opt",
                       "name" : "ReturnExpression?",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "ReturnExpression"
                       }
                     },
@@ -3432,14 +3425,14 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Symbol"
                     },
                     {
                       "kind" : "Opt",
                       "name" : "ReturnExpression?",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "ReturnExpression"
                       }
                     },
@@ -3865,7 +3858,7 @@
                       "kind" : "Star",
                       "name" : "Range*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Range"
                       }
                     },
@@ -3910,7 +3903,7 @@
                       "kind" : "Star",
                       "name" : "Range*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Range"
                       }
                     },
@@ -3953,7 +3946,7 @@
                       "kind" : "Plus",
                       "name" : "PriorityLevels+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "PriorityLevels"
                       },
                       "separators" : [
@@ -3997,7 +3990,7 @@
                       "kind" : "Plus",
                       "name" : "Rule+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Rule"
                       }
                     }
@@ -4022,8 +4015,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -4040,7 +4032,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -4075,8 +4067,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "VarName"
+                      "kind" : "Identifier"
                     },
                     {
                       "kind" : "Terminal",
@@ -4093,7 +4084,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Expression"
                     }
                   ],
@@ -4132,7 +4123,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regexs"
                     },
                     {
@@ -4157,7 +4148,7 @@
                             }
                           },
                           {
-                            "kind" : "Nonterminal",
+                            "kind" : "Identifier",
                             "name" : "Regexs"
                           }
                         ]
@@ -4187,8 +4178,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "NontName"
+                      "kind" : "Identifier"
                     }
                   ],
                   "label" : "Nont"
@@ -4200,7 +4190,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "CharClass"
                     }
                   ],
@@ -4227,14 +4217,14 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "Regex+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "Regex"
                       }
                     },
@@ -4262,7 +4252,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
@@ -4303,7 +4293,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
@@ -4330,7 +4320,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
@@ -4458,7 +4448,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Regex"
                     },
                     {
@@ -4586,13 +4576,778 @@
       ]
     }
   ],
+  "terminals" : {
+    "Comment" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 47
+            },
+            {
+              "kind" : "Char",
+              "val" : 47
+            },
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "CharRange",
+                    "start" : 1,
+                    "end" : 9
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 11,
+                    "end" : 12
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 14,
+                    "end" : 1114111
+                  }
+                ]
+              }
+            },
+            {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 47
+            },
+            {
+              "kind" : "Char",
+              "val" : 42
+            },
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "regex.Seq",
+                    "symbols" : [
+                      {
+                        "kind" : "regex.Star",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 42
+                        }
+                      },
+                      {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "CharRange",
+                            "start" : 1,
+                            "end" : 41
+                          },
+                          {
+                            "kind" : "CharRange",
+                            "start" : 43,
+                            "end" : 46
+                          },
+                          {
+                            "kind" : "CharRange",
+                            "start" : 48,
+                            "end" : 1114111
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 47
+                  }
+                ]
+              }
+            },
+            {
+              "kind" : "regex.Plus",
+              "regex" : {
+                "kind" : "Char",
+                "val" : 42
+              }
+            },
+            {
+              "kind" : "Char",
+              "val" : 47
+            }
+          ]
+        }
+      ]
+    },
+    "Character" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 1,
+              "end" : 33
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 35,
+              "end" : 38
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 40,
+              "end" : 91
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 93,
+              "end" : 1114111
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 92
+            },
+            {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 34
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 39
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 92
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 102
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 110
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 114
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 116
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Label" : {
+      "kind" : "Char",
+      "val" : 37
+    },
+    "LetterOrDigit" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 36
+        },
+        {
+          "kind" : "CharRange",
+          "start" : 48,
+          "end" : 57
+        },
+        {
+          "kind" : "CharRange",
+          "start" : 65,
+          "end" : 90
+        },
+        {
+          "kind" : "Char",
+          "val" : 95
+        },
+        {
+          "kind" : "CharRange",
+          "start" : 97,
+          "end" : 122
+        }
+      ]
+    },
+    "String" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 34
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "CharRange",
+                    "start" : 1,
+                    "end" : 33
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 35,
+                    "end" : 38
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 40,
+                    "end" : 91
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 93,
+                    "end" : 1114111
+                  }
+                ]
+              },
+              {
+                "kind" : "regex.Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 92
+                  },
+                  {
+                    "kind" : "regex.Alt",
+                    "symbols" : [
+                      {
+                        "kind" : "Char",
+                        "val" : 34
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 39
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 92
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 102
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 110
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 114
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 116
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Char",
+          "val" : 34
+        }
+      ]
+    },
+    "WhiteSpaces" : {
+      "kind" : "regex.Plus",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "CharRange",
+            "start" : 9,
+            "end" : 10
+          },
+          {
+            "kind" : "CharRange",
+            "start" : 12,
+            "end" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    },
+    "LetterOrDigits" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 36
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 65,
+              "end" : 90
+            },
+            {
+              "kind" : "Char",
+              "val" : 95
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 97,
+              "end" : 122
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 36
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 48,
+                    "end" : 57
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 65,
+                    "end" : 90
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 95
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 97,
+                    "end" : 122
+                  }
+                ]
+              },
+              {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 36
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 65,
+                    "end" : 90
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 95
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 97,
+                    "end" : 122
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "RangeChar" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 92
+            },
+            {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 45
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 91,
+                  "end" : 93
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 102
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 110
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 114
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 116
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 1,
+              "end" : 31
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 33,
+              "end" : 44
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 46,
+              "end" : 90
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 94,
+              "end" : 1114111
+            }
+          ]
+        }
+      ]
+    },
+    "Letter" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 36
+        },
+        {
+          "kind" : "CharRange",
+          "start" : 65,
+          "end" : 90
+        },
+        {
+          "kind" : "Char",
+          "val" : 95
+        },
+        {
+          "kind" : "CharRange",
+          "start" : 97,
+          "end" : 122
+        }
+      ]
+    },
+    "Number" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 49,
+              "end" : 57
+            },
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "CharRange",
+                "start" : 48,
+                "end" : 57
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Char",
+          "val" : 48
+        }
+      ]
+    },
+    "CommentChar" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "Char",
+                "val" : 42
+              }
+            },
+            {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 1,
+                  "end" : 41
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 43,
+                  "end" : 46
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 48,
+                  "end" : 1114111
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind" : "Char",
+          "val" : 47
+        }
+      ]
+    },
+    "Char" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 39
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "CharRange",
+                    "start" : 1,
+                    "end" : 33
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 35,
+                    "end" : 38
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 40,
+                    "end" : 91
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 93,
+                    "end" : 1114111
+                  }
+                ]
+              },
+              {
+                "kind" : "regex.Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 92
+                  },
+                  {
+                    "kind" : "regex.Alt",
+                    "symbols" : [
+                      {
+                        "kind" : "Char",
+                        "val" : 34
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 39
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 92
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 102
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 110
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 114
+                      },
+                      {
+                        "kind" : "Char",
+                        "val" : 116
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Char",
+          "val" : 39
+        }
+      ]
+    },
+    "Associativity" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 114
+            },
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 103
+            },
+            {
+              "kind" : "Char",
+              "val" : 104
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 102
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 111
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 45
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 111
+            },
+            {
+              "kind" : "Char",
+              "val" : 99
+            }
+          ]
+        }
+      ]
+    }
+  },
   "startSymbol" : {
     "kind" : "Start",
-    "name" : "Start(Definition)",
-    "nonterminal" : {
-      "kind" : "Nonterminal",
-      "name" : "Definition"
-    }
+    "name" : "Start(Definition)"
   },
   "layout" : {
     "kind" : "Nonterminal",

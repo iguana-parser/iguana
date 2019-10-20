@@ -51,7 +51,7 @@ public class TestCSharp {
 
 	static {
 		try {
-			originalGrammar = Grammar.load(new File("grammars/csharp/csharp")).toGrammar();
+			originalGrammar = Grammar.load(new File("grammars/csharp/csharp")).toRuntimeGrammar();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

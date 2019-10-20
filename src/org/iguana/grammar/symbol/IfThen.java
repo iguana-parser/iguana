@@ -48,7 +48,7 @@ public class IfThen extends AbstractSymbol {
 	}
 	
 	public static IfThen ifThen(Expression expression, Symbol thenPart) {
-		return builder(expression, thenPart).build();
+		return new Builder(expression, thenPart).build();
 	}
 	
 	public Expression getExpression() {
@@ -92,10 +92,6 @@ public class IfThen extends AbstractSymbol {
 		return Epsilon.getInstance().toString() + (j == 1? " . " : "");
 	}
 
-	public static Builder builder(Expression expression, Symbol symbol) {
-		return new Builder(expression, symbol);
-	}
-	
 	public static class Builder extends SymbolBuilder<IfThen> {
 		
 		private Expression expression;

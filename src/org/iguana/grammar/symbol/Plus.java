@@ -43,7 +43,7 @@ public class Plus extends AbstractSymbol {
 	private final List<Symbol> separators;
 	
 	public static Plus from(Symbol s) {
-		return builder(s).build();
+		return new Builder(s).build();
 	}
 	
 	private Plus(Builder builder) {
@@ -87,10 +87,6 @@ public class Plus extends AbstractSymbol {
 		return name.hashCode();
 	}
 	
-	public static Builder builder(Symbol s) {
-		return new Builder(s);
-	}
-
 	public static class Builder extends SymbolBuilder<Plus> {
 
 		private Symbol s;

@@ -168,7 +168,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
         if (symbol.getName().equals(head))
             throw new GrammarValidationException(new HashSet<>(Arrays.asList(new RuntimeException("Regex definitions must not be recursive: " + symbol.getName()))));
         if (definitions.containsKey(symbol.getName())) {
-            return Terminal.builder(definitions.get(symbol.getName()))
+            return new Terminal.Builder(definitions.get(symbol.getName()))
                     .setNodeType(TerminalNodeType.Keyword)
                     .setName(symbol.getName())
                     .build();
@@ -253,10 +253,11 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
 
     @Override
     public Symbol visit(Start start) {
-        Symbol sym = visitSym(start.getNonterminal());
-        if (sym == start.getNonterminal())
-            return start;
-        return Start.from((Nonterminal) sym);
+        return start;
+//        Symbol sym = visitSym(start.getNonterminal());
+//        if (sym == start.getNonterminal())
+//            return start;
+//        return Start.from((Nonterminal) sym);
     }
 
     @Override

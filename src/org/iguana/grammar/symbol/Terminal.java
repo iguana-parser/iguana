@@ -54,7 +54,7 @@ public class Terminal extends AbstractSymbol {
     }
 
 	public static Terminal from(RegularExpression regex) {
-		return builder(regex).build();
+		return new Builder(regex).build();
 	}
 
 	public Terminal(Builder builder) {
@@ -102,10 +102,6 @@ public class Terminal extends AbstractSymbol {
 		Terminal other = (Terminal) obj;
 
 		return regex.equals(other.regex);
-	}
-
-	public static Builder builder(RegularExpression regex) {
-		return new Builder(regex);
 	}
 
 	public static class Builder extends SymbolBuilder<Terminal> {

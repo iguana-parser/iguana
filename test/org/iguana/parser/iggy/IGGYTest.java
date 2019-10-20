@@ -23,7 +23,7 @@ public class IGGYTest {
 		
 		Input input = Input.fromFile(new File("test/org/iguana/parser/iggy/examples/Example1.iggy"));
 		
-		RuntimeGrammar grammar = Grammar.load(new File("test/org/iguana/parser/iggy/IGGY")).toGrammar();
+		RuntimeGrammar grammar = Grammar.load(new File("test/org/iguana/parser/iggy/IGGY")).toRuntimeGrammar();
 		
 		DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
 		precedenceAndAssociativity.setOP2();

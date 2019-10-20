@@ -44,7 +44,7 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public static Ignore ignore(Symbol symbol) {
-		return builder(symbol).build();
+		return new Builder(symbol).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -74,10 +74,6 @@ private static final long serialVersionUID = 1L;
 	@Override
 	public String toString(int j) {
 		return String.format("ignore %s", symbol.toString(j));
-	}
-	
-	public static Builder builder(Symbol symbol) {
-		return new Builder(symbol);
 	}
 	
 	public static class Builder extends SymbolBuilder<Ignore> {

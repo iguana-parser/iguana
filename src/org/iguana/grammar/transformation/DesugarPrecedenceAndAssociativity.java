@@ -2362,7 +2362,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			this.isFirst = isFirst;
 			this.isLast = isLast;
 			
-			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
+			return modified? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					: symbol;
 		}
 
@@ -2390,7 +2390,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (sym == symbol.getThenPart())
 				return symbol;
 			
-			return IfThen.builder(symbol.getExpression(), sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new IfThen.Builder(symbol.getExpression(), sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2401,7 +2401,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					&& elsePart == symbol.getElsePart())
 				return symbol;
 			
-			return IfThenElse.builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new IfThenElse.Builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override
@@ -2409,7 +2409,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2905,7 +2905,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (body == symbol.getBody()) 
 				return symbol;
 			
-			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new While.Builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override
@@ -2940,7 +2940,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
         @Override
         public Symbol visit(Start start) {
-            return start.getNonterminal().accept(this);
+			return start;
+//            return start.getNonterminal().accept(this);
         }
 
     }

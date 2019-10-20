@@ -71,11 +71,11 @@ public class Test11 {
 		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(S).build();
 		
 		RuntimeRule r1 = RuntimeRule.withHead(S)
-					.addSymbol(Code.code(Terminal.builder(Char.from('a')).setLabel("a")
+					.addSymbol(Code.code(new Terminal.Builder(Char.from('a')).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
 										 stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(NoNL) // TODO: Should be removed
-					.addSymbol(Code.code(Terminal.builder(Char.from('b')).setLabel("b")
+					.addSymbol(Code.code(new Terminal.Builder(Char.from('b')).setLabel("b")
 												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					

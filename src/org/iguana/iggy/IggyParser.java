@@ -17,7 +17,6 @@ import org.iguana.util.serialization.JsonSerializer;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import static iguana.utils.io.FileUtils.readFile;
@@ -27,7 +26,7 @@ public class IggyParser {
     private static Grammar iggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
-            return transform(JsonSerializer.deserialize(content, Grammar.class));
+            return JsonSerializer.deserialize(content, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,7 +68,7 @@ public class IggyParser {
     }
 
     public static Grammar getGrammar(String path) throws IOException {
-        IguanaParser parser = new IguanaParser(transform(iggyGrammar().toGrammar()));
+        IguanaParser parser = new IguanaParser(transform(transform(iggyGrammar()).toRuntimeGrammar()));
 
         Input input = Input.fromFile(new File(path));
         ParseTreeNode parseTree = parser.getParserTree(input);
@@ -94,7 +93,7 @@ public class IggyParser {
     }
 
     public static RuntimeGrammar getRuntimeGrammar(String path) throws IOException {
-        return transform(getGrammar(path).toGrammar());
+        return transform(getGrammar(path).toRuntimeGrammar());
     }
 
 }

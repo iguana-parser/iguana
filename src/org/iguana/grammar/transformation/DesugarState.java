@@ -265,7 +265,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override

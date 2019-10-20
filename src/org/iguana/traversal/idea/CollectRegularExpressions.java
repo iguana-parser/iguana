@@ -168,6 +168,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
 
     @Override
     public Void visit(Start start) {
-        return start.getNonterminal().accept(this);
+        return null;
+//        return start.getNonterminal().accept(this);
     }
 }

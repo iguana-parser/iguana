@@ -86,7 +86,7 @@ public class Test7 {
 				.addSymbol(new Nonterminal.Builder(E).apply(var("l"), integer(4)).build()).build();
 		
 		RuntimeRule r1_3 = RuntimeRule.withHead(E)
-				.addSymbol(Terminal.builder(Char.from('-'))
+				.addSymbol(new Terminal.Builder(Char.from('-'))
 					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
 				.addSymbol(new Nonterminal.Builder(E).apply(integer(0), integer(0)).build()).build();
 		

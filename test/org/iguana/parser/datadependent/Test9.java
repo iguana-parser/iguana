@@ -79,7 +79,7 @@ public class Test9 {
 					.addSymbol(z).build();
 		
 		RuntimeRule r1_2 = RuntimeRule.withHead(E)
-					.addSymbol(Terminal.builder(Char.from('x'))
+					.addSymbol(new Terminal.Builder(Char.from('x'))
 							.addPreCondition(predicate(greaterEq(integer(4), var("l")))).build())
 					.addSymbol(new Nonterminal.Builder(E).apply(var("l"), integer(4)).build()).build();
 		
@@ -89,7 +89,7 @@ public class Test9 {
 					.addSymbol(w).build();
 		
 		RuntimeRule r1_4 = RuntimeRule.withHead(E)
-					.addSymbol(Terminal.builder(Char.from('y'))
+					.addSymbol(new Terminal.Builder(Char.from('y'))
 						.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
 					.addSymbol(new Nonterminal.Builder(E).apply(integer(0), integer(0)).build()).build();
 		

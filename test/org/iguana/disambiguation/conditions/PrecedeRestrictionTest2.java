@@ -64,7 +64,7 @@ public class PrecedeRestrictionTest2 {
 	private Char ws = Char.from(' ');
 	private CharRange az = CharRange.in('a', 'z');
 	private RuntimeGrammar grammar;
-	private Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
+	private Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
 			                              .addPostCondition(RegularExpressionCondition.notPrecede(Seq.from("for"))).build();
 
 	@Before

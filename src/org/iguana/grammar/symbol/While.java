@@ -47,7 +47,7 @@ public class While extends AbstractSymbol {
 	}
 	
 	public static While whileLoop(Expression expression, Symbol body) {
-		return builder(expression, body).build();
+		return new Builder(expression, body).build();
 	}
 	
 	public Expression getExpression() {
@@ -81,10 +81,6 @@ public class While extends AbstractSymbol {
 	@Override
 	public String toString(int j) {
 		return String.format("while (%s) %s", expression.toString(), body.toString(j));
-	}
-	
-	public static Builder builder(Expression expression, Symbol body) {
-		return new Builder(expression, body);
 	}
 	
 	public static class Builder extends SymbolBuilder<While> {
