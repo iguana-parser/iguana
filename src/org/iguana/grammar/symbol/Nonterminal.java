@@ -195,7 +195,7 @@ public class Nonterminal extends AbstractSymbol {
 			this.name = name;
 		}
 
-		public Builder() { }
+		private Builder() { }
 
 		public Builder setIndex(int index) {
 			this.index = index;

@@ -81,7 +81,7 @@ public class Rule implements Serializable {
         }
 
         public Builder addPriorityLevels(List<PriorityLevel> priorityLevels) {
-            priorityLevels.addAll(priorityLevels);
+            this.priorityLevels.addAll(priorityLevels);
             return this;
         }
 

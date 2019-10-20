@@ -13,6 +13,10 @@ public class PriorityLevel implements Serializable {
 
     private final List<Alternative> alternatives;
 
+    public static PriorityLevel from(List<Alternative> alternatives) {
+        return new PriorityLevel.Builder().addAlternatives(alternatives).build();
+    }
+
     public PriorityLevel(Builder builder) {
         this.alternatives = builder.alternatives;
     }
@@ -55,7 +59,7 @@ public class PriorityLevel implements Serializable {
         }
 
         public Builder addAlternatives(List<Alternative> alternatives) {
-            alternatives.addAll(alternatives);
+            this.alternatives.addAll(alternatives);
             return this;
         }
 

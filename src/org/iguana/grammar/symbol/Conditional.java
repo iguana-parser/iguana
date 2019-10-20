@@ -110,7 +110,6 @@ public class Conditional extends AbstractSymbol {
 			this.name = String.format("%s when %s;", symbol.toString(), expression.toString());
 			return new Conditional(this);
 		}
-		
 	}
 
 	@Override

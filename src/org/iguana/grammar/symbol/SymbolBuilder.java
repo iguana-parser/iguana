@@ -42,7 +42,7 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	protected String label;
 	
 	protected Object object;
-	
+
 	protected Set<Condition> preConditions = new HashSet<>();
 	
 	protected Set<Condition> postConditions = new HashSet<>();

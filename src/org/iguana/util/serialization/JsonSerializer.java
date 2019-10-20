@@ -47,8 +47,10 @@ public class JsonSerializer {
         mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
+        mapper.addMixIn(PriorityLevel.class, PriorityLevelMixIn.class);
         mapper.addMixIn(Alternative.class, AlternativeMixIn.class);
         mapper.addMixIn(Sequence.class, SequenceMixIn.class);
+
 
         mapper.addMixIn(Symbol.class, SymbolMixIn.class);
         mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
@@ -427,6 +429,9 @@ public class JsonSerializer {
         @JsonIgnore
         RuntimeGrammar grammar;
     }
+
+    @JsonDeserialize(builder = PriorityLevel.Builder.class)
+    abstract static class PriorityLevelMixIn { }
 
     abstract static class AlternativeMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)

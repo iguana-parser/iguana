@@ -119,7 +119,7 @@ public class Terminal extends AbstractSymbol {
 			this.regex = regex;
 		}
 
-		public Builder() {}
+		private Builder() {}
 
 		public Builder(Terminal terminal) {
 			super(terminal);

@@ -31,7 +31,6 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,10 +49,8 @@ public class Group extends AbstractSymbol {
 		return new Builder(symbols).build();
 	}
 	
-	@SafeVarargs
-	@SuppressWarnings("varargs")
-	public static <T extends Symbol> Group from(T...elements) {
-		return from(Arrays.asList(elements));
+	public static Group from(Symbol...symbols) {
+		return from(Arrays.asList(symbols));
 	}
 	
 	private Group(Builder builder) {

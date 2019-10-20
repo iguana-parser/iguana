@@ -8,13 +8,7 @@ import java.util.List;
 
 public class GrammarTransformer {
 
-    private SymbolTransformation symbolTransformation;
-
-    public GrammarTransformer(SymbolTransformation symbolTransformation) {
-        this.symbolTransformation = symbolTransformation;
-    }
-
-    public Grammar transform(Grammar grammar) {
+    public static Grammar transform(Grammar grammar, SymbolTransformation symbolTransformation) {
         Grammar.Builder grammarBuilder = new Grammar.Builder();
         for (Rule rule : grammar.getRules()) {
             Rule.Builder ruleBuilder = new Rule.Builder();
@@ -25,7 +19,7 @@ public class GrammarTransformer {
                     for (Sequence sequence : alt.seqs()) {
                         Sequence.Builder seqBuilder = new Sequence.Builder();
                         for (Symbol symbol : sequence.getSymbols()) {
-                            seqBuilder.addSymbol(transform(symbol));
+                            seqBuilder.addSymbol(transform(symbol, symbolTransformation));
                         }
                         altBuilder.addSequence(seqBuilder.build());
                     }
@@ -38,10 +32,10 @@ public class GrammarTransformer {
         return grammarBuilder.build();
     }
 
-    private Symbol transform(Symbol symbol) {
+    private static Symbol transform(Symbol symbol, SymbolTransformation symbolTransformation) {
         List<Symbol> transformedChildren = new ArrayList<>();
         for (Symbol child : symbol.getChildren()) {
-            transformedChildren.add(transform(child));
+            transformedChildren.add(transform(child, symbolTransformation));
         }
 
         if (symbolTransformation.isDefinedAt(symbol)) {

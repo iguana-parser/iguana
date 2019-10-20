@@ -14,6 +14,10 @@ public class Alternative implements Serializable {
     
     public final Associativity associativity;
 
+    public Alternative from(List<Sequence> seqs) {
+        return new Builder().addSequences(seqs).build();
+    }
+
     public Alternative(Builder builder) {
         this.seqs = builder.seqs;
         this.associativity = builder.associativity;
@@ -70,6 +74,11 @@ public class Alternative implements Serializable {
 
         public Builder addSequence(Sequence seq) {
             seqs.add(seq);
+            return this;
+        }
+
+        public Builder addSequences(List<Sequence> seqs) {
+            this.seqs.addAll(seqs);
             return this;
         }
 
