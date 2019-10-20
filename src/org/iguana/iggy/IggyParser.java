@@ -50,7 +50,7 @@ public class IggyParser {
                     } else if (grammar.getTerminals().containsKey(id.getName())) {
                         RegularExpression regularExpression = grammar.getTerminals().get(id.getName());
                         return new Terminal.Builder(regularExpression)
-                                .setNodeType(TerminalNodeType.Keyword)
+                                .setNodeType(TerminalNodeType.Regex)
                                 .setTerminalPostConditions(id.getPostConditions())
                                 .setTerminalPreConditions(id.getPreConditions())
                                 .setLabel(id.getLabel())
@@ -64,7 +64,7 @@ public class IggyParser {
 
     public static void main(String[] args) throws IOException {
         Grammar g = Grammar.load(new File("/Users/afroozeh/iggy"));
-        System.out.println(JsonSerializer.toJSON(g));
+        System.out.println(JsonSerializer.toJSON(transform(g)));
     }
 
     public static Grammar getGrammar(String path) throws IOException {

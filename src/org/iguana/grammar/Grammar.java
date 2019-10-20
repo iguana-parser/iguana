@@ -153,6 +153,11 @@ public class Grammar implements Serializable {
             return this;
         }
 
+        public Builder addTerminals(Map<String, RegularExpression> terminals) {
+            this.terminals.putAll(terminals);
+            return this;
+        }
+
         public Grammar build() {
             return new Grammar(this);
         }

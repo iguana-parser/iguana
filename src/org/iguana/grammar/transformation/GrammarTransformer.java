@@ -11,7 +11,7 @@ public class GrammarTransformer {
     public static Grammar transform(Grammar grammar, SymbolTransformation symbolTransformation) {
         Grammar.Builder grammarBuilder = new Grammar.Builder();
         for (Rule rule : grammar.getRules()) {
-            Rule.Builder ruleBuilder = new Rule.Builder();
+            Rule.Builder ruleBuilder = new Rule.Builder(rule.getHead());
             for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
                 PriorityLevel.Builder priorityLevelBuilder = new PriorityLevel.Builder();
                 for (Alternative alt : priorityLevel.getAlternatives()) {
@@ -27,9 +27,13 @@ public class GrammarTransformer {
                 }
                 ruleBuilder.addPriorityLevel(priorityLevelBuilder.build());
             }
-            grammarBuilder.addRule(rule);
+            grammarBuilder.addRule(ruleBuilder.build());
         }
-        return grammarBuilder.build();
+        return grammarBuilder
+                .setStartSymbol(grammar.getStartSymbol())
+                .addTerminals(grammar.getTerminals())
+                .setLayout(grammar.getLayout())
+                .build();
     }
 
     private static Symbol transform(Symbol symbol, SymbolTransformation symbolTransformation) {

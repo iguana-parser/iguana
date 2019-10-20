@@ -69,7 +69,7 @@ public class Rule implements Serializable {
         private Nonterminal head;
         private List<PriorityLevel> priorityLevels = new ArrayList<>();
 
-        public Builder() { }
+        private Builder() { }
 
         public Builder(Nonterminal head) {
             this.head = head;
