@@ -47,6 +47,7 @@ public class JsonSerializer {
         mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
+        mapper.addMixIn(Rule.class, RuleMixIn.class);
         mapper.addMixIn(PriorityLevel.class, PriorityLevelMixIn.class);
         mapper.addMixIn(Alternative.class, AlternativeMixIn.class);
         mapper.addMixIn(Sequence.class, SequenceMixIn.class);
@@ -60,6 +61,7 @@ public class JsonSerializer {
         mapper.addMixIn(Opt.class, OptMixIn.class);
         mapper.addMixIn(Alt.class, AltMixIn.class);
         mapper.addMixIn(Group.class, GroupMixIn.class);
+        mapper.addMixIn(Identifier.class, IdentifierMixIn.class);
         mapper.addMixIn(Start.class, StartMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
@@ -430,14 +432,19 @@ public class JsonSerializer {
         RuntimeGrammar grammar;
     }
 
+    @JsonDeserialize(builder = Rule.Builder.class)
+    abstract static class RuleMixIn { }
+
     @JsonDeserialize(builder = PriorityLevel.Builder.class)
     abstract static class PriorityLevelMixIn { }
 
+    @JsonDeserialize(builder = Alternative.Builder.class)
     abstract static class AlternativeMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
         Associativity associativity;
     }
 
+    @JsonDeserialize(builder = Sequence.Builder.class)
     abstract static class SequenceMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
         Associativity associativity;
@@ -460,6 +467,7 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Alt.class, name="Alt"),
         @JsonSubTypes.Type(value=Group.class, name="Sequence"),
         @JsonSubTypes.Type(value=Start.class, name="Start"),
+        @JsonSubTypes.Type(value=Identifier.class, name="Identifier"),
     })
     abstract static class SymbolMixIn { }
 
@@ -527,6 +535,9 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = Group.Builder.class)
     abstract static class GroupMixIn { }
+
+    @JsonDeserialize(builder = Identifier.Builder.class)
+    abstract static class IdentifierMixIn { }
 
     @JsonDeserialize(builder = Terminal.Builder.class)
     abstract static class TerminalMixIn { }

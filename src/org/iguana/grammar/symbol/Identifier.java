@@ -4,8 +4,10 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Identifier extends AbstractSymbol {
 
+    private static final long serialVersionUID = 1L;
+
     public static Identifier fromName(String name) {
-        return new Builder().setName(name).build();
+        return new Builder(name).build();
     }
 
     public Identifier(Builder builder) {
@@ -14,7 +16,7 @@ public class Identifier extends AbstractSymbol {
 
     @Override
     public Builder copy() {
-        return new Builder();
+        return new Builder(this);
     }
 
     @Override
@@ -23,6 +25,17 @@ public class Identifier extends AbstractSymbol {
     }
 
     public static class Builder extends SymbolBuilder<Identifier> {
+
+        private Builder() { }
+
+        public Builder(String name) {
+            this.name = name;
+        }
+
+        public Builder(Identifier identifier) {
+            super(identifier);
+        }
+
         @Override
         public Identifier build() {
             return new Identifier(this);

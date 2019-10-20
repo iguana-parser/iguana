@@ -118,7 +118,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -161,7 +162,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -191,7 +193,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     }
                   ],
                   "label" : "Name"
@@ -203,7 +206,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -981,7 +985,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "NontName"
                     }
                   ],
                   "label" : "Nont"
@@ -1198,7 +1203,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -1302,7 +1308,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -2710,6 +2717,7 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
+                      "name" : "LetterOrDigits",
                       "preConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
@@ -3167,7 +3175,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -3219,7 +3228,8 @@
                       }
                     },
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -3330,7 +3340,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier"
+                      "kind" : "Identifier",
+                      "name" : "NontName"
                     }
                   ],
                   "label" : "Nont"

@@ -48,6 +48,8 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	protected final Set<Condition> postConditions;
 
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
+		if (builder.name == null) 
+			throw new IllegalArgumentException("Name cannot be null");
 		this.name = builder.name;
 		this.label = builder.label;
 		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptySet() : builder.preConditions;
