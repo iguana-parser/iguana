@@ -29,10 +29,10 @@ package org.iguana.datadependent.traversal;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.eclipse.imp.pdb.facts.util.TrieSet;
-import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Expression.Boolean;
 import org.iguana.datadependent.ast.Expression.Integer;
 import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
@@ -41,8 +41,8 @@ import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -701,7 +701,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Alt<E> symbol) {
+	public Void visit(Alt symbol) {
 		
 		ImmutableSet<java.lang.String> env = symbol.getEnv();
 		

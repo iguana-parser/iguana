@@ -2160,11 +2160,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			switch(config_op) {
 				case _1: 
 					if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r", "_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r", "_not").build());
 					else if (isLeftOrRightRecursiveNonterminal)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r").build());
 					else if (isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
 					else builder = rule.copyBuilder();
 					
 					builder = builder.setSymbols(symbols);
@@ -2180,7 +2180,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 						Symbol sym = symbol.accept(this);
 						if (preconditions != null && i == 0)
-							symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
+							symbols.add(sym.copy().addPreConditions(preconditions).build());
 						else 
 							symbols.add(sym);
 						i++;
@@ -2190,11 +2190,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				case _2: 
 					
 					if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("p", "_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("p", "_not").build());
 					else if (isLeftOrRightRecursiveNonterminal)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("p").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("p").build());
 					else if (isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
 					else builder = rule.copyBuilder();
 					
 					boolean isIndirectEnd = false;
@@ -2228,9 +2228,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						}
 						
 						if (isHeadWithLabeledRules)
-							builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).addParameters("_not").build());
+							builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(params).addParameters("_not").build());
 						else
-							builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).build());
+							builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(params).build());
 					}
 					
 					builder = builder.setSymbols(symbols);
@@ -2262,11 +2262,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							postconditions.add(DataDependentCondition.predicate(xlcond));
 						
 						if (!preconditions.isEmpty() && !postconditions.isEmpty())
-							symbols.add(sym.copyBuilder().addPreConditions(preconditions).addPostConditions(postconditions).build());
+							symbols.add(sym.copy().addPreConditions(preconditions).addPostConditions(postconditions).build());
 						else if (!postconditions.isEmpty())
-							symbols.add(sym.copyBuilder().addPostConditions(postconditions).build());
+							symbols.add(sym.copy().addPostConditions(postconditions).build());
 						else if (!preconditions.isEmpty())
-							symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
+							symbols.add(sym.copy().addPreConditions(preconditions).build());
 						else 
 							symbols.add(sym);
 						
@@ -2469,11 +2469,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						arguments = new Expression[] { l2, r2 };
 					
 					if (arguments != null && _not != null)
-						return symbol.copyBuilder().apply(arguments).apply(_not).build();
+						return symbol.copy().apply(arguments).apply(_not).build();
 					else if (arguments != null)
-						return symbol.copyBuilder().apply(arguments).build();
+						return symbol.copy().apply(arguments).build();
 					else 
-						return symbol.copyBuilder().apply(_not).build();
+						return symbol.copy().apply(_not).build();
 					
 				case _2:
 					if (labels != null) {
@@ -2867,14 +2867,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					}
 					
 					if (arguments != null && _not != null)
-						newone = variable.isEmpty()? symbol.copyBuilder().apply(arguments).apply(_not).build()
-												   : symbol.copyBuilder().apply(arguments).apply(_not).setVariable(variable).build();
+						newone = variable.isEmpty()? symbol.copy().apply(arguments).apply(_not).build()
+												   : symbol.copy().apply(arguments).apply(_not).setVariable(variable).build();
 					else if (arguments != null) {
-						newone =  variable.isEmpty()? symbol.copyBuilder().apply(arguments).build()
-												    : symbol.copyBuilder().apply(arguments).setVariable(variable).build();
+						newone =  variable.isEmpty()? symbol.copy().apply(arguments).build()
+												    : symbol.copy().apply(arguments).setVariable(variable).build();
 					} else 
-						newone =  variable.isEmpty()? symbol.copyBuilder().apply(_not).build()
-								                    : symbol.copyBuilder().apply(_not).setVariable(variable).build();
+						newone =  variable.isEmpty()? symbol.copy().apply(_not).build()
+								                    : symbol.copy().apply(_not).setVariable(variable).build();
 					if (binding != null)
 						return Code.code(newone, binding);
 					else if (lbinding != null && rbinding != null) {
@@ -2914,7 +2914,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+		public Symbol visit(Alt symbol) {
 			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 

@@ -57,12 +57,12 @@ public class Plus extends AbstractSymbol {
 	}
 	
 	@Override
-	public SymbolBuilder<Plus> copyBuilder() {
+	public SymbolBuilder<Plus> copy() {
 		return new Builder(this);
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return Collections.singletonList(s);
 	}
 

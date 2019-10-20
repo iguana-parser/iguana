@@ -200,7 +200,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+    public Symbol visit(Alt symbol) {
         boolean changed = false;
         List<Symbol> syms = new ArrayList<>();
         for (Symbol s : symbol.getSymbols()) {
@@ -317,7 +317,7 @@ public class InlineRegex implements GrammarTransformation, ISymbolVisitor<Symbol
     }
 
     private Symbol visitSym(Symbol symbol) {
-        return symbol.accept(this).copyBuilder()
+        return symbol.accept(this).copy()
                 .addPreConditions(symbol.getPreConditions())
                 .addPostConditions(symbol.getPostConditions())
                 .setLabel(symbol.getLabel())

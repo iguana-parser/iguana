@@ -154,7 +154,7 @@ public class Nonterminal extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 

@@ -13,7 +13,7 @@ public class Identifier extends AbstractSymbol {
     }
 
     @Override
-    public Builder copyBuilder() {
+    public Builder copy() {
         return new Builder();
     }
 

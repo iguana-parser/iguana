@@ -167,8 +167,8 @@ public class EBNFToBNF implements GrammarTransformation {
 		 *           | B
 		 */
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {	
-			List<? extends Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
+		public Symbol visit(Alt symbol) {
+			List<Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
@@ -191,7 +191,7 @@ public class EBNFToBNF implements GrammarTransformation {
 														.setDefinition(symbol)
 														.build()));
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -230,7 +230,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setDefinition(symbol)
 									.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -288,7 +288,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setDefinition(symbol)
 									.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -324,7 +324,7 @@ public class EBNFToBNF implements GrammarTransformation {
 								.setDefinition(symbol)
 								.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -372,7 +372,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setDefinition(symbol)
 									.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -423,7 +423,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Nonterminal newNt = new Nonterminal.Builder("IF_" + counter++).addParameters(parameters).build();
 			
-			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copy().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
@@ -435,7 +435,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
-			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
+			return newNt.copy().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 		
 		/**
@@ -483,21 +483,21 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			Nonterminal newNt = new Nonterminal.Builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
 			
-			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copy().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setDefinition(symbol)
 									.build());
 			
-			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(elsePart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(elsePart.copy().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setDefinition(symbol)
 									.build());
 			
-			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
+			return newNt.copy().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 		
 		/**

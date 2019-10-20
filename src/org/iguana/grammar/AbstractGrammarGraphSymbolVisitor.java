@@ -69,7 +69,7 @@ public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVis
 	}
 
 	@Override
-	public <E extends Symbol> T visit(Alt<E> symbol) {
+	public T visit(Alt symbol) {
 		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
 	}
 

@@ -134,7 +134,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     }
 
     @Override
-    public <E extends Symbol> Void visit(Alt<E> symbol) {
+    public Void visit(Alt symbol) {
         for (Symbol sym : symbol.getSymbols())
             sym.accept(this);
         return null;

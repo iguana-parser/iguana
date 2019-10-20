@@ -40,7 +40,7 @@ import static iguana.utils.string.StringUtil.listToString;
 /**
  * A group represents a grouping of symbols, e.g, (A B C) in the EBNF notation.
  */
-public class Group extends AbstractSymbol implements Iterable<Symbol> {
+public class Group extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 
@@ -88,17 +88,12 @@ public class Group extends AbstractSymbol implements Iterable<Symbol> {
 	}
 
 	@Override
-	public Iterator<Symbol> iterator() {
-		return symbols.iterator();
-	}
-	
-	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return symbols;
 	}
 

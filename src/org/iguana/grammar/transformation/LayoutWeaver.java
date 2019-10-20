@@ -76,7 +76,7 @@ public class LayoutWeaver implements GrammarTransformation {
 				if (ignoreLayoutConditions.isEmpty())
 					ruleBuilder.addSymbol(s);
 				else
-					ruleBuilder.addSymbol(s.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
+					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
 				
 				addLayout(layout, rule, ruleBuilder, s);
 			}
@@ -87,7 +87,7 @@ public class LayoutWeaver implements GrammarTransformation {
 			if (ignoreLayoutConditions.isEmpty())
 				ruleBuilder.addSymbol(last);
 			else 
-				ruleBuilder.addSymbol(last.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
+				ruleBuilder.addSymbol(last.copy().removePostConditions(ignoreLayoutConditions).build());
 			
 			if (!ignoreLayoutConditions.isEmpty()) {
 				addLayout(layout, rule, ruleBuilder, last);
@@ -111,11 +111,11 @@ public class LayoutWeaver implements GrammarTransformation {
 				
 			case INHERITED:
                 if (layout != null)
-				    ruleBuilder.addSymbol(layout.copyBuilder().addPostConditions(getIgnoreLayoutConditions(s)).build());
+				    ruleBuilder.addSymbol(layout.copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
 				break;
 				
 			case FIXED:
-				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getIgnoreLayoutConditions(s)).build());
+				ruleBuilder.addSymbol(rule.getLayout().copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
 				break;
 		}
 	}

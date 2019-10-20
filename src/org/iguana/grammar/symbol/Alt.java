@@ -29,43 +29,34 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T> {
+public class Alt extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 
-	protected final List<T> symbols;
+	protected final List<Symbol> symbols;
 	
-	public Alt(Builder<T> builder) {
+	public Alt(Builder builder) {
 		super(builder);
 		this.symbols = builder.symbols;
 	}
 
-	@SafeVarargs
-	@SuppressWarnings("varargs")
-	public static <T extends Symbol> Alt<T> from(T...symbols) {
+	public static Alt from(Symbol...symbols) {
 		return from(Arrays.asList(symbols));
 	}
 
-	public static <T extends Symbol> Alt<T> from(List<T> list) {
-		return new Builder<>(list).build();
-	}
-	
-	@Override
-	public Iterator<T> iterator() {
-		return symbols.iterator();
+	public static Alt from(List<Symbol> list) {
+		return new Builder(list).build();
 	}
 	
 	public int size() {
 		return symbols.size();
 	}
 	
-	public T get(int index) {
+	public Symbol get(int index) {
 		return symbols.get(index);
 	}
 	
@@ -77,7 +68,7 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 		if(!(obj instanceof Alt))
 			return false;
 		
-		Alt<?> other = (Alt<?>) obj;
+		Alt other = (Alt) obj;
 		
 		return other.symbols.equals(symbols);
 	}
@@ -88,52 +79,52 @@ public class Alt<T extends Symbol> extends AbstractSymbol implements Iterable<T>
 	}
 
 	@Override
-	public Builder<T> copyBuilder() {
-		return new Builder<T>(this);
+	public Builder copy() {
+		return new Builder(this);
 	}
 	
-	public List<T> getSymbols() {
+	public List<Symbol> getSymbols() {
 		return symbols;
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return symbols;
 	}
 
-	public static class Builder<T extends Symbol> extends SymbolBuilder<Alt<T>> {
+	public static class Builder extends SymbolBuilder<Alt> {
 
-		private List<T> symbols;
+		private List<Symbol> symbols;
 
 		private Builder() {}
 
-		public Builder(T...symbols) {
+		public Builder(Symbol...symbols) {
 			this(Arrays.asList(symbols));
 		}
 
-		public Builder(List<T> symbols) {
+		public Builder(List<Symbol> symbols) {
 			this.symbols = symbols;
 		}
 		
-		public Builder(Alt<T> alt) {
+		public Builder(Alt alt) {
 			super(alt);
 			this.symbols = alt.getSymbols();
 		}
 
-		public Builder<T> add(T symbol) {
+		public Builder add(Symbol symbol) {
 			symbols.add(symbol);
 			return this;
 		}
 				
-		public Builder<T> add(List<T> l) {
+		public Builder add(List<Symbol> l) {
 			symbols.addAll(l);
 			return this;
 		}
 
 		@Override
-		public Alt<T> build() {
+		public Alt build() {
 			this.name = "(" + symbols.stream().map(Symbol::getName).collect(Collectors.joining(" | ")) + ")";
-			return new Alt<>(this);
+			return new Alt(this);
 		}
 	}
 

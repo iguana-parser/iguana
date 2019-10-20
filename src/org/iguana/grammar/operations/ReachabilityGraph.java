@@ -198,7 +198,7 @@ public class ReachabilityGraph {
 		}
 
 		@Override
-		public <E extends Symbol> Boolean visit(Alt<E> symbol) {
+		public Boolean visit(Alt symbol) {
 			boolean changed = false;
 			for (Symbol s : symbol.getSymbols())
 				changed |= s.accept(this);

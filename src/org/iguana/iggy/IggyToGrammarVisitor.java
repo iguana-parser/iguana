@@ -312,7 +312,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Labeled": {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);
-                return symbol.copyBuilder().setLabel(getIdentifier(node.childAt(0)).id).build();
+                return symbol.copy().setLabel(getIdentifier(node.childAt(0)).id).build();
             }
 
             case "Constraints": {
@@ -338,36 +338,36 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Precede": {
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
-                return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.precede(regex)).build();
+                return symbol.copy().addPreCondition(RegularExpressionCondition.precede(regex)).build();
             }
 
             case "NotPrecede": {
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
-                return symbol.copyBuilder().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
+                return symbol.copy().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
             }
 
             case "Follow": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.follow(regex)).build();
+                return symbol.copy().addPostCondition(RegularExpressionCondition.follow(regex)).build();
             }
 
             case "NotFollow": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
+                return symbol.copy().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
             }
 
             case "Exclude": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copyBuilder().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
+                return symbol.copy().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
             }
 
             case "Except": {
                 Nonterminal symbol = (Nonterminal) node.childAt(0).accept(this);
-                return symbol.copyBuilder().addExcept(getIdentifier(node.childAt(2)).id).build();
+                return symbol.copy().addExcept(getIdentifier(node.childAt(2)).id).build();
             }
 
             case "Nont":

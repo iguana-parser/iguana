@@ -40,7 +40,7 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
     }
 
     @Override
-    public SymbolBuilder<? extends org.iguana.grammar.symbol.Symbol> copyBuilder() {
+    public SymbolBuilder<? extends org.iguana.grammar.symbol.Symbol> copy() {
         return null;
     }
 

@@ -189,7 +189,7 @@ public abstract class Builder {
 	}
 	
 	public Symbol label(Object name, Object sym) {
-		return ((Symbol)sym).copyBuilder().setLabel((String)name).build();
+		return ((Symbol)sym).copy().setLabel((String)name).build();
 	}
 	
 	public iguana.regex.Seq<Char> string(Object obj) {

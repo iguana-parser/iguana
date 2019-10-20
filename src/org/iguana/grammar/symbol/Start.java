@@ -53,12 +53,12 @@ public class Start extends AbstractSymbol {
 	}
 
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return builder(nonterminal);
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return Collections.singletonList(nonterminal);
 	}
 

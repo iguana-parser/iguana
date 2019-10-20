@@ -78,9 +78,9 @@ public interface Symbol extends Serializable, Attr {
 	
 	String getLabel();
 	
-	SymbolBuilder<? extends Symbol> copyBuilder();
+	SymbolBuilder<? extends Symbol> copy();
 
-	default List<? extends Symbol> getChildren() {
+	default List<Symbol> getChildren() {
 		return Collections.emptyList();
 	}
 	

@@ -52,7 +52,7 @@ public class Align extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 	
@@ -72,7 +72,7 @@ public class Align extends AbstractSymbol {
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return Collections.singletonList(symbol);
 	}
 

@@ -250,7 +250,7 @@ public class Grammar implements Serializable {
                 symbols.remove(0);
                 preConditions = holder.expressions.stream().map(DataDependentCondition::predicate).collect(Collectors.toList());
                 if (rest.isEmpty()) {
-                    symbols.add(Terminal.epsilon().copyBuilder().addPreConditions(preConditions).build());
+                    symbols.add(Terminal.epsilon().copy().addPreConditions(preConditions).build());
                     return;
                 }
             }
@@ -265,7 +265,7 @@ public class Grammar implements Serializable {
                             preConditions.add(DataDependentCondition.predicate(e));
                     } else {
                         Symbol last = symbols.remove(symbols.size() - 1);
-                        symbols.add(last.copyBuilder().addPostConditions(holder.expressions.stream()
+                        symbols.add(last.copy().addPostConditions(holder.expressions.stream()
                                 .map(DataDependentCondition::predicate).collect(Collectors.toList())).build());
                     }
                 } else if (holder.statements != null) {
@@ -276,7 +276,7 @@ public class Grammar implements Serializable {
                 if (preConditions.isEmpty())
                     symbols.add(symbol);
                 else {
-                    symbols.add(symbol.copyBuilder().addPreConditions(preConditions).build());
+                    symbols.add(symbol.copy().addPreConditions(preConditions).build());
                     preConditions = new ArrayList<>();
                 }
             }

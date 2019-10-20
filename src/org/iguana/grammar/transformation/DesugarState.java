@@ -164,7 +164,7 @@ public class DesugarState implements GrammarTransformation {
 			for (String parameter : head_uses)
 			    parameters[i++] = parameter;
 			    
-			builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
+			builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(parameters).build());
 		}
 		
 		if (builder == null)
@@ -271,7 +271,7 @@ public class DesugarState implements GrammarTransformation {
 		@Override
 		public Symbol visit(Nonterminal symbol) {
 			
-			Builder builder = symbol.copyBuilder();
+			Builder builder = symbol.copy();
 			
 			boolean changed = false;
 			
@@ -331,7 +331,7 @@ public class DesugarState implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+		public Symbol visit(Alt symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
 

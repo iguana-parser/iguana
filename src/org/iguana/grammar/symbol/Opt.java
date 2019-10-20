@@ -52,12 +52,12 @@ public class Opt extends AbstractSymbol {
 	}
 
 	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
+	public SymbolBuilder<? extends Symbol> copy() {
 		return new Builder(s);
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return Collections.singletonList(s);
 	}
 

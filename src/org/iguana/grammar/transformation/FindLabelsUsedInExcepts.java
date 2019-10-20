@@ -107,7 +107,7 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Alt<E> symbol) {
+	public Void visit(Alt symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 

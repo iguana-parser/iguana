@@ -83,7 +83,7 @@ public class Names implements GrammarTransformation {
         }
 
         public Symbol visitSymbol(Symbol symbol) {
-            SymbolBuilder<? extends Symbol> builder = symbol.accept(this).copyBuilder();
+            SymbolBuilder<? extends Symbol> builder = symbol.accept(this).copy();
             builder.addPreConditions(symbol.getPreConditions());
             builder.addPostConditions(symbol.getPostConditions());
             builder.setLabel(symbol.getLabel());
@@ -182,7 +182,7 @@ public class Names implements GrammarTransformation {
         }
 
         @Override
-        public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+        public Symbol visit(Alt symbol) {
             return Alt.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
         }
 

@@ -102,7 +102,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         for (Condition condition : symbol.getPostConditions())
             postConditions.add(condition.accept(this));
 
-        return sym.copyBuilder()
+        return sym.copy()
                 .setLabel(symbol.getLabel())
                 .addPreConditions(preConditions)
                 .addPostConditions(postConditions)
@@ -208,7 +208,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+    public Symbol visit(Alt symbol) {
         throw new RuntimeException("Unsupported symbol: var-to-int!");
     }
 

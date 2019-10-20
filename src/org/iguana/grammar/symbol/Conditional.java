@@ -59,12 +59,12 @@ public class Conditional extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return Collections.singletonList(symbol);
 	}
 

@@ -165,7 +165,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			RuntimeRule.Builder builder;
 			
 			if (isOffsided)
-				builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(index, ind, first).build());
+				builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(index, ind, first).build());
 			else
 				builder = rule.copyBuilder();
 			
@@ -299,7 +299,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		public Symbol visit(Nonterminal symbol) {
 			if (isOffsided && offsided.contains(symbol.getName())) { // The rule has a parameter for indentation, and therefore, also all reachable nonterminals
 				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
-				return symbol.copyBuilder().apply(// (fst & (lExt - index == 0)) == 1? index : 0 or fst == 1? index : 0 
+				return symbol.copy().apply(// (fst & (lExt - index == 0)) == 1? index : 0 or fst == 1? index : 0
 						                          //     after non-nullable (0 as only indentation will be needed)
 						                          andIndent(index_exp, first_exp, lExt(l), true), 
 												  ind_exp,
@@ -307,7 +307,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 												  andIndent(index_exp, first_exp, lExt(l)))
 												  .setLabel(l).build();
 			} else if (offsided.contains(symbol.getName())) // A ::= offside B; B ::= D; C ::= B or C ::= D
-				return symbol.copyBuilder().apply(integer(0), integer(0), integer(0)).build();
+				return symbol.copy().apply(integer(0), integer(0), integer(0)).build();
 			else
 				return symbol;
 		}
@@ -327,7 +327,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				Nonterminal s = (Nonterminal) sym;
 				
 				if (offsided.contains(s.getName())) { // TODO: too general
-					return s.copyBuilder()
+					return s.copy()
 							.apply(integer(0), integer(0), integer(0))
 							.addConditions(symbol)
 							.addConditions(sym)
@@ -337,7 +337,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				
 			// Otherwise, ignore 'ignore'
 			sym = sym.accept(this);
-			return sym.copyBuilder().addConditions(symbol).build();
+			return sym.copy().addConditions(symbol).build();
 		}
 
 		@Override
@@ -365,7 +365,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				    l = l_offside + i++;
 				
 				if (isOffsided) { // Offside inside a rule that has a parameter for indentation
-					return s.copyBuilder()
+					return s.copy()
 							.apply(lExt(l), indent(lExt(l)), integer(1))
 							.setLabel(l)
 							.addConditions(symbol)
@@ -374,7 +374,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 							.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
 							.build();
 				} else {
-					return s.copyBuilder()
+					return s.copy()
 							.apply(lExt(l), indent(lExt(l)), integer(1))
 							.setLabel(l)
 							.addConditions(symbol)
@@ -385,14 +385,14 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			// Otherwise, ignore offside
 			sym = sym.accept(this);
-			return sym.copyBuilder().addConditions(symbol).build();
+			return sym.copy().addConditions(symbol).build();
 		}
 
 		@Override
 		public Symbol visit(Terminal symbol) {
 			if (isOffsided) {
 				String l = symbol.getLabel() != null? symbol.getLabel() : l_offside + i++;
-				return symbol.copyBuilder()
+				return symbol.copy()
 								.setLabel(l)
 								.addConditions(symbol)
 								.addPreCondition(predicate(orIndent(index_exp, ind_exp, first_exp, lExt(l))))
@@ -416,7 +416,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+		public Symbol visit(Alt symbol) {
 			
 			List<? extends Symbol> symbols = symbol.getSymbols();
 			List<Symbol> syms = new ArrayList<>();
@@ -523,11 +523,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			if (symbol instanceof Offside) {
 				Offside sym = (Offside) symbol;
-				return new Offside.Builder(sym.getSymbol().copyBuilder().addPreCondition(precondition).setLabel(label).build())
+				return new Offside.Builder(sym.getSymbol().copy().addPreCondition(precondition).setLabel(label).build())
 									.addConditions(symbol).setLabel(symbol.getLabel()).build();
 			}
 			
-			return symbol.copyBuilder().addPreCondition(precondition).setLabel(label).build();
+			return symbol.copy().addPreCondition(precondition).setLabel(label).build();
 		}
 		
 		@SuppressWarnings("unused")
@@ -640,7 +640,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Void visit(Alt<E> symbol) {
+		public Void visit(Alt symbol) {
 			for (Symbol sym : symbol.getSymbols())
 				sym.accept(this);
 			return null;

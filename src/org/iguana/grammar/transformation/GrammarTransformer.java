@@ -2,13 +2,11 @@ package org.iguana.grammar.transformation;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.*;
-import org.iguana.traversal.ISymbolVisitor;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GrammarTransformer<S extends Symbol, R extends Symbol> {
+public class GrammarTransformer {
 
     private SymbolTransformation symbolTransformation;
 
@@ -24,12 +22,16 @@ public class GrammarTransformer<S extends Symbol, R extends Symbol> {
                 PriorityLevel.Builder priorityLevelBuilder = new PriorityLevel.Builder();
                 for (Alternative alt : priorityLevel.getAlternatives()) {
                     Alternative.Builder altBuilder = new Alternative.Builder();
-                    for (Sequence seq : alt.seqs()) {
+                    for (Sequence sequence : alt.seqs()) {
                         Sequence.Builder seqBuilder = new Sequence.Builder();
-                        for (Symbol symbol : seq.getSymbols()) {
+                        for (Symbol symbol : sequence.getSymbols()) {
+                            seqBuilder.addSymbol(transform(symbol));
                         }
+                        altBuilder.addSequence(seqBuilder.build());
                     }
+                    priorityLevelBuilder.addAlternative(altBuilder.build());
                 }
+                ruleBuilder.addPriorityLevel(priorityLevelBuilder.build());
             }
             grammarBuilder.addRule(rule);
         }
@@ -37,116 +39,19 @@ public class GrammarTransformer<S extends Symbol, R extends Symbol> {
     }
 
     private Symbol transform(Symbol symbol) {
-        boolean childrenChanged = false;
-
         List<Symbol> transformedChildren = new ArrayList<>();
         for (Symbol child : symbol.getChildren()) {
-            Symbol transformedChild = transform(child);
-            if (!transformedChild.equals(child)) {
-                childrenChanged = true;
-            }
-            transformedChildren.add(transformedChild);
-        }
-        return null;
-    }
-
-    class SymbolVisitor implements ISymbolVisitor<Symbol> {
-
-        @Override
-        public Symbol visit(Align align) {
-            Symbol symbolResult = align.getSymbol().accept(this);
-            if (symbolTransformation.isDefinedAt(align)) {
-                Symbol apply = symbolTransformation.apply(align);
-            }
-
-            return null;
+            transformedChildren.add(transform(child));
         }
 
-        @Override
-        public Symbol visit(Block symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Code symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Conditional symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(IfThen symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(IfThenElse symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Ignore symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Nonterminal symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Offside symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Terminal symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(While symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Return symbol) {
-            return null;
-        }
-
-        @Override
-        public <E extends Symbol> Symbol visit(Alt<E> symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Opt symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Plus symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Group symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Star symbol) {
-            return null;
-        }
-
-        @Override
-        public Symbol visit(Start start) {
-            return null;
+        if (symbolTransformation.isDefinedAt(symbol)) {
+            Symbol transformedSymbol = symbolTransformation.apply(symbol);
+            return transformedSymbol.copy().setChildren(transformedChildren).build();
+        } else {
+            return symbol.copy().setChildren(transformedChildren).build();
         }
     }
+
 }
 
 

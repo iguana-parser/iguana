@@ -55,7 +55,7 @@ public interface ISymbolVisitor<T> {
 	
 	T visit(Return symbol);
 	
-	<E extends Symbol> T visit(Alt<E> symbol);
+	T visit(Alt symbol);
 	
 	T visit(Opt symbol);
 	

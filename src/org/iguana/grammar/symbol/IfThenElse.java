@@ -66,12 +66,12 @@ public class IfThenElse extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 
 	@Override
-	public List<? extends Symbol> getChildren() {
+	public List<Symbol> getChildren() {
 		return Arrays.asList(thenPart, elsePart);
 	}
 
