@@ -33,13 +33,20 @@ import org.iguana.traversal.ISymbolVisitor;
 public class Start extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
+
+	private String startSymbol;
 	
-    public static Start from(String name) {
-        return new Builder(name).build();
+    public static Start from(String startSymbol) {
+        return new Builder(startSymbol).build();
     }
 
 	public Start(Builder builder) {
 		super(builder);
+		this.startSymbol = builder.startSymbol;
+	}
+
+	public String getStartSymbol() {
+		return startSymbol;
 	}
 
 	@Override
@@ -67,15 +74,17 @@ public class Start extends AbstractSymbol {
 
 	public static class Builder extends SymbolBuilder<Start> {
 
+		private String startSymbol;
+
 		private Builder() {}
 
-		public Builder(String name) {
-			this.name = name;
+		public Builder(String startSymbol) {
+			this.startSymbol = startSymbol;
 		}
 
 		@Override
 		public Start build() {
-			this.name = "Start(" + name + ")";
+			this.name = "Start(" + startSymbol + ")";
 			return new Start(this);
 		}
 	}

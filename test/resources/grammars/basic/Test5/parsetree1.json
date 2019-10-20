@@ -3,10 +3,7 @@
   "symbol" : {
     "kind" : "Start",
     "name" : "Start(A)",
-    "nonterminal" : {
-      "kind" : "Nonterminal",
-      "name" : "A"
-    }
+    "startSymbol" : "A"
   },
   "children" : [
     {

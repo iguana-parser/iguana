@@ -47,9 +47,23 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
-                      "name" : "id",
-                      "postConditions" : [
+                      "kind" : "Terminal",
+                      "name" : "(a-z)*",
+                      "nodeType" : "Regex",
+                      "regex" : {
+                        "kind" : "regex.Plus",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 97,
+                              "end" : 122
+                            }
+                          ]
+                        }
+                      },
+                      "terminalPostConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
                           "type" : "NOT_FOLLOW",
@@ -75,12 +89,24 @@
       ]
     }
   ],
+  "terminals" : {
+    "id" : {
+      "kind" : "regex.Plus",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "CharRange",
+            "start" : 97,
+            "end" : 122
+          }
+        ]
+      }
+    }
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
-    "nonterminal" : {
-      "kind" : "Nonterminal",
-      "name" : "S"
-    }
+    "startSymbol" : "S"
   }
 }

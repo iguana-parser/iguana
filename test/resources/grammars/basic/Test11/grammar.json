@@ -69,9 +69,6 @@
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
-    "nonterminal" : {
-      "kind" : "Nonterminal",
-      "name" : "S"
-    }
+    "startSymbol" : "S"
   }
 }

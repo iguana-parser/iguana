@@ -28,6 +28,7 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
+import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +64,10 @@ public class Plus extends AbstractSymbol {
 
 	@Override
 	public List<Symbol> getChildren() {
-		return Collections.singletonList(s);
+		List<Symbol> children = new ArrayList<>();
+		children.add(s);
+		children.addAll(separators);
+		return children;
 	}
 
 	public Symbol getSymbol() {
@@ -91,7 +95,7 @@ public class Plus extends AbstractSymbol {
 
 		private Symbol s;
 		
-		private final List<Symbol> separators = new ArrayList<>();
+		private List<Symbol> separators = new ArrayList<>();
 
 		private Builder() {}
 
@@ -123,6 +127,7 @@ public class Plus extends AbstractSymbol {
 		@Override
 		public SymbolBuilder<Plus> setChildren(List<Symbol> symbols) {
 			this.s = symbols.get(0);
+			this.separators = symbols.subList(1, symbols.size());
 			return this;
 		}
 

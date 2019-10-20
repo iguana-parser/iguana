@@ -22,7 +22,7 @@ public class DesugarStartSymbol implements GrammarTransformation {
         RuntimeRule startRule;
         if (layout != null)
             startRule = RuntimeRule.withHead(startNonterminal)
-                    .addSymbol(layout).addSymbol(Nonterminal.withName(startSymbol.getName())).addSymbol(layout)
+                    .addSymbol(layout).addSymbol(Nonterminal.withName(startSymbol.getStartSymbol())).addSymbol(layout)
                     .setRecursion(Recursion.NON_REC)
                     .setAssociativity(Associativity.UNDEFINED)
                     .setPrecedence(-1)
@@ -30,7 +30,7 @@ public class DesugarStartSymbol implements GrammarTransformation {
                     .setDefinition(startSymbol).build();
         else
             startRule = RuntimeRule.withHead(startNonterminal)
-                    .addSymbol(Nonterminal.withName(startSymbol.getName()))
+                    .addSymbol(Nonterminal.withName(startSymbol.getStartSymbol()))
                     .setRecursion(Recursion.NON_REC)
                     .setAssociativity(Associativity.UNDEFINED)
                     .setPrecedence(-1)

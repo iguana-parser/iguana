@@ -22,14 +22,6 @@ public class Sequence implements Serializable {
         this.label = builder.label;
     }
 
-    public Sequence(Symbol symbol, List<Symbol> rest, Associativity associativity, String label) {
-        this.symbols = new ArrayList<>();
-        if (symbol != null) symbols.add(symbol);
-        if (rest != null) symbols.addAll(rest);
-        this.associativity = associativity;
-        this.label = label;
-    }
-
     public boolean isEmpty() {
         return symbols == null || symbols.isEmpty();
     }
@@ -81,13 +73,17 @@ public class Sequence implements Serializable {
     }
 
     public static class Builder {
-
         private List<Symbol> symbols = new ArrayList<>();
-        public Associativity associativity;
-        public String label;
+        private Associativity associativity;
+        private String label;
 
         public Builder addSymbol(Symbol symbol) {
-            symbols.add(symbol);
+            this.symbols.add(symbol);
+            return this;
+        }
+
+        public Builder addSymbols(List<Symbol> symbols) {
+            this.symbols.addAll(symbols);
             return this;
         }
 

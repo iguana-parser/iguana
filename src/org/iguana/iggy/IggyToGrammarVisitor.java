@@ -191,25 +191,29 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 if (!node.childAt(0).children().isEmpty()) {
                     associativity = getAssociativity(node.childAt(0).childAt(0));
                 }
-                Symbol first = (Symbol) node.childAt(1).accept(this);
-                List<Symbol> rest = (List<Symbol>) node.childAt(2).accept(this);
+                Sequence.Builder builder = new Sequence.Builder();
+                builder.addSymbol((Symbol) node.childAt(1).accept(this));
+                builder.addSymbols((List<Symbol>) node.childAt(2).accept(this));
                 Expression returnExpression = (Expression) node.childAt(3).accept(this);
                 if (returnExpression != null) {
-                    rest.add(Return.ret(returnExpression));
+                    builder.addSymbol(Return.ret(returnExpression));
                 }
                 String label = (String) node.childAt(4).accept(this);
-                return new Sequence(first, rest, associativity, label);
+                builder.setAssociativity(associativity);
+                builder.setLabel(label);
+                return builder.build();
             }
 
             case "Single": {
-                Symbol first = (Symbol) node.childAt(0).accept(this);
-                List<Symbol> rest = new ArrayList<>();
+                Sequence.Builder builder = new Sequence.Builder();
+                builder.addSymbol((Symbol) node.childAt(0).accept(this));
                 Expression returnExpression = (Expression) node.childAt(1).accept(this);
                 if (returnExpression != null) {
-                    rest.add(Return.ret(returnExpression));
+                    builder.addSymbol(Return.ret(returnExpression));
                 }
                 String label = (String) node.childAt(2).accept(this);
-                return new Sequence(first, rest, null, label);
+                builder.setLabel(label);
+                return builder.build();
             }
 
             default:

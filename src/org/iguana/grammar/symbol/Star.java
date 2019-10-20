@@ -63,7 +63,10 @@ public class Star extends AbstractSymbol {
 
 	@Override
 	public List<Symbol> getChildren() {
-		return Collections.singletonList(s);
+		List<Symbol> children = new ArrayList<>();
+		children.add(s);
+		children.addAll(separators);
+		return children;
 	}
 
 	public Symbol getSymbol() {
@@ -122,6 +125,7 @@ public class Star extends AbstractSymbol {
 		@Override
 		public SymbolBuilder<Star> setChildren(List<Symbol> symbols) {
 			this.s = symbols.get(0);
+			this.separators = symbols.subList(1, symbols.size());
 			return this;
 		}
 

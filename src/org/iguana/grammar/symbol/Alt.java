@@ -122,6 +122,12 @@ public class Alt extends AbstractSymbol {
 		}
 
 		@Override
+		public SymbolBuilder<Alt> setChildren(List<Symbol> symbols) {
+			this.symbols = symbols;
+			return this;
+		}
+
+		@Override
 		public Alt build() {
 			this.name = "(" + symbols.stream().map(Symbol::getName).collect(Collectors.joining(" | ")) + ")";
 			return new Alt(this);

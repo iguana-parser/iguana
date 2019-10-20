@@ -21,6 +21,7 @@ public class GrammarTransformer {
                     for (Sequence sequence : alt.seqs()) {
                         Sequence.Builder seqBuilder = new Sequence.Builder();
                         seqBuilder.setAssociativity(sequence.getAssociativity());
+                        seqBuilder.setLabel(sequence.getLabel());
                         for (Symbol symbol : sequence.getSymbols()) {
                             seqBuilder.addSymbol(transform(symbol, symbolTransformation));
                         }
