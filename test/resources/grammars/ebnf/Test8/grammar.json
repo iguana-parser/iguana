@@ -16,7 +16,7 @@
                       "kind" : "Star",
                       "name" : "A*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       }
                     }

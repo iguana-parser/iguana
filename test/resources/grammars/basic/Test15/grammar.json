@@ -13,7 +13,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "B"
                     },
                     {

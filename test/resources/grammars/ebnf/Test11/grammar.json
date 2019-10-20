@@ -16,19 +16,19 @@
                       "kind" : "Plus",
                       "name" : "A+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "L"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "B+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "B"
                       }
                     }

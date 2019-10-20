@@ -16,7 +16,7 @@
                       "kind" : "Plus",
                       "name" : "A+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       },
                       "separators" : [
@@ -29,11 +29,11 @@
                           }
                         },
                         {
-                          "kind" : "Nonterminal",
+                          "kind" : "Identifier",
                           "name" : "B"
                         },
                         {
-                          "kind" : "Nonterminal",
+                          "kind" : "Identifier",
                           "name" : "C"
                         }
                       ]

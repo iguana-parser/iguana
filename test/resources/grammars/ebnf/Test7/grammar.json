@@ -16,7 +16,7 @@
                       "kind" : "Opt",
                       "name" : "A?",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       }
                     },
@@ -24,7 +24,7 @@
                       "kind" : "Plus",
                       "name" : "B+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "B"
                       }
                     },
@@ -32,7 +32,7 @@
                       "kind" : "Star",
                       "name" : "C*",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "C"
                       }
                     }

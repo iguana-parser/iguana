@@ -13,11 +13,11 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "T"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "E1"
                     }
                   ]
@@ -49,11 +49,11 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "T"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "E1"
                     }
                   ]
@@ -78,11 +78,11 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "F"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "T1"
                     }
                   ]
@@ -114,11 +114,11 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "F"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "T1"
                     }
                   ]
@@ -151,7 +151,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "E"
                     },
                     {

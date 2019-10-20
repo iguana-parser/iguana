@@ -16,7 +16,7 @@
                       "kind" : "Plus",
                       "name" : "A+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       }
                     }

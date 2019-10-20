@@ -95,11 +95,11 @@ public class GrammarTest {
             }
 
             String parserTestName = "Parser test " + category + " " + testName;
-            IguanaParser parser = new IguanaParser(IggyParser.transform(grammar.toRuntimeGrammar()));
+            IguanaParser parser = new IguanaParser(IggyParser.transform(IggyParser.transform(grammar).toRuntimeGrammar()));
             DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, jsonGrammarPath, parser, i, input, grammar));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
-            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(grammar.toRuntimeGrammar()));
+            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(IggyParser.transform(grammar).toRuntimeGrammar()));
             DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
             grammarTests.add(dynamicParserTest);

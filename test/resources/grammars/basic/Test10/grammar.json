@@ -13,15 +13,15 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "A"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "B"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "C"
                     }
                   ]
@@ -33,15 +33,15 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "A"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "B"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "D"
                     }
                   ]

@@ -13,23 +13,23 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "A"
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "A"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "A+",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "A"
                     }
                   ]

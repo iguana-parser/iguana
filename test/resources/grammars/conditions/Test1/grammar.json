@@ -13,7 +13,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "Label",
                       "postConditions" : [
                         {
@@ -47,23 +47,9 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Terminal",
-                      "name" : "(a-z)*",
-                      "nodeType" : "Regex",
-                      "regex" : {
-                        "kind" : "regex.Plus",
-                        "regex" : {
-                          "kind" : "regex.Alt",
-                          "symbols" : [
-                            {
-                              "kind" : "CharRange",
-                              "start" : 97,
-                              "end" : 122
-                            }
-                          ]
-                        }
-                      },
-                      "terminalPostConditions" : [
+                      "kind" : "Identifier",
+                      "name" : "id",
+                      "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
                           "type" : "NOT_FOLLOW",

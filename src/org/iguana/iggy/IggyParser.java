@@ -32,7 +32,7 @@ public class IggyParser {
         }
     }
 
-    private static Grammar transform(Grammar grammar) {
+    public static Grammar transform(Grammar grammar) {
         Set<String> nonterminals = new HashSet<>();
         for (Rule rule : grammar.getRules()) {
             nonterminals.add(rule.getHead().getName());
@@ -77,8 +77,7 @@ public class IggyParser {
             throw new RuntimeException("Parse error");
         }
 
-        Grammar grammar = (Grammar) parseTree.accept(new IggyToGrammarVisitor());
-        return transform(grammar);
+        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 
     public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
@@ -94,7 +93,7 @@ public class IggyParser {
     }
 
     public static RuntimeGrammar getRuntimeGrammar(String path) throws IOException {
-        return transform(getGrammar(path).toRuntimeGrammar());
+        return transform(transform(getGrammar(path)).toRuntimeGrammar());
     }
 
 }

@@ -16,7 +16,7 @@
                       "kind" : "Opt",
                       "name" : "A?",
                       "s" : {
-                        "kind" : "Nonterminal",
+                        "kind" : "Identifier",
                         "name" : "A"
                       }
                     }

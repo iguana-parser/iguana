@@ -21,7 +21,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "B"
                     },
                     {
@@ -41,7 +41,7 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "C"
                     }
                   ]
@@ -101,7 +101,7 @@
                       }
                     },
                     {
-                      "kind" : "Nonterminal",
+                      "kind" : "Identifier",
                       "name" : "C"
                     }
                   ]
