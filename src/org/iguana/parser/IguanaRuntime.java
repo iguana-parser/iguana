@@ -215,7 +215,7 @@ public class IguanaRuntime<T extends Result> {
 
     public ParseError getParseError() {
         if (!hasParseError) return null;
-        return new ParseError(errorSlot, input, errorIndex);
+        return new ParseError(errorSlot, errorIndex, input.getLineNumber(errorIndex), input.getColumnNumber(errorIndex));
     }
 
     public RecognizerStatistics getStatistics() {

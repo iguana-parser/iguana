@@ -5,6 +5,8 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
+  "start" : 0,
+  "end" : 0,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -26,8 +28,6 @@
           }
         ]
       },
-      "start" : 0,
-      "end" : 0,
       "children" : [
         {
           "kind" : "MetaSymbolNode",
@@ -55,9 +55,9 @@
           "start" : 0,
           "end" : 0
         }
-      ]
+      ],
+      "start" : 0,
+      "end" : 0
     }
-  ],
-  "start" : 0,
-  "end" : 0
+  ]
 }

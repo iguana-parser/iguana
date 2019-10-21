@@ -47,8 +47,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier",
-                      "name" : "id",
+                      "kind" : "Plus",
+                      "name" : "(a-z)+",
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
@@ -64,7 +64,21 @@
                             ]
                           }
                         }
-                      ]
+                      ],
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(a-z)",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 97,
+                              "end" : 122
+                            }
+                          ]
+                        }
+                      }
                     }
                   ]
                 }
@@ -75,21 +89,6 @@
       ]
     }
   ],
-  "terminals" : {
-    "id" : {
-      "kind" : "regex.Plus",
-      "regex" : {
-        "kind" : "regex.Alt",
-        "symbols" : [
-          {
-            "kind" : "CharRange",
-            "start" : 97,
-            "end" : 122
-          }
-        ]
-      }
-    }
-  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

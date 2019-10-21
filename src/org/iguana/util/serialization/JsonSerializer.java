@@ -767,10 +767,11 @@ public class JsonSerializer {
     }
 
     abstract static class ParseErrorMixIn {
-        @JsonIgnore
-        private GrammarSlot slot;
-        @JsonIgnore
-        private String message;
+        ParseErrorMixIn(
+                @JsonProperty("slot") GrammarSlot slot,
+                @JsonProperty("inputIndex") int inputIndex,
+                @JsonProperty("lineNumber") int lineNumber,
+                @JsonProperty("columnNumber") int columnNumber) { }
     }
 }
 

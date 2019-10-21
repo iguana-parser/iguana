@@ -5,6 +5,8 @@
     "name" : "Start(A)",
     "startSymbol" : "A"
   },
+  "start" : 0,
+  "end" : 1,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -20,8 +22,6 @@
           }
         ]
       },
-      "start" : 0,
-      "end" : 1,
       "children" : [
         {
           "kind" : "NonterminalNode",
@@ -41,8 +41,6 @@
               }
             ]
           },
-          "start" : 0,
-          "end" : 1,
           "children" : [
             {
               "kind" : "TerminalNode",
@@ -57,11 +55,13 @@
               "start" : 0,
               "end" : 1
             }
-          ]
+          ],
+          "start" : 0,
+          "end" : 1
         }
-      ]
+      ],
+      "start" : 0,
+      "end" : 1
     }
-  ],
-  "start" : 0,
-  "end" : 1
+  ]
 }

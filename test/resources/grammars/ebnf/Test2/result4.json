@@ -5,6 +5,8 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
+  "start" : 0,
+  "end" : 11,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -21,8 +23,6 @@
           }
         ]
       },
-      "start" : 0,
-      "end" : 11,
       "children" : [
         {
           "kind" : "MetaSymbolNode",
@@ -34,6 +34,8 @@
               "name" : "A"
             }
           },
+          "start" : 0,
+          "end" : 11,
           "children" : [
             {
               "kind" : "NonterminalNode",
@@ -53,8 +55,6 @@
                   }
                 ]
               },
-              "start" : 0,
-              "end" : 1,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -69,7 +69,9 @@
                   "start" : 0,
                   "end" : 1
                 }
-              ]
+              ],
+              "start" : 0,
+              "end" : 1
             },
             {
               "kind" : "NonterminalNode",
@@ -89,8 +91,6 @@
                   }
                 ]
               },
-              "start" : 1,
-              "end" : 2,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -105,7 +105,9 @@
                   "start" : 1,
                   "end" : 2
                 }
-              ]
+              ],
+              "start" : 1,
+              "end" : 2
             },
             {
               "kind" : "NonterminalNode",
@@ -125,8 +127,6 @@
                   }
                 ]
               },
-              "start" : 2,
-              "end" : 3,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -141,7 +141,9 @@
                   "start" : 2,
                   "end" : 3
                 }
-              ]
+              ],
+              "start" : 2,
+              "end" : 3
             },
             {
               "kind" : "NonterminalNode",
@@ -161,8 +163,6 @@
                   }
                 ]
               },
-              "start" : 3,
-              "end" : 4,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -177,7 +177,9 @@
                   "start" : 3,
                   "end" : 4
                 }
-              ]
+              ],
+              "start" : 3,
+              "end" : 4
             },
             {
               "kind" : "NonterminalNode",
@@ -197,8 +199,6 @@
                   }
                 ]
               },
-              "start" : 4,
-              "end" : 5,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -213,7 +213,9 @@
                   "start" : 4,
                   "end" : 5
                 }
-              ]
+              ],
+              "start" : 4,
+              "end" : 5
             },
             {
               "kind" : "NonterminalNode",
@@ -233,8 +235,6 @@
                   }
                 ]
               },
-              "start" : 5,
-              "end" : 6,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -249,7 +249,9 @@
                   "start" : 5,
                   "end" : 6
                 }
-              ]
+              ],
+              "start" : 5,
+              "end" : 6
             },
             {
               "kind" : "NonterminalNode",
@@ -269,8 +271,6 @@
                   }
                 ]
               },
-              "start" : 6,
-              "end" : 7,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -285,7 +285,9 @@
                   "start" : 6,
                   "end" : 7
                 }
-              ]
+              ],
+              "start" : 6,
+              "end" : 7
             },
             {
               "kind" : "NonterminalNode",
@@ -305,8 +307,6 @@
                   }
                 ]
               },
-              "start" : 7,
-              "end" : 8,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -321,7 +321,9 @@
                   "start" : 7,
                   "end" : 8
                 }
-              ]
+              ],
+              "start" : 7,
+              "end" : 8
             },
             {
               "kind" : "NonterminalNode",
@@ -341,8 +343,6 @@
                   }
                 ]
               },
-              "start" : 8,
-              "end" : 9,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -357,7 +357,9 @@
                   "start" : 8,
                   "end" : 9
                 }
-              ]
+              ],
+              "start" : 8,
+              "end" : 9
             },
             {
               "kind" : "NonterminalNode",
@@ -377,8 +379,6 @@
                   }
                 ]
               },
-              "start" : 9,
-              "end" : 10,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -393,7 +393,9 @@
                   "start" : 9,
                   "end" : 10
                 }
-              ]
+              ],
+              "start" : 9,
+              "end" : 10
             },
             {
               "kind" : "NonterminalNode",
@@ -413,8 +415,6 @@
                   }
                 ]
               },
-              "start" : 10,
-              "end" : 11,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -429,15 +429,15 @@
                   "start" : 10,
                   "end" : 11
                 }
-              ]
+              ],
+              "start" : 10,
+              "end" : 11
             }
-          ],
-          "start" : 0,
-          "end" : 11
+          ]
         }
-      ]
+      ],
+      "start" : 0,
+      "end" : 11
     }
-  ],
-  "start" : 0,
-  "end" : 11
+  ]
 }

@@ -5,6 +5,8 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
+  "start" : 0,
+  "end" : 4,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -44,8 +46,6 @@
           }
         ]
       },
-      "start" : 0,
-      "end" : 4,
       "children" : [
         {
           "kind" : "NonterminalNode",
@@ -78,8 +78,6 @@
               }
             ]
           },
-          "start" : 0,
-          "end" : 3,
           "children" : [
             {
               "kind" : "MetaSymbolNode",
@@ -117,6 +115,8 @@
                   }
                 }
               },
+              "start" : 0,
+              "end" : 3,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -175,11 +175,11 @@
                   "start" : 2,
                   "end" : 3
                 }
-              ],
-              "start" : 0,
-              "end" : 3
+              ]
             }
-          ]
+          ],
+          "start" : 0,
+          "end" : 3
         },
         {
           "kind" : "TerminalNode",
@@ -200,9 +200,9 @@
           "start" : 3,
           "end" : 4
         }
-      ]
+      ],
+      "start" : 0,
+      "end" : 4
     }
-  ],
-  "start" : 0,
-  "end" : 4
+  ]
 }

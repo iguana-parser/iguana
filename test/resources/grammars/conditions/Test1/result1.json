@@ -5,6 +5,8 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
+  "start" : 0,
+  "end" : 3,
   "children" : [
     {
       "kind" : "NonterminalNode",
@@ -30,8 +32,6 @@
           }
         ]
       },
-      "start" : 0,
-      "end" : 3,
       "children" : [
         {
           "kind" : "NonterminalNode",
@@ -42,23 +42,9 @@
             },
             "body" : [
               {
-                "kind" : "Terminal",
-                "name" : "(a-z)*",
-                "nodeType" : "Regex",
-                "regex" : {
-                  "kind" : "regex.Plus",
-                  "regex" : {
-                    "kind" : "regex.Alt",
-                    "symbols" : [
-                      {
-                        "kind" : "CharRange",
-                        "start" : 97,
-                        "end" : 122
-                      }
-                    ]
-                  }
-                },
-                "terminalPostConditions" : [
+                "kind" : "Nonterminal",
+                "name" : "(a-z)+",
+                "postConditions" : [
                   {
                     "kind" : "RegularExpressionCondition",
                     "type" : "NOT_FOLLOW",
@@ -73,33 +59,18 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "nodeType" : "Plus"
               }
             ]
           },
-          "start" : 0,
-          "end" : 3,
           "children" : [
             {
-              "kind" : "TerminalNode",
-              "terminal" : {
-                "kind" : "Terminal",
-                "name" : "(a-z)*",
-                "nodeType" : "Regex",
-                "regex" : {
-                  "kind" : "regex.Plus",
-                  "regex" : {
-                    "kind" : "regex.Alt",
-                    "symbols" : [
-                      {
-                        "kind" : "CharRange",
-                        "start" : 97,
-                        "end" : 122
-                      }
-                    ]
-                  }
-                },
-                "terminalPostConditions" : [
+              "kind" : "MetaSymbolNode",
+              "symbol" : {
+                "kind" : "Plus",
+                "name" : "(a-z)+",
+                "postConditions" : [
                   {
                     "kind" : "RegularExpressionCondition",
                     "type" : "NOT_FOLLOW",
@@ -114,16 +85,91 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "s" : {
+                  "kind" : "Terminal",
+                  "name" : "(a-z)",
+                  "regex" : {
+                    "kind" : "regex.Alt",
+                    "symbols" : [
+                      {
+                        "kind" : "CharRange",
+                        "start" : 97,
+                        "end" : 122
+                      }
+                    ]
+                  }
+                }
               },
               "start" : 0,
-              "end" : 3
+              "end" : 3,
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "(a-z)",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "CharRange",
+                          "start" : 97,
+                          "end" : 122
+                        }
+                      ]
+                    }
+                  },
+                  "start" : 0,
+                  "end" : 1
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "(a-z)",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "CharRange",
+                          "start" : 97,
+                          "end" : 122
+                        }
+                      ]
+                    }
+                  },
+                  "start" : 1,
+                  "end" : 2
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "(a-z)",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "CharRange",
+                          "start" : 97,
+                          "end" : 122
+                        }
+                      ]
+                    }
+                  },
+                  "start" : 2,
+                  "end" : 3
+                }
+              ]
             }
-          ]
+          ],
+          "start" : 0,
+          "end" : 3
         }
-      ]
+      ],
+      "start" : 0,
+      "end" : 3
     }
-  ],
-  "start" : 0,
-  "end" : 3
+  ]
 }

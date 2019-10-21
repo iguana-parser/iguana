@@ -11,7 +11,6 @@ import org.iguana.traversal.exception.CyclicGrammarException;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.RecognizerStatisticsSerializer;
-import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
@@ -29,7 +28,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static iguana.utils.io.FileUtils.readFile;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GrammarTest {
 
@@ -69,17 +68,13 @@ public class GrammarTest {
         String jsonGrammarPath = testPath + "/grammar.json";
 
         if (REGENERATE_FILES) {
-            String jsonGrammar = JsonSerializer.toJSON(grammar);
-            FileUtils.writeFile(jsonGrammar, jsonGrammarPath);
+            record(grammar, jsonGrammarPath);
         } else {
             Grammar jsonGrammar;
             try {
                 jsonGrammar = Grammar.load(jsonGrammarPath, "json");
             } catch (FileNotFoundException e) {
                 throw new RuntimeException("No grammar.json file is present");
-            }
-            if (!grammar.equals(jsonGrammar)) {
-                System.out.println("Hi!");
             }
             assertEquals(grammar, jsonGrammar);
         }
@@ -99,7 +94,7 @@ public class GrammarTest {
 
             String parserTestName = "Parser test " + category + " " + testName;
             IguanaParser parser = new IguanaParser(IggyParser.transform(IggyParser.transform(grammar).toRuntimeGrammar()));
-            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, jsonGrammarPath, parser, i, input, grammar));
+            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
             IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(IggyParser.transform(grammar).toRuntimeGrammar()));
@@ -112,16 +107,16 @@ public class GrammarTest {
 
     private Executable getRecognizerTest(String testPath, IguanaRecognizer recognizer, int j, Input input) {
         return () -> {
-            Assert.assertTrue(recognizer.recognize(input));
+            if (recognizer.recognize(input)) {
+                String statisticsPath = testPath + "/statistics" + j + ".json";
+                RecognizerStatistics expectedStatistics = RecognizerStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
 
-            String statisticsPath = testPath + "/statistics" + j + ".json";
-            RecognizerStatistics expectedStatistics = RecognizerStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
-
-            assertEquals(expectedStatistics, recognizer.getStatistics());
+                assertEquals(expectedStatistics, recognizer.getStatistics());
+            }
         };
     }
 
-    private Executable getParserTest(String testPath, String grammarPath, IguanaParser parser, int j, Input input, Grammar grammar) {
+    private Executable getParserTest(String testPath, IguanaParser parser, int j, Input input) {
         return () -> {
 
             ParseTreeNode actualParseTree = null;
@@ -140,40 +135,39 @@ public class GrammarTest {
             }
 
             if (!isCyclic) {
-                Assert.assertNotNull(actualParseTree);
-
                 String statisticsPath = testPath + "/statistics" + j + ".json";
-                String parseTreePath = testPath + "/result" + j + ".json";
+                String resultPath = testPath + "/result" + j + ".json";
 
-                if (REGENERATE_FILES) {
-                    record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
-                    return;
+                if (actualParseTree == null) { // Parse error
+                    if (REGENERATE_FILES) {
+                        record(parser.getParseError(), resultPath);
+                    } else {
+                        ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
+                        assertEquals(expectedParseError, parser.getParseError());
+                    }
+                } else {
+                    if (REGENERATE_FILES) {
+                        record(actualParseTree, resultPath);
+                    } else {
+                        ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
+                        assertEquals(expectedParseTree, actualParseTree);
+                    }
                 }
 
-                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
-                assertEquals(expectedStatistics, parser.getStatistics());
-
-                // TODO: why is this check here?
-                assertNotNull("Parse Error: " + parser.getParseError(), actualParseTree);
-
-                ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(parseTreePath), ParseTreeNode.class);
-
-                assertEquals(expectedParseTree, actualParseTree);
+                if (REGENERATE_FILES) {
+                    record(parser.getStatistics(), statisticsPath);
+                } else {
+                    ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
+                    assertEquals(expectedStatistics, parser.getStatistics());
+                }
             }
         };
     }
 
-    private static void record(IguanaParser parser, ParseTreeNode parseTree, Grammar grammar, String grammarPath, String statisticsPath, String parseTreePath) throws IOException {
-        String jsonGrammar = JsonSerializer.toJSON(grammar);
-        FileUtils.writeFile(jsonGrammar, grammarPath);
-
-        ParseStatistics statistics = parser.getStatistics();
-        String jsonStatistics = ParseStatisticsSerializer.serialize(statistics);
-        FileUtils.writeFile(jsonStatistics, statisticsPath);
-
+    private static void record(Object obj, String path) throws IOException {
         try {
-            String jsonTree = JsonSerializer.toJSON(parseTree);
-            FileUtils.writeFile(jsonTree, parseTreePath);
+            String json = JsonSerializer.serialize(obj);
+            FileUtils.writeFile(json, path);
         } catch (Exception e) {
             e.printStackTrace();
         }

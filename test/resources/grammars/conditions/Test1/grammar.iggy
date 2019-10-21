@@ -4,9 +4,5 @@ start S
   ;
 
 Label
-  : id !>> [a-z]
-  ;
-
-terminal id
-  : [a-z]+
+  : [a-z]+ !>> [a-z]
   ;
