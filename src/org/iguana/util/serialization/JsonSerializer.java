@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
@@ -22,12 +21,15 @@ import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.runtime.*;
+import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
+import org.iguana.parser.ParseError;
 import org.iguana.parsetree.*;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +53,6 @@ public class JsonSerializer {
         mapper.addMixIn(PriorityLevel.class, PriorityLevelMixIn.class);
         mapper.addMixIn(Alternative.class, AlternativeMixIn.class);
         mapper.addMixIn(Sequence.class, SequenceMixIn.class);
-
 
         mapper.addMixIn(Symbol.class, SymbolMixIn.class);
         mapper.addMixIn(Nonterminal.class, NonterminalMixIn.class);
@@ -111,7 +112,13 @@ public class JsonSerializer {
 
         // Parse tree
         mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
+        mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
+        mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.class, MetaSymbolNodeMixIn.class);
         mapper.addMixIn(DefaultTerminalNode.class, DefaultTerminalNodeMixIn.class);
+        mapper.addMixIn(KeywordTerminalNode.class, KeywordTerminalNodeMixIn.class);
+
+        mapper.addMixIn(ParseError.class, ParseErrorMixIn.class);
 
         SimpleModule module = new SimpleModule();
         module.addDeserializer(Expression.Call.class, new CallDeserializer());
@@ -289,7 +296,7 @@ public class JsonSerializer {
 
                 case "ppLookup":
                     assertSize(2, expressions.length);
-                    return AST.ppDeclare(expressions[0], expressions[1]);
+                    return AST.ppLookup(expressions[0]);
 
                 case "endsWith":
                     assertSize(1, expressions.length);
@@ -472,7 +479,6 @@ public class JsonSerializer {
     abstract static class SymbolMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
-//    @JsonTypeIdResolver(MyTypeIdResolver.class)
     @JsonSubTypes({
         @JsonSubTypes.Type(value=iguana.regex.Seq.class, name="regex.Seq"),
         @JsonSubTypes.Type(value=iguana.regex.Alt.class, name="regex.Alt"),
@@ -488,12 +494,51 @@ public class JsonSerializer {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
         @JsonSubTypes.Type(value=DefaultTerminalNode.class, name="TerminalNode"),
-        @JsonSubTypes.Type(value=KeywordTerminalNode.class, name="TerminalNode"),
+        @JsonSubTypes.Type(value=KeywordTerminalNode.class, name="KeywordTerminalNode"),
         @JsonSubTypes.Type(value=NonterminalNode.class, name="NonterminalNode"),
         @JsonSubTypes.Type(value=MetaSymbolNode.class, name="MetaSymbolNode"),
         @JsonSubTypes.Type(value=AmbiguityNode.class, name="AmbiguityNode")
     })
     abstract static class ParseTreeNodeMixIn { }
+
+    abstract static class DefaultTerminalNodeMixIn {
+        DefaultTerminalNodeMixIn(
+                @JsonProperty("terminal") Terminal terminal,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end,
+                @JsonProperty("ignore") Input input
+        ) { }
+        @JsonIgnore
+        Input input;
+    }
+
+    abstract static class KeywordTerminalNodeMixIn {
+        KeywordTerminalNodeMixIn(
+                @JsonProperty("terminal") Terminal terminal,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end
+        ) { }
+    }
+
+    abstract static class NonterminalNodeMixIn {
+        NonterminalNodeMixIn(
+                @JsonProperty("rule") RuntimeRule rule,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) { }
+    }
+
+    abstract static class MetaSymbolNodeMixIn {
+        MetaSymbolNodeMixIn(
+                @JsonProperty("symbol") Symbol symbol,
+                @JsonProperty("symbols") List<ParseTreeNode> symbols,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) { }
+    }
+
+    abstract static class AmbiguityNodeMixIn {
+        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) { }
+    }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)
     abstract static class NonterminalMixIn {
@@ -716,16 +761,17 @@ public class JsonSerializer {
                                     @JsonProperty("expression") Expression expression) { }
     }
 
-    abstract static class DefaultTerminalNodeMixIn {
-        @JsonIgnore
-        Input input;
-    }
-
     abstract static class AbstractAttrsMixIn {
         @JsonIgnore
         ImmutableSet<String> env;
     }
 
+    abstract static class ParseErrorMixIn {
+        @JsonIgnore
+        private GrammarSlot slot;
+        @JsonIgnore
+        private String message;
+    }
 }
 
 

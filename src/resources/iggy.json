@@ -866,6 +866,19 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Nonterminal",
+                      "name" : "CharClass"
+                    }
+                  ],
+                  "label" : "CharClass"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
                       "kind" : "Terminal",
                       "name" : "(' ((\\u0001-! | #-& | (-[ | ]-\\u10FFFF) | (\\ (\" | ' | \\ | f | n | r | t)))* ')",
                       "nodeType" : "Regex",

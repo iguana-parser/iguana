@@ -24,6 +24,19 @@ public class Identifier extends AbstractSymbol {
         return visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Identifier)) return false;
+        Identifier identifier = (Identifier) obj;
+        return identifier.name.equals(name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
     public static class Builder extends SymbolBuilder<Identifier> {
 
         private Builder() { }

@@ -32,6 +32,7 @@ public class IguanaRecognizer {
 
     public boolean recognize(Input input, Map<String, Object> map, boolean global) {
         RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
+        if (root == null) return false;
         return root.getIndex() == input.length() - 1;
     }
 

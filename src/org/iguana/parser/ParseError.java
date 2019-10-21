@@ -29,7 +29,6 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.gss.GSSNode;
 
 
 public class ParseError {

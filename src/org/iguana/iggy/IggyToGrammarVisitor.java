@@ -252,6 +252,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | Identifier                       %Nont
      *   | String                           %String
      *   | Char                             %Character
+     *   | CharClass                        %CharClass
      *   | "{" Symbol Symbol+ "}" "*"       %StarSep
      *   | "{" Symbol Symbol+ "}" "+"       %PlusSep
      *   ;
@@ -382,6 +383,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "String":
             case "Character":
                 return Terminal.from(getCharsRegex(node.getText()));
+
+            case "CharClass":
+                return Terminal.from((iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this));
 
             case "StarSep": {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);

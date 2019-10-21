@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 
 public class GrammarTest {
 
-    private static boolean REGENERATE_FILES = true;
+    private static boolean REGENERATE_FILES = false;
 
     static {
         String regenerate = System.getenv("REGENERATE");
@@ -77,6 +77,9 @@ public class GrammarTest {
                 jsonGrammar = Grammar.load(jsonGrammarPath, "json");
             } catch (FileNotFoundException e) {
                 throw new RuntimeException("No grammar.json file is present");
+            }
+            if (!grammar.equals(jsonGrammar)) {
+                System.out.println("Hi!");
             }
             assertEquals(grammar, jsonGrammar);
         }
@@ -136,18 +139,20 @@ public class GrammarTest {
                 isCyclic = true;
             }
 
-            String statisticsPath = testPath + "/statistics" + j + ".json";
-            String parseTreePath = testPath + "/parsetree" + j + ".json";
-
-            if (REGENERATE_FILES) {
-                record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
-                return;
-            }
-
-            ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
-            assertEquals(expectedStatistics, parser.getStatistics());
-
             if (!isCyclic) {
+                Assert.assertNotNull(actualParseTree);
+
+                String statisticsPath = testPath + "/statistics" + j + ".json";
+                String parseTreePath = testPath + "/result" + j + ".json";
+
+                if (REGENERATE_FILES) {
+                    record(parser, actualParseTree, grammar, grammarPath, statisticsPath, parseTreePath);
+                    return;
+                }
+
+                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
+                assertEquals(expectedStatistics, parser.getStatistics());
+
                 // TODO: why is this check here?
                 assertNotNull("Parse Error: " + parser.getParseError(), actualParseTree);
 
