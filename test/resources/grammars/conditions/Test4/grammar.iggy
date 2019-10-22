@@ -1,0 +1,4 @@
+
+start Id
+  : [a-z]+ !>> [a-z] \ ('if' | 'while' | 'do')
+  ;

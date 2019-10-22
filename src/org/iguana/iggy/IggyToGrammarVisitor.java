@@ -430,7 +430,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *  | Regex "?"                     %Option
      *  | "(" Regex ")"                 %Bracket
      *  | "(" Regex Regex+ ")"          %Sequence
-     *  | "(" Regex ("|" Regex)+ ")"    %Alternation
+     *  | "(" Regex+ ("|" Regex+)+ ")"  %Alternation
      *  | Identifier                    %Reference
      *  | CharClass                     %CharClass
      *  | String                        %String
@@ -457,11 +457,22 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return iguana.regex.Seq.from(list);
             }
 
-            // TODO: add an optimization step to flatten alternation
             case "Alternation": {
                 List<RegularExpression> list = new ArrayList<>();
-                list.add((RegularExpression) node.childAt(1).accept(this));
-                list.addAll((Collection<? extends RegularExpression>) node.childAt(2).accept(this));
+                List<RegularExpression> first = (List<RegularExpression>) node.childAt(1).accept(this);
+                if (first.size() == 1) {
+                    list.add(first.get(0));
+                } else {
+                    list.add(iguana.regex.Seq.from(first));
+                }
+                List<List<RegularExpression>> second = (List<List<RegularExpression>>) node.childAt(2).accept(this);
+                for (List<RegularExpression> l : second) {
+                    if (l.size() == 1) {
+                        list.add(l.get(0));
+                    } else {
+                        list.add(iguana.regex.Seq.from(l));
+                    }
+                }
                 return iguana.regex.Alt.from(list);
             }
 

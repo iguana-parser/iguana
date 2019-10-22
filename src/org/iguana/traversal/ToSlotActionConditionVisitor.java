@@ -163,7 +163,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
-                        return matcher.match(input, leftExtent, rightExtent);
+                        return matcher.match(input, gssNode.getInputIndex(), rightExtent);
                     }
 
 					@Override
