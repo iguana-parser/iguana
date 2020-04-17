@@ -27,26 +27,16 @@
 
 package org.iguana.parser.datadependent;
 
-import static org.iguana.datadependent.ast.AST.integer;
-import static org.iguana.datadependent.ast.AST.println;
-import static org.iguana.datadependent.ast.AST.stat;
-import static org.iguana.datadependent.ast.AST.string;
-import static org.iguana.datadependent.ast.AST.var;
-
+import iguana.regex.Char;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
+import org.iguana.grammar.symbol.Terminal;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.iguana.datadependent.ast.AST.*;
 
 /**
  * 
@@ -96,13 +86,13 @@ public class Test2 {
 									 stat(println(string("PRINT2: "), var("l1"), var("l2"), var("a"), var("b")))))
 				.addSymbol(D).build();
 		
-		Rule r2_1 = Rule.withHead(A).addSymbol(Character.from('a')).addSymbol(Character.from('a')).build();
-		Rule r2_2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r3_1 = Rule.withHead(B).addSymbol(Character.from('b')).build();
-		Rule r3_2 = Rule.withHead(B).addSymbol(Character.from('a')).addSymbol(Character.from('b')).build();
+		Rule r2_1 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r2_2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r3_1 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		Rule r3_2 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		Rule r4 = Rule.withHead(C).addSymbol(Character.from('a')).build();
-		Rule r5 = Rule.withHead(D).addSymbol(Character.from('b')).build();
+		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('b'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r2_1, r2_2, r3_1, r3_2, r4, r5).build();
 		
@@ -117,14 +107,14 @@ public class Test2 {
 //		Input input = Input.fromString("aab");
 //		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 //		
-//		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-//		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
+//		IguanaParser parser = ParserFactory.getParser();
+//		ParseResult result = parser.getParserTree(input, graph, Nonterminal.withName("X"));
 //		
 //		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
 //		
 //		if (result.isParseSuccess()) {
 //			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-//					result.asParseSuccess().getRoot(), input);
+//					result.asParseSuccess().getResult(), input);
 //		}
 		
 	}

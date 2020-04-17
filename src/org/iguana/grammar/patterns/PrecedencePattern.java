@@ -27,16 +27,15 @@
 
 package org.iguana.grammar.patterns;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
-import org.iguana.util.generator.ConstructorCode;
+
+import java.io.Serializable;
+import java.util.List;
 
 
-public class PrecedencePattern extends AbstractPattern implements Serializable, ConstructorCode {
+public class PrecedencePattern extends AbstractPattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +47,7 @@ public class PrecedencePattern extends AbstractPattern implements Serializable, 
 		return new PrecedencePattern(parent.getHead(), parent.getBody(), position, child.getBody());
 	}
 
-	/**
+	/*
 	 * A direct filter is of the form (E, alpha .E beta, gamma).
 	 * In other words, the filtered nonterminal is the same
 	 * as the filter's nonterminal.
@@ -73,8 +72,4 @@ public class PrecedencePattern extends AbstractPattern implements Serializable, 
 		return position == parent.size() - 1;
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return "new " + PrecedencePattern.class.getSimpleName() + "(" + super.getConstructorCode() + ")";
-	}
 }

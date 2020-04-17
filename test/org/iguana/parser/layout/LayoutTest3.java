@@ -27,19 +27,21 @@
 
 package org.iguana.parser.layout;
 
-import static org.junit.Assert.*;
-
+import iguana.regex.Char;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Plus;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * 
@@ -53,34 +55,37 @@ import org.junit.Test;
  */
 public class LayoutTest3 {
 
-	private static Grammar getGrammar() {
+    static Terminal a = Terminal.from(Char.from('a'));
+    static Terminal b = Terminal.from(Char.from('b'));
+    static Terminal c = Terminal.from(Char.from('c'));
+    static Terminal space = Terminal.from(Char.from(' '));
+    static Nonterminal S = Nonterminal.withName("S");
+    static Nonterminal A = Nonterminal.withName("A");
+    static Nonterminal B = Nonterminal.withName("B");
+    static Nonterminal C = Nonterminal.withName("C");
+    static Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
-		Character a = Character.from('a');
-		Character b = Character.from('b');
-		Character c = Character.from('c');
-		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal A = Nonterminal.withName("A");
-		Nonterminal B = Nonterminal.withName("B");
-		Nonterminal C = Nonterminal.withName("C");
-		
-		Nonterminal L = Nonterminal.withName("L");
-		
-		Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
-		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
-		Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
-		Rule r4 = Rule.withHead(C).addSymbol(c).setLayout(L).build();
-		
-		Rule layout = Rule.withHead(L).addSymbol(Character.from(' ')).build();
-		
-		return Grammar.builder().addRules(r1, r2, r3, r4, layout).build();
-	}
-	
+    static Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
+    static Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
+    static Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
+    static Rule r4 = Rule.withHead(C).addSymbol(c).setLayout(L).build();
+
+    static Rule layout = Rule.withHead(L).addSymbol(space).build();
+
+
+    private static Grammar getGrammar() {
+        Grammar grammar = Grammar.builder().addRules(r1, r2, r3, r4, layout).build();
+        return new LayoutWeaver().transform(new EBNFToBNF().transform(grammar));
+    }
+
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
 		Grammar grammar = getGrammar();
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNotNull(result);
 	}
 }

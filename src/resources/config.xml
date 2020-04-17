@@ -1,0 +1,15 @@
+<Iguana>
+
+    <Parser>
+        <Lookahead>1</Lookahead>
+        <GSSLookupImpl>HASH_MAP</GSSLookupImpl>
+        <MatcherType>DFA</MatcherType>
+        <HashMapImpl>INT_OPEN_ADDRESSING</HashMapImpl>
+        <EnvironmentImpl>INT_ARRAY</EnvironmentImpl>
+    </Parser>
+
+    <Logging>
+        <LogLevel>INFO</LogLevel>
+    </Logging>
+
+</Iguana>

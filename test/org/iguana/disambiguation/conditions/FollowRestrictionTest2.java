@@ -27,22 +27,22 @@
 
 package org.iguana.disambiguation.conditions;
 
-import static org.junit.Assert.*;
-
+import iguana.regex.CharRange;
+import iguana.regex.Seq;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -56,39 +56,40 @@ import org.junit.Test;
  */
 public class FollowRestrictionTest2 {
 	
-	private GLLParser parser;
 	private Grammar grammar;
 	
 	@Before
 	public void init() {
 		
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Sequence.from("8"))).build();
-		CharacterRange az = CharacterRange.in('a', 'z');
-		CharacterRange zero_nine = CharacterRange.in('0', '9');
-		Plus AZPlus = Plus.builder(az).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
+		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from("8"))).build();
+		CharRange az = CharRange.in('a', 'z');
+		CharRange zero_nine = CharRange.in('0', '9');
+		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
-		Rule r1 = Rule.withHead(S).addSymbols(Label, zero_nine).build();
+		Rule r1 = Rule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
 		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
 
 		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
-	}
+        grammar = new EBNFToBNF().transform(grammar);
+    }
 	
 	@Test
 	public void testParser1() {
 		Input input = Input.fromString("abc8");
-		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseError());
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNotNull(result);
 	}
 	
 	@Test
 	public void testParser2() {
 		Input input = Input.fromString("abc3");
-		parser =  ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseError());
-	}
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
 
+        assertNotNull(result);
+	}
 
 }

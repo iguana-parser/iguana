@@ -27,67 +27,40 @@
 
 package org.iguana.parser;
 
+import iguana.utils.input.Input;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.Input;
+import org.iguana.gss.GSSNode;
 
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
-public class ParseError extends AbstractParseResult {
+public class ParseError {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
-	
-	public ParseError(GrammarSlot slot, Input input, int inputIndex, GSSNode curerntNode) {
-		super(input);
+	private final String message;
+
+    public ParseError(GrammarSlot slot, Input input, int inputIndex) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-	}
+		this.message = getMessage(input, inputIndex);
+    }
 	
 	public int getInputIndex() {
 		return inputIndex;
 	}
 
-	public GrammarSlot getSlot() {
+	public GrammarSlot getGrammarSlot() {
 		return slot;
 	}
-	
-	public static String getMessage(Input input, int inputIndex) {		
+
+    @Override
+    public String toString() {
+        return message;
+    }
+
+    private static String getMessage(Input input, int inputIndex) {
 		int lineNumber = input.getLineNumber(inputIndex);
 		int columnNumber = input.getColumnNumber(inputIndex);
 		
 		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
 	}
-
-	@Override
-	public String toString() {
-		return String.format("Parse error at %d, line: %d, column: %d", inputIndex, 
-							 input.getLineNumber(inputIndex), 
-							 input.getColumnNumber(inputIndex));
-	}
-
-	@Override
-	public boolean isParseError() {
-		return true;
-	}
-
-	@Override
-	public boolean isParseSuccess() {
-		return false;
-	}
-
-	@Override
-	public ParseError asParseError() {
-		return this;
-	}
-
-	@Override
-	public ParseSuccess asParseSuccess() {
-		throw new RuntimeException("Cannot call getParseSuccess on ParseError.");
-	}
- 	
 }

@@ -27,16 +27,17 @@
 
 package org.iguana.grammar.symbol;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.condition.Condition;
-import org.iguana.parser.HashFunctions;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 public class Nonterminal extends AbstractSymbol {
 
@@ -56,10 +57,18 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final Set<String> excepts;
 	
+	private final Map<String, Object> attributes;
+
+	/**
+	 * The type of this nonterminal. This field is used to track EBNF to BNF conversion
+	 * information for each nonterminal. See NonterminalNodeType.
+	 */
+	private final NonterminalNodeType nodeType;
+	
 	public static Nonterminal withName(String name) {
 		return builder(name).build();
 	}
-	
+
 	protected Nonterminal(Builder builder) {
 		super(builder);
 		this.ebnfList = builder.ebnfList;
@@ -69,6 +78,8 @@ public class Nonterminal extends AbstractSymbol {
 		this.parameters = builder.parameters;
 		this.arguments = builder.arguments;
 		this.excepts = builder.excepts;
+		this.nodeType = builder.nodeType;
+		this.attributes = builder.attributes;
 	}
 	
 	public boolean isEbnfList() {
@@ -106,17 +117,25 @@ public class Nonterminal extends AbstractSymbol {
 	public Set<String> getExcepts() {
 		return excepts;
 	}
-	
+
+	public NonterminalNodeType getNodeType() {
+		return nodeType;
+	}
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
 	@Override
 	public String toString() {
 		return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
-				+ (state != null && !state.isEmpty()? GeneratorUtil.listToString(state, ":") + "=" : "")
-				+ (getPreConditions().isEmpty()? "" : GeneratorUtil.listToString(getPreConditions(), ","))
+				+ (state != null && !state.isEmpty()? listToString(state, ":") + "=" : "")
+				+ (getPreConditions().isEmpty()? "" : listToString(getPreConditions(), ","))
 			    + (label != null? label + ":" : "")
 			    + name + (index > 0 ? index : "")
-			    + (arguments == null && parameters != null? "(" + GeneratorUtil.listToString(parameters, ",") + ")" : "")
-		        + (arguments != null? "(" + GeneratorUtil.listToString(arguments, ",") + ")" : "")
-		        + (getPostConditions().isEmpty()? "" : GeneratorUtil.listToString(getPostConditions(), ","));
+			    + (arguments == null && parameters != null? "(" + listToString(parameters, ",") + ")" : "")
+		        + (arguments != null? "(" + listToString(arguments, ",") + ")" : "")
+		        + (getPostConditions().isEmpty()? "" : listToString(getPostConditions(), ","));
 	}
 	
 	@Override
@@ -128,13 +147,17 @@ public class Nonterminal extends AbstractSymbol {
 			return false;
 		
 		Nonterminal other = (Nonterminal) obj;
-		
-		return name.equals(other.name) && index == other.index;
+
+		return getEffectiveName().equals(other.getEffectiveName());
 	}
-	
+
+    public String getEffectiveName() {
+        return name + (index > 0 ? index : "");
+    }
+
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(name.hashCode(), index);
+		return getEffectiveName().hashCode();
 	}
 	
 	public static Builder builder(String name) {
@@ -148,25 +171,6 @@ public class Nonterminal extends AbstractSymbol {
 	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
-	}
-	
-	@Override
-	public String getConstructorCode() {	
-		
-		String excepts = "";
-		if (this.excepts != null)
-			excepts = GeneratorUtil.listToString(this.excepts.stream().map(l -> ".addExcept(\"" + l + "\")").collect(Collectors.toSet()));
-		
-		return Nonterminal.class.getSimpleName() + ".builder(\"" + name + "\")"
-				+ (parameters != null? ".addParameters(" 
-						+ GeneratorUtil.listToString(Arrays.asList(parameters).stream().map(param -> "\"" + param + "\"").collect(Collectors.toList()), ",") + ")" : "")
-				+ (arguments != null? ".apply(" 
-						+ GeneratorUtil.listToString(Arrays.asList(arguments).stream().map(arg -> arg.getConstructorCode()).collect(Collectors.toList()), ",") + ")" : "")
-				+ super.getConstructorCode() 
-				+ (index > 0 ?  ".setIndex(" + index + ")" : "")
-				+ (ebnfList == true ? ".setEbnfList(" + ebnfList + ")" : "")
-				+ excepts
-				+ ".build()";
 	}
 
 	public static class Builder extends SymbolBuilder<Nonterminal> {
@@ -184,7 +188,11 @@ public class Nonterminal extends AbstractSymbol {
 		private Expression[] arguments;
 		
 		private Set<String> excepts;
+
+		private NonterminalNodeType nodeType = NonterminalNodeType.Basic;
 		
+		private Map<String, Object> attributes = new HashMap<>();
+
 		public Builder(Nonterminal nonterminal) {
 			super(nonterminal);
 			this.ebnfList = nonterminal.ebnfList;
@@ -194,10 +202,16 @@ public class Nonterminal extends AbstractSymbol {
 			this.parameters = nonterminal.parameters;
 			this.arguments = nonterminal.arguments;
 			this.excepts = nonterminal.excepts;
+			this.nodeType = nonterminal.nodeType;
+			this.attributes = nonterminal.attributes;
 		}
 
 		public Builder(String name) {
 			super(name);
+		}
+
+		public Builder() {
+			super();
 		}
 		
 		public Builder setIndex(int index) {
@@ -305,7 +319,7 @@ public class Nonterminal extends AbstractSymbol {
 		}
 		
 		public Builder addExcepts(Set<String> labels) {
-			if (labels.isEmpty()) 
+			if (labels == null || labels.isEmpty()) 
 				return this;
 			
 			if (excepts == null) 
@@ -314,7 +328,27 @@ public class Nonterminal extends AbstractSymbol {
 			excepts.addAll(labels);			
 			return this;
 		}
+
+		public Builder setNodeType(NonterminalNodeType nodeType) {
+			this.nodeType = nodeType;
+			return this;
+		}
 		
+		public Builder setAttributes(Map<String, Object> attributes) {
+			this.attributes = attributes;
+			return this;
+		}
+		
+		public Builder addAttribute(String key, Object value) {
+			this.attributes.put(key, value);
+			return this;
+		}
+		
+		public Builder addAttributes(Map<String, Object> attributes) {
+			this.attributes.putAll(attributes);
+			return this;
+		}
+
 		@Override
 		public Nonterminal build() {
 			return new Nonterminal(this);

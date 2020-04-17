@@ -1,3 +1,12 @@
 .DS_Store
-bin
-target
+bin/
+target/
+.idea/
+project/
+.cache-tests
+.cache-main
+.classpath
+.project
+.settings/
+iguana.iml
+*.pdf

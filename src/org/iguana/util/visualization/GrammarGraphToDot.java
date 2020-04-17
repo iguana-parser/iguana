@@ -27,60 +27,73 @@
 
 package org.iguana.util.visualization;
 
-import static org.iguana.util.generator.GeneratorUtil.*;
-import static org.iguana.util.visualization.GraphVizUtil.*;
-
+import iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.ConditionalTransition;
-import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.util.generator.GeneratorUtil;
+import org.iguana.grammar.slot.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static iguana.utils.string.StringUtil.listToString;
+import static iguana.utils.visualization.DotGraph.newEdge;
+import static iguana.utils.visualization.DotGraph.newNode;
 
 public class GrammarGraphToDot {
 
-	public static String toDot(GrammarGraph g) {
-		
-		final StringBuilder sb = new StringBuilder();
-		
-		for (NonterminalGrammarSlot nonterminal : g.getNonterminals()) {
-			toDot(nonterminal, sb);
+	public static DotGraph toDot(GrammarGraph g) {
+		DotGraph dotGraph = new DotGraph();
+		ids.clear();
+
+		for (NonterminalGrammarSlot nonterminal : g.getNonterminalGrammarSlots()) {
+			toDot(nonterminal, dotGraph);
 		}
 		
-		return sb.toString();
+		return dotGraph;
 	}
 	
-	private static void toDot(NonterminalGrammarSlot slot, StringBuilder sb) {
-		sb.append("\"" + slot.getId() + "\"" + String.format(NONTERMINAL_SLOT, 
-				escape(slot.getNonterminal().getParameters() != null? 
-						String.format("%s(%s)", slot.getNonterminal().getName(), GeneratorUtil.listToString(slot.getNonterminal().getParameters(), ",")) 
-						: slot.getNonterminal().getName())) + "\n");
-		
-		slot.getFirstSlots().forEach(s -> sb.append(EPSILON_TRANSITION + "\"" + slot.getId() + "\"" + "->" + "{\"" + s.getId() + "\"}" + "\n"));
-		slot.getFirstSlots().forEach(s -> toDot(s, sb));
-	}
-	
-	private static void toDot(GrammarSlot slot, StringBuilder sb) {
-		if (slot instanceof EndGrammarSlot) {
-			sb.append("\"" + slot.getId() + "\"" + String.format(END_SLOT, "") + "\n");
+	private static void toDot(NonterminalGrammarSlot slot, DotGraph dotGraph) {
+		DotGraph.Node node = newNode(getId(slot));
+		String label;
+		if (slot.getNonterminal().getParameters() != null) {
+			label = String.format("%s(%s)", slot.getNonterminal().getName(), listToString(slot.getNonterminal().getParameters(), ","));
 		} else {
-			sb.append("\"" + slot.getId() + "\"" + BODY_SLOT + "\n");
+			label = slot.getNonterminal().getName();
+		}
+		node.setLabel(label);
+		dotGraph.addNode(node);
+
+		slot.getFirstSlots().forEach(s -> dotGraph.addEdge(newEdge(getId(slot), getId(s))));
+		slot.getFirstSlots().forEach(s -> toDot(s, dotGraph));
+	}
+	
+	private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph) {
+		if (slot instanceof EndGrammarSlot) {
+			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.DOUBLE_CIRCLE));
+		} else {
+			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.CIRCLE));
 		}
 		
 		// TODO: improve this code
-		slot.getTransitions().forEach(t -> { 
-			if(t instanceof ConditionalTransition) {
-				sb.append(String.format(TRANSITION, t.getLabel() + ", true") + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n");
-				
-				BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
-				
-				if (ifFalse != null)
-					sb.append(String.format(TRANSITION, t.getLabel() + ", false") + "\"" + slot.getId() + "\"" + "->" + "{\"" + ifFalse.getId() + "\"}" + "\n");
-			}
-			else sb.append(String.format(TRANSITION, t.getLabel()) + "\"" + slot.getId() + "\"" + "->" + "{\"" + t.destination().getId() + "\"}" + "\n"); 
-		});
-		slot.getTransitions().forEach(t -> toDot(t.destination(), sb));
+        Transition t = slot.getOutTransition();
+        if(t instanceof ConditionalTransition) {
+            dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
+
+            BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
+            if (ifFalse != null)
+                dotGraph.addEdge(newEdge(getId(slot), getId(ifFalse), t.getLabel()));
+        }
+        else {
+            dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
+        }
+
+		toDot(t.destination(), dotGraph);
 	}
+
+
+    private static Map<GrammarSlot, Integer> ids = new HashMap<>();
+
+    private static int getId(GrammarSlot slot) {
+        return ids.computeIfAbsent(slot, k -> ids.size() + 1);
+    }
 	
 }

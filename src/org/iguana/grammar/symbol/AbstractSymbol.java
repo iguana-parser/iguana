@@ -27,34 +27,31 @@
 
 package org.iguana.grammar.symbol;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.condition.Condition;
 
-import static org.iguana.util.generator.GeneratorUtil.*;
+import java.util.Collections;
+import java.util.Set;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
 	private static final long serialVersionUID = 1L;
-	
-	protected final Set<Condition> preConditions;
-	
-	protected final Set<Condition> postConditions;
-	
+
 	protected final String name;
-	
-	protected final Object object;
-	
+
 	protected final String label;
-	
+
+	protected final Set<Condition> preConditions;
+
+	protected final Set<Condition> postConditions;
+
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
 		this.name = builder.name;
 		this.label = builder.label;
-		this.object = builder.object;
-		this.preConditions = builder.preConditions; // TODO: Dangerous move: ImmutableSet.copyOf(builder.preConditions);
-		this.postConditions = Collections.unmodifiableSet(builder.postConditions);
+		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptySet() : builder.preConditions;
+		this.postConditions = builder.postConditions.isEmpty() ? Collections.emptySet() : builder.postConditions;
 	}
 	
 	@Override
@@ -70,11 +67,6 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	@Override
 	public String getName() {
 		return name;
-	}
-	
-	@Override
-	public Object getObject() {
-		return object;
 	}
 	
 	@Override
@@ -96,13 +88,6 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	@Override
 	public String toString(int j) {
 		return this.toString() + (j == 1? " . " : "");
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return (label == null ? "" : ".setLabel(\"" + label + "\")") + 
-			   (preConditions.isEmpty() ? "" : ".addPreConditions(" + asSet(preConditions) + ")") +
-			   (postConditions.isEmpty() ? "" : ".addPostConditions(" + asSet(postConditions) + ")");
 	}
 	
 }

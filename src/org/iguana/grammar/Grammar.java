@@ -27,52 +27,33 @@
 
 package org.iguana.grammar;
 
-import static org.iguana.util.generator.GeneratorUtil.listToString;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
+import iguana.regex.RegularExpression;
+import iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
-import org.iguana.grammar.symbol.Associativity;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.PrecedenceLevel;
-import org.iguana.grammar.symbol.Recursion;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Start;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.regex.RegularExpression;
-import org.iguana.util.CollectionsUtil;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.generator.ConstructorCode;
+import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.symbol.*;
+import org.iguana.traversal.idea.IdeaIDEGenerator;
+import org.iguana.util.serialization.JsonSerializer;
+
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 
 /**
  * 
  * @author Ali Afroozeh
+ * @author Anastasia Izmaylova
  *
  */
-public class Grammar implements ConstructorCode, Serializable {
+public class Grammar implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -85,13 +66,21 @@ public class Grammar implements ConstructorCode, Serializable {
 	private final Symbol layout;
 	
 	private final List<Rule> rules;
+	
+	private final Map<String, Set<String>> ebnfLefts;
+	private final Map<String, Set<String>> ebnfRights;
+
+	private final Start startSymbol;
 		
 	public Grammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.precedencePatterns = builder.precedencePatterns;
 		this.exceptPatterns = builder.exceptPatterns;
 		this.layout = builder.layout;
+		this.startSymbol = builder.startSymbol;
 		this.rules = builder.rules;
+		this.ebnfLefts = builder.ebnfLefts;
+		this.ebnfRights = builder.ebnfRights;
 	}
 	
 	public Map<Nonterminal, List<Rule>> getDefinitions() {
@@ -110,25 +99,17 @@ public class Grammar implements ConstructorCode, Serializable {
 		return rules;
 	}
 	
-	public Start getStartSymbol(Nonterminal nt) {
-		Start start = Start.from(nt);
-		if (definitions.keySet().contains(start)) return start;
-		
-		Rule startRule;
-		if (layout != null)
-			startRule = Rule.withHead(start).addSymbol(layout).addSymbol(nt).addSymbol(layout)
-								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
-		else 
-			startRule = Rule.withHead(start).addSymbol(nt)
-								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
-								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build();
-		
-		definitions.put(start, CollectionsUtil.list(startRule));
-		rules.add(startRule);
-		
-		return start;
+	public Map<String, Set<String>> getEBNFLefts() {
+		return this.ebnfLefts;
 	}
+	
+	public Map<String, Set<String>> getEBNFRights() {
+		return this.ebnfRights;
+	}
+
+    public Start getStartSymbol() {
+        return startSymbol;
+    }
 	
 	public int sizeRules() {
 		int num = 0;
@@ -150,17 +131,18 @@ public class Grammar implements ConstructorCode, Serializable {
 		return null;
 	}
 	
-	public GrammarGraph toGrammarGraph(Input input, Configuration config) {
-		return new GrammarGraph(this, input, config);
-	}
-	
 	private static Set<RuntimeException> validate(List<Rule> rules, Map<Nonterminal, List<Rule>> definitions) {
-		return rules.stream().filter(r -> r.getBody() != null)
-		   .<RuntimeException>flatMap(r -> r.getBody().stream()
-		                                              .filter(s -> !definitions.containsKey(s))
-		                                              .filter(s -> s instanceof Nonterminal)
-		                                              .map(s -> new NonterminalNotDefinedException((Nonterminal)s)))
-						     .collect(Collectors.toSet());		
+	    Set<RuntimeException> exceptions = new HashSet<>();
+        for (Rule rule : rules) {
+            if (rule.getBody() != null) {
+                for (Symbol s : rule.getBody()) {
+                    if (s instanceof Nonterminal && !definitions.containsKey(s)) {
+                        exceptions.add(new NonterminalNotDefinedException((Nonterminal) s));
+                    }
+                }
+            }
+        }
+        return exceptions;
 	}
 	
 	public Symbol getLayout() {
@@ -211,11 +193,7 @@ public class Grammar implements ConstructorCode, Serializable {
 		
 		return sb.toString();
 	}
-	
-	public Object getObject(Nonterminal nonterminal, int alternateIndex) {
-		return definitions.get(nonterminal).get(alternateIndex).getObject();
-	}
-	
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -225,28 +203,44 @@ public class Grammar implements ConstructorCode, Serializable {
 		private final Map<Nonterminal, List<Rule>> definitions = new HashMap<>();
 		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
-		private List<Rule> rules;
+		private List<Rule> rules = new ArrayList<>();
 		private Symbol layout;
+		private Start startSymbol;
+		
+		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
+		private Map<String, Set<String>> ebnfRights = new HashMap<>();
+
+        public Builder() { }
+
+        public Builder(Grammar grammar) {
+            definitions.putAll(grammar.definitions);
+            precedencePatterns.addAll(grammar.precedencePatterns);
+            exceptPatterns.addAll(grammar.exceptPatterns);
+            rules.addAll(grammar.rules);
+            layout = grammar.layout;
+            ebnfLefts.putAll(grammar.ebnfLefts);
+            ebnfRights.putAll(grammar.ebnfRights);
+            startSymbol = grammar.startSymbol;
+        }
 		
 		public Grammar build() {
-			rules = definitions.values().stream().flatMap(l -> l.stream()).collect(Collectors.toList());
-			
 			Set<RuntimeException> exceptions = validate(rules, definitions);
 			
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
-			
-			return new Grammar(this);
+
+            return new Grammar(this);
 		}
-		
-		public Builder addRule(Rule rule) {
+
+        public Builder addRule(Rule rule) {
 			List<Rule> rules = definitions.get(rule.getHead());
 			if (rules == null) {
 				rules = new ArrayList<>();
 				definitions.put(rule.getHead(), rules);
 			}
 			rules.add(rule);
+			this.rules.add(rule);
 			return this;
 		}
 		
@@ -264,6 +258,11 @@ public class Grammar implements ConstructorCode, Serializable {
 			this.layout = layout;
 			return this;
 		}
+
+		public Builder setStartSymbol(Start startSymbol) {
+		    this.startSymbol = startSymbol;
+		    return this;
+        }
 		
 		public Builder addPrecedencePattern(PrecedencePattern pattern) {
 			precedencePatterns.add(pattern);
@@ -284,12 +283,32 @@ public class Grammar implements ConstructorCode, Serializable {
 			exceptPatterns.addAll(patterns);
 			return this;
 		}
+		
+		public Builder addEBNFl(Map<String, Set<String>> ebnfLefts) {
+			this.ebnfLefts.putAll(ebnfLefts);
+			return this;
+		}
+		
+		public Builder addEBNFl(String ebnf, Set<String> lefts) {
+			this.ebnfLefts.put(ebnf, lefts);
+			return this;
+		}
+		
+		public Builder addEBNFr(Map<String, Set<String>> ebnfRights) {
+			this.ebnfRights.putAll(ebnfRights);
+			return this;
+		}
+		
+		public Builder addEBNFr(String ebnf, Set<String> rights) {
+			this.ebnfRights.put(ebnf, rights);
+			return this;
+		}
 	}
-	
+
 	public void save(URI uri) {
 		save(new File(uri));
 	}
-	
+
 	public void save(File file) {
 		if (!file.exists()) {
 			try {
@@ -298,31 +317,63 @@ public class Grammar implements ConstructorCode, Serializable {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
-			out.writeObject(this);			
+			out.writeObject(this);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public static Grammar load(URI uri) {
-		return load(new File(uri));
+
+	public static Grammar load(URI uri, String format) throws FileNotFoundException {
+		return load(new File(uri), format);
 	}
-	
-	public static Grammar load(File file) {
+
+	public static Grammar load(String path, String format) throws FileNotFoundException {
+		return load(new File(path), format);
+	}
+
+	public static Grammar load(File file) throws FileNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        Grammar binary = load(fis, "binary");
+        return binary;
+    }
+
+    public static Grammar load(File file, String format) throws FileNotFoundException {
+		return load(new FileInputStream(file), format);
+    }
+
+	public static Grammar load(InputStream inputStream) {
+		return load(inputStream, "binary");
+	}
+
+	public static Grammar load(InputStream inputStream, String format) {
 		Grammar grammar;
-		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
-			grammar = (Grammar) in.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(e);
+		switch (format) {
+			case "binary":
+				try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
+					grammar = (Grammar) in.readObject();
+				} catch (IOException | ClassNotFoundException e) {
+					throw new RuntimeException(e);
+				}
+				break;
+
+			case "json":
+				try {
+					grammar = JsonSerializer.deserialize(inputStream, Grammar.class);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+				break;
+
+			default:
+				throw new RuntimeException("Unsupported format exception");
 		}
 		return grammar;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		
 		if (this == obj)
 			return true;
 		
@@ -330,14 +381,18 @@ public class Grammar implements ConstructorCode, Serializable {
 			return false;
 		
 		Grammar other = (Grammar) obj;
-		
+
 		return definitions.equals(other.definitions);
 	}
-	
-	/**
+
+	@Override
+	public int hashCode() {
+		return definitions.hashCode();
+	}
+
+	/*
 	 * Returns the size of this grammar, which is equal to the number of nonterminals +
 	 * number of terminals + grammar slots.
-	 * 
 	 */
 	public int size() {
 		int heads = definitions.size();
@@ -349,17 +404,32 @@ public class Grammar implements ConstructorCode, Serializable {
 		return heads + bodySymbols;
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return "Grammar.builder()\n" +
-			   (layout == null ? "" : ".setLayout(" + layout.getConstructorCode() + ")") +
-			   definitions.values().stream().map(l -> rulesToString(l)).collect(Collectors.joining()) + "\n.build()";
-	}
-	
 	private static String rulesToString(Iterable<Rule> rules) {
 		return StreamSupport.stream(rules.spliterator(), false)
-				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r.getConstructorCode() + ")")
+				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r + ")")
 				.collect(Collectors.joining());
 	}
 	
+	private static String leftsToString(Map<String, Set<String>> lefts) {
+		return lefts.entrySet().stream()
+				.map(entry -> ".addEBNFl(" + "\"" + entry.getKey() + "\"," 
+							  + "new HashSet<String>(Arrays.asList(" 
+							  		+ listToString(entry.getValue().stream().map(elem -> "\"" + elem + "\"").collect(Collectors.toList()), ",") 
+							  + ")))")
+				.collect(Collectors.joining());
+	}
+	
+	private static String rightsToString(Map<String, Set<String>> rights) {
+		return rights.entrySet().stream()
+				.map(entry -> ".addEBNFr(" + "\"" + entry.getKey() + "\"," 
+							  + "new HashSet<String>(Arrays.asList(" 
+							  		+ listToString(entry.getValue().stream().map(elem -> "\"" + elem + "\"").collect(Collectors.toList()), ",") 
+							  + ")))")
+				.collect(Collectors.joining());
+	}
+
+	public void generate_idea_ide(String language, String extendsion, String path) {
+        new IdeaIDEGenerator().generate(this, language, "iggy", path);
+    }
+
 }

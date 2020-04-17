@@ -27,13 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import org.iguana.util.Input;
-import org.iguana.util.generator.ConstructorCode;
-
 /**
  * A GrammarSlot is a position immediately before or after
  * a symbol in the body of a production rule. 
@@ -46,32 +39,8 @@ import org.iguana.util.generator.ConstructorCode;
  * @author Ali Afroozeh
  *
  */
-public interface GrammarSlot extends ConstructorCode {
-	
-	default Set<GrammarSlot> getReachableSlots() {
-		return StreamSupport.stream(getTransitions().spliterator(), false).map(t -> t.destination()).collect(Collectors.toSet());
-	}
-	
-	/**
-	 * Corresponds to a grammar position A ::= B . \alpha 
-	 */
-	default boolean isFirst() { return false; }
-	
-	/**
-	 * Corresponds to a grammar position after the last terminal or nonterminal symbol 
-	 */
-	default boolean isLast() { return false; }
-	
-	default boolean isEnd() { return false; }
+public interface GrammarSlot {
 
-	public void reset(Input input);
-	
-	public boolean addTransition(Transition transition);
-	
-	public Iterable<Transition> getTransitions();
-	
-	default GrammarSlot withId(int id) { return this; }
-	
-	public int getId();
+	void reset();
 	
 }

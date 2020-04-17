@@ -27,11 +27,12 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 
 public class ReturnTransition extends AbstractTransition {
 	
@@ -43,25 +44,14 @@ public class ReturnTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-	   Object value = parser.evaluate(expression, parser.getEmptyEnvironment());
-	   ((EndGrammarSlot) dest).execute(parser, u, i, node, value);
-	}
-
-	@Override
 	public String getLabel() {
 		return expression.toString();
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		Object value = parser.evaluate(expression, env);
-		((EndGrammarSlot) dest).execute(parser, u, i, node, value);
-	}
-
-	@Override
-	public String getConstructorCode() {
-		return null;
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+		Object value = runtime.evaluate(expression, env, input);
+		((EndGrammarSlot) dest).execute(input, u, result, value, runtime);
 	}
 
 }

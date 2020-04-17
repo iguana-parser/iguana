@@ -27,19 +27,20 @@
 
 package org.iguana.traversal;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import iguana.regex.matcher.Matcher;
+import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.grammar.condition.ContextFreeCondition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.condition.SlotAction;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.regex.matcher.Matcher;
-import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.util.Input;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.gss.GSSNode;
+import org.iguana.result.Result;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotAction> {
 
@@ -54,26 +55,16 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 	}
 	
 	@Override
-	public SlotAction visit(ContextFreeCondition condition) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public SlotAction visit(DataDependentCondition condition) {
 		return new SlotAction() {
-			
-			@Override
-			public boolean execute(Input input, GSSNode gssNode, int inputIndex) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public boolean execute(Input input, GSSNode gssNode, int inputIndex, IEvaluatorContext ctx) {
-				Object value = condition.getExpression().interpret(ctx);
-				if (!(value instanceof Boolean)) 
-					throw new RuntimeException("Data dependent condition should evaluate to a boolean value."); 
-				return (!(Boolean) value);
-			}
+
+            @Override
+            public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                Object value = condition.getExpression().interpret(ctx, input);
+                if (!(value instanceof Boolean))
+                    throw new RuntimeException("Data dependent condition should evaluate to a boolean value.");
+                return (!(Boolean) value);
+            }
 			
 			@Override
 			public String toString() {
@@ -84,20 +75,41 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
 	@Override
 	public SlotAction visit(PositionalCondition condition) {
-		return cachePositional.computeIfAbsent(condition, c -> create(c));
+		return cachePositional.computeIfAbsent(condition, ToSlotActionConditionVisitor::create);
 	}
 	
 	private static SlotAction create(PositionalCondition condition) {
 		switch (condition.getType()) {				
 			case START_OF_LINE:
-				return (input, node, i) -> !input.isStartOfLine(i);
-			    
+				return new SlotAction() {
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return !input.isStartOfLine(rightExtent);
+                    }
+				};
+
+
 			case END_OF_LINE:
-				return (input, node, i) -> !input.isEndOfLine(i);
-				
+				return new SlotAction() {
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return !input.isEndOfLine(rightExtent);
+                    }
+
+				};
+
 			case END_OF_FILE:
-				return (input, node, i) -> !input.isEndOfFile(i);
-		
+				return new SlotAction() {
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return !input.isEndOfFile(rightExtent);
+                    }
+				};
+
+
 		    default: 
 		    	throw new RuntimeException();
 		}
@@ -115,22 +127,28 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		    case FOLLOW_IGNORE_LAYOUT:		    	
 		    	return new SlotAction() {
 		    		Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) == -1;
+                    }
+
 					@Override
-					public boolean execute(Input input, GSSNode gssNode, int i) { return matcher.match(input, i) == -1; }
-					
-					@Override
-					public String toString() { return condition.toString(); }
+					public String toString() {
+					    return condition.toString();
+					}
 				};
 		    	
 		    case NOT_FOLLOW:
 		    case NOT_FOLLOW_IGNORE_LAYOUT: 
 			    return new SlotAction() {
 			    	Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-			    	
-					@Override
-					public boolean execute(Input input, GSSNode gssNode, int i) { return matcher.match(input, i) >= 0; }
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) >= 0;
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
@@ -141,10 +159,13 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			case NOT_MATCH: 
 				return new SlotAction() {
 					Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-					
-					@Override
-					public boolean execute(Input input, GSSNode node, int i) { return matcher.match(input, node.getInputIndex(), i); }
-					
+
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, leftExtent, rightExtent);
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
@@ -152,10 +173,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			case NOT_PRECEDE: 
 				return new SlotAction() {
 					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
-					
-					@Override
-					public boolean execute(Input input, GSSNode gssNode, int i) { return matcher.match(input, i) >= 0; }
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) >= 0;
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
@@ -163,16 +186,18 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 			case PRECEDE:
 				return new SlotAction() {
 					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
-					
-					@Override
-					public boolean execute(Input input, GSSNode node, int i) { return matcher.match(input, i) == -1; }
-					
+
+                    @Override
+                    public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
+                        return matcher.match(input, rightExtent) == -1;
+                    }
+
 					@Override
 					public String toString() { return condition.toString(); }
 				};
 				
 			default:
-				throw new RuntimeException("Unexpected error occured.");
+				throw new RuntimeException("Unexpected error occurred.");
 		}
 	}
 

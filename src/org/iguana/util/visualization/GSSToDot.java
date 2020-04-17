@@ -27,34 +27,40 @@
 
 package org.iguana.util.visualization;
 
-import static org.iguana.util.visualization.GraphVizUtil.*;
+import iguana.utils.visualization.DotGraph;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
 
-import org.iguana.parser.gss.GSSEdge;
-import org.iguana.parser.gss.GSSNode;
+import java.util.HashMap;
+import java.util.Map;
 
-public class GSSToDot extends ToDot {
-	
-	private StringBuilder sb = new StringBuilder();
-	
-	public void execute(Iterable<GSSNode> set) {
+import static iguana.utils.visualization.DotGraph.newEdge;
+import static iguana.utils.visualization.DotGraph.newNode;
+
+public class GSSToDot {
+
+	private Map<GSSNode<?>, Integer> ids = new HashMap<>();
+
+	public DotGraph execute(Iterable<GSSNode<?>> set) {
+		DotGraph dotGraph = new DotGraph();
 		
-		for(GSSNode gssNode : set) {
-			
-			sb.append("\"" + getId(gssNode) + "\"" + String.format(GSS_NODE, gssNode.toString()) + "\n");
-			
-			for(GSSEdge edge : gssNode.getGSSEdges()) {
-				String label = edge.getReturnSlot() == null ? "" : String.format(GSS_EDGE, edge.getReturnSlot()); 
-				sb.append(label + "\"" + getId(gssNode) + "\"" + "->" + "{\"" + getId(edge.getDestination()) + "\"}" + "\n");				
+		for(GSSNode<?> gssNode : set) {
+			dotGraph.addNode(newNode(getId(gssNode), gssNode.toString()));
+
+			for(GSSEdge<?> edge : gssNode.getGSSEdges()) {
+				DotGraph.Edge dotEdge = newEdge(getId(gssNode), getId(edge.getDestination()));
+				if (edge.getReturnSlot() != null) {
+					dotEdge.setLabel(edge.getReturnSlot().toString());
+				}
+				dotGraph.addEdge(dotEdge);
 			}
 		}
+
+		return dotGraph;
 	}
 
-	private String getId(GSSNode node) {
-		return node.getGrammarSlot() + "" + node.getInputIndex();
-	}
-	
-	public String getString() {
-		return sb.toString();
+	private int getId(GSSNode node) {
+		return ids.computeIfAbsent(node, k -> ids.size() + 1);
 	}
 	
 }

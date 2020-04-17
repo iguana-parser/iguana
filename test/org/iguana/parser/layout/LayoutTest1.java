@@ -27,18 +27,19 @@
 
 package org.iguana.parser.layout;
 
-import static org.junit.Assert.*;
-
+import iguana.regex.Char;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Character;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
 
 /**
  * 
@@ -52,29 +53,31 @@ import org.junit.Test;
 public class LayoutTest1 {
 
 	private static Grammar getGrammar() {
-		Character a = Character.from('a');
-		Character b = Character.from('b');
+		Terminal a = Terminal.from(Char.from('a'));
+		Terminal b = Terminal.from(Char.from('b'));
 		Nonterminal S = Nonterminal.withName("S");
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		
-		Nonterminal L = Nonterminal.withName("L");
+		Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
 		
 		Rule r1 = Rule.withHead(S).addSymbols(A, B).setLayout(L).build();
 		Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
 		Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
-		
-		Rule layout = Rule.withHead(L).addSymbol(Character.from(' ')).build();
-		
-		return Grammar.builder().addRules(r1, r2, r3, layout).build();
+
+		Rule layout = Rule.withHead(L).addSymbol(Terminal.from(Char.from(' '))).build();
+
+		return new LayoutWeaver().transform(Grammar.builder().addRules(r1, r2, r3, layout).build());
 	}
 	
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b");
 		Grammar grammar = getGrammar();
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("S"));
-		assertTrue(result.isParseSuccess());
-	}
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNotNull(result);
+    }
 }

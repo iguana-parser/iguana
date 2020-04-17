@@ -1,21 +1,24 @@
 package org.iguana.grammar.slot.lookahead;
 
-import java.util.Set;
+import iguana.regex.CharRange;
+import iguana.utils.collections.rangemap.IntRangeMap;
+import iguana.utils.collections.rangemap.RangeMapBuilder;
 
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.util.collections.IntRangeTree;
+import java.util.Set;
 
 public class RangeTreeFollowTest implements FollowTest {
 
-	private final IntRangeTree rangeTree = new IntRangeTree();
+	private IntRangeMap rangeMap;
 	
-	public RangeTreeFollowTest(Set<CharacterRange> set) {
-		set.forEach(r -> rangeTree.insert(r, 1));
+	public RangeTreeFollowTest(Set<CharRange> set) {
+		RangeMapBuilder<Integer> builder = new RangeMapBuilder<>();
+		set.forEach(r -> builder.put(r, 1));
+		rangeMap = builder.buildIntRangeMap();
 	}
 	
 	@Override
 	public boolean test(int v) {
-		return rangeTree.get(v) == 1;
+		return rangeMap.get(v) == 1;
 	}
 
 }

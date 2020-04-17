@@ -30,24 +30,11 @@ package org.iguana.datadependent.env;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iguana.util.Input;
-
 public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
-	
-	private final Input input;
 	
 	private Environment env;
 	
 	private Map<String, Object> global;
-	
-	public AbstractEvaluatorContext(Input input) {
-		this.input = input;
-	}
-	
-	@Override
-	public Input getInput() {
-		return this.input;
-	}
 
 	@Override
 	public Environment getEnvironment() {
@@ -72,7 +59,7 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 
 	@Override
 	public void declareVariable(String name, Object value) {
-		env = env.declare(name, value);
+		env = env._declare(name, value);
 	}
 
 	@Override
@@ -121,6 +108,26 @@ public abstract class AbstractEvaluatorContext implements IEvaluatorContext {
 			return null;
 		
 		return global.get(name);
+	}
+
+	@Override
+	public void declareVariable(Object value) {
+		env = env._declare(value);
+	}
+
+	@Override
+	public void declareVariables(Object[] values) {
+		env = env.declare(values);
+	}
+
+	@Override
+	public void storeVariable(int i, Object value) {
+		env = env.store(i, value);
+	}
+
+	@Override
+	public Object lookupVariable(int i) {
+		return env.lookup(i);
 	}
 	
 }

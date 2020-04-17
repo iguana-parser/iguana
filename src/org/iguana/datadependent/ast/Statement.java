@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
@@ -34,7 +35,7 @@ public abstract class Statement extends AbstractAST {
 	
 	private static final long serialVersionUID = 1L;
 
-	static public class Expression extends Statement {
+	public static class Expression extends Statement {
 
 		private static final long serialVersionUID = 1L;
 		
@@ -49,16 +50,11 @@ public abstract class Statement extends AbstractAST {
 		}
 		
 		@Override
-		public Object interpret(IEvaluatorContext ctx) {
-			exp.interpret(ctx);
+		public Object interpret(IEvaluatorContext ctx, Input input) {
+			exp.interpret(ctx, input);
 			return null;
 		}
-		
-		@Override
-		public String getConstructorCode() {
-			return "AST.stat(" + exp.getConstructorCode() + ")";
-		}
-		
+
 		@Override
 		public String toString() {
 			return exp.toString();
@@ -71,7 +67,7 @@ public abstract class Statement extends AbstractAST {
 		
 	}
 	
-	static public class VariableDeclaration extends Statement {
+	public static class VariableDeclaration extends Statement {
 		
 		private static final long serialVersionUID = 1L;
 		
@@ -86,14 +82,9 @@ public abstract class Statement extends AbstractAST {
 		}
 
 		@Override
-		public Object interpret(IEvaluatorContext ctx) {
-			decl.interpret(ctx);
+		public Object interpret(IEvaluatorContext ctx, Input input) {
+			decl.interpret(ctx, input);
 			return null;
-		}
-		
-		@Override
-		public String getConstructorCode() {
-			return "AST.varDeclStat(" + decl.getConstructorCode() + ")";
 		}
 		
 		@Override

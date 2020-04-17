@@ -58,12 +58,12 @@ public class PositionalCondition extends Condition {
 		
 		return type == other.type;
 	}
-	
+
 	@Override
-	public String getConstructorCode() {
-		return "new PositionalCondition(" + type.name() + ")";
+	public int hashCode() {
+		return type.hashCode();
 	}
-	
+
 	@Override
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);

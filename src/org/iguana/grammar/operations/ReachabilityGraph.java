@@ -27,38 +27,12 @@
 
 package org.iguana.grammar.operations;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReachabilityGraph {
 
@@ -94,12 +68,12 @@ public class ReachabilityGraph {
 	public Set<Nonterminal> getReachableNonterminals(Nonterminal nt) {
 		return reachabilityGraph.get(nt);
 	}
-	
-	/**
+
+	/*
 	 * 
 	 * Calculate the set of nonterminals that are reachable via the alternates of A.
 	 * In other words, if A is a nonterminal, reachable nonterminals are all the B's such as
-	 * A =>* alpha B gamma. Note that this method does not calculate direct-nullable reachable
+	 * A =&gt;* alpha B gamma. Note that this method does not calculate direct-nullable reachable
 	 * nonterminals.
 	 * 
 	 */
@@ -170,16 +144,6 @@ public class ReachabilityGraph {
 		}
 
 		@Override
-		public Boolean visit(Character symbol) {
-			return false;
-		}
-
-		@Override
-		public Boolean visit(CharacterRange symbol) {
-			return false;
-		}
-
-		@Override
 		public Boolean visit(Code symbol) {
 			return symbol.getSymbol().accept(this);
 		}
@@ -187,16 +151,6 @@ public class ReachabilityGraph {
 		@Override
 		public Boolean visit(Conditional symbol) {
 			return symbol.getSymbol().accept(this);
-		}
-
-		@Override
-		public Boolean visit(EOF symbol) {
-			return false;
-		}
-
-		@Override
-		public Boolean visit(Epsilon symbol) {
-			return false;
 		}
 
 		@Override
@@ -279,7 +233,12 @@ public class ReachabilityGraph {
 			return changed;
 		}
 
-	}
+        @Override
+        public Boolean visit(Start start) {
+            return start.getNonterminal().accept(this);
+        }
+
+    }
 	
 	private static boolean add(Nonterminal a, Nonterminal nonterminal, Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
 		boolean changed = false;

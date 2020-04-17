@@ -27,23 +27,29 @@
 
 package org.iguana.grammar.condition;
 
+import iguana.utils.input.Input;
+import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.util.Input;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 
 
-/**
- * 
- * @author Ali Afroozeh
- *
- */
-@FunctionalInterface
 public interface Conditions {
+
+    default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int leftExtent, int rightExtent, IguanaRuntime<T> runtime) {
+        return execute(input, slot, u, leftExtent, rightExtent, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
+    }
+
+    <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int leftExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime);
+
+	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int inputIndex, IguanaRuntime<T> runtime) {
+        return execute(input, slot, u, inputIndex, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
+    }
 	
-	public boolean execute(Input input, GSSNode u, int i);
-	
-	default boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
-		return execute(input, u, i);
-	}
-	
+	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int inputIndex, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+        return execute(input, slot, u, inputIndex, inputIndex, ctx, runtime);
+    }
+
 }

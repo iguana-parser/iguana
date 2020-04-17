@@ -26,30 +26,23 @@
  */
 
 package org.iguana.parser.datadependent.precedence;
-import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+
+import iguana.regex.Char;
+import iguana.regex.Seq;
+import iguana.utils.input.Input;
+import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Associativity;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.PrecedenceLevel;
-import org.iguana.grammar.symbol.Recursion;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.junit.Assert;
-import org.junit.Test;
+import static junit.framework.TestCase.assertNotNull;
+import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("unused")
 public class Test9_1 {
@@ -63,11 +56,11 @@ Grammar.builder()
 // $default$ ::=  {UNDEFINED,-1,NON_REC} PREC(1,1) 
 .addRule(Rule.withHead(Nonterminal.builder("$default$").build()).setLayoutStrategy(NO_LAYOUT).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // E ::= E ('+') E  {LEFT,1,LEFT_RIGHT_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Seq.builder(Char.builder(43).build()).build()).build()).addSymbol(Nonterminal.builder("E").build()).setRecursion(Recursion.LEFT_RIGHT_REC).setAssociativity(Associativity.LEFT).setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // E ::= ('a')  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Sequence.builder(Character.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("E").build()).addSymbol(Terminal.builder(Seq.builder(Char.builder(97).build()).build()).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 // S ::= E*  {UNDEFINED,-1,NON_REC} PREC(1,1) 
-.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Star.builder(Nonterminal.builder("E").build()).addSeparators(Arrays.asList(Terminal.builder(Sequence.builder(Character.builder(59).build()).build()).build())).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
+.addRule(Rule.withHead(Nonterminal.builder("S").build()).addSymbol(Star.builder(Nonterminal.builder("E").build()).addSeparators(Arrays.asList(Terminal.builder(Seq.builder(Char.builder(59).build()).build()).build())).build()).setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED).setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.from(1,1,-1,false,false,false,false)).build())
 .build();
          grammar = new EBNFToBNF().transform(grammar);
          System.out.println(grammar);
@@ -76,18 +69,11 @@ Grammar.builder()
          System.out.println(grammar.toStringWithOrderByPrecedence());
 
          Input input = Input.fromString("a+a;a+a+a+a;a");
-         GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
 
-         // Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/", graph);
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
 
-         GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-         ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
-
-         Assert.assertTrue(result.isParseSuccess());
-
-         // Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/precedence/",
-         //                   result.asParseSuccess().getRoot(), input);
-
-         Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+        assertNotNull(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
     }
 }
