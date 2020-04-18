@@ -74,13 +74,11 @@ public class DFAMatcher implements Matcher {
 
 	@Override
 	public int match(Input input, int inputIndex) {
-
-		int length = 0;
-		int maximumMatched = -1;
+		int maximumMatchedIndex = -1;
 		int state = start;
 
 		if (finalStates[state])
-			maximumMatched = 0;
+			maximumMatchedIndex = inputIndex;
 
 		for (int i = inputIndex; i < input.length(); i++) {
 			state = table[state].get(input.charAt(i));
@@ -88,13 +86,11 @@ public class DFAMatcher implements Matcher {
 			if (state == ERROR_STATE)
 				break;
 
-			length++;
-
 			if (finalStates[state])
-				maximumMatched = length;
+				maximumMatchedIndex = i + 1;
 		}
 
-		return maximumMatched;
+		return maximumMatchedIndex;
 	}
 
 }

@@ -71,16 +71,16 @@ public class TerminalGrammarSlot implements GrammarSlot {
         }
 
 		if (node == null) {
-			int length = matcher.match(input, i);
-			if (length < 0) {
+			int endIndex = matcher.match(input, i);
+			if (endIndex < 0) {
 				node = null;
 				terminalNodes.put(i, failure);
 			} else {
-                if (postConditions.execute(input, slot, gssNode, i, i + length, runtime)) {
+                if (postConditions.execute(input, slot, gssNode, i, endIndex, runtime)) {
                     terminalNodes.put(i, failure);
                     return null;
                 }
-				node = runtime.getResultOps().base(this, i, i + length);
+				node = runtime.getResultOps().base(this, i, endIndex);
 				terminalNodes.put(i, node);
 			}
 		}

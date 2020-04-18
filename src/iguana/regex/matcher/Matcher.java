@@ -41,15 +41,15 @@ public interface Matcher {
 	
 	int match(Input input, int i);
 	
-	default boolean match(Input input) {
-		return match(input, 0) == input.length() - 1;
-	}
+//	default boolean match(Input input) {
+//		return match(input, 0) == input.length() - 1;
+//	}
 	
-	default boolean matchPrefix(Input input) {
-		return match(input, 0) > -1;
-	}
+//	default boolean matchPrefix(Input input) {
+//		return match(input, 0) > -1;
+//	}
 	
 	default boolean match(Input input, int start, int end) {
-		return match(input, start) == (end - start);
+		return match(input, start) == end;
 	}
 }
