@@ -11,7 +11,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.*;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.ParserResultOps;
@@ -167,9 +166,9 @@ public class IguanaRuntime<T extends Result> {
     public GSSEdge<T> createGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> gssNode, Environment env) {
         if (result.isDummy()) {
             if (env.isEmpty()) {
-                return gssNode != null? new DummyGSSEdge<>(returnSlot, gssNode) : new CyclicDummyGSSEdges<>();
+                return gssNode != null ? new DummyGSSEdge<>(returnSlot, gssNode) : new CyclicDummyGSSEdges<>();
             } else {
-                return gssNode != null? new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env) : new CyclicDummyGSSEdgesWithEnv<>(env);
+                return gssNode != null ? new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env) : new CyclicDummyGSSEdgesWithEnv<>(env);
             }
         }
 
