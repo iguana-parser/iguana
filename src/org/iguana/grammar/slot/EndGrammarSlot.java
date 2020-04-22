@@ -73,8 +73,11 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
 		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
-		if (nonterminal.testFollow(input.charAtIgnoreLayout(rightExtent)))
-            u.pop(input, this, result, value, runtime);
+		boolean anyMatchTestFollow = input.nextSymbols(rightExtent)
+				.stream()
+				.anyMatch(nonterminal::testFollow);
+		if (anyMatchTestFollow) {
+			u.pop(input, this, result, value, runtime);
+		}
 	}
-
 }

@@ -3,6 +3,9 @@ package iguana.regex.matcher;
 import iguana.utils.input.GraphInput;
 import iguana.utils.input.Input;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GraphMatcher implements Matcher {
     private String label;
 
@@ -11,22 +14,20 @@ public class GraphMatcher implements Matcher {
     }
 
     @Override
-    public int match(Input input, int vertexIndex) {
+    public List<Integer> match(Input input, int vertexIndex) {
         if (input instanceof GraphInput) {
             GraphInput graphInput = (GraphInput) input;
             return graphInput.getDestVertex(vertexIndex, label);
-        } else {
-            return -1;
         }
+        return new ArrayList<>();
     }
 
     @Override
     public boolean match(Input input, int startIndex, int endIndex) {
         if (input instanceof GraphInput) {
             GraphInput graphInput = (GraphInput) input;
-            return graphInput.getDestVertex(startIndex, label) == endIndex;
-        } else {
-            return false;
+            return graphInput.getDestVertex(startIndex, label).contains(endIndex);
         }
+        return false;
     }
 }

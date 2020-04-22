@@ -1,6 +1,8 @@
 package iguana.utils.input;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 
 public class DefaultInput extends AbstractInput {
 
@@ -12,9 +14,9 @@ public class DefaultInput extends AbstractInput {
     }
 
     @Override
-    public int charAt(int index) {
-        if (index == s.length()) return EOF;
-        return s.charAt(index);
+    public List<Integer> nextSymbols(int index) {
+        if (index == s.length()) return Collections.singletonList(EOF);
+        return Collections.singletonList((int) s.charAt(index));
     }
 
     @Override

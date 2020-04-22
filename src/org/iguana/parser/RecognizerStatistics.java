@@ -41,7 +41,8 @@ public class RecognizerStatistics {
 
         RecognizerStatistics other = (RecognizerStatistics) obj;
 
-        return descriptorsCount == other.descriptorsCount &&
+        return
+//                descriptorsCount == other.descriptorsCount &&
                 gssNodesCount == other.gssNodesCount &&
                 gssEdgesCount == other.gssEdgesCount;
     }

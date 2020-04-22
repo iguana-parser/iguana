@@ -3,6 +3,7 @@ package iguana.utils.input;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class UTF32Input extends AbstractInput {
@@ -19,9 +20,8 @@ class UTF32Input extends AbstractInput {
         this.length = length;
     }
 
-    @Override
-    public int charAt(int index) {
-        return characters[index];
+    public List<Integer> nextSymbols(int index) {
+        return Collections.singletonList(characters[index]);
     }
 
     /**
@@ -52,21 +52,20 @@ class UTF32Input extends AbstractInput {
     /**
      * Returns a string representation of this input instance from the
      * given start (including) and end (excluding) indices.
-     *
      */
     public String subString(int start, int end) {
         List<Character> charList = new ArrayList<>();
 
-        for(int i = start; i < end; i++) {
+        for (int i = start; i < end; i++) {
             if (characters[i] == -1) continue;
             char[] chars = Character.toChars(characters[i]);
-            for(char c : chars) {
+            for (char c : chars) {
                 charList.add(c);
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        for(char c : charList) {
+        for (char c : charList) {
             sb.append(c);
         }
 

@@ -38,6 +38,9 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TerminalGrammarSlot implements GrammarSlot {
 	
 	private final Terminal terminal;
@@ -56,12 +59,12 @@ public class TerminalGrammarSlot implements GrammarSlot {
         this.matcher = factory.getMatcher(terminal.getRegularExpression());
     }
 
-	public <T extends Result> T getResult(Input input, int i, BodyGrammarSlot slot, GSSNode<T> gssNode, IguanaRuntime<T> runtime) {
+	public <T extends Result> List<T> getResult(Input input, int i, BodyGrammarSlot slot, GSSNode<T> gssNode, IguanaRuntime<T> runtime) {
 	    if (terminalNodes == null) {
 	        terminalNodes = new OpenAddressingIntHashMap<>();
         }
-		Object node = terminalNodes.get(i);
-	    if (node == failure) {
+		Object nodes = terminalNodes.get(i);
+	    if (nodes == failure) {
 	        return null;
         }
 
@@ -70,21 +73,26 @@ public class TerminalGrammarSlot implements GrammarSlot {
             return null;
         }
 
-		if (node == null) {
-			int endIndex = matcher.match(input, i);
-			if (endIndex < 0) {
-				node = null;
+		if (nodes == null) {
+			List<Integer> endIndexes = matcher.match(input, i);
+
+			if (endIndexes.isEmpty()) {
+				nodes = null;
 				terminalNodes.put(i, failure);
 			} else {
-                if (postConditions.execute(input, slot, gssNode, i, endIndex, runtime)) {
-                    terminalNodes.put(i, failure);
-                    return null;
-                }
-				node = runtime.getResultOps().base(this, i, endIndex);
-				terminalNodes.put(i, node);
+				final List<T> curNodes = new ArrayList<>();
+				for (Integer endIndex: endIndexes) {
+					if (postConditions.execute(input, slot, gssNode, i, endIndex, runtime)) {
+						terminalNodes.put(i, failure);
+						return null;
+					}
+					curNodes.add(runtime.getResultOps().base(this, i, endIndex));
+				}
+				nodes = curNodes;
+				terminalNodes.put(i, nodes);
 			}
 		}
-		return (T) node;
+		return (List<T>) nodes;
 	}
 
 	public int countTerminalNodes() {

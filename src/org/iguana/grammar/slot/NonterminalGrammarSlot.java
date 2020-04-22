@@ -49,6 +49,7 @@ import org.iguana.util.ParserLogger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
@@ -82,6 +83,12 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
     private List<BodyGrammarSlot> getFirstSlots(int v) {
         return lookAheadTest.get(v);
+    }
+
+    private List<BodyGrammarSlot> getFirstSlots(List<Integer> v) {
+        return v.stream()
+                .flatMap(t -> lookAheadTest.get(t).stream())
+                .collect(Collectors.toList());
     }
 
     public void setLookAheadTest(RangeMap<BodyGrammarSlot> lookAheadTest) {
@@ -166,7 +173,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
         if (gssNode == null) {
 
-            List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
+            List<BodyGrammarSlot> firstSlots = getFirstSlots(input.nextSymbols(i));
             if (firstSlots == null || firstSlots.isEmpty()) {
                 return;
             }

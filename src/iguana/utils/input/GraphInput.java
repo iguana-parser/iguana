@@ -1,6 +1,7 @@
 package iguana.utils.input;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GraphInput {
     private List<Edge>[] adjacencyList;
@@ -21,30 +22,28 @@ public class GraphInput {
         return finalVertices.contains(v);
     }
 
-    public int getDestVertex(int v, String t) {
-        for (Edge edge : adjacencyList[v]) {
-            if (edge.getTag().equals(t)) {
-                return edge.getDestVertex();
-            }
+    public List<Integer> getDestVertex(int v, String t) {
+        return adjacencyList[v].stream()
+                .filter(edge -> edge.getTag().equals(t))
+                .map(Edge::getDestVertex)
+                .collect(Collectors.toList());
+    }
+
+    private class Edge {
+        private String tag;
+        private int destVertex;
+
+        public Edge(String tag, int dest) {
+            this.tag = tag;
+            this.destVertex = dest;
         }
-        return -1;
-    }
-}
 
-class Edge {
-    private String tag;
-    private int destVertex;
+        public int getDestVertex() {
+            return this.destVertex;
+        }
 
-    public Edge(String tag, int dest) {
-        this.tag = tag;
-        this.destVertex = dest;
-    }
-
-    public int getDestVertex() {
-        return this.destVertex;
-    }
-
-    public String getTag() {
-        return this.tag;
+        public String getTag() {
+            return this.tag;
+        }
     }
 }

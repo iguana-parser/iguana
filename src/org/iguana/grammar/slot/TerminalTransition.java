@@ -35,6 +35,8 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
+import java.util.List;
+
 public class TerminalTransition extends AbstractTransition {
 
     protected final TerminalGrammarSlot slot;
@@ -71,22 +73,25 @@ public class TerminalTransition extends AbstractTransition {
 		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 
-		T cr = slot.getResult(input, i, origin, u, runtime);
+		List<T> crs = slot.getResult(input, i, origin, u, runtime);
 		
-		if (cr == null) {
+		if (crs == null) {
 			runtime.recordParseError(i, origin, u);
 			return;
 		}
 
 		if (dest.getLabel() != null)
-			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), crs);
 
-		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getIndex(), runtime.getEvaluatorContext(), runtime))
-			return;
+		for (T cr: crs) {
+			if (!postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getIndex(), runtime.getEvaluatorContext(), runtime)) {
+				T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
 
-		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
-				
-		dest.execute(input, u, n, runtime.getEnvironment(), runtime);
+//				dest.execute(input, u, n, runtime.getEnvironment(), runtime);
+				runtime.scheduleDescriptor(dest, u, n, runtime.getEnvironment());
+
+			}
+		}
 	}
 	
 }

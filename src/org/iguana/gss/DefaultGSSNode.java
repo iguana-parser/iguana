@@ -148,8 +148,12 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		}
 	}
 
-	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
-		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getIndex()))) {
+	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot,
+									  GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
+		boolean anyMatchTestFollow = input.nextSymbols(poppedElement.getIndex())
+				.stream()
+				.anyMatch(returnSlot::testFollow);
+		if (anyMatchTestFollow) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
 			if (result != null) {
 				runtime.scheduleDescriptor(returnSlot, destination, result, env);
@@ -175,7 +179,10 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
-		if (!returnSlot.testFollow(input.charAt(node.getIndex()))) return;
+		boolean anyMatchTestFollow = input.nextSymbols(node.getIndex())
+				.stream()
+				.anyMatch(returnSlot::testFollow);
+		if (!anyMatchTestFollow) return;
 
 		T result = addDescriptor(input, this, node, edge, returnSlot, runtime);
 		if (result != null) {

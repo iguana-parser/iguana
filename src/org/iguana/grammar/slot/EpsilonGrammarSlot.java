@@ -35,6 +35,8 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
+import java.util.List;
+
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private TerminalGrammarSlot epsilonSlot;
@@ -53,8 +55,15 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
-		if (getNonterminal().testFollow(input.charAtIgnoreLayout(i)))
-            u.pop(input, this, epsilonSlot.getResult(input, i, this, u, runtime), value, runtime);
+		boolean anyMatchTestFollow = input.nextSymbols(i)
+				.stream()
+				.anyMatch(getNonterminal()::testFollow);
+		if (anyMatchTestFollow) {
+			List<T> res = epsilonSlot.getResult(input, i, this, u, runtime);
+
+			assert res.size() == 1;
+			u.pop(input, this, res.get(0), value, runtime);
+		}
 	}
 
 }

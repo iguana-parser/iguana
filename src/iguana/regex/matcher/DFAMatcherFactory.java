@@ -32,6 +32,8 @@ import iguana.regex.CharRange;
 import iguana.regex.Epsilon;
 import iguana.regex.RegularExpression;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,34 +57,35 @@ public class DFAMatcherFactory implements MatcherFactory {
 
     @Deprecated
     public Matcher getBackwardsMatcher(RegularExpression regex) {
-
-        if (regex instanceof Char)
-            return characterBackwardsMatcher((Char) regex);
-
-        if (regex instanceof CharRange)
-            return characterRangeBackwardsMatcher((CharRange) regex);
-
+//
+//        if (regex instanceof Char)
+//            return characterBackwardsMatcher((Char) regex);
+//
+//        if (regex instanceof CharRange)
+//            return characterRangeBackwardsMatcher((CharRange) regex);
+//
         return cache.computeIfAbsent(regex, DFABackwardsMatcher::new);
     }
 
     public static Matcher characterMatcher(Char c) {
-        return (input, i) -> input.charAt(i) == c.getValue() ? i + 1 : -1;
+        return (input, i) -> input.nextSymbols(i).get(0) == c.getValue() ? Collections.singletonList(i + 1) : new ArrayList<>();
     }
 
-    public static Matcher characterBackwardsMatcher(Char c) {
-        return (input, i) -> i == 0 ? -1 : (input.charAt(i - 1) == c.getValue() ? 1 : -1);
-    }
+//    public static Matcher characterBackwardsMatcher(Char c) {
+//        return (input, i) -> i == 0 ? -1 : (input.charAt(i - 1) == c.getValue() ? 1 : -1);
+//    }
 
     public static Matcher characterRangeMatcher(CharRange range) {
-        return (input, i) -> input.charAt(i) >= range.getStart() && input.charAt(i) <= range.getEnd() ? i + 1 : -1;
+        return (input, i) -> input.nextSymbols(i).get(0) >= range.getStart() && input.nextSymbols(i).get(0) <= range.getEnd() ?
+                Collections.singletonList(i + 1) : new ArrayList<>();
     }
 
-    public static Matcher characterRangeBackwardsMatcher(CharRange range) {
-        return (input, i) -> i == 0 ? -1 : (input.charAt(i - 1) >= range.getStart() && input.charAt(i - 1) <= range.getEnd() ? 1 : -1);
-    }
+//    public static Matcher characterRangeBackwardsMatcher(CharRange range) {
+//        return (input, i) -> i == 0 ? -1 : (input.charAt(i - 1) >= range.getStart() && input.charAt(i - 1) <= range.getEnd() ? 1 : -1);
+//    }
 
     public static Matcher epsilonMatcher() {
-        return (input, i) -> i;
+        return (input, i) -> Collections.singletonList(i);
     }
 
 }
