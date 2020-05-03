@@ -95,6 +95,7 @@ public class Configuration {
 	}
 	
 	public enum MatcherType {
+    	GRAPH,
 		DFA,
 		JAVA_REGEX
 	}

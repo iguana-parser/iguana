@@ -3,7 +3,7 @@
     <Parser>
         <Lookahead>1</Lookahead>
         <GSSLookupImpl>HASH_MAP</GSSLookupImpl>
-        <MatcherType>DFA</MatcherType>
+        <MatcherType>Graph</MatcherType>
         <HashMapImpl>INT_OPEN_ADDRESSING</HashMapImpl>
         <EnvironmentImpl>INT_ARRAY</EnvironmentImpl>
     </Parser>

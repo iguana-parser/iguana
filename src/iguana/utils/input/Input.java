@@ -36,7 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static java.lang.Character.*;
+import static java.lang.Character.isHighSurrogate;
 
 
 /**
@@ -158,4 +158,8 @@ public interface Input {
     boolean isEndOfLine(int inputIndex);
 
     boolean isEndOfFile(int inputIndex);
+
+    List<Integer> getStartVertices();
+
+    List<Integer> getFinalVertices();
 }

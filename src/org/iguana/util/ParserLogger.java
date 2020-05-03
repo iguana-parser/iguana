@@ -3,7 +3,6 @@ package org.iguana.util;
 import iguana.utils.logging.IguanaLogger;
 import iguana.utils.logging.JavaUtilIguanaLogger;
 import iguana.utils.logging.LogLevel;
-import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
@@ -37,7 +36,7 @@ public class ParserLogger {
 
     private final IguanaLogger logger;
 
-    private boolean logEnabled = false;
+    private boolean logEnabled = true;
 
     public ParserLogger() {
         Configuration config = Configuration.load();

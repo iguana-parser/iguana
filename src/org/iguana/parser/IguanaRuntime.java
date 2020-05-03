@@ -21,6 +21,7 @@ import org.iguana.util.ParserLogger;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class IguanaRuntime<T extends Result> {
 
@@ -68,11 +69,14 @@ public class IguanaRuntime<T extends Result> {
 
         NonterminalGrammarSlot startSymbol = grammarGraph.getStartSlot();
 
-        int inputLength = input.length() - 1;
-
         Environment env = ctx.getEmptyEnvironment();
 
-        StartGSSNode<T> startGSSNode = new StartGSSNode<>(startSymbol, 0);
+
+        List<StartGSSNode<T>> startGSSNodes = input.getStartVertices()
+                .stream()
+                .map(v -> new StartGSSNode<T>(startSymbol, v))
+                .collect(Collectors.toList());
+//        StartGSSNode<T> startGSSNode = new StartGSSNode<>(startSymbol, 0);
 //
 //        if (!global && !map.isEmpty()) {
 //            Object[] arguments = new Object[map.size()];
@@ -90,8 +94,12 @@ public class IguanaRuntime<T extends Result> {
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
 
-        for (BodyGrammarSlot slot : startSymbol.getFirstSlots()) {
-            scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
+        List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
+        Collections.reverse(t);
+        for (BodyGrammarSlot slot : t) {
+            for (StartGSSNode<T> startGSSNode: startGSSNodes) {
+                scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
+            }
         }
 
         while (hasDescriptor()) {
@@ -104,9 +112,17 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
-        T result = startGSSNode.getResult(inputLength);
-        hasParseError = result == null;
-        return result;
+        List<T> results = new ArrayList<>();
+        for (StartGSSNode<T> startGSSNode: startGSSNodes) {
+            for (Integer v: input.getFinalVertices()) {
+                T result = startGSSNode.getResult(v);
+                if (result != null) {
+                    results.add(result);
+                }
+            }
+        }
+        hasParseError = results.isEmpty();
+        return results.get(0);
     }
 
     /**
@@ -114,7 +130,6 @@ public class IguanaRuntime<T extends Result> {
      * inputIndex of the new getParserTree error is greater than the previous one. In
      * other words, we throw away an error if we find an error which happens at
      * the next position of input.
-     *
      */
     public void recordParseError(int i, GrammarSlot slot, GSSNode<T> u) {
         if (i >= this.errorIndex) {

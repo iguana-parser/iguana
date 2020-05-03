@@ -73,6 +73,16 @@ class UTF32Input extends AbstractInput {
     }
 
     @Override
+    public List<Integer> getStartVertices() {
+        return Collections.singletonList(0);
+    }
+
+    @Override
+    public List<Integer> getFinalVertices() {
+        return Collections.singletonList(length - 1);
+    }
+
+    @Override
     public String toString() {
         return subString(0, characters.length - 1);
     }

@@ -29,4 +29,13 @@ public class DefaultInput extends AbstractInput {
         return s.substring(start, end);
     }
 
+    @Override
+    public List<Integer> getStartVertices() {
+        return Collections.singletonList(0);
+    }
+
+    @Override
+    public List<Integer> getFinalVertices() {
+        return Collections.singletonList(length() - 1);
+    }
 }

@@ -77,4 +77,5 @@ public abstract class AbstractInput implements Input {
             throw new IndexOutOfBoundsException("index must be greater than or equal to 0 and smaller than the input length (" + length + ")");
         }
     }
+
 }
