@@ -9,19 +9,20 @@ import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
 import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.*;
-import org.iguana.traversal.exception.CyclicGrammarException;
 
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static java.util.Collections.singletonList;
 import static org.iguana.parsetree.VisitResult.*;
 
 public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
+    private final static Object DUMMY = "null";
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
     private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, VisitResult> convertedNodes;
+
     private final boolean ignoreLayout;
     private ParserResultOps resultOps;
 
@@ -42,9 +43,9 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
             return empty();
         }
         return convertedNodes.computeIfAbsent(node, key -> {
-                    if (node.getLeftExtent() == node.getIndex()) return empty();
+//                    if (node.getLeftExtent() == node.getIndex()) return empty();
                     Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());
-                    return single(terminalNode);
+                    return unpack(single(terminalNode));
                 }
         );
     }
@@ -56,7 +57,15 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
         }
 
         VisitResult result = convertedNodes.get(node);
-        if (result != null) return result;
+        if (result != null) {
+//            if (!visitedNodes.contains(node)) {
+//                result = unpack(result);
+//            }
+            return result;
+        }
+
+        result = single(DUMMY);
+        convertedNodes.put(node, result);
 
         // To guard for cyclic SPPFs
         if (visitedNodes.contains(node)) {
@@ -73,7 +82,8 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                 }
             }
             cycle.add(node.getGrammarSlot().getNonterminal());
-            throw new CyclicGrammarException(cycle);
+//            return node;
+//            throw new CyclicGrammarException(cycle);
         } else {
             visitedNodes.add(node);
         }
@@ -84,7 +94,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                 VisitResult visitResult = packedNode.accept(this);
                 children.addAll(visitResult.accept(createNodeVisitor, packedNode));
             }
-            result = single(parseTreeBuilder.ambiguityNode(children));
+            ((Single) result).setValue(parseTreeBuilder.ambiguityNode(children));
         } else {
             PackedNode packedNode = node.getFirstPackedNode();
             switch (node.getGrammarSlot().getNodeType()) {
@@ -92,13 +102,18 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                 case Layout: {
                     List<T> children = packedNode.accept(this).accept(createNodeVisitor, packedNode);
                     if (children.size() > 1) {
-                        result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
+//                        result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
+                        ((Single) result).setValue(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
                     } else {
                         T child = children.get(0);
                         if (child instanceof MetaSymbolNode) { // Last Plus node propagated up
-                            result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+//                            result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                            ((Single) result).setValue(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(),
+                                    children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+
                         } else {
-                            result = single(children.get(0));
+//                            result = single(children.get(0));
+                            ((Single) result).setValue(children.get(0));
                         }
                     }
                     break;
@@ -122,9 +137,12 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                     if (visitResult instanceof VisitResult.List && visitResult.getValues().size() == 1 && visitResult.getValues().get(0) instanceof VisitResult.EBNF) {
                         VisitResult.EBNF ebnfChild = (VisitResult.EBNF) visitResult.getValues().get(0);
                         T ebnfResult = parseTreeBuilder.metaSymbolNode(ebnfChild.getSymbol(), (List<T>) ebnfChild.getValues(), node.getLeftExtent(), node.getRightExtent());
-                        result = single(parseTreeBuilder.metaSymbolNode(symbol, singletonList(ebnfResult), node.getLeftExtent(), node.getRightExtent()));
+//                        result = single(parseTreeBuilder.metaSymbolNode(symbol, singletonList(ebnfResult), node.getLeftExtent(), node.getRightExtent()));
+                        ((Single) result).setValue(parseTreeBuilder.metaSymbolNode(symbol, singletonList(ebnfResult), node.getLeftExtent(), node.getRightExtent()));
+
                     } else {
-                        result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+//                        result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
+                        ((Single) result).setValue(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(), node.getLeftExtent(), node.getRightExtent()));
                     }
 
                     break;
@@ -132,14 +150,36 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
             }
         }
         visitedNodes.remove(node);
+        result = unpack(result);
         convertedNodes.put(node, result);
         return result;
+    }
+
+    private VisitResult unpack(VisitResult result) {
+        if (result instanceof Single) {
+            return ((Single) result).unpack();
+//        } else if (result instanceof VisitResult.List) {
+//            List <Object> objects = ((VisitResult.List) result).getValues() ;
+//            objects = ((VisitResult.List) result).getValues().stream()
+//                    .map(x -> {
+//                        if (x instanceof Wrapper) {
+//                            return ((Wrapper) x).getValue();
+//                        } else {
+//                            return x;
+//                        }
+//                    })
+//                    .collect(Collectors.toList());
+//            return new VisitResult.List(objects);
+//        } else {
+        }
+        return result;
+
     }
 
     @Override
     public VisitResult visit(IntermediateNode node) {
         VisitResult result = convertedNodes.get(node);
-        if (result != null) return result;
+        if (result != null) return unpack(result);
 
         if (node.isAmbiguous()) {
             result = empty();
@@ -150,6 +190,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
             PackedNode packedNode = node.getFirstPackedNode();
             result = packedNode.accept(this);
         }
+        result = unpack(result);
         convertedNodes.put(node, result);
         return result;
     }
@@ -166,7 +207,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
         // It seems that we can simplify the SPPF to ParseTree creation by checking the packed node's node type
         // and may be able to get rid of VisitResult hierarchy
         if (node.getGrammarSlot().getRule().getHead().getNodeType() != NonterminalNodeType.Plus &&
-            node.getGrammarSlot().getRule().getHead().getNodeType() != NonterminalNodeType.Star) {
+                node.getGrammarSlot().getRule().getHead().getNodeType() != NonterminalNodeType.Star) {
             if (left instanceof EBNF) {
                 List<Object> values = new ArrayList<>();
                 values.add(left);
@@ -179,7 +220,11 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
             }
         }
 
-        return left.merge(right);
+        return unpack(left.merge(right));
+    }
+
+    public VisitResult getResult(NonterminalNode node) {
+        return convertedNodes.get(node);
     }
 
 }

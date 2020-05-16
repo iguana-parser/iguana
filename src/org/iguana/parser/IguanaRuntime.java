@@ -59,7 +59,7 @@ public class IguanaRuntime<T extends Result> {
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
     }
 
-    public Result run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+    public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -72,10 +72,13 @@ public class IguanaRuntime<T extends Result> {
         Environment env = ctx.getEmptyEnvironment();
 
 
-        List<StartGSSNode<T>> startGSSNodes = input.getStartVertices()
+        List<DefaultGSSNode<T>> startGSSNodes = input.getStartVertices()
                 .stream()
-                .map(v -> new StartGSSNode<T>(startSymbol, v))
+                .map(v -> new DefaultGSSNode<T>(startSymbol, v))
                 .collect(Collectors.toList());
+
+        startGSSNodes.forEach(node -> startSymbol.addStartGSSNode(node, node.getInputIndex()));
+//        startSymbol.addStartGSSNode(startGSSNodes.get(0), 0);
 //        StartGSSNode<T> startGSSNode = new StartGSSNode<>(startSymbol, 0);
 //
 //        if (!global && !map.isEmpty()) {
@@ -95,9 +98,9 @@ public class IguanaRuntime<T extends Result> {
         logger.reset();
 
         List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
-        Collections.reverse(t);
+//        Collections.reverse(t);
         for (BodyGrammarSlot slot : t) {
-            for (StartGSSNode<T> startGSSNode: startGSSNodes) {
+            for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
                 scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
             }
         }
@@ -112,17 +115,24 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
-        List<T> results = new ArrayList<>();
-        for (StartGSSNode<T> startGSSNode: startGSSNodes) {
+//        List<T> results = new ArrayList<>();
+        Map<Pair, Result> results = new HashMap<>();
+
+        for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
             for (Integer v: input.getFinalVertices()) {
                 T result = startGSSNode.getResult(v);
+//                Iterable<T> result = startGSSNode.getPoppedElements();
                 if (result != null) {
-                    results.add(result);
+                    results.put(new Pair(startGSSNode.getInputIndex(), v), result);
                 }
             }
         }
         hasParseError = results.isEmpty();
-        return results.get(0);
+        if (hasParseError) {
+            return null;
+        }
+
+        return results;
     }
 
     /**
@@ -323,3 +333,5 @@ public class IguanaRuntime<T extends Result> {
         return new double[]{min, max, (double) sum / count};
     }
 }
+
+

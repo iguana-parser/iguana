@@ -92,7 +92,7 @@ public class ParserLogger {
             if (data != null) {
                 logger.log("GSS node added %s(%s)", node, data);
             } else {
-                logger.log("GSS node added %s", node, data);
+                logger.log("GSS node added %s --- %s", node, node.getClass().getSimpleName());
             }
         }
     }

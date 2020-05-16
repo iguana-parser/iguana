@@ -1,22 +1,16 @@
 package org.iguana;
 
-import iguana.utils.input.Edge;
-import iguana.utils.input.GraphInput;
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.exception.AmbiguityException;
 import org.iguana.traversal.exception.CyclicGrammarException;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.RecognizerStatisticsSerializer;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
@@ -26,7 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -192,69 +188,5 @@ public class GrammarTest {
                 getTests(currentDir + "/" + childDir, tests);
             }
         }
-    }
-
-    @Test
-    public void testGraphInput() {
-        List<List<Edge>> edges = Arrays.asList(
-                Arrays.asList(
-                        new Edge("a", 1),
-                        new Edge("b", 3)
-                ),
-                Collections.singletonList(
-                        new Edge("a", 2)
-                ),
-                Collections.singletonList(
-                        new Edge("a", 0)
-                ),
-                Collections.singletonList(
-                        new Edge("b", 0)
-                )
-        );
-        Input input = new GraphInput(
-                edges,
-                Collections.singletonList(0),
-                Arrays.asList(0)
-        );
-
-        Grammar grammar;
-        try {
-            grammar = Grammar.load("test/resources/grammars/graph/Test1/grammar.json", "json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("No grammar.json file is present");
-        }
-        IguanaParser parser = new IguanaParser(grammar);
-        GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
-
-        NonterminalNode node = parser.getSPPF(input);
-    }
-
-    @Test
-    public void testGraphInput2() {
-        List<List<Edge>> edges = Arrays.asList(
-                Arrays.asList(
-                        new Edge("a", 1)
-                ),
-                Arrays.asList(
-                        new Edge("a", 1)
-                )
-        );
-        Input input = new GraphInput(
-                edges,
-                Collections.singletonList(0),
-                Arrays.asList(1)
-        );
-
-        Grammar grammar;
-        try {
-            grammar = Grammar.load("test/resources/grammars/graph/Test2/grammar.json", "json");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("No grammar.json file is present");
-        }
-        IguanaParser parser = new IguanaParser(grammar);
-        GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
-
-        NonterminalNode node = parser.getSPPF(input);
-        ParseTreeNode parseTreeNode = parser.getParserTree(input);
     }
 }

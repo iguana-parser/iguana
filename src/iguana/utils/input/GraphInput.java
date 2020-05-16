@@ -2,52 +2,12 @@ package iguana.utils.input;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class GraphInput implements Input {
-    private static final int EOF = -1;
+public abstract class GraphInput implements Input {
 
-    private List<List<Edge>> adjacencyList;
-    private List<Integer> startVertices;
-    private List<Integer> finalVertices;
+    public abstract List<Integer> getDestVertex(int v, String t);
 
-    public GraphInput(List<List<Edge>> adjacencyList, List<Integer> startVertices, List<Integer> finalVertices) {
-        this.adjacencyList = adjacencyList;
-        this.startVertices = startVertices;
-        this.finalVertices = finalVertices;
-    }
-
-    @Override
-    public List<Integer> getStartVertices() {
-        return this.startVertices;
-    }
-
-    @Override
-    public List<Integer> getFinalVertices() {
-        return finalVertices;
-    }
-
-    public boolean isFinal(int v) {
-        return finalVertices.contains(v);
-    }
-
-    public List<Integer> getDestVertex(int v, String t) {
-        return adjacencyList.get(v).stream()
-                .filter(edge -> edge.getTag().equals(t))
-                .map(Edge::getDestVertex)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Integer> nextSymbols(int v) {
-        List<Integer> nextSymbols = adjacencyList.get(v).stream()
-                .map(edge -> (int) edge.getTag().charAt(0))
-                .collect(Collectors.toList());
-        if (isFinal(v)) {
-            nextSymbols.add(EOF);
-        }
-        return nextSymbols;
-    }
+    public abstract boolean isFinal(int v);
 
     @Override
     public int length() {

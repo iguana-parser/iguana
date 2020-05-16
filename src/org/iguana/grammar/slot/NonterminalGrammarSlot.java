@@ -73,6 +73,12 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         this.firstSlots = new ArrayList<>();
     }
 
+    public <T extends Result> void addStartGSSNode(GSSNode<T> gssNode, int index) {
+        if (intGSSNodes == null)
+            intGSSNodes = new OpenAddressingIntHashMap<>();
+        intGSSNodes.put(index, gssNode);
+    }
+
     public void addFirstSlot(BodyGrammarSlot slot) {
         firstSlots.add(slot);
     }

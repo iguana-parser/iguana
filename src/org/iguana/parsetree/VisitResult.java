@@ -5,13 +5,19 @@ import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.sppf.PackedNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class VisitResult {
 
     public abstract MergeResultVisitor<VisitResult> visitor();
+
     public abstract VisitResult merge(VisitResult other);
+
     public abstract <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode);
+
     public abstract java.util.List<Object> getValues();
 
     public static Empty empty() {
@@ -67,11 +73,15 @@ public abstract class VisitResult {
         private Object value;
 
         public Single(Object value) {
-            this.value = value;
+            this.value = new Wrapper(value);
         }
 
         public Object getValue() {
             return value;
+        }
+
+        public void setValue(Object value) {
+            ((Wrapper) this.value).setValue(value);
         }
 
         public VisitResult merge(VisitResult other) {
@@ -86,8 +96,20 @@ public abstract class VisitResult {
         @Override
         public java.util.List<Object> getValues() {
             java.util.List<Object> list = new ArrayList<>(1);
+//            if (value instanceof Wrapper) {
+//                list.add(((Wrapper) value).getValue());
+//            } else {
             list.add(value);
+//            }
+
             return list;
+        }
+
+        public VisitResult unpack() {
+            if (value instanceof Wrapper) {
+                this.value = ((Wrapper) value).value;
+            }
+            return this;
         }
 
         public MergeResultVisitor visitor() {
@@ -99,12 +121,29 @@ public abstract class VisitResult {
             if (this == obj) return true;
             if (!(obj instanceof Single)) return false;
             Single other = (Single) obj;
-            return value.equals(other.value);
+            return ((Wrapper) value).getValue().equals(((Wrapper) other.value).getValue());
         }
 
         @Override
         public String toString() {
-            return "[" + value.toString() + "]";
+            return "[" + ((Wrapper) value).getValue().toString() + "]";
+        }
+
+    }
+
+    public static class Wrapper {
+        Object value;
+
+        public Wrapper(Object value) {
+            this.value = value;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
         }
     }
 
@@ -243,9 +282,13 @@ public abstract class VisitResult {
 
     interface MergeResultVisitor<T> {
         T visit(Empty other);
+
         T visit(Single other);
+
         T visit(List other);
+
         T visit(EBNF other);
+
         T visit(ListOfResult other);
     }
 
@@ -464,9 +507,13 @@ public abstract class VisitResult {
 
     public interface CreateNodeVisitor<T> {
         T visit(Empty result, PackedNode packedNode);
+
         T visit(Single result, PackedNode packedNode);
+
         T visit(List result, PackedNode packedNode);
+
         T visit(EBNF result, PackedNode packedNode);
+
         T visit(ListOfResult result, PackedNode packedNode);
     }
 
@@ -515,7 +562,7 @@ public abstract class VisitResult {
         @Override
         public java.util.List<T> visit(ListOfResult result, PackedNode packedNode) {
             Set<T> set = new HashSet<>();
-            for (VisitResult vResult :result.getVisitResults()) {
+            for (VisitResult vResult : result.getVisitResults()) {
                 set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(), (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getIndex()));
             }
             return CollectionsUtil.list(parseTreeBuilder.ambiguityNode(set));

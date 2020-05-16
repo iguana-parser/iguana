@@ -20,6 +20,7 @@ class UTF32Input extends AbstractInput {
         this.length = length;
     }
 
+    @Override
     public List<Integer> nextSymbols(int index) {
         return Collections.singletonList(characters[index]);
     }

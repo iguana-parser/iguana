@@ -4,7 +4,6 @@ import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
-import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
 
@@ -31,8 +30,9 @@ public class IguanaRecognizer {
     }
 
     public boolean recognize(Input input, Map<String, Object> map, boolean global) {
-        RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
-        return root.getIndex() == input.length() - 1;
+//        RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
+//        return root.getIndex() == input.length() - 1;
+        return !runtime.run(input, grammarGraph, map, global).isEmpty();
     }
 
     public RecognizerStatistics getStatistics() {

@@ -27,8 +27,10 @@
 
 package org.iguana.gss;
 
+import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.Keys;
 import iguana.utils.collections.OpenAddressingHashMap;
+import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
@@ -48,6 +50,7 @@ import java.util.*;
 public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private final int inputIndex;
+	private final NonterminalGrammarSlot slot;
 
 	private GSSEdge<T> firstGSSEdge;
 
@@ -57,10 +60,20 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private Map<Key, T> restPoppedElements;
 
+	private final IntHashMap<T> poppedElements;
+
 	public DefaultGSSNode(GSSEdge<T> firstGSSEdge, int inputIndex) {
 	    this.firstGSSEdge = firstGSSEdge;
 	    this.inputIndex = inputIndex;
-    }
+		poppedElements = new OpenAddressingIntHashMap<>();
+		slot = null;
+	}
+
+	public DefaultGSSNode(NonterminalGrammarSlot slot, int inputIndex) {
+		this.slot = slot;
+		this.inputIndex = inputIndex;
+		poppedElements = new OpenAddressingIntHashMap<>();
+	}
 
     @Override
 	public void addGSSEdge(Input input, BodyGrammarSlot returnSlot, int i, GSSNode<T> destination, T w, Environment env, IguanaRuntime<T> runtime) {
@@ -69,11 +82,13 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 				addGSSEdge(firstGSSEdge);
 				firstGSSEdge = runtime.createGSSEdge(returnSlot, w, null, env);
 			}
+//			System.out.println("#1 default " + this.toString());
 			ParserLogger.getInstance().gssEdgeAdded(firstGSSEdge);
 			((CyclicDummyGSSEdges<T>) firstGSSEdge).addReturnSlot(returnSlot);
 			iterateOverPoppedElements(firstGSSEdge, returnSlot, destination, input, env, runtime);
 		} else {
 			GSSEdge<T> edge = runtime.createGSSEdge(returnSlot, w, destination, env);
+//			System.out.println("#2 default " + this.toString());
 			ParserLogger.getInstance().gssEdgeAdded(edge);
 			addGSSEdge(edge);
 			iterateOverPoppedElements(edge, returnSlot, destination, input, env, runtime);
@@ -107,7 +122,26 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		T node = addPoppedElements(slot, result, value, runtime.getResultOps());
 		if (node != null)
 			iterateOverEdges(input, node, runtime);
+
+//		int index = result.getIndex();
+//		if (slot != null) {
+//			T poppedElement = poppedElements.get(index);
+//
+//			if (poppedElement == null) {
+//				poppedElement = runtime.getResultOps().convert(null, result, slot, value);
+//				poppedElements.put(index, poppedElement);
+////			return true;
+//			} else {
+//				runtime.getResultOps().convert(poppedElement, result, slot, value);
+////			return false;
+//			}
+//		}
+
 		return node != null;
+	}
+
+	public T getResult(int i) {
+		return poppedElements.get(i);
 	}
 
 	/**
@@ -117,6 +151,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		// No node added yet
 		if (firstPoppedElement == null) {
 			firstPoppedElement = ops.convert(null, child, slot, value);
+			poppedElements.put(child.getIndex(), firstPoppedElement);
 			return firstPoppedElement;
 		} else {
 			int rightIndex = child.getIndex();
@@ -132,12 +167,14 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 					restPoppedElements = new OpenAddressingHashMap<>();
 					T poppedElement = ops.convert(null, child, slot, value);
 					restPoppedElements.put(key, poppedElement);
+					poppedElements.put(rightIndex, poppedElement);
 					return poppedElement;
 				}
 
 				T poppedElement = restPoppedElements.get(key);
 				if (poppedElement == null) {
 					poppedElement = ops.convert(null, child, slot, value);
+					poppedElements.put(rightIndex, poppedElement);
 					restPoppedElements.put(key, poppedElement);
 					return poppedElement;
 				}
@@ -164,18 +201,17 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	private void iterateOverEdges(Input input, T result, IguanaRuntime<T> runtime) {
 		if (firstGSSEdge instanceof CyclicDummyGSSEdges<?>) {
             List<BodyGrammarSlot> returnSlots = ((CyclicDummyGSSEdges<?>) firstGSSEdge).getReturnSlots();
-            for (int i = 0; i < returnSlots.size(); i++) {
-                processEdge(input, result, firstGSSEdge, returnSlots.get(i), runtime);
-            }
-		} else {
+			for (BodyGrammarSlot returnSlot : returnSlots) {
+				processEdge(input, result, firstGSSEdge, returnSlot, runtime);
+			}
+		} else if (firstGSSEdge != null){
 			processEdge(input, result, firstGSSEdge, firstGSSEdge.getReturnSlot(), runtime);
 		}
 
 		if (restGSSEdges != null)
-            for (int i = 0; i < restGSSEdges.size(); i++) {
-                GSSEdge<T> edge = restGSSEdges.get(i);
-                processEdge(input, result, edge, edge.getReturnSlot(), runtime);
-            }
+			for (GSSEdge<T> edge : restGSSEdges) {
+				processEdge(input, result, edge, edge.getReturnSlot(), runtime);
+			}
 	}
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
@@ -221,6 +257,9 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
     }
 
 	public NonterminalGrammarSlot getGrammarSlot() {
+    	if (slot != null) {
+    		return slot;
+		}
         NonterminalTransition transition;
         if (firstGSSEdge instanceof CyclicDummyGSSEdges) {
             transition = (NonterminalTransition) restGSSEdges.get(0).getReturnSlot().getInTransition();
