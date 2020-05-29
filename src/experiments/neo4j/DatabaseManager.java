@@ -19,12 +19,12 @@ package experiments.neo4j;
  * under the License.
  */
 
-import org.neo4j.configuration.connectors.BoltConnector;
-import org.neo4j.configuration.helpers.SocketAddress;
+import org.neo4j.configuration.GraphDatabaseSettings;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
-import org.neo4j.graphdb.*;
-import org.neo4j.io.fs.FileUtils;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,8 @@ import java.io.IOException;
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 public class DatabaseManager {
-    private static final File databaseDirectory = new File("target/neo4j-hello-db");
+//    private static final File databaseDirectory = new File("target/neo4j-hello-db");
+    private static final File databaseDirectory = new File("/Users/annavlasova/Downloads/neo4j-enterprise-4.0.4_2");
     private GraphDatabaseService graphDb;
     private DatabaseManagementService managementService;
 
@@ -43,74 +44,75 @@ public class DatabaseManager {
     public static void main(final String[] args) throws IOException {
         DatabaseManager hello = new DatabaseManager();
         hello.createDb();
-        hello.removeData();
+//        hello.removeData();
 //        Thread.sleep(10000);
-        hello.shutDown();
+//        hello.shutDown();
     }
 
     void createDb() throws IOException {
-        FileUtils.deleteRecursively(databaseDirectory);
-
         // start db
         managementService = new DatabaseManagementServiceBuilder(databaseDirectory)
-                .setConfig(BoltConnector.enabled, true)
-                .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
+                .setConfig( GraphDatabaseSettings.read_only, true )
                 .build();
-//        managementService = new DatabaseManagementServiceBuilder(databaseDirectory).build();
-        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
-        registerShutdownHook(managementService);
 
-        // transaction
+        graphDb = managementService.database( DEFAULT_DATABASE_NAME );
+
         try (Transaction tx = graphDb.beginTx()) {
-            // Database operations go here
-            // add data
-            Node node1 = tx.createNode();
-            node1.setProperty("node label", "node1");
-            Node node2 = tx.createNode();
-            node2.setProperty("node label", "node2");
-            Node node3 = tx.createNode();
-            node3.setProperty("node label", "node3");
-
-            node1.createRelationshipTo(node2, RelTypes.KNOWS).setProperty("tag", "a");
-            node1.createRelationshipTo(node3, RelTypes.KNOWS).setProperty("tag", "b");
-
-            // read data
-            node1.getRelationships().forEach(r -> {
-                System.out.println((String)r.getStartNode().getProperty("node label") + " "
-                        + (String)r.getEndNode().getProperty("node label") + " "
-                        + (String)r.getProperty("tag"));
-            });
-            tx.commit();
+            System.out.println(tx.getAllNodes().stream().count());
         }
+//        registerShutdownHook(managementService);
+//
+//        // transaction
+//        try (Transaction tx = graphDb.beginTx()) {
+//            // Database operations go here
+//            // add data
+//            Node node1 = tx.createNode();
+//            node1.setProperty("node label", "node1");
+//            Node node2 = tx.createNode();
+//            node2.setProperty("node label", "node2");
+//            Node node3 = tx.createNode();
+//            node3.setProperty("node label", "node3");
+//
+//            node1.createRelationshipTo(node2, RelTypes.KNOWS).setProperty("tag", "a");
+//            node1.createRelationshipTo(node3, RelTypes.KNOWS).setProperty("tag", "b");
+//
+//            // read data
+//            node1.getRelationships().forEach(r -> {
+//                System.out.println((String)r.getStartNode().getProperty("node label") + " "
+//                        + (String)r.getEndNode().getProperty("node label") + " "
+//                        + (String)r.getProperty("tag"));
+//            });
+//            tx.commit();
+//        }
     }
 
     void removeData() {
         try (Transaction tx = graphDb.beginTx()) {
             // remove the data
-            tx.getAllNodes().forEach(node -> {
-                node.getRelationships().forEach(Relationship::delete);
-                node.delete();
-            });
-            tx.commit();
+//            tx.getAllNodes().forEach(node -> {
+//                node.getRelationships().forEach(Relationship::delete);
+//                node.delete();
+//            });
+//            tx.commit();
         }
     }
 
-    void shutDown() {
-        System.out.println();
-        System.out.println("Shutting down database ...");
-        // shutdown server
-        managementService.shutdown();
-    }
+//    void shutDown() {
+//        System.out.println();
+//        System.out.println("Shutting down database ...");
+//        // shutdown server
+//        managementService.shutdown();
+//    }
 
-    private static void registerShutdownHook(final DatabaseManagementService managementService) {
-        // Registers a shutdown hook for the Neo4j instance so that it
-        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
-        // running application).
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                managementService.shutdown();
-            }
-        });
-    }
+//    private static void registerShutdownHook(final DatabaseManagementService managementService) {
+//        // Registers a shutdown hook for the Neo4j instance so that it
+//        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
+//        // running application).
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            @Override
+//            public void run() {
+//                managementService.shutdown();
+//            }
+//        });
+//    }
 }

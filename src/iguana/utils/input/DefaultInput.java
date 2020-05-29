@@ -3,6 +3,7 @@ package iguana.utils.input;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class DefaultInput extends AbstractInput {
 
@@ -14,9 +15,9 @@ public class DefaultInput extends AbstractInput {
     }
 
     @Override
-    public List<Integer> nextSymbols(int index) {
-        if (index == s.length()) return Collections.singletonList(EOF);
-        return Collections.singletonList((int) s.charAt(index));
+    public Stream<Integer> nextSymbols(int index) {
+        if (index == s.length()) return Stream.of(EOF);
+        return Stream.of((int) s.charAt(index));
     }
 
     @Override
@@ -37,5 +38,10 @@ public class DefaultInput extends AbstractInput {
     @Override
     public List<Integer> getFinalVertices() {
         return Collections.singletonList(length() - 1);
+    }
+
+    @Override
+    public boolean isFinal(int index) {
+        return index == s.length();
     }
 }

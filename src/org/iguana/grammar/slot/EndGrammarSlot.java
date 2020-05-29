@@ -65,19 +65,24 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		return null;
 	}
 
-	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-		execute(input, u, result, (Object) null, runtime);
-	}
-	
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
-		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
+    @Override
+    public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+        execute(input, u, result, (Object) null, runtime);
+    }
 
-		boolean anyMatchTestFollow = input.nextSymbols(rightExtent)
-				.stream()
-				.anyMatch(nonterminal::testFollow);
-		if (anyMatchTestFollow) {
-			u.pop(input, this, result, value, runtime);
-		}
-	}
+    public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
+        int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
+
+        boolean anyMatchTestFollow;
+        if (input.isFinal(rightExtent)) {
+            anyMatchTestFollow = true;
+        } else {
+            anyMatchTestFollow = input.nextSymbols(rightExtent)
+                    .anyMatch(nonterminal::testFollow);
+        }
+
+        if (anyMatchTestFollow) {
+            u.pop(input, this, result, value, runtime);
+        }
+    }
 }

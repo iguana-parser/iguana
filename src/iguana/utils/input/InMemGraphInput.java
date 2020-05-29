@@ -2,6 +2,7 @@ package iguana.utils.input;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InMemGraphInput extends GraphInput {
     private List<List<Edge>> adjacencyList;
@@ -38,12 +39,11 @@ public class InMemGraphInput extends GraphInput {
     }
 
     @Override
-    public List<Integer> nextSymbols(int v) {
-        List<Integer> nextSymbols = adjacencyList.get(v).stream()
-                .map(edge -> (int) edge.getTag().charAt(0))
-                .collect(Collectors.toList());
+    public Stream<Integer> nextSymbols(int v) {
+        Stream<Integer> nextSymbols = adjacencyList.get(v).stream()
+                .map(edge -> (int) edge.getTag().charAt(0));
         if (isFinal(v)) {
-            nextSymbols.add(EOF);
+            nextSymbols = Stream.concat(Stream.of(EOF), nextSymbols);
         }
         return nextSymbols;
     }

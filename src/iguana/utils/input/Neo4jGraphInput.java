@@ -1,12 +1,10 @@
 package iguana.utils.input;
 
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Label;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Neo4jGraphInput extends GraphInput {
@@ -20,7 +18,7 @@ public class Neo4jGraphInput extends GraphInput {
     }
 
     @Override
-    public List<Integer> nextSymbols(int index) {
+    public Stream<Integer> nextSymbols(int index) {
         try (Transaction tx = graphDb.beginTx()) {
             List<Integer> nextSymbols = StreamSupport.stream(tx.getNodeById(index).getRelationships(Direction.OUTGOING).spliterator(), false)
                     .map(rel -> (int) ((String) rel.getProperty(TAG)).charAt(0))
@@ -29,9 +27,15 @@ public class Neo4jGraphInput extends GraphInput {
             if (isFinal(index)) {
                 nextSymbols.add(EOF);
             }
-            return nextSymbols;
+            return nextSymbols.stream();
         }
     }
+
+//    public boolean nVertices() {
+//        try (Transaction tx = graphDb.beginTx()) {
+//            return tx.getAllNodes().stream().map(Entity::getId).allMatch(i -> (i >= 0 && i < 225135));
+//        }
+//    }
 
     @Override
     public boolean isFinal(int index) {

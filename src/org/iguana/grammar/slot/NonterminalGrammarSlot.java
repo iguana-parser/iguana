@@ -46,10 +46,10 @@ import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.util.Collections.emptyList;
 
@@ -92,9 +92,15 @@ public class NonterminalGrammarSlot implements GrammarSlot {
     }
 
     private List<BodyGrammarSlot> getFirstSlots(List<Integer> v) {
-        return v.stream()
+        return v
+                .stream()
                 .flatMap(t -> lookAheadTest.get(t).stream())
                 .collect(Collectors.toList());
+    }
+
+    private List<BodyGrammarSlot> getFirstSlots(Stream<Integer> v) {
+        return v
+                .flatMap(t -> lookAheadTest.get(t).stream()).collect(Collectors.toList());
     }
 
     public void setLookAheadTest(RangeMap<BodyGrammarSlot> lookAheadTest) {
@@ -208,7 +214,6 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                 int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
                 if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, runtime.getEvaluatorContext(), runtime))
                     runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
-
             }
 
             if (arguments == null) {
@@ -221,4 +226,12 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         }
     }
 
+    static <T> Stream<T> wrapperStream(Stream<T> stream) {
+        Iterator<T> iterator = stream.iterator();
+        if (iterator.hasNext()) {
+            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), false);
+        } else {
+            return null;
+        }
+    }
 }

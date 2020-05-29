@@ -51,7 +51,6 @@ public class InMemGraphTest {
             throw new RuntimeException("No grammar.json file is present");
         }
         IguanaParser parser = new IguanaParser(grammar);
-//        GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
         Map<Pair, ParseTreeNode> node = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
     }
@@ -81,7 +80,6 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-//        NonterminalNode node = parser.getSPPF(input);
         ParseTreeNode parseTreeNode = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
     }
 }

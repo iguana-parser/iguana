@@ -82,13 +82,11 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 				addGSSEdge(firstGSSEdge);
 				firstGSSEdge = runtime.createGSSEdge(returnSlot, w, null, env);
 			}
-//			System.out.println("#1 default " + this.toString());
 			ParserLogger.getInstance().gssEdgeAdded(firstGSSEdge);
 			((CyclicDummyGSSEdges<T>) firstGSSEdge).addReturnSlot(returnSlot);
 			iterateOverPoppedElements(firstGSSEdge, returnSlot, destination, input, env, runtime);
 		} else {
 			GSSEdge<T> edge = runtime.createGSSEdge(returnSlot, w, destination, env);
-//			System.out.println("#2 default " + this.toString());
 			ParserLogger.getInstance().gssEdgeAdded(edge);
 			addGSSEdge(edge);
 			iterateOverPoppedElements(edge, returnSlot, destination, input, env, runtime);
@@ -188,7 +186,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot,
 									  GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
 		boolean anyMatchTestFollow = input.nextSymbols(poppedElement.getIndex())
-				.stream()
+//				.stream()
 				.anyMatch(returnSlot::testFollow);
 		if (anyMatchTestFollow) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
@@ -216,7 +214,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
 		boolean anyMatchTestFollow = input.nextSymbols(node.getIndex())
-				.stream()
+//				.stream()
 				.anyMatch(returnSlot::testFollow);
 		if (!anyMatchTestFollow) return;
 

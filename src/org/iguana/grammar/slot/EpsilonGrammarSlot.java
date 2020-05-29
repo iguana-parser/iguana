@@ -56,8 +56,8 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
 		boolean anyMatchTestFollow = input.nextSymbols(i)
-				.stream()
 				.anyMatch(getNonterminal()::testFollow);
+
 		if (anyMatchTestFollow) {
 			List<T> res = epsilonSlot.getResult(input, i, this, u, runtime);
 

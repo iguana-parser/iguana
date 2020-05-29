@@ -38,6 +38,7 @@ import iguana.utils.input.Input;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DFAMatcher implements Matcher {
 
@@ -84,7 +85,7 @@ public class DFAMatcher implements Matcher {
             maximumMatchedIndex = inputIndex;
 
         for (int i = inputIndex; i < input.length(); i++) {
-            state = table[state].get(input.nextSymbols(i).get(0));
+            state = table[state].get(input.nextSymbols(i).collect(Collectors.toList()).get(0));
 
             if (state == ERROR_STATE)
                 break;

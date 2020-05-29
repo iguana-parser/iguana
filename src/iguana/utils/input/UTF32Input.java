@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 class UTF32Input extends AbstractInput {
 
@@ -21,8 +22,8 @@ class UTF32Input extends AbstractInput {
     }
 
     @Override
-    public List<Integer> nextSymbols(int index) {
-        return Collections.singletonList(characters[index]);
+    public Stream<Integer> nextSymbols(int index) {
+        return Stream.of(characters[index]);
     }
 
     /**
@@ -81,6 +82,11 @@ class UTF32Input extends AbstractInput {
     @Override
     public List<Integer> getFinalVertices() {
         return Collections.singletonList(length - 1);
+    }
+
+    @Override
+    public boolean isFinal(int i) {
+        return characters[i] == -1;
     }
 
     @Override
