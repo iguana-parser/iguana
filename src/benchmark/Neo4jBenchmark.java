@@ -27,9 +27,7 @@ import java.util.function.BiFunction;
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 public class Neo4jBenchmark {
-//    private static final File databaseDirectory = new File("/Users/annavlasova/Downloads/neo4j-enterprise-4.0.4_2");
     private static GraphDatabaseService graphDb;
-//    private static String relationshipName;
     private static Map<String, String> relationshipNamesMap = Map.of(
             "nt", "skos__narrowerTransitive",
             "bt", "skos__broaderTransitive"
