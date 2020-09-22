@@ -1,0 +1,134 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Id"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Chars",
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_MATCH",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "regex.Seq",
+                                "symbols" : [
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 105
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 102
+                                  }
+                                ]
+                              },
+                              {
+                                "kind" : "regex.Seq",
+                                "symbols" : [
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 119
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 104
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 105
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 108
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 101
+                                  }
+                                ]
+                              },
+                              {
+                                "kind" : "regex.Seq",
+                                "symbols" : [
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 100
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 111
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "terminals" : {
+    "Chars" : {
+      "kind" : "regex.Plus",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "CharRange",
+            "start" : 97,
+            "end" : 122
+          }
+        ]
+      }
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}
