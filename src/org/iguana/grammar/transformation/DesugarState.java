@@ -27,46 +27,19 @@
 
 package org.iguana.grammar.transformation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.exception.UnexpectedSymbol;
 import org.iguana.grammar.operations.ReachabilityGraph;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.generator.GeneratorUtil;
+
+import java.util.*;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 /**
  * 
@@ -84,14 +57,11 @@ public class DesugarState implements GrammarTransformation {
 	
 	private final Map<Nonterminal, Set<String>> returns = new HashMap<>();
 	private final Map<Nonterminal, List<Map<Nonterminal, Set<String>>>> bindings = new HashMap<>();
-	
-	private Set<String> current_uses;
-	private Set<String> current_updates;
-	
-	private Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 
 	@Override
 	public Grammar transform(Grammar grammar) {
+		Set<String> current_uses;
+		Set<String> current_updates;
 		for (Nonterminal head : grammar.getNonterminals()) {
 			
 			current_uses = new HashSet<>();
@@ -106,10 +76,10 @@ public class DesugarState implements GrammarTransformation {
 				visitor.compute(rule);
 			
 			if (!current_updates.isEmpty())
-				System.out.println("Updates: " + head + "    " + GeneratorUtil.listToString(current_updates, " , ") );
+				System.out.println("Updates: " + head + "    " + listToString(current_updates, " , ") );
 		}
-		
-		reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();		
+
+		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph = new ReachabilityGraph(grammar).getReachabilityGraph();
 		for (Map.Entry<Nonterminal, Set<Nonterminal>> entry : reachabilityGraph.entrySet()) {
 			current_uses = uses.get(entry.getKey());
 			current_updates = updates.get(entry.getKey());
@@ -160,12 +130,12 @@ public class DesugarState implements GrammarTransformation {
 		
 		for (Map.Entry<Nonterminal, Set<String>> entry : uses.entrySet())
 			if (!entry.getValue().isEmpty()) {
-				System.out.println("Uses: " + entry.getKey() + "    " + GeneratorUtil.listToString(entry.getValue(), ";"));
+				System.out.println("Uses: " + entry.getKey() + "    " + listToString(entry.getValue(), ";"));
 			}
 		
 		for (Map.Entry<Nonterminal, Set<String>> entry : returns.entrySet())
 			if (!entry.getValue().isEmpty()) {
-				System.out.println("Returns: " + entry.getKey() + "    " + GeneratorUtil.listToString(entry.getValue(), ";"));
+				System.out.println("Returns: " + entry.getKey() + "    " + listToString(entry.getValue(), ";"));
 			}
 		
 		Set<Rule> newRules = new LinkedHashSet<>();
@@ -237,13 +207,13 @@ public class DesugarState implements GrammarTransformation {
 		return builder.build();
 	}
 	
-	static public class DesugarStateVisitor implements ISymbolVisitor<Symbol> {
+	public static class DesugarStateVisitor implements ISymbolVisitor<Symbol> {
 		
 		private final Map<Nonterminal, Set<String>> uses;
 		private final Map<Nonterminal, Set<String>> returns;
 		private final Map<Nonterminal, Set<String>> bindings;
 		
-		public DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
+		DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
 			this.uses = uses;
 			this.returns = returns;
 			this.bindings = bindings;
@@ -263,16 +233,6 @@ public class DesugarState implements GrammarTransformation {
 		}
 
 		@Override
-		public Symbol visit(Character symbol) {
-			return symbol;
-		}
-
-		@Override
-		public Symbol visit(CharacterRange symbol) {
-			return symbol;
-		}
-
-		@Override
 		public Symbol visit(Code symbol) {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
@@ -287,16 +247,6 @@ public class DesugarState implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
-		}
-
-		@Override
-		public Symbol visit(EOF symbol) {
-			return symbol;
-		}
-
-		@Override
-		public Symbol visit(Epsilon symbol) {
-			return symbol;
 		}
 
 		@Override
@@ -403,7 +353,12 @@ public class DesugarState implements GrammarTransformation {
 		public Symbol visit(Star symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
-		
-	}
+
+        @Override
+        public Symbol visit(Start symbol) {
+            throw new UnexpectedSymbol(symbol, "desugar-state");
+        }
+
+    }
 
 }

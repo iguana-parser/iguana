@@ -1,6 +1,6 @@
 package org.iguana.datadependent.values;
 
-import org.iguana.util.hashing.hashfunction.MurmurHash3;
+import iguana.utils.collections.hash.MurmurHash3;
 
 public class Stack<T> {
 	
@@ -16,7 +16,7 @@ public class Stack<T> {
 		this.parent = null;
 		this.top = top;
 		this.size = 1;
-		this.hash = f.hash(top.hashCode());
+		this.hash = top.hashCode();
 	}
 	
 	Stack(T top, Stack<T> parent) {
@@ -32,7 +32,7 @@ public class Stack<T> {
 			root = root.parent;
 		}
 		
-		this.hash = f.hash(hs);
+		this.hash = MurmurHash3.fn().apply(hs);
 	}
 	
 	public static <T> Stack<T> from(T top) {

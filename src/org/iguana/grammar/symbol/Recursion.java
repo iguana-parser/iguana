@@ -29,12 +29,9 @@ package org.iguana.grammar.symbol;
 
 public enum Recursion {
 	
-	LEFT_REC, RIGHT_REC, LEFT_RIGHT_REC, NON_REC, UNDEFINED;
-	
-	public String getConstructorCode() {
-		return this.getClass().getSimpleName() + "." + this.name();
-	}
-	
+	LEFT_REC, RIGHT_REC, LEFT_RIGHT_REC, NON_REC,
+	iLEFT_REC, iRIGHT_REC, iLEFT_RIGHT_REC;
+
 	@Override
 	public String toString() {
 		return this.name();

@@ -27,12 +27,13 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 
 public class ConditionalTransition extends AbstractTransition {
 	
@@ -43,8 +44,8 @@ public class ConditionalTransition extends AbstractTransition {
 	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(condition, origin, dest, null);
 	}
-	
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, BodyGrammarSlot ifFalse) {
+
+	private ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, BodyGrammarSlot ifFalse) {
 		super(origin, dest);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
@@ -55,49 +56,26 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		
-		Object value = parser.evaluate(condition, parser.getEmptyEnvironment());
-		
-		if (!(value instanceof Boolean)) {
-			throw new UnexpectedRuntimeTypeException(condition);
-		}
-		
-		boolean isTrue = ((Boolean) value) == true;
-		
-		if (isTrue)
-			dest.execute(parser, u, i, node);
-		else if (ifFalse != null)
-			ifFalse.execute(parser, u, i, node);
-		// TODO: logging
-	}
-
-	@Override
 	public String getLabel() {
 		return String.format("[%s]", condition.toString());
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
 		
-		Object value = parser.evaluate(condition, env);
+		Object value = runtime.evaluate(condition, env, input);
 		
 		if (!(value instanceof Boolean)) {
 			throw new UnexpectedRuntimeTypeException(condition);
 		}
 		
-		boolean isTrue = ((Boolean) value) == true;
+		boolean isTrue = (Boolean) value;
 		
 		if (isTrue)
-			dest.execute(parser, u, i, node, env);
+			dest.execute(input, u, result, env, runtime);
 		else if (ifFalse != null)
-			ifFalse.execute(parser, u, i, node, env);
+			ifFalse.execute(input, u, result, env, runtime);
 		// TODO: logging
-	}
-
-	@Override
-	public String getConstructorCode() {
-		return null;
 	}
 
 }

@@ -27,14 +27,15 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
-import org.iguana.grammar.condition.ConditionsFactory;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.util.generator.GeneratorUtil;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 
 public class NonterminalTransition extends AbstractTransition {
@@ -45,99 +46,40 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions) {
-		this(nonterminal, origin, dest, null, preConditions);
-	}
-	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(nonterminal, origin, dest, null, ConditionsFactory.DEFAULT);
-	}	
-	
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest, 
-			Expression[] arguments, Conditions preConditions) {
+	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest,
+			                     Expression[] arguments, Conditions preConditions) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
 		this.preConditions = preConditions;
 	}
 
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {		
-//		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
-//			parser.recordParseError(origin);
-//			return;
-//		}
-		
-		if (nonterminal.getParameters() == null && dest.getLabel() == null) {
-			
-			if (preConditions.execute(parser.getInput(), u, i))
-				return;
-			
-			nonterminal.create(parser, dest, u, i, node);
-			
-		} else {
-			
-			Environment env = parser.getEmptyEnvironment();
-			
-			if (dest.getLabel() != null) {
-				env = env.declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
-			}
-			
-			parser.setEnvironment(env);
-			
-			if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			
-			nonterminal.create(parser, dest, u, i, node, arguments, parser.getEnvironment());
-		}
-		
-	}
-	
 	public NonterminalGrammarSlot getSlot() {
 		return nonterminal;
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-			.append("new NonterminalTransition(")
-			.append("slot" + nonterminal.getId()).append(", ")
-			.append("slot" + origin.getId()).append(", ")
-			.append("slot" + dest.getId()).append(", ")
-			.append(preConditions)
-			.toString();
 	}
 	
 	@Override
 	public String getLabel() {
 		return (dest.getVariable() != null? dest.getVariable() + "=" : "") 
 				+ (dest.getLabel() != null? dest.getLabel() + ":"  : "")
-				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), GeneratorUtil.listToString(arguments, ",")) : getSlot().toString());
+				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), listToString(arguments, ",")) : getSlot().toString());
 	}
 
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		
-//		if (!nonterminal.testPredict(parser.getInput().charAt(i))) {
-//			parser.recordParseError(origin);
-//			return;
-//		}
-		
-		if (dest.getLabel() != null) {
-			env = env.declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
+
+        if (dest.getLabel() != null) {
+			env = env._declare(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 		}
 		
-		parser.setEnvironment(env);
+		runtime.setEnvironment(env);
 		
-		if (preConditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
+		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
 			return;
 				
-		nonterminal.create(parser, dest, u, i, node, arguments, parser.getEnvironment());
+		nonterminal.create(input, dest, u, result, arguments, runtime.getEnvironment(), runtime);
 	}
 
 }

@@ -27,70 +27,27 @@
 
 package org.iguana.datadependent.traversal;
 
+
+import org.iguana.datadependent.ast.Expression.*;
+import org.iguana.datadependent.ast.Expression.Boolean;
+import org.iguana.datadependent.ast.Expression.Integer;
+import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Statement;
+import org.iguana.datadependent.ast.Statement.Expression;
+import org.iguana.datadependent.ast.VariableDeclaration;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.PositionalCondition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.traversal.IConditionVisitor;
+import org.iguana.traversal.ISymbolVisitor;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
-import org.eclipse.imp.pdb.facts.util.TrieSet;
-import org.iguana.datadependent.ast.Statement;
-import org.iguana.datadependent.ast.VariableDeclaration;
-import org.iguana.datadependent.ast.Expression.And;
-import org.iguana.datadependent.ast.Expression.AndIndent;
-import org.iguana.datadependent.ast.Expression.Assignment;
-import org.iguana.datadependent.ast.Expression.Boolean;
-import org.iguana.datadependent.ast.Expression.Call;
-import org.iguana.datadependent.ast.Expression.EndOfFile;
-import org.iguana.datadependent.ast.Expression.Equal;
-import org.iguana.datadependent.ast.Expression.Greater;
-import org.iguana.datadependent.ast.Expression.GreaterThanEqual;
-import org.iguana.datadependent.ast.Expression.Integer;
-import org.iguana.datadependent.ast.Expression.LShiftANDEqZero;
-import org.iguana.datadependent.ast.Expression.LeftExtent;
-import org.iguana.datadependent.ast.Expression.Less;
-import org.iguana.datadependent.ast.Expression.LessThanEqual;
-import org.iguana.datadependent.ast.Expression.Name;
-import org.iguana.datadependent.ast.Expression.NotEqual;
-import org.iguana.datadependent.ast.Expression.Or;
-import org.iguana.datadependent.ast.Expression.OrIndent;
-import org.iguana.datadependent.ast.Expression.Real;
-import org.iguana.datadependent.ast.Expression.RightExtent;
-import org.iguana.datadependent.ast.Expression.String;
-import org.iguana.datadependent.ast.Expression.Tuple;
-import org.iguana.datadependent.ast.Expression.Val;
-import org.iguana.datadependent.ast.Expression.Yield;
-import org.iguana.datadependent.ast.Statement.Expression;
-import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.ContextFreeCondition;
-import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.condition.PositionalCondition;
-import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Align;
-import org.iguana.grammar.symbol.Block;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Conditional;
-import org.iguana.grammar.symbol.EOF;
-import org.iguana.grammar.symbol.Epsilon;
-import org.iguana.grammar.symbol.IfThen;
-import org.iguana.grammar.symbol.IfThenElse;
-import org.iguana.grammar.symbol.Ignore;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Offside;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.grammar.symbol.While;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
-import org.iguana.traversal.IConditionVisitor;
-import org.iguana.traversal.ISymbolVisitor;
 
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
@@ -115,16 +72,15 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 	
 	public void compute(Rule rule) {
-		
-		ImmutableSet<java.lang.String> env = TrieSet.of();
-		
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = io.usethesource.capsule.Set.Immutable.of();
+
 		java.lang.String[] parameters = rule.getHead().getParameters();
 		if (parameters != null) {
 			for (java.lang.String parameter : parameters)
 				env = env.__insert(parameter);
 		}
-		
-		ImmutableSet<java.lang.String> _env = env;
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> _env = env;
 		
 		for (Symbol symbol : rule.getBody()) {
 			
@@ -497,6 +453,24 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		return null;
 	}
+	
+	@Override
+	public Void visit(org.iguana.datadependent.ast.Expression.IfThenElse expression) {
+		
+		org.iguana.datadependent.ast.Expression condition = expression.getCondition();
+		condition.setEnv(expression.getEnv());
+		condition.accept(this);
+		
+		org.iguana.datadependent.ast.Expression thenPart = expression.getThenPart();
+		thenPart.setEnv(expression.getEnv());
+		thenPart.accept(this);
+		
+		org.iguana.datadependent.ast.Expression elsePart = expression.getElsePart();
+		elsePart.setEnv(expression.getEnv());
+		elsePart.accept(this);
+		
+		return null;
+	}
 
 	@Override
 	public Void visit(VariableDeclaration declaration) {
@@ -551,8 +525,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Block symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
@@ -564,19 +538,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public Void visit(Character symbol) {
-		return null;
-	}
-
-	@Override
-	public Void visit(CharacterRange symbol) {
-		return null;
-	}
-
-	@Override
 	public Void visit(Code symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		Symbol sym = symbol.getSymbol();
 		
@@ -600,8 +564,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		Symbol sym = symbol.getSymbol();
 		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		sym.setEnv(env);
 		visitSymbol(sym);
@@ -614,16 +578,6 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		return null;
 	}
 
-	@Override
-	public Void visit(EOF symbol) {
-		return null;
-	}
-
-	@Override
-	public Void visit(Epsilon symbol) {
-		return null;
-	}
-	
 	@Override
 	public Void visit(IfThen symbol) {
 		
@@ -672,8 +626,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Nonterminal symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		if (symbol.getVariable() != null)
 			env = env.__insert(symbol.getVariable());
@@ -748,8 +702,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public <E extends Symbol> Void visit(Alt<E> symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
@@ -783,8 +737,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public <E extends Symbol> Void visit(Sequence<E> symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (E sym : symbol.getSymbols()) {
 			sym.setEnv(env);
@@ -805,14 +759,21 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		return null;
 	}
-	
-	/**
-	 * 
-	 * Accounts for optional label and optional preconditions and postconditions
-	 */
+
+    @Override
+    public Void visit(Start start) {
+        Symbol sym = start.getNonterminal();
+
+        sym.setEnv(start.getEnv());
+        visitSymbol(sym);
+
+        return null;
+    }
+
+    // Accounts for optional label and optional preconditions and postconditions
 	public Void visitSymbol(Symbol symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		if (symbol.getLabel() != null)
 			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));
@@ -838,11 +799,6 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		symbol.setEnv(env);
 		
 		return null;
-	}
-
-	@Override
-	public Void visit(ContextFreeCondition condition) {
-		throw new UnsupportedOperationException("Context-free condition");
 	}
 
 	@Override

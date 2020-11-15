@@ -27,12 +27,14 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.util.generator.GeneratorUtil;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
+
+import static iguana.utils.string.StringUtil.listToString;
 
 public class CodeTransition extends AbstractTransition {
 	
@@ -44,33 +46,14 @@ public class CodeTransition extends AbstractTransition {
 	}
 
 	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		parser.evaluate(statements, parser.getEmptyEnvironment());
-		if (parser.getEnvironment().isEmpty())
-			dest.execute(parser, u, i, node);
-		else
-			dest.execute(parser, u, i, node, parser.getEnvironment());
-	}
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		parser.evaluate(statements, env);
-		dest.execute(parser, u, i, node, parser.getEnvironment());
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+		runtime.evaluate(statements, env, input);
+		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}
 
 	@Override
 	public String getLabel() {
-		return GeneratorUtil.listToString(statements, ";");
+		return listToString(statements, ";");
 	}
 	
 }

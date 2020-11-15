@@ -27,28 +27,21 @@
 
 package org.iguana.parser.datadependent;
 
-import static org.iguana.datadependent.ast.AST.*;
-import static org.iguana.grammar.condition.DataDependentCondition.predicate;
-
+import iguana.regex.Alt;
+import iguana.regex.Char;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.LayoutStrategy;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Star;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 /**
  * 
@@ -93,13 +86,13 @@ public class Test10 {
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
 		Rule r4 = Rule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Alt.from(Character.from(' '), Character.from('\t')))
-										.addPostCondition(RegularExpressionCondition.notFollow(Character.from(' ')))
-										.addPostCondition(RegularExpressionCondition.notFollow(Character.from('\t'))).build()).build();
+						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
+										.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
+										.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1, r2, r3, r4).build();
 		
@@ -112,18 +105,11 @@ public class Test10 {
 		grammar = new EBNFToBNF().transform(grammar);
 		
 		Input input = Input.fromString("a    b");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
-		
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNotNull(result);
 	}
 
 }

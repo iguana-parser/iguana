@@ -27,28 +27,33 @@
 
 package org.iguana.grammar.condition;
 
+import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.input.Input;
+import org.iguana.datadependent.env.GLLEvaluator;
+import org.iguana.datadependent.env.IEvaluatorContext;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
+import org.iguana.traversal.ToSlotActionConditionVisitor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.iguana.datadependent.env.IEvaluatorContext;
-import org.iguana.datadependent.env.persistent.PersistentEvaluatorContext;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.traversal.ToSlotActionConditionVisitor;
-import org.iguana.util.Input;
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.listToString;
+
 
 public class ConditionsFactory {
 	
 	public static Conditions DEFAULT = new Conditions() {
-		
-		@Override
-		public boolean execute(Input input, GSSNode u, int i) {
-			return false;
-		}
-		
+
+        @Override
+        public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int leftExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+            return false;
+        }
+
 		@Override
 		public String toString() {
 			return "";
@@ -72,17 +77,13 @@ public class ConditionsFactory {
 		
 		if (requiresEnvironment) {
 			return new Conditions() {
-				
+
 				@Override
-				public boolean execute(Input input, GSSNode u, int i) {
-					return execute(input, u, i, new PersistentEvaluatorContext(input));
-				}
-				
-				@Override
-				public boolean execute(Input input, GSSNode u, int i, IEvaluatorContext ctx) {
-					for (SlotAction c : actions) {
-					    if (c.execute(input, u, i, ctx)) {
-//			                log.trace("Condition %s executed with %s", c, ctx.getEnvironment());
+				public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int lefExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+					for (int j = 0; j < actions.size(); j++) {
+						SlotAction slotAction = actions.get(j);
+					    if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
+                            runtime.recordParseError(rightExtent, null, gssNode);
 			                return true;
 			            }
 			        }
@@ -91,28 +92,29 @@ public class ConditionsFactory {
 				
 				@Override
 				public String toString() {
-					return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+					return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
 				}
 				
 			};
 		}
 		
 		return new Conditions() {
-			
-			@Override
-			public boolean execute(Input input, GSSNode u, int i) {
-		        for (SlotAction c : actions) {
-		            if (c.execute(input, u, i)) {
-//		                log.trace("Condition %s executed", c);
-		                return true;
-		            }
-		        }
-				return false;
-			}
-			
+
+            @Override
+            public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+                for (int j = 0; j < actions.size(); j++) {
+                    SlotAction slotAction = actions.get(j);
+                    if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
+                        runtime.recordParseError(rightExtent, null, gssNode);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
 			@Override
 			public String toString() {
-				return conditions.isEmpty()? "" : "[" + GeneratorUtil.listToString(conditions, ";") + "]";
+				return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
 			}
 		};
 

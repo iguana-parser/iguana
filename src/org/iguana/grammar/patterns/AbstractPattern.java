@@ -27,16 +27,15 @@
 
 package org.iguana.grammar.patterns;
 
+import iguana.utils.collections.hash.MurmurHash3;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Symbol;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.parser.HashFunctions;
-import org.iguana.util.generator.ConstructorCode;
-
-public class AbstractPattern implements Serializable, ConstructorCode {
+public class AbstractPattern implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -48,7 +47,7 @@ public class AbstractPattern implements Serializable, ConstructorCode {
 	public AbstractPattern(Nonterminal nonteriminal, List<Symbol> parent, int position, List<Symbol> child) {
 		
 		if(parent == null || child == null) {
-			throw new IllegalArgumentException("parent or child alternates cannot be null.");
+			throw new IllegalArgumentException("parent or first alternates cannot be null.");
 		}
 		
 		this.parent = new ArrayList<>(parent);
@@ -84,7 +83,7 @@ public class AbstractPattern implements Serializable, ConstructorCode {
 	
 	@Override
 	public int hashCode() {
-		return HashFunctions.defaulFunction.hash(nonterminal.hashCode(), position, parent.hashCode());
+		return MurmurHash3.fn().apply(nonterminal, position, parent);
 	}
 	
 	/**
@@ -142,11 +141,4 @@ public class AbstractPattern implements Serializable, ConstructorCode {
 		return sb.toString();
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return nonterminal.getConstructorCode() + ", " + 
-			   asList(parent) + ", " +
-			   position + ", " +
-			   asList(child);
-	}
 }

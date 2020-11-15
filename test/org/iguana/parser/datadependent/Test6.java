@@ -27,24 +27,20 @@
 
 package org.iguana.parser.datadependent;
 
-import static org.iguana.datadependent.ast.AST.greaterEq;
-import static org.iguana.datadependent.ast.AST.integer;
-import static org.iguana.datadependent.ast.AST.var;
-import static org.iguana.grammar.condition.DataDependentCondition.predicate;
-
+import iguana.regex.Char;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 /**
  * 
@@ -75,9 +71,9 @@ public class Test6 {
 		
 		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
 		
-		Character hat = Character.from('^');
-		Character star = Character.from('*');
-		Character plus = Character.from('+');
+		Terminal hat = Terminal.from(Char.from('^'));
+        Terminal star = Terminal.from(Char.from('*'));
+        Terminal plus = Terminal.from(Char.from('+'));
 		
 		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
 		
@@ -99,7 +95,7 @@ public class Test6 {
 				.addSymbol(plus)
 				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Character.from('a')).build();
+		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
 		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
 		
@@ -110,18 +106,11 @@ public class Test6 {
 		System.out.println(grammar);
 		
 		Input input = Input.fromString("a+a^a^a*a");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("S"));
-		
-		Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		if (result.isParseSuccess()) {
-			Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-					result.asParseSuccess().getRoot(), input);
-		}
-		
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNotNull(result);
 	}
 
 }

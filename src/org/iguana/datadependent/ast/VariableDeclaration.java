@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
@@ -34,14 +35,24 @@ public class VariableDeclaration extends AbstractAST {
 	
 	private static final long serialVersionUID = 1L;
 
-	static public Object defaultValue = new Object() {};
+	public static Object defaultValue = new Object() {};
 	
 	private final String name;
+	private final int i;
 	private final Expression expression;
 	
-	VariableDeclaration(String name, Expression expression) {
+	VariableDeclaration(String name, int i, Expression expression) {
 		this.name = name;
+		this.i = i;
 		this.expression = expression;
+	}
+	
+	VariableDeclaration(String name, Expression expression) {
+		this(name, -1, expression);
+	}
+	
+	VariableDeclaration(String name, int i) {
+		this(name, i, null);
 	}
 	
 	VariableDeclaration(String name) {
@@ -57,24 +68,24 @@ public class VariableDeclaration extends AbstractAST {
 	}
 
 	@Override
-	public Object interpret(IEvaluatorContext ctx) {
+	public Object interpret(IEvaluatorContext ctx, Input input) {
 		Object value = defaultValue;
-		if (expression != null) {
-			value = expression.interpret(ctx);
-		}
-		ctx.declareVariable(name, value);
+		
+		if (expression != null)
+			value = expression.interpret(ctx, input);
+		
+		if (i != -1)
+			ctx.declareVariable(value);
+		else
+			ctx.declareVariable(name, value);
+		
 		return null;
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "AST.varDecl(" + "\"" + name + "\"" + (expression != null? "," + expression.getConstructorCode() : "") + ")";
-	}
-	
-	@Override
 	public String toString() {
-		return expression != null? String.format( "var %s = %s", name, expression) 
-				: String.format("var %s", name);
+		return expression != null? (i != -1? String.format( "var %s:%s = %s", name, i, expression) : String.format( "var %s = %s", name, expression)) 
+								 : (i != -1? String.format("var %s:%s", name, i) : String.format("var %s", name));
 	}
 
 	@Override

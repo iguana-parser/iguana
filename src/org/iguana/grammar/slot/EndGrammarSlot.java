@@ -27,82 +27,62 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Collections;
-import java.util.Set;
-
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.datadependent.util.collections.IntKey1PlusObject;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.util.SemanticAction;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
+
+import java.util.Set;
 
 public class EndGrammarSlot extends BodyGrammarSlot {
 
-	private final NonterminalGrammarSlot nonterminal;
-	private final SemanticAction action;
+	protected final NonterminalGrammarSlot nonterminal;
 
-	public EndGrammarSlot(int id, Position position, NonterminalGrammarSlot nonterminal, String label, 
-			              String variable, Set<String> state, Conditions conditions, SemanticAction action) {
-		super(id, position, label, variable, state, conditions);
-		this.nonterminal = nonterminal;
-		this.action = action;
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
+			              String variable, Set<String> state, Conditions conditions) {
+		this(position, nonterminal, label, -1, variable, -1, state, conditions);
 	}
+	
+	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
+            			  String variable, int i2, Set<String> state, Conditions conditions) {
+		super(position, label, i1, variable, i2, state, conditions);
+		this.nonterminal = nonterminal;
+    }
 	
 	public NonterminalGrammarSlot getNonterminal() {
 		return nonterminal;
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node));
-	}
-	
-	@Override
 	public boolean isEnd() {
 		return true;
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return null;
 	}
 	
 	public Object getObject() {
 		return null;
 	}
-	
-	@Override
-	public Set<Transition> getTransitions() {
-		return Collections.emptySet();
-	}
 
-	@Override
-	public boolean addTransition(Transition transition) {
-		return false;
-	}
-	
-	public SemanticAction getAction() {
-		return action;
-	}
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, i, this, node));
-	}
-	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Object value) {
-		if (nonterminal.testFollow(parser.getInput().charAt(i)))
-			parser.pop(u, i, u.addToPoppedElements(parser, IntKey1PlusObject.from(i, value, parser.getInput().length()), this, node, value));
-	}
+    @Override
+    public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+        execute(input, u, result, (Object) null, runtime);
+    }
 
+    public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
+        int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
+
+        boolean anyMatchTestFollow;
+        if (input.isFinal(rightExtent)) {
+            anyMatchTestFollow = true;
+        } else {
+            anyMatchTestFollow = input.nextSymbols(rightExtent)
+                    .anyMatch(nonterminal::testFollow);
+        }
+
+        if (anyMatchTestFollow) {
+            u.pop(input, this, result, value, runtime);
+        }
+    }
 }

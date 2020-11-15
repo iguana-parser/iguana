@@ -28,33 +28,34 @@
 package org.iguana.grammar.slot;
 
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.exception.UnexpectedRuntimeTypeException;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 import org.iguana.util.Tuple;
 
 public class EpsilonTransition extends AbstractTransition {
 	
 	private final Type type;
-	private final String label;
-	private final Conditions conditions;
+    private final String label;
+    private final Conditions conditions;
 
 	public EpsilonTransition(Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		this(Type.DUMMY, conditions, origin, dest);
 	}
-	
-	public EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+
+	private EpsilonTransition(Type type, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		this.type = type;
-		this.label = null;
-		this.conditions = conditions;
-	}
-	
+        this.label = null;
+        this.conditions = conditions;
+    }
+
 	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
 		super(origin, dest);
 		
@@ -63,71 +64,6 @@ public class EpsilonTransition extends AbstractTransition {
 		this.type = type;
 		this.label = label;
 		this.conditions = conditions;
-	}
-
-	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		switch(type) {
-		
-		case DUMMY:
-			if (conditions.execute(parser.getInput(), u, i))
-				return;	
-			break;
-			
-		case CLEAR_LABEL: // TODO: Decide if this case is needed
-			break;
-			
-		case OPEN: 
-			if (conditions.execute(parser.getInput(), u, i)) 
-				return;
-			
-			parser.setEnvironment(parser.getEmptyEnvironment());
-			parser.getEvaluatorContext().pushEnvironment();
-			
-			dest.execute(parser, u, i, node, parser.getEnvironment());
-			return;
-			
-		case CLOSE:
-			if (conditions.execute(parser.getInput(), u, i))
-				return;
-			break;
-			
-		case DECLARE_LABEL:
-			
-			parser.setEnvironment(parser.getEmptyEnvironment());
-			
-			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
-			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
-			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			
-			dest.execute(parser, u, i, node, parser.getEnvironment());
-			return;
-			
-		case STORE_LABEL:
-			
-			parser.setEnvironment(parser.getEmptyEnvironment());
-			
-			Object value = parser.getEvaluatorContext().lookupVariable(label);
-			
-			Integer lhs;
-			if (!(value instanceof Tuple)) {
-				lhs = (Integer) ((Tuple<?,?>) value).getFirst();
-			} else {
-				throw new UnexpectedRuntimeTypeException(AST.var(label));
-			}
-			
-			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
-			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			
-			dest.execute(parser, u, i, node, parser.getEnvironment());	
-			return;
-		}
-		
-		dest.execute(parser, u, i, node);
 	}
 
 	@Override
@@ -140,7 +76,7 @@ public class EpsilonTransition extends AbstractTransition {
 		case DECLARE_LABEL:
 			return label + ".lExt " + conditions;
 		case DUMMY:
-			return conditions.equals("") ? String.valueOf('\u2205') : conditions.toString();
+			return conditions.toString().equals("") ? String.valueOf('\u2205') : conditions.toString();
 		case OPEN:
 			return conditions + " {";
 		case STORE_LABEL:
@@ -150,68 +86,64 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		
-		parser.setEnvironment(env);
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
+
+		runtime.setEnvironment(env);
 		
 		switch(type) {
 		
-		case DUMMY:
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;	
-			break;
-			
-		case CLEAR_LABEL: // TODO: Decide if this case is needed
-			break;
-			
-		case OPEN: 
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext())) 
-				return;
-			parser.getEvaluatorContext().pushEnvironment();
-			break;
-			
-		case CLOSE:
-			parser.getEvaluatorContext().popEnvironment();
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			break;
-			
-		case DECLARE_LABEL:
-			parser.getEvaluatorContext().declareVariable(label, Tuple.<Integer, Integer>of(i, -1));
-			parser.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.<Integer, Integer>of(i, -1));
-			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			break;
-			
-		case STORE_LABEL:
-			
-			Object value = parser.getEvaluatorContext().lookupVariable(label);
-			
-			Integer lhs;
-			if (!(value instanceof Tuple)) {
-				lhs = (Integer) ((Tuple<?,?>) value).getFirst();
-			} else {
-				throw new UnexpectedRuntimeTypeException(AST.var(label));
-			}
-			
-			parser.getEvaluatorContext().storeVariable(label, Tuple.<Integer, Integer>of(lhs, i));
-			
-			if (conditions.execute(parser.getInput(), u, i, parser.getEvaluatorContext()))
-				return;
-			break;
-		}
+            case DUMMY:
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
+                    return;
+                break;
+
+            case CLEAR_LABEL: // TODO: Decide if this case is needed
+                break;
+
+            case OPEN:
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
+                    return;
+                runtime.getEvaluatorContext().pushEnvironment();
+                break;
+
+            case CLOSE:
+                runtime.getEvaluatorContext().popEnvironment();
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
+                    return;
+                break;
+
+            case DECLARE_LABEL:
+                runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
+                runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
+
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
+                    return;
+                break;
+
+            case STORE_LABEL:
+
+                Object value = runtime.getEvaluatorContext().lookupVariable(label);
+
+                Integer lhs;
+                if (!(value instanceof Tuple)) {
+                    lhs = (Integer) ((Tuple<?,?>) value).getFirst();
+                } else {
+                    throw new UnexpectedRuntimeTypeException(AST.var(label));
+                }
+
+                runtime.getEvaluatorContext().storeVariable(label, Tuple.of(lhs, i));
+
+                if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
+                    return;
+                break;
+            }
 		
-		dest.execute(parser, u, i, node, parser.getEnvironment());
+		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
-	
-	public static enum Type {
-		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL;
+	public enum Type {
+		DUMMY, OPEN, CLOSE, DECLARE_LABEL, STORE_LABEL, CLEAR_LABEL
 	}
 
 }

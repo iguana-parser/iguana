@@ -27,65 +27,54 @@
 
 package org.iguana.parser.descriptor;
 
+import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.gss.GSSNode;
+import org.iguana.result.Result;
 
-/**
- * @author Ali Afroozeh
- * 
- */
-// The label of SPPFNode is the same as the slot
-public class Descriptor {
+public class Descriptor<T extends Result> {
 	
 	// L
-	private final BodyGrammarSlot slot;
+	private BodyGrammarSlot slot;
 	
 	// (L1, i)
-	private final GSSNode gssNode;
+	private GSSNode<T> gssNode;
 	
-	// j
-	private final int inputIndex;
-	
-	// (L, i, j)
-	private final NonPackedNode sppfNode;
-	
-	public Descriptor(BodyGrammarSlot slot, GSSNode gssNode, int inputIndex, NonPackedNode sppfNode) {
-		assert slot != null;
-		assert gssNode != null;
-		assert inputIndex >= 0;
-		assert sppfNode != null;
-		
+	// (L, i, j), The label of SPPFNode is the same as the slot
+	private T result;
+
+	private Environment env;
+
+	public Descriptor(BodyGrammarSlot slot, GSSNode<T> gssNode, T result, Environment env) {
+		init(slot, gssNode, result, env);
+	}
+
+	public void init(BodyGrammarSlot slot, GSSNode<T> gssNode, T result, Environment env) {
 		this.slot = slot;
 		this.gssNode = gssNode;
-		this.inputIndex = inputIndex;
-		this.sppfNode = sppfNode;
+		this.result = result;
+		this.env = env;
 	}
 	
 	public BodyGrammarSlot getGrammarSlot() {
 		return slot;
 	}
 
-	public GSSNode getGSSNode() {
+	public GSSNode<T> getGSSNode() {
 		return gssNode;
 	}
 	
-	public int getInputIndex() {
-		return inputIndex;
+	public T getResult() {
+		return result;
 	}
 
-	public NonPackedNode getSPPFNode() {
-		return sppfNode;
+	public Environment getEnv() {
+		return env;
 	}
-	
-	public void execute(GLLParser parser) {
-		slot.execute(parser, gssNode, inputIndex, sppfNode);
-	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("(%s, %d, %s, %s)", slot, inputIndex, gssNode, sppfNode);
+		return String.format("(%s, %s, %s)", slot, gssNode, result);
 	}
 	
 }

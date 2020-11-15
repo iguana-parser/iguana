@@ -49,13 +49,6 @@ public class Offside extends AbstractSymbol {
 	}
 	
 	@Override
-	public String getConstructorCode() {
-		return "Offside.builder(" + symbol.getConstructorCode() + ")" 
-								  + super.getConstructorCode()
-								  + ".build()";
-	}
-
-	@Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
@@ -67,7 +60,7 @@ public class Offside extends AbstractSymbol {
 	
 	@Override
 	public String toString() {
-		return String.format("offside %s", symbol.toString());
+		return super.toString();
 	}
 	
 	@Override

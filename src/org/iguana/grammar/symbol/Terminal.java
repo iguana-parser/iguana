@@ -27,79 +27,133 @@
 
 package org.iguana.grammar.symbol;
 
-import java.util.Set;
-
-import org.iguana.regex.RegularExpression;
+import iguana.regex.Epsilon;
+import iguana.regex.RegularExpression;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
 
-public class Terminal extends AbstractRegularExpression {
+import java.util.Collections;
+import java.util.Set;
+
+public class Terminal extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private final TerminalNodeType nodeType;
+
 	private final RegularExpression regex;
-	
+
+	private final Set<Condition> terminalPreConditions;
+	private final Set<Condition> terminalPostConditions;
+
+    private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
+
+    public static Terminal epsilon() {
+        return epsilon;
+    }
+
 	public static Terminal from(RegularExpression regex) {
 		return builder(regex).build();
 	}
-	
+
 	public Terminal(Builder builder) {
 		super(builder);
 		this.regex = builder.regex;
+		this.nodeType = builder.nodeType;
+		this.terminalPreConditions = builder.terminalPreConditions;
+		this.terminalPostConditions = builder.terminalPostConditions;
 	}
 
-	@Override
+    @Override
 	public Builder copyBuilder() {
 		return new Builder(this);
 	}
-	
+
 	public RegularExpression getRegularExpression() {
 		return regex;
 	}
-	
-	@Override
-	public int length() {
-		return regex.length();
+
+	public TerminalNodeType getNodeType() {
+		return nodeType;
 	}
-	
+
+	public Set<Condition> getTerminalPostConditions() {
+		return terminalPostConditions;
+	}
+
+	public Set<Condition> getTerminalPreConditions() {
+		return terminalPreConditions;
+	}
+
 	@Override
 	public int hashCode() {
 		return regex.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		
 		if (obj == this)
 			return true;
-		
+
 		if (!(obj instanceof Terminal))
 			return false;
-		
+
 		Terminal other = (Terminal) obj;
-		
+
 		return regex.equals(other.regex);
 	}
-	
+
 	public static Builder builder(RegularExpression regex) {
 		return new Builder(regex);
 	}
-	
+
 	public static class Builder extends SymbolBuilder<Terminal> {
-		
+
+		private TerminalNodeType nodeType;
 		private RegularExpression regex;
+		private Set<Condition> terminalPreConditions;
+		private Set<Condition> terminalPostConditions;
 
 		public Builder(RegularExpression regex) {
-			super(regex.getName());
 			this.regex = regex;
 		}
-		
+
+		public Builder() {}
+
 		public Builder(Terminal terminal) {
 			super(terminal);
 			this.regex = terminal.regex;
+			this.nodeType = terminal.getNodeType();
+            this.terminalPreConditions = terminal.getTerminalPreConditions();
+            this.terminalPostConditions = terminal.getTerminalPostConditions();
 		}
-		
+
+		public Builder setNodeType(TerminalNodeType nodeType) {
+			this.nodeType = nodeType;
+			return this;
+		}
+
+		public Builder setTerminalPreConditions(Set<Condition> conditions) {
+			this.terminalPreConditions = conditions;
+			return this;
+		}
+
+		public Builder setTerminalPostConditions(Set<Condition> conditions) {
+			this.terminalPostConditions = conditions;
+			return this;
+		}
+
 		@Override
 		public Terminal build() {
+			if (name == null)
+				name = regex.toString();
+			if (terminalPreConditions == null) {
+				terminalPreConditions = Collections.emptySet();
+			}
+			if (terminalPostConditions == null) {
+				terminalPostConditions = Collections.emptySet();
+			}
 			return new Terminal(this);
 		}
 	}
@@ -109,24 +163,8 @@ public class Terminal extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Set<CharacterRange> getFirstSet() {
-		return regex.getFirstSet();
-	}
-
-	@Override
-	public Set<CharacterRange> getNotFollowSet() {
-		return regex.getNotFollowSet();
-	}
-	
-	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
-	}
-	
-	public String getConstructorCode() {
-		return Terminal.class.getSimpleName() + ".builder(" + regex.getConstructorCode() + ")"
-											  + super.getConstructorCode() 
-											  + ".build()";
 	}
 
 }

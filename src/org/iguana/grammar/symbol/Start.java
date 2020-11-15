@@ -27,12 +27,19 @@
 
 package org.iguana.grammar.symbol;
 
-public class Start extends Nonterminal {
+
+import org.iguana.traversal.ISymbolVisitor;
+
+public class Start extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final Nonterminal nonterminal;
-	
+
+    public static Start from(String s) {
+        return builder(Nonterminal.withName(s)).build();
+    }
+
 	public static Start from(Nonterminal nonterminal) {
 		return builder(nonterminal).build();
 	}
@@ -46,21 +53,41 @@ public class Start extends Nonterminal {
 	public Builder copyBuilder() {
 		return builder(nonterminal);
 	}
-	
-	public Nonterminal getNonterminal() {
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    public Nonterminal getNonterminal() {
 		return nonterminal;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+    	if (this == obj) return true;
+    	if (!(obj instanceof Start)) return false;
+    	Start other = (Start) obj;
+    	return this.nonterminal.equals(other.nonterminal);
+	}
+
+	@Override
+	public int hashCode() {
+		return nonterminal.hashCode();
+	}
+
 	public static Builder builder(Nonterminal nonterminal) {
 		return new Builder(nonterminal);
 	}
 	
-	public static class Builder extends Nonterminal.Builder {
+	public static class Builder extends SymbolBuilder<Start> {
 
 		private Nonterminal nonterminal;
 
+		private Builder() {}
+
 		public Builder(Nonterminal nonterminal) {
-			super("start[" + nonterminal.getName() + "]");
+			super("Start(" + nonterminal.getName() + ")");
 			this.nonterminal = nonterminal;
 		}
 

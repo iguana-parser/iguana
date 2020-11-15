@@ -27,24 +27,24 @@
 
 package org.iguana.disambiguation.conditions;
 
-import static org.junit.Assert.*;
-
+import iguana.regex.Alt;
+import iguana.regex.Char;
+import iguana.regex.CharRange;
+import iguana.regex.Seq;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.CharacterRange;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Alt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Sequence;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
 
 
 /**
@@ -61,49 +61,57 @@ public class KeywordExclusionTest {
 	@Before
 	public void init() {
 		Nonterminal Id = Nonterminal.withName("Id");
-		CharacterRange az = CharacterRange.in('a', 'z');
+		Terminal az = Terminal.from(CharRange.in('a', 'z'));
 		
-		Sequence<Character> iff = Sequence.from("if");
-		Sequence<Character> when = Sequence.from("when");
-		Sequence<Character> doo = Sequence.from("do");
-		Sequence<Character> whilee = Sequence.from("while");
+		Seq<Char> iff = Seq.from("if");
+		Seq<Char> when = Seq.from("when");
+		Seq<Char> doo = Seq.from("do");
+		Seq<Char> whilee = Seq.from("while");
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);
-		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(az)).addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
+		Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(CharRange.in('a', 'z'))).addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
 		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
 		grammar = Grammar.builder().addRule(r1).build();
-	}
+        grammar = new EBNFToBNF().transform(grammar);
+    }
 	
 	@Test
 	public void testWhen() {
 		Input input = Input.fromString("when");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
-		assertTrue(result.isParseError());
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNull(result);
 	}
 	
 	@Test
 	public void testIf() {
-		Input input = Input.fromString("if");		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
-		assertTrue(result.isParseError());
+		Input input = Input.fromString("if");
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNull(result);
 	}
 	
 	@Test
 	public void testDo() {
 		Input input = Input.fromString("do");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
-		assertTrue(result.isParseError());
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNull(result);
 	}
 	
 	@Test
 	public void testWhile() {
 		Input input = Input.fromString("while");
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, grammar, Nonterminal.withName("Id"));
-		assertTrue(result.isParseError());
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNull(result);
 	}
 
 }

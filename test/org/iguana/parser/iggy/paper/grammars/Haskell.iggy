@@ -1,0 +1,30 @@
+/*
+ * Expressing indentation rules using the align,
+ * offside and ignore constructs of Iguana
+ */
+
+Start ::= Exp
+
+Decls ::= align offside Decl*
+        | ignore '{' Decl (';' Decl)* '}'
+
+Exp ::= Exp '+' Exp             left
+      > 'let' Decls 'in' Exp
+      | Num
+
+Decl ::= Id '=' Exp
+
+@Layout
+L ::= Whitespaces
+
+regex {
+Id ::= [a-zA-Z][a-zA-Z0-9]*
+Num ::= [1-9][0-9]*
+Whitespaces ::= [\n\r\t\f\ ]*
+}
+
+/*
+ * Desugaring align alone:
+ *     Decls ::= x:(offside y:Decl [col(x.l)==col(y.l)])*
+ *             | ignore '{' Decl (';' Decl)* '}'
+ */

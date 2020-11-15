@@ -27,18 +27,6 @@
 
 package org.iguana.grammar.precedence;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.patterns.AbstractPattern;
 import org.iguana.grammar.patterns.ExceptPattern;
@@ -48,6 +36,10 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Rule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class OperatorPrecedence {
 	
@@ -106,8 +98,8 @@ public class OperatorPrecedence {
 			Nonterminal head = e.getKey();
 			for (int i = 0; i < e.getValue().size(); i++) {
 				List<Symbol> list = definitions.get(head).get(i);
-				Nonterminal layout = grammar.getDefinitions().get((Nonterminal) plain(head)).get(i).getLayout();
-				LayoutStrategy strategy = grammar.getDefinitions().get((Nonterminal) plain(head)).get(i).getLayoutStrategy();
+				Symbol layout = grammar.getDefinitions().get(plain(head)).get(i).getLayout();
+				LayoutStrategy strategy = grammar.getDefinitions().get(plain(head)).get(i).getLayoutStrategy();
 				Rule rule = Rule.withHead(head).addSymbols(list).setLayout(layout).setLayoutStrategy(strategy).build();
 				if (rule.getBody() != null)
 					builder.addRule(rule);
@@ -211,12 +203,13 @@ public class OperatorPrecedence {
 			Map<PrecedencePattern, List<List<Symbol>>> patterns = groupPatterns(entry.getValue());
 			
 			rewriteFirstLevel(nonterminal, patterns);
-			rewriteDeeperLevels(nonterminal, patterns);
+			// if (nonterminal.getIndex() > 0)
+				rewriteDeeperLevels(nonterminal, patterns);
 		}
 	}
 
 	private void rewriteDeeperLevels(Nonterminal head, Map<PrecedencePattern, List<List<Symbol>>> patterns) {
-
+		
 		for(Entry<PrecedencePattern, List<List<Symbol>>> e : patterns.entrySet()) {
 			
 			PrecedencePattern pattern = e.getKey();
@@ -224,13 +217,15 @@ public class OperatorPrecedence {
 			
 			for (List<Symbol> alt : definitions.get(head)) {
 				if (pattern.isLeftMost() && match(plain(alt), pattern.getParent())) {
-					rewriteRightEnds((Nonterminal)alt.get(0), pattern, children, new HashSet<Nonterminal>());
-					rewriteIndirectRightEnds((Nonterminal)alt.get(0), pattern, children, new HashSet<Nonterminal>());
+					Nonterminal nt = (Nonterminal)alt.get(0);
+					rewriteRightEnds(nt, pattern, children, new HashSet<Nonterminal>());
+					rewriteIndirectRightEnds(nt, pattern, children, new HashSet<Nonterminal>());
 				}
 
 				if (pattern.isRightMost() && match(plain(alt), pattern.getParent())) {
-					rewriteLeftEnds((Nonterminal)alt.get(alt.size() - 1), pattern, children, new HashSet<Nonterminal>());
-					rewriteIndirectLeftEnds((Nonterminal)alt.get(alt.size() - 1), pattern, children, new HashSet<Nonterminal>());
+					Nonterminal nt = (Nonterminal)alt.get(alt.size() - 1);
+					rewriteLeftEnds(nt, pattern, children, new HashSet<Nonterminal>());
+					rewriteIndirectLeftEnds(nt, pattern, children, new HashSet<Nonterminal>());
 				}
 			}
 		}
@@ -244,6 +239,7 @@ public class OperatorPrecedence {
 			visited.add(nonterminal);
 		}
 		
+		if (nonterminal.getIndex() == 0) return;
 			
 		for(List<Symbol> alternate : definitions.get(nonterminal)) {
 			
@@ -275,6 +271,7 @@ public class OperatorPrecedence {
 			visited.add(nonterminal);
 		}
 		
+		if (nonterminal.getIndex() == 0) return;
 			
 		for(List<Symbol> alternate : definitions.get(nonterminal)) {
 			
@@ -308,6 +305,8 @@ public class OperatorPrecedence {
 		} else {
 			visited.add(nonterminal);
 		}
+		
+		if (nonterminal.getIndex() == 0) return;
 			
 		for(List<Symbol> alternate : definitions.get(nonterminal)) {
 			
@@ -338,7 +337,9 @@ public class OperatorPrecedence {
 		} else {
 			visited.add(nonterminal);
 		}
-			
+		
+		if (nonterminal.getIndex() == 0) return;
+		
 		for(List<Symbol> alternate : definitions.get(nonterminal)) {
 			
 			if (alternate == null) {
@@ -469,9 +470,6 @@ public class OperatorPrecedence {
 	 * Returns a list of all nonterminals with the given name which are
 	 * reachable from the given head and are on the left-most end.
 	 * 
-	 * @param head
-	 * @param directName
-	 * @param alternates
 	 */
 	private void getLeftEnds(Nonterminal head, Nonterminal nonterminal, Set<List<Symbol>> nonterminals) {
 		getLeftEnds(head, nonterminal, nonterminals, new HashSet<Nonterminal>());
@@ -665,7 +663,7 @@ public class OperatorPrecedence {
 					} else {
 						Nonterminal newNonterminal = createNewNonterminal(n);
 						map.put(n,  newNonterminal);
-						definitions.put(newNonterminal, deepCopy(definitions.get(n), nonterminal, map));
+                        definitions.put(newNonterminal, deepCopy(definitions.get(n), nonterminal, map));
 						copyAlt.add(newNonterminal);				
 					}
 					continue;

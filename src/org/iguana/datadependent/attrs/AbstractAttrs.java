@@ -27,30 +27,30 @@
 
 package org.iguana.datadependent.attrs;
 
-import java.io.Serializable;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
-import org.eclipse.imp.pdb.facts.util.TrieSet;
+import io.usethesource.capsule.Set;
+
+import java.io.Serializable;
 
 public abstract class AbstractAttrs implements Attr, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private transient ImmutableSet<String> env;
+	private transient Set.Immutable<String> env;
 
 	@Override
-	public ImmutableSet<String> getEnv() {
-		return env == null? TrieSet.of() : env;
+	public Set.Immutable<String> getEnv() {
+		return env == null? Set.Immutable.of() : env;
 	}
 
 	@Override
-	public void setEnv(ImmutableSet<String> env) {
+	public void setEnv(Set.Immutable<String> env) {
 		this.env = env;
 	}
 	
 	@Override
 	public void setEmpty() {
-		this.env = TrieSet.of();
+		this.env = io.usethesource.capsule.Set.Immutable.of();
 	}
 
 }

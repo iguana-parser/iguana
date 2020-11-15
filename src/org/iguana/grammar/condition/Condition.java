@@ -27,18 +27,17 @@
 
 package org.iguana.grammar.condition;
 
-import java.io.Serializable;
-
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.traversal.IConditionVisitor;
-import org.iguana.util.generator.ConstructorCode;
+
+import java.io.Serializable;
 
 
-public abstract class Condition extends AbstractAttrs implements Serializable, ConstructorCode {
+public abstract class Condition extends AbstractAttrs implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected ConditionType type;
+	protected final ConditionType type;
 
 	public Condition (ConditionType type) {
 		this.type = type;
@@ -50,10 +49,10 @@ public abstract class Condition extends AbstractAttrs implements Serializable, C
 
 	public abstract <T> T accept(IConditionVisitor<T> visitor);
 	
-	/**
-	 * 
+	/*
+	 *
 	 * Data-dependent GLL parsing
-	 * 
+	 *
 	 */
 	public boolean isDataDependent() {
 		return false;

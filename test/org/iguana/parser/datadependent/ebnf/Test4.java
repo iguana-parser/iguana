@@ -27,27 +27,20 @@
 
 package org.iguana.parser.datadependent.ebnf;
 
-import static org.iguana.datadependent.ast.AST.*;
-import static org.iguana.grammar.condition.DataDependentCondition.predicate;
-
+import iguana.regex.Char;
+import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.symbol.Character;
-import org.iguana.grammar.symbol.Code;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.ParseResult;
-import org.iguana.parser.ParserFactory;
-import org.iguana.regex.Sequence;
-import org.iguana.regex.Star;
-import org.iguana.util.Configuration;
-import org.iguana.util.Input;
-import org.iguana.util.Visualization;
-import org.junit.Assert;
+import org.iguana.parser.IguanaParser;
+import org.iguana.parsetree.ParseTreeNode;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.iguana.datadependent.ast.AST.*;
+import static org.iguana.grammar.condition.DataDependentCondition.predicate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * 
@@ -84,9 +77,9 @@ public class Test4 {
 																	 stat(println(var("b"))))).build())
 									.setLabel("b").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Character.from('a')).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Character.from('b')).build();
-		Rule r4 = Rule.withHead(C).addSymbol(Character.from('c')).build();
+		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
 		
 		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
 		
@@ -100,19 +93,12 @@ public class Test4 {
 		System.out.println(grammar);
 		
 		Input input = Input.fromString("abcbcbc");
-		GrammarGraph graph = grammar.toGrammarGraph(input, Configuration.DEFAULT);
-		
-		GLLParser parser = ParserFactory.getParser(Configuration.DEFAULT, input, grammar);
-		ParseResult result = parser.parse(input, graph, Nonterminal.withName("X"));
-		
-		Assert.assertTrue(result.isParseSuccess());
-		
-		// Visualization.generateGrammarGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", graph);
-		
-		// Visualization.generateSPPFGraph("/Users/anastasiaizmaylova/git/diguana/test/org/jgll/parser/datadependent/", 
-		// 		result.asParseSuccess().getRoot(), input);
-		
-		Assert.assertTrue(result.asParseSuccess().getStatistics().getCountAmbiguousNodes() == 0);
+
+        IguanaParser parser = new IguanaParser(grammar);
+        ParseTreeNode result = parser.getParserTree(input);
+
+        assertNotNull(result);
+        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 	}
 
 }

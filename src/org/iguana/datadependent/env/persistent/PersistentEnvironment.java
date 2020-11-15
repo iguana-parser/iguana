@@ -27,8 +27,7 @@
 
 package org.iguana.datadependent.env.persistent;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableMap;
-import org.eclipse.imp.pdb.facts.util.TrieMap;
+import io.usethesource.capsule.Map;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UndeclaredVariableException;
@@ -38,11 +37,11 @@ public class PersistentEnvironment implements Environment {
 	
 	private final PersistentEnvironment parent;
 	
-	final private ImmutableMap<String, Object> bindings;
+	final private Map.Immutable<String, Object> bindings;
+
+	static final Environment EMPTY = new PersistentEnvironment(null, (Map.Immutable<String, Object>) Map.Immutable.<String, Object>of());
 	
-	static public final Environment EMPTY = new PersistentEnvironment(null, (TrieMap<String, Object>) TrieMap.<String, Object>of());
-	
-	public PersistentEnvironment(PersistentEnvironment parent, ImmutableMap<String, Object> bindings) {
+	private PersistentEnvironment(PersistentEnvironment parent, Map.Immutable<String, Object> bindings) {
 		this.parent = parent;
 		this.bindings = bindings;
 	}
@@ -51,25 +50,25 @@ public class PersistentEnvironment implements Environment {
 	public boolean isEmpty() {
 		return bindings.isEmpty() && (parent == null || parent.isEmpty());
 	}
-	
-	@Override
+
+    @Override
 	public Environment pop() {
 		return parent;
 	}
 
 	@Override
 	public Environment push() {
-		return new PersistentEnvironment(this, (TrieMap<String, Object>) TrieMap.<String, Object>of());
+		return new PersistentEnvironment(this, Map.Immutable.of());
 	}
 	
 	@Override
-	public Environment declare(String name, Object value) {
+	public Environment _declare(String name, Object value) {
 		return new PersistentEnvironment(parent, bindings.__put(name, value));
 	}
 
 	@Override
 	public Environment declare(String[] names, Object[] values) {
-		ImmutableMap<String, Object> bindings = this.bindings;
+		Map.Immutable<String, Object> bindings = this.bindings;
 		int i = 0;
 		while (i < names.length) {
 			bindings = bindings.__put(names[i], values[i]);
@@ -97,8 +96,8 @@ public class PersistentEnvironment implements Environment {
 			
 			return new PersistentEnvironment((PersistentEnvironment) parent, bindings);
 		}
-		
-		ImmutableMap<String, Object> bindings = this.bindings.__put(name, value);
+
+		Map.Immutable<String, Object> bindings = this.bindings.__put(name, value);
 		if (bindings == this.bindings) {
 			return this;
 		}
@@ -160,6 +159,26 @@ public class PersistentEnvironment implements Environment {
 	public String toString() {
 		return (parent != null? parent.toString() + " -> " : "() -> ")
 				+ (bindings != null? bindings.toString(): "()");
+	}
+
+	@Override
+	public Environment _declare(Object value) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
+	@Override
+	public Environment declare(Object[] values) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
+	@Override
+	public Environment store(int i, Object value) {
+		throw new RuntimeException("Unsupported with this type of environment!");
+	}
+
+	@Override
+	public Object lookup(int i) {
+		throw new RuntimeException("Unsupported with this type of environment!");
 	}
 
 }

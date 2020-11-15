@@ -27,68 +27,65 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.function.BiFunction;
-
+import iguana.utils.collections.Keys;
+import iguana.utils.collections.OpenAddressingHashMap;
+import iguana.utils.collections.key.Key;
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.symbol.Position;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.util.Holder;
-import org.iguana.util.Input;
-import org.iguana.util.collections.Key;
-import org.iguana.util.hashing.hashfunction.MurmurHash3;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class BodyGrammarSlot extends AbstractGrammarSlot {
+public class BodyGrammarSlot implements GrammarSlot {
 	
 	protected final Position position;
 	
-	private HashMap<Key, IntermediateNode> intermediateNodes;
+	private Map<Key, Object> intermediateNodes;
 	
 	private final Conditions conditions;
 	
 	private final String label;
 	
+	private final int i1;
+	
 	private final String variable;
+	
+	private final int i2;
 	
 	private final Set<String> state;
 	
 	private FollowTest followTest;
+
+	private Transition outTransition;
+
+	private Transition inTransition;
+
+	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions) {
+		this(position, label, -1, variable, -1, state, conditions);
+	}
 	
-	public BodyGrammarSlot(int id, Position position, String label, String variable, Set<String> state, Conditions conditions) {
-		super(id);
+	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions) {
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
+		this.i1 = i1;
 		this.variable = variable;
+		this.i2 = i2;
 		this.state = state;
-		this.intermediateNodes = new HashMap<>();
-	}
-	
-	@Override
-	public String getConstructorCode() {
-		return new StringBuilder()
-    	  .append("new BodyGrammarSlot(")
-    	  .append(")").toString();
 	}
 	
 	@Override
 	public String toString() {
 		return position.toString();
-	}
-	
-	@Override
-	public boolean isFirst() {
-		return position.isFirst();
 	}
 	
 	public void setFollowTest(FollowTest followTest) {
@@ -98,77 +95,38 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 	public boolean testFollow(int v) {
 		return followTest.test(v);
 	}
-	
-	public IntermediateNode createIntermediateNode(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild) {
-		IntermediateNode newNode = new IntermediateNode(this, leftChild.getLeftExtent(), rightChild.getRightExtent());
-		newNode.addPackedNode(parser, this, leftChild, rightChild);
-		parser.intermediateNodeAdded(newNode);
-		return newNode;
-	}
-	
-	public NonPackedNode getIntermediateNode2(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild) {
-		
+
+	@SuppressWarnings("unchecked")
+	public <T extends Result> T getIntermediateNode(T leftResult, int destinationIndex, T rightResult, Environment env, IguanaRuntime<T> runtime) {
 		if (isFirst())
-			return rightChild;
-		
-		Holder<IntermediateNode> holder = new Holder<>();
-		
-		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
-			if (value != null) {
-				value.addPackedNode(parser, this, leftChild, rightChild);
-				return value;
-			} else {
-				IntermediateNode newNode = createIntermediateNode(parser, leftChild, rightChild);
-				holder.set(newNode);
-				return newNode;				
-			}
-		};
-		
-		intermediateNodes.compute(IntKey2.from(leftChild.getLeftExtent(), rightChild.getRightExtent(), parser.getInput().length()), creator);
-		
-		return holder.get();
+			return rightResult;
+
+		Key key = Keys.from(destinationIndex, rightResult.getIndex(), env);
+
+		if (intermediateNodes == null) {
+		    intermediateNodes = new OpenAddressingHashMap<>();
+        }
+
+		Object value = intermediateNodes.get(key);
+		if (value == null) {
+			T newNode = runtime.getResultOps().merge(null, leftResult, rightResult, this);
+			intermediateNodes.put(key, newNode);
+			return newNode;
+		}
+
+		runtime.getResultOps().merge((T) value, leftResult, rightResult, this);
+		return null;
 	}
-	
-	public NonPackedNode getIntermediateNode2(GLLParser parser, NonPackedNode leftChild, NonPackedNode rightChild, Environment env) {
-		
-		if (isFirst())
-			return rightChild;
-		
-		Holder<IntermediateNode> holder = new Holder<>();
-		BiFunction<Key, IntermediateNode, IntermediateNode> creator = (key, value) -> {
-			if (value != null) {
-				value.addPackedNode(parser, this, leftChild, rightChild);
-				return value;
-			} else {
-				IntermediateNode newNode = createIntermediateNode(parser, leftChild, rightChild);
-				holder.set(newNode);
-				return newNode;				
-			}
-		};
-		
-		intermediateNodes.compute(IntKey2PlusObject.from(env, leftChild.getLeftExtent(), rightChild.getRightExtent(), parser.getInput().length()), creator);
-		
-		return holder.get();
-	}	
 	
 	public Conditions getConditions() {
 		return conditions;
 	}
 
 	@Override
-	public void reset(Input input) {
-		intermediateNodes = new HashMap<>();
+	public void reset() {
+		intermediateNodes = null;
 	}
-	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node) {
-		getTransitions().forEach(t -> t.execute(parser, u, i, node));
-	}
-	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
+
 	public String getLabel() {
 		return label;
 	}
@@ -177,154 +135,100 @@ public class BodyGrammarSlot extends AbstractGrammarSlot {
 		return variable;
 	}
 	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env) {
-		getTransitions().forEach(t -> t.execute(parser, u, i, node, env));
+	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+        outTransition.execute(input, u, result, env, runtime);
 	}
 		
 	public boolean requiresBinding() {
 		return label != null || variable != null || state != null; 
 	}
 	
-	public Environment doBinding(NonPackedNode sppfNode, Environment env) {
+	public Environment doBinding(Result result, Environment env) {
+
+		if (label != null) {
+			if (i1 != -1)
+				env = env._declare(result);
+			else
+				env = env._declare(label, result);
+		}
 		
-		if (label != null)
-			env = env.declare(label, sppfNode);
-		
-		if (variable != null && state == null)
-			env = env.declare(variable, ((NonterminalNode) sppfNode).getValue());
-		
-		if (variable == null && state != null) {
+		if (variable != null && state == null) {
+			if (i2 != -1)
+				env = env._declare(result.getValue());
+			else
+				env = env._declare(variable, result.getValue());
+		}
+
+		if (variable == null && state != null) { // TODO: support for the array-based environment implementation
 			if (state.size() == 1) {
 				String v = state.iterator().next();
 				if (!v.equals("_")) {
-					Object value = ((NonterminalNode) sppfNode).getValue();
-					env = env.declare(v, value);
+					Object value = result.getValue();
+					env = env._declare(v, value);
 				}
 			} else {
-				List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
+				List<?> values = (List<?>) result.getValue();
 				Iterator<?> it = values.iterator();
 				for (String v : state) {
 					if (!v.equals("_"))
-						env = env.declare(v, it.next());
+						env = env._declare(v, it.next());
 				}
 			}
 		}
 		
-		if (variable != null && state != null) {
-			List<?> values = (List<?>) ((NonterminalNode) sppfNode).getValue();
+		if (variable != null && state != null) { // TODO: support for the array-based environment implementation
+			List<?> values = (List<?>) result.getValue();
 			Iterator<?> it = values.iterator();
 			
-			env = env.declare(variable, it.next());
+			env = env._declare(variable, it.next());
 			
 			for (String v : state) {
 				if (!v.equals("_"))
-					env = env.declare(v, it.next());
+					env = env._declare(v, it.next());
 			}
 		}
 		
 		return env;
 	}
-	
-	static class IntKey2 implements Key, Comparable<IntKey2> {
-		
-		private final int k1;
-		private final int k2;
-		private final int hash;
 
-		private IntKey2(int k1, int k2, int size) {
-			this.k1 = k1;
-			this.k2 = k2;
-			this.hash = k1 * size + k2;
-		}
-		
-		public static Key from(int k1, int k2, int size) {
-			return new IntKey2(k1, k2, size);
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			
-			if (!(obj instanceof IntKey2))
-				return false;
-			
-			IntKey2 other = (IntKey2) obj;
-			return k1 == other.k1 && k2 == other.k2;
-		}
-		
-		@Override
-		public int hashCode() {
-			return hash;
-		}
-
-		@Override
-		public int[] components() {
-			return new int[] {k1, k2};
-		}
-
-		@Override
-		public int compareTo(IntKey2 o) {
-			int r;
-			return (r = k1 - o.k1) != 0 ? r : k2 - o.k2;
-		}
-		
-		@Override
-		public String toString() {
-			return String.format("(%d, %d)", k1, k2);
-		}
-	}
-	
-	
-	static class IntKey2PlusObject implements Key {
-		
-		private static MurmurHash3 f = new MurmurHash3();
-		
-		private final int k1;
-		private final int k2;
-		private final Object obj;
-		
-		private final int hash;
-
-		private IntKey2PlusObject(Object obj, int k1, int k2, int size) {
-			this.k1 = k1;
-			this.k2 = k2;
-			this.obj = obj;
-			this.hash =  f.hash(obj.hashCode(), k1, k2);
-		}
-		
-		public static Key from(Object obj, int k1, int k2, int size) {
-			return new IntKey2PlusObject(obj, k1, k2, size);
-		}
-		
-		@Override
-		public boolean equals(Object other) {
-			if (this == other) return true;
-			
-			if (!(other instanceof IntKey2PlusObject)) return false;
-			
-			IntKey2PlusObject that = (IntKey2PlusObject) other;
-			return hash == that.hash 
-					&& k1 == that.k1 && k2 == that.k2 
-					&& obj.equals(that.obj);
-		}
-		
-		@Override
-		public int hashCode() {
-			return hash;
-		}
-
-		@Override
-		public int[] components() {
-			return new int[] {k1, k2};
-		}
-
-		@Override
-		public String toString() {
-			return String.format("(%d, %d, %s)", k1, k2, obj);
-		}
-
+	public int getPosition() {
+		return position.getPosition();
 	}
 
+    public Rule getRule() {
+		return position.getRule();
+	}
+
+    public void setOutTransition(Transition outTransition) {
+        this.outTransition = outTransition;
+    }
+
+    public void setInTransition(Transition inTransition) {
+        this.inTransition = inTransition;
+    }
+
+    public Transition getOutTransition() {
+        return outTransition;
+    }
+
+    public Transition getInTransition() { return inTransition; }
+
+    /*
+     * Corresponds to a grammar position A ::= B . \alpha
+     */
+    public boolean isFirst() {
+        return getPosition() == 1;
+    }
+
+    /*
+     * Corresponds to a grammar position A ::= . \alpha
+     */
+    public boolean isStart() {
+        return getPosition() == 0;
+    }
+
+    public boolean isEnd() {
+        return false;
+    }
 
 }

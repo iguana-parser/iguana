@@ -38,17 +38,16 @@ import org.iguana.sppf.TerminalNode;
  * 
  * @author Ali Afroozeh
  *
- * @see org.jgll.visitor.Visitor
  *
  */
-public interface SPPFVisitor {
+public interface SPPFVisitor<T> {
 
-	public void visit(TerminalNode node);
+	T visit(TerminalNode node);
 
-	public void visit(NonterminalNode node);
-	
-	public void visit(IntermediateNode node);
-	
-	public void visit(PackedNode node);
-	
+	T visit(NonterminalNode node);
+
+	T visit(IntermediateNode node);
+
+	T visit(PackedNode node);
+
 }

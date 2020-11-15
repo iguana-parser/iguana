@@ -27,72 +27,90 @@
 
 package org.iguana.grammar.slot;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import iguana.regex.matcher.Matcher;
+import iguana.regex.matcher.MatcherFactory;
+import iguana.utils.collections.IntHashMap;
+import iguana.utils.collections.OpenAddressingIntHashMap;
+import iguana.utils.input.Input;
+import org.iguana.grammar.condition.Conditions;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 
-import org.iguana.parser.GLLParser;
-import org.iguana.regex.RegularExpression;
-import org.iguana.regex.matcher.Matcher;
-import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.sppf.TerminalNode;
-import org.iguana.util.Input;
+import java.util.ArrayList;
+import java.util.List;
 
-
-public class TerminalGrammarSlot extends AbstractGrammarSlot {
+public class TerminalGrammarSlot implements GrammarSlot {
 	
-	private RegularExpression regex;
-	private Matcher matcher;
-	private Map<Integer, TerminalNode> terminalNodes;
+	private final Terminal terminal;
+    private final Matcher matcher;
+	private IntHashMap<Object> terminalNodes;
+    private final Conditions preConditions;
+    private final Conditions postConditions;
 
-	public TerminalGrammarSlot(int id, RegularExpression regex, MatcherFactory factory) {
-		super(id, Collections.emptyList());
-		this.regex = regex;
-		this.matcher = factory.getMatcher(regex);
-		this.terminalNodes = new HashMap<>();
-	}
+    // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
+	private static final Object failure = "failure";
 
-	@Override
-	public String getConstructorCode() {
-		return null;
-	}
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, Conditions preConditions, Conditions postConditions) {
+		this.terminal = terminal;
+        this.preConditions = preConditions;
+        this.postConditions = postConditions;
+        this.matcher = factory.getMatcher(terminal.getRegularExpression());
+    }
 
-	public RegularExpression getRegularExpression() {
-		return regex;
-	}
-		
-	public TerminalNode getTerminalNode(GLLParser parser, Input input, int i) {
-		return terminalNodes.computeIfAbsent(i, k -> {
-			int length = matcher.match(input, i);
-			if (length < 0) {
-				return null;
+	public <T extends Result> List<T> getResult(Input input, int i, BodyGrammarSlot slot, GSSNode<T> gssNode, IguanaRuntime<T> runtime) {
+	    if (terminalNodes == null) {
+	        terminalNodes = new OpenAddressingIntHashMap<>();
+        }
+		Object nodes = terminalNodes.get(i);
+	    if (nodes == failure) {
+	        return null;
+        }
+
+        if (preConditions.execute(input, slot, gssNode, i, runtime)) {
+            terminalNodes.put(i, failure);
+            return null;
+        }
+
+		if (nodes == null) {
+			List<Integer> endIndexes = matcher.match(input, i);
+
+			if (endIndexes.isEmpty()) {
+				nodes = null;
+				terminalNodes.put(i, failure);
 			} else {
-				TerminalNode t = new TerminalNode(this, i, i + length);
-				parser.terminalNodeAdded(t);
-				return t;
+				final List<T> curNodes = new ArrayList<>();
+				for (Integer endIndex: endIndexes) {
+					if (postConditions.execute(input, slot, gssNode, i, endIndex, runtime)) {
+						terminalNodes.put(i, failure);
+						return null;
+					}
+					curNodes.add(runtime.getResultOps().base(this, i, endIndex));
+				}
+				nodes = curNodes;
+				terminalNodes.put(i, nodes);
 			}
-		});
-	}
-	
-	@Override
-	public Set<Transition> getTransitions() {
-		return Collections.emptySet();
+		}
+		return (List<T>) nodes;
 	}
 
-	@Override
-	public boolean addTransition(Transition transition) {
-		return false;
+	public int countTerminalNodes() {
+		return terminalNodes.size();
 	}
+
+    public Terminal getTerminal() {
+        return terminal;
+    }
 
 	@Override
 	public String toString() {
-		return regex.toString();
+		return terminal.toString();
 	}
 
-	@Override
-	public void reset(Input input) {
-		terminalNodes = new HashMap<>();
+    @Override
+	public void reset() {
+		terminalNodes = null;
 	}
 
 }

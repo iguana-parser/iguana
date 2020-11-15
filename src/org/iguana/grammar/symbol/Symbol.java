@@ -27,44 +27,44 @@
 
 package org.iguana.grammar.symbol;
 
-import java.io.Serializable;
-import java.util.Set;
-
+import iguana.utils.collections.CollectionsUtil;
 import org.iguana.datadependent.attrs.Attr;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.util.CollectionsUtil;
-import org.iguana.util.generator.ConstructorCode;
+
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * 
  * 
  * @author Ali Afroozeh
  * @author Anastasia Izmaylova
- * 
+ *
+ * <pre>
  * Symbol ::= Label ':' Symbol
  *          | Nonterminal '(' {Expression ','}+ ')'
- *          
  *          | ...
- *          
  *          | '{' Symbol+ '}'
- *          > "align" Symbol
- *          | "offside" Symbol 
- *          > Symbol "do" Statement
+ *       &gt; "align" Symbol
+ *          | "offside" Symbol
+ *       &gt; Symbol "do" Statement
  *          | Symbol "when" Expression
- *          > "if" '(' Expression ')' Symbol
+ *       &gt; "if" '(' Expression ')' Symbol
  *          | "if" '(' Expression ')' Symbol "else" Symbol
  *          | "while" '(' Expression ')' Symbol
- *          
+ * </pre>
  *
  */
-public interface Symbol extends ConstructorCode, Serializable, Attr {
+public interface Symbol extends Serializable, Attr {
+
+	long serialVersionUID = 1L;
 	
-	public String getName();
+	String getName();
 	
-	public Set<Condition> getPreConditions();
+	Set<Condition> getPreConditions();
 	
-	public Set<Condition> getPostConditions();
+	Set<Condition> getPostConditions();
 	
 	default Set<Condition> getConditions() {
 		return CollectionsUtil.union(getPreConditions(), getPostConditions());
@@ -74,21 +74,15 @@ public interface Symbol extends ConstructorCode, Serializable, Attr {
 		return !getConditions().isEmpty();
 	}
 	
-	public Object getObject();
+	String getLabel();
 	
-	public String getLabel();
-	
-	default boolean isTerminal() {
-		return false;
-	}
-	
-	public SymbolBuilder<? extends Symbol> copyBuilder();
+	SymbolBuilder<? extends Symbol> copyBuilder();
 	
 	default int size() {
 		return 1;
 	}
 		
-	public String toString(int j);
+	String toString(int j);
 	
-	public <T> T accept(ISymbolVisitor<T> visitor);
+	<T> T accept(ISymbolVisitor<T> visitor);
 }	

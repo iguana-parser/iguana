@@ -1,0 +1,12 @@
+regex Whitespaces ::= [\n\r\t\ ]*
+
+@Layout L ::= Whitespaces
+
+S ::= E
+
+E ::= '-' E
+    > (E '*' E
+    |  E '/' E) left
+    > (E '+' E
+    |  E '-' E) right
+    | 'a'

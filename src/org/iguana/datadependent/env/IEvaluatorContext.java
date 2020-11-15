@@ -27,45 +27,43 @@
 
 package org.iguana.datadependent.env;
 
-import org.iguana.util.Input;
-
 public interface IEvaluatorContext {
 	
-	public Input getInput();
+	Environment getEnvironment();
 	
-	public Environment getEnvironment();
+	void setEnvironment(Environment env);
 	
-	public void setEnvironment(Environment env);
-	
-	public Environment getEmptyEnvironment();
+	Environment getEmptyEnvironment();
 	
 	
-	/**
-	 * 
-	 * Operations on environment
-	 * 
-	 */
-	public void popEnvironment();
+	// Operations on environment
+
+	void popEnvironment();
 	
-	public void pushEnvironment();
+	void pushEnvironment();
 	
-	public void declareVariable(String name, Object value);
+	void declareVariable(String name, Object value);
 	
-	public void declareVariables(String[] names, Object[] values);
+	void declareVariables(String[] names, Object[] values);
 	
-	public void storeVariable(String name, Object value);
+	void storeVariable(String name, Object value);
 	
-	public Object lookupVariable(String name);
+	Object lookupVariable(String name);
 	
-	/**
-	 * 
-	 * Global parser environment
-	 * 
-	 */
-	public void declareGlobalVariable(String name, Object value);
+	void declareVariable(Object value);
 	
-	public void declareGlobalVariables(String[] names, Object[] values);
+	void declareVariables(Object[] values);
 	
-	public Object lookupGlobalVariable(String name);
+	void storeVariable(int i, Object value);
+	
+	Object lookupVariable(int i);
+	
+	// Global parser environment
+
+	void declareGlobalVariable(String name, Object value);
+	
+	void declareGlobalVariables(String[] names, Object[] values);
+	
+	Object lookupGlobalVariable(String name);
 
 }

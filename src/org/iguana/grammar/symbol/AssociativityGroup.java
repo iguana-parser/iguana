@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iguana.util.generator.GeneratorUtil;
+import static iguana.utils.string.StringUtil.listToString;
 
 
 public class AssociativityGroup implements Serializable {
@@ -93,7 +93,8 @@ public class AssociativityGroup implements Serializable {
 	}
 		
 	public int getPrecedence(Rule rule) {
-		if (!rule.isLeftOrRightRecursive())
+		if (!(rule.isLeftOrRightRecursive() 
+				|| rule.isILeftOrRightRecursive()))
 			return -1;
 		
 		if (rule.getAssociativity() == associativity) {
@@ -129,26 +130,13 @@ public class AssociativityGroup implements Serializable {
 		rhs = precedenceLevel.getCurrent();
 	}
 	
-	public String getConstructorCode() {
-		String elements = "";
-		
-		for (Map.Entry<Integer, Associativity> entry : map.entrySet())
-			elements += ".add(" + entry.getKey() + "," + entry.getValue().getConstructorCode() + ")";
-		
-		return "new " + getClass().getSimpleName() + "(" + associativity.getConstructorCode() + "," 
-														 + precedenceLevel.getConstructorCode() + ","
-														 + lhs + ","
-														 + rhs + ","
-														 + precedence + ")" + elements;
-	}
-	
 	@Override
 	public String toString() {
 		return associativity.name() + "(" 
 					+ lhs + ","
 					+ rhs + ","
 					+ (precedence != -1? precedence + (map.keySet().isEmpty()? "" : ",") : "") 
-					+ GeneratorUtil.listToString(map.keySet(), ",") + ")";
+					+ listToString(map.keySet(), ",") + ")";
 	}
 
 }

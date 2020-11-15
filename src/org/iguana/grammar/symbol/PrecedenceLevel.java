@@ -30,8 +30,6 @@ package org.iguana.grammar.symbol;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.iguana.util.generator.GeneratorUtil;
-
 public class PrecedenceLevel implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -93,7 +91,7 @@ public class PrecedenceLevel implements Serializable {
 	
 	public static PrecedenceLevel getFirstAndDone() {
 		PrecedenceLevel level = new PrecedenceLevel(1);
-		level.done();
+		level.rhs = level.lhs;
 		return level;
 	}
 	
@@ -147,7 +145,8 @@ public class PrecedenceLevel implements Serializable {
 		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
-		if (!rule.isLeftOrRightRecursive()) return -1;
+		if (!(rule.isLeftOrRightRecursive() 
+				|| rule.isILeftOrRightRecursive())) return -1;
 		else if (rule.getAssociativity() == Associativity.UNDEFINED) {
 			if (undefined == -1)
 				undefined = index++;
@@ -160,7 +159,8 @@ public class PrecedenceLevel implements Serializable {
 		if (rule.isUnary() && rule.isRightRecursive()) hasPrefixUnary = true;
 		if (rule.isUnary() && rule.isLeftRecursive()) hasPostfixUnary = true;
 		
-		if (!rule.isLeftOrRightRecursive()) return -1;
+		if (!(rule.isLeftOrRightRecursive() 
+				|| rule.isILeftOrRightRecursive())) return -1;
 		else return index++;
 	}
 	
@@ -191,7 +191,6 @@ public class PrecedenceLevel implements Serializable {
 	}
 	
 	public void done() {
-		assert rhs != -1;
 		rhs = index == lhs? index : index - 1;
 	}
 	
@@ -203,12 +202,6 @@ public class PrecedenceLevel implements Serializable {
 		this.containsAssociativityGroup = true;
 		this.assoc_lhs = l;
 		this.assoc_rhs = r;
-	}
-		
-	public String getConstructorCode() {
-		return getClass().getSimpleName() + ".from(" + lhs + "," + rhs + "," + undefined + "," + hasPrefixUnary + "," + hasPostfixUnary + "," 
-												     + hasPrefixUnaryBelow + "," + "new Integer[]{" + GeneratorUtil.listToString(prefixUnaryBelow, ",") + "}" + "," 
-												     + hasPostfixUnaryBelow + "," + "new Integer[]{" + GeneratorUtil.listToString(postfixUnaryBelow, ",") + "}" + ")";
 	}
 	
 	@Override

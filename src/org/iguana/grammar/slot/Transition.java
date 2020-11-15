@@ -27,28 +27,21 @@
 
 package org.iguana.grammar.slot;
 
+import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
-import org.iguana.parser.GLLParser;
-import org.iguana.parser.gss.GSSNode;
-import org.iguana.sppf.NonPackedNode;
-import org.iguana.util.generator.ConstructorCode;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.IguanaRuntime;
+import org.iguana.result.Result;
 
 
-public interface Transition extends ConstructorCode {
-	
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node);
-	
-	public GrammarSlot destination();
-	
-	public GrammarSlot origin();
+public interface Transition {
 
-	public String getLabel();
+    BodyGrammarSlot destination();
 	
-	/**
-	 * 
-	 * Data-dependent GLL parsing
-	 * 
-	 */
-	public void execute(GLLParser parser, GSSNode u, int i, NonPackedNode node, Environment env);
+	BodyGrammarSlot origin();
+
+	String getLabel();
+
+	<T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime);
 	
 }
