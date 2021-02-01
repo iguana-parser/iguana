@@ -28,7 +28,7 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.traversal.SPPFVisitor;
+//import org.iguana.traversal.SPPFVisitor;
 
 public class PackedNode implements SPPFNode {
 
@@ -84,10 +84,10 @@ public class PackedNode implements SPPFNode {
         return String.format("(%s, %d)", slot, getPivot());
     }
 
-    @Override
-    public <R> R accept(SPPFVisitor<R> visitAction) {
-        return visitAction.visit(this);
-    }
+//    @Override
+//    public <R> R accept(SPPFVisitor<R> visitAction) {
+//        return visitAction.visit(this);
+//    }
 
     public NonPackedNode getLeftChild() {
         return leftChild;

@@ -1,7 +1,7 @@
 package org.iguana;
 
 import iguana.utils.input.GraphInput;
-import iguana.utils.input.Neo4jTestInput;
+import iguana.utils.input.Neo4jBenchmarkInput;
 import org.iguana.grammar.Grammar;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parser.Pair;
@@ -30,7 +30,7 @@ import java.util.function.BiFunction;
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 interface Data {
-    File databaseDirectory = new File("/Users/annavlasova/Downloads/neo4j-enterprise-4.0.4_2");
+    File databaseDirectory = new File("/Users/vladapogozhelskaya/Downloads/neo4j-enterprise-4.0.8");
     DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(databaseDirectory)
             .setConfig(GraphDatabaseSettings.read_only, true)
             .build();
@@ -210,7 +210,7 @@ public class Neo4jBenchMark2 extends JBench.OfflineReport {
     @benchmark("t")
     @curve("t")
     public Map<Pair, ParseTreeNode> t() {
-        GraphInput input = new Neo4jTestInput(Data.graphDb, Data.getF(), 0);
+        GraphInput input = new Neo4jBenchmarkInput(Data.graphDb, Data.getF(), 0);
         IguanaParser parser = new IguanaParser(Data.getGrammar());
         return parser.getParserTree(input,
                 new ParseOptions.Builder().setAmbiguous(true).build());

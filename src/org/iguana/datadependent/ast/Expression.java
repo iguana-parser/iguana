@@ -1356,10 +1356,10 @@ public abstract class Expression extends AbstractAST {
                 throw new UndeclaredVariableException(label);
             }
 
-            if (!(value instanceof NonPackedNode)) {
-                throw new UnexpectedTypeOfArgumentException(this);
-            }
-
+//            if (!(value instanceof NonPackedNode)) {
+//                throw new UnexpectedTypeOfArgumentException(this);
+//            }
+//
             NonPackedNode node = (NonPackedNode) value;
             return input.subString(node.getLeftExtent(), node.getRightExtent());
         }

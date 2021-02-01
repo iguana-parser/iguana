@@ -35,8 +35,9 @@ import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
+//import org.iguana.parsetree.NonterminalNode;
 import org.iguana.sppf.NonterminalNode;
-import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
+//import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
 
@@ -59,8 +60,12 @@ public class IguanaParser {
         this.runtime = new IguanaRuntime<>(config, new ParserResultOps());
     }
 
-    public Map<Pair, NonterminalNode> getSPPF(Input input) {
-        return getSPPF(input, new ParseOptions.Builder().build());
+//    public Map<Pair, NonterminalNode> getSPPF(Input input) {
+//        return getSPPF(input, new ParseOptions.Builder().build());
+//    }
+
+    public Map<Pair, Boolean> getPairs(Input input, ParseOptions options) {
+        return runtime.no_sppf_run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
     public Map<Pair, NonterminalNode> getSPPF(Input input, ParseOptions options) {
@@ -75,6 +80,11 @@ public class IguanaParser {
         return getParserTree(input, new ParseOptions.Builder().build());
     }
 
+    public Map<Pair, Boolean> getReachabilities(Input input, ParseOptions options) {
+        return getPairs(input, options);
+    }
+
+
     public ParseTreeNode getParserTree(Input input, ParseOptions options) {
         Map<Pair, NonterminalNode> roots = getSPPF(input, options);
 
@@ -84,10 +94,10 @@ public class IguanaParser {
 
         NonterminalNode root = new ArrayList<>(roots.entrySet()).get(0).getValue();
 
-        if (options.ambiguous()) {
-            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
-            return (ParseTreeNode) root.accept(visitor).getValues().get(0);
-        }
+//        if (options.ambiguous()) {
+//            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
+//            return (ParseTreeNode) root.accept(visitor).getValues().get(0);
+//        }
 
         DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, options.ignoreLayout());
         return (ParseTreeNode) converter.convertNonterminalNode(root);
@@ -102,13 +112,13 @@ public class IguanaParser {
 
         NonterminalNode firstRoot = new ArrayList<>(roots.entrySet()).get(0).getValue();
 
-        if (options.ambiguous()) {
-            Map<Pair, ParseTreeNode> results = new HashMap<>();
-            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
-            roots.forEach((key, value) -> results.put(key,
-                    (ParseTreeNode) value.accept(visitor).getValues().get(0)));
-            return results;
-        }
+//        if (options.ambiguous()) {
+//            Map<Pair, ParseTreeNode> results = new HashMap<>();
+//            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
+//            roots.forEach((key, value) -> results.put(key,
+//                    (ParseTreeNode) value.accept(visitor).getValues().get(0)));
+//            return results;
+//        }
 
         DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, options.ignoreLayout());
         return Collections.singletonMap(null, (ParseTreeNode) converter.convertNonterminalNode(firstRoot));

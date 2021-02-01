@@ -3,9 +3,8 @@ package org.iguana.result;
 import org.iguana.grammar.slot.*;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.sppf.*;
-import org.iguana.traversal.SPPFVisitor;
+//import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
-
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -36,8 +35,8 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
             return true;
         }
 
-        @Override
-        public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
+//        @Override
+//        public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
 
         @Override
         public void setAmbiguous(boolean ambiguous) {
@@ -80,7 +79,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         else {
             node = new DefaultTerminalNode(slot, start, end);
         }
-        logger.terminalNodeAdded(node);
+        //logger.terminalNodeAdded(node);
         return node;
     }
 
@@ -91,22 +90,22 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
         if (current == null) {
             current = new IntermediateNode(slot, result1, result2);
-            logger.intermediateNodeAdded((IntermediateNode) current);
+            //logger.intermediateNodeAdded((IntermediateNode) current);
         } else {
             List<PackedNode> packedNodes = packedNodesMap.computeIfAbsent(current, key -> new ArrayList<>());
 
             if (!current.isAmbiguous()) {
                 PackedNode firstPackedNode = current.getFirstPackedNode();
-                logger.packedNodeAdded(firstPackedNode);
+                //logger.packedNodeAdded(firstPackedNode);
                 packedNodes.add(firstPackedNode);
 
                 current.setAmbiguous(true);
-                logger.ambiguousNodeAdded(current);
+                //logger.ambiguousNodeAdded(current);
             }
 
             PackedNode packedNode = new PackedNode(slot, result1, result2);
             packedNodes.add(packedNode);
-            logger.packedNodeAdded(packedNode);
+            //logger.packedNodeAdded(packedNode);
         }
 
         return current;
@@ -120,22 +119,22 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
             else
                 current = new NonterminalNodeWithValue(slot, result, result.getLeftExtent(), result.getRightExtent(), value);
 
-            logger.nonterminalNodeAdded((NonterminalNode) current);
+            //logger.nonterminalNodeAdded((NonterminalNode) current);
         } else {
             List<PackedNode> packedNodes = packedNodesMap.computeIfAbsent(current, key -> new ArrayList<>());
 
             if (!current.isAmbiguous()) {
                 PackedNode firstPackedNode = current.getFirstPackedNode();
-                logger.packedNodeAdded(firstPackedNode);
+              //  logger.packedNodeAdded(firstPackedNode);
                 packedNodes.add(firstPackedNode);
 
                 current.setAmbiguous(true);
-                logger.ambiguousNodeAdded(current);
+                //logger.ambiguousNodeAdded(current);
             }
 
             PackedNode packedNode = new PackedNode(slot, result);
             packedNodes.add(packedNode);
-            logger.packedNodeAdded(packedNode);
+            //logger.packedNodeAdded(packedNode);
         }
 
         return current;

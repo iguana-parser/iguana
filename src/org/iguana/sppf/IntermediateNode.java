@@ -28,7 +28,7 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.traversal.SPPFVisitor;
+//import org.iguana.traversal.SPPFVisitor;
 
 public class IntermediateNode extends NonPackedNode {
 
@@ -46,10 +46,10 @@ public class IntermediateNode extends NonPackedNode {
         this.rightChild = rightChild;
     }
 
-    @Override
-    public <R> R accept(SPPFVisitor<R> visitAction) {
-        return visitAction.visit(this);
-    }
+//    @Override
+//    public <R> R accept(SPPFVisitor<R> visitAction) {
+//        return visitAction.visit(this);
+//    }
 
     @Override
     public SPPFNode getChildAt(int index) {
