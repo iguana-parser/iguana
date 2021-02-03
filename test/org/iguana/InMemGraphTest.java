@@ -150,7 +150,7 @@ public class InMemGraphTest {
 
         Grammar grammar;
         try {
-            grammar = Grammar.load("test/resources/grammars/graph/Test4/grammar.json", "json");
+            grammar = Grammar.load("test/resources/grammars/graph/Test3/grammar.json", "json");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No grammar.json file is present");
         }
@@ -210,7 +210,6 @@ public class InMemGraphTest {
         assert pairs.equals(pairs1);
 
     }
-    
 
     @Test
     public void testGraphInput2() {
