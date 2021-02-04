@@ -60,57 +60,57 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
  *  
  */
 
-public class Test6 {
-	
-	private Grammar grammar;
-
-	@Before
-	public void init() {
-		
-		Nonterminal S = Nonterminal.withName("S");
-		
-		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
-		
-		Terminal hat = Terminal.from(Char.from('^'));
-        Terminal star = Terminal.from(Char.from('*'));
-        Terminal plus = Terminal.from(Char.from('+'));
-		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
-		
-		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(5))
-							.addPreCondition(predicate(greaterEq(integer(4), var("p")))).build())
-					.addSymbol(hat)
-					.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
-		
-		Rule r1_2 = Rule.withHead(E)
-						.addSymbol(Nonterminal.builder(E).apply(integer(3))
-								.addPreCondition(predicate(greaterEq(integer(3), var("p")))).build())
-						.addSymbol(star)
-						.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
-		
-		Rule r1_3 = Rule.withHead(E)
-				.addSymbol(Nonterminal.builder(E).apply(integer(2))
-						.addPreCondition(predicate(greaterEq(integer(2), var("p")))).build())
-				.addSymbol(plus)
-				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
-		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
-		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
-		
-	}
-	
-	@Test
-	public void test() {
-		System.out.println(grammar);
-		
-		Input input = Input.fromString("a+a^a^a*a");
-
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
-
-        assertNotNull(result);
-	}
-
-}
+//public class Test6 {
+//
+//	private Grammar grammar;
+//
+//	@Before
+//	public void init() {
+//
+//		Nonterminal S = Nonterminal.withName("S");
+//
+//		Nonterminal E = Nonterminal.builder("E").addParameters("p").build();
+//
+//		Terminal hat = Terminal.from(Char.from('^'));
+//        Terminal star = Terminal.from(Char.from('*'));
+//        Terminal plus = Terminal.from(Char.from('+'));
+//
+//		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
+//
+//		Rule r1_1 = Rule.withHead(E)
+//					.addSymbol(Nonterminal.builder(E).apply(integer(5))
+//							.addPreCondition(predicate(greaterEq(integer(4), var("p")))).build())
+//					.addSymbol(hat)
+//					.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
+//
+//		Rule r1_2 = Rule.withHead(E)
+//						.addSymbol(Nonterminal.builder(E).apply(integer(3))
+//								.addPreCondition(predicate(greaterEq(integer(3), var("p")))).build())
+//						.addSymbol(star)
+//						.addSymbol(Nonterminal.builder(E).apply(integer(4)).build()).build();
+//
+//		Rule r1_3 = Rule.withHead(E)
+//				.addSymbol(Nonterminal.builder(E).apply(integer(2))
+//						.addPreCondition(predicate(greaterEq(integer(2), var("p")))).build())
+//				.addSymbol(plus)
+//				.addSymbol(Nonterminal.builder(E).apply(integer(3)).build()).build();
+//
+//		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
+//
+//		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
+//
+//	}
+//
+//	@Test
+//	public void test() {
+//		System.out.println(grammar);
+//
+//		Input input = Input.fromString("a+a^a^a*a");
+//
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
+//
+//        assertNotNull(result);
+//	}
+//
+//}

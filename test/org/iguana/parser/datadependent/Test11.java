@@ -54,53 +54,53 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
  *
  */
 
-public class Test11 {
-	
-	private Grammar grammar;
-
-	@Before
-	public void init() {
-		
-		Nonterminal X = Nonterminal.withName("X");
-		
-		Nonterminal NoNL = Nonterminal.withName("NoNL");
-		
-		Nonterminal S = Nonterminal.withName("S");		
-		
-		Rule r0 = Rule.withHead(X).addSymbol(S).build();
-		
-		Rule r1 = Rule.withHead(S)
-					.addSymbol(Code.code(Terminal.builder(Char.from('a')).setLabel("a")
-											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
-										 stat(println(rExt("a"), indent(rExt("a"))))))
-					.addSymbol(NoNL) // TODO: Should be removed
-					.addSymbol(Code.code(Terminal.builder(Char.from('b')).setLabel("b")
-												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
-										 stat(println(rExt("b"), indent(rExt("b"))))))
-					
-					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
-		
-		Rule r2 = Rule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
-								.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
-								.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
-		
-		grammar = Grammar.builder().addRules(r0, r1, r2).build();
-		
-	}
-	
-	@Test
-	public void test() {
-		System.out.println(grammar);
-		
-		grammar = new EBNFToBNF().transform(grammar);
-		
-		Input input = Input.fromString("a    b");
-
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
-
-        assertNotNull(result);
-	}
-
-}
+//public class Test11 {
+//
+//	private Grammar grammar;
+//
+//	@Before
+//	public void init() {
+//
+//		Nonterminal X = Nonterminal.withName("X");
+//
+//		Nonterminal NoNL = Nonterminal.withName("NoNL");
+//
+//		Nonterminal S = Nonterminal.withName("S");
+//
+//		Rule r0 = Rule.withHead(X).addSymbol(S).build();
+//
+//		Rule r1 = Rule.withHead(S)
+//					.addSymbol(Code.code(Terminal.builder(Char.from('a')).setLabel("a")
+//											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
+//										 stat(println(rExt("a"), indent(rExt("a"))))))
+//					.addSymbol(NoNL) // TODO: Should be removed
+//					.addSymbol(Code.code(Terminal.builder(Char.from('b')).setLabel("b")
+//												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
+//										 stat(println(rExt("b"), indent(rExt("b"))))))
+//
+//					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
+//
+//		Rule r2 = Rule.withHead(Nonterminal.builder("NoNL").build())
+//						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
+//								.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
+//								.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
+//
+//		grammar = Grammar.builder().addRules(r0, r1, r2).build();
+//
+//	}
+//
+//	@Test
+//	public void test() {
+//		System.out.println(grammar);
+//
+//		grammar = new EBNFToBNF().transform(grammar);
+//
+//		Input input = Input.fromString("a    b");
+//
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
+//
+//        assertNotNull(result);
+//	}
+//
+//}

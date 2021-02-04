@@ -95,15 +95,15 @@ public class Gamma1Test {
 //		assertEquals(set(d, EOF.getInstance()), grammar.getFollowSet(S));
 //	}
 	
-	@Test
-	public void testSPPF() {
-		Input input = Input.fromString("aad");
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+//	@Test
+//	public void testSPPF() {
+//		Input input = Input.fromString("aad");
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
 
-        assertNotNull(result);
+//        assertNotNull(result);
 //		assertTrue(result.asParseSuccess().getResult().deepEquals(getSPPF(parser.getGrammarGraph())));
-	}
+//	}
 	
 //	public SPPFNode getSPPF(GrammarGraph graph) {
 //		SPPFNodeFactory factory = new SPPFNodeFactory(graph);

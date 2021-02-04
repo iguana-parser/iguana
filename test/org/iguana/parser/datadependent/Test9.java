@@ -57,56 +57,56 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
  * tricky inputs: see Test8 and: (x (y a)) w
  */
 
-public class Test9 {
-	
-	private Grammar grammar;
+//public class Test9 {
+//
+//	private Grammar grammar;
+//
+//	@Before
+//	public void init() {
+//
+//		Nonterminal S = Nonterminal.withName("S");
+//
+//		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
+//
+//		Terminal z = Terminal.from(Char.from('z'));
+//		Terminal w = Terminal.from(Char.from('w'));
+//
+//		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+//
+//		Rule r1_1 = Rule.withHead(E)
+//					.addSymbol(Nonterminal.builder(E).apply(integer(5), var("r"))
+//						.addPreCondition(predicate(greaterEq(integer(5), var("r")))).build())
+//					.addSymbol(z).build();
+//
+//		Rule r1_2 = Rule.withHead(E)
+//					.addSymbol(Terminal.builder(Char.from('x'))
+//							.addPreCondition(predicate(greaterEq(integer(4), var("l")))).build())
+//					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
+//
+//		Rule r1_3 = Rule.withHead(E)
+//					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
+//						.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
+//					.addSymbol(w).build();
+//
+//		Rule r1_4 = Rule.withHead(E)
+//					.addSymbol(Terminal.builder(Char.from('y'))
+//						.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
+//					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+//
+//		Rule r1_5 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
+//
+//		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4, r1_5).build();
+//
+//	}
+//
+//	@Test
+//	public void test() {
+//		Input input = Input.fromString("xyaw");
+//
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
+//
+//        assertNotNull(result);
+//	}
 
-	@Before
-	public void init() {
-		
-		Nonterminal S = Nonterminal.withName("S");
-		
-		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
-		
-		Terminal z = Terminal.from(Char.from('z'));
-		Terminal w = Terminal.from(Char.from('w'));
-		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
-		
-		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(5), var("r"))
-						.addPreCondition(predicate(greaterEq(integer(5), var("r")))).build())
-					.addSymbol(z).build();
-		
-		Rule r1_2 = Rule.withHead(E)
-					.addSymbol(Terminal.builder(Char.from('x'))
-							.addPreCondition(predicate(greaterEq(integer(4), var("l")))).build())
-					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
-		
-		Rule r1_3 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
-						.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
-					.addSymbol(w).build();
-		
-		Rule r1_4 = Rule.withHead(E)
-					.addSymbol(Terminal.builder(Char.from('y'))
-						.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
-					.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
-		
-		Rule r1_5 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
-		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4, r1_5).build();
-		
-	}
-	
-	@Test
-	public void test() {
-		Input input = Input.fromString("xyaw");
-
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
-
-        assertNotNull(result);
-	}
-
-}
+// }

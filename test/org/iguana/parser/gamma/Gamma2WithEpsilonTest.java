@@ -71,60 +71,60 @@ public class Gamma2WithEpsilonTest {
         grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
     }
     
-    @Test
-    public void testParsers1() {
-        Input input = Input.fromString(getBs(5));
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
-
-        assertNotNull(result);
-
-        ParseStatistics parseStatistics = parser.getStatistics();
-        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
-        assertEquals(129, parseStatistics.getDescriptorsCount());
-        assertEquals(21, parseStatistics.getNonterminalNodesCount());
-		assertEquals(21, parseStatistics.getIntermediateNodesCount());
-		assertEquals(11, parseStatistics.getTerminalNodesCount());
-		assertEquals(179, parseStatistics.getPackedNodesCount());
-    }
+//    @Test
+//    public void testParsers1() {
+//        Input input = Input.fromString(getBs(5));
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
+//
+//        assertNotNull(result);
+//
+//        ParseStatistics parseStatistics = parser.getStatistics();
+//        assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
+//        assertEquals(129, parseStatistics.getDescriptorsCount());
+//        assertEquals(21, parseStatistics.getNonterminalNodesCount());
+//		assertEquals(21, parseStatistics.getIntermediateNodesCount());
+//		assertEquals(11, parseStatistics.getTerminalNodesCount());
+//		assertEquals(179, parseStatistics.getPackedNodesCount());
+//    }
+//
+//    @Test
+//    public void testParsers2() {
+//        Input input = Input.fromString(getBs(10));
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
+//
+//        assertNotNull(result);
+//
+//        ParseStatistics parseStatistics = parser.getStatistics();
+//		assertEquals(374, parseStatistics.getDescriptorsCount());
+//		assertEquals(66, parseStatistics.getNonterminalNodesCount());
+//		assertEquals(66, parseStatistics.getIntermediateNodesCount());
+//		assertEquals(21, parseStatistics.getTerminalNodesCount());
+//		assertEquals(879, parseStatistics.getPackedNodesCount());
+//    }
+//
+//    @Test
+//    public void testParsers3() {
+//        Input input = Input.fromString(getBs(100));
+//        IguanaParser parser = new IguanaParser(grammar);
+//        ParseTreeNode result = parser.getParserTree(input);
+//
+//        assertNotNull(result);
+//
+//        ParseStatistics parseStatistics = parser.getStatistics();
+//		assertEquals(26159, parseStatistics.getDescriptorsCount());
+//		assertEquals(5151, parseStatistics.getNonterminalNodesCount());
+//		assertEquals(5151, parseStatistics.getIntermediateNodesCount());
+//		assertEquals(201, parseStatistics.getTerminalNodesCount());
+//		assertEquals(530754, parseStatistics.getPackedNodesCount());
+//    }
     
-    @Test
-    public void testParsers2() {
-        Input input = Input.fromString(getBs(10));
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
-
-        assertNotNull(result);
-
-        ParseStatistics parseStatistics = parser.getStatistics();
-		assertEquals(374, parseStatistics.getDescriptorsCount());
-		assertEquals(66, parseStatistics.getNonterminalNodesCount());
-		assertEquals(66, parseStatistics.getIntermediateNodesCount());
-		assertEquals(21, parseStatistics.getTerminalNodesCount());
-		assertEquals(879, parseStatistics.getPackedNodesCount());
-    }
-    
-    @Test
-    public void testParsers3() {
-        Input input = Input.fromString(getBs(100));
-        IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
-
-        assertNotNull(result);
-
-        ParseStatistics parseStatistics = parser.getStatistics();
-		assertEquals(26159, parseStatistics.getDescriptorsCount());
-		assertEquals(5151, parseStatistics.getNonterminalNodesCount());
-		assertEquals(5151, parseStatistics.getIntermediateNodesCount());
-		assertEquals(201, parseStatistics.getTerminalNodesCount());
-		assertEquals(530754, parseStatistics.getPackedNodesCount());
-    }
-    
-    private String getBs(int size) {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < size; i++) {
-            sb.append("b");
-        }
-        return sb.toString();
-    }
+//    private String getBs(int size) {
+//        StringBuilder sb = new StringBuilder();
+//        for(int i = 0; i < size; i++) {
+//            sb.append("b");
+//        }
+//        return sb.toString();
+//    }
 }
