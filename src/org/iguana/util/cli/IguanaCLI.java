@@ -34,7 +34,7 @@ import org.apache.commons.cli.*;
 import org.iguana.grammar.Grammar;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
-import org.iguana.util.visualization.ParseTreeToDot;
+//import org.iguana.util.visualization.ParseTreeToDot;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,8 +95,8 @@ public class IguanaCLI {
                     }
 
                     ParseTreeNode node = JsonSerializer.deserialize(FileUtils.readFile(contentPath), ParseTreeNode.class);
-                    DotGraph dotGraph = ParseTreeToDot.getDotGraph(node, input, excludeSet);
-                    dotGraph.generate(outputFile);
+                    //DotGraph dotGraph = ParseTreeToDot.getDotGraph(node, input, excludeSet);
+                    //dotGraph.generate(outputFile);
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -30,7 +30,7 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Rule;
-import org.iguana.traversal.SPPFVisitor;
+//import org.iguana.traversal.SPPFVisitor;
 
 public class NonterminalNode extends NonPackedNode {
 
@@ -77,10 +77,10 @@ public class NonterminalNode extends NonPackedNode {
         return slot.getRule();
     }
 
-	@Override
-	public <R> R accept(SPPFVisitor<R> visitAction) {
-		return visitAction.visit(this);
-	}
+//	@Override
+//	public <R> R accept(SPPFVisitor<R> visitAction) {
+//		return visitAction.visit(this);
+//	}
 
     @Override
     public int getLeftExtent() {

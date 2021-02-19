@@ -98,6 +98,88 @@ public class Neo4jBenchmark {
         };
     }
 
+    public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
+        BiFunction<Relationship, Direction, String> f = getFunction(relType);
+
+        Map<Integer, Integer> numPaths = new HashMap<>();
+        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
+//        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
+
+        Grammar grammar;
+        try {
+            grammar = Grammar.load(pathToGrammar, "json");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("No grammar.json file is present");
+        }
+//        Runtime r = Runtime.getRuntime();
+
+        Map<Integer, Integer> counterLength = new HashMap<>();
+
+        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
+//        PrintWriter outStatsMem = new PrintWriter("results/enzyme_mem_" + relType + ".csv");
+
+        for (int iter = 0; iter < maxIter; iter++) {
+            for (int start = 0; start < rightNode; start += 1) {
+                System.out.println("iter " + iter + " node " + start);
+
+                GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
+//                System.out.println(input.nVertices());
+                IguanaParser parser = new IguanaParser(grammar);
+//                r.gc();
+//                long m1 = r.totalMemory() - r.freeMemory();
+                long t1 = System.currentTimeMillis();
+                Map<Pair, Boolean> parseResults = parser.getReachabilities(input,
+                        new ParseOptions.Builder().setAmbiguous(true).build());
+                long t2 = System.currentTimeMillis();
+//                long m2 = r.totalMemory() - r.freeMemory();
+                long curT = t2 - t1;
+//                long curM = (m2 - m1);
+
+                if (iter >= warmUp /* && parseTreeNodes != null */) {
+
+                    vertexToTime.putIfAbsent(start, new ArrayList<>());
+                    vertexToTime.get(start).add((int) curT);
+//                    vertexToMem.putIfAbsent(start, new ArrayList<>());
+//                    vertexToMem.get(start).add((int) curM);
+//                    if (iter == maxIter - 1) {
+//                        numPaths.put(start, countNumberOfPaths(parseTreeNodes, counterLength));
+////                        System.out.println(start + " " + countNumberOfPaths(parseTreeNodes, counterLength) + " " + counterLength);
+//                    }
+                }
+                ((Neo4jBenchmarkInput) input).close();
+            }
+        }
+        System.out.println(counterLength);
+        Map<Integer, Double> resultTime = new HashMap<>();
+//        Map<Integer, Double> resultMem = new HashMap<>();
+
+        vertexToTime.forEach((vertex, list) ->
+                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
+
+//        vertexToMem.forEach((vertex, list) ->
+//                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
+
+        PrintWriter out = new PrintWriter("results/" + dataset + "_" + relType + ".csv");
+        numPaths.keySet().forEach(vertex -> {
+            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex)); //+ "," + resultMem.get(vertex));
+        });
+        out.close();
+
+        vertexToTime.forEach((vertex, list) -> {
+            outStatsTime.print(vertex);
+            list.forEach(x -> outStatsTime.print("," + x));
+            outStatsTime.println();
+        });
+        outStatsTime.close();
+
+//        vertexToMem.forEach((vertex, list) -> {
+//            outStatsMem.print(vertex);
+//            list.forEach(x -> outStatsMem.print("," + x));
+//            outStatsMem.println();
+//        });
+//        outStatsMem.close();
+    }
+
     public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
          BiFunction<Relationship, Direction, String> f = getFunction(relType);
 
