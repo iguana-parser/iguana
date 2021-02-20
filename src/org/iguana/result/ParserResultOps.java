@@ -3,7 +3,7 @@ package org.iguana.result;
 import org.iguana.grammar.slot.*;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.sppf.*;
-//import org.iguana.traversal.SPPFVisitor;
+import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -35,8 +35,8 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
             return true;
         }
 
-//        @Override
-//        public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
+        @Override
+        public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
 
         @Override
         public void setAmbiguous(boolean ambiguous) {

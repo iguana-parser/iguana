@@ -28,7 +28,7 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-//import org.iguana.traversal.SPPFVisitor;
+import org.iguana.traversal.SPPFVisitor;
 
 public abstract class TerminalNode extends NonPackedNode {
 
@@ -38,10 +38,10 @@ public abstract class TerminalNode extends NonPackedNode {
 		this.leftExtent = leftExtent;
 	}
 
-//	@Override
-//	public <R> R accept(SPPFVisitor<R> visitAction) {
-//		return visitAction.visit(this);
-//	}
+	@Override
+	public <R> R accept(SPPFVisitor<R> visitAction) {
+		return visitAction.visit(this);
+	}
 
 	@Override
 	public int childrenCount() {

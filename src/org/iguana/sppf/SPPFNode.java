@@ -29,7 +29,7 @@ package org.iguana.sppf;
 
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.result.Result;
-//import org.iguana.traversal.SPPFVisitor;
+import org.iguana.traversal.SPPFVisitor;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public interface SPPFNode extends Result {
 		return getIndex();
 	}
 
-	//<R> R accept(SPPFVisitor<R> visitAction);
+	<R> R accept(SPPFVisitor<R> visitAction);
 
 	default Object getValue() {
 		return null;

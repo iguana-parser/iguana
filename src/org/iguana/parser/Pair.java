@@ -20,6 +20,10 @@ public class Pair {
                 endVertex == pair.endVertex;
     }
 
+    public boolean equalsKey(int start) {
+        return startVertex == start;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(startVertex, endVertex);
