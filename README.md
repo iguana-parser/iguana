@@ -1,5 +1,10 @@
-Iguana
-======
+### Iguana
 
-Iguana is a data-dependent parsing framework. For more information on Iguana 
-visit the [Iguana](http://iguana-parser.github.io) website.
+This is a modification of data-dependent parsing framework [Iguana](http://iguana-parser.github.io/), implemented on top of the GLL parsing algorithm.  The algorithm was modificated to support graph-structured input data.
+
+## Install 
+```
+git clone https://github.com/YaccConstructor/iguana
+cd iguana
+mvn compile
+```
