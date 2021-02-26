@@ -88,7 +88,7 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Map<Pair, Boolean> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+        List<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
     }
 
     @Test
@@ -123,14 +123,14 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Map<Pair, Boolean> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+        List<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
         Map<Pair, NonterminalNode> parseResults1 = parser.getSPPF(input, new ParseOptions.Builder().setAmbiguous(true).build());
 
         assert parseResults.size() == parseResults1.size();
 
-        Set<Pair> pairs = parseResults.keySet();
+      //  Set<Pair> pairs = parseResults;
         Set<Pair> pairs1 = parseResults1.keySet();
-        assert pairs.equals(pairs1);
+        assert parseResults.containsAll(pairs1);
 
     }
 
@@ -157,14 +157,13 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Map<Pair, Boolean> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+        List<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
         Map<Pair, NonterminalNode> parseResults1 = parser.getSPPF(input, new ParseOptions.Builder().setAmbiguous(true).build());
 
         assert parseResults.size() == parseResults1.size();
 
-        Set<Pair> pairs = parseResults.keySet();
         Set<Pair> pairs1 = parseResults1.keySet();
-        assert pairs.equals(pairs1);
+        assert parseResults.containsAll(pairs1);;
 
     }
 
@@ -200,14 +199,13 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Map<Pair, Boolean> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+        List<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
         Map<Pair, NonterminalNode> parseResults1 = parser.getSPPF(input, new ParseOptions.Builder().setAmbiguous(true).build());
 
         assert parseResults.size() == parseResults1.size();
 
-        Set<Pair> pairs = parseResults.keySet();
         Set<Pair> pairs1 = parseResults1.keySet();
-        assert pairs.equals(pairs1);
+        assert parseResults.containsAll(pairs1);
 
     }
 

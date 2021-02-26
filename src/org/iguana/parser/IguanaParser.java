@@ -42,10 +42,7 @@ import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class IguanaParser {
 
@@ -65,7 +62,7 @@ public class IguanaParser {
         return getSPPF(input, new ParseOptions.Builder().build());
     }
 
-    public Map<Pair, Boolean> getPairs(Input input, ParseOptions options) {
+    public List<Pair> getPairs(Input input, ParseOptions options) {
         return runtime.no_sppf_run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
@@ -81,7 +78,7 @@ public class IguanaParser {
         return getParserTree(input, new ParseOptions.Builder().build());
     }
 
-    public Map<Pair, Boolean> getReachabilities(Input input, ParseOptions options) {
+    public List<Pair> getReachabilities(Input input, ParseOptions options) {
         return getPairs(input, options);
     }
 

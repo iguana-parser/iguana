@@ -129,7 +129,7 @@ public class Neo4jBenchmark {
                 r.gc();
                 long m1 = r.totalMemory() - r.freeMemory();
 //                long t1 = System.currentTimeMillis();
-                Map<Pair, Boolean> parseResults = parser.getReachabilities(input,
+                List<Pair> parseResults = parser.getReachabilities(input,
                         new ParseOptions.Builder().setAmbiguous(false).build());
 //                long t2 = System.currentTimeMillis();
                 long m2 = r.totalMemory() - r.freeMemory();
@@ -143,8 +143,8 @@ public class Neo4jBenchmark {
                     vertexToMem.putIfAbsent(start, new ArrayList<>());
                     vertexToMem.get(start).add((int) curM);
                     if (iter == maxIter - 1) {
-                        Set<Pair> reachibilities = parseResults.keySet();
-                        Iterator it = reachibilities.iterator();
+                        //Set<Pair> reachibilities = parseResults.keySet();
+                        Iterator it = parseResults.iterator();
                         Integer cnt = 0;
                         while (it.hasNext()) {
                             Pair pair = (Pair) it.next();
