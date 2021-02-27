@@ -8,7 +8,7 @@ import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.Result;
-//import org.iguana.sppf.*;
+import org.iguana.sppf.*;
 
 public class ParserLogger {
 
@@ -61,30 +61,30 @@ public class ParserLogger {
         logEnabled = true;
     }
 
-//    public void terminalNodeAdded(TerminalNode node) {
-//        countTerminalNodes++;
-//        if (logEnabled) logger.log("Terminal node added %s", node);
-//    }
-//
-//    public void nonterminalNodeAdded(NonterminalNode node) {
-//        countNonterminalNodes++;
-//        if (logEnabled) logger.log("Nonterminal node added %s", node);
-//    }
-//
-//    public void intermediateNodeAdded(IntermediateNode node) {
-//        countIntermediateNodes++;
-//        if (logEnabled) logger.log("Intermediate node added %s", node);
-//    }
-//
-//    public void packedNodeAdded(PackedNode packedNode) {
-//        countPackedNodes++;
-//        if (logEnabled) logger.log("Packed node added %s", packedNode);
-//    }
-//
-//    public void ambiguousNodeAdded(NonPackedNode node) {
-//        countAmbiguousNodes++;
-//        if (logEnabled) logger.log("Ambiguous node added: %s", node);
-//    }
+    public void terminalNodeAdded(TerminalNode node) {
+        countTerminalNodes++;
+        if (logEnabled) logger.log("Terminal node added %s", node);
+    }
+
+    public void nonterminalNodeAdded(NonterminalNode node) {
+        countNonterminalNodes++;
+        if (logEnabled) logger.log("Nonterminal node added %s", node);
+    }
+
+    public void intermediateNodeAdded(IntermediateNode node) {
+        countIntermediateNodes++;
+        if (logEnabled) logger.log("Intermediate node added %s", node);
+    }
+
+    public void packedNodeAdded(PackedNode packedNode) {
+        countPackedNodes++;
+        if (logEnabled) logger.log("Packed node added %s", packedNode);
+    }
+
+    public void ambiguousNodeAdded(NonPackedNode node) {
+        countAmbiguousNodes++;
+        if (logEnabled) logger.log("Ambiguous node added: %s", node);
+    }
 
     public void gssNodeAdded(GSSNode<?> node, Object[] data) {
         countGSSNodes++;

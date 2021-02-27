@@ -7,7 +7,7 @@ import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.sppf.*;
-//import org.iguana.traversal.exception.AmbiguityException;
+import org.iguana.traversal.exception.AmbiguityException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,9 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     public T convertNonterminalNode(NonterminalNode node) {
-//        if (node.isAmbiguous()) {
-//            throw new AmbiguityException(node, input);
-//        }
+        if (node.isAmbiguous()) {
+            throw new AmbiguityException(node, input);
+        }
 
         if (ignoreLayout && node.getGrammarSlot().getNonterminal().getNodeType() == NonterminalNodeType.Layout) {
             return null;
@@ -172,9 +172,9 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     }
 
     private void convertIntermediateNode(IntermediateNode node, List<T> children) {
-//        if (node.isAmbiguous()) {
-//            throw new AmbiguityException(node, input);
-//        }
+        if (node.isAmbiguous()) {
+            throw new AmbiguityException(node, input);
+        }
 
         NonPackedNode leftChild = (NonPackedNode) node.getChildAt(0);
         NonPackedNode rightChild = (NonPackedNode) node.getChildAt(1);

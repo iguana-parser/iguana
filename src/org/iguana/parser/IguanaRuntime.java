@@ -13,7 +13,7 @@ import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.gss.*;
 import org.iguana.parser.descriptor.Descriptor;
-//import org.iguana.result.ParserResultOps;
+import org.iguana.result.ParserResultOps;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
@@ -171,8 +171,8 @@ public class IguanaRuntime<T extends Result> {
 //            startGSSNode = startSymbol.getGSSNode(0);
 //        }
 
-//        ParserLogger logger = ParserLogger.getInstance();
-//        logger.reset();
+        ParserLogger logger = ParserLogger.getInstance();
+        logger.reset();
 
         List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
 //        Collections.reverse(t);
@@ -184,7 +184,7 @@ public class IguanaRuntime<T extends Result> {
 
         while (hasDescriptor()) {
             Descriptor<T> descriptor = nextDescriptor();
-//            logger.processDescriptor(descriptor);
+            logger.processDescriptor(descriptor);
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
         }
 
@@ -246,7 +246,7 @@ public class IguanaRuntime<T extends Result> {
             descriptor = new Descriptor<>(grammarSlot, gssNode, result, env);
         }
         descriptorsStack.push(descriptor);
-//        logger.descriptorAdded(descriptor);
+        logger.descriptorAdded(descriptor);
     }
 
     public IEvaluatorContext getEvaluatorContext() {
@@ -320,24 +320,24 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public RecognizerStatistics getStatistics() {
-//        if (resultOps instanceof ParserResultOps) {
-//            return ParseStatistics.builder()
-//                    .setDescriptorsCount(logger.getDescriptorsCount())
-//                    .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
-//                    .setGSSEdgesCount(logger.getCountGSSEdges())
-//                    .setNonterminalNodesCount(logger.getCountNonterminalNodes())
-//                    .setTerminalNodesCount(logger.getCountTerminalNodes())
-//                    .setIntermediateNodesCount(logger.getCountIntermediateNodes())
-//                    .setPackedNodesCount(logger.getCountPackedNodes())
-//                    .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())
-//                    .build();
-//        } else {
+        if (resultOps instanceof ParserResultOps) {
+            return ParseStatistics.builder()
+                    .setDescriptorsCount(logger.getDescriptorsCount())
+                    .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
+                    .setGSSEdgesCount(logger.getCountGSSEdges())
+                    .setNonterminalNodesCount(logger.getCountNonterminalNodes())
+                    .setTerminalNodesCount(logger.getCountTerminalNodes())
+                    .setIntermediateNodesCount(logger.getCountIntermediateNodes())
+                    .setPackedNodesCount(logger.getCountPackedNodes())
+                    .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())
+                    .build();
+        } else {
             return RecognizerStatistics.builder()
                     .setDescriptorsCount(logger.getDescriptorsCount())
                     .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node
                     .setGSSEdgesCount(logger.getCountGSSEdges())
                     .build();
-       // }
+        }
 
     }
 

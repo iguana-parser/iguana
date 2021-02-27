@@ -35,9 +35,7 @@ import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
-//import org.iguana.parsetree.NonterminalNode;
 import org.iguana.sppf.NonterminalNode;
-//import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
@@ -62,12 +60,12 @@ public class IguanaParser {
         return getSPPF(input, new ParseOptions.Builder().build());
     }
 
-    public List<Pair> getPairs(Input input, ParseOptions options) {
-        return runtime.no_sppf_run(input, grammarGraph, options.getMap(), options.isGlobal());
-    }
-
     public Map<Pair, NonterminalNode> getSPPF(Input input, ParseOptions options) {
         return (Map<Pair, NonterminalNode>) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
+    }
+
+    public List<Pair> getPairs(Input input, ParseOptions options) {
+        return runtime.no_sppf_run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
     public ParseTreeNode getParserTree(Input input) {
@@ -81,7 +79,6 @@ public class IguanaParser {
     public List<Pair> getReachabilities(Input input, ParseOptions options) {
         return getPairs(input, options);
     }
-
 
     public ParseTreeNode getParserTree(Input input, ParseOptions options) {
         Map<Pair, NonterminalNode> roots = getSPPF(input, options);

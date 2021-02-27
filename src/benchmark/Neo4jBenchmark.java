@@ -34,7 +34,7 @@ public class Neo4jBenchmark {
     );
     private static String st = "st";
 
-//    args0 rel type (st/bt/nt)
+    //    args0 rel type (st/bt/nt)
 //    args1 rightNode
 //    args2 number of warm up iteration
 //    args3 total number of iterations
@@ -49,7 +49,7 @@ public class Neo4jBenchmark {
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
         benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
         benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
-     }
+    }
 
     public static BiFunction<Relationship, Direction, String> getFunction(String relationshipName) {
         if (relationshipNamesMap.containsKey(relationshipName)) {
@@ -86,7 +86,7 @@ public class Neo4jBenchmark {
                 } else {
                     throw new RuntimeException("Unexpected direction");
                 }
-            } else if (rel.isType(RelationshipType.withName("rdf__type"))) {
+            } else if (rel.isType(RelationshipType.withName("type"))) {
                 if (direction.equals(Direction.INCOMING)) {
                     return "c";
                 } else if (direction.equals(Direction.OUTGOING)) {
@@ -143,14 +143,11 @@ public class Neo4jBenchmark {
                     vertexToMem.putIfAbsent(start, new ArrayList<>());
                     vertexToMem.get(start).add((int) curM);
                     if (iter == maxIter - 1) {
-                        //Set<Pair> reachibilities = parseResults.keySet();
-                        Iterator it = parseResults.iterator();
-                        Integer cnt = 0;
-                        while (it.hasNext()) {
-                            Pair pair = (Pair) it.next();
-                            if (pair.equalsKey(start)) cnt++;
-                        }
-                        numPaths.put(start, cnt);
+//                        int cnt = 0;
+//                        for(Pair nodePair: parseResults) {
+//                            if (nodePair.equalsKey(start)) cnt  += 1;
+//                        }
+                        numPaths.put(start, parseResults.size());
                         //System.out.println(numPaths.get(start));
                         System.out.println(start + " " + numPaths.get(start));
 //                        System.out.println(start + " " + countNumberOfPaths(parseTreeNodes, counterLength) + " " + counterLength);
@@ -197,11 +194,11 @@ public class Neo4jBenchmark {
     }
 
     public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
-         BiFunction<Relationship, Direction, String> f = getFunction(relType);
+        BiFunction<Relationship, Direction, String> f = getFunction(relType);
 
         Map<Integer, Integer> numPaths = new HashMap<>();
-//        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
-        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
+        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
+//        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
 
         Grammar grammar;
         try {
@@ -209,12 +206,12 @@ public class Neo4jBenchmark {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No grammar.json file is present");
         }
-        Runtime r = Runtime.getRuntime();
+//        Runtime r = Runtime.getRuntime();
 
 //        Map<Integer, Integer> counterLength = new HashMap<>();
 
-//        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
-        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + "_mem_" + relType + ".csv");
+        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
+//        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + "_mem_" + relType + ".csv");
 
         for (int iter = 0; iter < maxIter; iter++) {
             for (int start = 0; start < rightNode; start += 1) {
@@ -223,30 +220,28 @@ public class Neo4jBenchmark {
                 GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
 //                System.out.println(input.nVertices());
                 IguanaParser parser = new IguanaParser(grammar);
-                r.gc();
-                long m1 = r.totalMemory() - r.freeMemory();
-//                long t1 = System.currentTimeMillis();
+//                r.gc();
+//                long m1 = r.totalMemory() - r.freeMemory();
+                long t1 = System.currentTimeMillis();
                 Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,
                         new ParseOptions.Builder().setAmbiguous(true).build());
-//                long t2 = System.currentTimeMillis();
-                long m2 = r.totalMemory() - r.freeMemory();
-//                long curT = t2 - t1;
-                long curM = (m2 - m1);
+                long t2 = System.currentTimeMillis();
+//                long m2 = r.totalMemory() - r.freeMemory();
+                long curT = t2 - t1;
+//                long curM = (m2 - m1);
 
                 if (iter >= warmUp && parseTreeNodes != null) {
-//                    vertexToTime.putIfAbsent(start, new ArrayList<>());
-//                    vertexToTime.get(start).add((int) curT);
-                    vertexToMem.putIfAbsent(start, new ArrayList<>());
-                    vertexToMem.get(start).add((int) curM);
+                    vertexToTime.putIfAbsent(start, new ArrayList<>());
+                    vertexToTime.get(start).add((int) curT);
+//                    vertexToMem.putIfAbsent(start, new ArrayList<>());
+//                    vertexToMem.get(start).add((int) curM);
                     if (iter == maxIter - 1) {
                         Set<Pair> reachibilities = parseTreeNodes.keySet();
-                        Iterator it = reachibilities.iterator();
-                        Integer cnt = 0;
-                        while (it.hasNext()) {
-                            Pair pair = (Pair) it.next();
-                            if (pair.equalsKey(start)) cnt++;
-                        }
-                        numPaths.put(start, cnt);
+//                        int cnt = 0;
+//                        for(Pair nodePair: reachibilities) {
+//                            if (nodePair.equalsKey(start)) cnt  += 1;
+//                        }
+                        numPaths.put(start, reachibilities.size());
                         //System.out.println(numPaths.get(start));
                         System.out.println(start + " " + numPaths.get(start));
                     }
@@ -255,41 +250,41 @@ public class Neo4jBenchmark {
             }
         }
 //        System.out.println("counterLength: " + counterLength);
-//        Map<Integer, Double> resultTime = new HashMap<>();
-        Map<Integer, Double> resultMem = new HashMap<>();
+        Map<Integer, Double> resultTime = new HashMap<>();
+//        Map<Integer, Double> resultMem = new HashMap<>();
 
-//        vertexToTime.forEach((vertex, list) ->
-//                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
+        vertexToTime.forEach((vertex, list) ->
+                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
 
-        vertexToMem.forEach((vertex, list) ->
-                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
+//        vertexToMem.forEach((vertex, list) ->
+//                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
 
-        PrintWriter out = new PrintWriter("results/" + dataset + "_mem_num_" + relType + ".csv");
-        numPaths.keySet().forEach(vertex -> {
-            out.println(vertex + "," + numPaths.get(vertex) + "," + resultMem.get(vertex));
-        });
-
-//        PrintWriter out = new PrintWriter("results/" + dataset + "_time_num_" + relType + ".csv");
+//        PrintWriter out = new PrintWriter("results/" + dataset + "_mem_num_" + relType + ".csv");
 //        numPaths.keySet().forEach(vertex -> {
-//            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex));
+//            out.println(vertex + "," + numPaths.get(vertex) + "," + resultMem.get(vertex));
 //        });
+
+        PrintWriter out = new PrintWriter("results/" + dataset + "_time_num_" + relType + ".csv");
+        numPaths.keySet().forEach(vertex -> {
+            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex));
+        });
 
         out.close();
 
 
-//        vertexToTime.forEach((vertex, list) -> {
-//            outStatsTime.print(vertex);
-//            list.forEach(x -> outStatsTime.print("," + x));
-//            outStatsTime.println();
-//        });
-//        outStatsTime.close();
-
-        vertexToMem.forEach((vertex, list) -> {
-            outStatsMem.print(vertex);
-            list.forEach(x -> outStatsMem.print("," + x));
-            outStatsMem.println();
+        vertexToTime.forEach((vertex, list) -> {
+            outStatsTime.print(vertex);
+            list.forEach(x -> outStatsTime.print("," + x));
+            outStatsTime.println();
         });
-        outStatsMem.close();
+        outStatsTime.close();
+
+//        vertexToMem.forEach((vertex, list) -> {
+//            outStatsMem.print(vertex);
+//            list.forEach(x -> outStatsMem.print("," + x));
+//            outStatsMem.println();
+//        });
+//        outStatsMem.close();
     }
 
     private static int countNumberOfPaths(Map<Pair, ParseTreeNode> parseTreeNodes, Map<Integer, Integer> counter) {

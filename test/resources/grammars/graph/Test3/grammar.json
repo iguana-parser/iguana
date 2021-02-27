@@ -27,10 +27,6 @@
             "kind": "Char",
             "val": 98
           }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "S"
         }
       ]
     },

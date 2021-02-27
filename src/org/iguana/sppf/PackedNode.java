@@ -29,7 +29,6 @@ package org.iguana.sppf;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
-//import org.iguana.traversal.SPPFVisitor;
 
 public class PackedNode implements SPPFNode {
 

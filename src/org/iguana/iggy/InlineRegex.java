@@ -38,7 +38,7 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Sequence;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.transformation.GrammarTransformation;
-//import org.iguana.sppf.TerminalNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
