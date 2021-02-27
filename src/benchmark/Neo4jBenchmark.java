@@ -103,8 +103,8 @@ public class Neo4jBenchmark {
         BiFunction<Relationship, Direction, String> f = getFunction(relType);
 
         Map<Integer, Integer> numPaths = new HashMap<>();
-//        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
-        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
+        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
+//        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
 
         Grammar grammar;
         try {
@@ -112,12 +112,12 @@ public class Neo4jBenchmark {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No grammar.json file is present");
         }
-        Runtime r = Runtime.getRuntime();
+//        Runtime r = Runtime.getRuntime();
 
-        Map<Integer, Integer> counterLength = new HashMap<>();
+//        Map<Integer, Integer> counterLength = new HashMap<>();
 
-//        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + relType + "_time_reachibilities.csv");
-        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + relType + "_mem_reachibilities.csv");
+        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + relType + "_time_reachibilities.csv");
+//        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + relType + "_mem_reachibilities.csv");
 
         for (int iter = 0; iter < maxIter; iter++) {
             for (int start = 0; start < rightNode; start += 1) {
@@ -126,22 +126,22 @@ public class Neo4jBenchmark {
                 GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
 //                System.out.println(input.nVertices());
                 IguanaParser parser = new IguanaParser(grammar);
-                r.gc();
-                long m1 = r.totalMemory() - r.freeMemory();
-//                long t1 = System.currentTimeMillis();
+//                r.gc();
+//                long m1 = r.totalMemory() - r.freeMemory();
+                long t1 = System.currentTimeMillis();
                 List<Pair> parseResults = parser.getReachabilities(input,
                         new ParseOptions.Builder().setAmbiguous(false).build());
-//                long t2 = System.currentTimeMillis();
-                long m2 = r.totalMemory() - r.freeMemory();
-//                long curT = t2 - t1;
-                long curM = (m2 - m1);
+                long t2 = System.currentTimeMillis();
+//                long m2 = r.totalMemory() - r.freeMemory();
+                long curT = t2 - t1;
+//                long curM = (m2 - m1);
 
                 if (iter >= warmUp  && parseResults != null) {
 
-//                    vertexToTime.putIfAbsent(start, new ArrayList<>());
-//                    vertexToTime.get(start).add((int) curT);
-                    vertexToMem.putIfAbsent(start, new ArrayList<>());
-                    vertexToMem.get(start).add((int) curM);
+                    vertexToTime.putIfAbsent(start, new ArrayList<>());
+                    vertexToTime.get(start).add((int) curT);
+//                    vertexToMem.putIfAbsent(start, new ArrayList<>());
+//                    vertexToMem.get(start).add((int) curM);
                     if (iter == maxIter - 1) {
 //                        int cnt = 0;
 //                        for(Pair nodePair: parseResults) {
@@ -156,41 +156,41 @@ public class Neo4jBenchmark {
                 ((Neo4jBenchmarkInput) input).close();
             }
         }
-        System.out.println(counterLength);
-//        Map<Integer, Double> resultTime = new HashMap<>();
-        Map<Integer, Double> resultMem = new HashMap<>();
+//        System.out.println(counterLength);
+        Map<Integer, Double> resultTime = new HashMap<>();
+//        Map<Integer, Double> resultMem = new HashMap<>();
 
-//        vertexToTime.forEach((vertex, list) ->
-//                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
+        vertexToTime.forEach((vertex, list) ->
+                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
 
-        vertexToMem.forEach((vertex, list) ->
-                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
+//        vertexToMem.forEach((vertex, list) ->
+//                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
 
-        PrintWriter out = new PrintWriter("results/" + dataset + "_mem_num_reachibilities_" + relType + ".csv");
-        numPaths.keySet().forEach(vertex -> {
-            out.println(vertex + "," + numPaths.get(vertex) + "," + resultMem.get(vertex));
-        });
-
-//        PrintWriter out = new PrintWriter("results/" + dataset + "_time_num_reachibilities_" + relType + ".csv");
+//        PrintWriter out = new PrintWriter("results/" + dataset + "_mem_num_reachibilities_" + relType + ".csv");
 //        numPaths.keySet().forEach(vertex -> {
-//            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex));
+//            out.println(vertex + "," + numPaths.get(vertex) + "," + resultMem.get(vertex));
 //        });
+
+        PrintWriter out = new PrintWriter("results/" + dataset + "_time_num_reachibilities_" + relType + ".csv");
+        numPaths.keySet().forEach(vertex -> {
+            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex));
+        });
 
         out.close();
 
-//        vertexToTime.forEach((vertex, list) -> {
-//            outStatsTime.print(vertex);
-//            list.forEach(x -> outStatsTime.print("," + x));
-//            outStatsTime.println();
-//        });
-//        outStatsTime.close();
-
-        vertexToMem.forEach((vertex, list) -> {
-            outStatsMem.print(vertex);
-            list.forEach(x -> outStatsMem.print("," + x));
-            outStatsMem.println();
+        vertexToTime.forEach((vertex, list) -> {
+            outStatsTime.print(vertex);
+            list.forEach(x -> outStatsTime.print("," + x));
+            outStatsTime.println();
         });
-        outStatsMem.close();
+        outStatsTime.close();
+
+//        vertexToMem.forEach((vertex, list) -> {
+//            outStatsMem.print(vertex);
+//            list.forEach(x -> outStatsMem.print("," + x));
+//            outStatsMem.println();
+//        });
+//        outStatsMem.close();
     }
 
     public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
