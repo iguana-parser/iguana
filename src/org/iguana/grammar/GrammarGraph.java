@@ -14,9 +14,9 @@ import static java.util.stream.Collectors.toList;
 
 public class GrammarGraph {
 
-    public static final TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), new DFAMatcherFactory(), ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);;
+    public static final TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), new DFAMatcherFactory(), ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);
     private final List<GrammarSlot> slots;
-    private NonterminalGrammarSlot startSlot;
+    private final NonterminalGrammarSlot startSlot;
 
     public GrammarGraph(List<GrammarSlot> slots, NonterminalGrammarSlot startSlot) {
         this.slots = slots;

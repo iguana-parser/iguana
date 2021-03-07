@@ -47,7 +47,7 @@ public class IggyParser {
         Grammar iggyGrammar = iggyGrammar();
         IguanaParser parser = new IguanaParser(iggyGrammar);
 
-        ParseTreeNode parseTree = (ParseTreeNode) parser.getParserTree(input);
+        ParseTreeNode parseTree = parser.getParserTree(input);
         if (parseTree == null) {
             throw new RuntimeException("Parse error");
         }

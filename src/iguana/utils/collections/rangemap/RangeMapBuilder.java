@@ -6,11 +6,11 @@ import static java.util.Collections.emptyList;
 
 public class RangeMapBuilder<T> {
 
-    private List<Range> ranges = new ArrayList<>();
-    private List<T> values = new ArrayList<>();
+    private final List<Range> ranges = new ArrayList<>();
+    private final List<T> values = new ArrayList<>();
 
-    private static RangeMap<?> emptyRangeMap = (RangeMap<Object>) key -> emptyList();
-    private static IntRangeMap emptyIntRangeMap = key -> -2;
+    private static final RangeMap<?> emptyRangeMap = (RangeMap<Object>) key -> emptyList();
+    private static final IntRangeMap emptyIntRangeMap = key -> -2;
 
     public RangeMapBuilder<T> put(Range range, T value) {
         ranges.add(range);

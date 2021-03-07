@@ -203,12 +203,12 @@ public class Grammar implements Serializable {
 		private final Map<Nonterminal, List<Rule>> definitions = new HashMap<>();
 		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
 		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
-		private List<Rule> rules = new ArrayList<>();
+		private final List<Rule> rules = new ArrayList<>();
 		private Symbol layout;
 		private Start startSymbol;
 		
-		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
-		private Map<String, Set<String>> ebnfRights = new HashMap<>();
+		private final Map<String, Set<String>> ebnfLefts = new HashMap<>();
+		private final Map<String, Set<String>> ebnfRights = new HashMap<>();
 
         public Builder() { }
 

@@ -12,7 +12,7 @@ import org.iguana.sppf.*;
 
 public class ParserLogger {
 
-    private static ParserLogger instance = new ParserLogger();
+    private static final ParserLogger instance = new ParserLogger();
 
     public static ParserLogger getInstance() {
         return instance;

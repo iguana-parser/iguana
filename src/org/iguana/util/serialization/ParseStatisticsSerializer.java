@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class ParseStatisticsSerializer {
 
-    private static ObjectMapper mapper;
+    private static final ObjectMapper mapper;
 
     static {
         mapper = new ObjectMapper();

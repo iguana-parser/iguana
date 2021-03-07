@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automaton> {
 
-	private Map<RegularExpression, Automaton> cache = new HashMap<>();
+	private final Map<RegularExpression, Automaton> cache = new HashMap<>();
 
 	@Override
 	public Automaton visit(Char c) {

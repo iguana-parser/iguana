@@ -31,9 +31,9 @@ package org.iguana.util.trie;
 
 public class Edge<T> {
 	
-	private T label;
+	private final T label;
 	
-	private Node<T> destination;
+	private final Node<T> destination;
 	
 	public Edge(T label, Node<T> destination) {
 		

@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 public class DFAMatcherFactory implements MatcherFactory {
 
-    private Map<RegularExpression, Matcher> cache = new HashMap<>();
+    private final Map<RegularExpression, Matcher> cache = new HashMap<>();
 
     public Matcher getMatcher(RegularExpression regex) {
 

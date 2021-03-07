@@ -39,7 +39,7 @@ import java.util.List;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
-	private TerminalGrammarSlot epsilonSlot;
+	private final TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, Conditions conditions) {
 		super(position, nonterminal, null, null, null, conditions);

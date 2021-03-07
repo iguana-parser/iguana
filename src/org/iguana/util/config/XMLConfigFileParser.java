@@ -12,7 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class XMLConfigFileParser implements ConfigFileParser {
 
-    private Element root;
+    private final Element root;
 
     private XMLConfigFileParser(Element root) {
         this.root = root;

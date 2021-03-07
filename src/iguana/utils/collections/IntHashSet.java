@@ -16,7 +16,7 @@ public class IntHashSet implements Serializable {
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 	
-	private int initialCapacity;
+	private final int initialCapacity;
 	
 	private int capacity;
 	
@@ -24,7 +24,7 @@ public class IntHashSet implements Serializable {
 	
 	private int threshold;
 	
-	private float loadFactor;
+	private final float loadFactor;
 	
 	private int rehashCount;
 	

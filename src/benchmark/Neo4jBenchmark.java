@@ -28,11 +28,11 @@ import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAM
 
 public class Neo4jBenchmark {
     private static GraphDatabaseService graphDb;
-    private static Map<String, String> relationshipNamesMap = Map.of(
+    private static final Map<String, String> relationshipNamesMap = Map.of(
             "nt", "narrowerTransitive",
             "bt", "broaderTransitive"
     );
-    private static String st = "st";
+    private static final String st = "st";
 
     //    args0 rel type (st/bt/nt)
 //    args1 rightNode
@@ -48,7 +48,7 @@ public class Neo4jBenchmark {
 
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
         benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
-        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+//        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
     }
 
     public static BiFunction<Relationship, Direction, String> getFunction(String relationshipName) {
@@ -120,7 +120,7 @@ public class Neo4jBenchmark {
 //        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + relType + "_mem_reachibilities.csv");
 
         for (int iter = 0; iter < maxIter; iter++) {
-            for (int start = 0; start < rightNode; start += 1) {
+            for (int start = rightNode; start <= rightNode; start += 1) {
                 System.out.println("iter " + iter + " node " + start);
 
                 GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
@@ -148,7 +148,7 @@ public class Neo4jBenchmark {
 //                            if (nodePair.equalsKey(start)) cnt  += 1;
 //                        }
                         numPaths.put(start, parseResults.size());
-                        //System.out.println(numPaths.get(start));
+                        System.out.println(curT);
                         System.out.println(start + " " + numPaths.get(start));
 //                        System.out.println(start + " " + countNumberOfPaths(parseTreeNodes, counterLength) + " " + counterLength);
                     }
@@ -214,7 +214,7 @@ public class Neo4jBenchmark {
 //        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + "_mem_" + relType + ".csv");
 
         for (int iter = 0; iter < maxIter; iter++) {
-            for (int start = 0; start < rightNode; start += 1) {
+            for (int start = rightNode; start <= rightNode; start += 1) {
                 System.out.println("iter " + iter + " node " + start);
 
                 GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
@@ -242,7 +242,7 @@ public class Neo4jBenchmark {
 //                            if (nodePair.equalsKey(start)) cnt  += 1;
 //                        }
                         numPaths.put(start, reachibilities.size());
-                        //System.out.println(numPaths.get(start));
+                        System.out.println(curT);
                         System.out.println(start + " " + numPaths.get(start));
                     }
                 }

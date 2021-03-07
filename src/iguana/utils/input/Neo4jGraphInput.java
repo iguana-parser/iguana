@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Neo4jGraphInput extends GraphInput {
-    private GraphDatabaseService graphDb;
+    private final GraphDatabaseService graphDb;
     private static final Label START_STATUS = Label.label("start");
     private static final Label FINAL_STATUS = Label.label("final");
     private static final String TAG = "tag";

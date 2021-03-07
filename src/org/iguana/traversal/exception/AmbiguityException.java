@@ -6,7 +6,7 @@ import org.iguana.sppf.NonPackedNode;
 public class AmbiguityException extends RuntimeException {
 
     private final NonPackedNode node;
-    private Input input;
+    private final Input input;
 
     public AmbiguityException(NonPackedNode node, Input input) {
         this.node = node;

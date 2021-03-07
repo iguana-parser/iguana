@@ -14,7 +14,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 	
-	private int initialCapacity;
+	private final int initialCapacity;
 	
 	private int capacity;
 	
@@ -22,7 +22,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 	
 	private int threshold;
 	
-	private float loadFactor;
+	private final float loadFactor;
 	
 	private int rehashCount;
 	
@@ -252,15 +252,14 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 			public boolean hasNext() {
 				if (current == null) {
 					current = nextInTable();
-					return current == null ? false : true;
+					return current != null;
 				}
 				
 				current = nextInChain();
 				if (current == null) {
 					i++;
 					current = nextInTable();
-					if (current == null)
-						return false;
+					return current != null;
 				}
 			
 				return true;

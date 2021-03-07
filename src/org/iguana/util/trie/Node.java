@@ -33,7 +33,7 @@ import java.util.List;
 
 public class Node<T> {
 
-	private List<Edge<T>> edges;
+	private final List<Edge<T>> edges;
 	
 	public Node() {
 		edges = new ArrayList<>();

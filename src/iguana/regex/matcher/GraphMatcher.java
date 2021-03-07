@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GraphMatcher implements Matcher {
-    private String label;
+    private final String label;
 
     public GraphMatcher(String label) {
         this.label = label;

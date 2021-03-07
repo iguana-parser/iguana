@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class RangeTreeFollowTest implements FollowTest {
 
-	private IntRangeMap rangeMap;
+	private final IntRangeMap rangeMap;
 	
 	public RangeTreeFollowTest(Set<CharRange> set) {
 		RangeMapBuilder<Integer> builder = new RangeMapBuilder<>();

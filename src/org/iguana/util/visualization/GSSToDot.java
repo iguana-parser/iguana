@@ -39,7 +39,7 @@ import static iguana.utils.visualization.DotGraph.newNode;
 
 public class GSSToDot {
 
-	private Map<GSSNode<?>, Integer> ids = new HashMap<>();
+	private final Map<GSSNode<?>, Integer> ids = new HashMap<>();
 
 	public DotGraph execute(Iterable<GSSNode<?>> set) {
 		DotGraph dotGraph = new DotGraph();

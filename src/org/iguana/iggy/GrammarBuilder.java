@@ -116,8 +116,8 @@ public class GrammarBuilder {
 
         private static org.iguana.grammar.symbol.Rule getRule(Nonterminal head, List<org.iguana.grammar.symbol.Symbol> symbols, List<Attribute> attributes, List<String> tag) {
             // TODO: The first and the last symbol should be visited!
-            boolean isLeft = symbols.isEmpty()? false : symbols.get(0).getName().equals(head.getName());
-            boolean isRight = symbols.isEmpty()? false : symbols.get(symbols.size() - 1).getName().equals(head.getName());
+            boolean isLeft = !symbols.isEmpty() && symbols.get(0).getName().equals(head.getName());
+            boolean isRight = !symbols.isEmpty() && symbols.get(symbols.size() - 1).getName().equals(head.getName());
 
             Associativity associativity = null;
             String label = null;
@@ -167,7 +167,7 @@ public class GrammarBuilder {
                 case "left": return Associativity.LEFT;
                 case "right": return Associativity.RIGHT;
                 case "non-assoc": return Associativity.NON_ASSOC;
-                default: ;
+                default:
             }
             return Associativity.UNDEFINED;
         }

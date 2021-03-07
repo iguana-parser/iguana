@@ -86,13 +86,9 @@ public class Nonterminal extends AbstractSymbol {
 		if (ebnfList == true) {
 			return true;
 		} else {
-			if(name.startsWith("List")) {
-				return true;
-			}
+            return name.startsWith("List");
 		}
-
-		return false;
-	}
+    }
 	
 	public int getIndex() {
 		return index;

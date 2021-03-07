@@ -46,7 +46,7 @@ public class State implements Serializable {
 	/**
 	 * The set of regular expressions whose final state is this state.
 	 */
-	private Set<RegularExpression> regularExpressions;
+	private final Set<RegularExpression> regularExpressions;
 	
 	private StateType stateType = StateType.NORMAL;
 	

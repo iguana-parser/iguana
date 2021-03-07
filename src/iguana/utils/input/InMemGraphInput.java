@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InMemGraphInput extends GraphInput {
-    private List<List<Edge>> adjacencyList;
-    private List<Integer> startVertices;
-    private List<Integer> finalVertices;
+    private final List<List<Edge>> adjacencyList;
+    private final List<Integer> startVertices;
+    private final List<Integer> finalVertices;
 
     public InMemGraphInput(List<List<Edge>> adjacencyList, List<Integer> startVertices, List<Integer> finalVertices) {
         this.adjacencyList = adjacencyList;

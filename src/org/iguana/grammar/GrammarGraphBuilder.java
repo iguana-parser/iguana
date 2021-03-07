@@ -57,23 +57,23 @@ public class GrammarGraphBuilder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
+    private final Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 
-    private Map<Terminal, TerminalGrammarSlot> terminalsMap;
+    private final Map<Terminal, TerminalGrammarSlot> terminalsMap;
 
-    private List<GrammarSlot> slots;
+    private final List<GrammarSlot> slots;
 
     private FirstFollowSets firstFollow;
 
-    private Grammar grammar;
+    private final Grammar grammar;
 
-    private Configuration config;
+    private final Configuration config;
 
     private final Map<Integer, Map<String, Integer>> mapping;
 
     private Map<String, Integer> current;
 
-    private static MatcherFactory matcherFactory = new DFAMatcherFactory();
+    private static final MatcherFactory matcherFactory = new DFAMatcherFactory();
 
     public static GrammarGraph from(Grammar grammar) {
         return from(grammar, Configuration.load());

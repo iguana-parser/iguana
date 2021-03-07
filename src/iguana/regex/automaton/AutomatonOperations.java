@@ -430,7 +430,7 @@ public class AutomatonOperations {
 		
 		for (State state : states) {
 			for (Transition t : state.getTransitions()) {
-				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
+				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));
 			}
 		}
 		
@@ -465,8 +465,8 @@ public class AutomatonOperations {
 	}
 	
 	@FunctionalInterface
-	private static interface Op {
-		public boolean execute(State s1, State s2);
+	private interface Op {
+		boolean execute(State s1, State s2);
 	}
 	
 }

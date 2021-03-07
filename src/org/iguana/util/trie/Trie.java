@@ -29,7 +29,7 @@ package org.iguana.util.trie;
 
 public class Trie<T> {
 
-	private Node<T> root;
+	private final Node<T> root;
 	
 	public Trie() {
 		this.root = new Node<>();

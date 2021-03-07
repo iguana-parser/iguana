@@ -42,13 +42,13 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 	
 	private final boolean showPackedNodeLabel;
 
-	private Map<SPPFNode, Integer> ids = new HashMap<>();
+	private final Map<SPPFNode, Integer> ids = new HashMap<>();
 	
-	private DotGraph dotGraph;
+	private final DotGraph dotGraph;
 
 	protected Input input;
 	
-	private Set<NonPackedNode> visited = new HashSet<>();
+	private final Set<NonPackedNode> visited = new HashSet<>();
 
 	public static DotGraph getDotGraph(SPPFNode root, Input input) {
 		return getDotGraph(root, input, false);
