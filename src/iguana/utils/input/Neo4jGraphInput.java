@@ -4,7 +4,6 @@ import org.neo4j.graphdb.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Neo4jGraphInput extends GraphInput {
@@ -13,12 +12,13 @@ public class Neo4jGraphInput extends GraphInput {
     private static final Label FINAL_STATUS = Label.label("final");
     private static final String TAG = "tag";
 
+
     public Neo4jGraphInput(GraphDatabaseService graphDb) {
         this.graphDb = graphDb;
     }
 
     @Override
-    public Stream<Integer> nextSymbols(int index) {
+    public List<Integer> nextSymbols(int index) {
         try (Transaction tx = graphDb.beginTx()) {
             List<Integer> nextSymbols = StreamSupport.stream(tx.getNodeById(index).getRelationships(Direction.OUTGOING).spliterator(), false)
                     .map(rel -> (int) ((String) rel.getProperty(TAG)).charAt(0))
@@ -27,7 +27,7 @@ public class Neo4jGraphInput extends GraphInput {
             if (isFinal(index)) {
                 nextSymbols.add(EOF);
             }
-            return nextSymbols.stream();
+            return nextSymbols;
         }
     }
 

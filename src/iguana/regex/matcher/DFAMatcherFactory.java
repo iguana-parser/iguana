@@ -69,7 +69,7 @@ public class DFAMatcherFactory implements MatcherFactory {
     }
 
     public static Matcher characterMatcher(Char c) {
-        return (input, i) -> input.nextSymbols(i).collect(Collectors.toList()).get(0) == c.getValue() ? Collections.singletonList(i + 1) : new ArrayList<>();
+        return (input, i) -> input.nextSymbols(i).get(0) == c.getValue() ? Collections.singletonList(i + 1) : new ArrayList<>();
     }
 
 //    public static Matcher characterBackwardsMatcher(Char c) {
@@ -77,7 +77,7 @@ public class DFAMatcherFactory implements MatcherFactory {
 //    }
 
     public static Matcher characterRangeMatcher(CharRange range) {
-        return (input, i) -> input.nextSymbols(i).collect(Collectors.toList()).get(0) >= range.getStart() && input.nextSymbols(i).collect(Collectors.toList()).get(0) <= range.getEnd() ?
+        return (input, i) -> input.nextSymbols(i).get(0) >= range.getStart() && input.nextSymbols(i).get(0) <= range.getEnd() ?
                 Collections.singletonList(i + 1) : new ArrayList<>();
     }
 

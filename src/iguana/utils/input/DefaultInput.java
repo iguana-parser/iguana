@@ -1,6 +1,7 @@
 package iguana.utils.input;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,9 +16,9 @@ public class DefaultInput extends AbstractInput {
     }
 
     @Override
-    public Stream<Integer> nextSymbols(int index) {
-        if (index == s.length()) return Stream.of(EOF);
-        return Stream.of((int) s.charAt(index));
+    public List<Integer> nextSymbols(int index) {
+        if (index == s.length()) return Collections.singletonList(EOF);
+        return Collections.singletonList((int) s.charAt(index));
     }
 
     @Override

@@ -22,8 +22,8 @@ class UTF32Input extends AbstractInput {
     }
 
     @Override
-    public Stream<Integer> nextSymbols(int index) {
-        return Stream.of(characters[index]);
+    public List<Integer> nextSymbols(int index) {
+        return Collections.singletonList(characters[index]);
     }
 
     /**

@@ -34,7 +34,7 @@ import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.input.Input;
-import org.eclipse.rdf4j.query.algebra.In;
+//import org.eclipse.rdf4j.query.algebra.In;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
@@ -94,9 +94,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
     private List<BodyGrammarSlot> getFirstSlots(List<Integer> v) {
         List<BodyGrammarSlot> result = new ArrayList<>();
-        v.forEach(t -> {
-            result.addAll(lookAheadTest.get(t));
-        });
+        v.forEach(t -> result.addAll(lookAheadTest.get(t)));
         return result;
     }
 

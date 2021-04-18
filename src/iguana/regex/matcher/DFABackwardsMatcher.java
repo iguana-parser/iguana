@@ -56,7 +56,7 @@ public class DFABackwardsMatcher extends DFAMatcher {
             maximumMatched = 0;
 
         for (int i = inputIndex - 1; i >= 0; i--) {
-            state = table[state].get(input.nextSymbols(i).collect(Collectors.toList()).get(0));
+            state = table[state].get(input.nextSymbols(i).get(0));
 
             if (state == ERROR_STATE)
                 break;

@@ -10,51 +10,97 @@ import org.iguana.parsetree.AmbiguityNode;
 import org.iguana.parsetree.DefaultTerminalNode;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
+//import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
+//import org.neo4j.configuration.GraphDatabaseSettings;
+
 import org.neo4j.configuration.GraphDatabaseSettings;
+import org.neo4j.configuration.connectors.BoltConnector;
+import org.neo4j.configuration.helpers.SocketAddress;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.schema.IndexDefinition;
+import org.neo4j.graphdb.schema.Schema;
+//import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 public class Neo4jBenchmark {
+    private static final File databaseDirectory = new File("target/neo4j-hello-db");
     private static GraphDatabaseService graphDb;
-    private static final Map<String, String> relationshipNamesMap = Map.of(
-            "nt", "narrowerTransitive",
-            "bt", "broaderTransitive"
-    );
+    private static DatabaseManagementService managementService;
+
+//    @BeforeClass
+//    public static void initDb() throws IOException {
+//        org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
+//
+//        managementService = new DatabaseManagementServiceBuilder(databaseDirectory)
+//                .setConfig(BoltConnector.enabled, true)
+//                .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
+//                .build();
+//        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+//        assert (graphDb != null);
+//    }
+
+//    @AfterClass
+//    public static void finalizeDb() {
+////        removeData();
+////        managementService.shutdown();
+//    }
+
+//    @Before
+//    public void clearDb() {
+//        removeData();
+//    }
+
+
+    private static final Map<String, String> relationshipNamesMap = new HashMap<String, String>() {
+        {
+            put("nt", "narrowerTransitive");
+            put("bt", "broaderTransitive");
+        }
+    };
     private static final String st = "st";
 
     //    args0 rel type (st/bt/nt)
 //    args1 rightNode
 //    args2 number of warm up iteration
 //    args3 total number of iterations
-//    args4 path to database
+//    args4 path to dataset
 //    args5 path to grammar
 //    args6 dataset name = name of file with results
-    public static void main(String[] args) throws FileNotFoundException {
-        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(args[4]))
-                .setConfig(GraphDatabaseSettings.read_only, true)
-                .build();
+    public static void main(String[] args) throws IOException {
 
-        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
-        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
-//        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+//        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(args[4]))
+//                .setConfig(GraphDatabaseSettings.read_only, true)
+//                .build();
+//
+//        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+//        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( new File(args[4]) );
+        loadGraph(args[4]);
+//        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+        removeData();
+        managementService.shutdown();
     }
 
     public static BiFunction<Relationship, Direction, String> getFunction(String relationshipName) {
         if (relationshipNamesMap.containsKey(relationshipName)) {
             return singleFunction(relationshipNamesMap.get(relationshipName));
-        } else if (relationshipName.equals(st)){
+        } else if (relationshipName.equals(st)) {
             return subclassAndTypeFunction();
         } else {
             throw new RuntimeException("Unknown relationship");
@@ -99,6 +145,66 @@ public class Neo4jBenchmark {
         };
     }
 
+    public static void loadGraph(String pathToDataset) throws IOException {
+        org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
+
+        managementService =
+                new DatabaseManagementServiceBuilder(databaseDirectory)
+                        .setConfig( GraphDatabaseSettings.pagecache_memory, "100G" )
+//                        .setConfig( GraphDatabaseSettings.read_only, true)
+                        .setConfig( GraphDatabaseSettings.pagecache_warmup_enabled, true)
+                .setConfig(BoltConnector.enabled, true)
+                .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
+                .build();
+        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+
+        HashMap<Integer, Long> nodeList = new HashMap<>();
+        try (Stream<String> stream = Files.lines(Paths.get(pathToDataset))) {
+
+            try (Transaction tx = graphDb.beginTx()) {
+                stream.forEach(s -> {
+                    String[] split = s.split("\\s+");
+
+                    if (!nodeList.containsKey(Integer.parseInt(split[0]))) {
+                        Node node1 = tx.createNode();
+                        nodeList.put(Integer.parseInt(split[0]), node1.getId());
+                        node1.addLabel(Label.label(split[0]));
+                    }
+                    if (!nodeList.containsKey(Integer.parseInt(split[2]))) {
+                        Node node1 = tx.createNode();
+                        nodeList.put(Integer.parseInt(split[2]), node1.getId());
+                        node1.addLabel(Label.label(split[2]));
+                    }
+                    Node node1 = tx.getNodeById(nodeList.get(Integer.parseInt(split[0])));
+                    Node node2 = tx.getNodeById(nodeList.get(Integer.parseInt(split[2])));
+                    node1.createRelationshipTo(node2, RelationshipType.withName(split[1]));
+
+//                    System.out.println("from: " + split[0] + " id: " + node1.getId() + " label: " + splited[1] + "  to: " + splited[2] + "id: " + node2.getId());
+                });
+                Iterable<Label> labels = tx.getAllLabels();
+                for (Label label : labels) {
+                    System.out.println("label: " + label);
+                    tx.findNodes(label).stream().forEach(System.out::println);
+                }
+                Iterable<RelationshipType> relationships = tx.getAllRelationshipTypes();
+                for (RelationshipType reltype : relationships) {
+                    System.out.println(reltype);
+                }
+//                IndexDefinition usernamesIndex;
+//
+//                Schema schema = tx.schema();
+//                usernamesIndex = schema.indexFor(RelationshipType.withName("broaderTransitive"))
+//                        .create();
+
+                tx.commit();
+                tx.close();
+                stream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
         BiFunction<Relationship, Direction, String> f = getFunction(relType);
 
@@ -122,9 +228,9 @@ public class Neo4jBenchmark {
         for (int iter = 0; iter < maxIter; iter++) {
             for (int start = rightNode; start <= rightNode; start += 1) {
                 System.out.println("iter " + iter + " node " + start);
-
+                assert (graphDb != null);
                 GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
-//                System.out.println(input.nVertices());
+                System.out.println(input.nextSymbols(start));
                 IguanaParser parser = new IguanaParser(grammar);
 //                r.gc();
 //                long m1 = r.totalMemory() - r.freeMemory();
@@ -136,7 +242,7 @@ public class Neo4jBenchmark {
                 long curT = t2 - t1;
 //                long curM = (m2 - m1);
 
-                if (iter >= warmUp  && parseResults != null) {
+                if (iter >= warmUp && parseResults != null) {
 
                     vertexToTime.putIfAbsent(start, new ArrayList<>());
                     vertexToTime.get(start).add((int) curT);
@@ -148,8 +254,8 @@ public class Neo4jBenchmark {
 //                            if (nodePair.equalsKey(start)) cnt  += 1;
 //                        }
                         numPaths.put(start, parseResults.size());
-                        System.out.println(curT);
-                        System.out.println(start + " " + numPaths.get(start));
+//                        System.out.println(curT);
+//                        System.out.println(start + " " + numPaths.get(start));
 //                        System.out.println(start + " " + countNumberOfPaths(parseTreeNodes, counterLength) + " " + counterLength);
                     }
                 }
@@ -347,13 +453,13 @@ public class Neo4jBenchmark {
         nodeToLengths.put(parseTreeNode, lengths);
     }
 
-//    private static void removeData() {
-//        try (Transaction tx = graphDb.beginTx()) {
-//            tx.getAllNodes().forEach(node -> {
-//                node.getRelationships().forEach(Relationship::delete);
-//                node.delete();
-//            });
-//            tx.commit();
-//        }
-//    }
+    private static void removeData() {
+        try (Transaction tx = graphDb.beginTx()) {
+            tx.getAllNodes().forEach(node -> {
+                node.getRelationships().forEach(Relationship::delete);
+                node.delete();
+            });
+            tx.commit();
+        }
+    }
 }

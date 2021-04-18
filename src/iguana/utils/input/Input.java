@@ -35,7 +35,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static java.lang.Character.isHighSurrogate;
 
@@ -108,7 +107,7 @@ public interface Input {
         return new UTF32Input(characters, j + 1, lineCount + 1, uri);
     }
 
-    Stream<Integer> nextSymbols(int index);
+    List<Integer> nextSymbols(int index);
 
 //    default List<Integer> nextSymbolsIgnoreLayout(int index) {
 //        return nextSymbols(index);

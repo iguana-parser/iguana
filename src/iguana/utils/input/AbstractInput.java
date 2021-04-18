@@ -47,14 +47,14 @@ public abstract class AbstractInput implements Input {
     public boolean isEndOfLine(int inputIndex) {
         checkBounds(inputIndex, length());
 
-        return nextSymbols(inputIndex).collect(Collectors.toList()).get(0) == '\n' || nextSymbols(inputIndex).collect(Collectors.toList()).get(0) == EOF;
+        return nextSymbols(inputIndex).get(0) == '\n' || nextSymbols(inputIndex).get(0) == EOF;
     }
 
     @Override
     public boolean isEndOfFile(int inputIndex) {
         checkBounds(inputIndex, length());
 
-        return nextSymbols(inputIndex).collect(Collectors.toList()).get(0) == EOF;
+        return nextSymbols(inputIndex).get(0) == EOF;
     }
 
     @Override
