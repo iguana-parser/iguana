@@ -1,25 +1,29 @@
 package iguana.utils.input;
 
+import org.eclipse.collections.impl.list.Interval;
 import org.neo4j.graphdb.*;
-
+import org.neo4j.internal.kernel.api.NodeCursor;
+import org.neo4j.kernel.api.KernelTransaction;
+import org.neo4j.kernel.impl.coreapi.TransactionImpl;
 import java.io.Closeable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.stream.IntStream;
+
 
 public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable
 {
     private final GraphDatabaseService graphDb;
     private final BiFunction<Relationship, Direction, String> toLabel;
-    private final int start;
+    private final List<Integer> startVertices;
     Transaction tx;
 
-    public Neo4jBenchmarkInput(GraphDatabaseService graphDb, BiFunction<Relationship, Direction, String> toLabel, int start) {
+    public Neo4jBenchmarkInput(GraphDatabaseService graphDb, BiFunction<Relationship, Direction, String> toLabel, List<Integer> startVertices) {
         super(graphDb);
         this.graphDb = graphDb;
         this.toLabel = toLabel;
-        this.start = start;
+        this.startVertices = startVertices;
         this.tx = graphDb.beginTx();
     }
 
@@ -65,30 +69,62 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable
         return true;
     }
 
+//    @Override
+//    public List<Integer> getStartVertices() {
+//        List<Integer> result = new ArrayList<>();
+//        ResourceIterable<Node> nodes = tx.getAllNodes();
+//        for (Node node: nodes) {
+//            long id = node.getId();
+//            if (id == start) {
+//                result.add((int) id);
+//            }
+//        }
+//        return result;
+////        return tx.getAllNodes().stream()
+////                .filter(node -> node.getId() == start)
+////                .map(node -> (int) node.getId())
+////                .collect(Collectors.toList());
+//    }
     @Override
     public List<Integer> getStartVertices() {
-        List<Integer> result = new ArrayList<>();
-        ResourceIterable<Node> nodes = tx.getAllNodes();
-        for (Node node: nodes) {
-            long id = node.getId();
-            if (id == start) {
-                result.add((int) id);
-            }
-        }
-        return result;
-//        return tx.getAllNodes().stream()
-//                .filter(node -> node.getId() == start)
-//                .map(node -> (int) node.getId())
-//                .collect(Collectors.toList());
-    }
+    return this.startVertices;
+}
+
 
     @Override
     public List<Integer> getFinalVertices() {
-        List<Integer> result = new ArrayList<>();
-        tx.getAllNodes().forEach(node -> {
-            result.add((int) node.getId());
-        });
-        return result;
+        return Interval.zeroTo(15399);
+//        TransactionImpl tx = graphDb.beginTx();
+//        KernelTransaction ktx = tx.;
+//        final NodeCursor cursor = ktx.cursors().allocateNodeCursor();
+//        ktx.dataRead().allNodesScan(cursor);
+////        return new PrefetchingResourceIterator<Node>() {
+////            protected Node fetchNextOrNull() {
+////                if (cursor.next()) {
+////                    return TransactionImpl.newNodeEntity(cursor.nodeReference());
+////                } else {
+////                    this.close();
+////                    return null;
+////                }
+////            }
+//        List<Integer> res = new ArrayList<>();
+//        while (cursor.next()) {
+//            res.add(((Long) cursor.nodeReference()).intValue());
+//        }
+////
+////        Result result = tx.execute("MATCH (n) RETURN ID(n)");
+////        tx.getAllNodes().forEach(node -> {
+////            result.add((int) node.getId());
+////        });
+////        while ( result.hasNext() )
+////        {
+////            Map<String,Object> row = result.next();
+////            for ( Map.Entry<String,Object> column : row.entrySet() )
+////            {
+////                res.add(((Long) column.getValue()).intValue());
+////            }
+////        }
+//        return res;
 //        return tx.getAllNodes().stream()
 //                .map(node -> (int) node.getId())
 //                .collect(Collectors.toList());

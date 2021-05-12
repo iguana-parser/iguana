@@ -170,7 +170,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             key = Keys.from(i, data);
         }
 
-        GSSNode<T> gssNode = null;
+        GSSNode gssNode = null;
 
         if (arguments == null) {
             if (intGSSNodes == null) {
@@ -189,7 +189,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         if (gssNode == null) {
 
             List<BodyGrammarSlot> firstSlots = getFirstSlots(input.nextSymbols(i));
-            if (firstSlots == null || firstSlots.isEmpty()) {
+            if (firstSlots.isEmpty()) {
                 return;
             }
 

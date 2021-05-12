@@ -1,7 +1,9 @@
 package benchmark;
 
+import com.google.common.collect.Lists;
 import iguana.utils.input.GraphInput;
 import iguana.utils.input.Neo4jBenchmarkInput;
+import org.eclipse.collections.impl.list.Interval;
 import org.iguana.grammar.Grammar;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parser.Pair;
@@ -10,10 +12,6 @@ import org.iguana.parsetree.AmbiguityNode;
 import org.iguana.parsetree.DefaultTerminalNode;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
-//import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.AfterClass;
-//import org.neo4j.configuration.GraphDatabaseSettings;
 
 import org.neo4j.configuration.GraphDatabaseSettings;
 import org.neo4j.configuration.connectors.BoltConnector;
@@ -21,9 +19,6 @@ import org.neo4j.configuration.helpers.SocketAddress;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
 import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.schema.IndexDefinition;
-import org.neo4j.graphdb.schema.Schema;
-//import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 
 import java.io.File;
@@ -34,6 +29,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
@@ -43,31 +40,7 @@ public class Neo4jBenchmark {
     private static GraphDatabaseService graphDb;
     private static DatabaseManagementService managementService;
 
-//    @BeforeClass
-//    public static void initDb() throws IOException {
-//        org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
-//
-//        managementService = new DatabaseManagementServiceBuilder(databaseDirectory)
-//                .setConfig(BoltConnector.enabled, true)
-//                .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
-//                .build();
-//        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
-//        assert (graphDb != null);
-//    }
-
-//    @AfterClass
-//    public static void finalizeDb() {
-////        removeData();
-////        managementService.shutdown();
-//    }
-
-//    @Before
-//    public void clearDb() {
-//        removeData();
-//    }
-
-
-    private static final Map<String, String> relationshipNamesMap = new HashMap<String, String>() {
+    private static final Map<String, String> relationshipNamesMap = new HashMap<>() {
         {
             put("nt", "narrowerTransitive");
             put("bt", "broaderTransitive");
@@ -76,20 +49,13 @@ public class Neo4jBenchmark {
     private static final String st = "st";
 
     //    args0 rel type (st/bt/nt)
-//    args1 rightNode
-//    args2 number of warm up iteration
-//    args3 total number of iterations
-//    args4 path to dataset
-//    args5 path to grammar
-//    args6 dataset name = name of file with results
+    //    args1 rightNode
+    //    args2 number of warm up iteration
+    //    args3 total number of iterations
+    //    args4 path to dataset
+    //    args5 path to grammar
+    //    args6 dataset name = name of file with results
     public static void main(String[] args) throws IOException {
-
-//        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(args[4]))
-//                .setConfig(GraphDatabaseSettings.read_only, true)
-//                .build();
-//
-//        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
-//        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( new File(args[4]) );
         loadGraph(args[4]);
 //        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
         benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
@@ -150,12 +116,11 @@ public class Neo4jBenchmark {
 
         managementService =
                 new DatabaseManagementServiceBuilder(databaseDirectory)
-                        .setConfig( GraphDatabaseSettings.pagecache_memory, "100G" )
-//                        .setConfig( GraphDatabaseSettings.read_only, true)
-                        .setConfig( GraphDatabaseSettings.pagecache_warmup_enabled, true)
-                .setConfig(BoltConnector.enabled, true)
-                .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
-                .build();
+                        .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
+                        .setConfig(GraphDatabaseSettings.pagecache_warmup_enabled, true)
+                        .setConfig(BoltConnector.enabled, true)
+                        .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
+                        .build();
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
 
         HashMap<Integer, Long> nodeList = new HashMap<>();
@@ -178,24 +143,16 @@ public class Neo4jBenchmark {
                     Node node1 = tx.getNodeById(nodeList.get(Integer.parseInt(split[0])));
                     Node node2 = tx.getNodeById(nodeList.get(Integer.parseInt(split[2])));
                     node1.createRelationshipTo(node2, RelationshipType.withName(split[1]));
-
-//                    System.out.println("from: " + split[0] + " id: " + node1.getId() + " label: " + splited[1] + "  to: " + splited[2] + "id: " + node2.getId());
                 });
-                Iterable<Label> labels = tx.getAllLabels();
-                for (Label label : labels) {
-                    System.out.println("label: " + label);
-                    tx.findNodes(label).stream().forEach(System.out::println);
-                }
-                Iterable<RelationshipType> relationships = tx.getAllRelationshipTypes();
-                for (RelationshipType reltype : relationships) {
-                    System.out.println(reltype);
-                }
-//                IndexDefinition usernamesIndex;
-//
-//                Schema schema = tx.schema();
-//                usernamesIndex = schema.indexFor(RelationshipType.withName("broaderTransitive"))
-//                        .create();
-
+//                Iterable<Label> labels = tx.getAllLabels();
+//                for (Label label : labels) {
+//                    System.out.println("label: " + label);
+//                    tx.findNodes(label).stream().forEach(System.out::println);
+//                }
+//                Iterable<RelationshipType> relationships = tx.getAllRelationshipTypes();
+//                for (RelationshipType reltype : relationships) {
+//                    System.out.println(reltype);
+//                }
                 tx.commit();
                 tx.close();
                 stream.close();
@@ -208,103 +165,58 @@ public class Neo4jBenchmark {
     public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
         BiFunction<Relationship, Direction, String> f = getFunction(relType);
 
-        Map<Integer, Integer> numPaths = new HashMap<>();
-        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
-//        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
-
+        Map<String, List<Integer>> vertexToTime = new HashMap<>();
         Grammar grammar;
         try {
             grammar = Grammar.load(pathToGrammar, "json");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No grammar.json file is present");
         }
-//        Runtime r = Runtime.getRuntime();
 
-//        Map<Integer, Integer> counterLength = new HashMap<>();
+        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
+        outStatsTime.append("chunk_size, time");
+        outStatsTime.append("\n");
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
+        List<Integer> vertices = Interval.zeroTo(rightNode - 1);
+        for (Integer sz : chunkSize) {
+            List<List<Integer>> chunks = Lists.partition(vertices, sz);
+            for (Integer iter = 0; iter < maxIter; iter++) {
+                for (List<Integer> chunk : chunks) {
+                    System.out.println("iter " + iter + " chunkSize " + sz);
 
-        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + relType + "_time_reachibilities.csv");
-//        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + relType + "_mem_reachibilities.csv");
-
-        for (int iter = 0; iter < maxIter; iter++) {
-            for (int start = rightNode; start <= rightNode; start += 1) {
-                System.out.println("iter " + iter + " node " + start);
-                assert (graphDb != null);
-                GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
-                System.out.println(input.nextSymbols(start));
-                IguanaParser parser = new IguanaParser(grammar);
-//                r.gc();
-//                long m1 = r.totalMemory() - r.freeMemory();
-                long t1 = System.currentTimeMillis();
-                List<Pair> parseResults = parser.getReachabilities(input,
-                        new ParseOptions.Builder().setAmbiguous(false).build());
-                long t2 = System.currentTimeMillis();
-//                long m2 = r.totalMemory() - r.freeMemory();
-                long curT = t2 - t1;
-//                long curM = (m2 - m1);
-
-                if (iter >= warmUp && parseResults != null) {
-
-                    vertexToTime.putIfAbsent(start, new ArrayList<>());
-                    vertexToTime.get(start).add((int) curT);
-//                    vertexToMem.putIfAbsent(start, new ArrayList<>());
-//                    vertexToMem.get(start).add((int) curM);
-                    if (iter == maxIter - 1) {
-//                        int cnt = 0;
-//                        for(Pair nodePair: parseResults) {
-//                            if (nodePair.equalsKey(start)) cnt  += 1;
-//                        }
-                        numPaths.put(start, parseResults.size());
-//                        System.out.println(curT);
-//                        System.out.println(start + " " + numPaths.get(start));
-//                        System.out.println(start + " " + countNumberOfPaths(parseTreeNodes, counterLength) + " " + counterLength);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk);
+                    IguanaParser parser = new IguanaParser(grammar);
+                    long t1 = System.currentTimeMillis();
+                    List<Pair> parseResults = parser.getReachabilities(input,
+                                new ParseOptions.Builder().setAmbiguous(false).build());
+                    long t2 = System.currentTimeMillis();
+                    long curT = t2 - t1;
+                    System.out.println("time:" + curT);
+                    ((Neo4jBenchmarkInput) input).close();
+                    if (iter >= warmUp && parseResults != null) {
+                        vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
+                        vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
+//                    if (iter >= warmUp && parseResults != null && chunk.contains(1122)) {
+//                        outStatsTime.print(chunk.toString());
+//                        vertexToTime.get(chunk.toString() + iter).forEach(x -> outStatsTime.print("," + x));
+//                        outStatsTime.println();
+//                    }
                 }
-                ((Neo4jBenchmarkInput) input).close();
+                if (iter >= warmUp) {
+                    outStatsTime.print(sz);
+                    vertexToTime.get(sz.toString() + iter).forEach(x -> outStatsTime.print("," + x));
+                    outStatsTime.println();
+                }
             }
         }
-//        System.out.println(counterLength);
-        Map<Integer, Double> resultTime = new HashMap<>();
-//        Map<Integer, Double> resultMem = new HashMap<>();
 
-        vertexToTime.forEach((vertex, list) ->
-                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
-
-//        vertexToMem.forEach((vertex, list) ->
-//                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
-
-//        PrintWriter out = new PrintWriter("results/" + dataset + "_mem_num_reachibilities_" + relType + ".csv");
-//        numPaths.keySet().forEach(vertex -> {
-//            out.println(vertex + "," + numPaths.get(vertex) + "," + resultMem.get(vertex));
-//        });
-
-        PrintWriter out = new PrintWriter("results/" + dataset + "_time_num_reachibilities_" + relType + ".csv");
-        numPaths.keySet().forEach(vertex -> {
-            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex));
-        });
-
-        out.close();
-
-        vertexToTime.forEach((vertex, list) -> {
-            outStatsTime.print(vertex);
-            list.forEach(x -> outStatsTime.print("," + x));
-            outStatsTime.println();
-        });
         outStatsTime.close();
-
-//        vertexToMem.forEach((vertex, list) -> {
-//            outStatsMem.print(vertex);
-//            list.forEach(x -> outStatsMem.print("," + x));
-//            outStatsMem.println();
-//        });
-//        outStatsMem.close();
     }
 
     public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
         BiFunction<Relationship, Direction, String> f = getFunction(relType);
-
-        Map<Integer, Integer> numPaths = new HashMap<>();
-        Map<Integer, List<Integer>> vertexToTime = new HashMap<>();
-//        Map<Integer, List<Integer>> vertexToMem = new HashMap<>();
+        Map<String, List<Integer>> vertexToTime = new HashMap<>();
 
         Grammar grammar;
         try {
@@ -312,86 +224,41 @@ public class Neo4jBenchmark {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No grammar.json file is present");
         }
-//        Runtime r = Runtime.getRuntime();
-
-//        Map<Integer, Integer> counterLength = new HashMap<>();
-
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
-//        PrintWriter outStatsMem = new PrintWriter("results/" + dataset + "_mem_" + relType + ".csv");
+        outStatsTime.append("chunk_size, time");
+        outStatsTime.append("\n");
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
+        List<Integer> vertices = Interval.zeroTo(rightNode - 1);
+        for (Integer sz : chunkSize) {
+            List<List<Integer>> chunks = Lists.partition(vertices, sz);
+            for (Integer iter = 0; iter < maxIter; iter++) {
+                for (List<Integer> chunk : chunks) {
+                    System.out.println("iter " + iter + " chunkSize " + sz);
 
-        for (int iter = 0; iter < maxIter; iter++) {
-            for (int start = rightNode; start <= rightNode; start += 1) {
-                System.out.println("iter " + iter + " node " + start);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk);
+                    IguanaParser parser = new IguanaParser(grammar);
+                    long t1 = System.currentTimeMillis();
+                    Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,
+                            new ParseOptions.Builder().setAmbiguous(true).build());
+                    long t2 = System.currentTimeMillis();
+                    long curT = t2 - t1;
+                    ((Neo4jBenchmarkInput) input).close();
+                    if (iter >= warmUp && parseTreeNodes != null) {
 
-                GraphInput input = new Neo4jBenchmarkInput(graphDb, f, start);
-//                System.out.println(input.nVertices());
-                IguanaParser parser = new IguanaParser(grammar);
-//                r.gc();
-//                long m1 = r.totalMemory() - r.freeMemory();
-                long t1 = System.currentTimeMillis();
-                Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,
-                        new ParseOptions.Builder().setAmbiguous(true).build());
-                long t2 = System.currentTimeMillis();
-//                long m2 = r.totalMemory() - r.freeMemory();
-                long curT = t2 - t1;
-//                long curM = (m2 - m1);
-
-                if (iter >= warmUp && parseTreeNodes != null) {
-                    vertexToTime.putIfAbsent(start, new ArrayList<>());
-                    vertexToTime.get(start).add((int) curT);
-//                    vertexToMem.putIfAbsent(start, new ArrayList<>());
-//                    vertexToMem.get(start).add((int) curM);
-                    if (iter == maxIter - 1) {
-                        Set<Pair> reachibilities = parseTreeNodes.keySet();
-//                        int cnt = 0;
-//                        for(Pair nodePair: reachibilities) {
-//                            if (nodePair.equalsKey(start)) cnt  += 1;
-//                        }
-                        numPaths.put(start, reachibilities.size());
-                        System.out.println(curT);
-                        System.out.println(start + " " + numPaths.get(start));
+                        vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
+                        vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
                 }
-                ((Neo4jBenchmarkInput) input).close();
+                if (iter >= warmUp) {
+                    outStatsTime.print(sz);
+                    vertexToTime.get(sz.toString() + iter).forEach(x -> outStatsTime.print("," + x));
+                    outStatsTime.println();
+                }
             }
         }
-//        System.out.println("counterLength: " + counterLength);
-        Map<Integer, Double> resultTime = new HashMap<>();
-//        Map<Integer, Double> resultMem = new HashMap<>();
-
-        vertexToTime.forEach((vertex, list) ->
-                resultTime.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble()));
-
-//        vertexToMem.forEach((vertex, list) ->
-//                resultMem.put(vertex, list.stream().mapToInt(x -> x).average().getAsDouble() / (1024 * 1024)));
-
-//        PrintWriter out = new PrintWriter("results/" + dataset + "_mem_num_" + relType + ".csv");
-//        numPaths.keySet().forEach(vertex -> {
-//            out.println(vertex + "," + numPaths.get(vertex) + "," + resultMem.get(vertex));
-//        });
-
-        PrintWriter out = new PrintWriter("results/" + dataset + "_time_num_" + relType + ".csv");
-        numPaths.keySet().forEach(vertex -> {
-            out.println(vertex + "," + numPaths.get(vertex) + "," + resultTime.get(vertex));
-        });
-
-        out.close();
-
-
-        vertexToTime.forEach((vertex, list) -> {
-            outStatsTime.print(vertex);
-            list.forEach(x -> outStatsTime.print("," + x));
-            outStatsTime.println();
-        });
         outStatsTime.close();
-
-//        vertexToMem.forEach((vertex, list) -> {
-//            outStatsMem.print(vertex);
-//            list.forEach(x -> outStatsMem.print("," + x));
-//            outStatsMem.println();
-//        });
-//        outStatsMem.close();
     }
+
 
     private static int countNumberOfPaths(Map<Pair, ParseTreeNode> parseTreeNodes, Map<Integer, Integer> counter) {
         int res = 0;
@@ -399,7 +266,6 @@ public class Neo4jBenchmark {
         Map<ParseTreeNode, List<Integer>> nodeToLength = new HashMap<>();
 
         for (Pair verticesPair : parseTreeNodes.keySet()) {
-//            System.out.println("ParseTreeNodes size is: " + parseTreeNodes.size());
             ParseTreeNode parseTreeNode = parseTreeNodes.get(verticesPair);
             traverse(parseTreeNode, nodeToCurPaths, nodeToLength);
             res += nodeToCurPaths.get(parseTreeNode);
