@@ -29,8 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
@@ -57,7 +55,7 @@ public class Neo4jBenchmark {
     //    args6 dataset name = name of file with results
     public static void main(String[] args) throws IOException {
         loadGraph(args[4]);
-//        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
         benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
         removeData();
         managementService.shutdown();
@@ -144,15 +142,6 @@ public class Neo4jBenchmark {
                     Node node2 = tx.getNodeById(nodeList.get(Integer.parseInt(split[2])));
                     node1.createRelationshipTo(node2, RelationshipType.withName(split[1]));
                 });
-//                Iterable<Label> labels = tx.getAllLabels();
-//                for (Label label : labels) {
-//                    System.out.println("label: " + label);
-//                    tx.findNodes(label).stream().forEach(System.out::println);
-//                }
-//                Iterable<RelationshipType> relationships = tx.getAllRelationshipTypes();
-//                for (RelationshipType reltype : relationships) {
-//                    System.out.println(reltype);
-//                }
                 tx.commit();
                 tx.close();
                 stream.close();
@@ -176,7 +165,7 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, 20000, 30000, 40000, rightNode);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
@@ -184,7 +173,7 @@ public class Neo4jBenchmark {
                 for (List<Integer> chunk : chunks) {
                     System.out.println("iter " + iter + " chunkSize " + sz);
 
-                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
                     IguanaParser parser = new IguanaParser(grammar);
                     long t1 = System.currentTimeMillis();
                     List<Pair> parseResults = parser.getReachabilities(input,
@@ -227,7 +216,7 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, 20000, 30000, 40000, rightNode);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
@@ -235,7 +224,7 @@ public class Neo4jBenchmark {
                 for (List<Integer> chunk : chunks) {
                     System.out.println("iter " + iter + " chunkSize " + sz);
 
-                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
                     IguanaParser parser = new IguanaParser(grammar);
                     long t1 = System.currentTimeMillis();
                     Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,
