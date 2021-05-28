@@ -40,7 +40,7 @@ public class InMemGraphInput extends GraphInput {
     }
 
     @Override
-    public List<Integer> nextSymbols(int v) {
+    public Stream<Integer> nextSymbols(int v) {
         List<Integer> nextSymbols = new ArrayList<>();
         if (isFinal(v)) {
             nextSymbols.add(EOF);
@@ -50,7 +50,7 @@ public class InMemGraphInput extends GraphInput {
         for (Edge edge: adjacencyList.get(v)) {
             nextSymbols.add((int) edge.getTag().charAt(0));
         }
-        return nextSymbols;
+        return nextSymbols.stream();
     }
 
 }

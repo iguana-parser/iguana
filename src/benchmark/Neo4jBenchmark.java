@@ -165,7 +165,7 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, 20000, 30000, 40000, rightNode);
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
@@ -175,22 +175,18 @@ public class Neo4jBenchmark {
 
                     GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
                     IguanaParser parser = new IguanaParser(grammar);
+
                     long t1 = System.currentTimeMillis();
-                    List<Pair> parseResults = parser.getReachabilities(input,
+                    Stream<Pair> parseResults = parser.getReachabilities(input,
                                 new ParseOptions.Builder().setAmbiguous(false).build());
                     long t2 = System.currentTimeMillis();
                     long curT = t2 - t1;
-                    System.out.println("time:" + curT);
                     ((Neo4jBenchmarkInput) input).close();
                     if (iter >= warmUp && parseResults != null) {
+                        System.out.println("time:" + curT);
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
-//                    if (iter >= warmUp && parseResults != null && chunk.contains(1122)) {
-//                        outStatsTime.print(chunk.toString());
-//                        vertexToTime.get(chunk.toString() + iter).forEach(x -> outStatsTime.print("," + x));
-//                        outStatsTime.println();
-//                    }
                 }
                 if (iter >= warmUp) {
                     outStatsTime.print(sz);
@@ -216,7 +212,7 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, 20000, 30000, 40000, rightNode);
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
@@ -233,7 +229,6 @@ public class Neo4jBenchmark {
                     long curT = t2 - t1;
                     ((Neo4jBenchmarkInput) input).close();
                     if (iter >= warmUp && parseTreeNodes != null) {
-
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }

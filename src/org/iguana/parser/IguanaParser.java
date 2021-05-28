@@ -41,6 +41,7 @@ import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class IguanaParser {
 
@@ -64,7 +65,7 @@ public class IguanaParser {
         return (Map<Pair, NonterminalNode>) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
-    public List<Pair> getPairs(Input input, ParseOptions options) {
+    public Stream<Pair> getPairs(Input input, ParseOptions options) {
         return runtime.no_sppf_run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
@@ -76,7 +77,7 @@ public class IguanaParser {
         return getParserTree(input, new ParseOptions.Builder().build());
     }
 
-    public List<Pair> getReachabilities(Input input, ParseOptions options) {
+    public Stream<Pair> getReachabilities(Input input, ParseOptions options) {
         return getPairs(input, options);
     }
 

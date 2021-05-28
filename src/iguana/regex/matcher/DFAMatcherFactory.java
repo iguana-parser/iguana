@@ -36,7 +36,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static java.lang.Integer.parseInt;
 
 public class DFAMatcherFactory implements MatcherFactory {
 
@@ -69,7 +70,7 @@ public class DFAMatcherFactory implements MatcherFactory {
     }
 
     public static Matcher characterMatcher(Char c) {
-        return (input, i) -> input.nextSymbols(i).get(0) == c.getValue() ? Collections.singletonList(i + 1) : new ArrayList<>();
+        return (input, i) -> input.nextSymbols(i).findFirst().toString().equals(Character.toString(c.getValue())) ? Collections.singletonList(i + 1) : new ArrayList<>();
     }
 
 //    public static Matcher characterBackwardsMatcher(Char c) {
@@ -77,7 +78,7 @@ public class DFAMatcherFactory implements MatcherFactory {
 //    }
 
     public static Matcher characterRangeMatcher(CharRange range) {
-        return (input, i) -> input.nextSymbols(i).get(0) >= range.getStart() && input.nextSymbols(i).get(0) <= range.getEnd() ?
+        return (input, i) -> parseInt(input.nextSymbols(i).findFirst().toString()) >= range.getStart() && parseInt(input.nextSymbols(i).findFirst().toString()) <= range.getEnd() ?
                 Collections.singletonList(i + 1) : new ArrayList<>();
     }
 

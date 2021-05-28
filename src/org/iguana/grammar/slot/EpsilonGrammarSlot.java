@@ -55,7 +55,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
-		boolean anyMatchTestFollow = input.nextSymbols(i).stream()
+		boolean anyMatchTestFollow = input.nextSymbols(i)
 				.anyMatch(getNonterminal()::testFollow);
 
 		if (anyMatchTestFollow) {

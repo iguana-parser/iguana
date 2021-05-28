@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.parseInt;
+
 public class DFAMatcher implements Matcher {
 
     public static final int ERROR_STATE = -2;
@@ -85,7 +87,7 @@ public class DFAMatcher implements Matcher {
             maximumMatchedIndex = inputIndex;
 
         for (int i = inputIndex; i < input.length(); i++) {
-            state = table[state].get(input.nextSymbols(i).get(0));
+            state = table[state].get(parseInt(input.nextSymbols(i).findFirst().toString()));
 
             if (state == ERROR_STATE)
                 break;

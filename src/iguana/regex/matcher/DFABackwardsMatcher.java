@@ -36,6 +36,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.parseInt;
+
 public class DFABackwardsMatcher extends DFAMatcher {
 
     DFABackwardsMatcher(RegularExpression regex) {
@@ -56,7 +58,7 @@ public class DFABackwardsMatcher extends DFAMatcher {
             maximumMatched = 0;
 
         for (int i = inputIndex - 1; i >= 0; i--) {
-            state = table[state].get(input.nextSymbols(i).get(0));
+            state = table[state].get(parseInt(input.nextSymbols(i).findFirst().toString()));
 
             if (state == ERROR_STATE)
                 break;

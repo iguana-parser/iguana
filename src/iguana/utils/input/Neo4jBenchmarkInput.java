@@ -6,6 +6,8 @@ import org.neo4j.graphdb.*;
 import java.io.Closeable;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 
 public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
@@ -21,7 +23,7 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
         this.toLabel = toLabel;
         this.startVertices = startVertices;
         this.tx = graphDb.beginTx();
-        this.finalVertices = Interval.zeroTo(48815);
+        this.finalVertices = Interval.zeroTo(verticesNumber);
     }
 
     public long nVertices() {
@@ -31,23 +33,23 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
     }
 
     @Override
-    public List<Integer> nextSymbols(int index) {
-        List<Integer> result = new ArrayList<>();
+    public Stream<Integer> nextSymbols(int index) {
+        Stream<Integer> nextSymbols = StreamSupport.stream(tx.getNodeById(index).getRelationships().spliterator(), false)
+                .map(rel -> {
+                    final Direction direction = rel.getStartNodeId() == index
+                            ? Direction.OUTGOING
+                            : Direction.INCOMING;
+                    String tmp = toLabel.apply(rel, direction);
+                    if (tmp != null) {
+                        return (int) tmp.charAt(0);
+                    }
+                    return null;
+                });
 
         if (isFinal(index)) {
-            result.add(EOF);
+            return Stream.concat(Stream.of(EOF), nextSymbols);
         }
-        Iterable<Relationship> relationships = tx.getNodeById(index).getRelationships();
-        for (Relationship rel : relationships) {
-            String tmp = toLabel.apply(
-                    rel,
-                    rel.getStartNodeId() == index ? Direction.OUTGOING : Direction.INCOMING
-            );
-            if (tmp != null) {
-                result.add((int) tmp.charAt(0));
-            }
-        }
-        return result;
+        return nextSymbols;
     }
 
     @Override

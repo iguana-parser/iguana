@@ -35,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.lang.Character.isHighSurrogate;
 
@@ -107,31 +108,10 @@ public interface Input {
         return new UTF32Input(characters, j + 1, lineCount + 1, uri);
     }
 
-    List<Integer> nextSymbols(int index);
-
-//    default List<Integer> nextSymbolsIgnoreLayout(int index) {
-//        return nextSymbols(index);
-//		while (true) {
-//			List<Integer> c = getTagsAt(index++);
-//			if (c == EOF) return EOF;
-//			if (!isWhitespace(c))
-//				return c;
-//		}
-//    }
+    Stream<Integer> nextSymbols(int index);
 
     default int[] calculateLineLengths(int lineCount) {
         return new int[]{0};
-//        int[] lineStarts = new int[lineCount];
-//        lineStarts[0] = 0;
-//        int j = 0;
-//
-//        for (int i = 0; i < length(); i++) {
-//            if (getTagsAt(i) == '\n') {
-//                if (i + 1 < length())
-//                    lineStarts[++j] = i + 1;
-//            }
-//        }
-//        return lineStarts;
     }
 
     /**

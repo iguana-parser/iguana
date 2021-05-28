@@ -34,7 +34,6 @@ import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.collections.key.Key;
 import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.input.Input;
-//import org.eclipse.rdf4j.query.algebra.In;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
@@ -48,7 +47,7 @@ import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -98,12 +97,12 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         return result;
     }
 
-    private List<BodyGrammarSlot> getFirstSlots(Stream<Integer> v) {
+    private Stream<BodyGrammarSlot> getFirstSlots(Stream<Integer> v) {
         List<BodyGrammarSlot> result = new ArrayList<>();
         v.forEach(t -> {
             result.addAll(lookAheadTest.get(t));
         });
-        return result;
+        return result.stream();
     }
 
     public void setLookAheadTest(RangeMap<BodyGrammarSlot> lookAheadTest) {
@@ -188,8 +187,8 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
         if (gssNode == null) {
 
-            List<BodyGrammarSlot> firstSlots = getFirstSlots(input.nextSymbols(i));
-            if (firstSlots.isEmpty()) {
+           Supplier<Stream<BodyGrammarSlot>> firstSlots = () -> getFirstSlots(input.nextSymbols(i).filter(Objects::nonNull)).filter(Objects::nonNull);
+            if (firstSlots.get().findAny().isPresent()) {
                 return;
             }
 
@@ -208,17 +207,18 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                     newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);
             }
 
-            for (BodyGrammarSlot slot : firstSlots) {
-                runtime.setEnvironment(newEnv);
+            Environment finalNewEnv = newEnv;
+            GSSNode finalGssNode = gssNode;
+            firstSlots.get().forEach(slot -> {
+                runtime.setEnvironment(finalNewEnv);
 
                 if (slot.getLabel() != null)
                     runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-                int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-                if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, runtime.getEvaluatorContext(), runtime))
-                    runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
-            }
-
+                int inputIndex = result.isDummy() ? finalGssNode.getInputIndex() : result.getIndex();
+                if (!slot.getConditions().execute(input, returnSlot, finalGssNode, inputIndex, runtime.getEvaluatorContext(), runtime))
+                    runtime.scheduleDescriptor(slot, finalGssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
+            });
             if (arguments == null) {
                 intGSSNodes.put(i, gssNode);
             } else {
