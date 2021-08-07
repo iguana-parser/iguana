@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.parseInt;
+
 public abstract class AbstractInput implements Input {
 
     private int[] lineStarts;
@@ -47,14 +49,14 @@ public abstract class AbstractInput implements Input {
     public boolean isEndOfLine(int inputIndex) {
         checkBounds(inputIndex, length());
 
-        return nextSymbols(inputIndex).collect(Collectors.toList()).get(0) == '\n' || nextSymbols(inputIndex).collect(Collectors.toList()).get(0) == EOF;
+        return nextSymbols(inputIndex).findFirst().toString().equals("\n") || parseInt(nextSymbols(inputIndex).findFirst().toString()) == EOF;
     }
 
     @Override
     public boolean isEndOfFile(int inputIndex) {
         checkBounds(inputIndex, length());
 
-        return nextSymbols(inputIndex).collect(Collectors.toList()).get(0) == EOF;
+        return parseInt(nextSymbols(inputIndex).findFirst().toString()) == EOF;
     }
 
     @Override

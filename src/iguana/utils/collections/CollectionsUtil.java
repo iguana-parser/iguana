@@ -40,7 +40,7 @@ import java.util.stream.StreamSupport;
 
 public class CollectionsUtil {
 
-	private static Object[] objects = new Object[0];
+	private static final Object[] objects = new Object[0];
 
 	@SafeVarargs
 	public static <T> Set<T> set(T...objects) {

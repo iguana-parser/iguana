@@ -14,7 +14,7 @@ import static iguana.utils.visualization.DotGraph.newNode;
 
 public class AutomatonToDot {
 
-    private static Map<State, Integer> idsMap = new IdentityHashMap<>();
+    private static final Map<State, Integer> idsMap = new IdentityHashMap<>();
 
     public static DotGraph toDot(Automaton automaton) {
         idsMap.clear();

@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  */
 public abstract class Builder {
 
-    private Map<String, Rule> regexs = new HashMap<>();
+    private final Map<String, Rule> regexs = new HashMap<>();
 	
 	public Grammar grammar(List<Object> rules) {
 		org.iguana.grammar.Grammar.Builder builder = Grammar.builder();
@@ -145,7 +145,7 @@ public abstract class Builder {
             return Epsilon.getInstance();
 
         if (syms.size() == 1)
-            return (Symbol)syms.get(0);
+            return syms.get(0);
 
         return new Sequence(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()), null);
     }

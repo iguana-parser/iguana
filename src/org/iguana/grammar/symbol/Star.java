@@ -93,7 +93,7 @@ public class Star extends AbstractSymbol {
 	public static class Builder extends SymbolBuilder<Star> {
 
 		private Symbol s;
-		private List<Symbol> separators = new ArrayList<>();
+		private final List<Symbol> separators = new ArrayList<>();
 
 		private Builder() {}
 

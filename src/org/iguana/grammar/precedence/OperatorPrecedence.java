@@ -45,13 +45,13 @@ public class OperatorPrecedence {
 	
 	private Map<Nonterminal, List<List<Symbol>>> definitions;
 	
-	private Map<String, Integer> newNonterminals;
+	private final Map<String, Integer> newNonterminals;
 	
-	private Map<Nonterminal, List<PrecedencePattern>> precednecePatterns;
+	private final Map<Nonterminal, List<PrecedencePattern>> precednecePatterns;
 	
-	private List<ExceptPattern> exceptPatterns;
+	private final List<ExceptPattern> exceptPatterns;
 	
-	private Map<List<List<Symbol>>, Nonterminal> existingAlternates;
+	private final Map<List<List<Symbol>>, Nonterminal> existingAlternates;
 	
 	public OperatorPrecedence(Iterable<PrecedencePattern> precedencePatterns) {
 		this(precedencePatterns, Collections.emptyList());

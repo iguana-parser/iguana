@@ -77,8 +77,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
         if (input.isFinal(rightExtent)) {
             anyMatchTestFollow = true;
         } else {
-            anyMatchTestFollow = input.nextSymbols(rightExtent)
-                    .anyMatch(nonterminal::testFollow);
+            anyMatchTestFollow = input.nextSymbols(rightExtent).anyMatch(nonterminal::testFollow);
         }
 
         if (anyMatchTestFollow) {

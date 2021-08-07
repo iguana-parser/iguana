@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class RecognizerStatisticsSerializer {
 
-    private static ObjectMapper mapper;
+    private static final ObjectMapper mapper;
 
     static {
         mapper = new ObjectMapper();

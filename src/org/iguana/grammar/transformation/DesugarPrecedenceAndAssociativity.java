@@ -110,23 +110,17 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			if (prefix_rules.containsKey(lhs) && !prefix_rules.get(lhs).isEmpty())
 				return true;
-			
-			if (iprefix_rules.containsKey(lhs) && !iprefix_rules.get(lhs).isEmpty())
-				return true;
-			
-			return false;
-		}
+
+            return iprefix_rules.containsKey(lhs) && !iprefix_rules.get(lhs).isEmpty();
+        }
 		
 		boolean hasPostfix(int lhs) {
 			
 			if (postfix_rules.containsKey(lhs) && !postfix_rules.get(lhs).isEmpty())
 				return true;
-			
-			if (ipostfix_rules.containsKey(lhs) && !ipostfix_rules.get(lhs).isEmpty())
-				return true;
-			
-			return false;
-		}
+
+            return ipostfix_rules.containsKey(lhs) && !ipostfix_rules.get(lhs).isEmpty();
+        }
 		
 		boolean hasPrefixBelow(int lhs) {
 			if (prefixBelow == -1) {
@@ -180,12 +174,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			if (from == left && this.leftEnds.contains(via) && configs.get(via).pleftEnds.contains(nt))
 				return true;
-			
-			if (from == right && this.rightEnds.contains(via) && configs.get(via).prightEnds.contains(nt))
-				return true;
-			
-			return false;
-		}
+
+            return from == right && this.rightEnds.contains(via) && configs.get(via).prightEnds.contains(nt);
+        }
 		
 	}
 	
@@ -801,8 +792,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression xrcond = null;
 		private Expression xret = null;
 		
-		private Expression[] lret;
-		private Expression[] rret;
+		private final Expression[] lret;
+		private final Expression[] rret;
 		
 		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, 
 					   Map<String, Configuration> configs, OP config_op) {
@@ -2168,12 +2159,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					int i = 0;
 					for (Symbol symbol : rule.getBody()) {
-						
-						if (i == 0) isFirst = true;
-						else isFirst = false;
-						
-						if (i == rule.getBody().size() - 1) isLast = true;
-						else isLast = false;
+
+                        isFirst = i == 0;
+
+                        isLast = i == rule.getBody().size() - 1;
 						
 						Symbol sym = symbol.accept(this);
 						if (preconditions != null && i == 0)
@@ -2234,12 +2223,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					i = 0;
 					for (Symbol symbol : rule.getBody()) {
-						
-						if (i == 0) isFirst = true;
-						else isFirst = false;
-						
-						if (i == rule.getBody().size() - 1) isLast = true;
-						else isLast = false;
+
+                        isFirst = i == 0;
+
+                        isLast = i == rule.getBody().size() - 1;
 						
 						Symbol sym = symbol.accept(this);
 						
@@ -2343,12 +2330,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			int j = 0;
 			boolean modified = false;
 			for (Symbol sym : symbols) {
-				
-				if (isFirst && j == 0) this.isFirst = true;
-				else this.isFirst = false;
-				
-				if (isLast && j == symbols.length - 1) this.isLast = true;
-				else this.isLast = false;
+
+                this.isFirst = isFirst && j == 0;
+
+                this.isLast = isLast && j == symbols.length - 1;
 				
 				syms[j] = sym.accept(this);
 				if (sym != syms[j])

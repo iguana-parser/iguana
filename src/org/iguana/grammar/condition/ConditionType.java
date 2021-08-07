@@ -44,7 +44,7 @@ public enum ConditionType {
 	DATA_DEPENDENT(" ? ")
 	;
 	
-	private String symbol;
+	private final String symbol;
 	
 	ConditionType(String symbol) {
 		this.symbol = symbol;

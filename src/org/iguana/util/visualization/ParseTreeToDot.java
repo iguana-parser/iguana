@@ -12,7 +12,7 @@ import static iguana.utils.visualization.DotGraph.newNode;
 
 public class ParseTreeToDot implements ParseTreeVisitor {
 
-    private DotGraph dotGraph;
+    private final DotGraph dotGraph;
     private final Input input;
     private final Set<String> exclude;
 

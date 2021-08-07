@@ -90,7 +90,7 @@ public class GrammarGraphToDot {
 	}
 
 
-    private static Map<GrammarSlot, Integer> ids = new HashMap<>();
+    private static final Map<GrammarSlot, Integer> ids = new HashMap<>();
 
     private static int getId(GrammarSlot slot) {
         return ids.computeIfAbsent(slot, k -> ids.size() + 1);

@@ -24,7 +24,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
     private final Map<NonPackedNode, VisitResult> convertedNodes;
 
     private final boolean ignoreLayout;
-    private ParserResultOps resultOps;
+    private final ParserResultOps resultOps;
 
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 

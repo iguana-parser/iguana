@@ -1,8 +1,8 @@
 package iguana.utils.input;
 
 public class Edge {
-    private String tag;
-    private int destVertex;
+    private final String tag;
+    private final int destVertex;
 
     public Edge(String tag, int dest) {
         this.tag = tag;

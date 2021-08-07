@@ -7,7 +7,7 @@ public class DotGraph {
     private static final Node nodeInstance = new Node();
     private static final Edge edgeInstance = new Edge();
 
-    private StringBuilder sb = new StringBuilder();
+    private final StringBuilder sb = new StringBuilder();
 
     public static Node newNode(int id) {
         return newNode(id, "");
@@ -164,7 +164,7 @@ public class DotGraph {
         }
 
         public String toString() {
-            return String.valueOf(id) + " " +
+            return id + " " +
                     "[" +
                     shapeToString(shape) + ", " +
                     "width = " + width + ", " +
@@ -217,7 +217,7 @@ public class DotGraph {
 
         @Override
         public String toString() {
-            return String.valueOf(sourceId) + "->" + String.valueOf(targetId) + " " +
+            return sourceId + "->" + targetId + " " +
                    "[" +
                    "color = black, " +
                    "style = solid, " +

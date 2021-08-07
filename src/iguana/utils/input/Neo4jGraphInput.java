@@ -8,10 +8,11 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Neo4jGraphInput extends GraphInput {
-    private GraphDatabaseService graphDb;
+    private final GraphDatabaseService graphDb;
     private static final Label START_STATUS = Label.label("start");
     private static final Label FINAL_STATUS = Label.label("final");
     private static final String TAG = "tag";
+
 
     public Neo4jGraphInput(GraphDatabaseService graphDb) {
         this.graphDb = graphDb;
@@ -20,22 +21,15 @@ public class Neo4jGraphInput extends GraphInput {
     @Override
     public Stream<Integer> nextSymbols(int index) {
         try (Transaction tx = graphDb.beginTx()) {
-            List<Integer> nextSymbols = StreamSupport.stream(tx.getNodeById(index).getRelationships(Direction.OUTGOING).spliterator(), false)
-                    .map(rel -> (int) ((String) rel.getProperty(TAG)).charAt(0))
-                    .collect(Collectors.toList());
+            Stream<Integer> nextSymbols = StreamSupport.stream(tx.getNodeById(index).getRelationships(Direction.OUTGOING).spliterator(), false)
+                    .map(rel -> (int) ((String) rel.getProperty(TAG)).charAt(0));
 
             if (isFinal(index)) {
-                nextSymbols.add(EOF);
+                Stream.concat(nextSymbols, Stream.of(EOF));
             }
-            return nextSymbols.stream();
+            return nextSymbols;
         }
     }
-
-//    public boolean nVertices() {
-//        try (Transaction tx = graphDb.beginTx()) {
-//            return tx.getAllNodes().stream().map(Entity::getId).allMatch(i -> (i >= 0 && i < 225135));
-//        }
-//    }
 
     @Override
     public boolean isFinal(int index) {

@@ -1,13 +1,14 @@
 package iguana.utils.input;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InMemGraphInput extends GraphInput {
-    private List<List<Edge>> adjacencyList;
-    private List<Integer> startVertices;
-    private List<Integer> finalVertices;
+    private final List<List<Edge>> adjacencyList;
+    private final List<Integer> startVertices;
+    private final List<Integer> finalVertices;
 
     public InMemGraphInput(List<List<Edge>> adjacencyList, List<Integer> startVertices, List<Integer> finalVertices) {
         this.adjacencyList = adjacencyList;
@@ -40,12 +41,16 @@ public class InMemGraphInput extends GraphInput {
 
     @Override
     public Stream<Integer> nextSymbols(int v) {
-        Stream<Integer> nextSymbols = adjacencyList.get(v).stream()
-                .map(edge -> (int) edge.getTag().charAt(0));
+        List<Integer> nextSymbols = new ArrayList<>();
         if (isFinal(v)) {
-            nextSymbols = Stream.concat(Stream.of(EOF), nextSymbols);
+            nextSymbols.add(EOF);
         }
-        return nextSymbols;
+//        List<Integer> nextSymbols = adjacencyList.get(v).stream()
+//                .map(edge -> (int) edge.getTag().charAt(0));
+        for (Edge edge: adjacencyList.get(v)) {
+            nextSymbols.add((int) edge.getTag().charAt(0));
+        }
+        return nextSymbols.stream();
     }
 
 }

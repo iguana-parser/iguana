@@ -29,5 +29,5 @@ package org.iguana.grammar.symbol;
 
 public enum Associativity {
 	
-	LEFT, RIGHT, NON_ASSOC, UNDEFINED;
+	LEFT, RIGHT, NON_ASSOC, UNDEFINED
 }

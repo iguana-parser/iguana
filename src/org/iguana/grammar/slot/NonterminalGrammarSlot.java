@@ -47,7 +47,7 @@ import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -92,15 +92,17 @@ public class NonterminalGrammarSlot implements GrammarSlot {
     }
 
     private List<BodyGrammarSlot> getFirstSlots(List<Integer> v) {
-        return v
-                .stream()
-                .flatMap(t -> lookAheadTest.get(t).stream())
-                .collect(Collectors.toList());
+        List<BodyGrammarSlot> result = new ArrayList<>();
+        v.forEach(t -> result.addAll(lookAheadTest.get(t)));
+        return result;
     }
 
-    private List<BodyGrammarSlot> getFirstSlots(Stream<Integer> v) {
-        return v
-                .flatMap(t -> lookAheadTest.get(t).stream()).collect(Collectors.toList());
+    private Stream<BodyGrammarSlot> getFirstSlots(Stream<Integer> v) {
+        List<BodyGrammarSlot> result = new ArrayList<>();
+        v.forEach(t -> {
+            result.addAll(lookAheadTest.get(t));
+        });
+        return result.stream();
     }
 
     public void setLookAheadTest(RangeMap<BodyGrammarSlot> lookAheadTest) {
@@ -167,7 +169,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             key = Keys.from(i, data);
         }
 
-        GSSNode<T> gssNode = null;
+        GSSNode gssNode = null;
 
         if (arguments == null) {
             if (intGSSNodes == null) {
@@ -184,9 +186,9 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         }
 
         if (gssNode == null) {
-
-            List<BodyGrammarSlot> firstSlots = getFirstSlots(input.nextSymbols(i));
-            if (firstSlots == null || firstSlots.isEmpty()) {
+            Stream<BodyGrammarSlot> firstSlots = getFirstSlots(input.nextSymbols(i));
+            Stream<BodyGrammarSlot> testFirstSlots = getFirstSlots(input.nextSymbols(i));
+            if (testFirstSlots.findAny().isEmpty()) {
                 return;
             }
 
@@ -205,17 +207,18 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                     newEnv = runtime.getEmptyEnvironment().declare(nonterminal.getParameters(), data);
             }
 
-            for (BodyGrammarSlot slot : firstSlots) {
-                runtime.setEnvironment(newEnv);
+            Environment finalNewEnv = newEnv;
+            GSSNode finalGssNode = gssNode;
+            firstSlots.forEach(slot -> {
+                runtime.setEnvironment(finalNewEnv);
 
                 if (slot.getLabel() != null)
                     runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-                int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
-                if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, runtime.getEvaluatorContext(), runtime))
-                    runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
-            }
-
+                int inputIndex = result.isDummy() ? finalGssNode.getInputIndex() : result.getIndex();
+                if (!slot.getConditions().execute(input, returnSlot, finalGssNode, inputIndex, runtime.getEvaluatorContext(), runtime))
+                    runtime.scheduleDescriptor(slot, finalGssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
+            });
             if (arguments == null) {
                 intGSSNodes.put(i, gssNode);
             } else {

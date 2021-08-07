@@ -4,13 +4,13 @@ import iguana.utils.collections.hash.MurmurHash3;
 
 public class Stack<T> {
 	
-	private static MurmurHash3 f = new MurmurHash3();
+	private static final MurmurHash3 f = new MurmurHash3();
 	
 	private final Stack<T> parent;
 	private final T top;
 	
-	private int size;
-	private int hash;
+	private final int size;
+	private final int hash;
 	
 	Stack(T top) {
 		this.parent = null;

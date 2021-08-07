@@ -59,9 +59,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         }
     };
 
-    private ParserLogger logger = ParserLogger.getInstance();
+    private final ParserLogger logger = ParserLogger.getInstance();
 
-    private Map<NonPackedNode, List<PackedNode>> packedNodesMap = new IdentityHashMap<>();
+    private final Map<NonPackedNode, List<PackedNode>> packedNodesMap = new IdentityHashMap<>();
 
     @Override
     public NonPackedNode dummy() {

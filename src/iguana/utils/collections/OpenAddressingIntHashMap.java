@@ -254,7 +254,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
         return (h + j) & bitMask;
     }
 
-    private IntMapIterator it = new IntMapIterator();
+    private final IntMapIterator it = new IntMapIterator();
 
     @Override
     public Iterable<T> values() {

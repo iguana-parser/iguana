@@ -37,9 +37,9 @@ public class Transition implements Comparable<Transition>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private CharRange range;
+	private final CharRange range;
 	
-	private State destination;
+	private final State destination;
 	
 	private int id;
 	

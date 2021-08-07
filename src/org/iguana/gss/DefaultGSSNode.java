@@ -138,6 +138,10 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		return node != null;
 	}
 
+	public boolean hasResult(int i) {
+		return poppedElements.containsKey(i);
+	}
+
 	public T getResult(int i) {
 		return poppedElements.get(i);
 	}
@@ -186,7 +190,6 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot,
 									  GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
 		boolean anyMatchTestFollow = input.nextSymbols(poppedElement.getIndex())
-//				.stream()
 				.anyMatch(returnSlot::testFollow);
 		if (anyMatchTestFollow) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
@@ -214,7 +217,6 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
 		boolean anyMatchTestFollow = input.nextSymbols(node.getIndex())
-//				.stream()
 				.anyMatch(returnSlot::testFollow);
 		if (!anyMatchTestFollow) return;
 

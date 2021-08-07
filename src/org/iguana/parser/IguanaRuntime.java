@@ -1,5 +1,6 @@
 package org.iguana.parser;
 
+import com.github.jsonldjava.shaded.com.google.common.collect.Streams;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -22,6 +23,7 @@ import org.iguana.util.ParserLogger;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class IguanaRuntime<T extends Result> {
 
@@ -59,6 +61,57 @@ public class IguanaRuntime<T extends Result> {
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
     }
 
+    // SPPF found in `T result = startGSSNode.getResult(v);`
+    public Stream<Pair> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+        this.input = input;
+
+        IEvaluatorContext ctx = getEvaluatorContext();
+
+        if (global)
+            map.forEach(ctx::declareGlobalVariable);
+
+        NonterminalGrammarSlot startSymbol = grammarGraph.getStartSlot();
+
+        Environment env = ctx.getEmptyEnvironment();
+
+        List<DefaultGSSNode<T>> startGSSNodes = new ArrayList<>();
+        for (Integer node : input.getStartVertices()) {
+            startGSSNodes.add(new DefaultGSSNode<T>(startSymbol, node));
+        }
+
+        startGSSNodes.forEach(node -> startSymbol.addStartGSSNode(node, node.getInputIndex()));
+
+        List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
+        for (BodyGrammarSlot slot : t) {
+            for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
+                scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
+            }
+        }
+
+        while (hasDescriptor()) {
+            Descriptor<T> descriptor = nextDescriptor();
+            descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
+        }
+
+        grammarGraph.clear();
+        descriptorPool.clear();
+        descriptorsStack.clear();
+
+        Stream<Pair> results = Stream.empty();
+        Streams.zip(startGSSNodes.stream(), input.getFinalVertices().stream(), (startVertex, finalVertex) -> {
+            if (startVertex.hasResult(finalVertex))
+              return Stream.concat(results, Stream.of(new Pair(startVertex.getInputIndex(), finalVertex)));
+            return Stream.empty();
+        });
+
+        hasParseError = results.findAny().isPresent();
+        if (hasParseError) {
+            return null;
+        }
+
+        return results;
+    }
+
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
@@ -78,27 +131,11 @@ public class IguanaRuntime<T extends Result> {
                 .collect(Collectors.toList());
 
         startGSSNodes.forEach(node -> startSymbol.addStartGSSNode(node, node.getInputIndex()));
-//        startSymbol.addStartGSSNode(startGSSNodes.get(0), 0);
-//        StartGSSNode<T> startGSSNode = new StartGSSNode<>(startSymbol, 0);
-//
-//        if (!global && !map.isEmpty()) {
-//            Object[] arguments = new Object[map.size()];
-//
-//            int i = 0;
-//            for (String parameter : nonterminal.getParameters())
-//                arguments[i++] = map.get(parameter);
-//
-//            startGSSNode =  startSymbol.getGSSNode(0, arguments);
-//            env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
-//        } else {
-//            startGSSNode = startSymbol.getGSSNode(0);
-//        }
 
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
 
         List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
-//        Collections.reverse(t);
         for (BodyGrammarSlot slot : t) {
             for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
                 scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
@@ -115,13 +152,11 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
-//        List<T> results = new ArrayList<>();
         Map<Pair, Result> results = new HashMap<>();
 
         for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
             for (Integer v: input.getFinalVertices()) {
                 T result = startGSSNode.getResult(v);
-//                Iterable<T> result = startGSSNode.getPoppedElements();
                 if (result != null) {
                     results.put(new Pair(startGSSNode.getInputIndex(), v), result);
                 }

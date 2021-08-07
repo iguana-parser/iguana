@@ -110,29 +110,8 @@ public interface Input {
 
     Stream<Integer> nextSymbols(int index);
 
-//    default List<Integer> nextSymbolsIgnoreLayout(int index) {
-//        return nextSymbols(index);
-//		while (true) {
-//			List<Integer> c = getTagsAt(index++);
-//			if (c == EOF) return EOF;
-//			if (!isWhitespace(c))
-//				return c;
-//		}
-//    }
-
     default int[] calculateLineLengths(int lineCount) {
         return new int[]{0};
-//        int[] lineStarts = new int[lineCount];
-//        lineStarts[0] = 0;
-//        int j = 0;
-//
-//        for (int i = 0; i < length(); i++) {
-//            if (getTagsAt(i) == '\n') {
-//                if (i + 1 < length())
-//                    lineStarts[++j] = i + 1;
-//            }
-//        }
-//        return lineStarts;
     }
 
     /**

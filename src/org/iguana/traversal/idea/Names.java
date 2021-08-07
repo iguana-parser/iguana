@@ -62,7 +62,7 @@ public class Names implements GrammarTransformation {
     private static class NameVisitor implements ISymbolVisitor<Symbol> {
 
         final List<Rule> rules;
-        private Set<Nonterminal> heads = new HashSet<>();
+        private final Set<Nonterminal> heads = new HashSet<>();
 
         private final Nonterminal layout;
 

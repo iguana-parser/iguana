@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> {
 
-    private Input input;
+    private final Input input;
 
     public DefaultParseTreeBuilder(Input input) {
         this.input = input;

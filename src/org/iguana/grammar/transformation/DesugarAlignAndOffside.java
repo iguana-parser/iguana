@@ -573,7 +573,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			// Offside will only be applied to nonterminals 
 			if (sym instanceof Nonterminal)
-				offsided.add(((Nonterminal) sym).getName());
+				offsided.add(sym.getName());
 			
 			return sym.accept(this);
 		}

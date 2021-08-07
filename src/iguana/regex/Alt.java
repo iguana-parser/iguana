@@ -53,7 +53,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	
 	@Override
 	public boolean isNullable() {
-		return symbols.stream().anyMatch(e -> ((RegularExpression)e).isNullable()); 
+		return symbols.stream().anyMatch(e -> e.isNullable());
 	}
 	
 	@Override

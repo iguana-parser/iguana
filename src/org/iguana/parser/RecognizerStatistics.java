@@ -70,12 +70,12 @@ public class RecognizerStatistics {
 
         public Builder setGSSNodesCount(int gssNodesCount) {
             this.gssNodesCount = gssNodesCount;
-            return (T) this;
+            return this;
         }
 
         public Builder setGSSEdgesCount(int gssEdgesCount) {
             this.gssEdgesCount = gssEdgesCount;
-            return (T) this;
+            return this;
         }
 
         public RecognizerStatistics build() {
