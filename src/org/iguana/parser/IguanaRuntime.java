@@ -19,6 +19,7 @@ import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParserLogger;
+import org.iguana.util.Tuple;
 
 import java.util.*;
 import java.util.function.Function;
@@ -62,7 +63,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     // SPPF found in `T result = startGSSNode.getResult(v);`
-    public Stream<Pair> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+    public Tuple<Stream<Pair>, Integer> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -97,19 +98,27 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
-        Stream<Pair> results = Stream.empty();
-        Streams.zip(startGSSNodes.stream(), input.getFinalVertices().stream(), (startVertex, finalVertex) -> {
-            if (startVertex.hasResult(finalVertex))
-              return Stream.concat(results, Stream.of(new Pair(startVertex.getInputIndex(), finalVertex)));
-            return Stream.empty();
+        List<Pair> results = new ArrayList<>();
+        startGSSNodes.forEach(startGSSNode -> {
+            input.getFinalVertices().forEach(v -> {
+                T result = startGSSNode.getResult(v);
+                if (result != null) {
+                    results.add(new Pair(startGSSNode.getInputIndex(), v));
+                }
+            });
+//                    for (Integer v: input.getFinalVertices()) {
+//                T result = startGSSNode.getResult(v);
+//                if (result != null) {
+//                    results.put(new Pair(startGSSNode.getInputIndex(), v), result);
+//                }
+//            }
         });
-
-        hasParseError = results.findAny().isPresent();
+        hasParseError = results.isEmpty();
         if (hasParseError) {
             return null;
         }
 
-        return results;
+        return Tuple.of(results.stream(), results.size());
     }
 
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
@@ -125,21 +134,21 @@ public class IguanaRuntime<T extends Result> {
         Environment env = ctx.getEmptyEnvironment();
 
 
-        List<DefaultGSSNode<T>> startGSSNodes = input.getStartVertices()
+        Stream<DefaultGSSNode<T>> startGSSNodes = input.getStartVertices()
                 .stream()
-                .map(v -> new DefaultGSSNode<T>(startSymbol, v))
-                .collect(Collectors.toList());
+                .map(v -> new DefaultGSSNode<T>(startSymbol, v));
 
         startGSSNodes.forEach(node -> startSymbol.addStartGSSNode(node, node.getInputIndex()));
 
-        ParserLogger logger = ParserLogger.getInstance();
-        logger.reset();
+//        ParserLogger logger = ParserLogger.getInstance();
+//        logger.reset();
 
         List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
         for (BodyGrammarSlot slot : t) {
-            for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
-                scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
-            }
+            startGSSNodes.forEach(startGSSNode -> scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env));
+//            for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
+//                scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
+//            }
         }
 
         while (hasDescriptor()) {
@@ -154,14 +163,28 @@ public class IguanaRuntime<T extends Result> {
 
         Map<Pair, Result> results = new HashMap<>();
 
-        for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
-            for (Integer v: input.getFinalVertices()) {
+//        for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
+//            for (Integer v: input.getFinalVertices()) {
+//                T result = startGSSNode.getResult(v);
+//                if (result != null) {
+//                    results.put(new Pair(startGSSNode.getInputIndex(), v), result);
+//                }
+//            }
+//        }
+        startGSSNodes.forEach(startGSSNode -> {
+            input.getFinalVertices().stream().forEach(v -> {
                 T result = startGSSNode.getResult(v);
                 if (result != null) {
                     results.put(new Pair(startGSSNode.getInputIndex(), v), result);
                 }
-            }
-        }
+            });
+//                    for (Integer v: input.getFinalVertices()) {
+//                T result = startGSSNode.getResult(v);
+//                if (result != null) {
+//                    results.put(new Pair(startGSSNode.getInputIndex(), v), result);
+//                }
+//            }
+        });
         hasParseError = results.isEmpty();
         if (hasParseError) {
             return null;

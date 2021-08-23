@@ -195,8 +195,8 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             GSSEdge<T> gssEdge = runtime.createGSSEdge(returnSlot, result, u, env);
             gssNode = new DefaultGSSNode<>(gssEdge, i);
 
-            ParserLogger.getInstance().gssNodeAdded(gssNode, data);
-            ParserLogger.getInstance().gssEdgeAdded(gssEdge);
+//            ParserLogger.getInstance().gssNodeAdded(gssNode, data);
+//            ParserLogger.getInstance().gssEdgeAdded(gssEdge);
 
             Environment newEnv = runtime.getEnvironment();
 

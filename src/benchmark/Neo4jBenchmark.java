@@ -1,5 +1,12 @@
 package benchmark;
 
+import apoc.ApocConfig;
+import apoc.create.Create;
+import apoc.help.Help;
+import apoc.load.*;
+import apoc.periodic.*;
+import static java.util.Arrays.asList;
+
 import com.google.common.collect.Lists;
 import iguana.utils.input.Neo4jBenchmarkInput;
 import org.eclipse.collections.impl.list.Interval;
@@ -16,7 +23,11 @@ import org.neo4j.configuration.helpers.SocketAddress;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
 import org.neo4j.exceptions.EntityNotFoundException;
+import org.neo4j.exceptions.KernelException;
 import org.neo4j.graphdb.*;
+import org.neo4j.internal.kernel.api.Procedures;
+import org.neo4j.kernel.api.procedure.GlobalProcedures;
+import org.neo4j.kernel.internal.GraphDatabaseAPI;
 
 
 import java.io.File;
@@ -30,6 +41,8 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import static org.neo4j.codegen.Expression.FALSE;
+import static org.neo4j.codegen.TypeReference.BOOLEAN;
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 public class Neo4jBenchmark {
@@ -108,13 +121,197 @@ public class Neo4jBenchmark {
         };
     }
 
-    public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
+//    public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
+//
+//        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(pathToDataset))
+//                .setConfig(GraphDatabaseSettings.read_only, true)
+//                .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
+//                .build();
+//        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+//    }
 
-        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(pathToDataset))
-                .setConfig(GraphDatabaseSettings.read_only, true)
-                .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
-                .build();
+    public static void registerProcedure(GraphDatabaseService graphDb, List<Class<?>> procedures) {
+        GlobalProcedures globalProcedures = ((GraphDatabaseAPI) graphDb).getDependencyResolver().resolveDependency(GlobalProcedures.class);
+        for (Class<?> procedure : procedures) {
+            try {
+                globalProcedures.registerProcedure(procedure, true);
+                globalProcedures.registerFunction(procedure, true);
+                globalProcedures.registerAggregationFunction(procedure, true);
+            } catch (KernelException e) {
+                throw new RuntimeException("while registering " + procedure, e);
+            }
+        }
+    }
+
+    public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
+        org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
+
+        managementService =
+                new DatabaseManagementServiceBuilder(databaseDirectory)
+                        .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
+                        .setConfig(GraphDatabaseSettings.pagecache_warmup_enabled, true)
+                        .setConfig(GraphDatabaseSettings.procedure_whitelist, List.of("gds.*","apoc.*", "apoc.load.*"))
+                        .setConfig(GraphDatabaseSettings.procedure_unrestricted, List.of("gds.*", "apoc.*"))
+                        .setConfig(GraphDatabaseSettings.default_allowed,"gds.*,apoc.*")
+                        .setConfig(BoltConnector.enabled, true)
+                        .build();
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+
+        registerProcedure(graphDb, asList(
+                Create.class,
+                Help.class,
+                LoadCsv.class,
+                Periodic.class
+        ));
+
+        long t1 = System.currentTimeMillis();
+//        Transaction tx = graphDb.beginTx();
+//        for (int i = 0; i < rightNode; i++) {
+//            Node node1 = tx.createNode();
+//            node1.addLabel(Label.label("Node"));
+//        }
+//        tx.commit();
+//        System.out.println("done0");
+//        graphDb.executeTransactionally("""
+//                CALL apoc.periodic.iterate(
+//                    "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1gEqks6UYEbJLbyxB1GP1jygpVALZ0yUk') yield map as row return row",
+//                    "MATCH (f:Node {id: toInteger(row.from)})
+//                        OPTIONAL MATCH (t:Node {id: toInteger(row.to)})
+//                        MERGE (f)-[:broaderTransitive]->(t)",
+//                    {batchSize:10000, iterateList:true, parallel:true}
+//                    );
+//                """);
+//        System.out.println("done");
+//        tx.getAllRelationshipTypes().forEach(System.out::println);
+//        tx.commit();
+//        try (Transaction tx = graphDb.beginTx()) {
+//            for (int i = 0; i < rightNode; i++) {
+////                Node node1 = tx.createNode();
+////                node1.addLabel(Label.label("Node"));
+//                tx.execute(String.format("CREATE (:Node {name: '%d'});", i));
+//            }
+////            tx.execute("CREATE CONSTRAINT node_names ON (n:Node) ASSERT n.name IS UNIQUE");
+//            tx.commit();
+//        }
+        try (Transaction tx = graphDb.beginTx()) {
+            for (int i = 0; i < rightNode; i++) {
+//                Node node1 = tx.createNode();
+//                node1.addLabel(Label.label("Node"));
+                String s = String.format("CREATE (:Node {name: '%d'});", i);
+//                System.out.println(s);
+                tx.execute(s);
+            }
+            tx.commit();
+        }
+        try (Transaction tx = graphDb.beginTx()) {
+            tx.execute("CREATE CONSTRAINT node_unique_name ON (n:Node) ASSERT n.name IS UNIQUE");
+            tx.commit();
+        }
+        try (Transaction tx = graphDb.beginTx()) {
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=14rv_bYw8dIdLrlfbO7c4WLXRxDX-ZZ4q') yield map as row return row",
+//                                        "MERGE (Node:Node {id: toInteger(row.id)})",
+//                                        {batchSize:10000, iterateList:true, parallel:true}
+//                                        );""");
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1uMoPCOFWEzzPxD19v3qtVnUZzePIwDWM') yield map as row return row",
+//                        "MERGE (f:Node {name:row.from})",
+//                        {batchSize:10000, iterateList:true, parallel:true}
+//                    );
+//            """);
+            tx.execute("""
+                    CALL apoc.periodic.iterate(
+                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1tNZNpiU4VDWvOnEE-SoAInEWMvmtNBj9') YIELD map AS row RETURN row",
+                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
+                        CREATE (f)-[:broaderTransitive]->(t)",
+                        {batchSize:10000, parallel:false}
+                    )
+                    YIELD batches, total;
+            """);
+            System.out.println("bt: "+ tx.getAllRelationships().stream().count());
+            tx.execute("""
+                    CALL apoc.periodic.iterate(
+                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1TA5Vv_6dhNgAxfcF91tdugrvxU6kU9lH') YIELD map AS row RETURN row",
+                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
+                        CREATE (f)-[:other]->(t)",
+                        {batchSize:100000, parallel:false}
+                    )
+                    YIELD batches, total;
+            """);
+            System.out.println("all: " + tx.getAllRelationships().stream().count());
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1uMoPCOFWEzzPxD19v3qtVnUZzePIwDWM') yield map as row return row;",
+//                        "MERGE (f:Node {name: row.from})
+//                        MERGE (t:Node {name: row.to})
+//                        MERGE (f)-[r:broaderTransitive]->(t);",
+//                        {batchSize:10000, iterateList:true, parallel:true,batchMode:'SINGLE',concurrency:100}
+//                    );
+//            """);
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1emispldNfbpv9ujd9jTLLlHpswiCZgiG',{sep:','}) yield map as row return row",
+//                        "MERGE (f:Node {name: toInteger(row.from)})-[:other]->(t:Node {name: toInteger(row.to)})",
+//                        {batchSize:1000, iterateList:true, parallel:true}
+//                    );
+//            """);
+
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1emispldNfbpv9ujd9jTLLlHpswiCZgiG') yield map as row return row",
+//                        "MERGE (f:Node {id: toInteger(row.from)})
+//                            MERGE (t:Node {id: toInteger(row.to)})
+//                            CREATE (f)-[:other]->(t)",
+//                        {batchSize:10000, iterateList:true, parallel:true}
+//                    );
+//            """);
+//            tx.getAllNodes().stream().forEach(node -> {
+//                System.out.println(node.getAllProperties());
+//            });
+//            graphDb.executeTransactionally("USING PERIODIC COMMIT LOAD CSV WITH HEADERS\n" +
+//                    "FROM \"https://drive.google.com/uc?export=download&id=1uMoPCOFWEzzPxD19v3qtVnUZzePIwDWM\" AS row\n" +
+//                    "MATCH (f:Node), (t:Node)\n" +
+//                    "WHERE f.name = toInteger(row.from) AND t.name = toInteger(row.to)\n"+
+//                    "MERGE (f)-[:broaderTransitive]->(t)\n" +
+//                    "RETURN *;");
+//            System.out.println("you're cool");
+//            graphDb.executeTransactionally("USING PERIODIC COMMIT LOAD CSV WITH HEADERS\n" +
+//                    "FROM \"https://drive.google.com/uc?export=download&id=1uMoPCOFWEzzPxD19v3qtVnUZzePIwDWM\" AS row\n" +
+//                    "MATCH (f:Node), (t:Node)\n" +
+//                    "WHERE f.name = toInteger(row.from) AND t.name = toInteger(row.to)\n"+
+//                    "MERGE (f)-[:broaderTransitive]->(t)\n" +
+//                    "RETURN *;");
+//            System.out.println(tx.getAllNodes().stream().count());
+//            System.out.println(tx.getAllRelationships().stream().count());
+//            tx.getAllRelationshipTypes().forEach(System.out::println);
+//            tx.getAllRelationships().stream().forEach(System.out::println);
+//            System.out.println(tx.getAllNodes().stream().count());
+//            System.out.println(tx.getAllRelationships().stream().count());
+//            tx.getAllRelationshipTypes().forEach(System.out::println);
+            tx.commit();
+        }
+//        try (Transaction tx = graphDb.beginTx()) {
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "LOAD CSV WITH HEADERS FROM 'https://drive.google.com/uc?export=download&id=1emispldNfbpv9ujd9jTLLlHpswiCZgiG' AS row RETURN row",
+//                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
+//                        MERGE (f)-[:other]->(t)",
+//                        {batchSize:10000, iterateList:true, parallel:true}
+//                    )
+//                    YIELD batches, total;
+//            """);
+//            tx.commit();
+//        }
+        long t2 = System.currentTimeMillis();
+        System.out.println(t2 - t1);
+        try (Transaction tx = graphDb.beginTx()) {
+            System.out.println(tx.getAllNodes().stream().count());
+            System.out.println(tx.getAllRelationships().stream().count());
+            tx.close();
+        }
+//        System.out.println(graphDb.beginTx().getAllRelationships().stream().count());
     }
 
     public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
@@ -131,10 +328,11 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(1);
+        List<Integer> chunkSize = Arrays.asList(rightNode);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             long cnt = 0;
+            Integer answer = 0;
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
             for (int iter = 0; iter < maxIter; iter++) {
                 for (List<Integer> chunk : chunks) {
@@ -144,18 +342,20 @@ public class Neo4jBenchmark {
                     IguanaParser parser = new IguanaParser(grammar);
 
                     long t1 = System.currentTimeMillis();
-                    Stream<Pair> parseResults = parser.getReachabilities(input,
+                    Tuple<Stream<Pair>, Integer> parseResults = parser.getReachabilities(input,
                             new ParseOptions.Builder().setAmbiguous(false).build());
                     long t2 = System.currentTimeMillis();
                     long curT = t2 - t1;
                     cnt += curT;
                     input.close();
                     if (iter >= warmUp && parseResults != null) {
-                        System.out.println("time:" + curT);
+                        answer += parseResults.getSecond();
+                        System.out.println("time:" + curT + " ans is " + answer);
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
                 }
+                System.out.println(answer);
                 if (iter >= warmUp) {
                     outStatsTime.print(sz);
                     vertexToTime.get(sz.toString() + iter).forEach(x -> outStatsTime.print("," + x));

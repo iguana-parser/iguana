@@ -25,7 +25,7 @@ public class Neo4jGraphInput extends GraphInput {
                     .map(rel -> (int) ((String) rel.getProperty(TAG)).charAt(0));
 
             if (isFinal(index)) {
-                Stream.concat(nextSymbols, Stream.of(EOF));
+                return Stream.concat(nextSymbols, Stream.of(EOF));
             }
             return nextSymbols;
         }
