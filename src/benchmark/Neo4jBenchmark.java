@@ -1,5 +1,6 @@
 package benchmark;
 
+<<<<<<< HEAD
 import apoc.ApocConfig;
 import apoc.create.Create;
 import apoc.help.Help;
@@ -8,6 +9,10 @@ import apoc.periodic.*;
 import static java.util.Arrays.asList;
 
 import com.google.common.collect.Lists;
+=======
+import com.google.common.collect.Lists;
+import iguana.utils.input.GraphInput;
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
 import iguana.utils.input.Neo4jBenchmarkInput;
 import org.eclipse.collections.impl.list.Interval;
 import org.iguana.grammar.Grammar;
@@ -16,18 +21,25 @@ import org.iguana.parser.Pair;
 import org.iguana.parser.ParseOptions;
 import org.iguana.parsetree.ParseTreeNode;
 
+<<<<<<< HEAD
 import org.iguana.util.Tuple;
+=======
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
 import org.neo4j.configuration.GraphDatabaseSettings;
 import org.neo4j.configuration.connectors.BoltConnector;
 import org.neo4j.configuration.helpers.SocketAddress;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
+<<<<<<< HEAD
 import org.neo4j.exceptions.EntityNotFoundException;
 import org.neo4j.exceptions.KernelException;
 import org.neo4j.graphdb.*;
 import org.neo4j.internal.kernel.api.Procedures;
 import org.neo4j.kernel.api.procedure.GlobalProcedures;
 import org.neo4j.kernel.internal.GraphDatabaseAPI;
+=======
+import org.neo4j.graphdb.*;
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
 
 
 import java.io.File;
@@ -36,7 +48,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+<<<<<<< HEAD
 import java.rmi.RemoteException;
+=======
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -66,10 +81,17 @@ public class Neo4jBenchmark {
     //    args5 path to grammar
     //    args6 dataset name = name of file with results
     public static void main(String[] args) throws IOException {
+<<<<<<< HEAD
         loadGraph(args[4], Integer.parseInt(args[1]));
 //        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
 //        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
 //        removeData();
+=======
+        loadGraph(args[4]);
+        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+        removeData();
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
         managementService.shutdown();
     }
 
@@ -101,7 +123,11 @@ public class Neo4jBenchmark {
     public static BiFunction<Relationship, Direction, String> subclassAndTypeFunction() {
         return (rel, direction) -> {
             if (rel.isType(RelationshipType.withName("subClassOf"))) {
+<<<<<<< HEAD
                 if (direction.equals(Direction.OUTGOING)) {
+=======
+                if (direction.equals(Direction.INCOMING)) {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
                     return "a";
                 } else if (direction.equals(Direction.INCOMING)) {
                     return "b";
@@ -109,7 +135,11 @@ public class Neo4jBenchmark {
                     throw new RuntimeException("Unexpected direction");
                 }
             } else if (rel.isType(RelationshipType.withName("type"))) {
+<<<<<<< HEAD
                 if (direction.equals(Direction.OUTGOING)) {
+=======
+                if (direction.equals(Direction.INCOMING)) {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
                     return "c";
                 } else if (direction.equals(Direction.INCOMING)) {
                     return "d";
@@ -121,6 +151,7 @@ public class Neo4jBenchmark {
         };
     }
 
+<<<<<<< HEAD
 //    public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
 //
 //        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(pathToDataset))
@@ -146,10 +177,16 @@ public class Neo4jBenchmark {
     public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
         org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
 
+=======
+    public static void loadGraph(String pathToDataset) throws IOException {
+        org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
+
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
         managementService =
                 new DatabaseManagementServiceBuilder(databaseDirectory)
                         .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
                         .setConfig(GraphDatabaseSettings.pagecache_warmup_enabled, true)
+<<<<<<< HEAD
                         .setConfig(GraphDatabaseSettings.procedure_whitelist, List.of("gds.*","apoc.*", "apoc.load.*"))
                         .setConfig(GraphDatabaseSettings.procedure_unrestricted, List.of("gds.*", "apoc.*"))
                         .setConfig(GraphDatabaseSettings.default_allowed,"gds.*,apoc.*")
@@ -197,6 +234,41 @@ public class Neo4jBenchmark {
 //            """);
 //            tx.commit();
 //        }
+=======
+                        .setConfig(BoltConnector.enabled, true)
+                        .setConfig(BoltConnector.listen_address, new SocketAddress("localhost", 7687))
+                        .build();
+        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+
+        HashMap<Integer, Long> nodeList = new HashMap<>();
+        try (Stream<String> stream = Files.lines(Paths.get(pathToDataset))) {
+
+            try (Transaction tx = graphDb.beginTx()) {
+                stream.forEach(s -> {
+                    String[] split = s.split("\\s+");
+
+                    if (!nodeList.containsKey(Integer.parseInt(split[0]))) {
+                        Node node1 = tx.createNode();
+                        nodeList.put(Integer.parseInt(split[0]), node1.getId());
+                        node1.addLabel(Label.label(split[0]));
+                    }
+                    if (!nodeList.containsKey(Integer.parseInt(split[2]))) {
+                        Node node1 = tx.createNode();
+                        nodeList.put(Integer.parseInt(split[2]), node1.getId());
+                        node1.addLabel(Label.label(split[2]));
+                    }
+                    Node node1 = tx.getNodeById(nodeList.get(Integer.parseInt(split[0])));
+                    Node node2 = tx.getNodeById(nodeList.get(Integer.parseInt(split[2])));
+                    node1.createRelationshipTo(node2, RelationshipType.withName(split[1]));
+                });
+                tx.commit();
+                tx.close();
+                stream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
     }
 
     public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
@@ -213,6 +285,7 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
+<<<<<<< HEAD
         List<Integer> chunkSize = Arrays.asList(rightNode);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
@@ -231,6 +304,80 @@ public class Neo4jBenchmark {
                     long curT = t2 - t1;
                     input.close();
                     if (iter >= warmUp && parseResults != null) {
+=======
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000);
+        List<Integer> vertices = Interval.zeroTo(rightNode - 1);
+        for (Integer sz : chunkSize) {
+            List<List<Integer>> chunks = Lists.partition(vertices, sz);
+            for (Integer iter = 0; iter < maxIter; iter++) {
+                for (List<Integer> chunk : chunks) {
+                    System.out.println("iter " + iter + " chunkSize " + sz);
+
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
+                    IguanaParser parser = new IguanaParser(grammar);
+
+                    long t1 = System.currentTimeMillis();
+                    Stream<Pair> parseResults = parser.getReachabilities(input,
+                                new ParseOptions.Builder().setAmbiguous(false).build());
+                    long t2 = System.currentTimeMillis();
+                    long curT = t2 - t1;
+                    ((Neo4jBenchmarkInput) input).close();
+                    if (iter >= warmUp && parseResults != null) {
+                        System.out.println("time:" + curT);
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
+                        vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
+                        vertexToTime.get(sz.toString() + iter).add((int) curT);
+                    }
+                }
+                if (iter >= warmUp) {
+                    outStatsTime.print(sz);
+                    vertexToTime.get(sz.toString() + iter).forEach(x -> outStatsTime.print("," + x));
+                    outStatsTime.println();
+                }
+            }
+        }
+<<<<<<< HEAD
+        outStatsTime.close();
+    }
+
+    public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
+        BiFunction<Relationship, Direction, String> f = getFunction(relType);
+        Map<String, List<Integer>> vertexToTime = new HashMap<>();
+=======
+
+        outStatsTime.close();
+    }
+
+    public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
+        BiFunction<Relationship, Direction, String> f = getFunction(relType);
+        Map<String, List<Integer>> vertexToTime = new HashMap<>();
+
+        Grammar grammar;
+        try {
+            grammar = Grammar.load(pathToGrammar, "json");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("No grammar.json file is present");
+        }
+        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
+        outStatsTime.append("chunk_size, time");
+        outStatsTime.append("\n");
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
+        List<Integer> vertices = Interval.zeroTo(rightNode - 1);
+        for (Integer sz : chunkSize) {
+            List<List<Integer>> chunks = Lists.partition(vertices, sz);
+            for (Integer iter = 0; iter < maxIter; iter++) {
+                for (List<Integer> chunk : chunks) {
+                    System.out.println("iter " + iter + " chunkSize " + sz);
+
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
+                    IguanaParser parser = new IguanaParser(grammar);
+                    long t1 = System.currentTimeMillis();
+                    Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,
+                            new ParseOptions.Builder().setAmbiguous(true).build());
+                    long t2 = System.currentTimeMillis();
+                    long curT = t2 - t1;
+                    ((Neo4jBenchmarkInput) input).close();
+                    if (iter >= warmUp && parseTreeNodes != null) {
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
@@ -245,9 +392,25 @@ public class Neo4jBenchmark {
         outStatsTime.close();
     }
 
-    public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
-        BiFunction<Relationship, Direction, String> f = getFunction(relType);
-        Map<String, List<Integer>> vertexToTime = new HashMap<>();
+
+    private static int countNumberOfPaths(Map<Pair, ParseTreeNode> parseTreeNodes, Map<Integer, Integer> counter) {
+        int res = 0;
+        Map<ParseTreeNode, Integer> nodeToCurPaths = new HashMap<>();
+        Map<ParseTreeNode, List<Integer>> nodeToLength = new HashMap<>();
+
+        for (Pair verticesPair : parseTreeNodes.keySet()) {
+            ParseTreeNode parseTreeNode = parseTreeNodes.get(verticesPair);
+            traverse(parseTreeNode, nodeToCurPaths, nodeToLength);
+            res += nodeToCurPaths.get(parseTreeNode);
+
+            nodeToLength.get(parseTreeNode).forEach(length -> {
+                counter.putIfAbsent(length, 0);
+                counter.put(length, counter.get(length) + 1);
+            });
+        }
+        return res;
+    }
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
 
         Grammar grammar;
         try {

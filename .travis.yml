@@ -1,4 +1,9 @@
+dist: xenial
+
 language: java
 
 jdk:
-- oraclejdk8
+  - openjdk15
+
+script:
+  - mvn -Dtest=InMemGraphTest test

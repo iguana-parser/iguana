@@ -63,7 +63,11 @@ public class IguanaRuntime<T extends Result> {
     }
 
     // SPPF found in `T result = startGSSNode.getResult(v);`
+<<<<<<< HEAD
     public Tuple<Stream<Pair>, Integer> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+=======
+    public Stream<Pair> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -98,6 +102,7 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
+<<<<<<< HEAD
         List<Pair> results = new ArrayList<>();
         startGSSNodes.forEach(startGSSNode -> {
             input.getFinalVertices().forEach(v -> {
@@ -114,11 +119,25 @@ public class IguanaRuntime<T extends Result> {
 //            }
         });
         hasParseError = results.isEmpty();
+=======
+        Stream<Pair> results = Stream.empty();
+        Streams.zip(startGSSNodes.stream(), input.getFinalVertices().stream(), (startVertex, finalVertex) -> {
+            if (startVertex.hasResult(finalVertex))
+              return Stream.concat(results, Stream.of(new Pair(startVertex.getInputIndex(), finalVertex)));
+            return Stream.empty();
+        });
+
+        hasParseError = results.findAny().isPresent();
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
         if (hasParseError) {
             return null;
         }
 
+<<<<<<< HEAD
         return Tuple.of(results.stream(), results.size());
+=======
+        return results;
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
     }
 
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {

@@ -66,7 +66,11 @@ public class IguanaParser {
         return (Map<Pair, NonterminalNode>) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
+<<<<<<< HEAD
     public Tuple<Stream<Pair>, Integer> getPairs(Input input, ParseOptions options) {
+=======
+    public Stream<Pair> getPairs(Input input, ParseOptions options) {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
         return runtime.no_sppf_run(input, grammarGraph, options.getMap(), options.isGlobal());
     }
 
@@ -78,7 +82,11 @@ public class IguanaParser {
         return getParserTree(input, new ParseOptions.Builder().build());
     }
 
+<<<<<<< HEAD
     public Tuple<Stream<Pair>, Integer> getReachabilities(Input input, ParseOptions options) {
+=======
+    public Stream<Pair> getReachabilities(Input input, ParseOptions options) {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
         return getPairs(input, options);
     }
 

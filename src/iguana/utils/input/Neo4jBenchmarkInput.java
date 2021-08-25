@@ -44,8 +44,7 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
                         return (int) tmp.charAt(0);
                     }
                     return null;
-                })
-                .filter(Objects::nonNull);
+                });
 
         if (isFinal(index)) {
             return Stream.concat(Stream.of(EOF), nextSymbols);

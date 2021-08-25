@@ -186,9 +186,15 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         }
 
         if (gssNode == null) {
+<<<<<<< HEAD
             Stream<BodyGrammarSlot> firstSlots = getFirstSlots(input.nextSymbols(i));
             Stream<BodyGrammarSlot> testFirstSlots = getFirstSlots(input.nextSymbols(i));
             if (testFirstSlots.findAny().isEmpty()) {
+=======
+
+           Supplier<Stream<BodyGrammarSlot>> firstSlots = () -> getFirstSlots(input.nextSymbols(i).filter(Objects::nonNull)).filter(Objects::nonNull);
+            if (firstSlots.get().findAny().isPresent()) {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
                 return;
             }
 
@@ -209,7 +215,11 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
             Environment finalNewEnv = newEnv;
             GSSNode finalGssNode = gssNode;
+<<<<<<< HEAD
             firstSlots.forEach(slot -> {
+=======
+            firstSlots.get().forEach(slot -> {
+>>>>>>> 2be07003ca2d9005d3a6b427446088648678d947
                 runtime.setEnvironment(finalNewEnv);
 
                 if (slot.getLabel() != null)
