@@ -68,9 +68,9 @@ public class Neo4jBenchmark {
     public static void main(String[] args) throws IOException {
         loadGraph(args[4], Integer.parseInt(args[1]));
 //        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
-        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+//        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
 //        removeData();
-//        managementService.shutdown();
+        managementService.shutdown();
     }
 
     public static BiFunction<Relationship, Direction, String> getFunction(String relationshipName) {
@@ -175,28 +175,28 @@ public class Neo4jBenchmark {
             tx.execute("CREATE CONSTRAINT node_unique_name ON (n:Node) ASSERT n.name IS UNIQUE");
             tx.commit();
         }
-        try (Transaction tx = graphDb.beginTx()) {
-            tx.execute("""
-                    CALL apoc.periodic.iterate(
-                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1tNZNpiU4VDWvOnEE-SoAInEWMvmtNBj9') YIELD map AS row RETURN row",
-                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
-                        CREATE (f)-[:broaderTransitive]->(t)",
-                        {batchSize:10000, parallel:false}
-                    )
-                    YIELD batches, total;
-            """);
-            tx.execute("""
-                    CALL apoc.periodic.iterate(
-                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1TA5Vv_6dhNgAxfcF91tdugrvxU6kU9lH') YIELD map AS row RETURN row",
-                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
-                        CREATE (f)-[:other]->(t)",
-                        {batchSize:100000, parallel:false}
-                    )
-                    YIELD batches, total;
-            """);
-            System.out.println("all: " + tx.getAllRelationships().stream().count());
-            tx.commit();
-        }
+        System.out.println("done");
+//        try (Transaction tx = graphDb.beginTx()) {
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1tNZNpiU4VDWvOnEE-SoAInEWMvmtNBj9') YIELD map AS row RETURN row",
+//                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
+//                        CREATE (f)-[:broaderTransitive]->(t)",
+//                        {batchSize:10000, parallel:false}
+//                    )
+//                    YIELD batches, total;
+//            """);
+//            tx.execute("""
+//                    CALL apoc.periodic.iterate(
+//                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1TA5Vv_6dhNgAxfcF91tdugrvxU6kU9lH') YIELD map AS row RETURN row",
+//                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
+//                        CREATE (f)-[:other]->(t)",
+//                        {batchSize:100000, parallel:false}
+//                    )
+//                    YIELD batches, total;
+//            """);
+//            tx.commit();
+//        }
     }
 
     public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
