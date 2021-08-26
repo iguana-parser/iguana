@@ -1,17 +1,13 @@
 package benchmark;
 
-import apoc.ApocConfig;
 import apoc.create.Create;
 import apoc.help.Help;
 import apoc.load.*;
 import apoc.periodic.*;
 import static java.util.Arrays.asList;
-
 import com.google.common.collect.Lists;
 
-import com.google.common.collect.Lists;
 import iguana.utils.input.GraphInput;
-
 import iguana.utils.input.Neo4jBenchmarkInput;
 import org.eclipse.collections.impl.list.Interval;
 import org.iguana.grammar.Grammar;
@@ -20,38 +16,24 @@ import org.iguana.parser.Pair;
 import org.iguana.parser.ParseOptions;
 import org.iguana.parsetree.ParseTreeNode;
 
-import org.iguana.util.Tuple;
-
 import org.neo4j.configuration.GraphDatabaseSettings;
 import org.neo4j.configuration.connectors.BoltConnector;
-import org.neo4j.configuration.helpers.SocketAddress;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
-
-import org.neo4j.exceptions.EntityNotFoundException;
 import org.neo4j.exceptions.KernelException;
 import org.neo4j.graphdb.*;
-import org.neo4j.internal.kernel.api.Procedures;
 import org.neo4j.kernel.api.procedure.GlobalProcedures;
 import org.neo4j.kernel.internal.GraphDatabaseAPI;
-
-import org.neo4j.graphdb.*;
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import static org.neo4j.codegen.Expression.FALSE;
-import static org.neo4j.codegen.TypeReference.BOOLEAN;
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 public class Neo4jBenchmark {
@@ -245,7 +227,7 @@ public class Neo4jBenchmark {
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
                 }
-                if (iter >= warmUp) {
+                if (iter >= warmUp && !vertexToTime.isEmpty()) {
                     outStatsTime.print(sz);
                     vertexToTime.get(sz.toString() + iter).forEach(x -> outStatsTime.print("," + x));
                     outStatsTime.println();
