@@ -98,12 +98,14 @@ public class IguanaRuntime<T extends Result> {
         descriptorPool.clear();
         descriptorsStack.clear();
 
-        List<Pair> results = new ArrayList<>();
+        final boolean[] empty = {true};
+        Stream.Builder<Pair> results = Stream.builder();
         startGSSNodes.forEach(startGSSNode -> {
             input.getFinalVertices().forEach(v -> {
                 T result = startGSSNode.getResult(v);
                 if (result != null) {
                     results.add(new Pair(startGSSNode.getInputIndex(), v));
+                    empty[0] = false;
                 }
             });
 //                    for (Integer v: input.getFinalVertices()) {
@@ -113,13 +115,13 @@ public class IguanaRuntime<T extends Result> {
 //                }
 //            }
         });
-        hasParseError = results.isEmpty();
-        if (hasParseError) {
+//        hasParseError = results.build().;
+        if (empty[0]) {
             return null;
         }
 
 
-        return results.stream();
+        return results.build();
     }
 
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
