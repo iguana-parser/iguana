@@ -102,8 +102,7 @@ public class IguanaRuntime<T extends Result> {
         Stream.Builder<Pair> results = Stream.builder();
         startGSSNodes.forEach(startGSSNode -> {
             input.getFinalVertices().forEach(v -> {
-                T result = startGSSNode.getResult(v);
-                if (result != null) {
+                if (startGSSNode.hasResult(v)) {
                     results.add(new Pair(startGSSNode.getInputIndex(), v));
                     empty[0] = false;
                 }
