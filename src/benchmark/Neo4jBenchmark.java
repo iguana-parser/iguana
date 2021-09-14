@@ -221,6 +221,7 @@ public class Neo4jBenchmark {
                             new ParseOptions.Builder().setAmbiguous(false).build());
                     long t2 = System.currentTimeMillis();
                     long curT = t2 - t1;
+                    System.out.println("time is " + curT);
                     input.close();
                     if (iter >= warmUp && parseResults != null) {
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());

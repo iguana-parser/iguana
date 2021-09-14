@@ -35,8 +35,7 @@ public class InMemGraphInput extends GraphInput {
     public List<Integer> getDestVertex(int v, String t) {
         return adjacencyList.get(v).stream()
                 .filter(edge -> edge.getTag().equals(t))
-                .map(Edge::getDestVertex)
-                .collect(Collectors.toList());
+                .map(Edge::getDestVertex).collect(Collectors.toList());
     }
 
     @Override

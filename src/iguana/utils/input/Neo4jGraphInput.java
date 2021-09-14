@@ -63,8 +63,7 @@ public class Neo4jGraphInput extends GraphInput {
         try (Transaction tx = graphDb.beginTx()) {
             return StreamSupport.stream(tx.getNodeById(v).getRelationships(Direction.OUTGOING).spliterator(), false)
                     .filter(edge -> edge.getProperty(TAG).equals(t))
-                    .map(edge -> (int)edge.getEndNode().getId())
-                    .collect(Collectors.toList());
+                    .map(edge -> (int)edge.getEndNode().getId()).collect(Collectors.toList());
         }
     }
 }
