@@ -101,12 +101,17 @@ public class IguanaRuntime<T extends Result> {
         final boolean[] empty = {true};
         Stream.Builder<Pair> results = Stream.builder();
         startGSSNodes.forEach(startGSSNode -> {
-            input.getFinalVertices().forEach(v -> {
-                if (startGSSNode.hasResult(v)) {
-                    results.add(new Pair(startGSSNode.getInputIndex(), v));
-                    empty[0] = false;
-                }
+            startGSSNode.getPoppedElements().forEach(v -> {
+                results.add(new Pair(startGSSNode.getInputIndex(), v.getIndex()));
+                empty[0] = false;
             });
+        //startGSSNodes.forEach(startGSSNode -> {
+          //  input.getFinalVertices().forEach(v -> {
+            //    if (startGSSNode.hasResult(v)) {
+              //      results.add(new Pair(startGSSNode.getInputIndex(), v));
+              //      empty[0] = false;
+               // }
+            //});
 //                    for (Integer v: input.getFinalVertices()) {
 //                T result = startGSSNode.getResult(v);
 //                if (result != null) {

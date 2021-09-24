@@ -6,6 +6,7 @@ import org.neo4j.graphdb.*;
 import java.io.Closeable;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -70,21 +71,20 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
 
     @Override
     public List<Integer> getDestVertex(int v, String t) {
-        List<Integer> result = new ArrayList<>();
-        Iterable<Relationship> relationships = tx.getNodeById(v).getRelationships();
-        for (Relationship rel : relationships) {
-            final Direction direction = rel.getStartNodeId() == v
-                    ? Direction.OUTGOING
-                    : Direction.INCOMING;
+        return StreamSupport.stream(tx.getNodeById(v).getRelationships().spliterator(), false)
+                .map(rel -> {
+                    final Direction direction = rel.getStartNodeId() == v
+                            ? Direction.OUTGOING
+                            : Direction.INCOMING;
 
-            String tmp = toLabel.apply(rel, direction);
-            if (tmp != null && tmp.equals(t)) {
-                result.add(direction == Direction.INCOMING
-                        ? (int) rel.getStartNode().getId()
-                        : (int) rel.getEndNode().getId());
-            }
-        }
-        return result;
+                    String tmp = toLabel.apply(rel, direction);
+                    if (tmp != null && tmp.equals(t)) {
+                        return direction == Direction.INCOMING
+                                ? (int) rel.getStartNode().getId()
+                                : (int) rel.getEndNode().getId();
+                    }
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     @Override

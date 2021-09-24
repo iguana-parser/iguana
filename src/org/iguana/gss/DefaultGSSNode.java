@@ -116,7 +116,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public boolean pop(Input input, EndGrammarSlot slot, T result, Object value, IguanaRuntime<T> runtime) {
-		ParserLogger.getInstance().pop(this, result.getLeftExtent(), result, value);
+		// ParserLogger.getInstance().pop(this, result.getLeftExtent(), result, value);
 		T node = addPoppedElements(slot, result, value, runtime.getResultOps());
 		if (node != null)
 			iterateOverEdges(input, node, runtime);

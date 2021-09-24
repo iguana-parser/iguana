@@ -2,6 +2,7 @@ package iguana.utils.input;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class GraphInput implements Input {
 
