@@ -16,6 +16,7 @@ import org.iguana.parser.Pair;
 import org.iguana.parser.ParseOptions;
 import org.iguana.parsetree.ParseTreeNode;
 
+import org.iguana.util.Tuple;
 import org.neo4j.configuration.GraphDatabaseSettings;
 import org.neo4j.configuration.connectors.BoltConnector;
 import org.neo4j.dbms.api.DatabaseManagementService;
@@ -61,7 +62,7 @@ public class Neo4jBenchmark {
         loadGraph(args[4], Integer.parseInt(args[1]));
 //        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
         benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
-//        removeData();
+        removeData();
         managementService.shutdown();
     }
 
@@ -141,6 +142,8 @@ public class Neo4jBenchmark {
         managementService =
                 new DatabaseManagementServiceBuilder(databaseDirectory)
                         .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
+                        .setConfig(GraphDatabaseSettings.tx_state_max_off_heap_memory, Long.parseLong("24000000000"))
+                        //.setConfig(GraphDatabaseSettings.he)
                         .setConfig(GraphDatabaseSettings.pagecache_warmup_enabled, true)
                         .setConfig(GraphDatabaseSettings.procedure_whitelist, List.of("gds.*","apoc.*", "apoc.load.*"))
                         .setConfig(GraphDatabaseSettings.procedure_unrestricted, List.of("gds.*", "apoc.*"))
@@ -205,7 +208,9 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(rightNode);
+        int cnt = 0;
+        long curT = 0;
+        List<Integer> chunkSize = Arrays.asList(450609);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
@@ -213,17 +218,18 @@ public class Neo4jBenchmark {
                 for (List<Integer> chunk : chunks) {
                     System.out.println("iter " + iter + " chunkSize " + sz);
 
-                    Neo4jBenchmarkInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
                     IguanaParser parser = new IguanaParser(grammar);
 
                     long t1 = System.currentTimeMillis();
-                    Stream<Pair> parseResults = parser.getReachabilities(input,
+                    Tuple<Stream<Pair>, Integer> parseResults = parser.getReachabilities(input,
                             new ParseOptions.Builder().setAmbiguous(false).build());
                     long t2 = System.currentTimeMillis();
-                    long curT = t2 - t1;
+                    curT += t2 - t1;
                     System.out.println("time is " + curT);
-                    input.close();
+                    ((Neo4jBenchmarkInput) input).close();
                     if (iter >= warmUp && parseResults != null) {
+                        cnt += parseResults.getSecond();
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
@@ -234,6 +240,7 @@ public class Neo4jBenchmark {
                     outStatsTime.println();
                 }
             }
+            System.out.println("ans is " + cnt);
         }
         outStatsTime.close();
     }
@@ -259,7 +266,7 @@ public class Neo4jBenchmark {
                 for (List<Integer> chunk : chunks) {
                     System.out.println("iter " + iter + " chunkSize " + sz);
 
-                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk, rightNode);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
                     IguanaParser parser = new IguanaParser(grammar);
                     long t1 = System.currentTimeMillis();
                     Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,

@@ -39,22 +39,20 @@ public class Neo4jGraphInput extends GraphInput {
     }
 
     @Override
-    public List<Integer> getStartVertices() {
+    public Stream<Integer> getStartVertices() {
         try (Transaction tx = graphDb.beginTx()) {
             return tx.getAllNodes().stream()
                     .filter(node -> node.hasLabel(START_STATUS))
-                    .map(node -> (int)node.getId())
-                    .collect(Collectors.toList());
+                    .map(node -> (int)node.getId());
         }
     }
 
     @Override
-    public List<Integer> getFinalVertices() {
+    public Stream<Integer> getFinalVertices() {
         try (Transaction tx = graphDb.beginTx()) {
             return tx.getAllNodes().stream()
                     .filter(node -> node.hasLabel(FINAL_STATUS))
-                    .map(node -> (int)node.getId())
-                    .collect(Collectors.toList());
+                    .map(node -> (int)node.getId());
         }
     }
 

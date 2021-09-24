@@ -1,6 +1,5 @@
 package org.iguana.parser;
 
-import com.github.jsonldjava.shaded.com.google.common.collect.Streams;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -63,7 +62,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     // SPPF found in `T result = startGSSNode.getResult(v);`
-    public Stream<Pair> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+    public Tuple<Stream<Pair>, Integer> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -76,7 +75,7 @@ public class IguanaRuntime<T extends Result> {
         Environment env = ctx.getEmptyEnvironment();
 
         List<DefaultGSSNode<T>> startGSSNodes = new ArrayList<>();
-        for (Integer node : input.getStartVertices()) {
+        for (Integer node : input.getStartVertices().collect(Collectors.toList())) {
             startGSSNodes.add(new DefaultGSSNode<T>(startSymbol, node));
         }
 
@@ -123,9 +122,8 @@ public class IguanaRuntime<T extends Result> {
         if (empty[0]) {
             return null;
         }
-
-
-        return results.build();
+        List<Pair> res = results.build().collect(Collectors.toList());
+        return new Tuple<> (res.stream(), res.size());
     }
 
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
@@ -142,7 +140,6 @@ public class IguanaRuntime<T extends Result> {
 
 
         Stream<DefaultGSSNode<T>> startGSSNodes = input.getStartVertices()
-                .stream()
                 .map(v -> new DefaultGSSNode<T>(startSymbol, v));
 
         startGSSNodes.forEach(node -> startSymbol.addStartGSSNode(node, node.getInputIndex()));
@@ -160,7 +157,7 @@ public class IguanaRuntime<T extends Result> {
 
         while (hasDescriptor()) {
             Descriptor<T> descriptor = nextDescriptor();
-            logger.processDescriptor(descriptor);
+            // logger.processDescriptor(descriptor);
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(), descriptor.getEnv(), this);
         }
 
@@ -179,7 +176,7 @@ public class IguanaRuntime<T extends Result> {
 //            }
 //        }
         startGSSNodes.forEach(startGSSNode -> {
-            input.getFinalVertices().stream().forEach(v -> {
+            input.getFinalVertices().forEach(v -> {
                 T result = startGSSNode.getResult(v);
                 if (result != null) {
                     results.put(new Pair(startGSSNode.getInputIndex(), v), result);
@@ -211,7 +208,7 @@ public class IguanaRuntime<T extends Result> {
             logger.error(slot, i);
             this.errorIndex = i;
             this.errorSlot = slot;
-            logger.error(errorSlot, errorIndex);
+          //  logger.error(errorSlot, errorIndex);
         }
     }
 
@@ -234,7 +231,7 @@ public class IguanaRuntime<T extends Result> {
             descriptor = new Descriptor<>(grammarSlot, gssNode, result, env);
         }
         descriptorsStack.push(descriptor);
-        logger.descriptorAdded(descriptor);
+       // logger.descriptorAdded(descriptor);
     }
 
     public IEvaluatorContext getEvaluatorContext() {

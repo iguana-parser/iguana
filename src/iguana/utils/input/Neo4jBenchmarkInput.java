@@ -7,6 +7,7 @@ import java.io.Closeable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -14,17 +15,17 @@ import java.util.stream.StreamSupport;
 public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
     private final GraphDatabaseService graphDb;
     private final BiFunction<Relationship, Direction, String> toLabel;
-    private final List<Integer> startVertices;
-    private final List<Integer> finalVertices;
+    private final Stream<Integer> startVertices;
+    private final Stream<Integer> finalVertices;
     Transaction tx;
 
-    public Neo4jBenchmarkInput(GraphDatabaseService graphDb, BiFunction<Relationship, Direction, String> toLabel, List<Integer> startVertices, Integer verticesNumber) {
+    public Neo4jBenchmarkInput(GraphDatabaseService graphDb, BiFunction<Relationship, Direction, String> toLabel, Stream<Integer> startVertices, Integer verticesNumber) {
         super(graphDb);
         this.graphDb = graphDb;
         this.toLabel = toLabel;
         this.startVertices = startVertices;
         this.tx = graphDb.beginTx();
-        this.finalVertices = Interval.zeroTo(verticesNumber);
+        this.finalVertices = IntStream.range(0, verticesNumber).boxed();
     }
 
     public long nVertices() {
@@ -60,12 +61,12 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
     }
 
     @Override
-    public List<Integer> getStartVertices() {
+    public Stream<Integer> getStartVertices() {
         return this.startVertices;
     }
 
     @Override
-    public List<Integer> getFinalVertices() {
+    public Stream<Integer> getFinalVertices() {
         return this.finalVertices;
     }
 

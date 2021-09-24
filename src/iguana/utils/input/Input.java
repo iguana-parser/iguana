@@ -139,9 +139,9 @@ public interface Input {
 
     boolean isEndOfFile(int inputIndex);
 
-    List<Integer> getStartVertices();
+    Stream<Integer> getStartVertices();
 
-    List<Integer> getFinalVertices();
+    Stream<Integer> getFinalVertices();
 
     boolean isFinal(int index);
 }
