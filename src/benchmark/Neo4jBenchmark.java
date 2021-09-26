@@ -208,13 +208,12 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        int cnt = 0;
-        long curT = 0;
-        List<Integer> chunkSize = Arrays.asList(450609);
+        List<Integer> chunkSize = Arrays.asList(rightNode);
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
             for (int iter = 0; iter < maxIter; iter++) {
+                int curT = 0;
                 for (List<Integer> chunk : chunks) {
                     System.out.println("iter " + iter + " chunkSize " + sz);
 
@@ -222,14 +221,13 @@ public class Neo4jBenchmark {
                     IguanaParser parser = new IguanaParser(grammar);
 
                     long t1 = System.currentTimeMillis();
-                    Tuple<Stream<Pair>, Integer> parseResults = parser.getReachabilities(input,
+                    Stream<Pair> parseResults = parser.getReachabilities(input,
                             new ParseOptions.Builder().setAmbiguous(false).build());
                     long t2 = System.currentTimeMillis();
                     curT += t2 - t1;
                     System.out.println("time is " + curT);
                     ((Neo4jBenchmarkInput) input).close();
                     if (iter >= warmUp && parseResults != null) {
-                        cnt += parseResults.getSecond();
                         vertexToTime.putIfAbsent(sz.toString() + iter, new ArrayList<>());
                         vertexToTime.get(sz.toString() + iter).add((int) curT);
                     }
@@ -240,7 +238,6 @@ public class Neo4jBenchmark {
                     outStatsTime.println();
                 }
             }
-            System.out.println("ans is " + cnt);
         }
         outStatsTime.close();
     }
