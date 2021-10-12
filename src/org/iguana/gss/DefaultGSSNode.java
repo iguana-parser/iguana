@@ -42,6 +42,8 @@ import org.iguana.result.ResultOps;
 import org.iguana.util.ParserLogger;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * If there is a cyclic GSSEdge, it's always the first one. If there is a cyclic GSS edge, there is always
@@ -307,18 +309,17 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 				getInputIndex() == other.getInputIndex() &&
 				Arrays.equals(getData(), other.getData());
 	}
-
 	public int hashCode() {
 		return Objects.hash(getGrammarSlot().hashCode(), getInputIndex(), getData());
 	}
 
 	public Iterable<T> getPoppedElements() {
-		List<T> poppedElements = new ArrayList<>(countPoppedElements());
+		Stream.Builder<T> poppedElements = Stream.builder();
 		if (firstPoppedElement != null) poppedElements.add(firstPoppedElement);
 		if (restPoppedElements != null)
-			poppedElements.addAll(restPoppedElements.values());
+			restPoppedElements.values().forEach(poppedElements::add);
 
-		return poppedElements;
+		return poppedElements.build()::iterator;
 	}
 
 	public String toString() {

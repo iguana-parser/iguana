@@ -39,8 +39,8 @@ public class InMemGraphTest {
         );
         GraphInput input = new InMemGraphInput(
                 edges,
-                Arrays.asList(0, 1),
-                Arrays.asList(0, 3)
+                Arrays.asList(0, 1).stream(),
+                Arrays.asList(0, 3).stream()
         );
 
         Grammar grammar;
@@ -73,8 +73,8 @@ public class InMemGraphTest {
         );
         GraphInput input = new InMemGraphInput(
                 edges,
-                Arrays.asList(0, 1),
-                Arrays.asList(0, 3)
+                Arrays.asList(0, 1).stream(),
+                Arrays.asList(0, 3).stream()
         );
 
         Grammar grammar;
@@ -86,7 +86,7 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Stream<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+       // Stream<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
     }
 
     @Test
@@ -108,8 +108,8 @@ public class InMemGraphTest {
         );
         GraphInput input = new InMemGraphInput(
                 edges,
-                Collections.singletonList(2),
-                Collections.singletonList(3)
+                Collections.singletonList(2).stream(),
+                Collections.singletonList(3).stream()
         );
 
         Grammar grammar;
@@ -121,7 +121,7 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Stream<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+      //  Stream<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
         Map<Pair, NonterminalNode> parseResults1 = parser.getSPPF(input, new ParseOptions.Builder().setAmbiguous(true).build());
 
 //        assert parseResults.size() == parseResults1.size();
@@ -142,8 +142,8 @@ public class InMemGraphTest {
         );
         GraphInput input = new InMemGraphInput(
                 edges,
-                Collections.singletonList(0),
-                Collections.singletonList(0)
+                Collections.singletonList(0).stream(),
+                Collections.singletonList(0).stream()
         );
 
         Grammar grammar;
@@ -155,7 +155,7 @@ public class InMemGraphTest {
         IguanaParser parser = new IguanaParser(grammar);
         GrammarGraph grammarGraph = GrammarGraphBuilder.from(grammar);
 
-        Stream<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
+     //   Stream<Pair> parseResults = parser.getReachabilities(input, new ParseOptions.Builder().setAmbiguous(true).build());
         Map<Pair, NonterminalNode> parseResults1 = parser.getSPPF(input, new ParseOptions.Builder().setAmbiguous(true).build());
 
 //        assert parseResults.size() == parseResults1.size();
@@ -219,8 +219,8 @@ public class InMemGraphTest {
         );
         Input input = new InMemGraphInput(
                 edges,
-                Collections.singletonList(0),
-                Collections.singletonList(1)
+                Collections.singletonList(0).stream(),
+                Collections.singletonList(1).stream()
         );
 
         Grammar grammar;
