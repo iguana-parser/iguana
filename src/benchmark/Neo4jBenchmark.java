@@ -255,38 +255,36 @@ public class Neo4jBenchmark {
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
 
-        List<Integer> chunkSize = Arrays.asList(10000);
+        //List<Integer> chunkSize = Arrays.asList(10000);
+        Integer chunkSize = 10000;
         int numOfThreads = 2;
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
-        List<List<Integer>> verticesPartitioned = Lists.partition(vertices, rightNode/numOfThreads);
-        ExecutorService executor = Executors.newFixedThreadPool(numOfThreads * 2);
-        final long[] curT = {0};
-        List<Thread> workers = new ArrayList<Thread>(verticesPartitioned.size());
-        Integer i = 0;
+        List<List<Integer>> verticesPartitioned = Lists.partition(vertices, chunkSize);
         long t1 = System.currentTimeMillis();
-        for (List<Integer> p: verticesPartitioned){
-            Runnable task = new HandleGraphPart(i, p, chunkSize);
-            i ++;
-            //Thread worker = new Thread(task);
-            //worker.start();
-            //workers.add(worker);
-            executor.execute(task);
-        }
-        /*for(Thread t: workers){
-            try {
-                t.join();
-            }
-            catch (InterruptedException e)
-            {
-                System.out.println(e);
-            }
-        }*/
-        executor.shutdown();
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            System.out.println(e);
-        }
+        verticesPartitioned.parallelStream().forEach(chunk -> {
+                IguanaParser parser = new IguanaParser(grammar);
+                //System.out.println("iter 0" + " chunkSize " + sz);
+                GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
+                long t1_local = System.currentTimeMillis();
+                Stream<Pair> parseResults = parser.getReachabilities(input,
+                        new ParseOptions.Builder().setAmbiguous(false).build());
+                //System.out.println("Result size: " + (parseResults.count()));
+                long t2_local = System.currentTimeMillis();
+                long stepTime = t2_local - t1_local;
+                //curT[0] += stepTime;
+                //System.out.println("My id " + myId + "; full time is " + curT[0] + "; step time is " + stepTime);
+                System.out.println("Step time is " + stepTime);
+                ((Neo4jBenchmarkInput) input).close();
+                /*if (parseResults != null) {
+                    vertexToTime.putIfAbsent(sz.toString(), new ArrayList<>());
+                    vertexToTime.get(sz.toString()).add((int) curT[0]);
+                    }*/
+       });
+
+        final long[] curT = {0};
+
+        Integer i = 0;
+
 
         long t2 = System.currentTimeMillis();
 
