@@ -230,9 +230,9 @@ public class Neo4jBenchmark {
                         System.out.println("iter 0" + " chunkSize " + sz);
                         GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
                         long t1 = System.currentTimeMillis();
-                        Stream<Pair> parseResults = parser.getReachabilities(input,
+                        Tuple<Stream<Pair>, Integer> parseResults = parser.getReachabilities(input,
                                 new ParseOptions.Builder().setAmbiguous(false).build());
-                        //System.out.println("Result size: " + (parseResults.count()));
+                        System.out.println("Result size: " + (parseResults.getSecond()));
                         long t2 = System.currentTimeMillis();
                         long stepTime = t2 - t1;
                         curT[0] += stepTime;
@@ -261,14 +261,19 @@ public class Neo4jBenchmark {
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         List<List<Integer>> verticesPartitioned = Lists.partition(vertices, chunkSize);
         long t1 = System.currentTimeMillis();
-        verticesPartitioned.parallelStream().forEach(chunk -> {
+        List<Integer> sumResult = new ArrayList<>();
+        Integer finalResultCount =
+                verticesPartitioned.parallelStream().map(chunk -> {
                 IguanaParser parser = new IguanaParser(grammar);
                 //System.out.println("iter 0" + " chunkSize " + sz);
                 GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
                 long t1_local = System.currentTimeMillis();
-                Stream<Pair> parseResults = parser.getReachabilities(input,
+                Tuple<Stream<Pair>, Integer>  parseResults = parser.getReachabilities(input,
                         new ParseOptions.Builder().setAmbiguous(false).build());
-                //System.out.println("Result size: " + (parseResults.count()));
+                if (parseResults != null) {
+                    System.out.println("Result size: " + (parseResults.getSecond()));
+                }
+                //sumResult.add(parseResults.getSecond());
                 long t2_local = System.currentTimeMillis();
                 long stepTime = t2_local - t1_local;
                 //curT[0] += stepTime;
@@ -278,8 +283,14 @@ public class Neo4jBenchmark {
                 /*if (parseResults != null) {
                     vertexToTime.putIfAbsent(sz.toString(), new ArrayList<>());
                     vertexToTime.get(sz.toString()).add((int) curT[0]);
+
                     }*/
-       });
+                    if (parseResults != null) {
+                        return parseResults.getSecond();
+                    } else {
+                        return  0;
+                    }
+       }).reduce(0, Integer::sum);
 
         final long[] curT = {0};
 
@@ -287,7 +298,7 @@ public class Neo4jBenchmark {
 
 
         long t2 = System.currentTimeMillis();
-
+        System.out.println("Total answer: " + finalResultCount);
         System.out.println("Total time: " + (t2 - t1));
 
         outStatsTime.close();

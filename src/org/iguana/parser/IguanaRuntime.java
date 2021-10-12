@@ -62,7 +62,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     // SPPF found in `T result = startGSSNode.getResult(v);`
-    public Stream<Pair> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+    public Tuple<Stream<Pair>, Integer>  no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -122,8 +122,8 @@ public class IguanaRuntime<T extends Result> {
         if (empty[0]) {
             return null;
         }
-       // List<Pair> res = results.build().collect(Collectors.toList());
-        return results.build();
+        List<Pair> res = results.build().collect(Collectors.toList());
+        return new Tuple<> (res.stream(), res.size());
     }
 
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
