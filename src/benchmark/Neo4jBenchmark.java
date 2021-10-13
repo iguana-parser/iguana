@@ -256,8 +256,7 @@ public class Neo4jBenchmark {
         outStatsTime.append("\n");
 
         //List<Integer> chunkSize = Arrays.asList(10000);
-        Integer chunkSize = 10000;
-        int numOfThreads = 2;
+        int chunkSize = 1000;
         List<Integer> vertices = Interval.zeroTo(rightNode - 1);
         List<List<Integer>> verticesPartitioned = Lists.partition(vertices, chunkSize);
         long t1 = System.currentTimeMillis();
