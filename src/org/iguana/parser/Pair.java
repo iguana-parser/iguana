@@ -3,8 +3,8 @@ package org.iguana.parser;
 import java.util.Objects;
 
 public class Pair {
-    int startVertex;
-    int endVertex;
+    public int startVertex;
+    public int endVertex;
 
     public Pair(int startVertex, int endVertex) {
         this.startVertex = startVertex;

@@ -1,6 +1,5 @@
 package iguana.utils.input;
 
-import org.eclipse.collections.impl.list.Interval;
 import org.neo4j.graphdb.*;
 
 import java.io.Closeable;

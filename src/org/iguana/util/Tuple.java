@@ -30,7 +30,8 @@ package org.iguana.util;
 import java.io.Serializable;
 
 
-public class Tuple<T, K> implements Serializable {
+public class
+Tuple<T, K> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

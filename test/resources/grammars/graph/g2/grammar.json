@@ -10,6 +10,18 @@
       "body" : [
         {
           "kind": "Terminal",
+          "name": "b",
+          "regex": {
+            "kind": "Char",
+            "val": 98
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        {
+          "kind": "Terminal",
           "name": "a",
           "regex": {
             "kind": "Char",
@@ -27,15 +39,11 @@
       "body" : [
         {
           "kind": "Terminal",
-          "name": "a",
+          "name": "b",
           "regex": {
             "kind": "Char",
             "val": 97
           }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "S"
         }
       ]
     }

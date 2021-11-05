@@ -84,22 +84,24 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 				addGSSEdge(firstGSSEdge);
 				firstGSSEdge = runtime.createGSSEdge(returnSlot, w, null, env);
 			}
-			ParserLogger.getInstance().gssEdgeAdded(firstGSSEdge);
+			// ParserLogger.getInstance().gssEdgeAdded(firstGSSEdge);
 			((CyclicDummyGSSEdges<T>) firstGSSEdge).addReturnSlot(returnSlot);
 			iterateOverPoppedElements(firstGSSEdge, returnSlot, destination, input, env, runtime);
 		} else {
 			GSSEdge<T> edge = runtime.createGSSEdge(returnSlot, w, destination, env);
-			ParserLogger.getInstance().gssEdgeAdded(edge);
+			// ParserLogger.getInstance().gssEdgeAdded(edge);
 			addGSSEdge(edge);
 			iterateOverPoppedElements(edge, returnSlot, destination, input, env, runtime);
 		}
 	}
 
     private void addGSSEdge(GSSEdge<T> edge) {
-        if (restGSSEdges == null) {
-            restGSSEdges = new ArrayList<>(4);
-        }
-        restGSSEdges.add(edge);
+		if (restGSSEdges == null) {
+			restGSSEdges = new ArrayList<>(4);
+		}
+		if (edge != null) {
+			restGSSEdges.add(edge);
+		}
 	}
 
     private void iterateOverPoppedElements(GSSEdge<T> edge, BodyGrammarSlot returnSlot, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
@@ -211,10 +213,11 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 			processEdge(input, result, firstGSSEdge, firstGSSEdge.getReturnSlot(), runtime);
 		}
 
-		if (restGSSEdges != null)
+		if (restGSSEdges != null) {
 			for (GSSEdge<T> edge : restGSSEdges) {
 				processEdge(input, result, edge, edge.getReturnSlot(), runtime);
 			}
+		}
 	}
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {

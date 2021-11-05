@@ -2,15 +2,16 @@ package iguana.utils.input;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InMemGraphInput extends GraphInput {
     private final List<List<Edge>> adjacencyList;
     private final Stream<Integer> startVertices;
-    private final Stream<Integer> finalVertices;
+    private final List<Integer> finalVertices;
 
-    public InMemGraphInput(List<List<Edge>> adjacencyList, Stream<Integer> startVertices, Stream<Integer> finalVertices) {
+    public InMemGraphInput(List<List<Edge>> adjacencyList, Stream<Integer> startVertices, List<Integer> finalVertices) {
         this.adjacencyList = adjacencyList;
         this.startVertices = startVertices;
         this.finalVertices = finalVertices;
@@ -23,12 +24,12 @@ public class InMemGraphInput extends GraphInput {
 
     @Override
     public Stream<Integer> getFinalVertices() {
-        return finalVertices;
+        return finalVertices.stream();
     }
 
     @Override
     public boolean isFinal(int v) {
-        return finalVertices.collect(Collectors.toList()).contains(v);
+        return finalVertices.contains(v);
     }
 
     @Override
@@ -40,16 +41,12 @@ public class InMemGraphInput extends GraphInput {
 
     @Override
     public Stream<Integer> nextSymbols(int v) {
-        List<Integer> nextSymbols = new ArrayList<>();
+        Stream<Integer> nextSymbols = adjacencyList.get(v).stream()
+                .map(edge -> (int) edge.getTag().charAt(0));
         if (isFinal(v)) {
-            nextSymbols.add(EOF);
+            nextSymbols = Stream.concat(Stream.of(EOF), nextSymbols);
         }
-//        List<Integer> nextSymbols = adjacencyList.get(v).stream()
-//                .map(edge -> (int) edge.getTag().charAt(0));
-        for (Edge edge: adjacencyList.get(v)) {
-            nextSymbols.add((int) edge.getTag().charAt(0));
-        }
-        return nextSymbols.stream();
+        return nextSymbols;
     }
 
 }

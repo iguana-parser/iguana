@@ -10,10 +10,10 @@
       "body" : [
         {
           "kind": "Terminal",
-          "name": "a",
+          "name": "b",
           "regex": {
             "kind": "Char",
-            "val": 97
+            "val": 98
           }
         },
         {
@@ -22,10 +22,10 @@
         },
         {
           "kind": "Terminal",
-          "name": "b",
+          "name": "a",
           "regex": {
             "kind": "Char",
-            "val": 98
+            "val": 97
           }
         }
       ]
@@ -37,6 +37,14 @@
         "name" : "S"
       },
       "body" : [
+        {
+          "kind": "Terminal",
+          "name": "b",
+          "regex": {
+            "kind": "Char",
+            "val": 98
+          }
+        },
         {
           "kind": "Terminal",
           "name": "a",
@@ -44,45 +52,8 @@
             "kind": "Char",
             "val": 97
           }
-        },
-        {
-          "kind": "Terminal",
-          "name": "b",
-          "regex": {
-            "kind": "Char",
-            "val": 98
-          }
         }
       ]
-    },
-    {
-    "kind" : "Rule",
-    "head" : {
-      "kind" : "Nonterminal",
-      "name" : "S"
-    },
-    "body" : [
-      {
-        "kind": "Terminal",
-        "name": "c",
-        "regex": {
-          "kind": "Char",
-          "val": 99
-        }
-      },
-      {
-        "kind" : "Nonterminal",
-        "name" : "S"
-      },
-      {
-        "kind": "Terminal",
-        "name": "d",
-        "regex": {
-          "kind": "Char",
-          "val": 100
-        }
-      }
-    ]
     },
     {
       "kind" : "Rule",
@@ -93,18 +64,47 @@
       "body" : [
         {
           "kind": "Terminal",
+          "name": "d",
+          "regex": {
+            "kind": "Char",
+            "val": 100
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        {
+          "kind": "Terminal",
           "name": "c",
           "regex": {
             "kind": "Char",
             "val": 99
           }
-        },
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
         {
           "kind": "Terminal",
           "name": "d",
           "regex": {
             "kind": "Char",
             "val": 100
+          }
+        },
+        {
+          "kind": "Terminal",
+          "name": "c",
+          "regex": {
+            "kind": "Char",
+            "val": 99
           }
         }
       ]

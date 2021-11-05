@@ -1,5 +1,6 @@
 package benchmark;
 
+import apoc.ApocSettings;
 import apoc.create.Create;
 import apoc.help.Help;
 import apoc.load.*;
@@ -10,7 +11,6 @@ import com.google.common.collect.Lists;
 import iguana.utils.input.GraphInput;
 import iguana.utils.input.Neo4jBenchmarkInput;
 import org.eclipse.collections.impl.list.Interval;
-import org.eclipse.rdf4j.query.algebra.In;
 import org.iguana.grammar.Grammar;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parser.Pair;
@@ -24,22 +24,19 @@ import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
 import org.neo4j.exceptions.KernelException;
 import org.neo4j.graphdb.*;
+import org.neo4j.io.fs.FileUtils;
 import org.neo4j.kernel.api.procedure.GlobalProcedures;
 import org.neo4j.kernel.internal.GraphDatabaseAPI;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Neo4jBenchmark {
     private static final File databaseDirectory = new File("target/neo4j-hello-db");
@@ -55,17 +52,18 @@ public class Neo4jBenchmark {
     private static final String st = "st";
 
     //    args0 rel type (st/bt/nt)
-    //    args1 rightNode
+    //    args1 nodeNumber
     //    args2 number of warm up iteration
     //    args3 total number of iterations
     //    args4 path to dataset
     //    args5 path to grammar
     //    args6 dataset name = name of file with results
+    //    args7 grammar name (g1/g2/geo)
     public static void main(String[] args) throws IOException {
 
-        loadGraph(args[4], Integer.parseInt(args[1]));
+        loadGraph(args[6], Integer.parseInt(args[1]), args[4], args[0]);
 //        benchmark(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
-        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6]);
+        benchmarkReachabilities(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[5], args[6], args[7]);
         removeData();
         managementService.shutdown();
     }
@@ -118,14 +116,6 @@ public class Neo4jBenchmark {
         };
     }
 
-//    public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
-//
-//        DatabaseManagementService managementService = new DatabaseManagementServiceBuilder(new File(pathToDataset))
-//                .setConfig(GraphDatabaseSettings.read_only, true)
-//                .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
-//                .build();
-//        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
-//    }
 
     public static void registerProcedure(GraphDatabaseService graphDb, List<Class<?>> procedures) {
         GlobalProcedures globalProcedures = ((GraphDatabaseAPI) graphDb).getDependencyResolver().resolveDependency(GlobalProcedures.class);
@@ -140,18 +130,20 @@ public class Neo4jBenchmark {
         }
     }
 
-    public static void loadGraph(String pathToDataset,  int rightNode) throws IOException {
-        org.neo4j.io.fs.FileUtils.deleteRecursively(databaseDirectory);
+    public static void loadGraph(String dataset,  int nodeNumber, String pathToDataset, String typeOfRelationships) throws IOException {
+        FileUtils.deleteRecursively(databaseDirectory);
 
         managementService =
                 new DatabaseManagementServiceBuilder(databaseDirectory)
                         .setConfig(GraphDatabaseSettings.pagecache_memory, "100G")
-                        .setConfig(GraphDatabaseSettings.tx_state_max_off_heap_memory, Long.parseLong("24000000000"))
+                        .setConfig(GraphDatabaseSettings.tx_state_max_off_heap_memory, java.lang.Long.parseLong("24000000000"))
                         .setConfig(GraphDatabaseSettings.pagecache_warmup_enabled, true)
                         .setConfig(GraphDatabaseSettings.procedure_whitelist, List.of("gds.*","apoc.*", "apoc.load.*"))
                         .setConfig(GraphDatabaseSettings.procedure_unrestricted, List.of("gds.*", "apoc.*"))
                         .setConfig(GraphDatabaseSettings.default_allowed,"gds.*,apoc.*")
                         .setConfig(BoltConnector.enabled, true)
+                        .setConfig(ApocSettings.apoc_import_file_enabled, true)
+                        .setConfig(ApocSettings.apoc_import_file_use__neo4j__config, false)
                         .build();
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
 
@@ -163,41 +155,66 @@ public class Neo4jBenchmark {
         ));
 
         try (Transaction tx = graphDb.beginTx()) {
-            for (int i = 0; i < rightNode; i++) {
+            for (int i = 0; i < nodeNumber; ++i) {
                 String s = String.format("CREATE (:Node {name: '%d'});", i);
                 tx.execute(s);
             }
             tx.commit();
         }
+
         try (Transaction tx = graphDb.beginTx()) {
             tx.execute("CREATE CONSTRAINT node_unique_name ON (n:Node) ASSERT n.name IS UNIQUE");
             tx.commit();
         }
+
         System.out.println("done");
-        try (Transaction tx = graphDb.beginTx()) {
-            tx.execute("""
-                    CALL apoc.periodic.iterate(
-                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1tNZNpiU4VDWvOnEE-SoAInEWMvmtNBj9') YIELD map AS row RETURN row",
-                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
-                        CREATE (f)-[:broaderTransitive]->(t)",
-                        {batchSize:10000, parallel:false}
-                    )
-                    YIELD batches, total;
-            """);
-            tx.execute("""
-                    CALL apoc.periodic.iterate(
-                        "CALL apoc.load.csv('https://drive.google.com/uc?export=download&id=1TA5Vv_6dhNgAxfcF91tdugrvxU6kU9lH') YIELD map AS row RETURN row",
-                        "MATCH (f:Node {name: row.from}), (t:Node {name: row.to})
-                        CREATE (f)-[:other]->(t)",
-                        {batchSize:100000, parallel:false}
-                    )
-                    YIELD batches, total;
-            """);
-            tx.commit();
+        if ("bt".equals(typeOfRelationships)) {
+            try (Transaction tx = graphDb.beginTx()) {
+                tx.execute("        CALL apoc.periodic.iterate(\n" +
+                           "            \"CALL apoc.load.csv('FILE:///" + pathToDataset + dataset + "_broaderTransitive.csv') YIELD map AS row RETURN row\",\n" +
+                           "            \"MATCH (f:Node {name: row.from}), (t:Node {name: row.to})\n" +
+                           "            CREATE (f)-[:broaderTransitive]->(t)\",\n" +
+                           "            {batchSize:10000, parallel:false}\n" +
+                           "        )\n" +
+                           "        YIELD batches, total;\n");
+                tx.execute("        CALL apoc.periodic.iterate(\n" +
+                           "            \"CALL apoc.load.csv('FILE:///" + pathToDataset + dataset + "_other.csv') YIELD map AS row RETURN row\",\n" +
+                           "            \"MATCH (f:Node {name: row.from}), (t:Node {name: row.to})\n" +
+                           "            CREATE (f)-[:other]->(t)\",\n" +
+                           "            {batchSize:100000, parallel:false}\n" +
+                           "        )\n" +
+                           "        YIELD batches, total;\n");
+                tx.commit();
+            }
+        } else if ("st".equals(typeOfRelationships)){
+            try (Transaction tx = graphDb.beginTx()) {
+                tx.execute("        CALL apoc.periodic.iterate(\n" +
+                           "            \"CALL apoc.load.csv('FILE:///" + pathToDataset + dataset + "_subClassOf.csv') YIELD map AS row RETURN row\",\n" +
+                           "            \"MATCH (f:Node {name: row.from}), (t:Node {name: row.to})\n" +
+                           "            CREATE (f)-[:subClassOf]->(t)\",\n" +
+                           "            {batchSize:10000, parallel:false}\n" +
+                           "        )\n" +
+                           "        YIELD batches, total;\n");
+                tx.execute("        CALL apoc.periodic.iterate(\n" +
+                           "            \"CALL apoc.load.csv('FILE:///" + pathToDataset + dataset + "_type.csv') YIELD map AS row RETURN row\",\n" +
+                           "            \"MATCH (f:Node {name: row.from}), (t:Node {name: row.to})\n" +
+                           "            CREATE (f)-[:type]->(t)\",\n" +
+                           "            {batchSize:10000, parallel:false}\n" +
+                           "        )\n" +
+                           "        YIELD batches, total;\n");
+                tx.execute("        CALL apoc.periodic.iterate(\n" +
+                           "            \"CALL apoc.load.csv('FILE:///" + pathToDataset + dataset + "_other.csv') YIELD map AS row RETURN row\",\n" +
+                           "            \"MATCH (f:Node {name: row.from}), (t:Node {name: row.to})\n" +
+                           "            CREATE (f)-[:other]->(t)\",\n" +
+                           "            {batchSize:100000, parallel:false}\n" +
+                           "        )\n" +
+                           "        YIELD batches, total;\n");
+                tx.commit();
+            }
         }
     }
 
-    public static void benchmarkReachabilities(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
+    public static void benchmarkReachabilities(String relType, int nodeNumber, int warmUp, int maxIter, String pathToGrammar, String dataset, String grammarName) throws FileNotFoundException {
         BiFunction<Relationship, Direction, String> f = getFunction(relType);
 
         Map<String, List<Integer>> vertexToTime = new HashMap<>();
@@ -207,104 +224,41 @@ public class Neo4jBenchmark {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No grammar.json file is present");
         }
-        class HandleGraphPart implements Runnable {
-            private final List<Integer> vertices;
-            private final List<Integer> chunkSizes;
-            private Integer myId;
-            private long[] curT = {0};
+        PrintWriter resultime = new PrintWriter("results/" + dataset + "_" + grammarName + "_reachabilities.txt");
 
-            HandleGraphPart(Integer id, List<Integer> vertices, List<Integer> chunkSizes) {
-                this.vertices = vertices;
-                this.chunkSizes = chunkSizes;
-                this.myId = id;
+        List<Integer> vertices = Interval.zeroTo(nodeNumber - 1);
+        List<java.lang.Long> resTime = new ArrayList<>(maxIter - warmUp);
+        //List<List<Integer>> verticesPartitioned = Lists.partition(vertices, nodeNumber);
+        for (int iter = 0; iter < maxIter; ++iter) {
+            IguanaParser parser = new IguanaParser(grammar);
+            GraphInput input = new Neo4jBenchmarkInput(graphDb, f, vertices.stream(), nodeNumber);
+            long resAns = 0;
+            long t1 = System.nanoTime();
+            //long t1_local = System.nanoTime();
+            Stream<Pair> parseResults = parser.getReachabilities(input,
+                    new ParseOptions.Builder().setAmbiguous(false).build());
+            //long t2_local = System.nanoTime();
+           // long stepTime = t2_local - t1_local;
 
+            if (parseResults != null) {
+                resAns = parseResults.count();
             }
+            long t2 = System.nanoTime();
 
-            @Override
-            public void run() {
-                for (Integer sz : chunkSizes) {
-                    List<List<Integer>> chunks = Lists.partition(vertices, sz);
-                    IguanaParser parser = new IguanaParser(grammar);
-                    //chunks.parallelStream().forEach(chunk -> {
-                    for(List<Integer> chunk : chunks) {
-                        System.out.println("iter 0" + " chunkSize " + sz);
-                        GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
-                        long t1 = System.currentTimeMillis();
-                        Tuple<Stream<Pair>, Integer> parseResults = parser.getReachabilities(input,
-                                new ParseOptions.Builder().setAmbiguous(false).build());
-                        System.out.println("Result size: " + (parseResults.getSecond()));
-                        long t2 = System.currentTimeMillis();
-                        long stepTime = t2 - t1;
-                        curT[0] += stepTime;
-                        System.out.println("My id " + myId + "; full time is " + curT[0] + "; step time is " + stepTime);
-                        ((Neo4jBenchmarkInput) input).close();
-                        if (parseResults != null) {
-                            vertexToTime.putIfAbsent(sz.toString(), new ArrayList<>());
-                            vertexToTime.get(sz.toString()).add((int) curT[0]);
-                        }
-                    }
-                    /*if (!vertexToTime.isEmpty()) {
-                        outStatsTime.print(sz);
-                        vertexToTime.get(sz.toString()).forEach(x -> outStatsTime.print("," + x));
-                        outStatsTime.println();
-                    }*/
-                }
+            //System.out.println("Step time is " + stepTime);
+            ((Neo4jBenchmarkInput) input).close();
+
+            if (iter >= warmUp) {
+                resTime.add(t2 - t1);
             }
+            System.out.println("Total answer: " + resAns);
+            System.out.println("Total time: " + (t2 - t1));
         }
-        PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_" + relType + "_time_reachabilities.csv");
-        outStatsTime.append("chunk_size, time");
-        outStatsTime.append("\n");
-
-        //List<Integer> chunkSize = Arrays.asList(10000);
-        Integer chunkSize = 10000;
-        int numOfThreads = 2;
-        List<Integer> vertices = Interval.zeroTo(rightNode - 1);
-        List<List<Integer>> verticesPartitioned = Lists.partition(vertices, chunkSize);
-        long t1 = System.currentTimeMillis();
-        List<Integer> sumResult = new ArrayList<>();
-        Integer finalResultCount =
-                verticesPartitioned.parallelStream().map(chunk -> {
-                IguanaParser parser = new IguanaParser(grammar);
-                //System.out.println("iter 0" + " chunkSize " + sz);
-                GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
-                long t1_local = System.currentTimeMillis();
-                Tuple<Stream<Pair>, Integer>  parseResults = parser.getReachabilities(input,
-                        new ParseOptions.Builder().setAmbiguous(false).build());
-                if (parseResults != null) {
-                    System.out.println("Result size: " + (parseResults.getSecond()));
-                }
-                //sumResult.add(parseResults.getSecond());
-                long t2_local = System.currentTimeMillis();
-                long stepTime = t2_local - t1_local;
-                //curT[0] += stepTime;
-                //System.out.println("My id " + myId + "; full time is " + curT[0] + "; step time is " + stepTime);
-                System.out.println("Step time is " + stepTime);
-                ((Neo4jBenchmarkInput) input).close();
-                /*if (parseResults != null) {
-                    vertexToTime.putIfAbsent(sz.toString(), new ArrayList<>());
-                    vertexToTime.get(sz.toString()).add((int) curT[0]);
-
-                    }*/
-                    if (parseResults != null) {
-                        return parseResults.getSecond();
-                    } else {
-                        return  0;
-                    }
-       }).reduce(0, Integer::sum);
-
-        final long[] curT = {0};
-
-        Integer i = 0;
-
-
-        long t2 = System.currentTimeMillis();
-        System.out.println("Total answer: " + finalResultCount);
-        System.out.println("Total time: " + (t2 - t1));
-
-        outStatsTime.close();
+        resTime.forEach(resultime::println);
+        resultime.close();
     }
 
-    public static void benchmark(String relType, int rightNode, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
+    public static void benchmark(String relType, int nodeNumber, int warmUp, int maxIter, String pathToGrammar, String dataset) throws FileNotFoundException {
         BiFunction<Relationship, Direction, String> f = getFunction(relType);
         Map<String, List<Integer>> vertexToTime = new HashMap<>();
 
@@ -317,15 +271,15 @@ public class Neo4jBenchmark {
         PrintWriter outStatsTime = new PrintWriter("results/" + dataset + "_time_" + relType + ".csv");
         outStatsTime.append("chunk_size, time");
         outStatsTime.append("\n");
-        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, rightNode);
-        List<Integer> vertices = Interval.zeroTo(rightNode - 1);
+        List<Integer> chunkSize = Arrays.asList(1, 2, 4, 8, 16, 32, 50, 100, 500, 1000, 5000, 10000, nodeNumber);
+        List<Integer> vertices = Interval.zeroTo(nodeNumber - 1);
         for (Integer sz : chunkSize) {
             List<List<Integer>> chunks = Lists.partition(vertices, sz);
-            for (Integer iter = 0; iter < maxIter; iter++) {
+            for (int iter = 0; iter < maxIter; iter++) {
                 for (List<Integer> chunk : chunks) {
                     System.out.println("iter " + iter + " chunkSize " + sz);
 
-                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), rightNode);
+                    GraphInput input = new Neo4jBenchmarkInput(graphDb, f, chunk.stream(), nodeNumber);
                     IguanaParser parser = new IguanaParser(grammar);
                     long t1 = System.currentTimeMillis();
                     Map<Pair, ParseTreeNode> parseTreeNodes = parser.getParserTree(input,

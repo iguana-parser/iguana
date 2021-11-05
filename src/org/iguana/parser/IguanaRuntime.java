@@ -62,7 +62,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     // SPPF found in `T result = startGSSNode.getResult(v);`
-    public Tuple<Stream<Pair>, Integer>  no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+    public Stream<Pair> no_sppf_run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -104,13 +104,13 @@ public class IguanaRuntime<T extends Result> {
                 results.add(new Pair(startGSSNode.getInputIndex(), v.getIndex()));
                 empty[0] = false;
             });
-        //startGSSNodes.forEach(startGSSNode -> {
-          //  input.getFinalVertices().forEach(v -> {
-            //    if (startGSSNode.hasResult(v)) {
-              //      results.add(new Pair(startGSSNode.getInputIndex(), v));
-              //      empty[0] = false;
-               // }
-            //});
+//        startGSSNodes.forEach(startGSSNode -> {
+//            input.getFinalVertices().forEach(v -> {
+//                if (startGSSNode.hasResult(v)) {
+//                    results.add(new Pair(startGSSNode.getInputIndex(), v));
+//                    empty[0] = false;
+//                }
+//            });
 //                    for (Integer v: input.getFinalVertices()) {
 //                T result = startGSSNode.getResult(v);
 //                if (result != null) {
@@ -122,8 +122,8 @@ public class IguanaRuntime<T extends Result> {
         if (empty[0]) {
             return null;
         }
-        List<Pair> res = results.build().collect(Collectors.toList());
-        return new Tuple<> (res.stream(), res.size());
+        //List<Pair> res = results.build().distinct().collect(Collectors.toList());
+        return results.build();
     }
 
     public Map<Pair, Result> run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
@@ -138,9 +138,10 @@ public class IguanaRuntime<T extends Result> {
 
         Environment env = ctx.getEmptyEnvironment();
 
-
-        Stream<DefaultGSSNode<T>> startGSSNodes = input.getStartVertices()
-                .map(v -> new DefaultGSSNode<T>(startSymbol, v));
+        List<DefaultGSSNode<T>> startGSSNodes = new ArrayList<>();
+        for (Integer node : input.getStartVertices().collect(Collectors.toList())) {
+            startGSSNodes.add(new DefaultGSSNode<T>(startSymbol, node));
+        }
 
         startGSSNodes.forEach(node -> startSymbol.addStartGSSNode(node, node.getInputIndex()));
 
@@ -149,10 +150,9 @@ public class IguanaRuntime<T extends Result> {
 
         List<BodyGrammarSlot> t = startSymbol.getFirstSlots();
         for (BodyGrammarSlot slot : t) {
-            startGSSNodes.forEach(startGSSNode -> scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env));
-//            for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
-//                scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
-//            }
+            for (DefaultGSSNode<T> startGSSNode: startGSSNodes) {
+                scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
+            }
         }
 
         while (hasDescriptor()) {
