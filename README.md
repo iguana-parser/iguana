@@ -30,3 +30,9 @@ arg5 | Path to dataset
 arg6 | Path to grammar
 arg7 | The name of a file with result
 arg8 | Grammar name (g1/g2/geo/anderson)
+
+### License
+---
+
+This project is licensed under OpenBSD License. License text can be found in the 
+[license file](https://github.com/YaccConstructor/iguana/blob/GLL-for-graph/LICENSE.md).
