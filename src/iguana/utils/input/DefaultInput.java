@@ -36,8 +36,8 @@ public class DefaultInput extends AbstractInput {
     }
 
     @Override
-    public Stream<Integer> getFinalVertices() {
-        return Collections.singletonList(length() - 1).stream();
+    public List<Integer> getFinalVertices() {
+        return Collections.singletonList(length() - 1);
     }
 
     @Override

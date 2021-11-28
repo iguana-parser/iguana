@@ -141,7 +141,7 @@ public interface Input {
 
     Stream<Integer> getStartVertices();
 
-    Stream<Integer> getFinalVertices();
+    List<Integer> getFinalVertices();
 
     boolean isFinal(int index);
 }

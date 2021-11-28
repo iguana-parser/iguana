@@ -15,7 +15,7 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
     private final GraphDatabaseService graphDb;
     private final BiFunction<Relationship, Direction, String> toLabel;
     private final Stream<Integer> startVertices;
-    private final Stream<Integer> finalVertices;
+    private final List<Integer> finalVertices;
     Transaction tx;
 
     public Neo4jBenchmarkInput(GraphDatabaseService graphDb, BiFunction<Relationship, Direction, String> toLabel, Stream<Integer> startVertices, Integer verticesNumber) {
@@ -24,7 +24,7 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
         this.toLabel = toLabel;
         this.startVertices = startVertices;
         this.tx = graphDb.beginTx();
-        this.finalVertices = IntStream.range(0, verticesNumber).boxed();
+        this.finalVertices = IntStream.range(0, verticesNumber).boxed().collect(Collectors.toList());
     }
 
     public long nVertices() {
@@ -65,7 +65,7 @@ public class Neo4jBenchmarkInput extends Neo4jGraphInput implements Closeable {
     }
 
     @Override
-    public Stream<Integer> getFinalVertices() {
+    public List<Integer> getFinalVertices() {
         return this.finalVertices;
     }
 

@@ -1,0 +1,154 @@
+{
+  "kind" : "Grammar",
+  "rules" : [
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind": "Terminal",
+          "name": "b",
+          "regex": {
+            "kind": "Char",
+            "val": 98
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "V"
+        },
+        {
+          "kind": "Terminal",
+          "name": "a",
+          "regex": {
+            "kind": "Char",
+            "val": 97
+          }
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "V1"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "V2"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "V3"
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V1"
+      },
+      "body" : [
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V1"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "V2"
+        },
+        {
+          "kind": "Terminal",
+          "name": "d",
+          "regex": {
+            "kind": "Char",
+            "val": 100
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "V1"
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V2"
+      },
+      "body" : [
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V2"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V3"
+      },
+      "body" : [
+      ]
+    },
+    {
+      "kind" : "Rule",
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "V3"
+      },
+      "body" : [
+        {
+          "kind": "Terminal",
+          "name": "c",
+          "regex": {
+            "kind": "Char",
+            "val": 99
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "V2"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "V3"
+        }
+      ]
+    }
+
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "S",
+    "nonterminal" : {
+      "kind" : "Nonterminal",
+      "name" : "S"
+    }
+  }
+}

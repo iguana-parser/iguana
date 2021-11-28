@@ -39,7 +39,7 @@
       "body" : [
         {
           "kind": "Terminal",
-          "name": "b",
+          "name": "a",
           "regex": {
             "kind": "Char",
             "val": 97

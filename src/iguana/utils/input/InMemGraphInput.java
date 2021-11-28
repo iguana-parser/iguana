@@ -23,8 +23,8 @@ public class InMemGraphInput extends GraphInput {
     }
 
     @Override
-    public Stream<Integer> getFinalVertices() {
-        return finalVertices.stream();
+    public List<Integer> getFinalVertices() {
+        return finalVertices;
     }
 
     @Override
