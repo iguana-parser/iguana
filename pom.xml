@@ -132,6 +132,16 @@
 
     <repositories>
         <repository>
+            <id>usethesource</id>
+            <url>https://nexus.usethesource.io/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
             <id>iguana-releases</id>
             <url>https://s3.amazonaws.com/iguana-releases/</url>
             <snapshots>
@@ -149,16 +159,6 @@
             </snapshots>
             <releases>
                 <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>usethesource</id>
-            <url>http://nexus.usethesource.io/content/repositories/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
             </releases>
         </repository>
     </repositories>
