@@ -251,7 +251,7 @@ public class Neo4jBenchmark {
                            "        YIELD batches, total;\n");
                 tx.commit();
             }
-        } else if ("da".equals(typeOfRelationships)){
+        } else if ("ad".equals(typeOfRelationships)){
             try (Transaction tx = graphDb.beginTx()) {
                 tx.execute("        CALL apoc.periodic.iterate(\n" +
                         "            \"CALL apoc.load.csv('FILE:///" + pathToDataset + dataset + "_D.csv') YIELD map AS row RETURN row\",\n" +
