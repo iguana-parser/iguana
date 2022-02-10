@@ -443,7 +443,7 @@ public class GrammarGraphBuilder implements Serializable {
 
     static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
         List<String> parameters = nonterminal.getParameters();
-        if ((parameters == null && arguments == null) || (Objects.requireNonNull(parameters).size() == arguments.length)) return;
+        if ((parameters == null && arguments == null) || (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length)) return;
 
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
     }

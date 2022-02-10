@@ -28,7 +28,6 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.ArrayList;
 import java.util.Arrays;

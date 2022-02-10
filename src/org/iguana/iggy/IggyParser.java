@@ -83,12 +83,12 @@ public class IggyParser {
     public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
         RuntimeGrammar grammar = new EBNFToBNF().transform(runtimeGrammar);
 
+        grammar = new DesugarStartSymbol().transform(grammar);
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
         grammar = precedenceAndAssociativity.transform(grammar);
 
         grammar = new LayoutWeaver().transform(grammar);
-        grammar = new DesugarStartSymbol().transform(grammar);
         return grammar;
     }
 

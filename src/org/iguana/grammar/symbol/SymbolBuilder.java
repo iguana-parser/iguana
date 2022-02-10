@@ -28,7 +28,6 @@
 package org.iguana.grammar.symbol;
 
 import org.iguana.grammar.condition.Condition;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.Collection;
 import java.util.HashSet;
