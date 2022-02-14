@@ -147,13 +147,13 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 		
 		Collections.sort(ranges);
 		
-		if(ranges.get(i).getStart() >= 1) {
+		if (ranges.get(i).getStart() >= 1) {
 			newRanges.add(CharRange.in(1, ranges.get(i).getStart() - 1));
 		}
 		
 		for (; i < ranges.size() - 1; i++) {
 			CharRange r1 = ranges.get(i);
-			CharRange r2 = ranges.get(i + i);
+			CharRange r2 = ranges.get(i + 1);
 			
 			if(r2.getStart() > r1.getEnd() + 1) {
 				newRanges.add(CharRange.in(r1.getEnd() + 1, r2.getStart() - 1));
@@ -185,7 +185,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 
 		private final List<T> symbols = new ArrayList<>();
 
-		private Builder() {}
+		public Builder() {}
 		
 		public Builder(List<T> symbols) {
 			this.addAll(symbols);

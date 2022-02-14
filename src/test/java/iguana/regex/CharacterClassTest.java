@@ -89,14 +89,14 @@ public class CharacterClassTest {
 		assertFalse(matcher.match(Input.fromString("0")));
 		assertFalse(matcher.match(Input.fromString("9")));
 	}
-	
+
+	@Test
 	public void notTest() {
-		Alt<CharRange> c = Alt.from(CharRange.in('0', '9'), CharRange.in('a', 'z'));
 		Alt<CharRange> expected = Alt.from(CharRange.in(1, '0' - 1),
 													  CharRange.in('9' + 1, 'a' - 1),
 													  CharRange.in('z' + 1, CharacterRanges.MAX_UTF32_VAL));
 		
-		assertEquals(expected, Alt.not(c));
+		assertEquals(expected, Alt.not(CharRange.in('0', '9'), CharRange.in('a', 'z')));
 	}
 	
 }

@@ -120,10 +120,10 @@ public class ExamplesTest {
 	public void testStringPart() {
 		RegularExpression regex = RegularExpressionExamples.getStringPart();
 		Automaton automaton = regex.getAutomaton();
-		assertEquals(15, automaton.getCountStates());
+		assertEquals(19, automaton.getCountStates());
 
 		automaton = AutomatonOperations.makeDeterministic(automaton);
-		assertEquals(7, automaton.getCountStates());
+		assertEquals(9, automaton.getCountStates());
 		
 		Matcher matcher = new DFAMatcher(automaton);
 		
