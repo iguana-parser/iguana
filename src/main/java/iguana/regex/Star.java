@@ -115,9 +115,9 @@ public class Star extends AbstractRegularExpression {
 
     public static class Builder extends RegexBuilder<Star> {
 
-        private final RegularExpression regex;
+        private RegularExpression regex;
 
-        private final List<RegularExpression> separators = new ArrayList<>();
+        private List<RegularExpression> separators = new ArrayList<>();
 
         private Builder() {
             regex = null;
@@ -130,21 +130,16 @@ public class Star extends AbstractRegularExpression {
         public Builder(Star star) {
             super(star);
             this.regex = star.regex;
-            this.addSeparators(star.getSeparators());
+            this.setSeparators(star.getSeparators());
         }
 
-        public Builder addSeparator(RegularExpression symbol) {
-            separators.add(symbol);
+        public Builder setSymbol(RegularExpression regex) {
+            this.regex = regex;
             return this;
         }
 
-        public Builder addSeparators(List<RegularExpression> symbols) {
-            separators.addAll(symbols);
-            return this;
-        }
-
-        public Builder addSeparators(RegularExpression...symbols) {
-            separators.addAll(Arrays.asList(symbols));
+        public Builder setSeparators(List<RegularExpression> separators) {
+            this.separators = separators;
             return this;
         }
 

@@ -72,7 +72,7 @@ public class Opt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public RegexBuilder<Opt> copyBuilder() {
+	public Builder copyBuilder() {
 		return new Builder(regex);
 	}
 	
@@ -116,7 +116,12 @@ public class Opt extends AbstractRegularExpression {
 			super(opt);
 			this.regex = opt.regex;
 		}
-		
+
+		public Builder setSymbol(RegularExpression regex) {
+			this.regex = regex;
+			return this;
+		}
+
 		@Override
 		public Opt build() {
 			return new Opt(this);

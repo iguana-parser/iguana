@@ -185,7 +185,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	
 	public static class Builder<T extends RegularExpression> extends RegexBuilder<Alt<T>> {
 
-		private final List<T> symbols = new ArrayList<>();
+		private List<T> symbols = new ArrayList<>();
 
 		public Builder() {}
 		
@@ -205,6 +205,11 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 
 		public Builder<T> addAll(List<T> symbols) {
 			this.symbols.addAll(symbols);
+			return this;
+		}
+
+		public Builder<T> setSymbols(List<T> symbols) {
+			this.symbols = symbols;
 			return this;
 		}
 

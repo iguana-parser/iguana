@@ -74,7 +74,7 @@ public class Plus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public RegexBuilder<Plus> copyBuilder() {
+	public Builder copyBuilder() {
 		return new Builder(this);
 	}
 
@@ -112,7 +112,7 @@ public class Plus extends AbstractRegularExpression {
 
 		private RegularExpression regex;
 
-		private final List<RegularExpression> separators = new ArrayList<>();
+		private List<RegularExpression> separators = new ArrayList<>();
 
 		private Builder() {}
 
@@ -123,27 +123,22 @@ public class Plus extends AbstractRegularExpression {
 		public Builder(Plus plus) {
 			super(plus);
 			this.regex = plus.regex;
-            this.addSeparators(plus.getSeparators());
-		}
-
-        public Builder addSeparator(RegularExpression symbol) {
-			separators.add(symbol);
-			return this;
-		}
-		
-		public Builder addSeparators(List<RegularExpression> symbols) {
-			separators.addAll(symbols);
-			return this;
-		}
-		
-		public Builder addSeparators(RegularExpression...symbols) {
-			separators.addAll(Arrays.asList(symbols));
-			return this;
+            this.separators = new ArrayList<>(plus.getSeparators());
 		}
 		
 		@Override
 		public Plus build() {
 			return new Plus(this);
+		}
+
+		public Builder setSymbol(RegularExpression regex) {
+			this.regex = regex;
+			return this;
+		}
+
+		public Builder setSeparators(List<RegularExpression> separators) {
+			this.separators = separators;
+			return this;
 		}
 	}
 

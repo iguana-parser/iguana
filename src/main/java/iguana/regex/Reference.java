@@ -53,6 +53,11 @@ public class Reference extends AbstractRegularExpression {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public static class Builder extends RegexBuilder<Reference> {
 
         private String name;
