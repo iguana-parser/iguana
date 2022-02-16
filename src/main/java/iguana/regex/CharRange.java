@@ -27,6 +27,7 @@
 
 package iguana.regex;
 
+import iguana.regex.visitor.RegularExpressionVisitor;
 import iguana.utils.collections.hash.MurmurHash3;
 import iguana.utils.collections.rangemap.Range;
 

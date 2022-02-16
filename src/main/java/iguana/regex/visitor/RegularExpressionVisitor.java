@@ -1,4 +1,6 @@
-package iguana.regex;
+package iguana.regex.visitor;
+
+import iguana.regex.*;
 
 public interface RegularExpressionVisitor<T> {
 	

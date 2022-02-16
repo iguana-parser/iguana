@@ -27,6 +27,8 @@
 
 package iguana.regex;
 
+import iguana.regex.visitor.RegularExpressionVisitor;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -27,6 +27,8 @@
 
 package iguana.regex;
 
+import iguana.regex.visitor.RegularExpressionVisitor;
+
 import java.util.*;
 
 public class Star extends AbstractRegularExpression {

@@ -28,6 +28,8 @@
 package iguana.regex;
 
 import iguana.regex.automaton.Automaton;
+import iguana.regex.visitor.RegularExpressionVisitor;
+import iguana.regex.visitor.ToAutomatonRegexVisitor;
 
 import java.io.Serializable;
 import java.util.Comparator;

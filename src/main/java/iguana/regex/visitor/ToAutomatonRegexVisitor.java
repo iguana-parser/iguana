@@ -1,5 +1,6 @@
-package iguana.regex;
+package iguana.regex.visitor;
 
+import iguana.regex.*;
 import iguana.regex.automaton.*;
 
 import java.util.*;

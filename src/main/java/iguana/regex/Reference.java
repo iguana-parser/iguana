@@ -1,5 +1,7 @@
 package iguana.regex;
 
+import iguana.regex.visitor.RegularExpressionVisitor;
+
 import java.util.Set;
 
 public class Reference extends AbstractRegularExpression {
@@ -55,7 +57,13 @@ public class Reference extends AbstractRegularExpression {
 
         private String name;
 
+        public Builder() { }
+
         Builder(String name) {
+            this.name = name;
+        }
+
+        public void setName(String name) {
             this.name = name;
         }
 
