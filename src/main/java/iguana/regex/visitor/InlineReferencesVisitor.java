@@ -2,20 +2,16 @@ package iguana.regex.visitor;
 
 import iguana.regex.*;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class InlineReferencesVisitor implements RegularExpressionVisitor<RegularExpression> {
 
     private final Map<String, RegularExpression> definitions;
-    private final Set<String> visited;
 
-    public InlineReferencesVisitor(Map<String, RegularExpression> definitions, LinkedHashSet<String> visited) {
+    public InlineReferencesVisitor(Map<String, RegularExpression> definitions) {
         this.definitions = definitions;
-        this.visited = visited;
     }
 
     @Override
@@ -70,10 +66,6 @@ public class InlineReferencesVisitor implements RegularExpressionVisitor<Regular
 
     @Override
     public RegularExpression visit(Reference ref) {
-        if (visited.contains(ref.getName())) {
-            throw new RuntimeException("Regular expression references cannot be cyclic: " +
-                String.join("->", visited) + "->" + ref.getName());
-        }
         RegularExpression regularExpression = definitions.get(ref.getName());
         if (regularExpression != null) {
             return regularExpression;
