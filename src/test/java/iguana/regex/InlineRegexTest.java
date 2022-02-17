@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class InlineRegexTest {
 
     @Test
-    public void test1() {
+    public void testInline() {
         // A : a B* c
         // B : c C
         // C : c
@@ -33,5 +33,27 @@ public class InlineRegexTest {
 
         // A : a (cc)* c
         assertEquals(InlineReferences.inline(definitions), newDefinitions);
+    }
+
+    @Test
+    public void testDetectCycles() {
+        // A : a B* c
+        // B : c C
+        // C : A
+
+        RegularExpression A = Seq.from(Char.from('a'), Star.from(Reference.from("B")), Char.from('c'));
+        RegularExpression B = Seq.from(Char.from('c'), Reference.from("C"));
+        RegularExpression C = Reference.from("A");
+
+        Map<String, RegularExpression> definitions = new HashMap<>();
+        definitions.put("A", A);
+        definitions.put("B", B);
+        definitions.put("C", C);
+
+        try {
+            InlineReferences.inline(definitions);
+        } catch (RuntimeException e) {
+            assertEquals(e.getMessage(), "Regular expression references cannot be cyclic: A->B->C->A");
+        }
     }
 }
