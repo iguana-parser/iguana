@@ -29,6 +29,7 @@ package org.iguana.traversal.idea;
 
 import iguana.regex.Char;
 import iguana.regex.*;
+import iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 

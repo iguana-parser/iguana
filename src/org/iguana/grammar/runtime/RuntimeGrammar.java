@@ -61,6 +61,8 @@ public class RuntimeGrammar {
 	private final Symbol layout;
 	
 	private final List<RuntimeRule> rules;
+
+	private final Map<String, RegularExpression> terminals;
 	
 	private final Map<String, Set<String>> ebnfLefts;
 	private final Map<String, Set<String>> ebnfRights;
@@ -76,6 +78,7 @@ public class RuntimeGrammar {
 		this.rules = builder.rules;
 		this.ebnfLefts = builder.ebnfLefts;
 		this.ebnfRights = builder.ebnfRights;
+		this.terminals = builder.terminals;
 	}
 	
 	public Map<Nonterminal, List<RuntimeRule>> getDefinitions() {
@@ -125,7 +128,11 @@ public class RuntimeGrammar {
 	public Set<RegularExpression> getPredictionSet(RuntimeRule rule, int index) {
 		return null;
 	}
-	
+
+	public Map<String, RegularExpression> getTerminals() {
+		return terminals;
+	}
+
 	private static Set<RuntimeException> validate(List<RuntimeRule> rules, Map<Nonterminal, List<RuntimeRule>> definitions) {
 	    Set<RuntimeException> exceptions = new HashSet<>();
         for (RuntimeRule rule : rules) {
@@ -201,6 +208,7 @@ public class RuntimeGrammar {
 		private List<RuntimeRule> rules = new ArrayList<>();
 		private Symbol layout;
 		private Start startSymbol;
+		private Map<String, RegularExpression> terminals;
 		
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
@@ -216,6 +224,7 @@ public class RuntimeGrammar {
             ebnfLefts.putAll(grammar.ebnfLefts);
             ebnfRights.putAll(grammar.ebnfRights);
             startSymbol = grammar.startSymbol;
+			terminals = grammar.getTerminals();
         }
 		
 		public RuntimeGrammar build() {
@@ -296,6 +305,11 @@ public class RuntimeGrammar {
 		
 		public Builder addEBNFr(String ebnf, Set<String> rights) {
 			this.ebnfRights.put(ebnf, rights);
+			return this;
+		}
+
+		public Builder setTerminals(Map<String, RegularExpression> terminals) {
+			this.terminals = terminals;
 			return this;
 		}
 	}

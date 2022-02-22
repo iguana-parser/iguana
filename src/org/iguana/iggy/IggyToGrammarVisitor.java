@@ -1,15 +1,16 @@
 package org.iguana.iggy;
 
-import iguana.regex.Char;
-import iguana.regex.CharRange;
-import iguana.regex.RegularExpression;
-import iguana.regex.Seq;
+import iguana.regex.*;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.ParseTreeVisitor;
@@ -19,8 +20,9 @@ import java.util.stream.Collectors;
 
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
-    private Map<String, RegularExpression> terminalsMap = new HashMap<>();
+    private final Map<String, RegularExpression> terminalsMap = new HashMap<>();
     private String start;
+    private org.iguana.grammar.symbol.Identifier layout;
 
     @Override
     public Object visitNonterminalNode(NonterminalNode node) {
@@ -60,6 +62,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Range":
                 return visitRange(node);
+
+            case "Expression":
+                return visitExpression(node);
         }
 
         return visitChildren(node);
@@ -77,6 +82,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             builder.addTerminal(entry.getKey(), entry.getValue());
         }
         builder.setStartSymbol(Start.from(start));
+        builder.setLayout(layout);
         return builder.build();
     }
 
@@ -105,8 +111,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             // RegexSequence : Regex+;
             case "Lexical":
                 List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
-                Identifier name = getIdentifier(node.getChildWithName("Identifier"));
-                terminalsMap.put(name.id, getRegex(alts));
+                Identifier identifier = getIdentifier(node.getChildWithName("Identifier"));
+                terminalsMap.put(identifier.id, getRegex(alts));
+
+                if (!node.childAt(0).children().isEmpty()) {
+                    layout = org.iguana.grammar.symbol.Identifier.fromName(identifier.id);
+                }
+
                 return null;
 
             default:
@@ -152,7 +163,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * Alternative
      *   : Sequence                                             %Sequence
      *   | Associativity "(" Sequence ("|" Sequence)+ ")"       %Assoc
-     *   |                                                      %Empty
+     *   | Label?                                               %Empty
      *   ;
      */
     private Alternative visitAlternative(NonterminalNode node) {
@@ -164,7 +175,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Assoc": {
-                Associativity associativity = getAssociativity(node.childAt(0).childAt(0));
+                Associativity associativity = getAssociativity(node.childAt(0));
                 List<Sequence> seqs = new ArrayList<>();
                 seqs.add((Sequence) node.childAt(2).accept(this));
                 seqs.addAll((List<Sequence>) node.childAt(3).accept(this));
@@ -172,7 +183,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Empty":
-                return new Alternative.Builder().build();
+                String label = (String) node.childAt(0).accept(this);
+                if (label != null) {
+                    Sequence sequence = new Sequence.Builder().setLabel(label).build();
+                    return new Alternative.Builder().addSequence(sequence).build();
+                } else {
+                    return new Alternative.Builder().build();
+                }
 
             default:
                 throw new RuntimeException("Unexpected label");
@@ -217,7 +234,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             default:
-                throw new RuntimeException("Unexpected label");
+                throw new RuntimeException("Unexpected label: " + node.getGrammarDefinition().getLabel());
         }
     }
 
@@ -262,7 +279,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
         switch (label) {
             case "Call": {
-                Expression[] expressions = ((List<Expression>) node.childAt(0).accept(this)).toArray(new Expression[]{});
+                Expression[] expressions = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
                 return new Nonterminal.Builder(getIdentifier(node.childAt(0)).id).apply(expressions).build();
             }
 
@@ -318,7 +335,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 );
 
             case "Labeled": {
-                Symbol symbol = (Symbol) node.childAt(1).accept(this);
+                Symbol symbol = (Symbol) node.childAt(2).accept(this);
                 return symbol.copy().setLabel(getIdentifier(node.childAt(0)).id).build();
             }
 
@@ -409,17 +426,20 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *        | "var" Identifier "=" Expression  %Declare
      */
     private Object visitBinding(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
+        String label = node.getGrammarDefinition().getLabel();
+        switch (label) {
             case "Assign":
                 return AST.assign(getIdentifier(node.childAt(0)).id, (Expression) node.childAt(1).accept(this));
 
-            case "Declare": {
+            case "Declare":
                 Expression expression = (Expression) node.childAt(3).accept(this);
                 return AST.varDeclStat(getIdentifier(node.childAt(1)).id, expression);
-            }
+
+            case "Expression":
+                return node.childAt(0).accept(this);
 
             default:
-                throw new RuntimeException("Unexpected label");
+                throw new RuntimeException("Unexpected label: " + label);
         }
     }
 
@@ -437,7 +457,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *  | Char                          %Char
      */
     private RegularExpression visitRegex(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
+        String label = node.getGrammarDefinition().getLabel();
+        switch (label) {
             case "Star":
                 return iguana.regex.Star.from((RegularExpression) node.childAt(0).accept(this));
 
@@ -476,7 +497,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return iguana.regex.Alt.from(list);
             }
 
-            case "Reference":
+            case "Nont":
                 return iguana.regex.Reference.from(getIdentifier(node.childAt(0)).id);
 
             case "CharClass":
@@ -499,14 +520,14 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             default:
-                throw new RuntimeException("Unexpected label");
+                throw new RuntimeException("Unexpected label: " + label);
         }
     }
 
     /*
      * CharClass
      *   : '[' Range* ']'    #Chars
-     *   | '[^' Range* ']'   #NotChars
+     *   | '!' '[' Range* ']'   #NotChars
      *   ;
      */
     private iguana.regex.Alt visitCharClass(NonterminalNode node) {
@@ -515,7 +536,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return iguana.regex.Alt.from((List<RegularExpression>) node.childAt(1).accept(this));
 
             case "NotChars":
-                return iguana.regex.Alt.not((List<RegularExpression>) node.childAt(1).accept(this));
+                return iguana.regex.Alt.not((List<RegularExpression>) node.childAt(2).accept(this));
 
             default:
                 throw new RuntimeException("Unexpected label");
@@ -545,6 +566,37 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
     }
 
+
+    /*
+     * Expression
+     * :           Expression Arguments           %Call
+     * > left      (Expression "*" Expression     %Multiplication
+     * |            Expression "/" Expression     %Division)
+     * > left      (Expression "+" Expression     %Plus
+     * |            Expression "-" Expression     %Minus)
+     * > non-assoc (Expression "\>=" Expression   %GreaterEq
+     * |            Expression "\<=" Expression   %LessEq
+     * |            Expression "\>" Expression    %Greater
+     * |            Expression "\<" Expression    %Less)
+     * > non-assoc (Expression "==" Expression    %Equal
+     * |            Expression "!=" Expression    %NotEqual)
+     * > left      (Expression "&&" Expression    %And
+     * |            Expression "||" Expression    %Or)
+     * |           VarName ".l"                   %LExtent
+     * |           VarName ".r"                   %RExtent
+     * |           VarName ".yield"               %Yield
+     * |           VarName                        %Name
+     * |           Number                         %Number
+     * |           "(" Expression ")"             %Bracket
+     * ;
+     */
+    private Expression visitExpression(NonterminalNode node) {
+        return null;
+//        switch (node.getGrammarDefinition().getLabel()) {
+//            case ""
+//        }
+    }
+
     private Associativity getAssociativity(ParseTreeNode node) {
         if (node == null) return null;
         switch (node.getText()) {
@@ -572,6 +624,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "\\'": return '\'';
             case "\\\"": return '\"';
             case "\\ ": return ' ';
+            case "\\[": return '[';
+            case "\\]": return ']';
+            case "\\-": return '-';
         }
         return s.charAt(0);
     }

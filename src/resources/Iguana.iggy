@@ -1,0 +1,223 @@
+
+start Definition
+  : Rule+
+  ;
+
+Rule
+  : "start"? Identifier Parameters? ":" Body ";"       %Syntax
+  | "layout"? "terminal" Identifier ":" RegexBody ";"  %Lexical
+  ;
+
+RegexRule
+  : NontName ":" RegexBody    %Regex
+  ;
+
+Body
+  : {PriorityLevels ">"}+
+  ;
+
+PriorityLevels
+  : {Alternative "|"}+  %Prec
+  ;
+
+Alternative
+  : Sequence                                         %Sequence
+  | Associativity "(" Sequence ("|" Sequence)+ ")"   %Assoc
+  | Label?                                           %Empty
+  ;
+
+RegexBody
+  : {RegexSequence "|"}*
+  ;
+
+Sequence
+  : Associativity? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOne
+  | Symbol ReturnExpression? Label?                          %Single
+  ;
+
+RegexSequence
+  : Regex+    %Sequence
+  ;
+
+Parameters
+  : "(" {VarName ","}* ")"
+  ;
+
+Symbol
+  : Identifier Arguments             %Call
+  > "offside" Symbol                 %Offside
+  > Symbol "*"                       %Star
+  | Symbol "+"                       %Plus
+  | Symbol "?"                       %Option
+  | "(" Symbol Symbol+ ")"           %Sequence
+  | "(" Symbol+ ("|" Symbol+)+ ")"   %Alternation
+  > "align" Symbol                   %Align
+  | "ignore" Symbol                  %Ignore
+  | Expression "?" Symbol ":" Symbol %IfThenElse
+  > Identifier ":" Symbol            %Labeled
+  | "[[" {Expression ","}+ "]]"      %Constraints
+  | "{{" {Binding ","}+ "}}"         %Bindings
+  | Regex "<<" Symbol                %Precede
+  | Regex "!<<" Symbol               %NotPrecede
+  > Symbol ">>" Regex                %Follow
+  | Symbol "!>>" Regex               %NotFollow
+  | Symbol "\\" Regex                %Exclude
+  | Symbol "!" Identifier            %Except
+  | Identifier                       %Nont
+  | String                           %String
+  | Char                             %Character
+  | CharClass                        %CharClass
+  | "{" Symbol Symbol+ "}" "*"       %StarSep
+  | "{" Symbol Symbol+ "}" "+"       %PlusSep
+  ;
+
+Symbols
+  : Symbol*  %Sequence
+  ;
+
+Arguments
+  : "(" {Expression ","}* ")"
+  ;
+
+Regex
+  : Regex "*"                     %Star
+  | Regex "+"                     %Plus
+  | Regex "?"                     %Option
+  | "(" Regex ")"                 %Bracket
+  | "(" Regex Regex+ ")"          %Sequence
+  | "(" Regexs ("|" Regexs)+ ")"  %Alternation
+  | NontName                      %Nont
+  | CharClass                     %CharClass
+  | String                        %String
+  | Char                          %Character
+  ;
+
+Regexs
+  : Regex+  %Sequence
+  ;
+
+CharClass
+  : "[" Range* "]"      %Chars
+  | "!" "[" Range* "]"  %NotChars
+  ;
+
+Range
+  : RangeChar "-" RangeChar   %Range
+  | RangeChar                 %Character
+  ;
+
+Expression
+  :           Expression Arguments         %Call
+  > left      (Expression "*" Expression   %Multiplication
+  |            Expression "/" Expression   %Division)
+  > left      (Expression "+" Expression   %Plus
+  |            Expression "-" Expression   %Minus)
+  > non-assoc (Expression ">=" Expression  %GreaterEq
+  |            Expression "<=" Expression  %LessEq
+  |            Expression ">" Expression   %Greater
+  |            Expression "<" Expression   %Less)
+  > non-assoc (Expression "==" Expression  %Equal
+  |            Expression "!=" Expression  %NotEqual)
+  > left      (Expression "&&" Expression  %And
+  |            Expression "||" Expression  %Or)
+  |           VarName ".l"                 %LExtent
+  |           VarName ".r"                 %RExtent
+  |           VarName ".yield"             %Yield
+  |           VarName                      %Name
+  |           Number                       %Number
+  |           "(" Expression ")"           %Bracket
+  ;
+
+ReturnExpression
+  : "{" Expression "}"    %ReturnExpression
+  ;
+
+Binding
+  : VarName "=" Expression         %Assign
+  | "var" VarName "=" Expression   %Declare
+  | Expression                     %Expression
+  ;
+
+terminal Keywords
+  : "regex" | "var" | "left" | "right" | "non-assoc" | "align" | "offside" | "ignore"
+  ;
+
+terminal Letter
+  : [A-Za-z$_]
+  ;
+
+terminal LetterOrDigit
+  : [A-Za-z$_0-9]
+  ;
+
+terminal LetterOrDigits
+  : Letter (Letter | LetterOrDigit)*
+  ;
+
+terminal Number
+  : [0]
+  | [1-9][0-9]*
+  ;
+
+terminal Character
+  : "\\" [' " \\ t f r n]
+  | ![' " \\]
+  ;
+
+terminal RangeChar
+  : "\\" [\\ \[ \] \- t f r n \ ]
+  | ![\\ \[ \] \- \ ]
+  ;
+
+terminal Char
+  : "\'" Character* "\'"
+  ;
+
+terminal String
+  : "\"" Character* "\""
+  ;
+
+layout terminal Layout
+  : WhiteSpaceOrComment*
+  ;
+
+terminal WhiteSpaceOrComment
+  : WhiteSpaces
+  | Comment
+  ;
+
+terminal WhiteSpaces
+  : [\ \t \f \r \n]+
+  ;
+
+terminal Comment
+  : "/*" CommentChar* [*]+  "/"
+  | "//" ![\r \n]* [\r\n]
+  ;
+
+terminal CommentChar
+  : [/]
+  | [*]* ![/ *]
+  ;
+
+Identifier
+  : [$A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
+  ;
+
+terminal Associativity
+  : "left"
+  | "right"
+  | "non-assoc"
+  ;
+
+VarName
+  : Identifier
+  ;
+
+Label
+  : "%" Identifier
+  ;
+
+NontName
+  : Identifier
+  ;

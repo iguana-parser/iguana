@@ -77,7 +77,7 @@ public class IguanaParser {
             return (ParseTreeNode) root.accept(visitor).getValues().get(0);
         }
 
-        DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, options.ignoreLayout());
+        DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
         return (ParseTreeNode) converter.convertNonterminalNode(root);
     }
 

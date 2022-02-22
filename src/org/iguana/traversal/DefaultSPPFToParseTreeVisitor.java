@@ -1,14 +1,17 @@
 package org.iguana.traversal;
 
 import iguana.utils.input.Input;
+import iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.ParseTreeBuilder;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.*;
 import org.iguana.traversal.exception.AmbiguityException;
+import org.iguana.util.visualization.SPPFToDot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +32,26 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     private final ParseTreeBuilder<T> parseTreeBuilder;
     private final Input input;
     private final boolean ignoreLayout;
+    private final ParserResultOps resultOps;
 
-    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Input input, boolean ignoreLayout) {
+    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Input input, boolean ignoreLayout, ParserResultOps resultOps) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.input = input;
         this.ignoreLayout = ignoreLayout;
+        this.resultOps = resultOps;
     }
 
     public T convertNonterminalNode(NonterminalNode node) {
         if (node.isAmbiguous()) {
+            List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
+            for (int i = 0; i < packedNodes.size(); i++) {
+                try {
+                    DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
+                    dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             throw new AmbiguityException(node, input);
         }
 

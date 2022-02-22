@@ -28,6 +28,7 @@ package org.iguana.iggy;
 
 import iguana.regex.Char;
 import iguana.regex.*;
+import iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.runtime.RuntimeRule;

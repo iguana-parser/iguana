@@ -70,6 +70,8 @@ public class RuntimeRule {
 
     private final Symbol definition; // Used for converted EBNF nodes
 
+    private final boolean terminalRule;
+
     public RuntimeRule(Builder builder) {
         this.body = builder.body;
         this.head = builder.head;
@@ -82,16 +84,13 @@ public class RuntimeRule {
         this.leftEnds = builder.leftEnds;
         this.rightEnds = builder.rightEnds;
         this.associativity = builder.associativity;
-
         this.associativityGroup = builder.associativityGroup;
         this.precedence = builder.precedence;
         this.precedenceLevel = builder.precedenceLevel;
-
         this.label = builder.label;
-
         this.attributes = builder.attributes;
-
         this.definition = builder.definition;
+        this.terminalRule = builder.terminalRule;
     }
 
     public Nonterminal getHead() {
@@ -322,6 +321,7 @@ public class RuntimeRule {
 
         private Map<String, Object> attributes = new HashMap<>();
         private Symbol definition;
+        public boolean terminalRule;
 
         public Builder(Nonterminal head) {
             this.head = head;
@@ -351,6 +351,7 @@ public class RuntimeRule {
 
             this.attributes = rule.attributes;
             this.definition = rule.definition;
+            this.terminalRule = rule.terminalRule;
         }
 
         public Builder addSymbol(Symbol symbol) {
@@ -458,6 +459,10 @@ public class RuntimeRule {
         public Builder setDefinition(Symbol definition) {
             this.definition = definition;
             return this;
+        }
+
+        public void setTerminalRule(boolean terminalRule) {
+            this.terminalRule = terminalRule;
         }
 
         public RuntimeRule build() {

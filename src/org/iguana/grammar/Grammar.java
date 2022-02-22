@@ -1,5 +1,6 @@
 package org.iguana.grammar;
 
+import iguana.regex.InlineReferences;
 import iguana.regex.RegularExpression;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -57,6 +58,7 @@ public class Grammar implements Serializable {
             }
             grammarBuilder.setStartSymbol(startSymbol);
             grammarBuilder.setLayout(layout);
+            grammarBuilder.setTerminals(InlineReferences.inline(terminals));
             grammar = grammarBuilder.build();
         }
 

@@ -106,6 +106,16 @@ public abstract class SymbolBuilder<T extends Symbol> {
  		return this;
  	}
 
+	public SymbolBuilder<T> setPreConditions(Set<Condition> conditions) {
+		preConditions = conditions;
+		return this;
+	}
+
+	public SymbolBuilder<T> setPostConditions(Set<Condition> conditions) {
+		postConditions = conditions;
+		return this;
+	}
+
 	public SymbolBuilder<T> setChildren(List<Symbol> symbols) {
 		return this;
 	}
