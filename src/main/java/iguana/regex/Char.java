@@ -118,7 +118,7 @@ public class Char extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public RegexBuilder<Char> copyBuilder() {
+	public RegexBuilder<Char> copy() {
 		return new Builder(this);
 	}
 

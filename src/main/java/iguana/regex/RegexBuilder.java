@@ -28,6 +28,7 @@
 package iguana.regex;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class RegexBuilder<T extends RegularExpression> {
@@ -61,7 +62,11 @@ public abstract class RegexBuilder<T extends RegularExpression> {
     public RegexBuilder<T> addLookahead(CharRange range) {
 		lookaheads.add(range);
 		return this;
-	}	
+	}
+
+    public RegexBuilder<T> setChildren(List<RegularExpression> children) {
+        return this;
+    }
 
 	public abstract T build();
 	

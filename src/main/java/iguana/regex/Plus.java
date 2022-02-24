@@ -74,7 +74,7 @@ public class Plus extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 
@@ -140,11 +140,25 @@ public class Plus extends AbstractRegularExpression {
 			this.separators = separators;
 			return this;
 		}
+
+		@Override
+		public RegexBuilder<Plus> setChildren(List<RegularExpression> children) {
+			if (children.size() != 1) {
+				throw new RuntimeException("Children size should be one.");
+			}
+			this.regex = children.get(0);
+			return this;
+		}
 	}
 
 	@Override
 	public <T> T accept(RegularExpressionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-	
+
+	@Override
+	public List<RegularExpression> getChildren() {
+		return Collections.singletonList(regex);
+	}
+
 }

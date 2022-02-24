@@ -19,6 +19,14 @@ public class InlineReferences {
             referencesMap.put(entry.getKey(), gatherReferencesVisitor.getReferences());
         }
 
+        for (List<String> references : referencesMap.values()) {
+            for (String reference : references) {
+                if (!referencesMap.containsKey(reference)) {
+                    throw new RuntimeException(reference + " refers to an name which is not a defined regular expression");
+                }
+            }
+        }
+
         isCyclic(referencesMap);
 
         Map<String, RegularExpression> current = definitions;

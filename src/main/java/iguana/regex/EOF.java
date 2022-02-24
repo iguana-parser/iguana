@@ -103,7 +103,7 @@ public class EOF extends AbstractRegularExpression {
     }
 
     @Override
-    public RegexBuilder<? extends RegularExpression> copyBuilder() {
+    public RegexBuilder<? extends RegularExpression> copy() {
         throw new UnsupportedOperationException();
     }
 

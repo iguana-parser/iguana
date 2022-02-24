@@ -30,6 +30,7 @@ package iguana.regex;
 import iguana.regex.visitor.RegularExpressionVisitor;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class Opt extends AbstractRegularExpression {
@@ -72,7 +73,12 @@ public class Opt extends AbstractRegularExpression {
 	}
 
 	@Override
-	public Builder copyBuilder() {
+	public List<RegularExpression> getChildren() {
+		return Collections.singletonList(regex);
+	}
+
+	@Override
+	public Builder copy() {
 		return new Builder(regex);
 	}
 	
@@ -119,6 +125,15 @@ public class Opt extends AbstractRegularExpression {
 
 		public Builder setSymbol(RegularExpression regex) {
 			this.regex = regex;
+			return this;
+		}
+
+		@Override
+		public RegexBuilder<Opt> setChildren(List<RegularExpression> children) {
+			if (children.size() != 1) {
+				throw new RuntimeException("Children size should be one.");
+			}
+			this.regex = children.get(0);
 			return this;
 		}
 

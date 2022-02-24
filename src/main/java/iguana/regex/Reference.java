@@ -49,7 +49,7 @@ public class Reference extends AbstractRegularExpression {
     }
 
     @Override
-    public RegexBuilder<? extends RegularExpression> copyBuilder() {
+    public RegexBuilder<? extends RegularExpression> copy() {
         return null;
     }
 

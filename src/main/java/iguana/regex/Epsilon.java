@@ -103,7 +103,7 @@ public class Epsilon extends AbstractRegularExpression {
     }
 
     @Override
-	public RegexBuilder<Epsilon> copyBuilder() {
+	public RegexBuilder<Epsilon> copy() {
 		return builder;
 	}
 

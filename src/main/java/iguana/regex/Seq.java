@@ -128,14 +128,19 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 
 	
 	@Override
-	public Builder<T> copyBuilder() {
+	public Builder<T> copy() {
 		return new Builder<T>(this);
 	}
 	
 	public List<T> getSymbols() {
 		return symbols;
 	}
-	
+
+	@Override
+	public List<T> getChildren() {
+		return symbols;
+	}
+
 	public static <T extends RegularExpression> Builder<T> builder(T s) {
 		return builder(Arrays.asList(s));
 	}
@@ -175,7 +180,13 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 			this.symbols = new ArrayList<>(symbols);
 			return this;
 		}
-		
+
+		@Override
+		public RegexBuilder<Seq<T>> setChildren(List<RegularExpression> children) {
+			this.symbols = (List<T>) children;
+			return this;
+		}
+
 		@Override
 		public Seq<T> build() {
 			return new Seq<>(this);

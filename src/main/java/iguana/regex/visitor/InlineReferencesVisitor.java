@@ -37,31 +37,31 @@ public class InlineReferencesVisitor implements RegularExpressionVisitor<Regular
     @Override
     public RegularExpression visit(Star s) {
         RegularExpression newSymbol = s.getSymbol().accept(this);
-        return s.copyBuilder().setSymbol(newSymbol).build();
+        return s.copy().setSymbol(newSymbol).build();
     }
 
     @Override
     public RegularExpression visit(Plus p) {
         RegularExpression newSymbol = p.getSymbol().accept(this);
-        return p.copyBuilder().setSymbol(newSymbol).build();
+        return p.copy().setSymbol(newSymbol).build();
     }
 
     @Override
     public RegularExpression visit(Opt o) {
         RegularExpression newSymbol = o.getSymbol().accept(this);
-        return o.copyBuilder().setSymbol(newSymbol).build();
+        return o.copy().setSymbol(newSymbol).build();
     }
 
     @Override
     public <E extends RegularExpression> RegularExpression visit(Alt<E> alt) {
         List<RegularExpression> newSymbols = alt.getSymbols().stream().map(symbol -> symbol.accept(this)).collect(Collectors.toList());
-        return alt.copyBuilder().setSymbols((List<E>) newSymbols).build();
+        return alt.copy().setSymbols((List<E>) newSymbols).build();
     }
 
     @Override
     public <E extends RegularExpression> RegularExpression visit(Seq<E> seq) {
         List<RegularExpression> newSymbols = seq.getSymbols().stream().map(symbol -> symbol.accept(this)).collect(Collectors.toList());
-        return seq.copyBuilder().setSymbols((List<E>) newSymbols).build();
+        return seq.copy().setSymbols((List<E>) newSymbols).build();
     }
 
     @Override

@@ -133,7 +133,7 @@ public class CharRange extends AbstractRegularExpression implements Range {
 	}
 	
     @Override
-    public Builder copyBuilder() {
+    public Builder copy() {
         return new Builder(this);
     }
     

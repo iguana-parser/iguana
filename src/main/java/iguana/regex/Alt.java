@@ -70,10 +70,10 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	@Override
 	public int length() {
 		Optional<T> max = symbols.stream().max(RegularExpression.lengthComparator());
-		if (max.isPresent()) 
+		if (max.isPresent())
 			return max.get().length();
 		else
-		return 0;
+			return 0;
 	}
 	
 	public T get(int index) {
@@ -115,11 +115,16 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	}
 
 	@Override
-	public Builder<T> copyBuilder() {
+	public Builder<T> copy() {
 		return new Builder<T>(this);
 	}
 	
 	public List<T> getSymbols() {
+		return symbols;
+	}
+
+	@Override
+	public List<? extends RegularExpression> getChildren() {
 		return symbols;
 	}
 
@@ -188,7 +193,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 		private List<T> symbols = new ArrayList<>();
 
 		public Builder() {}
-		
+
 		public Builder(List<T> symbols) {
 			this.addAll(symbols);
 		}
@@ -210,6 +215,12 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 
 		public Builder<T> setSymbols(List<T> symbols) {
 			this.symbols = symbols;
+			return this;
+		}
+
+		@Override
+		public RegexBuilder<Alt<T>> setChildren(List<RegularExpression> children) {
+			this.symbols = (List<T>) children;
 			return this;
 		}
 

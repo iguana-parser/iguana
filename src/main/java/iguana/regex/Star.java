@@ -79,12 +79,17 @@ public class Star extends AbstractRegularExpression {
     }
 
     @Override
-    public Builder copyBuilder() {
+    public Builder copy() {
         return new Builder(this);
     }
 
     public RegularExpression getSymbol() {
         return regex;
+    }
+
+    @Override
+    public List<? extends RegularExpression> getChildren() {
+        return Collections.singletonList(regex);
     }
 
     @Override
@@ -140,6 +145,15 @@ public class Star extends AbstractRegularExpression {
 
         public Builder setSeparators(List<RegularExpression> separators) {
             this.separators = separators;
+            return this;
+        }
+
+        @Override
+        public RegexBuilder<Star> setChildren(List<RegularExpression> children) {
+            if (children.size() != 1) {
+                throw new RuntimeException("Children size should be one.");
+            }
+            this.regex = children.get(0);
             return this;
         }
 

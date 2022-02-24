@@ -32,7 +32,9 @@ import iguana.regex.visitor.RegularExpressionVisitor;
 import iguana.regex.visitor.ToAutomatonRegexVisitor;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 public interface RegularExpression extends Serializable {
@@ -60,7 +62,11 @@ public interface RegularExpression extends Serializable {
 		return accept(new ToAutomatonRegexVisitor());
 	}
 
-    RegexBuilder<? extends RegularExpression> copyBuilder();
+	default List<? extends RegularExpression> getChildren() {
+		return Collections.emptyList();
+	}
+
+    RegexBuilder<? extends RegularExpression> copy();
 
 	static <T> Comparator<T> lengthComparator() {
 		return (T o1, T o2) -> {
