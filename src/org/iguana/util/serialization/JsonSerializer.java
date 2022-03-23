@@ -8,12 +8,13 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
 import iguana.utils.input.Input;
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.datadependent.ast.Statement;
+import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
@@ -64,6 +65,8 @@ public class JsonSerializer {
         mapper.addMixIn(Group.class, GroupMixIn.class);
         mapper.addMixIn(Identifier.class, IdentifierMixIn.class);
         mapper.addMixIn(Start.class, StartMixIn.class);
+        mapper.addMixIn(Code.class, CodeMixIn.class);
+        mapper.addMixIn(CodeHolder.class, CodeHolderMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
         mapper.addMixIn(Return.class, ReturnMixIn.class);
@@ -98,6 +101,41 @@ public class JsonSerializer {
         mapper.addMixIn(Expression.Val.class, ExpressionMixIn.ValMixIn.class);
         mapper.addMixIn(Expression.EndOfFile.class, ExpressionMixIn.EndOfFileMixIn.class);
         mapper.addMixIn(Expression.IfThenElse.class, ExpressionMixIn.IfThenElseMixIn.class);
+        mapper.addMixIn(Expression.Call.class, ExpressionMixIn.CallMixIn.class);
+
+        // Call Expressions
+        mapper.addMixIn(AST.Println.class, ExpressionMixIn.CallMixIn.PrintlnMixIn.class);
+        mapper.addMixIn(AST.StartsWith.class, ExpressionMixIn.CallMixIn.StartsWithMixIn.class);
+        mapper.addMixIn(AST.Push.class, ExpressionMixIn.CallMixIn.PushMixIn.class);
+        mapper.addMixIn(AST.Shift.class, ExpressionMixIn.CallMixIn.ShiftMixIn.class);
+        mapper.addMixIn(AST.Println.class, ExpressionMixIn.CallMixIn.PrintlnMixIn.class);
+        mapper.addMixIn(AST.Indent.class, ExpressionMixIn.CallMixIn.IndentMixIn.class);
+        mapper.addMixIn(AST.Min.class, ExpressionMixIn.CallMixIn.MinMixIn.class);
+        mapper.addMixIn(AST.Not.class, ExpressionMixIn.CallMixIn.NotMixIn.class);
+        mapper.addMixIn(AST.Neg.class, ExpressionMixIn.CallMixIn.NegMixIn.class);
+        mapper.addMixIn(AST.Pop.class, ExpressionMixIn.CallMixIn.PopMixIn.class);
+        mapper.addMixIn(AST.Get.class, ExpressionMixIn.CallMixIn.GetMixIn.class);
+        mapper.addMixIn(AST.Len.class, ExpressionMixIn.CallMixIn.LenMixIn.class);
+        mapper.addMixIn(AST.Top.class, ExpressionMixIn.CallMixIn.TopMixIn.class);
+        mapper.addMixIn(AST.Get2.class, ExpressionMixIn.CallMixIn.Get2MixIn.class);
+        mapper.addMixIn(AST.Put.class, ExpressionMixIn.CallMixIn.PutMixIn.class);
+        mapper.addMixIn(AST.Contains.class, ExpressionMixIn.CallMixIn.ContainsMixIn.class);
+        mapper.addMixIn(AST.PPDeclare.class, ExpressionMixIn.CallMixIn.PPDeclareMixIn.class);
+        mapper.addMixIn(AST.Put3.class, ExpressionMixIn.CallMixIn.Put3MixIn.class);
+        mapper.addMixIn(AST.EndsWith.class, ExpressionMixIn.CallMixIn.EndsWithMixIn.class);
+        mapper.addMixIn(AST.Map.class, ExpressionMixIn.CallMixIn.MapMixIn.class);
+        mapper.addMixIn(AST.Pr2.class, ExpressionMixIn.CallMixIn.Pr2MixIn.class);
+        mapper.addMixIn(AST.Pr3.class, ExpressionMixIn.CallMixIn.Pr3MixIn.class);
+        mapper.addMixIn(AST.PPLookup.class, ExpressionMixIn.CallMixIn.PPLookupMixIn.class);
+        mapper.addMixIn(AST.Undef.class, ExpressionMixIn.CallMixIn.UndefMixIn.class);
+        mapper.addMixIn(AST.Find.class, ExpressionMixIn.CallMixIn.FindMixIn.class);
+        mapper.addMixIn(AST.Pr1.class, ExpressionMixIn.CallMixIn.Pr1MixIn.class);
+
+
+        // Statement
+        mapper.addMixIn(Statement.class, StatementMixIn.class);
+        mapper.addMixIn(Statement.Expression.class, StatementMixIn.ExpressionMixIn.class);
+        mapper.addMixIn(Statement.VariableDeclaration.class, StatementMixIn.VariableDeclarationMixIn.class);
 
         // Regex
         mapper.addMixIn(iguana.regex.RegularExpression.class, RegularExpressionMixIn.class);
@@ -119,10 +157,6 @@ public class JsonSerializer {
         mapper.addMixIn(KeywordTerminalNode.class, KeywordTerminalNodeMixIn.class);
 
         mapper.addMixIn(ParseError.class, ParseErrorMixIn.class);
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Expression.Call.class, new CallDeserializer());
-        mapper.registerModule(module);
     }
 
     public static String toJSON(Grammar grammar) {
@@ -475,6 +509,8 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Group.class, name="Sequence"),
         @JsonSubTypes.Type(value=Start.class, name="Start"),
         @JsonSubTypes.Type(value=Identifier.class, name="Identifier"),
+        @JsonSubTypes.Type(value=CodeHolder.class, name="CodeHolder"),
+        @JsonSubTypes.Type(value=Code.class, name="Code")
     })
     abstract static class SymbolMixIn { }
 
@@ -569,6 +605,12 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Start.Builder.class)
     abstract static class StartMixIn { }
 
+    @JsonDeserialize(builder = Code.Builder.class)
+    abstract static class CodeMixIn { }
+
+    @JsonDeserialize(builder = CodeHolder.Builder.class)
+    abstract static class CodeHolderMixIn { }
+
     @JsonDeserialize(builder = Plus.Builder.class)
     abstract static class PlusMixIn { }
 
@@ -622,6 +664,31 @@ public class JsonSerializer {
     abstract static class ConditionMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value= Expression.Integer.class, name="Integer"),
+        @JsonSubTypes.Type(value= Expression.Real.class, name="Real"),
+        @JsonSubTypes.Type(value= Expression.String.class, name="String"),
+        @JsonSubTypes.Type(value= Expression.Name.class, name="Name"),
+        @JsonSubTypes.Type(value= Expression.Assignment.class, name="Assignment"),
+        @JsonSubTypes.Type(value= Expression.Tuple.class, name="Tuple"),
+        @JsonSubTypes.Type(value= Expression.GreaterThanEqual.class, name="GreaterThanEqual"),
+        @JsonSubTypes.Type(value= Expression.LShiftANDEqZero.class, name="LShiftANDEqZero"),
+        @JsonSubTypes.Type(value= Expression.Greater.class, name="Greater"),
+        @JsonSubTypes.Type(value= Expression.Or.class, name="Or"),
+        @JsonSubTypes.Type(value= Expression.LessThanEqual.class, name="LessThanEqual"),
+        @JsonSubTypes.Type(value= Expression.IfThenElse.class, name="IfThenElse"),
+        @JsonSubTypes.Type(value= Expression.Equal.class, name="Equal"),
+        @JsonSubTypes.Type(value= Expression.NotEqual.class, name="NotEqual"),
+        @JsonSubTypes.Type(value= Expression.OrIndent.class, name="OrIndent"),
+        @JsonSubTypes.Type(value= Expression.AndIndent.class, name="AndIndent"),
+        @JsonSubTypes.Type(value= Expression.And.class, name="And"),
+        @JsonSubTypes.Type(value= Expression.LeftExtent.class, name="LeftExtent"),
+        @JsonSubTypes.Type(value= Expression.RightExtent.class, name="RightExtent"),
+        @JsonSubTypes.Type(value= Expression.Yield.class, name="Yield"),
+        @JsonSubTypes.Type(value= Expression.Val.class, name="Val"),
+        @JsonSubTypes.Type(value= Expression.EndOfFile.class, name="EndOfFile"),
+        @JsonSubTypes.Type(value= Expression.Call.class, name="Call")
+    })
     abstract static class ExpressionMixIn {
 
         abstract static class IntegerMixIn {
@@ -629,22 +696,22 @@ public class JsonSerializer {
             IntegerMixIn(@JsonProperty("value") Integer value) { }
         }
 
-        public class RealMixIn {
+        abstract static class RealMixIn {
             @JsonCreator
             RealMixIn(@JsonProperty("value") Float value) { }
         }
 
-        public class StringMixIn {
+        abstract static class StringMixIn {
             @JsonCreator
             StringMixIn(@JsonProperty("value") String value) { }
         }
 
         abstract static class NameMixIn {
             @JsonCreator
-            NameMixIn(@JsonProperty("name") String name) { }
+            NameMixIn(@JsonProperty("name") String name, @JsonProperty("i") int i) { }
         }
 
-        public class AssignmentMixIn {
+        abstract static class AssignmentMixIn {
             @JsonCreator
             AssignmentMixIn(@JsonProperty("id") String id, @JsonProperty("exp") Expression exp) { }
         }
@@ -689,6 +756,124 @@ public class JsonSerializer {
             IfThenElseMixIn(@JsonProperty("condition") Expression condition,
                             @JsonProperty("thenPart") Expression thenPart,
                             @JsonProperty("elsePart") Expression elsePart) { }
+        }
+
+        @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+        @JsonSubTypes({
+            @JsonSubTypes.Type(value = AST.StartsWith.class, name = "StartsWith"),
+            @JsonSubTypes.Type(value = AST.Push.class, name = "Push"),
+            @JsonSubTypes.Type(value = AST.Pop.class, name = "Pop"),
+            @JsonSubTypes.Type(value = AST.Top.class, name = "Top"),
+            @JsonSubTypes.Type(value = AST.Find.class, name = "Find"),
+            @JsonSubTypes.Type(value = AST.Shift.class, name = "Shift"),
+            @JsonSubTypes.Type(value = AST.Println.class, name = "Println"),
+            @JsonSubTypes.Type(value = AST.Indent.class, name = "Indent"),
+            @JsonSubTypes.Type(value = AST.Min.class, name = "Min"),
+            @JsonSubTypes.Type(value = AST.Not.class, name = "Not"),
+            @JsonSubTypes.Type(value = AST.Neg.class, name = "Neg"),
+            @JsonSubTypes.Type(value = AST.Get.class, name = "Get"),
+            @JsonSubTypes.Type(value = AST.Len.class, name = "Len"),
+            @JsonSubTypes.Type(value = AST.Get2.class, name = "Get2"),
+            @JsonSubTypes.Type(value = AST.Put.class, name = "Put"),
+            @JsonSubTypes.Type(value = AST.Contains.class, name = "Contains"),
+            @JsonSubTypes.Type(value = AST.PPDeclare.class, name = "PPDeclare"),
+            @JsonSubTypes.Type(value = AST.Put3.class, name = "Put3"),
+            @JsonSubTypes.Type(value = AST.EndsWith.class, name = "EndsWith"),
+            @JsonSubTypes.Type(value = AST.Map.class, name = "Map"),
+            @JsonSubTypes.Type(value = AST.Pr2.class, name = "Pr2"),
+            @JsonSubTypes.Type(value = AST.Pr3.class, name = "Pr3"),
+            @JsonSubTypes.Type(value = AST.PPLookup.class, name = "PPLookup"),
+            @JsonSubTypes.Type(value = AST.Undef.class, name = "Undef"),
+            @JsonSubTypes.Type(value = AST.Pr1.class, name = "Pr1")
+        })
+        abstract static class CallMixIn {
+
+            abstract static class PrintlnMixIn {
+                @JsonCreator
+                PrintlnMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            public class StartsWithMixIn {
+                @JsonCreator
+                StartsWithMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            public class PushMixIn {
+                @JsonCreator
+                PushMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            public class PopMixIn {
+                @JsonCreator
+                PopMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            public class TopMixIn {
+                @JsonCreator
+                TopMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            public class FindMixIn {
+                @JsonCreator
+                FindMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            public class ShiftMixIn {
+            }
+
+            public class IndentMixIn {
+            }
+
+            public class MinMixIn {
+            }
+
+            public class NotMixIn {
+            }
+
+            public class NegMixIn {
+            }
+
+            public class GetMixIn {
+            }
+
+            public class LenMixIn {
+            }
+
+            public class Get2MixIn {
+            }
+
+            public class PutMixIn {
+            }
+
+            public class ContainsMixIn {
+            }
+
+            public class PPDeclareMixIn {
+            }
+
+            public class Put3MixIn {
+            }
+
+            public class EndsWithMixIn {
+            }
+
+            public class MapMixIn {
+            }
+
+            public class Pr2MixIn {
+            }
+
+            public class Pr3MixIn {
+            }
+
+            public class PPLookupMixIn {
+            }
+
+            public class UndefMixIn {
+            }
+
+            public class Pr1MixIn {
+            }
         }
 
         abstract static class EqualMixIn {
@@ -745,6 +930,24 @@ public class JsonSerializer {
         abstract static class EndOfFileMixIn {
             @JsonCreator
             EndOfFileMixIn(@JsonProperty("index") Expression index) { }
+        }
+    }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value=Statement.Expression.class, name="ExpressionStatement"),
+        @JsonSubTypes.Type(value= Statement.VariableDeclaration.class, name="VariableDeclaration")
+    })
+    abstract static class StatementMixIn {
+
+        abstract static class ExpressionMixIn {
+            @JsonCreator
+            ExpressionMixIn(@JsonProperty("exp") Expression value) { }
+        }
+
+        abstract static class VariableDeclarationMixIn {
+            @JsonCreator
+            VariableDeclarationMixIn(@JsonProperty("decl") VariableDeclaration value) { }
         }
     }
 

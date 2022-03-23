@@ -1,22 +1,23 @@
 package org.iguana.grammar.symbol;
 
 import org.eclipse.imp.pdb.facts.util.ImmutableSet;
-import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
 
-    public final List<Statement> statements;
-    public final List<Expression> expressions;
+    public final Statement statement;
 
-    public CodeHolder(List<Statement> statements, List<Expression> expressions) {
-        this.statements = statements;
-        this.expressions = expressions;
+    public CodeHolder(Builder builder) {
+        this.statement = builder.statement;
+    }
+
+    public CodeHolder(Statement statement) {
+        this.statement = statement;
     }
 
     @Override
@@ -40,8 +41,8 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
     }
 
     @Override
-    public SymbolBuilder<? extends org.iguana.grammar.symbol.Symbol> copy() {
-        return null;
+    public Builder copy() {
+        return new Builder(this);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
 
     @Override
     public <T> T accept(ISymbolVisitor<T> visitor) {
-        return null;
+        return visitor.visit(this);
     }
 
     @Override
@@ -67,4 +68,36 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
     public void setEmpty() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CodeHolder)) return false;
+        CodeHolder that = (CodeHolder) o;
+        return Objects.equals(statement, that.statement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(statement);
+    }
+
+    public static class Builder extends SymbolBuilder<CodeHolder> {
+
+        public Statement statement;
+
+        public Builder() {}
+
+        public Builder(CodeHolder codeHolder) {
+            this.statement = codeHolder.statement;
+        }
+
+        public void setStatement(Statement statement) {
+            this.statement = statement;
+        }
+
+        @Override
+        public CodeHolder build() {
+            return new CodeHolder(this);
+        }
+    }
 }

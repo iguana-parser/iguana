@@ -36,7 +36,9 @@ public interface ISymbolVisitor<T> {
 	T visit(Block symbol);
 	
 	T visit(Code symbol);
-	
+
+	default T visit(CodeHolder symbol) { return null; }
+
 	T visit(Conditional symbol);
 	
 	T visit(IfThen symbol);

@@ -43,10 +43,10 @@
                     {
                       "kind" : "Star",
                       "name" : "(B | (C D))*",
+                      "label" : "s",
                       "s" : {
                         "kind" : "Alt",
                         "name" : "(B | (C D))",
-                        "label" : "s",
                         "symbols" : [
                           {
                             "kind" : "Identifier",

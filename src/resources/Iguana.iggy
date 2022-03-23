@@ -49,7 +49,7 @@ Symbol
   > Symbol "*"                       %Star
   | Symbol "+"                       %Plus
   | Symbol "?"                       %Option
-  | "(" Symbol Symbol+ ")"           %Sequence
+  | "(" Symbol Symbol* ")"           %Sequence
   | "(" Symbol+ ("|" Symbol+)+ ")"   %Alternation
   > "align" Symbol                   %Align
   | "ignore" Symbol                  %Ignore
@@ -69,10 +69,12 @@ Symbol
   | CharClass                        %CharClass
   | "{" Symbol Symbol+ "}" "*"       %StarSep
   | "{" Symbol Symbol+ "}" "+"       %PlusSep
+  | Statement                        %Statement
   ;
 
-Symbols
-  : Symbol*  %Sequence
+
+Statement
+  : Expression
   ;
 
 Arguments
@@ -107,7 +109,7 @@ Range
   ;
 
 Expression
-  :           Expression Arguments         %Call
+  :           FunName Arguments            %Call
   > left      (Expression "*" Expression   %Multiplication
   |            Expression "/" Expression   %Division)
   > left      (Expression "+" Expression   %Plus
@@ -120,9 +122,9 @@ Expression
   |            Expression "!=" Expression  %NotEqual)
   > left      (Expression "&&" Expression  %And
   |            Expression "||" Expression  %Or)
-  |           VarName ".l"                 %LExtent
-  |           VarName ".r"                 %RExtent
-  |           VarName ".yield"             %Yield
+  |           Identifier ".l"              %LExtent
+  |           Identifier ".r"              %RExtent
+  |           Identifier ".yield"          %Yield
   |           VarName                      %Name
   |           Number                       %Number
   |           "(" Expression ")"           %Bracket
@@ -133,21 +135,16 @@ ReturnExpression
   ;
 
 Binding
-  : VarName "=" Expression         %Assign
-  | "var" VarName "=" Expression   %Declare
-  | Expression                     %Expression
-  ;
-
-terminal Keywords
-  : "regex" | "var" | "left" | "right" | "non-assoc" | "align" | "offside" | "ignore"
+  : Identifier "=" Expression         %Assign
+  | "var" Identifier "=" Expression   %Declare
   ;
 
 terminal Letter
-  : [A-Za-z$_]
+  : [A-Za-z_]
   ;
 
 terminal LetterOrDigit
-  : [A-Za-z$_0-9]
+  : [A-Za-z_0-9]
   ;
 
 terminal LetterOrDigits
@@ -201,7 +198,7 @@ terminal CommentChar
   ;
 
 Identifier
-  : [$A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
+  : [A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
   ;
 
 terminal Associativity
@@ -210,14 +207,32 @@ terminal Associativity
   | "non-assoc"
   ;
 
-VarName
-  : Identifier
+terminal VarName
+  : '$' LetterOrDigits
   ;
 
 Label
-  : "%" Identifier
+  : '%' Identifier
   ;
 
 NontName
   : Identifier
+  ;
+
+terminal Keywords
+  : "start"
+  | "terminal"
+  | "layout"
+  | "var"
+  | "left"
+  | "right"
+  | "non-assoc"
+  | "align"
+  | "offside"
+  | "ignore"
+  | "println"
+  ;
+
+terminal FunName
+  : "println"
   ;

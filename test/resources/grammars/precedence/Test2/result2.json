@@ -31,7 +31,7 @@
             "kind" : "Return",
             "name" : "{0}",
             "expression" : {
-              "kind" : "Expression$Integer",
+              "kind" : "Integer",
               "value" : 0
             }
           }

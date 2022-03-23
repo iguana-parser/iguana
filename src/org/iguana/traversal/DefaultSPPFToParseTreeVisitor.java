@@ -212,6 +212,15 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
     private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, List<T> children) {
         if (node.isAmbiguous()) {
+            List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
+            for (int i = 0; i < packedNodes.size(); i++) {
+                try {
+                    DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
+                    dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             throw new RuntimeException("Ambiguity found: " + node);
         }
 

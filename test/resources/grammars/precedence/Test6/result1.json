@@ -27,15 +27,15 @@
                 "kind" : "DataDependentCondition",
                 "type" : "DATA_DEPENDENT",
                 "expression" : {
-                  "kind" : "Expression$GreaterThanEqual",
+                  "kind" : "GreaterThanEqual",
                   "lhs" : {
-                    "kind" : "Expression$Integer",
+                    "kind" : "Integer",
                     "value" : 2
                   },
                   "rhs" : {
-                    "kind" : "Expression$Name",
+                    "kind" : "Name",
                     "name" : "p",
-                    "i" : 0
+                    "i" : -1
                   }
                 }
               }
@@ -45,28 +45,28 @@
                 "kind" : "DataDependentCondition",
                 "type" : "DATA_DEPENDENT",
                 "expression" : {
-                  "kind" : "Expression$Or",
+                  "kind" : "Or",
                   "lhs" : {
-                    "kind" : "Expression$LessThanEqual",
+                    "kind" : "LessThanEqual",
                     "lhs" : {
-                      "kind" : "Expression$Name",
+                      "kind" : "Name",
                       "name" : "l",
-                      "i" : 1
+                      "i" : -1
                     },
                     "rhs" : {
-                      "kind" : "Expression$Integer",
+                      "kind" : "Integer",
                       "value" : 0
                     }
                   },
                   "rhs" : {
-                    "kind" : "Expression$GreaterThanEqual",
+                    "kind" : "GreaterThanEqual",
                     "lhs" : {
-                      "kind" : "Expression$Name",
+                      "kind" : "Name",
                       "name" : "l",
-                      "i" : 1
+                      "i" : -1
                     },
                     "rhs" : {
-                      "kind" : "Expression$Integer",
+                      "kind" : "Integer",
                       "value" : 2
                     }
                   }
@@ -76,9 +76,9 @@
             "variable" : "l",
             "arguments" : [
               {
-                "kind" : "Expression$Name",
+                "kind" : "Name",
                 "name" : "p",
-                "i" : 0
+                "i" : -1
               }
             ]
           },
@@ -96,43 +96,43 @@
             "variable" : "r",
             "arguments" : [
               {
-                "kind" : "Expression$Integer",
+                "kind" : "Integer",
                 "value" : 3
               }
             ]
           },
           {
             "kind" : "Return",
-            "name" : "{(r:2 <= 0)? 2 : min(r:2,2)}",
+            "name" : "{(r <= 0)? 2 : min(r,2)}",
             "expression" : {
-              "kind" : "Expression$IfThenElse",
+              "kind" : "IfThenElse",
               "condition" : {
-                "kind" : "Expression$LessThanEqual",
+                "kind" : "LessThanEqual",
                 "lhs" : {
-                  "kind" : "Expression$Name",
+                  "kind" : "Name",
                   "name" : "r",
-                  "i" : 2
+                  "i" : -1
                 },
                 "rhs" : {
-                  "kind" : "Expression$Integer",
+                  "kind" : "Integer",
                   "value" : 0
                 }
               },
               "thenPart" : {
-                "kind" : "Expression$Integer",
+                "kind" : "Integer",
                 "value" : 2
               },
               "elsePart" : {
-                "kind" : "AST$13",
+                "kind" : "Min",
                 "fun" : "min",
                 "arguments" : [
                   {
-                    "kind" : "Expression$Name",
+                    "kind" : "Name",
                     "name" : "r",
-                    "i" : 2
+                    "i" : -1
                   },
                   {
-                    "kind" : "Expression$Integer",
+                    "kind" : "Integer",
                     "value" : 2
                   }
                 ]
@@ -165,7 +165,7 @@
                 "kind" : "Return",
                 "name" : "{0}",
                 "expression" : {
-                  "kind" : "Expression$Integer",
+                  "kind" : "Integer",
                   "value" : 0
                 }
               }
@@ -226,7 +226,7 @@
                 "name" : "E",
                 "arguments" : [
                   {
-                    "kind" : "Expression$Integer",
+                    "kind" : "Integer",
                     "value" : 0
                   }
                 ]
@@ -235,7 +235,7 @@
                 "kind" : "Return",
                 "name" : "{1}",
                 "expression" : {
-                  "kind" : "Expression$Integer",
+                  "kind" : "Integer",
                   "value" : 1
                 }
               }
@@ -274,15 +274,15 @@
                         "kind" : "DataDependentCondition",
                         "type" : "DATA_DEPENDENT",
                         "expression" : {
-                          "kind" : "Expression$GreaterThanEqual",
+                          "kind" : "GreaterThanEqual",
                           "lhs" : {
-                            "kind" : "Expression$Integer",
+                            "kind" : "Integer",
                             "value" : 2
                           },
                           "rhs" : {
-                            "kind" : "Expression$Name",
+                            "kind" : "Name",
                             "name" : "p",
-                            "i" : 0
+                            "i" : -1
                           }
                         }
                       }
@@ -292,28 +292,28 @@
                         "kind" : "DataDependentCondition",
                         "type" : "DATA_DEPENDENT",
                         "expression" : {
-                          "kind" : "Expression$Or",
+                          "kind" : "Or",
                           "lhs" : {
-                            "kind" : "Expression$LessThanEqual",
+                            "kind" : "LessThanEqual",
                             "lhs" : {
-                              "kind" : "Expression$Name",
+                              "kind" : "Name",
                               "name" : "l",
-                              "i" : 1
+                              "i" : -1
                             },
                             "rhs" : {
-                              "kind" : "Expression$Integer",
+                              "kind" : "Integer",
                               "value" : 0
                             }
                           },
                           "rhs" : {
-                            "kind" : "Expression$GreaterThanEqual",
+                            "kind" : "GreaterThanEqual",
                             "lhs" : {
-                              "kind" : "Expression$Name",
+                              "kind" : "Name",
                               "name" : "l",
-                              "i" : 1
+                              "i" : -1
                             },
                             "rhs" : {
-                              "kind" : "Expression$Integer",
+                              "kind" : "Integer",
                               "value" : 2
                             }
                           }
@@ -323,9 +323,9 @@
                     "variable" : "l",
                     "arguments" : [
                       {
-                        "kind" : "Expression$Name",
+                        "kind" : "Name",
                         "name" : "p",
-                        "i" : 0
+                        "i" : -1
                       }
                     ]
                   },
@@ -343,43 +343,43 @@
                     "variable" : "r",
                     "arguments" : [
                       {
-                        "kind" : "Expression$Integer",
+                        "kind" : "Integer",
                         "value" : 3
                       }
                     ]
                   },
                   {
                     "kind" : "Return",
-                    "name" : "{(r:2 <= 0)? 2 : min(r:2,2)}",
+                    "name" : "{(r <= 0)? 2 : min(r,2)}",
                     "expression" : {
-                      "kind" : "Expression$IfThenElse",
+                      "kind" : "IfThenElse",
                       "condition" : {
-                        "kind" : "Expression$LessThanEqual",
+                        "kind" : "LessThanEqual",
                         "lhs" : {
-                          "kind" : "Expression$Name",
+                          "kind" : "Name",
                           "name" : "r",
-                          "i" : 2
+                          "i" : -1
                         },
                         "rhs" : {
-                          "kind" : "Expression$Integer",
+                          "kind" : "Integer",
                           "value" : 0
                         }
                       },
                       "thenPart" : {
-                        "kind" : "Expression$Integer",
+                        "kind" : "Integer",
                         "value" : 2
                       },
                       "elsePart" : {
-                        "kind" : "AST$13",
+                        "kind" : "Min",
                         "fun" : "min",
                         "arguments" : [
                           {
-                            "kind" : "Expression$Name",
+                            "kind" : "Name",
                             "name" : "r",
-                            "i" : 2
+                            "i" : -1
                           },
                           {
-                            "kind" : "Expression$Integer",
+                            "kind" : "Integer",
                             "value" : 2
                           }
                         ]
@@ -412,7 +412,7 @@
                         "kind" : "Return",
                         "name" : "{0}",
                         "expression" : {
-                          "kind" : "Expression$Integer",
+                          "kind" : "Integer",
                           "value" : 0
                         }
                       }
@@ -472,7 +472,7 @@
                         "kind" : "Return",
                         "name" : "{0}",
                         "expression" : {
-                          "kind" : "Expression$Integer",
+                          "kind" : "Integer",
                           "value" : 0
                         }
                       }

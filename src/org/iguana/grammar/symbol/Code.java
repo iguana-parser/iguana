@@ -30,8 +30,10 @@ package org.iguana.grammar.symbol;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static iguana.utils.string.StringUtil.listToString;
 
@@ -71,6 +73,21 @@ public class Code extends AbstractSymbol {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Code)) return false;
+		Code code = (Code) o;
+		return Objects.equals(symbol, code.symbol) && Arrays.equals(statements, code.statements);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(symbol);
+		result = 31 * result + Arrays.hashCode(statements);
+		return result;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
 	}
@@ -79,6 +96,8 @@ public class Code extends AbstractSymbol {
 		
 		private Symbol symbol;
 		private Statement[] statements;
+
+		public Builder() { }
 
 		public Builder(Code code) {
 			super(code);

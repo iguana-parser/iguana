@@ -2,6 +2,7 @@ package org.iguana;
 
 import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
+import iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.Grammar;
 import org.iguana.iggy.IggyParser;
 import org.iguana.parser.*;
@@ -11,6 +12,7 @@ import org.iguana.traversal.exception.CyclicGrammarException;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.RecognizerStatisticsSerializer;
+import org.iguana.util.visualization.ParseTreeToDot;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
@@ -93,11 +95,11 @@ public class GrammarTest {
             }
 
             String parserTestName = "Parser test " + category + " " + testName;
-            IguanaParser parser = new IguanaParser(IggyParser.transform(IggyParser.transform(grammar).toRuntimeGrammar()));
+            IguanaParser parser = new IguanaParser(IggyParser.transform(grammar.toRuntimeGrammar()));
             DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
-            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(IggyParser.transform(grammar).toRuntimeGrammar()));
+            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(grammar.toRuntimeGrammar()));
             DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
             grammarTests.add(dynamicParserTest);
@@ -124,6 +126,11 @@ public class GrammarTest {
 
             try {
                 actualParseTree = parser.getParserTree(input);
+                // No parse error
+                if (actualParseTree != null) {
+                    DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
+                    dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                }
             } catch (AmbiguityException e) {
                 try {
                     actualParseTree = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());

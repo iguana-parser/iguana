@@ -181,7 +181,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public void evaluate(Statement[] statements, Environment env, Input input) {
-        assert statements.length > 1;
+        assert statements.length > 0;
 
         ctx.setEnvironment(env);
 

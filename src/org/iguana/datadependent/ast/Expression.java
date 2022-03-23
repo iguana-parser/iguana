@@ -404,8 +404,8 @@ public abstract class Expression extends AbstractAST {
 
         private static final long serialVersionUID = 1L;
 
-        private final java.lang.String fun;
-        private final Expression[] arguments;
+        protected final java.lang.String fun;
+        protected final Expression[] arguments;
 
         Call(java.lang.String fun, Expression... arguments) {
             this.fun = fun;

@@ -33,7 +33,7 @@
             "body" : [
               {
                 "kind" : "Terminal",
-                "name" : "(a-z)*",
+                "name" : "Chars",
                 "nodeType" : "Regex",
                 "regex" : {
                   "kind" : "regex.Plus",
@@ -118,7 +118,7 @@
               "kind" : "TerminalNode",
               "terminal" : {
                 "kind" : "Terminal",
-                "name" : "(a-z)*",
+                "name" : "Chars",
                 "nodeType" : "Regex",
                 "regex" : {
                   "kind" : "regex.Plus",

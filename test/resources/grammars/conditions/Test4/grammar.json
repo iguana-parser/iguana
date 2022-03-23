@@ -18,20 +18,6 @@
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
-                          "type" : "NOT_FOLLOW",
-                          "regularExpression" : {
-                            "kind" : "regex.Alt",
-                            "symbols" : [
-                              {
-                                "kind" : "CharRange",
-                                "start" : 97,
-                                "end" : 122
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "kind" : "RegularExpressionCondition",
                           "type" : "NOT_MATCH",
                           "regularExpression" : {
                             "kind" : "regex.Alt",
@@ -86,6 +72,20 @@
                                     "val" : 111
                                   }
                                 ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
                               }
                             ]
                           }

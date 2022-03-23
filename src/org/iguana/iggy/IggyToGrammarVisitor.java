@@ -11,6 +11,7 @@ import org.iguana.grammar.symbol.Alt;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
+import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.ParseTreeVisitor;
@@ -209,8 +210,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     associativity = getAssociativity(node.childAt(0).childAt(0));
                 }
                 Sequence.Builder builder = new Sequence.Builder();
-                builder.addSymbol((Symbol) node.childAt(1).accept(this));
-                builder.addSymbols((List<Symbol>) node.childAt(2).accept(this));
+                List<Symbol> symbols = new ArrayList<>();
+                symbols.add((Symbol) node.childAt(1).accept(this));
+                symbols.addAll((List<Symbol>) node.childAt(2).accept(this));
+                builder.addSymbols(symbols);
                 Expression returnExpression = (Expression) node.childAt(3).accept(this);
                 if (returnExpression != null) {
                     builder.addSymbol(Return.ret(returnExpression));
@@ -272,6 +275,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | CharClass                        %CharClass
      *   | "{" Symbol Symbol+ "}" "*"       %StarSep
      *   | "{" Symbol Symbol+ "}" "+"       %PlusSep
+     *   | Statement                        %Statement
      *   ;
      */
     private Symbol visitSymbol(NonterminalNode node) {
@@ -339,25 +343,29 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return symbol.copy().setLabel(getIdentifier(node.childAt(0)).id).build();
             }
 
+            // Introduce a Constraints symbol
             case "Constraints": {
                 List<Expression> expressions = (List<Expression>) node.childAt(0).accept(this);
-                CodeHolder codeHolder = new CodeHolder(null, expressions);
-                return codeHolder;
+                return null;
+//                CodeHolder codeHolder = new CodeHolder(null, expressions);
+//                return codeHolder;
             }
 
             case "Bindings": {
-                List<Object> objects = (List<Object>) node.childAt(1).accept(this);
-                List<Expression> expressions = new ArrayList<>();
-                List<Statement> statements = new ArrayList<>();
-                for (Object object : objects) {
-                    if (object instanceof Expression) {
-                        expressions.add((Expression) object);
-                    } else {
-                        statements.add((Statement) object);
-                    }
-                }
-                return new CodeHolder(statements, expressions);
+                return null;
             }
+//                List<Object> objects = (List<Object>) node.childAt(1).accept(this);
+//                List<Expression> expressions = new ArrayList<>();
+//                List<Statement> statements = new ArrayList<>();
+//                for (Object object : objects) {
+//                    if (object instanceof Expression) {
+//                        expressions.add((Expression) object);
+//                    } else {
+//                        statements.add((Statement) object);
+//                    }
+//                }
+//                return new CodeHolder(statements, expressions);
+//            }
 
             case "Precede": {
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
@@ -414,6 +422,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);
                 List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
                 return new Plus.Builder(symbol).addSeparators(seps).build();
+            }
+
+            case "Statement": {
+                Expression expression = (Expression) node.childAt(0).accept(this);
+                return new CodeHolder(AST.stat(expression));
             }
 
             default:
@@ -591,10 +604,25 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * ;
      */
     private Expression visitExpression(NonterminalNode node) {
-        return null;
-//        switch (node.getGrammarDefinition().getLabel()) {
-//            case ""
-//        }
+        String label = node.getGrammarDefinition().getLabel();
+        switch (label) {
+            case "Call":
+                String funName = node.childAt(0).getText();
+                Expression[] arguments = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
+                switch (funName) {
+                    case "println":
+                        return AST.println(arguments);
+                    default:
+                        throw new RuntimeException("Unknown function name: " + funName);
+                }
+
+            case "LExtent":
+                String l = node.childAt(0).getText();
+                return AST.lExt(l);
+
+            default:
+                throw new RuntimeException("Unexpected label: " +  label);
+        }
     }
 
     private Associativity getAssociativity(ParseTreeNode node) {

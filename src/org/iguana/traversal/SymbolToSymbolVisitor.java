@@ -184,6 +184,11 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
         return ref;
     }
 
+    @Override
+    default Symbol visit(CodeHolder symbol) {
+        return symbol;
+    }
+
     default Symbol visitSymbol(Symbol symbol) {
         List<Symbol> newChildren = symbol.getChildren().stream().map(s -> s.accept(this)).collect(Collectors.toList());
         Symbol newSymbol = symbol.copy()

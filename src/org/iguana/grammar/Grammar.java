@@ -2,12 +2,10 @@ package org.iguana.grammar;
 
 import iguana.regex.InlineReferences;
 import iguana.regex.RegularExpression;
-import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
+import org.iguana.traversal.SymbolToSymbolVisitor;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.*;
@@ -220,6 +218,7 @@ public class Grammar implements Serializable {
     }
 
     private static RuntimeRule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label) {
+        symbols = convertToCode(symbols.stream().map(s -> s.accept(new MyVisitor())).collect(Collectors.toList()));
         // TODO: The first and the last symbol should be visited!
         boolean isLeft = !symbols.isEmpty() && symbols.get(0).getName().equals(head.getName());
         boolean isRight = !symbols.isEmpty() && symbols.get(symbols.size() - 1).getName().equals(head.getName());
@@ -250,44 +249,61 @@ public class Grammar implements Serializable {
 
     private static void addAll(List<Symbol> symbols, List<Symbol> rest) {
         int i = 0;
-        List<Condition> preConditions = new ArrayList<>();
-        if (symbols.size() == 1 && symbols.get(0) instanceof CodeHolder) {
-            CodeHolder holder = (CodeHolder) symbols.get(0);
-            if (holder.expressions != null) {
-                symbols.remove(0);
-                preConditions = holder.expressions.stream().map(DataDependentCondition::predicate).collect(Collectors.toList());
-                if (rest.isEmpty()) {
-                    symbols.add(Terminal.epsilon().copy().addPreConditions(preConditions).build());
-                    return;
-                }
+        while (i < rest.size()) {
+            Symbol current = rest.get(i);
+            if (i < rest.size() - 1 && rest.get(i + 1) instanceof CodeHolder) {
+                CodeHolder holder = (CodeHolder) rest.get(i + 1);
+                symbols.add(Code.code(current, holder.statement));
+                i += 2;
+            } else {
+                symbols.add(current);
+                i += 1;
             }
         }
+    }
 
-        for (Symbol symbol : rest) {
-            if (symbol instanceof CodeHolder) {
-                CodeHolder holder = (CodeHolder) symbol;
-                if (holder.expressions != null) {
-                    if (i != rest.size() - 1) {
-                        for (Expression e : holder.expressions)
-                            preConditions.add(DataDependentCondition.predicate(e));
-                    } else {
-                        Symbol last = symbols.remove(symbols.size() - 1);
-                        symbols.add(last.copy().addPostConditions(holder.expressions.stream()
-                                .map(DataDependentCondition::predicate).collect(Collectors.toList())).build());
-                    }
-                } else if (holder.statements != null) {
-                    Symbol last = symbols.remove(symbols.size() - 1);
-                    symbols.add(Code.code(last, holder.statements.toArray(new Statement[0])));
-                }
-            } else {
-                if (preConditions.isEmpty())
-                    symbols.add(symbol);
-                else {
-                    symbols.add(symbol.copy().addPreConditions(preConditions).build());
-                    preConditions = new ArrayList<>();
-                }
+    private static List<Symbol> convertToCode(List<Symbol> symbols) {
+        List<Symbol> result = new ArrayList<>();
+        int i = 0;
+        while (i < symbols.size()) {
+            Symbol current = symbols.get(i);
+            int j = i;
+            while (j < symbols.size() - 1 && symbols.get(j + 1) instanceof CodeHolder) {
+                j++;
             }
-            i++;
+            // [i + 1 ... j] are statements.
+            if (j > i) {
+                List<Statement> statements = new ArrayList<>(j - i);
+                for (int k = i + 1; k <= j; k++) {
+                    statements.add(((CodeHolder) symbols.get(k)).statement);
+                }
+                result.add(Code.code(current, statements.toArray(new Statement[] {})));
+                i = j + 1;
+            } else {
+                result.add(current);
+                i += 1;
+            }
+        }
+        return result;
+    }
+
+    static class MyVisitor implements SymbolToSymbolVisitor {
+        @Override
+        public Symbol visit(Plus symbol) {
+            Symbol newSymbol = SymbolToSymbolVisitor.super.visit(symbol);
+            return newSymbol.copy().setChildren(convertToCode(newSymbol.getChildren())).build();
+        }
+
+        @Override
+        public Symbol visit(Group symbol) {
+            Symbol newSymbol = SymbolToSymbolVisitor.super.visit(symbol);
+            return newSymbol.copy().setChildren(convertToCode(newSymbol.getChildren())).build();
+        }
+
+        @Override
+        public Symbol visit(Star symbol) {
+            Symbol newSymbol = SymbolToSymbolVisitor.super.visit(symbol);
+            return newSymbol.copy().setChildren(convertToCode(newSymbol.getChildren())).build();
         }
     }
 }

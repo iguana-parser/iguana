@@ -58,7 +58,7 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
         if (nonterminals.contains(id.getName())) {
             return new Nonterminal.Builder(id.getName())
                 .addPreConditions(visitPreConditions(id))
-                .addPostConditions(visitPreConditions(id))
+                .addPostConditions(visitPostConditions(id))
                 .setLabel(id.getLabel())
                 .build();
         } else if (terminals.containsKey(id.getName())) {
@@ -68,6 +68,7 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
                 .setTerminalPreConditions(visitPreConditions(id))
                 .setTerminalPostConditions(visitPostConditions(id))
                 .setLabel(id.getLabel())
+                .setName(id.getName())
                 .build();
         } else {
             throw new RuntimeException("Identifier '" + id + "' is not defined.");

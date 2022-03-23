@@ -109,6 +109,22 @@
                     {
                       "kind" : "Plus",
                       "name" : "(a-z)+",
+                      "preConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_PRECEDE",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
+                              }
+                            ]
+                          }
+                        }
+                      ],
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
@@ -128,22 +144,6 @@
                       "s" : {
                         "kind" : "Terminal",
                         "name" : "(a-z)",
-                        "preConditions" : [
-                          {
-                            "kind" : "RegularExpressionCondition",
-                            "type" : "NOT_PRECEDE",
-                            "regularExpression" : {
-                              "kind" : "regex.Alt",
-                              "symbols" : [
-                                {
-                                  "kind" : "CharRange",
-                                  "start" : 97,
-                                  "end" : 122
-                                }
-                              ]
-                            }
-                          }
-                        ],
                         "regex" : {
                           "kind" : "regex.Alt",
                           "symbols" : [

@@ -42,11 +42,11 @@
                     },
                     {
                       "kind" : "Star",
-                      "name" : "(B | (C print D))*",
+                      "name" : "(B | (C null D))*",
+                      "label" : "s",
                       "s" : {
                         "kind" : "Alt",
-                        "name" : "(B | (C print D))",
-                        "label" : "s",
+                        "name" : "(B | (C null D))",
                         "symbols" : [
                           {
                             "kind" : "Identifier",
@@ -55,7 +55,7 @@
                           },
                           {
                             "kind" : "Sequence",
-                            "name" : "(C print D)",
+                            "name" : "(C null D)",
                             "symbols" : [
                               {
                                 "kind" : "Identifier",
@@ -63,8 +63,20 @@
                                 "label" : "c"
                               },
                               {
-                                "kind" : "Nonterminal",
-                                "name" : "print"
+                                "kind" : "CodeHolder",
+                                "statement" : {
+                                  "kind" : "ExpressionStatement",
+                                  "exp" : {
+                                    "kind" : "Println",
+                                    "arguments" : [
+                                      {
+                                        "kind" : "LeftExtent",
+                                        "label" : "c"
+                                      }
+                                    ],
+                                    "fun" : "println"
+                                  }
+                                }
                               },
                               {
                                 "kind" : "Identifier",
