@@ -1,11 +1,12 @@
 package org.iguana.util.serialization;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DatabindContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import iguana.regex.RegularExpression;
@@ -29,7 +30,6 @@ import org.iguana.parser.ParseError;
 import org.iguana.parsetree.*;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,9 +67,9 @@ public class JsonSerializer {
         mapper.addMixIn(Start.class, StartMixIn.class);
         mapper.addMixIn(Code.class, CodeMixIn.class);
         mapper.addMixIn(CodeHolder.class, CodeHolderMixIn.class);
+        mapper.addMixIn(Return.class, ReturnMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
-        mapper.addMixIn(Return.class, ReturnMixIn.class);
 
         // Conditions
         mapper.addMixIn(Condition.class, ConditionMixIn.class);
@@ -296,137 +296,6 @@ public class JsonSerializer {
         return mapper.readValue(layoutNode.toString(), Start.class);
     }
 
-    static class CallDeserializer extends JsonDeserializer<Expression.Call> {
-
-        @Override
-        public Expression.Call deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
-            ObjectCodec codec = parser.getCodec();
-            JsonNode node = codec.readTree(parser);
-
-            String fun = node.get("fun").asText();
-            JsonNode arguments = node.get("arguments");
-
-            Expression[] expressions = new Expression[0];
-            if (arguments != null && arguments.isArray()) {
-                expressions = new Expression[arguments.size()];
-                int i = 0;
-                for (JsonNode child : arguments) {
-                    Expression expression = mapper.readValue(child.toString(), Expression.class);
-                    expressions[i++] = expression;
-                }
-            }
-
-            switch (fun) {
-                case "println":
-                    return AST.println(expressions);
-
-                case "indent":
-                    assertSize(1, expressions.length);
-                    return AST.indent(expressions[0]);
-
-                case "ppDeclare":
-                    assertSize(2, expressions.length);
-                    return AST.ppDeclare(expressions[0], expressions[1]);
-
-                case "ppLookup":
-                    assertSize(2, expressions.length);
-                    return AST.ppLookup(expressions[0]);
-
-                case "endsWith":
-                    assertSize(1, expressions.length);
-                    return AST.endsWith(expressions[0], expressions[1]);
-
-                case "startsWith":
-                    assertSize(2, expressions.length);
-                    return AST.startsWith(expressions[0], expressions[1]);
-
-                case "not":
-                    assertSize(1, expressions.length);
-                    return AST.not(expressions[0]);
-
-                case "neg":
-                    assertSize(1, expressions.length);
-                    return AST.neg(expressions[0]);
-
-                case "len":
-                    assertSize(1, expressions.length);
-                    return AST.len(expressions[0]);
-
-                case "pr1":
-                    assertSize(2, expressions.length);
-                    return AST.pr1(expressions[0], expressions[1], expressions[2]);
-
-                case "pr2":
-                    assertMinSize(2, expressions.length);
-                    return AST.pr2(expressions[0], expressions[1], Arrays.copyOfRange(expressions, 2, expressions.length));
-
-                case "pr3":
-                    assertSize(2, expressions.length);
-                    return AST.pr3(expressions[0], expressions[1]);
-
-                case "min":
-                    assertSize(2, expressions.length);
-                    return AST.min(expressions[0], expressions[1]);
-
-                case "map":
-                    assertSize(0, expressions.length);
-                    return AST.map();
-
-                case "put":
-                    assertMinSize(2, expressions.length);
-                    if (expressions.length == 2)
-                        return AST.put(expressions[0], expressions[1]);
-                    else
-                        return AST.put(expressions[0], expressions[1], expressions[2]);
-
-                case "contains":
-                    assertMinSize(2, expressions.length);
-                    return AST.contains(expressions[0], expressions[1]);
-
-                case "push":
-                    assertMinSize(2, expressions.length);
-                    return AST.push(expressions[0], expressions[1]);
-
-                case "pop":
-                    assertMinSize(1, expressions.length);
-                    return AST.pop(expressions[0]);
-
-                case "top":
-                    assertMinSize(1, expressions.length);
-                    return AST.top(expressions[0]);
-
-                case "find":
-                    assertMinSize(2, expressions.length);
-                    return AST.find(expressions[0], expressions[1]);
-
-                case "get":
-                    assertMinSize(2, expressions.length);
-                    return AST.get(expressions[0], expressions[1]);
-
-                case "shift":
-                    assertMinSize(2, expressions.length);
-                    return AST.shift(expressions[0], expressions[1]);
-
-                case "undef":
-                    assertMinSize(0, expressions.length);
-                    return AST.undef();
-
-                default:
-                    throw new RuntimeException("Unsupported call type: " + fun);
-            }
-        }
-    }
-
-    private static void assertMinSize(int min, int actual) {
-        if (min > actual)
-            throw new RuntimeException("Expected min: " + min + ", actual: " + actual);
-    }
-
-    private static void assertSize(int expected, int actual) {
-        if (expected != actual)
-            throw new RuntimeException("Expected: " + expected + ", Actual: " + actual);
-    }
-
     static class LayoutStrategyFilter {
         @Override
         public boolean equals(Object obj) {
@@ -510,7 +379,8 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Start.class, name="Start"),
         @JsonSubTypes.Type(value=Identifier.class, name="Identifier"),
         @JsonSubTypes.Type(value=CodeHolder.class, name="CodeHolder"),
-        @JsonSubTypes.Type(value=Code.class, name="Code")
+        @JsonSubTypes.Type(value=Code.class, name="Code"),
+        @JsonSubTypes.Type(value=Return.class, name="Return")
     })
     abstract static class SymbolMixIn { }
 
@@ -793,86 +663,124 @@ public class JsonSerializer {
                 PrintlnMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class StartsWithMixIn {
+            abstract static class StartsWithMixIn {
                 @JsonCreator
                 StartsWithMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class PushMixIn {
+            abstract static class PushMixIn {
                 @JsonCreator
                 PushMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class PopMixIn {
+            abstract static class PopMixIn {
                 @JsonCreator
                 PopMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class TopMixIn {
+            abstract static class TopMixIn {
                 @JsonCreator
                 TopMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class FindMixIn {
+            abstract static class FindMixIn {
                 @JsonCreator
                 FindMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class ShiftMixIn {
+            abstract static class ShiftMixIn {
+                @JsonCreator
+                ShiftMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class IndentMixIn {
+            abstract static class IndentMixIn {
+                @JsonCreator
+                IndentMixIn(@JsonProperty("argument") Expression argument) { }
             }
 
-            public class MinMixIn {
+            abstract static class MinMixIn {
+                @JsonCreator
+                MinMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class NotMixIn {
+            abstract static class NotMixIn {
+                @JsonCreator
+                NotMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class NegMixIn {
+            abstract static class NegMixIn {
+                @JsonCreator
+                NegMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class GetMixIn {
+            abstract static class GetMixIn {
+                @JsonCreator
+                GetMixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") Expression arg2) { }
             }
 
-            public class LenMixIn {
+            abstract static class LenMixIn {
+                @JsonCreator
+                LenMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class Get2MixIn {
+            abstract static class Get2MixIn {
+                @JsonCreator
+                Get2MixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class PutMixIn {
+            abstract static class PutMixIn {
+                @JsonCreator
+                PutMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class ContainsMixIn {
+            abstract static class ContainsMixIn {
+                @JsonCreator
+                ContainsMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class PPDeclareMixIn {
+            abstract static class PPDeclareMixIn {
+                @JsonCreator
+                PPDeclareMixIn(@JsonProperty("variable") Expression variable, @JsonProperty("value") Expression value) { }
             }
 
-            public class Put3MixIn {
+            abstract static class Put3MixIn {
+                @JsonCreator
+                Put3MixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class EndsWithMixIn {
+            abstract static class EndsWithMixIn {
+                @JsonCreator
+                EndsWithMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class MapMixIn {
+            abstract static class MapMixIn {
+                @JsonCreator
+                MapMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class Pr2MixIn {
+            abstract static class Pr2MixIn {
+                @JsonCreator
+                Pr2MixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") Expression arg2, @JsonProperty("arg3") Expression[] arg3) { }
             }
 
-            public class Pr3MixIn {
+            abstract static class Pr3MixIn {
+                @JsonCreator
+                Pr3MixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class PPLookupMixIn {
+            abstract static class PPLookupMixIn {
+                @JsonCreator
+                PPLookupMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class UndefMixIn {
+            abstract static class UndefMixIn {
+                @JsonCreator
+                UndefMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
-            public class Pr1MixIn {
+            abstract static class Pr1MixIn {
+                @JsonCreator
+                Pr1MixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
         }
 
