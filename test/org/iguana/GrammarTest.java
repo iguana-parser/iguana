@@ -20,6 +20,7 @@ import org.junit.jupiter.api.function.Executable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class GrammarTest {
 
         String jsonGrammarPath = testPath + "/grammar.json";
 
-        if (REGENERATE_FILES) {
+        if (REGENERATE_FILES || !Files.exists(Paths.get(jsonGrammarPath))) {
             record(grammar, jsonGrammarPath);
         } else {
             Grammar jsonGrammar;
@@ -142,18 +143,17 @@ public class GrammarTest {
             }
 
             if (!isCyclic) {
-                String statisticsPath = testPath + "/statistics" + j + ".json";
                 String resultPath = testPath + "/result" + j + ".json";
 
                 if (actualParseTree == null) { // Parse error
-                    if (REGENERATE_FILES) {
+                    if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                         record(parser.getParseError(), resultPath);
                     } else {
                         ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
                         assertEquals(expectedParseError, parser.getParseError());
                     }
                 } else {
-                    if (REGENERATE_FILES) {
+                    if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                         record(actualParseTree, resultPath);
                     } else {
                         ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
@@ -161,7 +161,8 @@ public class GrammarTest {
                     }
                 }
 
-                if (REGENERATE_FILES) {
+                String statisticsPath = testPath + "/statistics" + j + ".json";
+                if (REGENERATE_FILES || !Files.exists(Paths.get(statisticsPath))) {
                     record(parser.getStatistics(), statisticsPath);
                 } else {
                     ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
