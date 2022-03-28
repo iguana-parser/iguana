@@ -218,7 +218,6 @@ public class Grammar implements Serializable {
     }
 
     private static RuntimeRule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label) {
-        symbols = convertToCode(symbols.stream().map(s -> s.accept(new MyVisitor())).collect(Collectors.toList()));
         // TODO: The first and the last symbol should be visited!
         boolean isLeft = !symbols.isEmpty() && symbols.get(0).getName().equals(head.getName());
         boolean isRight = !symbols.isEmpty() && symbols.get(symbols.size() - 1).getName().equals(head.getName());
@@ -259,51 +258,6 @@ public class Grammar implements Serializable {
                 symbols.add(current);
                 i += 1;
             }
-        }
-    }
-
-    private static List<Symbol> convertToCode(List<Symbol> symbols) {
-        List<Symbol> result = new ArrayList<>();
-        int i = 0;
-        while (i < symbols.size()) {
-            Symbol current = symbols.get(i);
-            int j = i;
-            while (j < symbols.size() - 1 && symbols.get(j + 1) instanceof CodeHolder) {
-                j++;
-            }
-            // [i + 1 ... j] are statements.
-            if (j > i) {
-                List<Statement> statements = new ArrayList<>(j - i);
-                for (int k = i + 1; k <= j; k++) {
-                    statements.add(((CodeHolder) symbols.get(k)).statement);
-                }
-                result.add(Code.code(current, statements.toArray(new Statement[] {})));
-                i = j + 1;
-            } else {
-                result.add(current);
-                i += 1;
-            }
-        }
-        return result;
-    }
-
-    static class MyVisitor implements SymbolToSymbolVisitor {
-        @Override
-        public Symbol visit(Plus symbol) {
-            Symbol newSymbol = SymbolToSymbolVisitor.super.visit(symbol);
-            return newSymbol.copy().setChildren(convertToCode(newSymbol.getChildren())).build();
-        }
-
-        @Override
-        public Symbol visit(Group symbol) {
-            Symbol newSymbol = SymbolToSymbolVisitor.super.visit(symbol);
-            return newSymbol.copy().setChildren(convertToCode(newSymbol.getChildren())).build();
-        }
-
-        @Override
-        public Symbol visit(Star symbol) {
-            Symbol newSymbol = SymbolToSymbolVisitor.super.visit(symbol);
-            return newSymbol.copy().setChildren(convertToCode(newSymbol.getChildren())).build();
         }
     }
 }

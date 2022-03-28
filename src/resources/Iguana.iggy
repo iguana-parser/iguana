@@ -55,7 +55,7 @@ Symbol
   | "ignore" Symbol                  %Ignore
   | Expression "?" Symbol ":" Symbol %IfThenElse
   > Identifier ":" Symbol            %Labeled
-  | "[[" {Expression ","}+ "]]"      %Constraints
+  | Symbol "[[" Expression "]]"      %Constraint
   | "{{" {Binding ","}+ "}}"         %Bindings
   | Regex "<<" Symbol                %Precede
   | Regex "!<<" Symbol               %NotPrecede
@@ -69,12 +69,7 @@ Symbol
   | CharClass                        %CharClass
   | "{" Symbol Symbol+ "}" "*"       %StarSep
   | "{" Symbol Symbol+ "}" "+"       %PlusSep
-  | Statement                        %Statement
-  ;
-
-
-Statement
-  : Expression
+  | Symbol Expression                %Statement
   ;
 
 Arguments

@@ -3,15 +3,14 @@ package org.iguana.iggy;
 import iguana.regex.*;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Alt;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
-import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.ParseTreeVisitor;
@@ -261,7 +260,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | "ignore" Symbol                  %Ignore
      *   | Expression "?" Symbol ":" Symbol %IfThenElse
      *   > Identifier ":" Symbol            %Labeled
-     *   | "[" {Expression ","}+ "]"        %Constraints
+     *   | Symbol "[" {Expression ","}+ "]" %Constraint
      *   | "{" {Binding ","}+ "}"           %Bindings
      *   | Regex "<<" Symbol                %Precede
      *   | Regex "!<<" Symbol               %NotPrecede
@@ -275,7 +274,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   | CharClass                        %CharClass
      *   | "{" Symbol Symbol+ "}" "*"       %StarSep
      *   | "{" Symbol Symbol+ "}" "+"       %PlusSep
-     *   | Statement                        %Statement
+     *   | Symbol Expression                %Statement
      *   ;
      */
     private Symbol visitSymbol(NonterminalNode node) {
@@ -425,9 +424,17 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Statement": {
-                Expression expression = (Expression) node.childAt(0).accept(this);
-                return new CodeHolder(AST.stat(expression));
+                Symbol symbol = (Symbol) node.childAt(0).accept(this);
+                Expression expression = (Expression) node.childAt(1).accept(this);
+                return Code.code(symbol, AST.stat(expression));
             }
+
+            case "Constraint": {
+                Symbol symbol = (Symbol) node.childAt(0).accept(this);
+                Expression expression = (Expression) node.childAt(2).accept(this);
+                symbol.copy().addPostCondition(DataDependentCondition.predicate(expression));
+                return symbol;
+             }
 
             default:
                 throw new RuntimeException("Unexpected label: " + label);
@@ -616,9 +623,18 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                         throw new RuntimeException("Unknown function name: " + funName);
                 }
 
+            case "Equal":
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.equal(lhs, rhs);
+
             case "LExtent":
                 String l = node.childAt(0).getText();
                 return AST.lExt(l);
+
+            case "RExtent":
+                String r = node.childAt(0).getText();
+                return AST.rExt(r);
 
             default:
                 throw new RuntimeException("Unexpected label: " +  label);

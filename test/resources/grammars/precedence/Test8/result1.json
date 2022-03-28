@@ -124,7 +124,6 @@
               },
               "elsePart" : {
                 "kind" : "Min",
-                "fun" : "min",
                 "arguments" : [
                   {
                     "kind" : "Name",
@@ -135,7 +134,8 @@
                     "kind" : "Integer",
                     "value" : 2
                   }
-                ]
+                ],
+                "fun" : "min"
               }
             }
           }

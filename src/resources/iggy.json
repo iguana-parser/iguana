@@ -1048,6 +1048,10 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Identifier",
+                      "name" : "Symbol"
+                    },
+                    {
                       "kind" : "Terminal",
                       "name" : "[[",
                       "regex" : {
@@ -1065,22 +1069,8 @@
                       }
                     },
                     {
-                      "kind" : "Plus",
-                      "name" : "Expression+",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Expression"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
+                      "kind" : "Identifier",
+                      "name" : "Expression"
                     },
                     {
                       "kind" : "Terminal",
@@ -1100,7 +1090,7 @@
                       }
                     }
                   ],
-                  "label" : "Constraints"
+                  "label" : "Constraint"
                 }
               ]
             },
@@ -1511,34 +1501,14 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Statement"
-                    }
-                  ],
-                  "label" : "Statement"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Statement"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
+                      "name" : "Symbol"
+                    },
                     {
                       "kind" : "Identifier",
                       "name" : "Expression"
                     }
-                  ]
+                  ],
+                  "label" : "Statement"
                 }
               ]
             }
