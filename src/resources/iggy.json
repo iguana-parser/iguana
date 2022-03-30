@@ -1042,7 +1042,11 @@
                   "label" : "Labeled"
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "alternatives" : [
             {
               "seqs" : [
                 {
@@ -1091,67 +1095,6 @@
                     }
                   ],
                   "label" : "Constraint"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "{{",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 123
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 123
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Plus",
-                      "name" : "Binding+",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Binding"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "}}",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 125
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 125
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  "label" : "Bindings"
                 }
               ]
             },
@@ -1352,6 +1295,27 @@
                   "label" : "Except"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol"
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression"
+                    }
+                  ],
+                  "label" : "Statement"
+                }
+              ]
             },
             {
               "seqs" : [
@@ -1500,15 +1464,59 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier",
-                      "name" : "Symbol"
+                      "kind" : "Terminal",
+                      "name" : "{{",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 123
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 123
+                          }
+                        ]
+                      }
                     },
                     {
-                      "kind" : "Identifier",
-                      "name" : "Expression"
+                      "kind" : "Plus",
+                      "name" : "Binding+",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Binding"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "}}",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 125
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 125
+                          }
+                        ]
+                      }
                     }
                   ],
-                  "label" : "Statement"
+                  "label" : "Bindings"
                 }
               ]
             }
