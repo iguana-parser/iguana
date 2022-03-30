@@ -3,7 +3,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "X"
       },
       "priorityLevels" : [
         {
@@ -13,8 +13,18 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier",
-                      "name" : "X"
+                      "kind" : "Nonterminal",
+                      "name" : "S",
+                      "arguments" : [
+                        {
+                          "kind" : "Integer",
+                          "value" : 1
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : 2
+                        }
+                      ]
                     }
                   ]
                 }
@@ -27,7 +37,11 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "X"
+        "name" : "S",
+        "parameters" : [
+          "a",
+          "b"
+        ]
       },
       "priorityLevels" : [
         {
@@ -38,11 +52,11 @@
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "a:A {println(a.lExt)}",
+                      "name" : "l:A {println(l,a,b)}",
                       "symbol" : {
                         "kind" : "Identifier",
                         "name" : "A",
-                        "label" : "a"
+                        "label" : "l"
                       },
                       "statements" : [
                         {
@@ -51,14 +65,29 @@
                             "kind" : "Println",
                             "arguments" : [
                               {
-                                "kind" : "LeftExtent",
-                                "label" : "a"
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              {
+                                "kind" : "Name",
+                                "name" : "a",
+                                "i" : -1
+                              },
+                              {
+                                "kind" : "Name",
+                                "name" : "b",
+                                "i" : -1
                               }
                             ],
                             "fun" : "println"
                           }
                         }
                       ]
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "B"
                     }
                   ]
                 }
@@ -95,11 +124,39 @@
           ]
         }
       ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "startSymbol" : {
     "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
+    "name" : "Start(X)",
+    "startSymbol" : "X"
   }
 }

@@ -1,9 +1,0 @@
-start S
-  : X
-  ;
-
-X :  a:A println(a.l)
-  ;
-
-A : 'a'
-  ;

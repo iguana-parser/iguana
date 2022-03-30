@@ -95,16 +95,15 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Syntax":
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
-                List<Identifier> parameters = (List<Identifier>) node.childAt(1).accept(this);
+                List<String> parameters = (List<String>) node.getChildWithName("Parameters?").accept(this);
                 if (parameters == null) parameters = Collections.emptyList();
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
-                List<String> params = parameters.stream().map(p -> p.id).collect(Collectors.toList());
 
                 if (!node.childAt(0).children().isEmpty()) { // start symbol
                     start = nonterminalName.id;
                 }
 
-                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.id).addParameters(params).build();
+                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.id).addParameters(parameters).build();
                 return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
 
             // RegexBody : { RegexSequence "|" }*;
@@ -146,8 +145,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     /*
      * Parameters: "(" { Identifier "," }* ")";
      */
-    private List<Identifier> visitParameters(NonterminalNode node) {
-        return (List<Identifier>) node.childAt(1).accept(this);
+    private List<String> visitParameters(NonterminalNode node) {
+        return node.childAt(1).children().stream()
+            .filter(s -> !s.getText().equals(","))
+            .map(s -> s.getText().substring(1)).collect(Collectors.toList());
     }
 
     /*
@@ -637,6 +638,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Name":
                 return AST.var((node.childAt(0).getText()).substring(1));
+
+            case "Number":
+                return AST.integer(Integer.parseInt(node.childAt(0).getText()));
 
             default:
                 throw new RuntimeException("Unexpected label: " +  label);
