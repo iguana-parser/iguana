@@ -407,7 +407,7 @@ public class GrammarGraphBuilder implements Serializable {
     }
 
     private BodyGrammarSlot getBodyGrammarSlot(RuntimeRule rule, int i, Position position, String label, String variable, Set<String> state) {
-        assert i < rule.size();
+        assert (i - 1) < rule.size();
 
         BodyGrammarSlot slot;
         if (current != null)

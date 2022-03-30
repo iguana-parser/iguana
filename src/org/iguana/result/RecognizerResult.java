@@ -37,6 +37,11 @@ class SimpleRecognizerResult implements RecognizerResult {
     public Object getValue() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return index + "";
+    }
 }
 
 class DataDependentRecognizerResult implements RecognizerResult {
@@ -67,5 +72,10 @@ class DataDependentRecognizerResult implements RecognizerResult {
     @Override
     public Object getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + "index=" + index + ", value=" + value + ")";
     }
 }

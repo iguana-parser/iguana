@@ -40,6 +40,22 @@
                 "kind" : "Nonterminal",
                 "name" : "(B)*",
                 "label" : "b",
+                "parameters" : [
+                  "a",
+                  "b.lExt"
+                ],
+                "arguments" : [
+                  {
+                    "kind" : "Name",
+                    "name" : "a",
+                    "i" : -1
+                  },
+                  {
+                    "kind" : "Name",
+                    "name" : "b.lExt",
+                    "i" : -1
+                  }
+                ],
                 "nodeType" : "Star"
               }
             ]
@@ -93,7 +109,24 @@
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
-                      "name" : "B"
+                      "name" : "B",
+                      "postConditions" : [
+                        {
+                          "kind" : "DataDependentCondition",
+                          "type" : "DATA_DEPENDENT",
+                          "expression" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "RightExtent",
+                              "label" : "a"
+                            },
+                            "rhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
                 }
@@ -109,7 +142,24 @@
                     "symbols" : [
                       {
                         "kind" : "Nonterminal",
-                        "name" : "B"
+                        "name" : "B",
+                        "postConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "a"
+                              },
+                              "rhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "b"
+                              }
+                            }
+                          }
+                        ]
                       }
                     ]
                   },
@@ -162,7 +212,24 @@
                     "symbols" : [
                       {
                         "kind" : "Nonterminal",
-                        "name" : "B"
+                        "name" : "B",
+                        "postConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "a"
+                              },
+                              "rhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "b"
+                              }
+                            }
+                          }
+                        ]
                       }
                     ]
                   },
@@ -215,7 +282,24 @@
                     "symbols" : [
                       {
                         "kind" : "Nonterminal",
-                        "name" : "B"
+                        "name" : "B",
+                        "postConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "a"
+                              },
+                              "rhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "b"
+                              }
+                            }
+                          }
+                        ]
                       }
                     ]
                   },

@@ -32,6 +32,7 @@ import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
+import org.iguana.result.RecognizerResult;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNodeWithValue;
 
@@ -1296,11 +1297,14 @@ public abstract class Expression extends AbstractAST {
                 throw new UndeclaredVariableException(label);
             }
 
-            if (!(value instanceof NonPackedNode)) {
+            if (value instanceof NonPackedNode) {
+                return ((NonPackedNode) value).getRightExtent();
+            // In case of recognizer, we don't have a node. The right extent will be equal to the recognized value.
+            } else if (value instanceof RecognizerResult) {
+                return ((RecognizerResult) value).getIndex();
+            } else {
                 throw new UnexpectedTypeOfArgumentException(this);
             }
-
-            return ((NonPackedNode) value).getRightExtent();
         }
 
         @Override

@@ -1,0 +1,218 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "X"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "A",
+                      "label" : "a"
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "(B [a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})*",
+                      "label" : "b",
+                      "s" : {
+                        "kind" : "Sequence",
+                        "name" : "(B [a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})",
+                        "symbols" : [
+                          {
+                            "kind" : "Code",
+                            "name" : "B [a.rExt == b.lExt] {println(b.lExt)}",
+                            "symbol" : {
+                              "kind" : "Identifier",
+                              "name" : "B",
+                              "postConditions" : [
+                                {
+                                  "kind" : "DataDependentCondition",
+                                  "type" : "DATA_DEPENDENT",
+                                  "expression" : {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "RightExtent",
+                                      "label" : "a"
+                                    },
+                                    "rhs" : {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "statements" : [
+                              {
+                                "kind" : "ExpressionStatement",
+                                "exp" : {
+                                  "kind" : "Println",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    }
+                                  ],
+                                  "fun" : "println"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind" : "Code",
+                            "name" : "b:C {println(b)}",
+                            "symbol" : {
+                              "kind" : "Identifier",
+                              "name" : "C",
+                              "label" : "b"
+                            },
+                            "statements" : [
+                              {
+                                "kind" : "ExpressionStatement",
+                                "exp" : {
+                                  "kind" : "Println",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "Name",
+                                      "name" : "b",
+                                      "i" : -1
+                                    }
+                                  ],
+                                  "fun" : "println"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "c",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 99
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

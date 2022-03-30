@@ -1,0 +1,15 @@
+start S
+  : X
+  ;
+
+X :  a:A b:(B [[a.r == b.l]] println(b.l) b:C println($b))*  // shadowing (b:C)
+  ;
+
+A : 'a'
+  ;
+
+B : 'b'
+  ;
+
+C : 'c'
+  ;
