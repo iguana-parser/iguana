@@ -40,10 +40,7 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class BodyGrammarSlot implements GrammarSlot {
 	
@@ -69,11 +66,11 @@ public class BodyGrammarSlot implements GrammarSlot {
 
 	private Transition inTransition;
 
-	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions) {
-		this(position, label, -1, variable, -1, state, conditions);
+	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions, FollowTest followTest) {
+		this(position, label, -1, variable, -1, state, conditions, followTest);
 	}
 	
-	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions) {
+	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, FollowTest followTest) {
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
@@ -81,17 +78,14 @@ public class BodyGrammarSlot implements GrammarSlot {
 		this.variable = variable;
 		this.i2 = i2;
 		this.state = state;
+		this.followTest = followTest;
 	}
 	
 	@Override
 	public String toString() {
 		return position.toString();
 	}
-	
-	public void setFollowTest(FollowTest followTest) {
-		this.followTest = followTest;
-	}
-	
+
 	public boolean testFollow(int v) {
 		return followTest.test(v);
 	}
@@ -200,11 +194,17 @@ public class BodyGrammarSlot implements GrammarSlot {
 	}
 
     public void setOutTransition(Transition outTransition) {
+		if (this.outTransition != null) {
+			throw new RuntimeException("outTransition is already set");
+		}
         this.outTransition = outTransition;
     }
 
     public void setInTransition(Transition inTransition) {
-        this.inTransition = inTransition;
+		if (this.inTransition != null) {
+			throw new RuntimeException("inTransition is already set");
+		}
+		this.inTransition = inTransition;
     }
 
     public Transition getOutTransition() {
@@ -231,4 +231,16 @@ public class BodyGrammarSlot implements GrammarSlot {
         return false;
     }
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BodyGrammarSlot that = (BodyGrammarSlot) o;
+		return i1 == that.i1 && i2 == that.i2 && Objects.equals(position, that.position) && Objects.equals(conditions, that.conditions) && Objects.equals(label, that.label) && Objects.equals(variable, that.variable) && Objects.equals(state, that.state) && Objects.equals(followTest, that.followTest);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(position, conditions, label, i1, variable, i2, state, followTest);
+	}
 }

@@ -87,7 +87,7 @@ public class GrammarGraphToDot {
 		if (slot instanceof EndGrammarSlot) {
 			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.DOUBLE_CIRCLE));
 		} else {
-			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.CIRCLE));
+			dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.CIRCLE));
 
 			// TODO: improve this code
 			Transition t = slot.getOutTransition();

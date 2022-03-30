@@ -35,6 +35,9 @@ public abstract class AbstractTransition implements Transition {
 	protected final BodyGrammarSlot origin;
 
 	public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest) {
+		if (origin.equals(dest)) {
+			throw new IllegalArgumentException("Origin " + origin + " and Destination " + dest + " are equal");
+		}
 		this.origin = origin;
 		this.dest = dest;
 	}

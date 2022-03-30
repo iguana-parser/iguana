@@ -432,8 +432,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Constraint": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 Expression expression = (Expression) node.childAt(2).accept(this);
-                symbol.copy().addPostCondition(DataDependentCondition.predicate(expression));
-                return symbol;
+                return symbol.copy().addPostCondition(DataDependentCondition.predicate(expression)).build();
              }
 
             default:
@@ -635,6 +634,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "RExtent":
                 String r = node.childAt(0).getText();
                 return AST.rExt(r);
+
+            case "Name":
+                return AST.var((node.childAt(0).getText()).substring(1));
 
             default:
                 throw new RuntimeException("Unexpected label: " +  label);

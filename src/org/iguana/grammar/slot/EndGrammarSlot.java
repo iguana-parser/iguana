@@ -31,6 +31,7 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.runtime.Position;
+import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
@@ -42,13 +43,13 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	protected final NonterminalGrammarSlot nonterminal;
 
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label,
-			              String variable, Set<String> state, Conditions conditions) {
-		this(position, nonterminal, label, -1, variable, -1, state, conditions);
+			              String variable, Set<String> state, Conditions conditions, FollowTest followTest) {
+		this(position, nonterminal, label, -1, variable, -1, state, conditions, followTest);
 	}
 	
 	public EndGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, String label, int i1,
-            			  String variable, int i2, Set<String> state, Conditions conditions) {
-		super(position, label, i1, variable, i2, state, conditions);
+						  String variable, int i2, Set<String> state, Conditions conditions, FollowTest followTest) {
+		super(position, label, i1, variable, i2, state, conditions, followTest);
 		this.nonterminal = nonterminal;
     }
 	
