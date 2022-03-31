@@ -430,7 +430,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return Code.code(symbol, AST.stat(expression));
             }
 
-            case "Constraint": {
+            case "PreCondition": {
+                Expression expression = (Expression) node.childAt(1).accept(this);
+                Symbol symbol = (Symbol) node.childAt(3).accept(this);
+                return symbol.copy().addPreCondition(DataDependentCondition.predicate(expression)).build();
+            }
+
+            case "PostCondition": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 Expression expression = (Expression) node.childAt(2).accept(this);
                 return symbol.copy().addPostCondition(DataDependentCondition.predicate(expression)).build();
@@ -623,10 +629,53 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                         throw new RuntimeException("Unknown function name: " + funName);
                 }
 
-            case "Equal":
+            case "GreaterEq": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.greaterEq(lhs, rhs);
+            }
+
+            case "LessEq": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.lessEq(lhs, rhs);
+            }
+
+            case "Less": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.less(lhs, rhs);
+            }
+
+            case "Greater": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.greater(lhs, rhs);
+            }
+
+            case "Equal": {
                 Expression lhs = (Expression) node.childAt(0).accept(this);
                 Expression rhs = (Expression) node.childAt(2).accept(this);
                 return AST.equal(lhs, rhs);
+            }
+
+            case "NotEqual": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.notEqual(lhs, rhs);
+            }
+
+            case "And": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.and(lhs, rhs);
+            }
+
+            case "Or": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.or(lhs, rhs);
+            }
 
             case "LExtent":
                 String l = node.childAt(0).getText();
@@ -641,6 +690,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Number":
                 return AST.integer(Integer.parseInt(node.childAt(0).getText()));
+
+            case "Bracket":
+                return (Expression) node.childAt(1).accept(this);
 
             default:
                 throw new RuntimeException("Unexpected label: " +  label);

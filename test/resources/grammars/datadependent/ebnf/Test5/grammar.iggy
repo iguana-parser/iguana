@@ -2,7 +2,7 @@ start S
   : X
   ;
 
-X : a:A b:(b:B [[b.l == a.r]] println($b) c:C println($c))*  // shadowing (b:B)
+X : a:A b:(b:B [[b.l == a.r]] println($b); c:C println($c); )*  // shadowing (b:B)
   ;
 
 A : 'a'

@@ -2,7 +2,7 @@ start S
   : X
   ;
 
-X : A s:(b:B | c:C println(c.l) d:D)*
+X : A s:(b:B | c:C println(c.l); d:D)*
   ;
 
 A : 'a'

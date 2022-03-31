@@ -1052,6 +1052,61 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Terminal",
+                      "name" : "[[",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 91
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 91
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "]]",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 93
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 93
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol"
+                    }
+                  ],
+                  "label" : "PreCondition"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
                       "kind" : "Identifier",
                       "name" : "Symbol"
                     },
@@ -1094,7 +1149,7 @@
                       }
                     }
                   ],
-                  "label" : "Constraint"
+                  "label" : "PostCondition"
                 }
               ]
             },
@@ -1311,6 +1366,14 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Expression"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
                     }
                   ],
                   "label" : "Statement"

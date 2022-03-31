@@ -42,7 +42,7 @@ public class IggyParser {
         ParseTreeNode parseTree = parser.getParserTree(input);
         if (parseTree == null) {
             System.out.println(parser.getParseError());
-            throw new RuntimeException("Parse error");
+            throw new RuntimeException("Parse error: " + path);
         }
 
         return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
