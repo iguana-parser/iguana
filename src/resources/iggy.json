@@ -1069,8 +1069,22 @@
                       }
                     },
                     {
-                      "kind" : "Identifier",
-                      "name" : "Expression"
+                      "kind" : "Star",
+                      "name" : "Expression*",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Expression"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
                     },
                     {
                       "kind" : "Terminal",
@@ -1128,8 +1142,22 @@
                       }
                     },
                     {
-                      "kind" : "Identifier",
-                      "name" : "Expression"
+                      "kind" : "Star",
+                      "name" : "Expression*",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Expression"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
                     },
                     {
                       "kind" : "Terminal",
