@@ -1,0 +1,524 @@
+{
+  "kind" : "MetaSymbolNode",
+  "symbol" : {
+    "kind" : "Start",
+    "name" : "Start(X)",
+    "startSymbol" : "X"
+  },
+  "start" : 0,
+  "end" : 3,
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "X"
+        },
+        "body" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "S",
+            "arguments" : [
+              {
+                "kind" : "Integer",
+                "value" : 1
+              },
+              {
+                "kind" : "Integer",
+                "value" : 2
+              }
+            ]
+          }
+        ]
+      },
+      "children" : [
+        {
+          "kind" : "AmbiguityNode",
+          "alternatives" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "S",
+                  "parameters" : [
+                    "a",
+                    "b"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Code",
+                    "name" : "l:A {println(l,a,b)}",
+                    "symbol" : {
+                      "kind" : "Nonterminal",
+                      "name" : "A",
+                      "label" : "l"
+                    },
+                    "statements" : [
+                      {
+                        "kind" : "ExpressionStatement",
+                        "exp" : {
+                          "kind" : "Println",
+                          "arguments" : [
+                            {
+                              "kind" : "Name",
+                              "name" : "l",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "a",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "b",
+                              "i" : -1
+                            }
+                          ],
+                          "fun" : "println"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "B"
+                  }
+                ]
+              },
+              "children" : [
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "A"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 0,
+                      "end" : 1
+                    }
+                  ],
+                  "start" : 0,
+                  "end" : 1
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "B"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "b",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 1,
+                      "end" : 2
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "b",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      },
+                      "start" : 2,
+                      "end" : 3
+                    }
+                  ],
+                  "start" : 1,
+                  "end" : 3
+                }
+              ],
+              "start" : 0,
+              "end" : 3
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "S",
+                  "parameters" : [
+                    "a",
+                    "b"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "l1"
+                  },
+                  {
+                    "kind" : "Code",
+                    "name" : "l2:A {println(l1,l2,a,b)}",
+                    "symbol" : {
+                      "kind" : "Nonterminal",
+                      "name" : "A",
+                      "label" : "l2"
+                    },
+                    "statements" : [
+                      {
+                        "kind" : "ExpressionStatement",
+                        "exp" : {
+                          "kind" : "Println",
+                          "arguments" : [
+                            {
+                              "kind" : "Name",
+                              "name" : "l1",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "l2",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "a",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "b",
+                              "i" : -1
+                            }
+                          ],
+                          "fun" : "println"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "D"
+                  }
+                ]
+              },
+              "children" : [
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "C"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 0,
+                      "end" : 1
+                    }
+                  ],
+                  "start" : 0,
+                  "end" : 1
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "A"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 1,
+                      "end" : 2
+                    }
+                  ],
+                  "start" : 1,
+                  "end" : 2
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "D"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "b",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "b",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      },
+                      "start" : 2,
+                      "end" : 3
+                    }
+                  ],
+                  "start" : 2,
+                  "end" : 3
+                }
+              ],
+              "start" : 0,
+              "end" : 3
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "S",
+                  "parameters" : [
+                    "a",
+                    "b"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Code",
+                    "name" : "l:A {println(l,a,b)}",
+                    "symbol" : {
+                      "kind" : "Nonterminal",
+                      "name" : "A",
+                      "label" : "l"
+                    },
+                    "statements" : [
+                      {
+                        "kind" : "ExpressionStatement",
+                        "exp" : {
+                          "kind" : "Println",
+                          "arguments" : [
+                            {
+                              "kind" : "Name",
+                              "name" : "l",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "a",
+                              "i" : -1
+                            },
+                            {
+                              "kind" : "Name",
+                              "name" : "b",
+                              "i" : -1
+                            }
+                          ],
+                          "fun" : "println"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "B"
+                  }
+                ]
+              },
+              "children" : [
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "A"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 0,
+                      "end" : 1
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 1,
+                      "end" : 2
+                    }
+                  ],
+                  "start" : 0,
+                  "end" : 2
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "B"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "b",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "b",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 98
+                        }
+                      },
+                      "start" : 2,
+                      "end" : 3
+                    }
+                  ],
+                  "start" : 2,
+                  "end" : 3
+                }
+              ],
+              "start" : 0,
+              "end" : 3
+            }
+          ]
+        }
+      ],
+      "start" : 0,
+      "end" : 3
+    }
+  ]
+}

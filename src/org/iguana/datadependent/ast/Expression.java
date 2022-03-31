@@ -443,7 +443,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.arguments, this.fun);
+            return Objects.hash(Arrays.hashCode(this.arguments), this.fun);
         }
 
         @Override
