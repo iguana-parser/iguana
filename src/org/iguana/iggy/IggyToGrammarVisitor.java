@@ -633,6 +633,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 switch (funName) {
                     case "println":
                         return AST.println(arguments);
+                    case "indent":
+                        return AST.indent(arguments[0]);
                     default:
                         throw new RuntimeException("Unknown function name: " + funName);
                 }

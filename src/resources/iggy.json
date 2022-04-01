@@ -3278,6 +3278,35 @@
               "val" : 110
             }
           ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 100
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
         }
       ]
     },
@@ -3354,35 +3383,69 @@
       ]
     },
     "FunName" : {
-      "kind" : "regex.Seq",
+      "kind" : "regex.Alt",
       "symbols" : [
         {
-          "kind" : "Char",
-          "val" : 112
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 112
+            },
+            {
+              "kind" : "Char",
+              "val" : 114
+            },
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            },
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            }
+          ]
         },
         {
-          "kind" : "Char",
-          "val" : 114
-        },
-        {
-          "kind" : "Char",
-          "val" : 105
-        },
-        {
-          "kind" : "Char",
-          "val" : 110
-        },
-        {
-          "kind" : "Char",
-          "val" : 116
-        },
-        {
-          "kind" : "Char",
-          "val" : 108
-        },
-        {
-          "kind" : "Char",
-          "val" : 110
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 100
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
         }
       ]
     },

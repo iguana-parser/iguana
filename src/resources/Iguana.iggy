@@ -227,8 +227,10 @@ terminal Keywords
   | "offside"
   | "ignore"
   | "println"
+  | "indent"
   ;
 
 terminal FunName
   : "println"
+  | "indent"
   ;
