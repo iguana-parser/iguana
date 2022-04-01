@@ -1,0 +1,12 @@
+start S
+  : E(0,0)
+  ;
+
+E($l,$r)
+  : [[4 >= $r]] E(4,$r) 'z'   // propagate r down as this is a deep case: x ( ( a w ) z )
+  | [[3 >= $l]] 'x' E(0,3)    // can be affected by left E  => constraint on l
+  | [[2 >= $r]] E(0,0) 'w'    // can be affected by right E => constraint on r
+  | 'a'
+  ;
+
+// xawz
