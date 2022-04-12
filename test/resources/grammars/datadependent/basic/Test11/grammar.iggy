@@ -1,0 +1,11 @@
+
+start X
+  : S
+  ;
+
+S : a:'a' [[a.l == 0]] println(a.r, indent(a.r)); Layout b:'b' [[b.l == 5]] println(b.r, indent(b.r));
+  ;
+
+terminal Layout
+  : [\ ]*
+  ;
