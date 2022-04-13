@@ -1048,43 +1048,6 @@
                   "label" : "Ignore"
                 }
               ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Expression"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "?",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 63
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Symbol"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ":",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 58
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Symbol"
-                    }
-                  ],
-                  "label" : "IfThenElse"
-                }
-              ]
             }
           ]
         },
@@ -1119,6 +1082,45 @@
         },
         {
           "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol"
+                    },
+                    {
+                      "kind" : "Plus",
+                      "name" : "Statement+",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Statement"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
+                    }
+                  ],
+                  "label" : "Statement"
+                }
+              ]
+            },
             {
               "seqs" : [
                 {
@@ -1183,7 +1185,11 @@
                   "label" : "PostCondition"
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "alternatives" : [
             {
               "seqs" : [
                 {
@@ -1381,33 +1387,67 @@
                   "label" : "Except"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "alternatives" : [
+            },
             {
               "seqs" : [
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier",
-                      "name" : "Symbol"
+                      "kind" : "Terminal",
+                      "name" : "if",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          }
+                        ]
+                      }
                     },
                     {
                       "kind" : "Identifier",
                       "name" : "Expression"
                     },
                     {
+                      "kind" : "Identifier",
+                      "name" : "Symbol"
+                    },
+                    {
                       "kind" : "Terminal",
-                      "name" : ";",
+                      "name" : "else",
                       "regex" : {
-                        "kind" : "Char",
-                        "val" : 59
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 115
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
                       }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol"
                     }
                   ],
-                  "label" : "Statement"
+                  "label" : "IfThenElse"
                 }
               ]
             },
@@ -1550,67 +1590,6 @@
                     }
                   ],
                   "label" : "PlusSep"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "{{",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 123
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 123
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Plus",
-                      "name" : "Binding+",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Binding"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "}}",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 125
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 125
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  "label" : "Bindings"
                 }
               ]
             }
@@ -2704,6 +2683,44 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "Statement"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression"
+                    }
+                  ],
+                  "label" : "Expression"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Binding"
+                    }
+                  ],
+                  "label" : "Binding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Binding"
       },
       "priorityLevels" : [
@@ -3346,6 +3363,40 @@
             {
               "kind" : "Char",
               "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 102
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
             }
           ]
         }

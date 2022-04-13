@@ -46,23 +46,22 @@ Symbol
   | "(" Symbol+ ("|" Symbol+)+ ")"          %Alternation
   > "align" Symbol                          %Align
   | "ignore" Symbol                         %Ignore
-  | Expression "?" Symbol ":" Symbol        %IfThenElse
   > Identifier ":" Symbol                   %Labeled
-  > Symbol "[[" {Expression ","}* "]]"      %PostCondition
-  | Regex "<<" Symbol                       %Precede
+  > Symbol { Statement "," }+ ";"           %Statement
+  | Symbol "[[" {Expression ","}* "]]"      %PostCondition
+  > Regex "<<" Symbol                       %Precede
   | Regex "!<<" Symbol                      %NotPrecede
   > Symbol ">>" Regex                       %Follow
   | Symbol "!>>" Regex                      %NotFollow
   | Symbol "\\" Regex                       %Exclude
   | Symbol "!" Identifier                   %Except
-  > Symbol Expression ";"                   %Statement
+  | "if" Expression Symbol "else" Symbol    %IfThenElse
   | Identifier                              %Nont
   | String                                  %String
   | Char                                    %Character
   | CharClass                               %CharClass
   | "{" Symbol Symbol+ "}" "*"              %StarSep
   | "{" Symbol Symbol+ "}" "+"              %PlusSep
-  | "{{" {Binding ","}+ "}}"                %Bindings
 
 Arguments
   = "(" {Expression ","}* ")"
@@ -114,6 +113,10 @@ Expression
 
 ReturnExpression
   = "{" Expression "}"    %ReturnExpression
+
+Statement
+  = Expression    %Expression
+  | Binding       %Binding
 
 Binding
   = Identifier "=" Expression         %Assign
@@ -194,6 +197,8 @@ terminal Keywords
   | "ignore"
   | "println"
   | "indent"
+  | "if"
+  | "else"
 
 terminal FunName
   = "println"

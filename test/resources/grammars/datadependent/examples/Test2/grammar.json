@@ -1,0 +1,225 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "AB",
+                      "arguments" : [
+                        {
+                          "kind" : "Integer",
+                          "value" : 5
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : 6
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "AB",
+        "parameters" : [
+          "a",
+          "b"
+        ]
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Code",
+                      "name" : "c {var x = a;var y = b}",
+                      "symbol" : {
+                        "kind" : "Terminal",
+                        "name" : "c",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 99
+                        }
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "VariableDeclaration",
+                          "decl" : {
+                            "name" : "x",
+                            "i" : -1,
+                            "expression" : {
+                              "kind" : "Name",
+                              "name" : "a",
+                              "i" : -1
+                            }
+                          }
+                        },
+                        {
+                          "kind" : "VariableDeclaration",
+                          "decl" : {
+                            "name" : "y",
+                            "i" : -1,
+                            "expression" : {
+                              "kind" : "Name",
+                              "name" : "b",
+                              "i" : -1
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "IfThenElse",
+                      "name" : "if (x == 5) A {println(x)} else B {println(y)};",
+                      "expression" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "Name",
+                          "name" : "x",
+                          "i" : -1
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 5
+                        }
+                      },
+                      "thenPart" : {
+                        "kind" : "Code",
+                        "name" : "A {println(x)}",
+                        "symbol" : {
+                          "kind" : "Identifier",
+                          "name" : "A"
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Println",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "x",
+                                  "i" : -1
+                                }
+                              ],
+                              "fun" : "println"
+                            }
+                          }
+                        ]
+                      },
+                      "elsePart" : {
+                        "kind" : "Code",
+                        "name" : "B {println(y)}",
+                        "symbol" : {
+                          "kind" : "Identifier",
+                          "name" : "B"
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Println",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "y",
+                                  "i" : -1
+                                }
+                              ],
+                              "fun" : "println"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

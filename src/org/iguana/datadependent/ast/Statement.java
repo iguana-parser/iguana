@@ -103,7 +103,7 @@ public abstract class Statement extends AbstractAST {
 
 		public boolean equals(Object o) {
 			if (this == o) return true;
-			if (!(o instanceof Expression)) return false;
+			if (!(o instanceof VariableDeclaration)) return false;
 			VariableDeclaration other = (VariableDeclaration) o;
 			return Objects.equals(decl, other.decl);
 		}

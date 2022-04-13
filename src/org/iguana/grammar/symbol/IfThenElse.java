@@ -32,6 +32,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class IfThenElse extends AbstractSymbol {
 
@@ -83,7 +84,22 @@ public class IfThenElse extends AbstractSymbol {
 	public int size() {
 		return thenPart.size() + elsePart.size();
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof IfThenElse)) return false;
+		IfThenElse that = (IfThenElse) o;
+		return Objects.equals(expression, that.expression) &&
+			Objects.equals(thenPart, that.thenPart) &&
+			Objects.equals(elsePart, that.elsePart);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(expression, thenPart, elsePart);
+	}
+
 	@Override
 	public String toString(int j) {
 		return String.format("if (%s) { %s } else { %s }", 
@@ -98,6 +114,8 @@ public class IfThenElse extends AbstractSymbol {
 		private Expression expression;
 		private Symbol thenPart;
 		private Symbol elsePart;
+
+		public Builder() { }
 
 		public Builder(IfThenElse ifThenElse) {
 			super(ifThenElse);

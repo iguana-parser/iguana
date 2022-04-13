@@ -68,6 +68,7 @@ public class JsonSerializer {
         mapper.addMixIn(Code.class, CodeMixIn.class);
         mapper.addMixIn(CodeHolder.class, CodeHolderMixIn.class);
         mapper.addMixIn(Return.class, ReturnMixIn.class);
+        mapper.addMixIn(IfThenElse.class, IfThenElseMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
 
@@ -102,6 +103,8 @@ public class JsonSerializer {
         mapper.addMixIn(Expression.EndOfFile.class, ExpressionMixIn.EndOfFileMixIn.class);
         mapper.addMixIn(Expression.IfThenElse.class, ExpressionMixIn.IfThenElseMixIn.class);
         mapper.addMixIn(Expression.Call.class, ExpressionMixIn.CallMixIn.class);
+
+        mapper.addMixIn(VariableDeclaration.class, VariableDeclarationMixIn.class);
 
         // Call Expressions
         mapper.addMixIn(AST.Println.class, ExpressionMixIn.CallMixIn.PrintlnMixIn.class);
@@ -380,7 +383,8 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Identifier.class, name="Identifier"),
         @JsonSubTypes.Type(value=CodeHolder.class, name="CodeHolder"),
         @JsonSubTypes.Type(value=Code.class, name="Code"),
-        @JsonSubTypes.Type(value=Return.class, name="Return")
+        @JsonSubTypes.Type(value=Return.class, name="Return"),
+        @JsonSubTypes.Type(value=IfThenElse.class, name="IfThenElse")
     })
     abstract static class SymbolMixIn { }
 
@@ -502,6 +506,9 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Return.Builder.class)
     abstract static class ReturnMixIn { }
 
+    @JsonDeserialize(builder = IfThenElse.Builder.class)
+    abstract static class IfThenElseMixIn { }
+
     @JsonDeserialize(builder = iguana.regex.Seq.Builder.class)
     abstract static class SeqMixIn { }
 
@@ -532,6 +539,13 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=DataDependentCondition.class, name="DataDependentCondition")
     })
     abstract static class ConditionMixIn { }
+
+    abstract static class VariableDeclarationMixIn {
+        @JsonCreator
+        VariableDeclarationMixIn(@JsonProperty("name") String name,
+                                 @JsonProperty("i") int i,
+                                 @JsonProperty("expression") Expression expression) { }
+    }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
