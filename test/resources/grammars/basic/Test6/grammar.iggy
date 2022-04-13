@@ -1,10 +1,7 @@
 
 start A
-  : B C
-  ;
+  = B C
 
-B : 'b'
-  ;
+B = 'b'
 
-C : 'c'
-  ;
+C = 'c'

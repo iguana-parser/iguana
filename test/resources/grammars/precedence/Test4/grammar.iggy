@@ -1,6 +1,5 @@
 
 start E
-  : left E '*' E
+  = left E '*' E
   > left E '+' E
   | 'a'
-  ;

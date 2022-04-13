@@ -1,18 +1,13 @@
 
 start S
-  : A B C
+  = A B C
   | A B D
-  ;
 
-A : 'a'
-  ;
+A = 'a'
 
-B : 'b'
-  ;
+B = 'b'
 
-C : 'c'
-  ;
+C = 'c'
 
-D : 'c'
-  ;
+D = 'c'
 

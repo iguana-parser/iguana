@@ -1,12 +1,8 @@
 start S
-  : X
-  ;
+  = X
 
-X : a:A b:(B [[a.r == b.l]])*
-  ;
+X = a:A b:(B [[a.r == b.l]])*
 
-A : 'a'
-  ;
+A = 'a'
 
-B : 'b'
-  ;
+B = 'b'

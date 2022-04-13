@@ -1,9 +1,7 @@
 start S
-   : E
-   ;
+   = E
 
- E : E 'z'
-   > 'x' E
-   > E 'w'
-   | 'a'
-   ;
+E = E 'z'
+  > 'x' E
+  > E 'w'
+  | 'a'

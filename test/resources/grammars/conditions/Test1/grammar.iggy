@@ -1,8 +1,6 @@
 
 start S
-  : Label !>> ":"
-  ;
+  = Label !>> ":"
 
 Label
-  : [a-z]+ !>> [a-z]
-  ;
+  = [a-z]+ !>> [a-z]

@@ -1,12 +1,9 @@
 
 start S
-  : 'for' L? Id
+  = 'for' L? Id
   | 'forall'
-  ;
 
 Id
-  : [a-z] !<< [a-z]+ !>> [a-z]
-  ;
+  = [a-z] !<< [a-z]+ !>> [a-z]
 
-L : ' '
-  ;
+L = ' '

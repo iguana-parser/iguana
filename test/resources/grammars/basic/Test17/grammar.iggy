@@ -1,6 +1,5 @@
 
 start A
-  : 'a' A 'b'
+  = 'a' A 'b'
   | 'a' A 'c'
   | 'a'
-  ;

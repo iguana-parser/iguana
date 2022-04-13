@@ -1,6 +1,5 @@
 
 start E
-  : '-' E
+  = '-' E
   > left E '+' E
   | 'a'
-  ;

@@ -1,18 +1,12 @@
 start S
-  : X
-  ;
+  = X
 
-X : A s:(b:B | c:C println(c.l); d:D)*
-  ;
+X = A s:(b:B | c:C println(c.l); d:D)*
 
-A : 'a'
-  ;
+A = 'a'
 
-B : 'b'
-  ;
+B = 'b'
 
-C : 'c'
-  ;
+C = 'c'
 
-D : 'd'
-  ;
+D = 'd'

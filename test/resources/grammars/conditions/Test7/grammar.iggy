@@ -1,16 +1,12 @@
 
 start S
-  : 'for' L? Id
+  = 'for' L? Id
   | 'forall'
-  ;
 
 Id
-  : 'for' !<< Chars
-  ;
+  = 'for' !<< Chars
 
 terminal Chars
-  : [a-z]+
-  ;
+  = [a-z]+
 
-L : ' '
-  ;
+L = ' '

@@ -1,12 +1,9 @@
 
 start S
-  : Id
-  ;
+  = Id
 
 Id
-  : Chars \ ('if' | 'while' | 'do')
-  ;
+  = Chars \ ('if' | 'while' | 'do')
 
 terminal Chars
-  : [a-z]+
-  ;
+  = [a-z]+

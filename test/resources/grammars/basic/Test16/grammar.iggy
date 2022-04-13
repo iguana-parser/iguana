@@ -1,21 +1,15 @@
 
 start S
-  : A B C D
-  ;
+  = A B C D
 
-A : 'a'
+A = 'a'
   |
-  ;
 
-
-B : 'a'
+B = 'a'
   |
-  ;
 
-C : 'a'
+C = 'a'
   |
-  ;
 
-D : 'a'
+D = 'a'
   |
-  ;

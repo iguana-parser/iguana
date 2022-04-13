@@ -1,9 +1,7 @@
 
 start S
-  : A A 'b'
-  ;
+  = A A 'b'
 
-A : 'a'
+A = 'a'
   |
-  ;
 

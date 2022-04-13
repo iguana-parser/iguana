@@ -1,7 +1,5 @@
 
 start A
-  : B 'a' 'c'
-  ;
+  = B 'a' 'c'
 
-B : 'b'
-  ;
+B = 'b'

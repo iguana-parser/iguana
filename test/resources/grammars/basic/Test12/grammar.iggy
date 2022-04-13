@@ -1,7 +1,6 @@
 
 
 start A
-  : A A
+  = A A
   | 'a'
   |
-  ;

@@ -198,8 +198,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     /*
-     * Sequence: Associativity? Symbol Symbol+ ReturnExpression? Label?     %MoreThanOne
-     *         | Symbol ReturnExpression? Label?                            %Single
+     * Sequence: Associativity? PreCondition? Symbol Symbol+ ReturnExpression? Label?     %MoreThanOne
+     *         | PreCondition? Symbol ReturnExpression? Label?                            %Single
      *         ;
      */
     private Sequence visitSequence(NonterminalNode node) {
@@ -210,15 +210,23 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     associativity = getAssociativity(node.childAt(0).childAt(0));
                 }
                 Sequence.Builder builder = new Sequence.Builder();
+                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
                 List<Symbol> symbols = new ArrayList<>();
-                symbols.add((Symbol) node.childAt(1).accept(this));
-                symbols.addAll((List<Symbol>) node.childAt(2).accept(this));
+                Symbol symbol = (Symbol) node.childAt(2).accept(this);
+                SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
+                if (expressions != null) {
+                    for (Expression expression : expressions) {
+                        symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
+                    }
+                }
+                symbols.add(symbolBuilder.build());
+                symbols.addAll((List<Symbol>) node.childAt(3).accept(this));
                 builder.addSymbols(symbols);
-                Expression returnExpression = (Expression) node.childAt(3).accept(this);
+                Expression returnExpression = (Expression) node.childAt(4).accept(this);
                 if (returnExpression != null) {
                     builder.addSymbol(Return.ret(returnExpression));
                 }
-                String label = (String) node.childAt(4).accept(this);
+                String label = (String) node.childAt(5).accept(this);
                 builder.setAssociativity(associativity);
                 builder.setLabel(label);
                 return builder.build();
@@ -226,12 +234,20 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Single": {
                 Sequence.Builder builder = new Sequence.Builder();
-                builder.addSymbol((Symbol) node.childAt(0).accept(this));
-                Expression returnExpression = (Expression) node.childAt(1).accept(this);
+                List<Expression> expressions = (List<Expression>) node.childAt(0).accept(this);
+                Symbol symbol = (Symbol) node.childAt(1).accept(this);
+                SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
+                if (expressions != null) {
+                    for (Expression expression : expressions) {
+                        symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
+                    }
+                }
+                Expression returnExpression = (Expression) node.childAt(2).accept(this);
                 if (returnExpression != null) {
                     builder.addSymbol(Return.ret(returnExpression));
                 }
-                String label = (String) node.childAt(2).accept(this);
+                builder.addSymbol(symbolBuilder.build());
+                String label = (String) node.childAt(3).accept(this);
                 builder.setLabel(label);
                 return builder.build();
             }
@@ -430,16 +446,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return Code.code(symbol, AST.stat(expression));
             }
 
-            case "PreCondition": {
-                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
-                Symbol symbol = (Symbol) node.childAt(3).accept(this);
-                SymbolBuilder<? extends Symbol> builder = symbol.copy();
-                for (Expression expression : expressions) {
-                    builder.addPreCondition(DataDependentCondition.predicate(expression));
-                }
-                return builder.build();
-            }
-
             case "PostCondition": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
                 List<Expression> expressions = (List<Expression>) node.childAt(2).accept(this);
@@ -616,9 +622,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * |            Expression "!=" Expression    %NotEqual)
      * > left      (Expression "&&" Expression    %And
      * |            Expression "||" Expression    %Or)
-     * |           VarName ".l"                   %LExtent
-     * |           VarName ".r"                   %RExtent
-     * |           VarName ".yield"               %Yield
+     * |           Identifier ".l"                %LExtent
+     * |           Identifier ".r"                %RExtent
+     * |           Identifier ".yield"            %Yield
+     * |           Identifier ".val"              %Val
      * |           VarName                        %Name
      * |           Number                         %Number
      * |           "(" Expression ")"             %Bracket
@@ -694,6 +701,14 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "RExtent":
                 String r = node.childAt(0).getText();
                 return AST.rExt(r);
+
+            case "Yield":
+                String yield = node.childAt(0).getText();
+                return AST.yield(yield);
+
+            case "Val":
+                String val = node.childAt(0).getText();
+                return AST.val(val);
 
             case "Name":
                 return AST.var((node.childAt(0).getText()).substring(1));

@@ -1,15 +1,10 @@
 start S
-  : X
-  ;
+  = X
 
-X : a:A b:(b:B [[b.l == a.r]] println($b); c:C println($c); )*  // shadowing (b:B)
-  ;
+X = a:A b:(b:B [[b.l == a.r]] println($b); c:C println($c); )*  // shadowing (b:B)
 
-A : 'a'
-  ;
+A = 'a'
 
-B : 'b'
-  ;
+B = 'b'
 
-C : 'c'
-  ;
+C = 'c'

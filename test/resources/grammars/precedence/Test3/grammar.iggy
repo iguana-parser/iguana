@@ -1,5 +1,4 @@
 
 start E
-  : right E '^' E
+  = right E '^' E
   |      'a'
-  ;

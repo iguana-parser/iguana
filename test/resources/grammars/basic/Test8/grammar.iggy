@@ -1,12 +1,9 @@
 
 start A
-  : 'a' B 'c'
+  = 'a' B 'c'
   | C
-  ;
 
-B : 'b'
-  ;
+B = 'b'
 
-C : 'a' C
+C = 'a' C
   | 'c'
-  ;

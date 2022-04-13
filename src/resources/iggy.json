@@ -87,23 +87,15 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : ":",
+                      "name" : "=",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 58
+                        "val" : 61
                       }
                     },
                     {
                       "kind" : "Identifier",
                       "name" : "Body"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ";",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 59
-                      }
                     }
                   ],
                   "label" : "Syntax"
@@ -198,23 +190,15 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : ":",
+                      "name" : "=",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 58
+                        "val" : 61
                       }
                     },
                     {
                       "kind" : "Identifier",
                       "name" : "RegexBody"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ";",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 59
-                      }
                     }
                   ],
                   "label" : "Lexical"
@@ -495,6 +479,14 @@
                       }
                     },
                     {
+                      "kind" : "Opt",
+                      "name" : "PreCondition?",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "PreCondition"
+                      }
+                    },
+                    {
                       "kind" : "Identifier",
                       "name" : "Symbol"
                     },
@@ -532,6 +524,14 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Opt",
+                      "name" : "PreCondition?",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "PreCondition"
+                      }
+                    },
+                    {
                       "kind" : "Identifier",
                       "name" : "Symbol"
                     },
@@ -553,6 +553,78 @@
                     }
                   ],
                   "label" : "Single"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "PreCondition"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "[[",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 91
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 91
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Expression*",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Expression"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "]]",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 93
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 93
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -1040,75 +1112,6 @@
                     }
                   ],
                   "label" : "Labeled"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "[[",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 91
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 91
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Star",
-                      "name" : "Expression*",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Expression"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "]]",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Symbol"
-                    }
-                  ],
-                  "label" : "PreCondition"
                 }
               ]
             }
@@ -2557,6 +2560,44 @@
                     }
                   ],
                   "label" : "Yield"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ".val",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 46
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 118
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "Val"
                 }
               ]
             },

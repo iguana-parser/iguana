@@ -1,13 +1,9 @@
 
 start A
-  : B C D
-  ;
+  = B C D
 
-B : 'b'
-  ;
+B = 'b'
 
-C : 'c'
-  ;
+C = 'c'
 
-D : 'd'
-  ;
+D = 'd'

@@ -1,50 +1,43 @@
 
 start Definition
-  : Rule+
-  ;
+  = Rule+
 
 Rule
-  : "start"? Identifier Parameters? ":" Body ";"       %Syntax
-  | "layout"? "terminal" Identifier ":" RegexBody ";"  %Lexical
-  ;
+  = "start"? Identifier Parameters? "=" Body        %Syntax
+  | "layout"? "terminal" Identifier "=" RegexBody   %Lexical
 
 RegexRule
-  : NontName ":" RegexBody    %Regex
-  ;
+  = NontName ":" RegexBody    %Regex
 
 Body
-  : {PriorityLevels ">"}+
-  ;
+  = {PriorityLevels ">"}+
 
 PriorityLevels
-  : {Alternative "|"}+  %Prec
-  ;
+  = {Alternative "|"}+  %Prec
 
 Alternative
-  : Sequence                                         %Sequence
+  = Sequence                                         %Sequence
   | Associativity "(" Sequence ("|" Sequence)+ ")"   %Assoc
   | Label?                                           %Empty
-  ;
 
 RegexBody
-  : {RegexSequence "|"}*
-  ;
+  = {RegexSequence "|"}*
 
 Sequence
-  : Associativity? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOne
-  | Symbol ReturnExpression? Label?                          %Single
-  ;
+  = Associativity? PreCondition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOne
+  | PreCondition? Symbol ReturnExpression? Label?                          %Single
+
+PreCondition
+  = "[[" {Expression ","}* "]]"
 
 RegexSequence
-  : Regex+    %Sequence
-  ;
+  = Regex+    %Sequence
 
 Parameters
-  : "(" {VarName ","}* ")"
-  ;
+  = "(" {VarName ","}* ")"
 
 Symbol
-  : Identifier Arguments                    %Call
+  = Identifier Arguments                    %Call
   > "offside" Symbol                        %Offside
   > Symbol "*"                              %Star
   | Symbol "+"                              %Plus
@@ -55,7 +48,6 @@ Symbol
   | "ignore" Symbol                         %Ignore
   | Expression "?" Symbol ":" Symbol        %IfThenElse
   > Identifier ":" Symbol                   %Labeled
-  > "[[" {Expression ","}* "]]" Symbol      %PreCondition
   > Symbol "[[" {Expression ","}* "]]"      %PostCondition
   | Regex "<<" Symbol                       %Precede
   | Regex "!<<" Symbol                      %NotPrecede
@@ -71,14 +63,12 @@ Symbol
   | "{" Symbol Symbol+ "}" "*"              %StarSep
   | "{" Symbol Symbol+ "}" "+"              %PlusSep
   | "{{" {Binding ","}+ "}}"                %Bindings
-  ;
 
 Arguments
-  : "(" {Expression ","}* ")"
-  ;
+  = "(" {Expression ","}* ")"
 
 Regex
-  : Regex "*"                     %Star
+  = Regex "*"                     %Star
   | Regex "+"                     %Plus
   | Regex "?"                     %Option
   | "(" Regex ")"                 %Bracket
@@ -88,24 +78,20 @@ Regex
   | CharClass                     %CharClass
   | String                        %String
   | Char                          %Character
-  ;
 
 Regexs
-  : Regex+  %Sequence
-  ;
+  = Regex+  %Sequence
 
 CharClass
-  : "[" Range* "]"      %Chars
+  = "[" Range* "]"      %Chars
   | "!" "[" Range* "]"  %NotChars
-  ;
 
 Range
-  : RangeChar "-" RangeChar   %Range
+  = RangeChar "-" RangeChar   %Range
   | RangeChar                 %Character
-  ;
 
 Expression
-  :           FunName Arguments            %Call
+  =           FunName Arguments            %Call
   > left      (Expression "*" Expression   %Multiplication
   |            Expression "/" Expression   %Division)
   > left      (Expression "+" Expression   %Plus
@@ -121,102 +107,82 @@ Expression
   |           Identifier ".l"              %LExtent
   |           Identifier ".r"              %RExtent
   |           Identifier ".yield"          %Yield
+  |           Identifier ".val"            %Val
   |           VarName                      %Name
   |           Number                       %Number
   |           "(" Expression ")"           %Bracket
-  ;
 
 ReturnExpression
-  : "{" Expression "}"    %ReturnExpression
-  ;
+  = "{" Expression "}"    %ReturnExpression
 
 Binding
-  : Identifier "=" Expression         %Assign
+  = Identifier "=" Expression         %Assign
   | "var" Identifier "=" Expression   %Declare
-  ;
 
 terminal Letter
-  : [A-Za-z_]
-  ;
+  = [A-Za-z_]
 
 terminal LetterOrDigit
-  : [A-Za-z_0-9]
-  ;
+  = [A-Za-z_0-9]
 
 terminal LetterOrDigits
-  : Letter (Letter | LetterOrDigit)*
-  ;
+  = Letter (Letter | LetterOrDigit)*
 
 terminal Number
-  : [0]
+  = [0]
   | [1-9][0-9]*
-  ;
 
 terminal Character
-  : "\\" [' " \\ t f r n]
+  = "\\" [' " \\ t f r n]
   | ![' " \\]
-  ;
 
 terminal RangeChar
-  : "\\" [\\ \[ \] \- t f r n \ ]
+  = "\\" [\\ \[ \] \- t f r n \ ]
   | ![\\ \[ \] \- \ ]
-  ;
 
 terminal Char
-  : "\'" Character* "\'"
-  ;
+  = "\'" Character* "\'"
 
 terminal String
-  : "\"" Character* "\""
-  ;
+  = "\"" Character* "\""
 
 layout terminal Layout
-  : WhiteSpaceOrComment*
-  ;
+  = WhiteSpaceOrComment*
 
 terminal WhiteSpaceOrComment
-  : WhiteSpaces
+  = WhiteSpaces
   | Comment
-  ;
 
 terminal WhiteSpaces
-  : [\ \t \f \r \n]+
-  ;
+  = [\ \t \f \r \n]+
 
 terminal Comment
-  : "/*" CommentChar* [*]+  "/"
+  = "/*" CommentChar* [*]+  "/"
   | "//" ![\r \n]* [\r\n]
-  ;
 
 terminal CommentChar
-  : [/]
+  = [/]
   | [*]* ![/ *]
-  ;
 
 Identifier
-  : [A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
-  ;
+  = [A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
 
 terminal Associativity
-  : "left"
+  = "left"
   | "right"
   | "non-assoc"
-  ;
 
 terminal VarName
-  : '$' LetterOrDigits
-  ;
+  = '$' LetterOrDigits
 
 Label
-  : '%' Identifier
-  ;
+  = '%' Identifier
 
 NontName
-  : Identifier
-  ;
+  = Identifier
 
 terminal Keywords
-  : "start"
+  = "start"
   | "terminal"
   | "layout"
   | "var"
@@ -228,9 +194,7 @@ terminal Keywords
   | "ignore"
   | "println"
   | "indent"
-  ;
 
 terminal FunName
-  : "println"
+  = "println"
   | "indent"
-  ;
