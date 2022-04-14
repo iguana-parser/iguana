@@ -147,7 +147,10 @@ public class DesugarState implements GrammarTransformation {
 				newRules.add(transform(rule, uses, nonterminal_bindings == null? new HashMap<>() : nonterminal_bindings.get(i++), returns));
 			}
 		}
-		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
+		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout())
+			.setStartSymbol(grammar.getStartSymbol())
+			.setGlobals(grammar.getGlobals())
+			.build();
 	}
 	
 	private RuntimeRule transform(RuntimeRule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {

@@ -1,0 +1,295 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Code",
+                      "name" : "A {var m = 3}",
+                      "symbol" : {
+                        "kind" : "Identifier",
+                        "name" : "A"
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "VariableDeclaration",
+                          "decl" : {
+                            "name" : "m",
+                            "i" : -1,
+                            "expression" : {
+                              "kind" : "Integer",
+                              "value" : 3
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "C"
+                    },
+                    {
+                      "kind" : "Code",
+                      "name" : "B {var n = 4}",
+                      "symbol" : {
+                        "kind" : "Identifier",
+                        "name" : "B"
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "VariableDeclaration",
+                          "decl" : {
+                            "name" : "n",
+                            "i" : -1,
+                            "expression" : {
+                              "kind" : "Integer",
+                              "value" : 4
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "D"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Code",
+                      "name" : "a {x = 1}",
+                      "symbol" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assignment",
+                            "id" : "x",
+                            "exp" : {
+                              "kind" : "Integer",
+                              "value" : 1
+                            },
+                            "i" : -1
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Code",
+                      "name" : "a {y = 2}",
+                      "symbol" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assignment",
+                            "id" : "y",
+                            "exp" : {
+                              "kind" : "Integer",
+                              "value" : 2
+                            },
+                            "i" : -1
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Code",
+                      "name" : "b {z = x} {println(x)}",
+                      "symbol" : {
+                        "kind" : "Code",
+                        "name" : "b {z = x}",
+                        "symbol" : {
+                          "kind" : "Terminal",
+                          "name" : "b",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 98
+                          }
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "z",
+                              "exp" : {
+                                "kind" : "Name",
+                                "name" : "x",
+                                "i" : -1
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Println",
+                            "arguments" : [
+                              {
+                                "kind" : "Name",
+                                "name" : "x",
+                                "i" : -1
+                              }
+                            ],
+                            "fun" : "println"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "D"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "d",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 100
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "c",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 99
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  },
+  "globals" : {
+    "x" : 0,
+    "y" : 0,
+    "z" : 0
+  }
+}

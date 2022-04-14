@@ -70,6 +70,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				.addEBNFl(grammar.getEBNFLefts())
 				.addEBNFr(grammar.getEBNFRights())
 				.setLayout(grammar.getLayout())
+				.setGlobals(grammar.getGlobals())
 				.setStartSymbol(grammar.getStartSymbol()).build();
 	}
 	

@@ -16,6 +16,7 @@ public class IguanaRecognizer {
 
     private final GrammarGraph grammarGraph;
     private final IguanaRuntime runtime;
+    private final Map<String, Object> globals;
 
     public IguanaRecognizer(RuntimeGrammar grammar) {
         this(grammar, Configuration.load());
@@ -24,10 +25,11 @@ public class IguanaRecognizer {
     public IguanaRecognizer(RuntimeGrammar grammar, Configuration config) {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.runtime = new IguanaRuntime<>(config, new RecognizerResultOps());
+        this.globals = grammar.getGlobals();
     }
 
     public boolean recognize(Input input) {
-        return recognize(input, emptyMap(), true);
+        return recognize(input, globals, false);
     }
 
     public boolean recognize(Input input, Map<String, Object> map, boolean global) {

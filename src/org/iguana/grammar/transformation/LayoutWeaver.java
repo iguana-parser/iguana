@@ -98,6 +98,8 @@ public class LayoutWeaver implements GrammarTransformation {
 			}
 			builder.addRule(ruleBuilder.build());
 		}
+
+		builder.setGlobals(grammar.getGlobals());
 		
 		return builder.build();
 	}

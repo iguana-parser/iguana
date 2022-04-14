@@ -68,7 +68,9 @@ public class RuntimeGrammar {
 	private final Map<String, Set<String>> ebnfRights;
 
 	private final Start startSymbol;
-		
+
+	private final Map<String, Object> globals;
+
 	public RuntimeGrammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.precedencePatterns = builder.precedencePatterns;
@@ -79,6 +81,7 @@ public class RuntimeGrammar {
 		this.ebnfLefts = builder.ebnfLefts;
 		this.ebnfRights = builder.ebnfRights;
 		this.terminals = builder.terminals;
+		this.globals = builder.globals;
 	}
 	
 	public Map<Nonterminal, List<RuntimeRule>> getDefinitions() {
@@ -150,7 +153,11 @@ public class RuntimeGrammar {
 	public Symbol getLayout() {
 		return layout;
 	}
-	
+
+	public Map<String, Object> getGlobals() {
+		return globals;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -212,6 +219,7 @@ public class RuntimeGrammar {
 		
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
+		private Map<String, Object> globals = new HashMap<>();
 
         public Builder() { }
 
@@ -225,6 +233,7 @@ public class RuntimeGrammar {
             ebnfRights.putAll(grammar.ebnfRights);
             startSymbol = grammar.startSymbol;
 			terminals = grammar.getTerminals();
+			globals = grammar.globals;
         }
 		
 		public RuntimeGrammar build() {
@@ -310,6 +319,11 @@ public class RuntimeGrammar {
 
 		public Builder setTerminals(Map<String, RegularExpression> terminals) {
 			this.terminals = terminals;
+			return this;
+		}
+
+		public Builder setGlobals(Map<String, Object> globals) {
+			this.globals = globals;
 			return this;
 		}
 	}

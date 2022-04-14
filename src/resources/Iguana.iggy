@@ -1,6 +1,19 @@
 
 start Definition
-  = Rule+
+  = (Rule | Global)+
+
+Global
+ = "global" Identifier "=" Initializer
+
+Initializer
+  = "null"                       %Null
+  | Number                       %Number
+  | String                       %String
+  | '[' {Initializer ','}* ']'   %List
+  | '{' {MapEntry ','}* '}'      %Map
+
+MapEntry
+  = Identifier '=' Initializer
 
 Rule
   = "start"? Identifier Parameters? "=" Body        %Syntax

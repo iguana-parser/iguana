@@ -39,6 +39,7 @@ public class DesugarStartSymbol implements GrammarTransformation {
                     .build();
 
         builder.addRule(startRule);
+        builder.setGlobals(grammar.getGlobals());
         return builder.build();
     }
 }

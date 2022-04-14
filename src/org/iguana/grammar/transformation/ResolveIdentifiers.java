@@ -48,8 +48,10 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
                 throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " + layout.getClass().getSimpleName());
             }
         }
-        return RuntimeGrammar.builder().addRules(newRules)
+        return RuntimeGrammar.builder()
+            .addRules(newRules)
             .setLayout(layout)
+            .setGlobals(grammar.getGlobals())
             .setStartSymbol(grammar.getStartSymbol()).build();
     }
 

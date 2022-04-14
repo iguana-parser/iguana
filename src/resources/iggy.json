@@ -14,11 +14,284 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "Rule+",
+                      "name" : "(Rule | Global)+",
+                      "s" : {
+                        "kind" : "Alt",
+                        "name" : "(Rule | Global)",
+                        "symbols" : [
+                          {
+                            "kind" : "Identifier",
+                            "name" : "Rule"
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "Global"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Global"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "global",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 103
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 98
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "=",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 61
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Initializer"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Initializer"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "null",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 117
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "Null"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Number"
+                    }
+                  ],
+                  "label" : "Number"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "String"
+                    }
+                  ],
+                  "label" : "String"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "[",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 91
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Initializer*",
                       "s" : {
                         "kind" : "Identifier",
-                        "name" : "Rule"
+                        "name" : "Initializer"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "]",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 93
                       }
+                    }
+                  ],
+                  "label" : "List"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "{",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 123
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "MapEntry*",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "MapEntry"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "}",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 125
+                      }
+                    }
+                  ],
+                  "label" : "Map"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "MapEntry"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "=",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 61
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Initializer"
                     }
                   ]
                 }

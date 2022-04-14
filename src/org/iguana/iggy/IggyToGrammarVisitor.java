@@ -24,6 +24,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private final Map<String, RegularExpression> terminalsMap = new HashMap<>();
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
+    private final Map<String, Object> globals = new HashMap<>();
 
     @Override
     public Object visitNonterminalNode(NonterminalNode node) {
@@ -69,21 +70,36 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Statement":
                 return visitStatement(node);
+
+            case "Global":
+                return visitGlobal(node);
+
+            case "Initializer":
+                return visitInitializer(node);
+
+            case "MapEntry":
+                return visitMapEntry(node);
         }
 
         return visitChildren(node);
     }
 
     /*
-     * Definition: Rule+;
+     * Definition = (Rule | Global)+;
      */
     private Grammar visitDefinition(NonterminalNode node) {
         Grammar.Builder builder = new Grammar.Builder();
-        for (Rule rule : (List<Rule>) node.childAt(0).accept(this)) {
-            builder.addRule(rule);
+        List<Rule> rules = (List<Rule>) node.childAt(0).accept(this);
+        for (Rule rule : rules) {
+            if (rule != null) { // null means a global definition
+                builder.addRule(rule);
+            }
         }
         for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
             builder.addTerminal(entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<String, Object> entry : globals.entrySet()) {
+            builder.addGlobal(entry.getKey(), entry.getValue());
         }
         builder.setStartSymbol(Start.from(start));
         builder.setLayout(layout);
@@ -449,7 +465,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
             case "Assign":
-                return AST.stat(AST.assign(getIdentifier(node.childAt(0)).id, (Expression) node.childAt(1).accept(this)));
+                return AST.stat(AST.assign(getIdentifier(node.childAt(0)).id, (Expression) node.childAt(2).accept(this)));
 
             case "Declare":
                 Expression expression = (Expression) node.childAt(3).accept(this);
@@ -601,6 +617,83 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             default:
                 throw new RuntimeException("Unexpected label: " + label);
         }
+    }
+
+    /**
+     * Global
+     *   = "global" Identifier "=" Initializer
+     */
+    private Object visitGlobal(NonterminalNode node) {
+        String key = node.childAt(1).getText();
+        Object value = node.childAt(3).accept(this);
+        globals.put(key, value);
+        return null;
+    }
+
+    /**
+     * Initializer
+     *   = "null"                       %Null
+     *   | Number                       %Number
+     *   | String                       %String
+     *   | '[' {Initializer ','}* ']'   %List
+     *   | '{' {MapEntry ','}* '}'      %Map
+     */
+    private Object visitInitializer(NonterminalNode node) {
+        String label = node.getGrammarDefinition().getLabel();
+        switch (label) {
+            case "Null":
+                return null;
+
+            case "Number":
+                return Integer.parseInt(node.childAt(0).getText());
+
+            case "String":
+                return node.childAt(1).getText();
+
+            case "List":
+                List<Object> list = new ArrayList<>();
+                List<Object> elements = (List<Object>) node.childAt(1).accept(this);
+                if (elements != null) {
+                    list.addAll(elements);
+                }
+                return list;
+
+            case "Map":
+                Map<String, Object> map = new HashMap<>();
+                List<Map.Entry<String, Object>> entries = (List<Map.Entry<String, Object>> ) node.childAt(1).accept(this);
+                if (entries != null) {
+                    for (Map.Entry<String, Object> entry : entries) {
+                        map.put(entry.getKey(), entry.getValue());
+                    }
+                }
+                return map;
+
+            default:
+                throw new RuntimeException("Unexpected label: " + label);
+        }
+    }
+
+    /**
+     * MapEntry
+     *   = Identifier '=' Initializer
+     */
+    private Map.Entry<String, Object> visitMapEntry(NonterminalNode node) {
+        return new Map.Entry<String, Object>() {
+            @Override
+            public String getKey() {
+                return node.childAt(0).getText();
+            }
+
+            @Override
+            public Object getValue() {
+                return node.childAt(2).accept(IggyToGrammarVisitor.this);
+            }
+
+            @Override
+            public Object setValue(Object value) {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
     /*

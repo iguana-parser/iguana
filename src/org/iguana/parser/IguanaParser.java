@@ -39,10 +39,13 @@ import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
 
+import java.util.Map;
+
 public class IguanaParser {
 
     private final GrammarGraph grammarGraph;
     private final IguanaRuntime runtime;
+    private final Map<String, Object> globals;
 
     public IguanaParser(RuntimeGrammar grammar) {
         this(grammar, Configuration.load());
@@ -51,6 +54,7 @@ public class IguanaParser {
     public IguanaParser(RuntimeGrammar grammar, Configuration config) {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.runtime = new IguanaRuntime<>(config, new ParserResultOps());
+        this.globals = grammar.getGlobals();
     }
 
     public NonterminalNode getSPPF(Input input) {
@@ -62,7 +66,7 @@ public class IguanaParser {
     }
 
     public ParseTreeNode getParserTree(Input input) {
-        return getParserTree(input, new ParseOptions.Builder().build());
+        return getParserTree(input, new ParseOptions.Builder().setMap(globals).setGlobal(false).build());
     }
 
     public ParseTreeNode getParserTree(Input input, ParseOptions options) {
