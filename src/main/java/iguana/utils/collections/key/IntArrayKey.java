@@ -18,11 +18,16 @@ public class IntArrayKey implements Key {
         if (!(obj instanceof IntArrayKey)) return false;
 
         IntArrayKey other = (IntArrayKey) obj;
-        return i == other.i && Arrays.equals(objects, other.objects);
+        return i == other.i && Arrays.deepEquals(objects, other.objects);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%d, %s)", i, Arrays.toString(objects));
     }
 
     @Override
     public int hashCode() {
-        return i * 31 + Arrays.hashCode(objects);
+        return i * 31 + Arrays.deepHashCode(objects);
     }
 }
