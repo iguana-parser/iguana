@@ -729,7 +729,7 @@ public class JsonSerializer {
 
             abstract static class GetMixIn {
                 @JsonCreator
-                GetMixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") Expression arg2) { }
+                GetMixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") int arg2) { }
             }
 
             abstract static class LenMixIn {

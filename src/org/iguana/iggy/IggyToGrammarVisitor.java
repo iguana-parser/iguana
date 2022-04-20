@@ -120,10 +120,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
 
                 if (!node.childAt(0).children().isEmpty()) { // start symbol
-                    start = nonterminalName.id;
+                    start = nonterminalName.getName();
                 }
 
-                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.id).addParameters(parameters).build();
+                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters).build();
                 return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
 
             // RegexBody : { RegexSequence "|" }*;
@@ -131,10 +131,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Lexical":
                 List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
                 Identifier identifier = getIdentifier(node.getChildWithName("Identifier"));
-                terminalsMap.put(identifier.id, getRegex(alts));
+                terminalsMap.put(identifier.getName(), getRegex(alts));
 
                 if (!node.childAt(0).children().isEmpty()) {
-                    layout = org.iguana.grammar.symbol.Identifier.fromName(identifier.id);
+                    layout = identifier;
                 }
 
                 return null;
@@ -281,7 +281,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * Label: "%" Identifier
      */
     private String visitLabel(NonterminalNode node) {
-        return getIdentifier(node.childAt(1)).id;
+        return getIdentifier(node.childAt(1)).getName();
     }
 
     /*
@@ -320,7 +320,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         switch (label) {
             case "Call": {
                 Expression[] expressions = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
-                return new Nonterminal.Builder(getIdentifier(node.childAt(0)).id).apply(expressions).build();
+                return new Nonterminal.Builder(getIdentifier(node.childAt(0)).getName()).apply(expressions).build();
             }
 
             case "Offside":
@@ -376,7 +376,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Labeled": {
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                return symbol.copy().setLabel(getIdentifier(node.childAt(0)).id).build();
+                return symbol.copy().setLabel(getIdentifier(node.childAt(0)).getName()).build();
             }
 
             case "Precede": {
@@ -410,12 +410,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Except": {
-                Nonterminal symbol = (Nonterminal) node.childAt(0).accept(this);
-                return symbol.copy().addExcept(getIdentifier(node.childAt(2)).id).build();
+                Identifier symbol = (Identifier) node.childAt(0).accept(this);
+                return symbol.copy().addExcept(getIdentifier(node.childAt(2)).getName()).build();
             }
 
             case "Nont":
-                return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).id);
+                return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).getName());
 
             case "String":
             case "Character":
@@ -465,11 +465,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
             case "Assign":
-                return AST.stat(AST.assign(getIdentifier(node.childAt(0)).id, (Expression) node.childAt(2).accept(this)));
+                return AST.stat(AST.assign(getIdentifier(node.childAt(0)).getName(), (Expression) node.childAt(2).accept(this)));
 
             case "Declare":
                 Expression expression = (Expression) node.childAt(3).accept(this);
-                return AST.varDeclStat(getIdentifier(node.childAt(1)).id, expression);
+                return AST.varDeclStat(getIdentifier(node.childAt(1)).getName(), expression);
 
             default:
                 throw new RuntimeException("Unexpected label: " + label);
@@ -531,7 +531,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Nont":
-                return iguana.regex.Reference.from(getIdentifier(node.childAt(0)).id);
+                return iguana.regex.Reference.from(getIdentifier(node.childAt(0)).getName());
 
             case "CharClass":
                 return (iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this);
@@ -828,7 +828,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     private Identifier getIdentifier(ParseTreeNode node) {
-        return new Identifier(node.getText());
+        return Identifier.fromName(node.getText());
     }
 
     private static int getRangeChar(String s) {
@@ -877,13 +877,5 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
         }
         return Arrays.copyOf(chars, j);
-    }
-
-    public static class Identifier {
-        public final String id;
-
-        public Identifier(String id) {
-            this.id = id;
-        }
     }
 }

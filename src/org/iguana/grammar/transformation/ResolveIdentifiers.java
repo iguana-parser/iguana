@@ -61,6 +61,7 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
             return new Nonterminal.Builder(id.getName())
                 .addPreConditions(visitPreConditions(id))
                 .addPostConditions(visitPostConditions(id))
+                .addExcepts(id.getExcepts())
                 .setLabel(id.getLabel())
                 .build();
         } else if (terminals.containsKey(id.getName())) {
