@@ -324,7 +324,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
 
             case "Offside":
-                return Offside.offside((Symbol) node.childAt(0).accept(this));
+                return Offside.offside((Symbol) node.childAt(1).accept(this));
 
             case "Star":
                 return Star.from((Symbol) node.childAt(0).accept(this));

@@ -50,7 +50,12 @@ public class IggyParser {
 
     public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
         RuntimeGrammar grammar = new ResolveIdentifiers().transform(runtimeGrammar);
+        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
+        desugarAlignAndOffside.doAlign();
+        grammar = desugarAlignAndOffside.transform(grammar);
         grammar = new EBNFToBNF().transform(grammar);
+        desugarAlignAndOffside.doOffside();
+        grammar = desugarAlignAndOffside.transform(grammar);
         grammar = new DesugarStartSymbol().transform(grammar);
         grammar = new DesugarState().transform(grammar);
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();

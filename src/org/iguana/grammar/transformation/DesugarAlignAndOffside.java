@@ -69,7 +69,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			for (RuntimeRule rule : grammar.getRules())
 				rules.add(desugarAligns.transform(rule, grammar.getLayout()));
 			
-			return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
+			return RuntimeGrammar.builder().addRules(rules)
+				.setLayout(grammar.getLayout())
+				.setStartSymbol(grammar.getStartSymbol())
+				.setGlobals(grammar.getGlobals())
+				.build();
 		}
 		
 		// After EBNF translation
@@ -91,7 +95,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		for (RuntimeRule rule : grammar.getRules())
 			rules.add(desugarOffsides.transform(rule, grammar.getLayout()));
 		
-		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).build();
+		return RuntimeGrammar.builder().addRules(rules)
+			.setLayout(grammar.getLayout())
+			.setStartSymbol(grammar.getStartSymbol())
+			.setGlobals(grammar.getGlobals())
+			.build();
 	}
 	
 	private static class DesugarAlignAndOffsideVisitor implements ISymbolVisitor<Symbol> {
