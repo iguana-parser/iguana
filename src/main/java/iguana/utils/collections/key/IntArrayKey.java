@@ -23,7 +23,7 @@ public class IntArrayKey implements Key {
 
     @Override
     public String toString() {
-        return String.format("(%d, %s)", i, Arrays.toString(objects));
+        return String.format("(%d, %s)", i, Arrays.deepToString(objects));
     }
 
     @Override
