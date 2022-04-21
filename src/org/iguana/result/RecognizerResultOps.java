@@ -26,6 +26,11 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
         public Object getValue() {
             return null;
         }
+
+        @Override
+        public String toString() {
+            return "$";
+        }
     };
 
     @Override

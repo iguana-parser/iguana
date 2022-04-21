@@ -58,7 +58,7 @@ public class IguanaParser {
     }
 
     public NonterminalNode getSPPF(Input input) {
-        return getSPPF(input, new ParseOptions.Builder().build());
+        return getSPPF(input, new ParseOptions.Builder().setMap(globals).setGlobal(false).build());
     }
 
     public NonterminalNode getSPPF(Input input, ParseOptions options) {
@@ -70,19 +70,22 @@ public class IguanaParser {
     }
 
     public ParseTreeNode getParserTree(Input input, ParseOptions options) {
-        NonterminalNode root = getSPPF(input, options);
+        NonterminalNode sppf = getSPPF(input, options);
+        return getParserTree(input, sppf, options);
+    }
 
-        if (root == null) {
+    public ParseTreeNode getParserTree(Input input, NonterminalNode sppf, ParseOptions options) {
+        if (sppf == null) {
             return null;
         }
 
         if (options.ambiguous()) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
-            return (ParseTreeNode) root.accept(visitor).getValues().get(0);
+            return (ParseTreeNode) sppf.accept(visitor).getValues().get(0);
         }
 
         DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, options.ignoreLayout(), (ParserResultOps) runtime.getResultOps());
-        return (ParseTreeNode) converter.convertNonterminalNode(root);
+        return (ParseTreeNode) converter.convertNonterminalNode(sppf);
     }
 
     public GrammarGraph getGrammarGraph() {

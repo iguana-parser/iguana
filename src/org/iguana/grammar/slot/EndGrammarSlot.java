@@ -68,7 +68,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 
 	@Override
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-		execute(input, u, result, (Object) null, runtime);
+		execute(input, u, result, result.getValue(), runtime);
 	}
 	
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
