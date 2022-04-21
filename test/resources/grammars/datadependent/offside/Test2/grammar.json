@@ -1,0 +1,189 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Align",
+                      "name" : "align offside Stat+",
+                      "symbol" : {
+                        "kind" : "Plus",
+                        "name" : "offside Stat+",
+                        "s" : {
+                          "kind" : "Offside",
+                          "name" : "offside Stat",
+                          "symbol" : {
+                            "kind" : "Identifier",
+                            "name" : "Stat"
+                          }
+                        },
+                        "separators" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : ";",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 59
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Stat"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "x",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 120
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "=",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 61
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Exp"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "+",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 43
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "terminals" : {
+    "Layout" : {
+      "kind" : "Reference",
+      "name" : "WhiteSpace"
+    },
+    "WhiteSpace" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 32
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 10
+          }
+        ]
+      }
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  },
+  "layout" : {
+    "kind" : "Identifier",
+    "name" : "Layout"
+  }
+}

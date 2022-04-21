@@ -1,0 +1,3303 @@
+{
+  "kind" : "MetaSymbolNode",
+  "symbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  },
+  "start" : 0,
+  "end" : 98,
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        "body" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ;, null}+",
+            "label" : "a0",
+            "parameters" : [
+              "a0.lExt"
+            ],
+            "arguments" : [
+              {
+                "kind" : "Name",
+                "name" : "a0.lExt",
+                "i" : -1
+              }
+            ],
+            "nodeType" : "Plus"
+          }
+        ],
+        "layout" : {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        }
+      },
+      "children" : [
+        {
+          "kind" : "MetaSymbolNode",
+          "symbol" : {
+            "kind" : "Plus",
+            "name" : "offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat+",
+            "label" : "a0",
+            "s" : {
+              "kind" : "Offside",
+              "name" : "offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "Stat",
+                "label" : "a1",
+                "preConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "Indent",
+                        "fun" : "indent",
+                        "arguments" : [
+                          {
+                            "kind" : "LeftExtent",
+                            "label" : "a1"
+                          }
+                        ]
+                      },
+                      "rhs" : {
+                        "kind" : "Indent",
+                        "fun" : "indent",
+                        "arguments" : [
+                          {
+                            "kind" : "LeftExtent",
+                            "label" : "a0"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "separators" : [
+              {
+                "kind" : "Terminal",
+                "name" : ";",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              }
+            ]
+          },
+          "start" : 2,
+          "end" : 97,
+          "children" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "Stat",
+                  "parameters" : [
+                    "i",
+                    "ind",
+                    "fst"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "Exp",
+                    "label" : "o2",
+                    "arguments" : [
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : true
+                      },
+                      {
+                        "kind" : "Name",
+                        "name" : "ind",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : false
+                      }
+                    ]
+                  }
+                ],
+                "layout" : {
+                  "kind" : "Terminal",
+                  "name" : "Layout",
+                  "nodeType" : "Layout",
+                  "regex" : {
+                    "kind" : "regex.Star",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 32
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 9
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 12
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 13
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 10
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  "start" : 2,
+                  "end" : 3
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  "start" : 4,
+                  "end" : 5
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "Exp",
+                      "parameters" : [
+                        "i",
+                        "ind",
+                        "fst"
+                      ]
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o0",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o0"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "layout" : {
+                      "kind" : "Terminal",
+                      "name" : "Layout",
+                      "nodeType" : "Layout",
+                      "regex" : {
+                        "kind" : "regex.Star",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "Char",
+                              "val" : 32
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 9
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 12
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 13
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 10
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 6,
+                      "end" : 7
+                    }
+                  ],
+                  "start" : 6,
+                  "end" : 7
+                }
+              ],
+              "start" : 2,
+              "end" : 7
+            },
+            {
+              "kind" : "TerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : ";",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              },
+              "start" : 7,
+              "end" : 8
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "Stat",
+                  "parameters" : [
+                    "i",
+                    "ind",
+                    "fst"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "Exp",
+                    "label" : "o2",
+                    "arguments" : [
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : true
+                      },
+                      {
+                        "kind" : "Name",
+                        "name" : "ind",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : false
+                      }
+                    ]
+                  }
+                ],
+                "layout" : {
+                  "kind" : "Terminal",
+                  "name" : "Layout",
+                  "nodeType" : "Layout",
+                  "regex" : {
+                    "kind" : "regex.Star",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 32
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 9
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 12
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 13
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 10
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  "start" : 11,
+                  "end" : 12
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  "start" : 13,
+                  "end" : 14
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "Exp",
+                      "parameters" : [
+                        "i",
+                        "ind",
+                        "fst"
+                      ]
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Nonterminal",
+                        "name" : "Exp",
+                        "label" : "o0",
+                        "arguments" : [
+                          {
+                            "kind" : "AndIndent",
+                            "index" : {
+                              "kind" : "Name",
+                              "name" : "i",
+                              "i" : -1
+                            },
+                            "first" : {
+                              "kind" : "Name",
+                              "name" : "fst",
+                              "i" : -1
+                            },
+                            "lExt" : {
+                              "kind" : "LeftExtent",
+                              "label" : "o0"
+                            },
+                            "returnIndex" : true
+                          },
+                          {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "AndIndent",
+                            "index" : {
+                              "kind" : "Name",
+                              "name" : "i",
+                              "i" : -1
+                            },
+                            "first" : {
+                              "kind" : "Name",
+                              "name" : "fst",
+                              "i" : -1
+                            },
+                            "lExt" : {
+                              "kind" : "LeftExtent",
+                              "label" : "o0"
+                            },
+                            "returnIndex" : false
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "Layout",
+                        "nodeType" : "Layout",
+                        "regex" : {
+                          "kind" : "regex.Star",
+                          "regex" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 12
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "+",
+                        "label" : "o1",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o1"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 43
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "Layout",
+                        "nodeType" : "Layout",
+                        "regex" : {
+                          "kind" : "regex.Star",
+                          "regex" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 12
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "layout" : {
+                      "kind" : "Terminal",
+                      "name" : "Layout",
+                      "nodeType" : "Layout",
+                      "regex" : {
+                        "kind" : "regex.Star",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "Char",
+                              "val" : 32
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 9
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 12
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 13
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 10
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "Exp",
+                          "parameters" : [
+                            "i",
+                            "ind",
+                            "fst"
+                          ]
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "a",
+                            "label" : "o0",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o0"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 97
+                            }
+                          }
+                        ],
+                        "layout" : {
+                          "kind" : "Terminal",
+                          "name" : "Layout",
+                          "nodeType" : "Layout",
+                          "regex" : {
+                            "kind" : "regex.Star",
+                            "regex" : {
+                              "kind" : "regex.Alt",
+                              "symbols" : [
+                                {
+                                  "kind" : "Char",
+                                  "val" : 32
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 9
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 12
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 13
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 10
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "TerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "a",
+                            "label" : "o2",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o2"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 97
+                            }
+                          },
+                          "start" : 22,
+                          "end" : 23
+                        }
+                      ],
+                      "start" : 22,
+                      "end" : 23
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "+",
+                        "label" : "o1",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o1"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 43
+                        }
+                      },
+                      "start" : 24,
+                      "end" : 25
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 31,
+                      "end" : 32
+                    }
+                  ],
+                  "start" : 22,
+                  "end" : 32
+                }
+              ],
+              "start" : 11,
+              "end" : 32
+            },
+            {
+              "kind" : "TerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : ";",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              },
+              "start" : 32,
+              "end" : 33
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "Stat",
+                  "parameters" : [
+                    "i",
+                    "ind",
+                    "fst"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "Exp",
+                    "label" : "o2",
+                    "arguments" : [
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : true
+                      },
+                      {
+                        "kind" : "Name",
+                        "name" : "ind",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : false
+                      }
+                    ]
+                  }
+                ],
+                "layout" : {
+                  "kind" : "Terminal",
+                  "name" : "Layout",
+                  "nodeType" : "Layout",
+                  "regex" : {
+                    "kind" : "regex.Star",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 32
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 9
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 12
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 13
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 10
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  "start" : 36,
+                  "end" : 37
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  "start" : 38,
+                  "end" : 39
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "Exp",
+                      "parameters" : [
+                        "i",
+                        "ind",
+                        "fst"
+                      ]
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Nonterminal",
+                        "name" : "Exp",
+                        "label" : "o0",
+                        "arguments" : [
+                          {
+                            "kind" : "AndIndent",
+                            "index" : {
+                              "kind" : "Name",
+                              "name" : "i",
+                              "i" : -1
+                            },
+                            "first" : {
+                              "kind" : "Name",
+                              "name" : "fst",
+                              "i" : -1
+                            },
+                            "lExt" : {
+                              "kind" : "LeftExtent",
+                              "label" : "o0"
+                            },
+                            "returnIndex" : true
+                          },
+                          {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "AndIndent",
+                            "index" : {
+                              "kind" : "Name",
+                              "name" : "i",
+                              "i" : -1
+                            },
+                            "first" : {
+                              "kind" : "Name",
+                              "name" : "fst",
+                              "i" : -1
+                            },
+                            "lExt" : {
+                              "kind" : "LeftExtent",
+                              "label" : "o0"
+                            },
+                            "returnIndex" : false
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "Layout",
+                        "nodeType" : "Layout",
+                        "regex" : {
+                          "kind" : "regex.Star",
+                          "regex" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 12
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "+",
+                        "label" : "o1",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o1"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 43
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "Layout",
+                        "nodeType" : "Layout",
+                        "regex" : {
+                          "kind" : "regex.Star",
+                          "regex" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 12
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "layout" : {
+                      "kind" : "Terminal",
+                      "name" : "Layout",
+                      "nodeType" : "Layout",
+                      "regex" : {
+                        "kind" : "regex.Star",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "Char",
+                              "val" : 32
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 9
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 12
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 13
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 10
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "Exp",
+                          "parameters" : [
+                            "i",
+                            "ind",
+                            "fst"
+                          ]
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "a",
+                            "label" : "o0",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o0"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 97
+                            }
+                          }
+                        ],
+                        "layout" : {
+                          "kind" : "Terminal",
+                          "name" : "Layout",
+                          "nodeType" : "Layout",
+                          "regex" : {
+                            "kind" : "regex.Star",
+                            "regex" : {
+                              "kind" : "regex.Alt",
+                              "symbols" : [
+                                {
+                                  "kind" : "Char",
+                                  "val" : 32
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 9
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 12
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 13
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 10
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "TerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "a",
+                            "label" : "o2",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o2"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 97
+                            }
+                          },
+                          "start" : 40,
+                          "end" : 41
+                        }
+                      ],
+                      "start" : 40,
+                      "end" : 41
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "+",
+                        "label" : "o1",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o1"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 43
+                        }
+                      },
+                      "start" : 42,
+                      "end" : 43
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 44,
+                      "end" : 45
+                    }
+                  ],
+                  "start" : 40,
+                  "end" : 45
+                }
+              ],
+              "start" : 36,
+              "end" : 45
+            },
+            {
+              "kind" : "TerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : ";",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              },
+              "start" : 45,
+              "end" : 46
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "Stat",
+                  "parameters" : [
+                    "i",
+                    "ind",
+                    "fst"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "Layout",
+                    "nodeType" : "Layout",
+                    "regex" : {
+                      "kind" : "regex.Star",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 12
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "Exp",
+                    "label" : "o2",
+                    "arguments" : [
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : true
+                      },
+                      {
+                        "kind" : "Name",
+                        "name" : "ind",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "AndIndent",
+                        "index" : {
+                          "kind" : "Name",
+                          "name" : "i",
+                          "i" : -1
+                        },
+                        "first" : {
+                          "kind" : "Name",
+                          "name" : "fst",
+                          "i" : -1
+                        },
+                        "lExt" : {
+                          "kind" : "LeftExtent",
+                          "label" : "o2"
+                        },
+                        "returnIndex" : false
+                      }
+                    ]
+                  }
+                ],
+                "layout" : {
+                  "kind" : "Terminal",
+                  "name" : "Layout",
+                  "nodeType" : "Layout",
+                  "regex" : {
+                    "kind" : "regex.Star",
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "symbols" : [
+                        {
+                          "kind" : "Char",
+                          "val" : 32
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 9
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 12
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 13
+                        },
+                        {
+                          "kind" : "Char",
+                          "val" : 10
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "x",
+                    "label" : "o0",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o0"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 120
+                    }
+                  },
+                  "start" : 49,
+                  "end" : 50
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "=",
+                    "label" : "o1",
+                    "preConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "OrIndent",
+                          "index" : {
+                            "kind" : "Name",
+                            "name" : "i",
+                            "i" : -1
+                          },
+                          "ind" : {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          "first" : {
+                            "kind" : "Name",
+                            "name" : "fst",
+                            "i" : -1
+                          },
+                          "lExt" : {
+                            "kind" : "LeftExtent",
+                            "label" : "o1"
+                          }
+                        }
+                      }
+                    ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 61
+                    }
+                  },
+                  "start" : 51,
+                  "end" : 52
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "Exp",
+                      "parameters" : [
+                        "i",
+                        "ind",
+                        "fst"
+                      ]
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Nonterminal",
+                        "name" : "Exp",
+                        "label" : "o0",
+                        "arguments" : [
+                          {
+                            "kind" : "AndIndent",
+                            "index" : {
+                              "kind" : "Name",
+                              "name" : "i",
+                              "i" : -1
+                            },
+                            "first" : {
+                              "kind" : "Name",
+                              "name" : "fst",
+                              "i" : -1
+                            },
+                            "lExt" : {
+                              "kind" : "LeftExtent",
+                              "label" : "o0"
+                            },
+                            "returnIndex" : true
+                          },
+                          {
+                            "kind" : "Name",
+                            "name" : "ind",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "AndIndent",
+                            "index" : {
+                              "kind" : "Name",
+                              "name" : "i",
+                              "i" : -1
+                            },
+                            "first" : {
+                              "kind" : "Name",
+                              "name" : "fst",
+                              "i" : -1
+                            },
+                            "lExt" : {
+                              "kind" : "LeftExtent",
+                              "label" : "o0"
+                            },
+                            "returnIndex" : false
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "Layout",
+                        "nodeType" : "Layout",
+                        "regex" : {
+                          "kind" : "regex.Star",
+                          "regex" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 12
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "+",
+                        "label" : "o1",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o1"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 43
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "Layout",
+                        "nodeType" : "Layout",
+                        "regex" : {
+                          "kind" : "regex.Star",
+                          "regex" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 12
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "layout" : {
+                      "kind" : "Terminal",
+                      "name" : "Layout",
+                      "nodeType" : "Layout",
+                      "regex" : {
+                        "kind" : "regex.Star",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "Char",
+                              "val" : 32
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 9
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 12
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 13
+                            },
+                            {
+                              "kind" : "Char",
+                              "val" : 10
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "Exp",
+                          "parameters" : [
+                            "i",
+                            "ind",
+                            "fst"
+                          ]
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Nonterminal",
+                            "name" : "Exp",
+                            "label" : "o0",
+                            "arguments" : [
+                              {
+                                "kind" : "AndIndent",
+                                "index" : {
+                                  "kind" : "Name",
+                                  "name" : "i",
+                                  "i" : -1
+                                },
+                                "first" : {
+                                  "kind" : "Name",
+                                  "name" : "fst",
+                                  "i" : -1
+                                },
+                                "lExt" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "o0"
+                                },
+                                "returnIndex" : true
+                              },
+                              {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              {
+                                "kind" : "AndIndent",
+                                "index" : {
+                                  "kind" : "Name",
+                                  "name" : "i",
+                                  "i" : -1
+                                },
+                                "first" : {
+                                  "kind" : "Name",
+                                  "name" : "fst",
+                                  "i" : -1
+                                },
+                                "lExt" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "o0"
+                                },
+                                "returnIndex" : false
+                              }
+                            ]
+                          },
+                          {
+                            "kind" : "Terminal",
+                            "name" : "Layout",
+                            "nodeType" : "Layout",
+                            "regex" : {
+                              "kind" : "regex.Star",
+                              "regex" : {
+                                "kind" : "regex.Alt",
+                                "symbols" : [
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 32
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 9
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 12
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 13
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 10
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "kind" : "Terminal",
+                            "name" : "+",
+                            "label" : "o1",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o1"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 43
+                            }
+                          },
+                          {
+                            "kind" : "Terminal",
+                            "name" : "Layout",
+                            "nodeType" : "Layout",
+                            "regex" : {
+                              "kind" : "regex.Star",
+                              "regex" : {
+                                "kind" : "regex.Alt",
+                                "symbols" : [
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 32
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 9
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 12
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 13
+                                  },
+                                  {
+                                    "kind" : "Char",
+                                    "val" : 10
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "kind" : "Terminal",
+                            "name" : "a",
+                            "label" : "o2",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o2"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 97
+                            }
+                          }
+                        ],
+                        "layout" : {
+                          "kind" : "Terminal",
+                          "name" : "Layout",
+                          "nodeType" : "Layout",
+                          "regex" : {
+                            "kind" : "regex.Star",
+                            "regex" : {
+                              "kind" : "regex.Alt",
+                              "symbols" : [
+                                {
+                                  "kind" : "Char",
+                                  "val" : 32
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 9
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 12
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 13
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 10
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "NonterminalNode",
+                          "rule" : {
+                            "head" : {
+                              "kind" : "Nonterminal",
+                              "name" : "Exp",
+                              "parameters" : [
+                                "i",
+                                "ind",
+                                "fst"
+                              ]
+                            },
+                            "body" : [
+                              {
+                                "kind" : "Terminal",
+                                "name" : "a",
+                                "label" : "o0",
+                                "preConditions" : [
+                                  {
+                                    "kind" : "DataDependentCondition",
+                                    "type" : "DATA_DEPENDENT",
+                                    "expression" : {
+                                      "kind" : "OrIndent",
+                                      "index" : {
+                                        "kind" : "Name",
+                                        "name" : "i",
+                                        "i" : -1
+                                      },
+                                      "ind" : {
+                                        "kind" : "Name",
+                                        "name" : "ind",
+                                        "i" : -1
+                                      },
+                                      "first" : {
+                                        "kind" : "Name",
+                                        "name" : "fst",
+                                        "i" : -1
+                                      },
+                                      "lExt" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "o0"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "regex" : {
+                                  "kind" : "Char",
+                                  "val" : 97
+                                }
+                              }
+                            ],
+                            "layout" : {
+                              "kind" : "Terminal",
+                              "name" : "Layout",
+                              "nodeType" : "Layout",
+                              "regex" : {
+                                "kind" : "regex.Star",
+                                "regex" : {
+                                  "kind" : "regex.Alt",
+                                  "symbols" : [
+                                    {
+                                      "kind" : "Char",
+                                      "val" : 32
+                                    },
+                                    {
+                                      "kind" : "Char",
+                                      "val" : 9
+                                    },
+                                    {
+                                      "kind" : "Char",
+                                      "val" : 12
+                                    },
+                                    {
+                                      "kind" : "Char",
+                                      "val" : 13
+                                    },
+                                    {
+                                      "kind" : "Char",
+                                      "val" : 10
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "children" : [
+                            {
+                              "kind" : "TerminalNode",
+                              "terminal" : {
+                                "kind" : "Terminal",
+                                "name" : "a",
+                                "label" : "o2",
+                                "preConditions" : [
+                                  {
+                                    "kind" : "DataDependentCondition",
+                                    "type" : "DATA_DEPENDENT",
+                                    "expression" : {
+                                      "kind" : "OrIndent",
+                                      "index" : {
+                                        "kind" : "Name",
+                                        "name" : "i",
+                                        "i" : -1
+                                      },
+                                      "ind" : {
+                                        "kind" : "Name",
+                                        "name" : "ind",
+                                        "i" : -1
+                                      },
+                                      "first" : {
+                                        "kind" : "Name",
+                                        "name" : "fst",
+                                        "i" : -1
+                                      },
+                                      "lExt" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "o2"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "regex" : {
+                                  "kind" : "Char",
+                                  "val" : 97
+                                }
+                              },
+                              "start" : 62,
+                              "end" : 63
+                            }
+                          ],
+                          "start" : 62,
+                          "end" : 63
+                        },
+                        {
+                          "kind" : "TerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "+",
+                            "label" : "o1",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o1"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 43
+                            }
+                          },
+                          "start" : 72,
+                          "end" : 73
+                        },
+                        {
+                          "kind" : "TerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "a",
+                            "label" : "o2",
+                            "preConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "OrIndent",
+                                  "index" : {
+                                    "kind" : "Name",
+                                    "name" : "i",
+                                    "i" : -1
+                                  },
+                                  "ind" : {
+                                    "kind" : "Name",
+                                    "name" : "ind",
+                                    "i" : -1
+                                  },
+                                  "first" : {
+                                    "kind" : "Name",
+                                    "name" : "fst",
+                                    "i" : -1
+                                  },
+                                  "lExt" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "o2"
+                                  }
+                                }
+                              }
+                            ],
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 97
+                            }
+                          },
+                          "start" : 81,
+                          "end" : 82
+                        }
+                      ],
+                      "start" : 62,
+                      "end" : 82
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "+",
+                        "label" : "o1",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o1"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 43
+                        }
+                      },
+                      "start" : 89,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "a",
+                        "label" : "o2",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "OrIndent",
+                              "index" : {
+                                "kind" : "Name",
+                                "name" : "i",
+                                "i" : -1
+                              },
+                              "ind" : {
+                                "kind" : "Name",
+                                "name" : "ind",
+                                "i" : -1
+                              },
+                              "first" : {
+                                "kind" : "Name",
+                                "name" : "fst",
+                                "i" : -1
+                              },
+                              "lExt" : {
+                                "kind" : "LeftExtent",
+                                "label" : "o2"
+                              }
+                            }
+                          }
+                        ],
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 96,
+                      "end" : 97
+                    }
+                  ],
+                  "start" : 62,
+                  "end" : 97
+                }
+              ],
+              "start" : 49,
+              "end" : 97
+            }
+          ]
+        }
+      ],
+      "start" : 2,
+      "end" : 97
+    }
+  ]
+}

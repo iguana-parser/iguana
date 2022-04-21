@@ -70,6 +70,7 @@ public class JsonSerializer {
         mapper.addMixIn(Return.class, ReturnMixIn.class);
         mapper.addMixIn(IfThenElse.class, IfThenElseMixIn.class);
         mapper.addMixIn(Offside.class, OffsideMixIn.class);
+        mapper.addMixIn(Align.class, AlignMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
 
@@ -386,7 +387,8 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=Code.class, name="Code"),
         @JsonSubTypes.Type(value=Return.class, name="Return"),
         @JsonSubTypes.Type(value=IfThenElse.class, name="IfThenElse"),
-        @JsonSubTypes.Type(value=Offside.class, name="Offside")
+        @JsonSubTypes.Type(value=Offside.class, name="Offside"),
+        @JsonSubTypes.Type(value=Align.class, name="Align"),
     })
     abstract static class SymbolMixIn { }
 
@@ -513,6 +515,9 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = Offside.Builder.class)
     abstract static class OffsideMixIn { }
+
+    @JsonDeserialize(builder = Align.Builder.class)
+    abstract static class AlignMixIn { }
 
     @JsonDeserialize(builder = iguana.regex.Seq.Builder.class)
     abstract static class SeqMixIn { }

@@ -31,6 +31,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Align extends AbstractSymbol {
 	
@@ -76,9 +77,24 @@ public class Align extends AbstractSymbol {
 		return Collections.singletonList(symbol);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Align)) return false;
+		Align align = (Align) o;
+		return Objects.equals(symbol, align.symbol);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(symbol);
+	}
+
 	public static class Builder extends SymbolBuilder<Align> {
 		
 		private Symbol symbol;
+
+		public Builder() { }
 
 		public Builder(Align align) {
 			super(align);
