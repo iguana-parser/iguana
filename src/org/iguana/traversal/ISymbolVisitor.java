@@ -31,41 +31,41 @@ import org.iguana.grammar.symbol.*;
 
 public interface ISymbolVisitor<T> {
 	
-	T visit(Align symbol);
+	T visit(Align align);
 	
-	T visit(Block symbol);
+	T visit(Block block);
 	
-	T visit(Code symbol);
+	T visit(Code code);
 
-	default T visit(CodeHolder symbol) { return null; }
+	default T visit(CodeHolder codeHolder) { return null; }
 
-	T visit(Conditional symbol);
+	T visit(Conditional conditional);
 	
-	T visit(IfThen symbol);
+	T visit(IfThen ifThen);
 	
-    T visit(IfThenElse symbol);
+    T visit(IfThenElse ifThenElse);
 	
-	T visit(Ignore symbol);
+	T visit(Ignore ignore);
 	
-	T visit(Nonterminal symbol);
+	T visit(Nonterminal nonterminal);
 	
-    T visit(Offside symbol);
+    T visit(Offside offside);
 	
-	T visit(Terminal symbol);
+	T visit(Terminal terminal);
 	
-	T visit(While symbol);
+	T visit(While whileSymbol);
 	
-	T visit(Return symbol);
+	T visit(Return returnSymbol);
 	
-	T visit(Alt symbol);
+	T visit(Alt alt);
 	
-	T visit(Opt symbol);
+	T visit(Opt opt);
 	
-	T visit(Plus symbol);
+	T visit(Plus plus);
 	
-	T visit(Group symbol);
+	T visit(Group group);
 	
-	T visit(Star symbol);
+	T visit(Star star);
 
 	T visit(Start start);
 

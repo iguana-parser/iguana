@@ -2,16 +2,14 @@ package org.iguana.grammar;
 
 import iguana.regex.InlineReferences;
 import iguana.regex.RegularExpression;
-import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
-import org.iguana.traversal.SymbolToSymbolVisitor;
+import org.iguana.grammar.transformation.CalculateRecursiveEnds;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.*;
 import java.net.URI;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Grammar implements Serializable {
 
@@ -51,10 +49,12 @@ public class Grammar implements Serializable {
 
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
+            CalculateRecursiveEnds recursiveEnds = new CalculateRecursiveEnds();
+            recursiveEnds.calculate(this);
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (Rule rule : rules) {
                 if (rule.getHead().toString().equals("$default$")) continue;
-                grammarBuilder.addRules(getRules(rule));
+                grammarBuilder.addRules(getRules(rule, recursiveEnds));
             }
             grammarBuilder.setStartSymbol(startSymbol);
             grammarBuilder.setLayout(layout);
@@ -172,7 +172,7 @@ public class Grammar implements Serializable {
         }
     }
 
-    private static List<RuntimeRule> getRules(Rule highLevelRule) {
+    private static List<RuntimeRule> getRules(Rule highLevelRule, CalculateRecursiveEnds recursiveEnds) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -192,7 +192,7 @@ public class Grammar implements Serializable {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, recursiveEnds);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                         rules.add(rule);
@@ -203,7 +203,7 @@ public class Grammar implements Serializable {
                     List<Symbol> symbols = new ArrayList<>();
                     if (alternative.first() == null || alternative.first().isEmpty()) { // Empty alternative
                         String label = alternative.first() == null ? null : alternative.first().label;
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label);
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, recursiveEnds);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -211,7 +211,7 @@ public class Grammar implements Serializable {
                         symbols.add(alternative.first().first());
                         if (alternative.first().rest() != null)
                             addAll(symbols, alternative.first().rest());
-                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label);
+                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label, recursiveEnds);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -226,31 +226,51 @@ public class Grammar implements Serializable {
         return rules;
     }
 
-    private static RuntimeRule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label) {
-        // TODO: The first and the last symbol should be visited!
-        boolean isLeft = !symbols.isEmpty() && symbols.get(0).getName().equals(head.getName());
-        boolean isRight = !symbols.isEmpty() && symbols.get(symbols.size() - 1).getName().equals(head.getName());
+    private static RuntimeRule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label, CalculateRecursiveEnds recursiveEnds) {
+        boolean isDirectLeft = false;
+        boolean isDirectRight = false;
+        boolean isIndirectLeft = false;
+        boolean isIndirectRight = false;
+
+        if (!symbols.isEmpty()) {
+            Symbol first = symbols.get(0);
+            Symbol last = symbols.get(symbols.size() - 1);
+            isDirectLeft = first.getName().equals(head.getName());
+            isDirectRight = last.getName().equals(head.getName());
+
+            Map<String, Set<String>> leftEnds = recursiveEnds.getLeftEnds();
+            Map<String, Set<String>> rightEnds = recursiveEnds.getRightEnds();
+            isIndirectLeft = !isDirectLeft && (leftEnds.containsKey(first.getName()) && leftEnds.get(first.getName()).contains(head.getName()));
+            isIndirectRight = !isDirectRight && (rightEnds.containsKey(last.getName()) && rightEnds.get(last.getName()).contains(head.getName()));
+        }
 
         if (associativity == null)
             associativity = Associativity.UNDEFINED;
 
         Recursion recursion = Recursion.NON_REC;
-
-        if (isLeft && isRight)
+        if (isDirectLeft && isDirectRight)
             recursion = Recursion.LEFT_RIGHT_REC;
-        else if (isLeft)
+        else if (isDirectLeft)
             recursion = Recursion.LEFT_REC;
-        else if (isRight)
+        else if (isDirectRight)
             recursion = Recursion.RIGHT_REC;
 
-        if (recursion == Recursion.NON_REC)
+        Recursion irecursion = Recursion.NON_REC;
+        if (isIndirectLeft && isIndirectRight)
+            irecursion = Recursion.iLEFT_RIGHT_REC;
+        else if (isIndirectLeft)
+            irecursion = Recursion.iLEFT_REC;
+        else if (isIndirectRight)
+            irecursion = Recursion.iRIGHT_REC;
+
+        if (recursion == Recursion.NON_REC && irecursion == Recursion.NON_REC)
             associativity = Associativity.UNDEFINED;
 
         RuntimeRule.Builder builder = RuntimeRule.withHead(head)
-                .addSymbols(symbols)
-                .setRecursion(recursion)
-                .setLabel(label)
-                .setAssociativity(associativity);
+            .addSymbols(symbols)
+            .setRecursion(recursion)
+            .setLabel(label)
+            .setAssociativity(associativity);
 
         return builder.build();
     }

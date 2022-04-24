@@ -221,6 +221,4 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
             return newRegex;
         }
     }
-
-
 }

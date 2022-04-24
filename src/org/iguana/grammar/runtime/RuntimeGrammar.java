@@ -71,6 +71,10 @@ public class RuntimeGrammar {
 
 	private final Map<String, Object> globals;
 
+	public Builder copy() {
+		return new Builder(this);
+	}
+
 	public RuntimeGrammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.precedencePatterns = builder.precedencePatterns;
