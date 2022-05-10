@@ -54,7 +54,6 @@ public class Grammar implements Serializable {
 
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
-
             computeEnds();
 
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();

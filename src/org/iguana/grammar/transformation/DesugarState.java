@@ -149,6 +149,8 @@ public class DesugarState implements GrammarTransformation {
 		}
 		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout())
 			.setStartSymbol(grammar.getStartSymbol())
+			.setEbnfLefts(grammar.getEBNFLefts())
+			.setEbnfRights(grammar.getEBNFRights())
 			.setGlobals(grammar.getGlobals())
 			.build();
 	}

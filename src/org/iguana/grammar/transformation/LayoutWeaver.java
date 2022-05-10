@@ -100,6 +100,8 @@ public class LayoutWeaver implements GrammarTransformation {
 		}
 
 		builder.setGlobals(grammar.getGlobals());
+		builder.setEbnfLefts(grammar.getEBNFLefts());
+		builder.setEbnfRights(grammar.getEBNFRights());
 		
 		return builder.build();
 	}

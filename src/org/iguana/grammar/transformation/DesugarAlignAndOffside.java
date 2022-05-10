@@ -72,6 +72,8 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			return RuntimeGrammar.builder().addRules(rules)
 				.setLayout(grammar.getLayout())
 				.setStartSymbol(grammar.getStartSymbol())
+				.setEbnfLefts(grammar.getEBNFLefts())
+				.setEbnfRights(grammar.getEBNFRights())
 				.setGlobals(grammar.getGlobals())
 				.build();
 		}
@@ -99,6 +101,8 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			.setLayout(grammar.getLayout())
 			.setStartSymbol(grammar.getStartSymbol())
 			.setGlobals(grammar.getGlobals())
+			.setEbnfLefts(grammar.getEBNFLefts())
+			.setEbnfRights(grammar.getEBNFRights())
 			.build();
 	}
 	

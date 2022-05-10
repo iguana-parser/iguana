@@ -52,6 +52,8 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
             .addRules(newRules)
             .setLayout(layout)
             .setGlobals(grammar.getGlobals())
+            .setEbnfLefts(grammar.getEBNFLefts())
+            .setEbnfRights(grammar.getEBNFRights())
             .setStartSymbol(grammar.getStartSymbol()).build();
     }
 

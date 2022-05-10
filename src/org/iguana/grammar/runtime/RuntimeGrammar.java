@@ -305,7 +305,7 @@ public class RuntimeGrammar {
 			this.ebnfLefts.putAll(ebnfLefts);
 			return this;
 		}
-		
+
 		public Builder addEBNFl(String ebnf, Set<String> lefts) {
 			this.ebnfLefts.put(ebnf, lefts);
 			return this;
@@ -318,6 +318,16 @@ public class RuntimeGrammar {
 		
 		public Builder addEBNFr(String ebnf, Set<String> rights) {
 			this.ebnfRights.put(ebnf, rights);
+			return this;
+		}
+
+		public Builder setEbnfLefts(Map<String, Set<String>> ebnfLefts) {
+			this.ebnfLefts = ebnfLefts;
+			return this;
+		}
+
+		public Builder setEbnfRights(Map<String, Set<String>> ebnfRights) {
+			this.ebnfRights = ebnfRights;
 			return this;
 		}
 

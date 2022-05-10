@@ -755,7 +755,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		for (RuntimeRule rule :grammar.getRules())
 			rules.add(transform(rule));
 		
-		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout()).setStartSymbol(grammar.getStartSymbol()).setGlobals(grammar.getGlobals()).build();
+		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout())
+			.setStartSymbol(grammar.getStartSymbol())
+			.setEbnfLefts(grammar.getEBNFLefts())
+			.setEbnfRights(grammar.getEBNFRights())
+			.setGlobals(grammar.getGlobals())
+			.build();
 	}
 	
 	public RuntimeRule transform(RuntimeRule rule) {
