@@ -1,10 +1,11 @@
 package org.iguana.grammar;
 
-import iguana.regex.InlineReferences;
-import iguana.regex.RegularExpression;
+import iguana.regex.*;
+import iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.transformation.CalculateRecursiveEnds;
+import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.*;
@@ -20,6 +21,10 @@ public class Grammar implements Serializable {
     private final Start startSymbol;
     private final Symbol layout;
     private final Map<String, Object> globals;
+
+    private Map<String, Set<String>> leftEnds = new HashMap<>();
+    private Map<String, Set<String>> rightEnds = new HashMap<>();
+    private Set<String> ebnfs = new HashSet<>();
 
     private RuntimeGrammar grammar;
 
@@ -49,21 +54,95 @@ public class Grammar implements Serializable {
 
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
-            CalculateRecursiveEnds recursiveEnds = new CalculateRecursiveEnds();
-            recursiveEnds.calculate(this);
+
+            computeEnds();
+
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (Rule rule : rules) {
                 if (rule.getHead().toString().equals("$default$")) continue;
-                grammarBuilder.addRules(getRules(rule, recursiveEnds));
+                grammarBuilder.addRules(getRules(rule));
             }
             grammarBuilder.setStartSymbol(startSymbol);
             grammarBuilder.setLayout(layout);
             grammarBuilder.setTerminals(InlineReferences.inline(terminals));
             grammarBuilder.setGlobals(globals);
+
+            Map<String, Set<String>> ebnfLefts = new HashMap<>();
+            Map<String, Set<String>> ebnfRights = new HashMap<>();
+
+            for (String ebnf : ebnfs) {
+                Set<String> set = leftEnds.get(ebnf);
+                if (set != null)
+                    ebnfLefts.put(ebnf, set);
+
+                set = rightEnds.get(ebnf);
+                if (set != null)
+                    ebnfRights.put(ebnf, set);
+            }
+
+            grammarBuilder.addEBNFl(ebnfLefts);
+            grammarBuilder.addEBNFr(ebnfRights);
             grammar = grammarBuilder.build();
         }
 
         return grammar;
+    }
+
+    private void computeEnds() {
+        for (Rule rule : rules) {
+            if (rule.getHead().toString().equals("$default$")) continue;
+            for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
+                for (Alternative alternative : priorityLevel.getAlternatives()) {
+                    for (Sequence seq : alternative.seqs()) {
+                        computeEnds(rule.getHead(), seq.getSymbols());
+                    }
+                }
+            }
+        }
+
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (String head : leftEnds.keySet()) {
+                Set<String> ends = leftEnds.get(head);
+                int size = ends.size();
+                Set<String> delta = new HashSet<>();
+                for (String end : ends) {
+                    Set<String> lefts = leftEnds.get(end);
+                    if (lefts != null) {
+                        for (String left : lefts) {
+                            if (!left.equals(head))
+                                delta.add(left);
+                        }
+                    }
+                }
+                ends.addAll(delta);
+                if (ends.size() != size)
+                    changed = true;
+            }
+        }
+
+        changed = true;
+        while (changed) {
+            changed = false;
+            for (String head : rightEnds.keySet()) {
+                Set<String> ends = rightEnds.get(head);
+                int size = ends.size();
+                Set<String> delta = new HashSet<>();
+                for (String end : ends) {
+                    Set<String> rights = rightEnds.get(end);
+                    if (rights != null) {
+                        for (String right : rights) {
+                            if (!right.equals(head))
+                                delta.add(right);
+                        }
+                    }
+                }
+                ends.addAll(delta);
+                if (ends.size() != size)
+                    changed = true;
+            }
+        }
     }
 
     public static Grammar load(URI uri, String format) throws FileNotFoundException {
@@ -172,7 +251,7 @@ public class Grammar implements Serializable {
         }
     }
 
-    private static List<RuntimeRule> getRules(Rule highLevelRule, CalculateRecursiveEnds recursiveEnds) {
+    private List<RuntimeRule> getRules(Rule highLevelRule) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -192,7 +271,7 @@ public class Grammar implements Serializable {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, recursiveEnds);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                         rules.add(rule);
@@ -203,7 +282,7 @@ public class Grammar implements Serializable {
                     List<Symbol> symbols = new ArrayList<>();
                     if (alternative.first() == null || alternative.first().isEmpty()) { // Empty alternative
                         String label = alternative.first() == null ? null : alternative.first().label;
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, recursiveEnds);
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -211,7 +290,7 @@ public class Grammar implements Serializable {
                         symbols.add(alternative.first().first());
                         if (alternative.first().rest() != null)
                             addAll(symbols, alternative.first().rest());
-                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label, recursiveEnds);
+                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -226,53 +305,397 @@ public class Grammar implements Serializable {
         return rules;
     }
 
-    private static RuntimeRule getRule(Nonterminal head, List<Symbol> symbols, Associativity associativity, String label, CalculateRecursiveEnds recursiveEnds) {
-        boolean isDirectLeft = false;
-        boolean isDirectRight = false;
-        boolean isIndirectLeft = false;
-        boolean isIndirectRight = false;
+    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label) {
+        boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs, layout));
+        boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs, layout));
 
-        if (!symbols.isEmpty()) {
-            Symbol first = symbols.get(0);
-            Symbol last = symbols.get(symbols.size() - 1);
-            isDirectLeft = first.getName().equals(head.getName());
-            isDirectRight = last.getName().equals(head.getName());
+        IsRecursive visitor = new IsRecursive(head, Recursion.iLEFT_REC, leftEnds, ebnfs, layout);
 
-            Map<String, Set<String>> leftEnds = recursiveEnds.getLeftEnds();
-            Map<String, Set<String>> rightEnds = recursiveEnds.getRightEnds();
-            isIndirectLeft = !isDirectLeft && (leftEnds.containsKey(first.getName()) && leftEnds.get(first.getName()).contains(head.getName()));
-            isIndirectRight = !isDirectRight && (rightEnds.containsKey(last.getName()) && rightEnds.get(last.getName()).contains(head.getName()));
-        }
+        boolean isiLeft = body.size() != 0 && body.get(0).accept(visitor);
+        String leftEnd = visitor.getEnd();
 
-        if (associativity == null)
-            associativity = Associativity.UNDEFINED;
+        visitor = new IsRecursive(head, Recursion.iRIGHT_REC, rightEnds, ebnfs, layout);
+        boolean isiRight = body.size() != 0 && body.get(body.size() - 1).accept(visitor);
+        String rightEnd = visitor.getEnd();
 
         Recursion recursion = Recursion.NON_REC;
-        if (isDirectLeft && isDirectRight)
+        Recursion irecursion = Recursion.NON_REC;
+        int precedence = -1;
+
+        if (isLeft && isRight)
             recursion = Recursion.LEFT_RIGHT_REC;
-        else if (isDirectLeft)
+        else if (isLeft)
             recursion = Recursion.LEFT_REC;
-        else if (isDirectRight)
+        else if (isRight)
             recursion = Recursion.RIGHT_REC;
 
-        Recursion irecursion = Recursion.NON_REC;
-        if (isIndirectLeft && isIndirectRight)
+        if (isiLeft && isiRight)
             irecursion = Recursion.iLEFT_RIGHT_REC;
-        else if (isIndirectLeft)
+        else if (isiLeft)
             irecursion = Recursion.iLEFT_REC;
-        else if (isIndirectRight)
+        else if (isiRight)
             irecursion = Recursion.iRIGHT_REC;
 
         if (recursion == Recursion.NON_REC && irecursion == Recursion.NON_REC)
             associativity = Associativity.UNDEFINED;
 
-        RuntimeRule.Builder builder = RuntimeRule.withHead(head)
-            .addSymbols(symbols)
-            .setRecursion(recursion)
-            .setLabel(label)
-            .setAssociativity(associativity);
+        // Mixed cases
+        boolean isPrefixOrCanBePrefix = (irecursion != Recursion.iLEFT_REC && recursion == Recursion.RIGHT_REC)
+            || (recursion != Recursion.LEFT_REC && irecursion == Recursion.iRIGHT_REC);
+        boolean isPostfixOrCanBePostfix = (recursion == Recursion.LEFT_REC && irecursion != Recursion.iRIGHT_REC)
+            || (irecursion == Recursion.iLEFT_REC && recursion != Recursion.RIGHT_REC);
 
-        return builder.build();
+        if ((isPrefixOrCanBePrefix || isPostfixOrCanBePostfix) && associativity != Associativity.NON_ASSOC)
+            associativity = Associativity.UNDEFINED;
+
+        if (associativity == null) {
+            associativity = Associativity.UNDEFINED;
+        }
+
+        return RuntimeRule.withHead(head)
+            .addSymbols(body)
+            .setRecursion(recursion)
+            .setiRecursion(irecursion)
+            .setLeftEnd(leftEnd)
+            .setRightEnd(rightEnd)
+            .setLeftEnds(leftEnds.get(head.getName()))
+            .setRightEnds(rightEnds.get(head.getName()))
+            .setAssociativity(associativity)
+            .setPrecedence(precedence)
+            .setLabel(label)
+            .build();
+    }
+
+    private void computeEnds(Nonterminal head, List<Symbol> symbols) {
+        if (symbols.size() >= 1) {
+            Symbol first = symbols.get(0);
+            Symbol last = symbols.get(symbols.size() - 1);
+
+            IsRecursive isLeft = new IsRecursive(head, Recursion.LEFT_REC, ebnfs);
+
+            if(!first.accept(isLeft) && !isLeft.getEnd().isEmpty()) {
+                Set<String> ends = leftEnds.get(head.getName());
+                if (ends == null) {
+                    ends = new HashSet<>();
+                    leftEnds.put(head.getName(), ends);
+                }
+                ends.add(isLeft.getEnd());
+                if (!isLeft.ends.isEmpty()) // EBNF related
+                    leftEnds.putAll(isLeft.ends);
+            }
+
+            IsRecursive isRight = new IsRecursive(head, Recursion.RIGHT_REC, ebnfs);
+
+            if(!last.accept(isRight) && !isRight.getEnd().isEmpty()) {
+                Set<String> ends = rightEnds.get(head.getName());
+                if (ends == null) {
+                    ends = new HashSet<>();
+                    rightEnds.put(head.getName(), ends);
+                }
+                ends.add(isRight.getEnd());
+                if (!isRight.ends.isEmpty()) // EBNF related
+                    rightEnds.putAll(isRight.ends);
+            }
+        }
+    }
+
+    private static class IsRecursive implements ISymbolVisitor<Boolean>, RegularExpressionVisitor<Boolean> {
+
+        private final Recursion recursion;
+        private final Nonterminal head;
+        private final Symbol layout;
+
+        private final Map<String, Set<String>> ends;
+        private final Set<String> ebnfs;
+
+        private String end = "";
+
+        public IsRecursive(Nonterminal head, Recursion recursion, Set<String> ebnfs) {
+            this(head, recursion, new HashMap<>(), ebnfs, null);
+        }
+
+        public IsRecursive(Nonterminal head, Recursion recursion, Map<String, Set<String>> ends, Set<String> ebnfs, Symbol layout) {
+            this.recursion = recursion;
+            this.head = head;
+            this.layout = layout;
+            this.ends = ends;
+            this.ebnfs = ebnfs;
+        }
+
+        private String getEnd() {
+            return end;
+        }
+
+        @Override
+        public Boolean visit(Align symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Block symbol) {
+            Symbol[] symbols = symbol.getSymbols();
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.iLEFT_REC)
+                return symbols[0].accept(this);
+            else
+                return symbols[symbols.length - 1].accept(this);
+        }
+
+        @Override
+        public Boolean visit(iguana.regex.Char symbol) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(CharRange symbol) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(Code symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Conditional symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public Boolean visit(EOF symbol) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(Epsilon symbol) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(IfThen symbol) {
+            return symbol.getThenPart().accept(this);
+        }
+
+        @Override
+        public Boolean visit(IfThenElse symbol) {
+            return symbol.getThenPart().accept(this)
+                || symbol.getElsePart().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Ignore symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Identifier symbol) {
+            end = symbol.getName();
+
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) {
+                if (symbol.getName().equals(head.getName())) {
+                    return true;
+                }
+            } else {
+                Set<String> set = ends.get(symbol.getName());
+                if (set != null && set.contains(head.getName()))
+                    return true;
+            }
+
+            return false;
+        }
+
+            @Override
+        public Boolean visit(Nonterminal symbol) {
+
+            end = symbol.getName();
+
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) {
+                if (symbol.getName().equals(head.getName())
+                    && ((head.getParameters() == null && symbol.getArguments() == null)
+                    || (head.getParameters().size() == symbol.getArguments().length)))
+                    return true;
+
+            } else {
+                Set<String> set = ends.get(symbol.getName());
+                if (set != null && set.contains(head.getName()))
+                    return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public Boolean visit(Offside symbol) {
+            return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Terminal symbol) {
+            end = "$" + head.getName();
+            return false;
+        }
+
+        @Override
+        public Boolean visit(While symbol) {
+            return symbol.getBody().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Return symbol) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(org.iguana.grammar.symbol.Alt symbol) {
+            System.out.println("Warning: indirect recursion isn't yet supported for (.|.).");
+            return false;
+        }
+
+        @Override
+        public Boolean visit(org.iguana.grammar.symbol.Opt symbol) {
+            System.out.println("Warning: indirect recursion isn't yet supported for options.");
+            return false;
+        }
+
+        @Override
+        public Boolean visit(org.iguana.grammar.symbol.Plus symbol) {
+
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) {
+
+                IsRecursive visitor = new IsRecursive(head, recursion, ebnfs);
+                symbol.getSymbol().accept(visitor);
+
+                String name = EBNFToBNF.getName(Nonterminal.withName(visitor.end), symbol.getSeparators(), null) + "+";
+                end = name;
+
+                ends.putAll(visitor.ends);
+                ends.put(name, new HashSet<String>(Arrays.asList(visitor.end)));
+                ebnfs.add(name);
+
+                return false;
+            } else {
+
+                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs, null);
+                symbol.getSymbol().accept(visitor);
+
+                String name = EBNFToBNF.getName(Nonterminal.withName(visitor.end), symbol.getSeparators(), null) + "+";
+                end = name;
+
+                Set<String> set = ends.get(name);
+                if (set != null && set.contains(head.getName()))
+                    return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Boolean visit(org.iguana.grammar.symbol.Group symbol) {
+
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) {
+
+                IsRecursive visitor = new IsRecursive(head, recursion, ebnfs);
+
+                if (recursion == Recursion.LEFT_REC)
+                    symbol.get(0).accept(visitor);
+                else
+                    symbol.getSymbols().get(symbol.getSymbols().size() - 1).accept(visitor);
+
+                String name = symbol.getName();
+                end = name;
+
+                ends.putAll(visitor.ends);
+                ends.put(name, new HashSet<String>(Arrays.asList(visitor.end)));
+                ebnfs.add(name);
+
+            } else {
+                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs, null);
+
+                if (recursion == Recursion.iLEFT_REC)
+                    symbol.getSymbols().get(0).accept(visitor);
+                else
+                    symbol.getSymbols().get(symbol.getSymbols().size() - 1).accept(visitor);
+
+                String name = symbol.getName();
+                end = name;
+
+                Set<String> set = ends.get(name);
+                if (set != null && set.contains(head.getName()))
+                    return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public Boolean visit(org.iguana.grammar.symbol.Star symbol) {
+
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) { // TODO: not good, there should be also left and right ends
+
+                IsRecursive visitor = new IsRecursive(head, recursion, ebnfs);
+                symbol.getSymbol().accept(visitor);
+
+                String base = EBNFToBNF.getName(Nonterminal.withName(visitor.end), symbol.getSeparators(), null);
+                String name = base + "*";
+                end = name;
+
+                ends.putAll(visitor.ends);
+                ends.put(name, new HashSet<String>(Arrays.asList(base + "+")));
+                ends.put(base + "+", new HashSet<String>(Arrays.asList(visitor.end)));
+                ebnfs.add(name);
+                ebnfs.add(base + "+");
+                return false;
+            } else {
+
+                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs, null);
+                symbol.getSymbol().accept(visitor);
+
+                String base = EBNFToBNF.getName(Nonterminal.withName(visitor.end), symbol.getSeparators(), null);
+                String name = base + "*";
+                end = name;
+
+                Set<String> set = ends.get(name);
+                if (set != null && set.contains(head.getName()))
+                    return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Boolean visit(iguana.regex.Star s) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(iguana.regex.Plus p) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(iguana.regex.Opt o) {
+            return false;
+        }
+
+        @Override
+        public <E extends RegularExpression> Boolean visit(iguana.regex.Alt<E> alt) {
+            return false;
+        }
+
+        @Override
+        public <E extends RegularExpression> Boolean visit(iguana.regex.Seq<E> seq) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(Start start) {
+            throw new IllegalStateException();
+//            return start.getNonterminal().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Reference ref) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
     private static void addAll(List<Symbol> symbols, List<Symbol> rest) {

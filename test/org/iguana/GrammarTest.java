@@ -4,6 +4,7 @@ import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.iggy.IggyParser;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
@@ -96,11 +97,12 @@ public class GrammarTest {
             }
 
             String parserTestName = "Parser test " + category + " " + testName;
-            IguanaParser parser = new IguanaParser(IggyParser.transform(grammar.toRuntimeGrammar()));
+            RuntimeGrammar runtimeGrammar = IggyParser.transform(grammar.toRuntimeGrammar());
+            IguanaParser parser = new IguanaParser(runtimeGrammar);
             DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
-            IguanaRecognizer recognizer = new IguanaRecognizer(IggyParser.transform(grammar.toRuntimeGrammar()));
+            IguanaRecognizer recognizer = new IguanaRecognizer(runtimeGrammar);
             DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
             grammarTests.add(dynamicParserTest);

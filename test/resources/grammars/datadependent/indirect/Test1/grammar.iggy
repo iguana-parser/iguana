@@ -1,0 +1,9 @@
+start S
+  = E
+
+E = E X
+  > E '+' E
+  | 'a'
+
+X = '*' Y
+Y = '*' E
