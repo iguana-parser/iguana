@@ -1,0 +1,10 @@
+start S
+  = E
+
+E = non-assoc   E '*' {R '*'}+      %star
+  > right       E '->' E            %arrow
+  >             '-' E
+  |             'a'
+
+
+R = E !star !arrow

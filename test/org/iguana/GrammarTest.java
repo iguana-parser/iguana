@@ -137,6 +137,8 @@ public class GrammarTest {
             } catch (AmbiguityException e) {
                 try {
                     actualParseTree = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
+                    DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
+                    dotGraph.generate(testPath + "/tree" + j + ".pdf");
                 } catch (CyclicGrammarException ee) {
                     isCyclic = true;
                 }

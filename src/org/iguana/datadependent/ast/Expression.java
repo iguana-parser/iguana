@@ -288,7 +288,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.elements, this.length);
+            return Objects.hash(Arrays.hashCode(this.elements), this.length);
         }
 
         @Override
@@ -410,7 +410,7 @@ public abstract class Expression extends AbstractAST {
 
         Call(java.lang.String fun, Expression... arguments) {
             this.fun = fun;
-            this.arguments = arguments;
+            this.arguments = arguments == null ? new Expression[0] : arguments;
         }
 
         public java.lang.String getFunName() {
