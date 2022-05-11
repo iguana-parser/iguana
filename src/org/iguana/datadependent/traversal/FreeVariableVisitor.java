@@ -27,8 +27,7 @@
 
 package org.iguana.datadependent.traversal;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
-import org.eclipse.imp.pdb.facts.util.TrieSet;
+import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Expression.Boolean;
 import org.iguana.datadependent.ast.Expression.Integer;
 import org.iguana.datadependent.ast.Expression.String;
@@ -71,16 +70,15 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 	
 	public void compute(RuntimeRule rule) {
-		
-		ImmutableSet<java.lang.String> env = TrieSet.of();
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = io.usethesource.capsule.Set.Immutable.of();
 		
 		List<java.lang.String> parameters = rule.getHead().getParameters();
 		if (parameters != null) {
 			for (java.lang.String parameter : parameters)
 				env = env.__insert(parameter);
 		}
-		
-		ImmutableSet<java.lang.String> _env = env;
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> _env = env;
 		
 		for (Symbol symbol : rule.getBody()) {
 			
@@ -525,8 +523,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Block symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
@@ -539,8 +537,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Code symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		Symbol sym = symbol.getSymbol();
 		
@@ -564,8 +562,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		Symbol sym = symbol.getSymbol();
 		org.iguana.datadependent.ast.Expression expression = symbol.getExpression();
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		sym.setEnv(env);
 		visitSymbol(sym);
@@ -626,8 +624,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Nonterminal symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		if (symbol.getVariable() != null)
 			env = env.__insert(symbol.getVariable());
@@ -702,8 +700,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Alt symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
@@ -737,8 +734,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Group symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
@@ -772,8 +768,8 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
     // Accounts for optional label and optional preconditions and postconditions
 	public Void visitSymbol(Symbol symbol) {
-		
-		ImmutableSet<java.lang.String> env = symbol.getEnv();
+
+		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		if (symbol.getLabel() != null)
 			env = env.__insert(java.lang.String.format(LeftExtent.format, symbol.getLabel()));

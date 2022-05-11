@@ -1,6 +1,5 @@
 package org.iguana.grammar.symbol;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableSet;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
@@ -56,12 +55,12 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
     }
 
     @Override
-    public ImmutableSet<String> getEnv() {
+    public io.usethesource.capsule.Set.Immutable<String> getEnv() {
         return null;
     }
 
     @Override
-    public void setEnv(ImmutableSet<String> env) {
+    public void setEnv(io.usethesource.capsule.Set.Immutable<String> env) {
     }
 
     @Override

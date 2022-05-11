@@ -27,8 +27,7 @@
 
 package org.iguana.datadependent.env.persistent;
 
-import org.eclipse.imp.pdb.facts.util.ImmutableMap;
-import org.eclipse.imp.pdb.facts.util.TrieMap;
+import io.usethesource.capsule.Map;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.exception.UndeclaredVariableException;
@@ -38,11 +37,11 @@ public class PersistentEnvironment implements Environment {
 	
 	private final PersistentEnvironment parent;
 	
-	final private ImmutableMap<String, Object> bindings;
+	final private Map.Immutable<String, Object> bindings;
 
-	static final Environment EMPTY = new PersistentEnvironment(null, (TrieMap<String, Object>) TrieMap.<String, Object>of());
+	static final Environment EMPTY = new PersistentEnvironment(null, (Map.Immutable<String, Object>) Map.Immutable.<String, Object>of());
 	
-	private PersistentEnvironment(PersistentEnvironment parent, ImmutableMap<String, Object> bindings) {
+	private PersistentEnvironment(PersistentEnvironment parent, Map.Immutable<String, Object> bindings) {
 		this.parent = parent;
 		this.bindings = bindings;
 	}
@@ -59,7 +58,7 @@ public class PersistentEnvironment implements Environment {
 
 	@Override
 	public Environment push() {
-		return new PersistentEnvironment(this, TrieMap.of());
+		return new PersistentEnvironment(this, Map.Immutable.of());
 	}
 	
 	@Override
@@ -69,7 +68,7 @@ public class PersistentEnvironment implements Environment {
 
 	@Override
 	public Environment declare(String[] names, Object[] values) {
-		ImmutableMap<String, Object> bindings = this.bindings;
+		Map.Immutable<String, Object> bindings = this.bindings;
 		int i = 0;
 		while (i < names.length) {
 			bindings = bindings.__put(names[i], values[i]);
@@ -97,8 +96,8 @@ public class PersistentEnvironment implements Environment {
 			
 			return new PersistentEnvironment((PersistentEnvironment) parent, bindings);
 		}
-		
-		ImmutableMap<String, Object> bindings = this.bindings.__put(name, value);
+
+		Map.Immutable<String, Object> bindings = this.bindings.__put(name, value);
 		if (bindings == this.bindings) {
 			return this;
 		}
