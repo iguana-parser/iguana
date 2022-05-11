@@ -1,0 +1,5 @@
+
+start E
+  = '-' E
+  > left E '+' E
+  | 'a'

@@ -43,7 +43,7 @@ public class Star extends AbstractSymbol {
 	private final List<Symbol> separators;
 	
 	public static Star from(Symbol s) {
-		return builder(s).build();
+		return new Builder(s).build();
 	}
 
 	private Star(Builder builder) {
@@ -51,18 +51,22 @@ public class Star extends AbstractSymbol {
 		this.s = builder.s;
 		this.separators = Collections.unmodifiableList(builder.separators);
 	}
-	
-	private static String getName(Symbol s) {
-		return s + "*";
-	}
-	
+
 	public List<Symbol> getSeparators() {
 		return separators;
 	}
 
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
+	}
+
+	@Override
+	public List<Symbol> getChildren() {
+		List<Symbol> children = new ArrayList<>();
+		children.add(s);
+		children.addAll(separators);
+		return children;
 	}
 
 	public Symbol getSymbol() {
@@ -86,10 +90,6 @@ public class Star extends AbstractSymbol {
 		return name.hashCode();
 	}
 
-    public static Builder builder(Symbol s) {
-		return new Builder(s);
-	}
-	
 	public static class Builder extends SymbolBuilder<Star> {
 
 		private Symbol s;
@@ -98,7 +98,6 @@ public class Star extends AbstractSymbol {
 		private Builder() {}
 
 		public Builder(Symbol s) {
-			super(getName(s));
 			this.s = s;
 		}
 		
@@ -122,9 +121,17 @@ public class Star extends AbstractSymbol {
 			separators.addAll(Arrays.asList(symbols));
 			return this;
 		}
-		
+
+		@Override
+		public SymbolBuilder<Star> setChildren(List<Symbol> symbols) {
+			this.s = symbols.get(0);
+			this.separators = symbols.subList(1, symbols.size());
+			return this;
+		}
+
 		@Override
 		public Star build() {
+			this.name = s.getName() + "*";
 			return new Star(this);
 		}
 	}

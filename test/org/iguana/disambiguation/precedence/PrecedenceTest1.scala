@@ -29,10 +29,11 @@ package org.iguana.disambiguation.precedence
 import java.util.Arrays
 
 import iguana.utils.input.Input
-import org.iguana.grammar.Grammar
+import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
-import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
+import org.iguana.grammar.runtime.RuntimeRule
+import org.iguana.grammar.symbol.{Nonterminal, Terminal}
 import org.iguana.iggy.IggyParser
 import org.iguana.parser.IguanaParser
 
@@ -53,12 +54,12 @@ class PrecedenceTest1 extends FunSuite {
   val a = Terminal.from(Character.from('a'))
 
   val grammar = {
-    val builder = new Grammar.Builder
-    val rule1 = Rule.withHead(E).addSymbols(E, plus, E).build
+    val builder = new RuntimeGrammar.Builder
+    val rule1 = RuntimeRule.withHead(E).addSymbols(E, plus, E).build
     builder.addRule(rule1)
-    val rule2 = Rule.withHead(E).addSymbols(minus, E).build
+    val rule2 = RuntimeRule.withHead(E).addSymbols(minus, E).build
     builder.addRule(rule2)
-    val rule3 = Rule.withHead(E).addSymbol(a).build
+    val rule3 = RuntimeRule.withHead(E).addSymbol(a).build
     builder.addRule(rule3)
     val list: java.util.List[PrecedencePattern] = Arrays.asList(PrecedencePattern.from(rule1, 2, rule1), PrecedencePattern.from(rule1, 0, rule2))
     val operatorPrecedence: OperatorPrecedence = new OperatorPrecedence(list)
@@ -93,6 +94,6 @@ class PrecedenceTest1 extends FunSuite {
         |
       """.stripMargin
 
-    IggyParser.getGrammar(Input.fromString(s))
+    IggyParser.getRuntimeGrammar(Input.fromString(s))
   }
 }

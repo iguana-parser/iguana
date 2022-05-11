@@ -103,7 +103,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public boolean pop(Input input, EndGrammarSlot slot, T result, Object value, IguanaRuntime<T> runtime) {
-		ParserLogger.getInstance().pop(this, result.getLeftExtent(), result, value);
+		ParserLogger.getInstance().pop(this, result.getIndex(), result, value);
 		T node = addPoppedElements(slot, result, value, runtime.getResultOps());
 		if (node != null)
 			iterateOverEdges(input, node, runtime);
@@ -152,7 +152,10 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getIndex()))) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
 			if (result != null) {
-				runtime.scheduleDescriptor(returnSlot, destination, result, env);
+				// TODO: verify if this fix is correct with more data-dependent examples.
+				// It seems like that some variables escape the scope and this is a problem for array-based environment
+				// implementations that rely on indexes.
+				runtime.scheduleDescriptor(returnSlot, destination, result, runtime.getEnvironment());
 			}
 		}
 	}

@@ -1,0 +1,8 @@
+start S
+  = E
+
+E = E!plus '*' E!star!hat      %star
+  | E!minus!plus '^' E!hat     %hat
+  | '-' E                      %minus
+  | '+' E                      %plus
+  | 'a'

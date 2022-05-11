@@ -28,10 +28,10 @@
 package org.iguana.parser.datadependent;
 
 import iguana.regex.Char;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,43 +58,43 @@ import static org.iguana.datadependent.ast.AST.*;
 
 public class Test2 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
 		
 		Nonterminal X = Nonterminal.withName("X");
 		
-		Nonterminal S = Nonterminal.builder("S").addParameters("a", "b").build();
+		Nonterminal S = new Nonterminal.Builder("S").addParameters("a", "b").build();
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		Nonterminal D = Nonterminal.withName("D");
 		
 		
-		Rule r0 = Rule.withHead(X).addSymbol(Nonterminal.builder(S).apply(integer(1), integer(2)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(new Nonterminal.Builder(S).apply(integer(1), integer(2)).build()).build();
 		
-		Rule r1_1 = Rule.withHead(S)
-					.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l").setVariable("x").build(),
+		RuntimeRule r1_1 = RuntimeRule.withHead(S)
+					.addSymbol(Code.code(new Nonterminal.Builder(A).setLabel("l").setVariable("x").build(),
 										 stat(println(string("PRINT1: "), var("l"), var("a"), var("b")))))
 					
 					.addSymbol(B).build();
 		
-		Rule r1_2 = Rule.withHead(S)
-				.addSymbol(Nonterminal.builder(C).setLabel("l1").build())
-				.addSymbol(Code.code(Nonterminal.builder(A).setLabel("l2").build(),
+		RuntimeRule r1_2 = RuntimeRule.withHead(S)
+				.addSymbol(new Nonterminal.Builder(C).setLabel("l1").build())
+				.addSymbol(Code.code(new Nonterminal.Builder(A).setLabel("l2").build(),
 									 stat(println(string("PRINT2: "), var("l1"), var("l2"), var("a"), var("b")))))
 				.addSymbol(D).build();
 		
-		Rule r2_1 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r2_2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3_1 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
-		Rule r3_2 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r2_1 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r2_2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3_1 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r3_2 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('a'))).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r5 = Rule.withHead(D).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r5 = RuntimeRule.withHead(D).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r2_1, r2_2, r3_1, r3_2, r4, r5).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1_1, r1_2, r2_1, r2_2, r3_1, r3_2, r4, r5).build();
 		
 	}
 	

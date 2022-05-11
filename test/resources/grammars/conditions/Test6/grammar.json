@@ -1,0 +1,201 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "for",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 114
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Opt",
+                      "name" : "L?",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "L"
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Id"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "forall",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 114
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Id"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Plus",
+                      "name" : "(a-z)+",
+                      "preConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_PRECEDE",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(a-z)",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 97,
+                              "end" : 122
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "L"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "\\u0020",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 32
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

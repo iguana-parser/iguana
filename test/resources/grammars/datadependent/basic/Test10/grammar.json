@@ -1,0 +1,233 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "S"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Code",
+                      "name" : "a:A [a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
+                      "symbol" : {
+                        "kind" : "Identifier",
+                        "name" : "A",
+                        "label" : "a",
+                        "postConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "a"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 0
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Println",
+                            "arguments" : [
+                              {
+                                "kind" : "RightExtent",
+                                "label" : "a"
+                              },
+                              {
+                                "kind" : "Indent",
+                                "fun" : "indent",
+                                "arguments" : [
+                                  {
+                                    "kind" : "RightExtent",
+                                    "label" : "a"
+                                  }
+                                ]
+                              }
+                            ],
+                            "fun" : "println"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Layout"
+                    },
+                    {
+                      "kind" : "Code",
+                      "name" : "b:B [b.lExt == 5] {println(b.lExt,b.rExt,indent(b.rExt))}",
+                      "symbol" : {
+                        "kind" : "Identifier",
+                        "name" : "B",
+                        "label" : "b",
+                        "postConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "b"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 5
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Println",
+                            "arguments" : [
+                              {
+                                "kind" : "LeftExtent",
+                                "label" : "b"
+                              },
+                              {
+                                "kind" : "RightExtent",
+                                "label" : "b"
+                              },
+                              {
+                                "kind" : "Indent",
+                                "fun" : "indent",
+                                "arguments" : [
+                                  {
+                                    "kind" : "RightExtent",
+                                    "label" : "b"
+                                  }
+                                ]
+                              }
+                            ],
+                            "fun" : "println"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "terminals" : {
+    "Layout" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(X)",
+    "startSymbol" : "X"
+  }
+}

@@ -28,6 +28,7 @@
 package org.iguana.parser.datadependent.preprocess;
 
 import iguana.utils.input.Input;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -46,17 +47,17 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class TestCSharp {
 	
-	private static Grammar originalGrammar;
+	private static RuntimeGrammar originalGrammar;
 
 	static {
 		try {
-			originalGrammar = Grammar.load(new File("grammars/csharp/csharp"));
+			originalGrammar = Grammar.load(new File("grammars/csharp/csharp")).toRuntimeGrammar();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static Grammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
+	private static RuntimeGrammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
 	private static Nonterminal start = Nonterminal.withName("CompilationUnit");
 	
 	@Test

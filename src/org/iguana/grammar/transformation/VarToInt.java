@@ -10,12 +10,13 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.exception.UndeclaredVariableException;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.traversal.IConditionVisitor;
@@ -34,16 +35,16 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
-    public Grammar transform(Grammar grammar) {
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
         mapping = new HashMap<>();
-        Set<Rule> rules = new LinkedHashSet<>();
+        Set<RuntimeRule> rules = new LinkedHashSet<>();
         int i = 0;
-        for (Rule rule : grammar.getRules()) {
+        for (RuntimeRule rule : grammar.getRules()) {
             rules.add(transform(rule));
             mapping.put(i, current);
             i++;
         }
-        return Grammar.builder()
+        return RuntimeGrammar.builder()
                 .addRules(rules)
                 .addEBNFl(grammar.getEBNFLefts())
                 .addEBNFr(grammar.getEBNFRights())
@@ -51,10 +52,10 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
                 .build();
     }
 
-    public Rule transform(Rule rule) {
+    public RuntimeRule transform(RuntimeRule rule) {
         current = new HashMap<>();
 
-        java.lang.String[] parameters = rule.getHead().getParameters();
+        List<java.lang.String> parameters = rule.getHead().getParameters();
 
         if (parameters != null) {
             for (java.lang.String parameter : parameters)
@@ -66,7 +67,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         for (Symbol symbol : rule.getBody())
             body.add(visit(symbol));
 
-        return Rule.withHead(rule.getHead())
+        return RuntimeRule.withHead(rule.getHead())
                 .addSymbols(body)
                 .setRecursion(rule.getRecursion())
                 .setAssociativity(rule.getAssociativity())
@@ -101,7 +102,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         for (Condition condition : symbol.getPostConditions())
             postConditions.add(condition.accept(this));
 
-        return sym.copyBuilder()
+        return sym.copy()
                 .setLabel(symbol.getLabel())
                 .addPreConditions(preConditions)
                 .addPostConditions(postConditions)
@@ -160,7 +161,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
             current.put(variable, current.size());
 
         if (symbol.getArguments() == null || symbol.getArguments().length == 0)
-            return Nonterminal.builder(symbol.getName())
+            return new Nonterminal.Builder(symbol.getName())
                     .setIndex(symbol.getIndex())
                     .setNodeType(symbol.getNodeType())
                     .setVariable(symbol.getVariable())
@@ -173,7 +174,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
         for (org.iguana.datadependent.ast.Expression e : symbol.getArguments())
             arguments[i++] = (org.iguana.datadependent.ast.Expression) e.accept(this);
 
-        return Nonterminal.builder(symbol.getName())
+        return new Nonterminal.Builder(symbol.getName())
                 .setIndex(symbol.getIndex())
                 .apply(arguments)
                 .setVariable(symbol.getVariable())
@@ -188,7 +189,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public Symbol visit(Terminal symbol) {
-        return Terminal.builder(symbol.getRegularExpression())
+        return new Terminal.Builder(symbol.getRegularExpression())
                 .setTerminalPreConditions(symbol.getTerminalPreConditions())
                 .setTerminalPostConditions(symbol.getTerminalPostConditions())
                 .setNodeType(symbol.getNodeType())
@@ -207,7 +208,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+    public Symbol visit(Alt symbol) {
         throw new RuntimeException("Unsupported symbol: var-to-int!");
     }
 
@@ -222,7 +223,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
-    public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+    public Symbol visit(Group symbol) {
         throw new RuntimeException("Unsupported symbol: var-to-int!");
     }
 

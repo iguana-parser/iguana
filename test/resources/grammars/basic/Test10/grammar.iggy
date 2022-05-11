@@ -1,0 +1,13 @@
+
+start S
+  = A B C
+  | A B D
+
+A = 'a'
+
+B = 'b'
+
+C = 'c'
+
+D = 'c'
+

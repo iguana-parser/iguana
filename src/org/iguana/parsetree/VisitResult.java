@@ -1,7 +1,7 @@
 package org.iguana.parsetree;
 
 import iguana.utils.collections.CollectionsUtil;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.sppf.PackedNode;
 
@@ -481,13 +481,13 @@ public abstract class VisitResult {
 
         @Override
         public java.util.List<T> visit(Empty result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getRule();
+            RuntimeRule rule = packedNode.getGrammarSlot().getRule();
             return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex()));
         }
 
         @Override
         public java.util.List<T> visit(Single result, PackedNode packedNode) {
-            Rule rule = packedNode.getGrammarSlot().getRule();
+            RuntimeRule rule = packedNode.getGrammarSlot().getRule();
             return CollectionsUtil.list((parseTreeBuilder.nonterminalNode(rule, (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getIndex())));
         }
 
@@ -501,7 +501,7 @@ public abstract class VisitResult {
                     values.add((T) o);
                 }
             }
-            Rule rule = packedNode.getGrammarSlot().getRule();
+            RuntimeRule rule = packedNode.getGrammarSlot().getRule();
             return CollectionsUtil.list(parseTreeBuilder.nonterminalNode(rule, values, packedNode.getLeftExtent(), packedNode.getIndex()));
         }
 

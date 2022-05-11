@@ -31,6 +31,9 @@ import iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class IfThen extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -45,7 +48,7 @@ public class IfThen extends AbstractSymbol {
 	}
 	
 	public static IfThen ifThen(Expression expression, Symbol thenPart) {
-		return builder(expression, thenPart).build();
+		return new Builder(expression, thenPart).build();
 	}
 	
 	public Expression getExpression() {
@@ -57,10 +60,15 @@ public class IfThen extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<Symbol> getChildren() {
+		return Collections.singletonList(thenPart);
+	}
+
 	@Override
 	public int size() {
 		return thenPart.size() + 1;
@@ -84,14 +92,10 @@ public class IfThen extends AbstractSymbol {
 		return Epsilon.getInstance().toString() + (j == 1? " . " : "");
 	}
 
-	public static Builder builder(Expression expression, Symbol symbol) {
-		return new Builder(expression, symbol);
-	}
-	
 	public static class Builder extends SymbolBuilder<IfThen> {
 		
-		private final Expression expression;
-		private final Symbol thenPart;
+		private Expression expression;
+		private Symbol thenPart;
 
 		public Builder(IfThen ifThen) {
 			super(ifThen);
@@ -100,13 +104,19 @@ public class IfThen extends AbstractSymbol {
 		}
 		
 		public Builder(Expression expression, Symbol thenPart) {
-			super(String.format("if (%s) %s", expression.toString(), thenPart.toString()));
 			this.expression = expression;
 			this.thenPart = thenPart;
 		}
 
 		@Override
+		public SymbolBuilder<IfThen> setChildren(List<Symbol> symbols) {
+			this.thenPart = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public IfThen build() {
+			this.name = String.format("if (%s) %s", expression.toString(), thenPart.toString());
 			return new IfThen(this);
 		}
 		

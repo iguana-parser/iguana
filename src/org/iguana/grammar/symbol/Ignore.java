@@ -29,6 +29,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Ignore extends AbstractSymbol {
 	
 private static final long serialVersionUID = 1L;
@@ -41,7 +44,7 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public static Ignore ignore(Symbol symbol) {
-		return builder(symbol).build();
+		return new Builder(symbol).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -49,10 +52,15 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<Symbol> getChildren() {
+		return Collections.singletonList(symbol);
+	}
+
 	@Override
 	public int size() {
 		return symbol.size();
@@ -68,13 +76,9 @@ private static final long serialVersionUID = 1L;
 		return String.format("ignore %s", symbol.toString(j));
 	}
 	
-	public static Builder builder(Symbol symbol) {
-		return new Builder(symbol);
-	}
-	
 	public static class Builder extends SymbolBuilder<Ignore> {
 		
-		private final Symbol symbol;
+		private Symbol symbol;
 
 		public Builder(Ignore ignore) {
 			super(ignore);
@@ -82,12 +86,18 @@ private static final long serialVersionUID = 1L;
 		}
 		
 		public Builder(Symbol symbol) {
-			super(String.format("ignore %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 
 		@Override
+		public SymbolBuilder<Ignore> setChildren(List<Symbol> symbols) {
+			this.symbol = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public Ignore build() {
+			this.name = String.format("ignore %s", symbol.toString());
 			return new Ignore(this);
 		}
 		

@@ -1,0 +1,59 @@
+{
+  "kind" : "MetaSymbolNode",
+  "symbol" : {
+    "kind" : "Start",
+    "name" : "Start(E)",
+    "startSymbol" : "E"
+  },
+  "start" : 0,
+  "end" : 1,
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "parameters" : [
+            "p"
+          ]
+        },
+        "body" : [
+          {
+            "kind" : "Terminal",
+            "name" : "a",
+            "regex" : {
+              "kind" : "Char",
+              "val" : 97
+            }
+          },
+          {
+            "kind" : "Return",
+            "name" : "{0}",
+            "expression" : {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          }
+        ]
+      },
+      "children" : [
+        {
+          "kind" : "TerminalNode",
+          "terminal" : {
+            "kind" : "Terminal",
+            "name" : "a",
+            "regex" : {
+              "kind" : "Char",
+              "val" : 97
+            }
+          },
+          "start" : 0,
+          "end" : 1
+        }
+      ],
+      "start" : 0,
+      "end" : 1
+    }
+  ]
+}

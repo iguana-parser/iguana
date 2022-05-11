@@ -29,11 +29,11 @@ package org.iguana.parser.layout;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
@@ -63,25 +63,25 @@ public class LayoutTest3 {
     static Nonterminal A = Nonterminal.withName("A");
     static Nonterminal B = Nonterminal.withName("B");
     static Nonterminal C = Nonterminal.withName("C");
-    static Nonterminal L = Nonterminal.builder("L").setNodeType(NonterminalNodeType.Layout).build();
+    static Nonterminal L = new Nonterminal.Builder("L").setNodeType(NonterminalNodeType.Layout).build();
 
-    static Rule r1 = Rule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
-    static Rule r2 = Rule.withHead(A).addSymbol(a).setLayout(L).build();
-    static Rule r3 = Rule.withHead(B).addSymbol(b).setLayout(L).build();
-    static Rule r4 = Rule.withHead(C).addSymbol(c).setLayout(L).build();
+    static RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(A, Plus.from(B), C).setLayout(L).build();
+    static RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(a).setLayout(L).build();
+    static RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(b).setLayout(L).build();
+    static RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(c).setLayout(L).build();
 
-    static Rule layout = Rule.withHead(L).addSymbol(space).build();
+    static RuntimeRule layout = RuntimeRule.withHead(L).addSymbol(space).build();
 
 
-    private static Grammar getGrammar() {
-        Grammar grammar = Grammar.builder().addRules(r1, r2, r3, r4, layout).build();
+    private static RuntimeGrammar getGrammar() {
+        RuntimeGrammar grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4, layout).build();
         return new LayoutWeaver().transform(new EBNFToBNF().transform(grammar));
     }
 
 	@Test
 	public void test() {
 		Input input = Input.fromString("a b b b b c");
-		Grammar grammar = getGrammar();
+		RuntimeGrammar grammar = getGrammar();
 
         IguanaParser parser = new IguanaParser(grammar);
         ParseTreeNode result = parser.getParserTree(input);

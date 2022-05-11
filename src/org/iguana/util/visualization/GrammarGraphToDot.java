@@ -32,7 +32,9 @@ import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static iguana.utils.string.StringUtil.listToString;
 import static iguana.utils.visualization.DotGraph.newEdge;
@@ -40,19 +42,34 @@ import static iguana.utils.visualization.DotGraph.newNode;
 
 public class GrammarGraphToDot {
 
-	public static DotGraph toDot(GrammarGraph g) {
-		DotGraph dotGraph = new DotGraph();
-		ids.clear();
-
-		for (NonterminalGrammarSlot nonterminal : g.getNonterminalGrammarSlots()) {
-			toDot(nonterminal, dotGraph);
-		}
-		
+	public static DotGraph toDot(GrammarGraph g, DotGraph.Direction direction) {
+		DotGraph dotGraph = new DotGraph(direction);
+		generate(dotGraph, g);
 		return dotGraph;
 	}
-	
-	private static void toDot(NonterminalGrammarSlot slot, DotGraph dotGraph) {
-		DotGraph.Node node = newNode(getId(slot));
+
+	public static DotGraph toDot(GrammarGraph g) {
+		DotGraph dotGraph = new DotGraph();
+		generate(dotGraph, g);
+		return dotGraph;
+	}
+
+	private static void generate(DotGraph dotGraph, GrammarGraph g) {
+		ids.clear();
+		Set<Integer> visited = new HashSet<>();
+		for (NonterminalGrammarSlot nonterminal : g.getNonterminalGrammarSlots()) {
+			toDot(nonterminal, dotGraph, visited);
+		}
+	}
+
+	private static void toDot(NonterminalGrammarSlot slot, DotGraph dotGraph, Set<Integer> visited) {
+		int slotId = getId(slot);
+		if (visited.contains(slotId)) {
+			return;
+		}
+
+		visited.add(slotId);
+		DotGraph.Node node = newNode(slotId);
 		String label;
 		if (slot.getNonterminal().getParameters() != null) {
 			label = String.format("%s(%s)", slot.getNonterminal().getName(), listToString(slot.getNonterminal().getParameters(), ","));
@@ -62,31 +79,31 @@ public class GrammarGraphToDot {
 		node.setLabel(label);
 		dotGraph.addNode(node);
 
-		slot.getFirstSlots().forEach(s -> dotGraph.addEdge(newEdge(getId(slot), getId(s))));
-		slot.getFirstSlots().forEach(s -> toDot(s, dotGraph));
+		slot.getFirstSlots().forEach(s -> dotGraph.addEdge(newEdge(slotId, getId(s), "")));
+		slot.getFirstSlots().forEach(s -> toDot(s, dotGraph, visited));
 	}
 	
-	private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph) {
+	private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph, Set<Integer> visited) {
 		if (slot instanceof EndGrammarSlot) {
 			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.DOUBLE_CIRCLE));
 		} else {
-			dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.CIRCLE));
+			dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.CIRCLE));
+
+			// TODO: improve this code
+			Transition t = slot.getOutTransition();
+			if(t instanceof ConditionalTransition) {
+				dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
+
+				BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
+				if (ifFalse != null)
+					dotGraph.addEdge(newEdge(getId(slot), getId(ifFalse), t.getLabel()));
+			}
+			else {
+				dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
+			}
+
+			toDot(t.destination(), dotGraph, visited);
 		}
-		
-		// TODO: improve this code
-        Transition t = slot.getOutTransition();
-        if(t instanceof ConditionalTransition) {
-            dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
-
-            BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
-            if (ifFalse != null)
-                dotGraph.addEdge(newEdge(getId(slot), getId(ifFalse), t.getLabel()));
-        }
-        else {
-            dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
-        }
-
-		toDot(t.destination(), dotGraph);
 	}
 
 

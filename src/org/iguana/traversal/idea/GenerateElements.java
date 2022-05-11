@@ -27,6 +27,7 @@
 
 package org.iguana.traversal.idea;
 
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -49,9 +50,9 @@ public class GenerateElements {
 
     enum NUM { ONE, MORE_THAN_ONE, ONE_AND_MORE }
 
-    public static void generate(List<Rule> rules, String language, String path) {
+    public static void generate(List<RuntimeRule> rules, String language, String path) {
         Map<String, Set<String>> elements = new LinkedHashMap<>();
-        for (Rule rule : rules) {
+        for (RuntimeRule rule : rules) {
 
             if (rule.getHead().getName().equals("$default$")) continue;
 
@@ -139,12 +140,12 @@ public class GenerateElements {
         }
     }
 
-    private static void generatePhiElements(List<Rule> rules, String language, String path) {
+    private static void generatePhiElements(List<RuntimeRule> rules, String language, String path) {
         new File(path + language.toLowerCase() + "/gen/psi/impl").mkdir();
         // Symbol names with their occurrence counter; per nonterminal and per label of a rule
         Map<String, Map<String, Map<String, NUM>>> elements = new LinkedHashMap<>();
 
-        for (Rule rule : rules) {
+        for (RuntimeRule rule : rules) {
 
             if (rule.getHead().getName().equals("$default$")) continue;
 
@@ -189,12 +190,12 @@ public class GenerateElements {
 
     private static class GetPhiElements implements ISymbolVisitor<String> {
 
-        private final Rule rule;
+        private final RuntimeRule rule;
         private final Map<String, NUM> children;
 
         private static final InferPsiEbnfElementType typer = new InferPsiEbnfElementType();
 
-        public GetPhiElements(Rule rule, Map<String, NUM> children) {
+        public GetPhiElements(RuntimeRule rule, Map<String, NUM> children) {
             this.rule = rule;
             this.children = children;
         }
@@ -308,7 +309,7 @@ public class GenerateElements {
         }
 
         @Override
-        public <E extends Symbol> String visit(Alt<E> symbol) {
+        public String visit(Alt symbol) {
             String type = typer.visit(symbol);
             if (type == null) return null;
             if (type.equals("PsiElement")) return "Element$Ebnf";
@@ -332,7 +333,7 @@ public class GenerateElements {
         }
 
         @Override
-        public <E extends Symbol> String visit(Sequence<E> symbol) {
+        public String visit(Group symbol) {
             String type = typer.visit(symbol);
             if (type == null) return null;
             if (type.equals("PsiElement")) return "Element$Ebnf";
@@ -775,7 +776,7 @@ public class GenerateElements {
         }
 
         @Override
-        public <E extends Symbol> String visit(Alt<E> symbol) {
+        public String visit(Alt symbol) {
             String type = null;
             for (Symbol sym : symbol.getSymbols()) {
                 String res = sym.accept(this);
@@ -801,7 +802,7 @@ public class GenerateElements {
         }
 
         @Override
-        public <E extends Symbol> String visit(Sequence<E> symbol) {
+        public String visit(Group symbol) {
             String type = null;
             for (Symbol sym : symbol.getSymbols()) {
                 String res = sym.accept(this);
@@ -823,7 +824,8 @@ public class GenerateElements {
 
         @Override
         public String visit(Start start) {
-            return start.getNonterminal().accept(this);
+            return null;
+//            return start.getNonterminal().accept(this);
         }
     }
 }

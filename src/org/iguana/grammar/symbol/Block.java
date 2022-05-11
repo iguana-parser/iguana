@@ -29,6 +29,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static iguana.utils.string.StringUtil.listToString;
 
 public class Block extends AbstractSymbol {
@@ -43,7 +46,7 @@ public class Block extends AbstractSymbol {
 	}
 	
 	public static Block block(Symbol... symbols) {
-		return builder(symbols).build();
+		return new Builder(symbols).build();
 	}
 	
 	public Symbol[] getSymbols() {
@@ -51,10 +54,15 @@ public class Block extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<Symbol> getChildren() {
+		return Arrays.asList(symbols);
+	}
+
 	@Override
 	public int size() {
 		int size = 0;
@@ -82,29 +90,30 @@ public class Block extends AbstractSymbol {
 		return String.format("{ %s }", listToString(strings, " "));
 	}
 	
-	public static Builder builder(Symbol... symbols) {
-		return new Builder(symbols);
-	}
-	
 	public static class Builder extends SymbolBuilder<Block> {
 		
-		private final Symbol[] symbols;
+		private Symbol[] symbols;
 
 		public Builder(Block block) {
 			super(block);
 			this.symbols = block.symbols; 
 		}
 		
-		public Builder(Symbol... symbols) {
-			super(String.format("{ %s }", listToString(symbols, " ")));
-			
+		public Builder(Symbol...symbols) {
 			assert symbols.length != 0;
 			
 			this.symbols = symbols;
 		}
 
 		@Override
+		public SymbolBuilder<Block> setChildren(List<Symbol> symbols) {
+			this.symbols = symbols.toArray(new Symbol[] {});
+			return this;
+		}
+
+		@Override
 		public Block build() {
+			this.name = String.format("{ %s }", listToString(symbols, " "));
 			return new Block(this);
 		}
 		

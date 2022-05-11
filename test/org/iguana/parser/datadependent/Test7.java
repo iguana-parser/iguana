@@ -29,9 +29,9 @@ package org.iguana.parser.datadependent;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -57,42 +57,42 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 public class Test7 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("l", "r").build();
+		Nonterminal E = new Nonterminal.Builder("E").addParameters("l", "r").build();
 		
 		Terminal hat = Terminal.from(Char.from('^'));
         Terminal plus = Terminal.from(Char.from('+'));
 		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(new Nonterminal.Builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Nonterminal.builder(E).apply(integer(5), integer(0))
+		RuntimeRule r1_1 = RuntimeRule.withHead(E)
+					.addSymbol(new Nonterminal.Builder(E).apply(integer(5), integer(0))
 							.addPreCondition(predicate(greaterEq(integer(4), var("l"))))
 							.addPreCondition(predicate(greaterEq(integer(4), var("r")))).build())
 					.addSymbol(hat)
-					.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
+					.addSymbol(new Nonterminal.Builder(E).apply(var("l"), integer(4)).build()).build();
 		
-		Rule r1_2 = Rule.withHead(E)
-				.addSymbol(Nonterminal.builder(E).apply(integer(3), integer(0))
+		RuntimeRule r1_2 = RuntimeRule.withHead(E)
+				.addSymbol(new Nonterminal.Builder(E).apply(integer(3), integer(0))
 						.addPreCondition(predicate(greaterEq(integer(3), var("l"))))
 						.addPreCondition(predicate(greaterEq(integer(3), var("r")))).build())
 				.addSymbol(plus)
-				.addSymbol(Nonterminal.builder(E).apply(var("l"), integer(4)).build()).build();
+				.addSymbol(new Nonterminal.Builder(E).apply(var("l"), integer(4)).build()).build();
 		
-		Rule r1_3 = Rule.withHead(E)
-				.addSymbol(Terminal.builder(Char.from('-'))
+		RuntimeRule r1_3 = RuntimeRule.withHead(E)
+				.addSymbol(new Terminal.Builder(Char.from('-'))
 					.addPreCondition(predicate(greaterEq(integer(2), var("l")))).build())
-				.addSymbol(Nonterminal.builder(E).apply(integer(0), integer(0)).build()).build();
+				.addSymbol(new Nonterminal.Builder(E).apply(integer(0), integer(0)).build()).build();
 		
-		Rule r1_4 = Rule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r1_4 = RuntimeRule.withHead(E).addSymbol(Terminal.from(Char.from('a'))).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1_1, r1_2, r1_3, r1_4).build();
 		
 	}
 	

@@ -1,0 +1,6 @@
+
+start S
+  = Label !>> '3' [0-9]
+
+Label
+  = [a-z]+ !>> [a-z]

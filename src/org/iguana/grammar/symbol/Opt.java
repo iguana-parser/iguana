@@ -29,6 +29,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Opt extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
@@ -41,22 +44,23 @@ public class Opt extends AbstractSymbol {
 	}
 
 	public static Opt from(Symbol s) {
-		return builder(s).build();
+		return new Builder(s).build();
 	}
 	
 	public Symbol getSymbol() {
 		return s;
 	}
 
-	private static String getName(Symbol s) {
-		return s.getName() + "?";
+	@Override
+	public SymbolBuilder<? extends Symbol> copy() {
+		return new Builder(s);
 	}
 
 	@Override
-	public SymbolBuilder<? extends Symbol> copyBuilder() {
-		return new Builder(s);
+	public List<Symbol> getChildren() {
+		return Collections.singletonList(s);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -74,10 +78,6 @@ public class Opt extends AbstractSymbol {
 		return name.hashCode();
 	}
 	
-	public static Builder builder(Symbol s) {
-		return new Builder(s);
-	}
-	
 	public static class Builder extends SymbolBuilder<Opt> {
 
 		private Symbol s;
@@ -85,7 +85,6 @@ public class Opt extends AbstractSymbol {
 		private Builder() {}
 
 		public Builder(Symbol s) {
-			super(getName(s));
 			this.s = s;
 		}
 		
@@ -93,9 +92,16 @@ public class Opt extends AbstractSymbol {
 			super(opt);
 			this.s = opt.s;
 		}
-		
+
+		@Override
+		public SymbolBuilder<Opt> setChildren(List<Symbol> symbols) {
+			this.s = symbols.get(0);
+			return this;
+		}
+
 		@Override
 		public Opt build() {
+			this.name = s.getName() + "?";
 			return new Opt(this);
 		}
 	}

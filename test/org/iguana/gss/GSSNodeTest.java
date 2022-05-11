@@ -2,12 +2,12 @@ package org.iguana.gss;
 
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.ParserResultOps;
@@ -29,8 +29,8 @@ public class GSSNodeTest {
 
     @Before
     public void init() {
-        Rule rule = Rule.withHead(Nonterminal.withName("A")).addSymbol(Terminal.from(Seq.from("a"))).build();
-        Grammar grammar = Grammar.builder().addRule(rule).build();
+        RuntimeRule rule = RuntimeRule.withHead(Nonterminal.withName("A")).addSymbol(Terminal.from(Seq.from("a"))).build();
+        RuntimeGrammar grammar = RuntimeGrammar.builder().addRule(rule).build();
 
         grammarGraph = GrammarGraphBuilder.from(grammar);
         input = Input.fromString("Test");

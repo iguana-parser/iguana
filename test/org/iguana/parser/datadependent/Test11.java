@@ -30,8 +30,9 @@ package org.iguana.parser.datadependent;
 import iguana.regex.Alt;
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -56,7 +57,7 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 public class Test11 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -65,27 +66,27 @@ public class Test11 {
 		
 		Nonterminal NoNL = Nonterminal.withName("NoNL");
 		
-		Nonterminal S = Nonterminal.withName("S");		
+		Nonterminal S = Nonterminal.withName("S");
 		
-		Rule r0 = Rule.withHead(X).addSymbol(S).build();
+		RuntimeRule r0 = RuntimeRule.withHead(X).addSymbol(S).build();
 		
-		Rule r1 = Rule.withHead(S)
-					.addSymbol(Code.code(Terminal.builder(Char.from('a')).setLabel("a")
+		RuntimeRule r1 = RuntimeRule.withHead(S)
+					.addSymbol(Code.code(new Terminal.Builder(Char.from('a')).setLabel("a")
 											.addPreCondition(predicate(equal(lExt("a"), integer(0)))).build(),
 										 stat(println(rExt("a"), indent(rExt("a"))))))
 					.addSymbol(NoNL) // TODO: Should be removed
-					.addSymbol(Code.code(Terminal.builder(Char.from('b')).setLabel("b")
+					.addSymbol(Code.code(new Terminal.Builder(Char.from('b')).setLabel("b")
 												.addPreCondition(predicate(equal(lExt("b"), integer(5)))).build(),
 										 stat(println(rExt("b"), indent(rExt("b"))))))
 					
 					.setLayout(NoNL).setLayoutStrategy(LayoutStrategy.FIXED).build();
 		
-		Rule r2 = Rule.withHead(Nonterminal.builder("NoNL").build())
-						.addSymbol(Star.builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
+		RuntimeRule r2 = RuntimeRule.withHead(new Nonterminal.Builder("NoNL").build())
+						.addSymbol(new Star.Builder(Terminal.from(Alt.from(Char.from(' '), Char.from('\t'))))
 								.addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 								.addPostCondition(RegularExpressionCondition.notFollow(Char.from('\t'))).build()).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1, r2).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1, r2).build();
 		
 	}
 	

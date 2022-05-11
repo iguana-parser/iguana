@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,12 +11,12 @@ import static java.util.Objects.requireNonNull;
 
 public class NonterminalNode implements ParseTreeNode {
 
-    private final Rule rule;
+    private final RuntimeRule rule;
     private final int start;
     private final int end;
     private final List<ParseTreeNode> children;
 
-    public NonterminalNode(Rule rule, List<ParseTreeNode> children, int start, int end) {
+    public NonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
         this.rule = requireNonNull(rule);
         this.children = children == null ? Collections.emptyList() : children;
         this.start = requireNonNegative(start);
@@ -49,7 +49,7 @@ public class NonterminalNode implements ParseTreeNode {
     }
 
     @Override
-    public Rule getGrammarDefinition() {
+    public RuntimeRule getGrammarDefinition() {
         return rule;
     }
 

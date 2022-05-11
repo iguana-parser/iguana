@@ -1,0 +1,6 @@
+
+start S
+  = 'a' A 'c'
+  | 'a' A 'b'
+
+A = 'a'

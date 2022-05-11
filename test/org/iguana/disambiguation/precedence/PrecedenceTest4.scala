@@ -27,10 +27,11 @@
 package org.iguana.disambiguation.precedence
 
 import iguana.utils.input.Input
-import org.iguana.grammar.Grammar
+import org.iguana.grammar.RuntimeGrammar
 import org.iguana.grammar.patterns.PrecedencePattern
 import org.iguana.grammar.precedence.OperatorPrecedence
-import org.iguana.grammar.symbol.{Nonterminal, Rule, Terminal}
+import org.iguana.grammar.runtime.RuntimeRule
+import org.iguana.grammar.symbol.{Nonterminal, Terminal}
 import org.iguana.iggy.IggyParser
 import org.iguana.parser.IguanaParser
 
@@ -54,14 +55,14 @@ class PrecedenceTest4 extends FunSuite {
   val z = Terminal.from(Character.from('z'))
 
   private val grammar = {
-    val builder: Grammar.Builder = new Grammar.Builder
-    val rule1: Rule = Rule.withHead(E).addSymbols(E, z).build
+    val builder: RuntimeGrammar.Builder = new RuntimeGrammar.Builder
+    val rule1: RuntimeRule = RuntimeRule.withHead(E).addSymbols(E, z).build
     builder.addRule(rule1)
-    val rule2: Rule = Rule.withHead(E).addSymbols(x, E).build
+    val rule2: RuntimeRule = RuntimeRule.withHead(E).addSymbols(x, E).build
     builder.addRule(rule2)
-    val rule3: Rule = Rule.withHead(E).addSymbols(E, w).build
+    val rule3: RuntimeRule = RuntimeRule.withHead(E).addSymbols(E, w).build
     builder.addRule(rule3)
-    val rule4: Rule = Rule.withHead(E).addSymbols(a).build
+    val rule4: RuntimeRule = RuntimeRule.withHead(E).addSymbols(a).build
     builder.addRule(rule4)
     val list: java.util.List[PrecedencePattern] = new java.util.ArrayList[PrecedencePattern]
     list.add(PrecedencePattern.from(rule1, 0, rule2))
@@ -102,6 +103,6 @@ class PrecedenceTest4 extends FunSuite {
         |
       """.stripMargin
 
-    IggyParser.getGrammar(Input.fromString(s))
+    IggyParser.getRuntimeGrammar(Input.fromString(s))
   }
 }

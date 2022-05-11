@@ -29,9 +29,9 @@ package org.iguana.parser.datadependent.ebnf;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class Test3 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -67,15 +67,15 @@ public class Test3 {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		
-		Rule r1 = Rule.withHead(X)
-					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
-					.addSymbol(Star.builder(Nonterminal.builder(B).addPreCondition(predicate(equal(rExt("a"), lExt("b")))).build())
+		RuntimeRule r1 = RuntimeRule.withHead(X)
+					.addSymbol(new Nonterminal.Builder(A).setLabel("a").build())
+					.addSymbol(new Star.Builder(new Nonterminal.Builder(B).addPreCondition(predicate(equal(rExt("a"), lExt("b")))).build())
 									.setLabel("b").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		grammar = Grammar.builder().addRules(r1, r2, r3).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3).build();
 		
 	}
 	

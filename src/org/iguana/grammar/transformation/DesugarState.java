@@ -30,9 +30,10 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.exception.UnexpectedSymbol;
 import org.iguana.grammar.operations.ReachabilityGraph;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
 import org.iguana.traversal.ISymbolVisitor;
@@ -59,7 +60,7 @@ public class DesugarState implements GrammarTransformation {
 	private final Map<Nonterminal, List<Map<Nonterminal, Set<String>>>> bindings = new HashMap<>();
 
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Set<String> current_uses;
 		Set<String> current_updates;
 		for (Nonterminal head : grammar.getNonterminals()) {
@@ -72,7 +73,7 @@ public class DesugarState implements GrammarTransformation {
 			
 			FreeVariableVisitor visitor = new FreeVariableVisitor(current_uses, current_updates);
 			
-			for (Rule rule : grammar.getAlternatives(head))
+			for (RuntimeRule rule : grammar.getAlternatives(head))
 				visitor.compute(rule);
 			
 			if (!current_updates.isEmpty())
@@ -97,10 +98,10 @@ public class DesugarState implements GrammarTransformation {
 		for (Nonterminal head : grammar.getNonterminals()) {
 			FreeVariableVisitor visitor = new FreeVariableVisitor(uses, updates, returns);
 			
-			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>(); 
+			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = new ArrayList<>();
 			bindings.put(head, nonterminal_bindings);
 			
-			for (Rule rule : grammar.getAlternatives(head))	
+			for (RuntimeRule rule : grammar.getAlternatives(head))
 				nonterminal_bindings.add(visitor.computeBindings(rule));
 		}
 		
@@ -138,24 +139,29 @@ public class DesugarState implements GrammarTransformation {
 				System.out.println("Returns: " + entry.getKey() + "    " + listToString(entry.getValue(), ";"));
 			}
 		
-		Set<Rule> newRules = new LinkedHashSet<>();
+		Set<RuntimeRule> newRules = new LinkedHashSet<>();
 		for (Nonterminal nonterminal : grammar.getNonterminals()) {
 			int i = 0;
 			List<Map<Nonterminal, Set<String>>> nonterminal_bindings = bindings.get(nonterminal);
-			for (Rule rule : grammar.getAlternatives(nonterminal)) {
+			for (RuntimeRule rule : grammar.getAlternatives(nonterminal)) {
 				newRules.add(transform(rule, uses, nonterminal_bindings == null? new HashMap<>() : nonterminal_bindings.get(i++), returns));
 			}
 		}
-		return Grammar.builder().addRules(newRules).setLayout(grammar.getLayout()).build();
+		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout())
+			.setStartSymbol(grammar.getStartSymbol())
+			.setEbnfLefts(grammar.getEBNFLefts())
+			.setEbnfRights(grammar.getEBNFRights())
+			.setGlobals(grammar.getGlobals())
+			.build();
 	}
 	
-	private Rule transform(Rule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
+	private RuntimeRule transform(RuntimeRule rule, Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> bindings, Map<Nonterminal, Set<String>> returns) {
 		if (rule.getBody() == null)
 			return rule;
 		
 		Set<String> head_uses = uses.get(rule.getHead());
 		
-		Rule.Builder builder = null;
+		RuntimeRule.Builder builder = null;
 		if (!head_uses.isEmpty()) {
 			
 			String[] parameters = new String[head_uses.size()];
@@ -163,7 +169,7 @@ public class DesugarState implements GrammarTransformation {
 			for (String parameter : head_uses)
 			    parameters[i++] = parameter;
 			    
-			builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(parameters).build());
+			builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(parameters).build());
 		}
 		
 		if (builder == null)
@@ -224,7 +230,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -238,7 +244,7 @@ public class DesugarState implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -246,7 +252,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -264,13 +270,13 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
 		public Symbol visit(Nonterminal symbol) {
 			
-			Builder builder = symbol.copyBuilder();
+			Builder builder = symbol.copy();
 			
 			boolean changed = false;
 			
@@ -311,7 +317,7 @@ public class DesugarState implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			if (sym == symbol.getSymbol())
 				return symbol;
-			return Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -330,7 +336,7 @@ public class DesugarState implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+		public Symbol visit(Alt symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
 
@@ -345,7 +351,7 @@ public class DesugarState implements GrammarTransformation {
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public Symbol visit(Group symbol) {
 			throw new UnexpectedSymbol(symbol, "desugar-state");
 		}
 

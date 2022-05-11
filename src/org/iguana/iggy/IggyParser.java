@@ -1,21 +1,16 @@
 package org.iguana.iggy;
 
 import iguana.utils.input.Input;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
-import org.iguana.grammar.transformation.DesugarStartSymbol;
-import org.iguana.grammar.transformation.EBNFToBNF;
-import org.iguana.grammar.transformation.LayoutWeaver;
+import org.iguana.grammar.transformation.*;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.*;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.nio.file.Paths;
 
 import static iguana.utils.io.FileUtils.readFile;
 
@@ -30,87 +25,48 @@ public class IggyParser {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Grammar g = Grammar.load(new java.io.File("/Users/afroozeh/iggy"));
-        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-        precedenceAndAssociativity.setOP2();
 
-        g = new EBNFToBNF().transform(g);
-        g = precedenceAndAssociativity.transform(g);
-        g = new LayoutWeaver().transform(g);
-        g = new DesugarStartSymbol().transform(g);
-        System.out.println(JsonSerializer.toJSON(g));
+    public static void main(String[] args) throws IOException {
+//        Grammar grammar = Grammar.load(new File("/Users/afroozeh/iggy"));
+//        System.out.println(JsonSerializer.toJSON(grammar));
+        String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
+        Grammar grammar = getGrammar(path);
+        System.out.println(JsonSerializer.toJSON(grammar));
+        JsonSerializer.serialize(grammar, Paths.get("src/resources/iggy.json").toAbsolutePath().toString());
     }
 
     public static Grammar getGrammar(String path) throws IOException {
-        Input input = Input.fromFile(new File(path));
-        Grammar iggyGrammar = iggyGrammar();
-        IguanaParser parser = new IguanaParser(iggyGrammar);
+        IguanaParser parser = new IguanaParser(transform(iggyGrammar().toRuntimeGrammar()));
 
+        Input input = Input.fromFile(new File(path));
         ParseTreeNode parseTree = parser.getParserTree(input);
         if (parseTree == null) {
-            throw new RuntimeException("Parse error");
+            System.out.println(parser.getParseError());
+            throw new RuntimeException("Parse error: " + path);
         }
 
-        ParseTreeVisitor parseTreeVisitor = new ParseTreeVisitor() {
+        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+    }
 
-            @Override
-            public Object visitNonterminalNode(org.iguana.parsetree.NonterminalNode node) {
-                switch (node.getName()) {
-                    case "Definition": {
-                        Grammar.Builder builder = Grammar.builder();
-                        List<Rule> rules = (List<Rule>) node.children().get(0);
-                        rules.forEach(r -> builder.addRule(r));
-                        return builder.build();
-                    }
-
-                    case "Rule":
-                        switch (node.getGrammarDefinition().getLabel()) {
-
-                            case "Syntax":
-                                Nonterminal head = (Nonterminal) node.getChildWithName("NontName");
-                                Object tag = node.getChildWithName("Tag?").accept(this);
-                                if (tag != null) {
-                                }
-                                List<Symbol> body = (List<Symbol>) node.getChildWithName("Body").accept(this);
-                                return new Rule.Builder(head).addSymbols(body).build();
-                        }
-                        break;
-
-                    case "Identifier":
-                        return input.subString(node.getStart(), node.getEnd());
-                }
-
-                throw new RuntimeException("Should not reach here");
-            }
-
-            @Override
-            public Object visitAmbiguityNode(AmbiguityNode node) {
-                return null;
-            }
-
-            @Override
-            public Object visitTerminalNode(TerminalNode node) {
-                return null;
-            }
-
-            @Override
-            public Object visitMetaSymbolNode(MetaSymbolNode node) {
-                return null;
-            }
-        };
-
-
-        Grammar grammar = (Grammar) parseTree.accept(parseTreeVisitor);
-
+    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
+        RuntimeGrammar grammar = new ResolveIdentifiers().transform(runtimeGrammar);
+        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
+        desugarAlignAndOffside.doAlign();
+        grammar = desugarAlignAndOffside.transform(grammar);
+        grammar = new EBNFToBNF().transform(grammar);
+        desugarAlignAndOffside.doOffside();
+        grammar = desugarAlignAndOffside.transform(grammar);
+        grammar = new DesugarStartSymbol().transform(grammar);
+        grammar = new DesugarState().transform(grammar);
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
-//        grammar = precedenceAndAssociativity.transform(grammar);
-
-        grammar = new EBNFToBNF().transform(grammar);
+        grammar = precedenceAndAssociativity.transform(grammar);
         grammar = new LayoutWeaver().transform(grammar);
-        grammar = new DesugarStartSymbol().transform(grammar);
         return grammar;
+    }
+
+    public static RuntimeGrammar getRuntimeGrammar(String path) throws IOException {
+        return transform(getGrammar(path).toRuntimeGrammar());
     }
 
 }

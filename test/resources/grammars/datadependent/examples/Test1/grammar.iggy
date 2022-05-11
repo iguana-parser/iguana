@@ -1,0 +1,22 @@
+// XML example
+
+start Element
+  = s:STag Content ETag(s.val)
+
+STag
+  = '<' n:Name '>' { n.yield }
+
+Content
+  = CharData (Element CharData)*
+
+ETag($s)
+  = '</' n:Name [[ n.yield == $s ]] '>'
+
+layout terminal L
+  = [\t\n\r\ ]*
+
+terminal CharData
+  = [A-Za-z]*
+
+terminal Name
+  = [a-z]+

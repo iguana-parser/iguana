@@ -31,11 +31,11 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -57,19 +57,19 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class FollowRestrictionTest {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 	
 	@Before
 	public void init() {
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from(":"))).build();
+		Nonterminal Label = new Nonterminal.Builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from(":"))).build();
 		CharRange az = CharRange.in('a', 'z');
-		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
+		Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 
-		Grammar.Builder builder = new Grammar.Builder();
+		RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder();
 		
-		Rule r1 = Rule.withHead(S).addSymbol(Label).build();		
-		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbol(Label).build();
+		RuntimeRule r2 = RuntimeRule.withHead(Label).addSymbol(AZPlus).build();
 		builder.addRule(r1).addRule(r2);
 
 		grammar = builder.build();
@@ -101,20 +101,20 @@ public class FollowRestrictionTest {
         Terminal s = Terminal.from(Char.from('s'));
         Terminal a = Terminal.from(Char.from('a'));
         Terminal b = Terminal.from(Char.from('b'));
-        private Grammar grammar;
+        private RuntimeGrammar grammar;
 
         @Before
         public void init() {
 
-            Grammar.Builder builder = new Grammar.Builder();
+            RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder();
 
-            Rule rule1 = Rule.withHead(S).addSymbols(a, S, b).build();
+            RuntimeRule rule1 = RuntimeRule.withHead(S).addSymbols(a, S, b).build();
             builder.addRule(rule1);
 
-            Rule rule2 = Rule.withHead(S).addSymbols(a, S).build();
+            RuntimeRule rule2 = RuntimeRule.withHead(S).addSymbols(a, S).build();
             builder.addRule(rule2);
 
-            Rule rule3 = Rule.withHead(S).addSymbols(s).build();
+            RuntimeRule rule3 = RuntimeRule.withHead(S).addSymbols(s).build();
             builder.addRule(rule3);
 
             grammar = builder.build();

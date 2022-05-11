@@ -32,11 +32,11 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -56,7 +56,7 @@ import static org.junit.Assert.assertNull;
  */
 public class KeywordExclusionTest2 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -69,12 +69,12 @@ public class KeywordExclusionTest2 {
 		Seq<Char> doo = Seq.from("do");
 		Seq<Char> whilee = Seq.from("while");
 		Alt<?> alt = Alt.from(iff, when, doo, whilee);		
-		Plus AZPlus = Plus.builder(Terminal.from(az)).addPostCondition(RegularExpressionCondition.notFollow(az))
+		Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPostCondition(RegularExpressionCondition.notFollow(az))
 									  .addPostCondition(RegularExpressionCondition.notMatch(alt)).build();
 		
-		Rule r1 = Rule.withHead(Id).addSymbol(AZPlus).build();
+		RuntimeRule r1 = RuntimeRule.withHead(Id).addSymbol(AZPlus).build();
 		
-		grammar = Grammar.builder().addRule(r1).build();
+		grammar = RuntimeGrammar.builder().addRule(r1).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 	

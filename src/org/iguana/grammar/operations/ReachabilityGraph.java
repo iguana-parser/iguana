@@ -27,7 +27,8 @@
 
 package org.iguana.grammar.operations;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -36,13 +37,13 @@ import java.util.stream.Collectors;
 
 public class ReachabilityGraph {
 
-	private final Map<Nonterminal, List<Rule>> definitions;
+	private final Map<Nonterminal, List<RuntimeRule>> definitions;
 	
 	private final Map<Nonterminal, Set<Nonterminal>> reachabilityGraph;
 	
 	private final Set<String> layouts;
 	
-	public ReachabilityGraph(Grammar grammar) {
+	public ReachabilityGraph(RuntimeGrammar grammar) {
 		this.reachabilityGraph = new HashMap<>();
 		this.definitions = grammar.getDefinitions();
 		
@@ -97,7 +98,7 @@ public class ReachabilityGraph {
 				
 				visitor.setHead(head);
 				
-				for (Rule rule : definitions.get(head)) {
+				for (RuntimeRule rule : definitions.get(head)) {
 					
 					List<Symbol> alternate = rule.getBody();
 					
@@ -197,7 +198,7 @@ public class ReachabilityGraph {
 		}
 
 		@Override
-		public <E extends Symbol> Boolean visit(Alt<E> symbol) {
+		public Boolean visit(Alt symbol) {
 			boolean changed = false;
 			for (Symbol s : symbol.getSymbols())
 				changed |= s.accept(this);
@@ -218,7 +219,7 @@ public class ReachabilityGraph {
 		}
 
 		@Override
-		public <E extends Symbol> Boolean visit(Sequence<E> symbol) {
+		public Boolean visit(Group symbol) {
 			boolean changed = false;
 			for (Symbol s : symbol.getSymbols())
 				changed |= s.accept(this);
@@ -235,7 +236,8 @@ public class ReachabilityGraph {
 
         @Override
         public Boolean visit(Start start) {
-            return start.getNonterminal().accept(this);
+//            return start.getNonterminal().accept(this);
+			return false;
         }
 
     }

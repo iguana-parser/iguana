@@ -27,15 +27,13 @@
 
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
-import java.lang.annotation.Inherited;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,14 +42,14 @@ import static org.iguana.grammar.symbol.LayoutStrategy.INHERITED;
 public class LayoutWeaver implements GrammarTransformation {
 
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Symbol layout = grammar.getLayout();
 		
-		Grammar.Builder builder = Grammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
 		
-		for (Rule rule : grammar.getRules()) {
+		for (RuntimeRule rule : grammar.getRules()) {
 			
-			Rule.Builder ruleBuilder = Rule.withHead(rule.getHead())
+			RuntimeRule.Builder ruleBuilder = RuntimeRule.withHead(rule.getHead())
 												.setRecursion(rule.getRecursion())
 												.setAssociativity(rule.getAssociativity())
 												.setAssociativityGroup(rule.getAssociativityGroup())
@@ -78,7 +76,7 @@ public class LayoutWeaver implements GrammarTransformation {
 				if (ignoreLayoutConditions.isEmpty())
 					ruleBuilder.addSymbol(s);
 				else
-					ruleBuilder.addSymbol(s.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
+					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
 				
 				addLayout(layout, rule, ruleBuilder, s);
 			}
@@ -89,7 +87,7 @@ public class LayoutWeaver implements GrammarTransformation {
 			if (ignoreLayoutConditions.isEmpty())
 				ruleBuilder.addSymbol(last);
 			else 
-				ruleBuilder.addSymbol(last.copyBuilder().removePostConditions(ignoreLayoutConditions).build());
+				ruleBuilder.addSymbol(last.copy().removePostConditions(ignoreLayoutConditions).build());
 			
 			if (!ignoreLayoutConditions.isEmpty()) {
 				addLayout(layout, rule, ruleBuilder, last);
@@ -100,11 +98,15 @@ public class LayoutWeaver implements GrammarTransformation {
 			}
 			builder.addRule(ruleBuilder.build());
 		}
+
+		builder.setGlobals(grammar.getGlobals());
+		builder.setEbnfLefts(grammar.getEBNFLefts());
+		builder.setEbnfRights(grammar.getEBNFRights());
 		
 		return builder.build();
 	}
 
-	private void addLayout(Symbol layout, Rule rule, Rule.Builder ruleBuilder, Symbol s) {
+	private void addLayout(Symbol layout, RuntimeRule rule, RuntimeRule.Builder ruleBuilder, Symbol s) {
 		switch (rule.getLayoutStrategy()) {
 			
 			case NO_LAYOUT:
@@ -113,11 +115,11 @@ public class LayoutWeaver implements GrammarTransformation {
 				
 			case INHERITED:
                 if (layout != null)
-				    ruleBuilder.addSymbol(layout.copyBuilder().addPostConditions(getIgnoreLayoutConditions(s)).build());
+				    ruleBuilder.addSymbol(layout.copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
 				break;
 				
 			case FIXED:
-				ruleBuilder.addSymbol(rule.getLayout().copyBuilder().addPostConditions(getIgnoreLayoutConditions(s)).build());
+				ruleBuilder.addSymbol(rule.getLayout().copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
 				break;
 		}
 	}

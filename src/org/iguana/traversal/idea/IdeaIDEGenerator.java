@@ -28,7 +28,7 @@
 package org.iguana.traversal.idea;
 
 import iguana.regex.RegularExpression;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -41,7 +41,7 @@ import java.util.Set;
 
 public class IdeaIDEGenerator {
 
-    public void generate(Grammar grammar, String language, String extension, String path) {
+    public void generate(RuntimeGrammar grammar, String language, String extension, String path) {
 
         path = path.endsWith("/")? path : path + "/";
 

@@ -30,6 +30,11 @@ package org.iguana.grammar.symbol;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import static iguana.utils.string.StringUtil.listToString;
 
 public class Code extends AbstractSymbol {
@@ -46,7 +51,7 @@ public class Code extends AbstractSymbol {
 	}
 	
 	public static Code code(Symbol symbol, Statement... statements) {
-		return builder(symbol, statements).build();
+		return new Builder(symbol, statements).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -58,23 +63,41 @@ public class Code extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<Symbol> getChildren() {
+		return Collections.singletonList(symbol);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Code)) return false;
+		Code code = (Code) o;
+		return Objects.equals(symbol, code.symbol) && Arrays.equals(statements, code.statements);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(symbol);
+		result = 31 * result + Arrays.hashCode(statements);
+		return result;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
 	}
 		
-	public static Builder builder(Symbol symbol, org.iguana.datadependent.ast.Statement... statements) {
-		return new Builder(symbol, statements);
-	}
-	
 	public static class Builder extends SymbolBuilder<Code> {
 		
-		private final Symbol symbol;
-		private final Statement[] statements;
+		private Symbol symbol;
+		private Statement[] statements;
+
+		public Builder() { }
 
 		public Builder(Code code) {
 			super(code);
@@ -83,16 +106,21 @@ public class Code extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol, Statement... statements) {
-			super(String.format("%s {%s}", symbol.toString(), listToString(statements, ";")));
-			
 			assert statements.length != 0;
 			
 			this.symbol = symbol;
 			this.statements = statements;
 		}
-		
+
+		@Override
+		public SymbolBuilder<Code> setChildren(List<Symbol> symbols) {
+			this.symbol = symbols.get(0);
+			return this;
+		}
+
 		@Override
 		public Code build() {
+			this.name = String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
 			return new Code(this);
 		}
 		

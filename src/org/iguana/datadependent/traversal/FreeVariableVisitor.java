@@ -27,11 +27,11 @@
 
 package org.iguana.datadependent.traversal;
 
-
 import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Expression.Boolean;
 import org.iguana.datadependent.ast.Expression.Integer;
 import org.iguana.datadependent.ast.Expression.String;
+import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.Statement.Expression;
 import org.iguana.datadependent.ast.VariableDeclaration;
@@ -39,15 +39,13 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>, IConditionVisitor<Void> {
@@ -71,10 +69,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.nonterminal_bindings = null;
 	}
 	
-	public void compute(Rule rule) {
+	public void compute(RuntimeRule rule) {
 		io.usethesource.capsule.Set.Immutable<java.lang.String> env = io.usethesource.capsule.Set.Immutable.of();
-
-		java.lang.String[] parameters = rule.getHead().getParameters();
+		
+		List<java.lang.String> parameters = rule.getHead().getParameters();
 		if (parameters != null) {
 			for (java.lang.String parameter : parameters)
 				env = env.__insert(parameter);
@@ -111,7 +109,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		this.nonterminal_bindings = new HashMap<>();
 	}
 	
-	public Map<Nonterminal, Set<java.lang.String>> computeBindings(Rule rule) {
+	public Map<Nonterminal, Set<java.lang.String>> computeBindings(RuntimeRule rule) {
 		initBindings();
 		compute(rule);
 		return nonterminal_bindings;
@@ -701,8 +699,7 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Alt<E> symbol) {
-
+	public Void visit(Alt symbol) {
 		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
 		for (Symbol sym : symbol.getSymbols()) {
@@ -736,11 +733,10 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Sequence<E> symbol) {
-
+	public Void visit(Group symbol) {
 		io.usethesource.capsule.Set.Immutable<java.lang.String> env = symbol.getEnv();
 		
-		for (E sym : symbol.getSymbols()) {
+		for (Symbol sym : symbol.getSymbols()) {
 			sym.setEnv(env);
 			visitSymbol(sym);
 			env = sym.getEnv();
@@ -762,11 +758,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
     @Override
     public Void visit(Start start) {
-        Symbol sym = start.getNonterminal();
-
-        sym.setEnv(start.getEnv());
-        visitSymbol(sym);
-
+//        Symbol sym = start.getNonterminal();
+//
+//        sym.setEnv(start.getEnv());
+//        visitSymbol(sym);
+//
         return null;
     }
 

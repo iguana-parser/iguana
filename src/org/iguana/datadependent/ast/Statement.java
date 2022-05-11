@@ -31,6 +31,8 @@ import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
+import java.util.Objects;
+
 public abstract class Statement extends AbstractAST {
 	
 	private static final long serialVersionUID = 1L;
@@ -53,6 +55,18 @@ public abstract class Statement extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx, Input input) {
 			exp.interpret(ctx, input);
 			return null;
+		}
+
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (!(o instanceof Expression)) return false;
+			Expression other = (Expression) o;
+			return Objects.equals(exp, other.exp);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(exp);
 		}
 
 		@Override
@@ -85,6 +99,18 @@ public abstract class Statement extends AbstractAST {
 		public Object interpret(IEvaluatorContext ctx, Input input) {
 			decl.interpret(ctx, input);
 			return null;
+		}
+
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (!(o instanceof VariableDeclaration)) return false;
+			VariableDeclaration other = (VariableDeclaration) o;
+			return Objects.equals(decl, other.decl);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(decl);
 		}
 		
 		@Override

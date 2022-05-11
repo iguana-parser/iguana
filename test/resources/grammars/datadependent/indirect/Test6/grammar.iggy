@@ -1,0 +1,10 @@
+E = non-assoc    E '/'
+  | non-assoc    E '+'
+  | non-assoc    E '-'
+  | non-assoc    E '*'
+  |              '--' E
+  > left         E '&' E
+  |              'a'
+
+start S
+  = E

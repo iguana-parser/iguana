@@ -30,8 +30,11 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.Recursion;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
@@ -52,36 +55,37 @@ public class EBNFToBNF implements GrammarTransformation {
 	private Map<String, Set<String>> ebnfLefts;
 	private Map<String, Set<String>> ebnfRights;
 
-	public static Grammar convert(Grammar grammar) {
+	public static RuntimeGrammar convert(RuntimeGrammar grammar) {
         EBNFToBNF ebnfToBNF = new EBNFToBNF();
         return ebnfToBNF.transform(grammar);
     }
 
 	@Override
-	public Grammar transform(Grammar grammar) {
-		Set<Rule> newRules = new LinkedHashSet<>();
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
+		Set<RuntimeRule> newRules = new LinkedHashSet<>();
 		ebnfLefts = grammar.getEBNFLefts();
 		ebnfRights = grammar.getEBNFRights();
 		grammar.getRules().forEach(r -> newRules.addAll(transform(r)));
-		return Grammar.builder().addRules(newRules)
+		return RuntimeGrammar.builder().addRules(newRules)
 				.addEBNFl(grammar.getEBNFLefts())
 				.addEBNFr(grammar.getEBNFRights())
 				.setLayout(grammar.getLayout())
+				.setGlobals(grammar.getGlobals())
 				.setStartSymbol(grammar.getStartSymbol()).build();
 	}
 	
-	private Set<Rule> transform(Rule rule) {
-		Set<Rule> newRules = new LinkedHashSet<>();
+	private Set<RuntimeRule> transform(RuntimeRule rule) {
+		Set<RuntimeRule> newRules = new LinkedHashSet<>();
 		newRules.add(rewrite(rule, newRules));
 		return newRules;
 	}
 	
-	public Rule rewrite(Rule rule, Set<Rule> newRules) {
+	public RuntimeRule rewrite(RuntimeRule rule, Set<RuntimeRule> newRules) {
 
 		if (rule.getBody() == null)
 			return rule;
 		
-		Rule.Builder builder = new Rule.Builder(rule.getHead());
+		RuntimeRule.Builder builder = new RuntimeRule.Builder(rule.getHead());
 		
 		Set<String> state = new HashSet<>();
 		new FreeVariableVisitor(state).compute(rule);
@@ -128,7 +132,7 @@ public class EBNFToBNF implements GrammarTransformation {
 	private static class EBNFVisitor implements ISymbolVisitor<Symbol> {
 		
 		private final Set<String> state;
-		private final Set<Rule> addedRules;
+		private final Set<RuntimeRule> addedRules;
 		private final Symbol layout;
 		private final LayoutStrategy strategy;
 		
@@ -137,7 +141,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		private static int counter = 0;
 		
-		public EBNFVisitor(Set<String> state, Set<Rule> addedRules, Symbol layout, LayoutStrategy strategy,
+		public EBNFVisitor(Set<String> state, Set<RuntimeRule> addedRules, Symbol layout, LayoutStrategy strategy,
 						   Map<String, Set<String>> ebnfLefts, Map<String, Set<String>> ebnfRights) {
 			this.state = state;
 			this.addedRules = addedRules;
@@ -164,14 +168,14 @@ public class EBNFToBNF implements GrammarTransformation {
 		 *           | B
 		 */
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {	
-			List<? extends Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
+		public Symbol visit(Alt symbol) {
+			List<Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
 			Expression[] arguments = null;
 			
-			Alt.builder(symbols).build().accept(visitor);
+			new Alt.Builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
@@ -179,16 +183,16 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setNodeType(NonterminalNodeType.Alt).build()
-					            		: Nonterminal.builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Alt).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(symbol.getName()).setNodeType(NonterminalNodeType.Alt).build()
+					            		: new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Alt).build();
 			
-			symbols.forEach(x -> addedRules.add(Rule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy)
+			symbols.forEach(x -> addedRules.add(RuntimeRule.withHead(newNt).addSymbol(x).setLayout(layout).setLayoutStrategy(strategy)
 														.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 														.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 														.setDefinition(symbol)
 														.build()));
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -213,21 +217,21 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setNodeType(NonterminalNodeType.Opt).build()
-									: Nonterminal.builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Opt).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(symbol.getName()).setNodeType(NonterminalNodeType.Opt).build()
+									: new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Opt).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setDefinition(symbol)
 									.build());
-			addedRules.add(Rule.withHead(newNt)
+			addedRules.add(RuntimeRule.withHead(newNt)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setDefinition(symbol)
 									.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -260,11 +264,11 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			List<Symbol> seperators = symbol.getSeparators().stream().map(sep -> sep.accept(this)).collect(Collectors.toList());
 
-			Nonterminal newNt = parameters == null? Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").setNodeType(NonterminalNodeType.Plus).build()
-									: Nonterminal.builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).setNodeType(NonterminalNodeType.Plus).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(getName(S, symbol.getSeparators(), layout) + "+").setNodeType(NonterminalNodeType.Plus).build()
+									: new Nonterminal.Builder(getName(S, symbol.getSeparators(), layout) + "+").addParameters(parameters).setNodeType(NonterminalNodeType.Plus).build();
 			
-			addedRules.add(Rule.withHead(newNt)
-									.addSymbol(arguments != null? Nonterminal.builder(newNt).apply(arguments).build() : newNt)
+			addedRules.add(RuntimeRule.withHead(newNt)
+									.addSymbol(arguments != null? new Nonterminal.Builder(newNt).apply(arguments).build() : newNt)
 									.addSymbols(seperators)
 									.addSymbols(S).setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED)
@@ -275,7 +279,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()) : new HashSet<>())
 									.setDefinition(symbol)
 									.build());
-			addedRules.add(Rule.withHead(newNt).addSymbol(S)
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(S)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setLeftEnd(S.getName())
@@ -285,7 +289,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setDefinition(symbol)
 									.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -293,14 +297,14 @@ public class EBNFToBNF implements GrammarTransformation {
 		 * (S) ::= S
 		 */
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public Symbol visit(Group symbol) {
 			List<Symbol> symbols = symbol.getSymbols().stream().map(x -> x.accept(this)).collect(Collectors.toList());
 			
 			init();
 			String[] parameters = null;
 			Expression[] arguments = null;
 			
-			Sequence.builder(symbols).build().accept(visitor);
+			new Group.Builder(symbols).build().accept(visitor);
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
@@ -308,10 +312,10 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
-			Nonterminal newNt = parameters == null? Nonterminal.builder(symbol.getName()).setNodeType(NonterminalNodeType.Seq).build()
-									: Nonterminal.builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Seq).build();
+			Nonterminal newNt = parameters == null? new Nonterminal.Builder(symbol.getName()).setNodeType(NonterminalNodeType.Seq).build()
+									: new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(NonterminalNodeType.Seq).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)
 								.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 								.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 								.setLeftEnd(symbols.get(0).getName())
@@ -321,7 +325,7 @@ public class EBNFToBNF implements GrammarTransformation {
 								.setDefinition(symbol)
 								.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
@@ -332,7 +336,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		 */
 		@Override
 		public Symbol visit(Star symbol) {
-			Symbol S = Plus.builder(symbol.getSymbol()).addSeparators(symbol.getSeparators()).build().accept(this);
+			Symbol S = new Plus.Builder(symbol.getSymbol()).addSeparators(symbol.getSeparators()).build().accept(this);
 			
 			init();
 			String[] parameters = null;
@@ -348,10 +352,10 @@ public class EBNFToBNF implements GrammarTransformation {
 			}
 			
 			String base = getName(symbol.getSymbol(), symbol.getSeparators(), layout);
-			Nonterminal newNt = parameters != null? Nonterminal.builder(base + "*").addParameters(parameters).setNodeType(NonterminalNodeType.Star).build()
-						              : Nonterminal.builder(base + "*").setNodeType(NonterminalNodeType.Star).build();
+			Nonterminal newNt = parameters != null? new Nonterminal.Builder(base + "*").addParameters(parameters).setNodeType(NonterminalNodeType.Star).build()
+						              : new Nonterminal.Builder(base + "*").setNodeType(NonterminalNodeType.Star).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbols(S)
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbols(S)
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
@@ -361,7 +365,7 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setRightEnds(ebnfRights.containsKey(newNt.getName())? ebnfRights.get(newNt.getName()): new HashSet<>())
 									.setDefinition(symbol)
 									.build());
-			addedRules.add(Rule.withHead(newNt)
+			addedRules.add(RuntimeRule.withHead(newNt)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setLeftEnds(ebnfLefts.containsKey(newNt.getName())? ebnfLefts.get(newNt.getName()): new HashSet<>())
@@ -369,13 +373,14 @@ public class EBNFToBNF implements GrammarTransformation {
 									.setDefinition(symbol)
 									.build());
 			
-			Builder copyBuilder = arguments == null? newNt.copyBuilder() : newNt.copyBuilder().apply(arguments);
+			Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
 			return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 
         @Override
         public Symbol visit(Start start) {
-            return start.getNonterminal().accept(this);
+			return start;
+//            return start.getNonterminal().accept(this);
         }
 
         /**
@@ -418,9 +423,9 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = new Expression[] { cond };
 			}
 			
-			Nonterminal newNt = Nonterminal.builder("IF_" + counter++).addParameters(parameters).build();
+			Nonterminal newNt = new Nonterminal.Builder("IF_" + counter++).addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copy().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
@@ -428,11 +433,11 @@ public class EBNFToBNF implements GrammarTransformation {
 									.build());
 			
 			// FIXME: epsilon rule can have a condition
-			addedRules.add(Rule.withHead(newNt)
+			addedRules.add(RuntimeRule.withHead(newNt)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());
 			
-			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
+			return newNt.copy().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 		
 		/**
@@ -478,23 +483,23 @@ public class EBNFToBNF implements GrammarTransformation {
 				arguments = new Expression[] { cond };
 			}
 			
-			Nonterminal newNt = Nonterminal.builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
+			Nonterminal newNt = new Nonterminal.Builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(thenPart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(thenPart.copy().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setDefinition(symbol)
 									.build());
 			
-			addedRules.add(Rule.withHead(newNt).addSymbol(elsePart.copyBuilder().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
+			addedRules.add(RuntimeRule.withHead(newNt).addSymbol(elsePart.copy().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())
 									.setLayout(layout).setLayoutStrategy(strategy)
 									.setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
 									.setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
 									.setDefinition(symbol)
 									.build());
 			
-			return newNt.copyBuilder().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
+			return newNt.copy().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();
 		}
 		
 		/**
@@ -506,7 +511,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -522,7 +527,7 @@ public class EBNFToBNF implements GrammarTransformation {
 					modified |= true;
 				j++;
 			}
-			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
+			return modified? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					: symbol;
 		}
 
@@ -532,7 +537,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -541,7 +546,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -549,7 +554,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -562,7 +567,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -576,7 +581,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			if (body == symbol.getBody()) 
 				return symbol;
 			
-			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new While.Builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override

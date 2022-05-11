@@ -26,7 +26,7 @@ class Test13 extends FunSuite {
         |     > 'if' E 'then' E 'else' E
         |     | 'a'
       """.stripMargin
-    IggyParser.getGrammar(s)
+    IggyParser.getRuntimeGrammar(s)
   }
 
   val start = Nonterminal.withName("S")
@@ -48,7 +48,7 @@ class Test13 extends FunSuite {
         |        | 'if' E(0) 'then' E(0) 'else' E(0) {1}
         |        | 'a' {0}
       """.stripMargin
-    IggyParser.getGrammar(s)
+    IggyParser.getRuntimeGrammar(s)
   }
 
   test("Parser") {

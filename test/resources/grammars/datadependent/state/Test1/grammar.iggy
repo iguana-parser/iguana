@@ -1,0 +1,14 @@
+global x = 0
+global y = 0
+global z = 0
+
+start S
+  = A var m = 3; C B var n = 4; D
+
+A = 'a' x = 1; 'a' y = 2; ';'
+
+B = 'b' z = $x; println($x); ';'
+
+D = 'd'
+
+C = 'c'

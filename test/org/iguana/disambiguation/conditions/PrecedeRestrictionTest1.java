@@ -31,8 +31,9 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -55,7 +56,7 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class PrecedeRestrictionTest1 {
 
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 	
 	private Nonterminal S = Nonterminal.withName("S");
 	private Terminal forr = Terminal.from(Seq.from("for"));
@@ -65,16 +66,16 @@ public class PrecedeRestrictionTest1 {
 	private Terminal ws = Terminal.from(Char.from(' '));
 	private Terminal az = Terminal.from(CharRange.in('a', 'z'));
 	
-	private Plus AZPlus = Plus.builder(az).addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
+	private Plus AZPlus = new Plus.Builder(az).addPostCondition(RegularExpressionCondition.notFollow(Char.from(' ')))
 			                              .addPreCondition(RegularExpressionCondition.notPrecede(CharRange.in('a', 'z'))).build();
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
-		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
-		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
-		Rule r4 = Rule.withHead(L).addSymbol(ws).build();
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
+		RuntimeRule r2 = RuntimeRule.withHead(S).addSymbol(forall).build();
+		RuntimeRule r3 = RuntimeRule.withHead(Id).addSymbol(AZPlus).build();
+		RuntimeRule r4 = RuntimeRule.withHead(L).addSymbol(ws).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 

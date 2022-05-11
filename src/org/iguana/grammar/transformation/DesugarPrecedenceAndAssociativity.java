@@ -30,13 +30,17 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.AssociativityGroup;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
+import java.util.Map;
 
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
@@ -73,7 +77,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		public Map<Integer, Set<Integer>> iprefix_rules = new HashMap<>();
 		public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
 		
-		public Map<String, Rule> right_rec_rules = new HashMap<>();
+		public Map<String, RuntimeRule> right_rec_rules = new HashMap<>();
 		
 		int prefixBelow = -1;
 		int postfixBelow = -1;
@@ -277,7 +281,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 	}
 		
 	@Override
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		
 		leftOrRightRecursiveNonterminals = new HashSet<>();
 		headsWithLabeledRules = new HashMap<>();
@@ -287,7 +291,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		
 		configs = new HashMap<>();
 		
-		for (Rule rule : grammar.getRules()) {
+		for (RuntimeRule rule : grammar.getRules()) {
 			
 			Configuration config = configs.get(rule.getHead().getName());
 			
@@ -306,7 +310,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			config.rightEnds = rule.getRightEnds();
 		}
 		
-		for (Rule rule : grammar.getRules()) {
+		for (RuntimeRule rule : grammar.getRules()) {
 			
 			Nonterminal head = rule.getHead();
 			
@@ -518,7 +522,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}
 		}
 		
-		for (Rule rule: grammar.getRules()) {
+		for (RuntimeRule rule: grammar.getRules()) {
 			
 			if (config_op == OP._1) break;
 			
@@ -714,7 +718,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 			}
 			
-			for (Rule rule : grammar.getRules()) {
+			for (RuntimeRule rule : grammar.getRules()) {
 				
 				if (rule.getPrecedence() == -1 || !rule.isIRightRecursive()) 
 					continue;
@@ -747,20 +751,25 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			}	
 		}
 		
-		Set<Rule> rules = new LinkedHashSet<>();
-		for (Rule rule :grammar.getRules())
+		Set<RuntimeRule> rules = new LinkedHashSet<>();
+		for (RuntimeRule rule :grammar.getRules())
 			rules.add(transform(rule));
 		
-		return Grammar.builder().addRules(rules).setLayout(grammar.getLayout()).setStartSymbol(grammar.getStartSymbol()).build();
+		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout())
+			.setStartSymbol(grammar.getStartSymbol())
+			.setEbnfLefts(grammar.getEBNFLefts())
+			.setEbnfRights(grammar.getEBNFRights())
+			.setGlobals(grammar.getGlobals())
+			.build();
 	}
 	
-	public Rule transform(Rule rule) {
+	public RuntimeRule transform(RuntimeRule rule) {
 		return new Visitor(rule, leftOrRightRecursiveNonterminals, headsWithLabeledRules, configs, config_op).transform();
 	}
 
 	private static class Visitor implements ISymbolVisitor<Symbol> {
 		
-		private final Rule rule;
+		private final RuntimeRule rule;
 		
 		private final Set<String> leftOrRightRecursiveNonterminals;
 		
@@ -804,7 +813,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private Expression[] lret;
 		private Expression[] rret;
 		
-		public Visitor(Rule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules, 
+		public Visitor(RuntimeRule rule, Set<String> leftOrRightRecursiveNonterminals, Map<String, Map<String, Integer>> headsWithLabeledRules,
 					   Map<String, Configuration> configs, OP config_op) {
 			this.rule = rule;
 			this.leftOrRightRecursiveNonterminals = leftOrRightRecursiveNonterminals;
@@ -2141,13 +2150,13 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		     		  		  min(rprec,integer(precedence)));
 		}
 		
-		public Rule transform() {
+		public RuntimeRule transform() {
 			
 			if (rule.getBody() == null)
 				return rule;
 			
 			List<Symbol> symbols = new ArrayList<>();
-			Rule.Builder builder = null;
+			RuntimeRule.Builder builder = null;
 			
 			String head = rule.getHead().getName();
 			
@@ -2157,11 +2166,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			switch(config_op) {
 				case _1: 
 					if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r", "_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r", "_not").build());
 					else if (isLeftOrRightRecursiveNonterminal)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("l","r").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r").build());
 					else if (isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
 					else builder = rule.copyBuilder();
 					
 					builder = builder.setSymbols(symbols);
@@ -2177,7 +2186,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 						Symbol sym = symbol.accept(this);
 						if (preconditions != null && i == 0)
-							symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
+							symbols.add(sym.copy().addPreConditions(preconditions).build());
 						else 
 							symbols.add(sym);
 						i++;
@@ -2187,11 +2196,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				case _2: 
 					
 					if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("p", "_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("p", "_not").build());
 					else if (isLeftOrRightRecursiveNonterminal)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("p").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("p").build());
 					else if (isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters("_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
 					else builder = rule.copyBuilder();
 					
 					boolean isIndirectEnd = false;
@@ -2225,9 +2234,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						}
 						
 						if (isHeadWithLabeledRules)
-							builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).addParameters("_not").build());
+							builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(params).addParameters("_not").build());
 						else
-							builder = rule.copyBuilderButWithHead(rule.getHead().copyBuilder().addParameters(params).build());
+							builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(params).build());
 					}
 					
 					builder = builder.setSymbols(symbols);
@@ -2259,11 +2268,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							postconditions.add(DataDependentCondition.predicate(xlcond));
 						
 						if (!preconditions.isEmpty() && !postconditions.isEmpty())
-							symbols.add(sym.copyBuilder().addPreConditions(preconditions).addPostConditions(postconditions).build());
+							symbols.add(sym.copy().addPreConditions(preconditions).addPostConditions(postconditions).build());
 						else if (!postconditions.isEmpty())
-							symbols.add(sym.copyBuilder().addPostConditions(postconditions).build());
+							symbols.add(sym.copy().addPostConditions(postconditions).build());
 						else if (!preconditions.isEmpty())
-							symbols.add(sym.copyBuilder().addPreConditions(preconditions).build());
+							symbols.add(sym.copy().addPreConditions(preconditions).build());
 						else 
 							symbols.add(sym);
 						
@@ -2329,7 +2338,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Align.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2359,7 +2368,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			this.isFirst = isFirst;
 			this.isLast = isLast;
 			
-			return modified? Block.builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
+			return modified? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
 					: symbol;
 		}
 
@@ -2369,7 +2378,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Code.builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2378,7 +2387,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (sym == symbol.getSymbol())
 				return symbol;
 			
-			return Conditional.builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2387,7 +2396,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (sym == symbol.getThenPart())
 				return symbol;
 			
-			return IfThen.builder(symbol.getExpression(), sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new IfThen.Builder(symbol.getExpression(), sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2398,7 +2407,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					&& elsePart == symbol.getElsePart())
 				return symbol;
 			
-			return IfThenElse.builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new IfThenElse.Builder(symbol.getExpression(), thenPart, elsePart).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override
@@ -2406,7 +2415,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Ignore.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2466,11 +2475,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						arguments = new Expression[] { l2, r2 };
 					
 					if (arguments != null && _not != null)
-						return symbol.copyBuilder().apply(arguments).apply(_not).build();
+						return symbol.copy().apply(arguments).apply(_not).build();
 					else if (arguments != null)
-						return symbol.copyBuilder().apply(arguments).build();
+						return symbol.copy().apply(arguments).build();
 					else 
-						return symbol.copyBuilder().apply(_not).build();
+						return symbol.copy().apply(_not).build();
 					
 				case _2:
 					if (labels != null) {
@@ -2481,7 +2490,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 								if (c != null && !c.right_rec_rules.isEmpty()) {
 									
 									int n = 0;
-									for (Map.Entry<String, Rule> entry : c.right_rec_rules.entrySet()) {
+									for (Map.Entry<String, RuntimeRule> entry : c.right_rec_rules.entrySet()) {
 										if (rule.getPrecedence() != -1 && rule.getPrecedence() > entry.getValue().getPrecedenceLevel().getRhs()) {
 											n = 1 << labels.get(entry.getKey());
 										}
@@ -2864,14 +2873,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					}
 					
 					if (arguments != null && _not != null)
-						newone = variable.isEmpty()? symbol.copyBuilder().apply(arguments).apply(_not).build()
-												   : symbol.copyBuilder().apply(arguments).apply(_not).setVariable(variable).build();
+						newone = variable.isEmpty()? symbol.copy().apply(arguments).apply(_not).build()
+												   : symbol.copy().apply(arguments).apply(_not).setVariable(variable).build();
 					else if (arguments != null) {
-						newone =  variable.isEmpty()? symbol.copyBuilder().apply(arguments).build()
-												    : symbol.copyBuilder().apply(arguments).setVariable(variable).build();
+						newone =  variable.isEmpty()? symbol.copy().apply(arguments).build()
+												    : symbol.copy().apply(arguments).setVariable(variable).build();
 					} else 
-						newone =  variable.isEmpty()? symbol.copyBuilder().apply(_not).build()
-								                    : symbol.copyBuilder().apply(_not).setVariable(variable).build();
+						newone =  variable.isEmpty()? symbol.copy().apply(_not).build()
+								                    : symbol.copy().apply(_not).setVariable(variable).build();
 					if (binding != null)
 						return Code.code(newone, binding);
 					else if (lbinding != null && rbinding != null) {
@@ -2888,7 +2897,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			Symbol sym = symbol.getSymbol().accept(this);
 			
 			return sym == symbol.getSymbol()? symbol 
-					: Offside.builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
+					: new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 
 		@Override
@@ -2902,7 +2911,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			if (body == symbol.getBody()) 
 				return symbol;
 			
-			return While.builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
+			return new While.Builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol).build();
 		}
 		
 		@Override
@@ -2911,7 +2920,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+		public Symbol visit(Alt symbol) {
 			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 
@@ -2926,7 +2935,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		}
 
 		@Override
-		public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
+		public Symbol visit(Group symbol) {
 			throw new RuntimeException("TODO: Unsupported EBNF while desugaring > and assoc!");
 		}
 
@@ -2937,7 +2946,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
         @Override
         public Symbol visit(Start start) {
-            return start.getNonterminal().accept(this);
+			return start;
+//            return start.getNonterminal().accept(this);
         }
 
     }

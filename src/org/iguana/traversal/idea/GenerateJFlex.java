@@ -29,6 +29,7 @@ package org.iguana.traversal.idea;
 
 import iguana.regex.Char;
 import iguana.regex.*;
+import iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 
@@ -291,6 +292,11 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
             return "[" + symbols.get(0).accept(this) + "]";
 
         return "(" + symbols.stream().map(s -> s.accept(this)).collect(Collectors.joining()) + ")";
+    }
+
+    @Override
+    public String visit(iguana.regex.Reference reference) {
+        throw new RuntimeException();
     }
 
     private boolean isCharClass(RegularExpression s) {

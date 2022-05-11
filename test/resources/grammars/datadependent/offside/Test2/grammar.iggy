@@ -1,0 +1,15 @@
+start S
+  = align {offside Stat ";"}+
+
+Stat
+  = 'x' '=' Exp
+
+Exp
+  = Exp '+' 'a'
+  | 'a'
+
+layout terminal Layout
+  = WhiteSpace
+
+terminal WhiteSpace
+  = [\ \t \f \r \n]*

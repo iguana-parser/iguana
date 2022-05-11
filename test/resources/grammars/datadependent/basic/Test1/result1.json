@@ -1,0 +1,171 @@
+{
+  "kind" : "MetaSymbolNode",
+  "symbol" : {
+    "kind" : "Start",
+    "name" : "Start(X)",
+    "startSymbol" : "X"
+  },
+  "start" : 0,
+  "end" : 2,
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "X"
+        },
+        "body" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "S",
+            "arguments" : [
+              {
+                "kind" : "Integer",
+                "value" : 1
+              },
+              {
+                "kind" : "Integer",
+                "value" : 2
+              }
+            ]
+          }
+        ]
+      },
+      "children" : [
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "S",
+              "parameters" : [
+                "a",
+                "b"
+              ]
+            },
+            "body" : [
+              {
+                "kind" : "Code",
+                "name" : "l:A {println(l,a,b)}",
+                "symbol" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A",
+                  "label" : "l"
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Println",
+                      "arguments" : [
+                        {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        {
+                          "kind" : "Name",
+                          "name" : "a",
+                          "i" : -1
+                        },
+                        {
+                          "kind" : "Name",
+                          "name" : "b",
+                          "i" : -1
+                        }
+                      ],
+                      "fun" : "println"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "B"
+              }
+            ]
+          },
+          "children" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "a",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  }
+                ]
+              },
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "a",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  },
+                  "start" : 0,
+                  "end" : 1
+                }
+              ],
+              "start" : 0,
+              "end" : 1
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "B"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "b",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 98
+                    }
+                  }
+                ]
+              },
+              "children" : [
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "b",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 98
+                    }
+                  },
+                  "start" : 1,
+                  "end" : 2
+                }
+              ],
+              "start" : 1,
+              "end" : 2
+            }
+          ],
+          "start" : 0,
+          "end" : 2
+        }
+      ],
+      "start" : 0,
+      "end" : 2
+    }
+  ]
+}

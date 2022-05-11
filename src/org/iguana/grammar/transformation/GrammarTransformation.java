@@ -27,9 +27,9 @@
 
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 
 @FunctionalInterface
 public interface GrammarTransformation {
-	public Grammar transform(Grammar grammar);
+	RuntimeGrammar transform(RuntimeGrammar grammar);
 }

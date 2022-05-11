@@ -47,9 +47,9 @@ package org.iguana.parser.datadependent;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -62,36 +62,36 @@ import static org.iguana.grammar.condition.DataDependentCondition.predicate;
 
 public class Test3 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
 		
 		Nonterminal S = Nonterminal.withName("S");
 		
-		Nonterminal E = Nonterminal.builder("E").addParameters("v").build();
+		Nonterminal E = new Nonterminal.Builder("E").addParameters("v").build();
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		
 		
-		Rule r0 = Rule.withHead(S).addSymbol(Nonterminal.builder(E).apply(integer(0)).build()).build();
+		RuntimeRule r0 = RuntimeRule.withHead(S).addSymbol(new Nonterminal.Builder(E).apply(integer(0)).build()).build();
 		
-		Rule r1_1 = Rule.withHead(E)
-					.addSymbol(Terminal.builder(Char.from('a')).addPreCondition(predicate(greater(var("v"), integer(1)))).build())
+		RuntimeRule r1_1 = RuntimeRule.withHead(E)
+					.addSymbol(new Terminal.Builder(Char.from('a')).addPreCondition(predicate(greater(var("v"), integer(1)))).build())
 					.addSymbol(Terminal.from(Char.from('b'))).addSymbol(Terminal.from(Char.from('c'))).build();
 		
-		Rule r1_2 = Rule.withHead(E)
-				.addSymbol(Nonterminal.builder(A).addPreCondition(predicate(equal(var("v"), integer(0)))).build())
-				.addSymbol(Nonterminal.builder(B).build())
-				.addSymbol(Nonterminal.builder(C).build()).build();
+		RuntimeRule r1_2 = RuntimeRule.withHead(E)
+				.addSymbol(new Nonterminal.Builder(A).addPreCondition(predicate(equal(var("v"), integer(0)))).build())
+				.addSymbol(new Nonterminal.Builder(B).build())
+				.addSymbol(new Nonterminal.Builder(C).build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
 		
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
+		RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
 		
-		grammar = Grammar.builder().addRules(r0, r1_1, r1_2, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r0, r1_1, r1_2, r2, r3, r4).build();
 		
 	}
 	

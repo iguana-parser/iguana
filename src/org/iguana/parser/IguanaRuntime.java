@@ -11,7 +11,6 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.*;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.ParserResultOps;
@@ -73,20 +72,20 @@ public class IguanaRuntime<T extends Result> {
 
         Environment env = ctx.getEmptyEnvironment();
 
-        StartGSSNode<T> startGSSNode = new StartGSSNode<>(startSymbol, 0);
-//
-//        if (!global && !map.isEmpty()) {
-//            Object[] arguments = new Object[map.size()];
-//
-//            int i = 0;
-//            for (String parameter : nonterminal.getParameters())
-//                arguments[i++] = map.get(parameter);
-//
-//            startGSSNode =  startSymbol.getGSSNode(0, arguments);
-//            env = ctx.getEmptyEnvironment().declare(nonterminal.getParameters(), arguments);
-//        } else {
-//            startGSSNode = startSymbol.getGSSNode(0);
-//        }
+        StartGSSNode<T> startGSSNode;
+
+        if (!global && !map.isEmpty()) {
+            Object[] arguments = new Object[map.size()];
+
+            int i = 0;
+            for (String parameter : startSymbol.getParameters())
+                arguments[i++] = map.get(parameter);
+
+            startGSSNode = new StartGSSNode<>(startSymbol, 0, arguments);
+            env = ctx.getEmptyEnvironment().declare(startSymbol.getParameters().toArray(new String[0]), arguments);
+        } else {
+            startGSSNode = new StartGSSNode<>(startSymbol, 0);
+        }
 
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
@@ -181,7 +180,7 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public void evaluate(Statement[] statements, Environment env, Input input) {
-        assert statements.length > 1;
+        assert statements.length > 0;
 
         ctx.setEnvironment(env);
 
@@ -215,7 +214,7 @@ public class IguanaRuntime<T extends Result> {
 
     public ParseError getParseError() {
         if (!hasParseError) return null;
-        return new ParseError(errorSlot, input, errorIndex);
+        return new ParseError(errorSlot, errorIndex, input.getLineNumber(errorIndex), input.getColumnNumber(errorIndex));
     }
 
     public RecognizerStatistics getStatistics() {

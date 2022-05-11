@@ -29,7 +29,8 @@ package org.iguana.parser.datadependent.ebnf;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -56,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Test5 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
@@ -67,21 +68,21 @@ public class Test5 {
 		Nonterminal B = Nonterminal.withName("B");
 		Nonterminal C = Nonterminal.withName("C");
 		
-		Rule r1 = Rule.withHead(X)
-					.addSymbol(Nonterminal.builder(A).setLabel("a").build())
-					.addSymbol(Star.builder(Sequence.builder(Code.code(Nonterminal.builder(B).setLabel("b")
+		RuntimeRule r1 = RuntimeRule.withHead(X)
+					.addSymbol(new Nonterminal.Builder(A).setLabel("a").build())
+					.addSymbol(new Star.Builder(new Group.Builder(Code.code(new Nonterminal.Builder(B).setLabel("b")
 																			.addPreCondition(predicate(greaterEq(lExt("b"), rExt("a")))).build(),
 																	   stat(println(lExt("b")))),
 															 
-															 Code.code(Nonterminal.builder(C).setLabel("c").build(),
+															 Code.code(new Nonterminal.Builder(C).setLabel("c").build(),
 																	   stat(println(var("c"))))).build())
 									.setLabel("b").build()).build();
 		
-		Rule r2 = Rule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
-		Rule r3 = Rule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
-		Rule r4 = Rule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbol(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbol(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r4 = RuntimeRule.withHead(C).addSymbol(Terminal.from(Char.from('c'))).build();
 		
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
 		
 	}
 	

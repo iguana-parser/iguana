@@ -31,8 +31,9 @@ import iguana.regex.Char;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -62,18 +63,18 @@ public class PrecedeRestrictionTest2 {
 	private Nonterminal Id = Nonterminal.withName("Id");
 	private Char ws = Char.from(' ');
 	private CharRange az = CharRange.in('a', 'z');
-	private Grammar grammar;
-	private Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
+	private RuntimeGrammar grammar;
+	private Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az))
 			                              .addPostCondition(RegularExpressionCondition.notPrecede(Seq.from("for"))).build();
 
 	@Before
 	public void createGrammar() {
-		Rule r1 = Rule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
-		Rule r2 = Rule.withHead(S).addSymbol(forall).build();
-		Rule r3 = Rule.withHead(Id).addSymbol(AZPlus).build();
-		Rule r4 = Rule.withHead(L).addSymbol(Terminal.from(ws)).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(forr, Opt.from(L), Id).build();
+		RuntimeRule r2 = RuntimeRule.withHead(S).addSymbol(forall).build();
+		RuntimeRule r3 = RuntimeRule.withHead(Id).addSymbol(AZPlus).build();
+		RuntimeRule r4 = RuntimeRule.withHead(L).addSymbol(Terminal.from(ws)).build();
 
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 

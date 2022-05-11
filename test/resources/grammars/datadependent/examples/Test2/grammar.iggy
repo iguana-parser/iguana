@@ -1,0 +1,10 @@
+
+start S
+  = AB(5,6)
+
+AB($a,$b)
+  = 'c' var x = $a, var y = $b; if ($x == 5) A println($x); else B println($y);
+
+A = 'a'
+
+B = 'b'

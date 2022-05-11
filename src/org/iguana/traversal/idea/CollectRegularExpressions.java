@@ -28,7 +28,8 @@
 package org.iguana.traversal.idea;
 
 import iguana.regex.RegularExpression;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
@@ -50,8 +51,8 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
         this.terminals = terminals;
     }
 
-    public void collect(Grammar grammar) {
-        for (Rule rule : grammar.getRules()) {
+    public void collect(RuntimeGrammar grammar) {
+        for (RuntimeRule rule : grammar.getRules()) {
             for (Symbol symbol : rule.getBody())
                 symbol.accept(this);
         }
@@ -133,7 +134,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     }
 
     @Override
-    public <E extends Symbol> Void visit(Alt<E> symbol) {
+    public Void visit(Alt symbol) {
         for (Symbol sym : symbol.getSymbols())
             sym.accept(this);
         return null;
@@ -152,7 +153,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     }
 
     @Override
-    public <E extends Symbol> Void visit(Sequence<E> symbol) {
+    public Void visit(Group symbol) {
         for (Symbol sym : symbol.getSymbols())
             sym.accept(this);
         return null;
@@ -167,6 +168,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
 
     @Override
     public Void visit(Start start) {
-        return start.getNonterminal().accept(this);
+        return null;
+//        return start.getNonterminal().accept(this);
     }
 }

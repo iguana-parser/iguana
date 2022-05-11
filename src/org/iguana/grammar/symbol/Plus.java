@@ -43,7 +43,7 @@ public class Plus extends AbstractSymbol {
 	private final List<Symbol> separators;
 	
 	public static Plus from(Symbol s) {
-		return builder(s).build();
+		return new Builder(s).build();
 	}
 	
 	private Plus(Builder builder) {
@@ -52,17 +52,21 @@ public class Plus extends AbstractSymbol {
 		this.separators = Collections.unmodifiableList(builder.separators);
 	}
 	
-	private static String getName(Symbol s) {
-		return s.getName() + "+";
-	}
-	
 	public List<Symbol> getSeparators() {
 		return separators;
 	}
 	
 	@Override
-	public SymbolBuilder<Plus> copyBuilder() {
+	public SymbolBuilder<Plus> copy() {
 		return new Builder(this);
+	}
+
+	@Override
+	public List<Symbol> getChildren() {
+		List<Symbol> children = new ArrayList<>();
+		children.add(s);
+		children.addAll(separators);
+		return children;
 	}
 
 	public Symbol getSymbol() {
@@ -86,20 +90,15 @@ public class Plus extends AbstractSymbol {
 		return name.hashCode();
 	}
 	
-	public static Builder builder(Symbol s) {
-		return new Builder(s);
-	}
-
 	public static class Builder extends SymbolBuilder<Plus> {
 
 		private Symbol s;
 		
-		private final List<Symbol> separators = new ArrayList<>();
+		private List<Symbol> separators = new ArrayList<>();
 
 		private Builder() {}
 
 		public Builder(Symbol s) {
-			super(getName(s));
 			this.s = s;
 		}
 		
@@ -123,9 +122,17 @@ public class Plus extends AbstractSymbol {
 			separators.addAll(Arrays.asList(symbols));
 			return this;
 		}
-		
+
+		@Override
+		public SymbolBuilder<Plus> setChildren(List<Symbol> symbols) {
+			this.s = symbols.get(0);
+			this.separators = symbols.subList(1, symbols.size());
+			return this;
+		}
+
 		@Override
 		public Plus build() {
+			this.name = s.getName() + "+";
 			return new Plus(this);
 		}
 	}

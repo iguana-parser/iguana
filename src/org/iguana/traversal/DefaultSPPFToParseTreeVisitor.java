@@ -1,13 +1,17 @@
 package org.iguana.traversal;
 
 import iguana.utils.input.Input;
+import iguana.utils.visualization.DotGraph;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.ParseTreeBuilder;
+import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.*;
 import org.iguana.traversal.exception.AmbiguityException;
+import org.iguana.util.visualization.SPPFToDot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +32,26 @@ public class DefaultSPPFToParseTreeVisitor<T> {
     private final ParseTreeBuilder<T> parseTreeBuilder;
     private final Input input;
     private final boolean ignoreLayout;
+    private final ParserResultOps resultOps;
 
-    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Input input, boolean ignoreLayout) {
+    public DefaultSPPFToParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder, Input input, boolean ignoreLayout, ParserResultOps resultOps) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.input = input;
         this.ignoreLayout = ignoreLayout;
+        this.resultOps = resultOps;
     }
 
     public T convertNonterminalNode(NonterminalNode node) {
         if (node.isAmbiguous()) {
+            List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
+            for (int i = 0; i < packedNodes.size(); i++) {
+                try {
+                    DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
+                    dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             throw new AmbiguityException(node, input);
         }
 
@@ -61,7 +76,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                 return convertPlus(firstChild, (Plus) node.getRule().getDefinition(), leftExtent, rightExtent);
 
             case Seq:
-                return convertSeq(firstChild, (Sequence<?>) node.getRule().getDefinition(), leftExtent, rightExtent);
+                return convertSeq(firstChild, (Group) node.getRule().getDefinition(), leftExtent, rightExtent);
 
             case Start:
                 return convertStart(firstChild, (Start) node.getRule().getDefinition(), leftExtent, rightExtent);
@@ -132,7 +147,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
-    private T convertSeq(NonPackedNode node, Sequence<?> symbol, int leftExtent, int rightExtent) {
+    private T convertSeq(NonPackedNode node, Group symbol, int leftExtent, int rightExtent) {
         List<T> children = new ArrayList<>();
         if (node instanceof IntermediateNode) {
             convertIntermediateNode((IntermediateNode) node, children);
@@ -197,6 +212,15 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
     private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, List<T> children) {
         if (node.isAmbiguous()) {
+            List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
+            for (int i = 0; i < packedNodes.size(); i++) {
+                try {
+                    DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
+                    dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             throw new RuntimeException("Ambiguity found: " + node);
         }
 
@@ -213,7 +237,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         }
         else {
             if (leftChild instanceof NonterminalNode) {
-                Rule rule = ((NonterminalNode) leftChild).getRule();
+                RuntimeRule rule = ((NonterminalNode) leftChild).getRule();
                 if (rule.getDefinition() != null && plus.getName().equals(rule.getDefinition().getName())) {
                     return (NonterminalNode) leftChild;
                 }

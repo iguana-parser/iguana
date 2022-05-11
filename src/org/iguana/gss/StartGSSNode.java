@@ -17,12 +17,18 @@ public class StartGSSNode<T extends Result> implements GSSNode<T> {
 
     private final NonterminalGrammarSlot slot;
     private final int inputIndex;
+    private final Object[] arguments;
 
     private final IntHashMap<T> poppedElements;
 
     public StartGSSNode(NonterminalGrammarSlot slot, int inputIndex) {
+        this(slot, inputIndex, null);
+    }
+
+    public StartGSSNode(NonterminalGrammarSlot slot, int inputIndex, Object[] arguments) {
         this.slot = slot;
         this.inputIndex = inputIndex;
+        this.arguments = arguments;
         poppedElements = new OpenAddressingIntHashMap<>();
     }
 
@@ -95,5 +101,9 @@ public class StartGSSNode<T extends Result> implements GSSNode<T> {
     @Override
     public String toString() {
         return String.format("(%s, %d)", slot, inputIndex);
+    }
+
+    public Object[] getArguments() {
+        return arguments;
     }
 }

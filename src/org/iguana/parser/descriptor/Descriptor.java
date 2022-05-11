@@ -74,7 +74,7 @@ public class Descriptor<T extends Result> {
 
 	@Override
 	public String toString() {
-		return String.format("(%s, %s, %s)", slot, gssNode, result);
+		return String.format("(%s, %s, %s, %s)", slot, gssNode, result, env);
 	}
 	
 }

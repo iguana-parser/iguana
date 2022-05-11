@@ -30,9 +30,9 @@ package org.iguana.parser.gamma;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -56,16 +56,16 @@ public class Gamma0Test {
     private Terminal a = Terminal.from(Char.from('a'));
     private Terminal d = Terminal.from(Char.from('d'));
 
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.withHead(S).addSymbols(a, S).build();
-		Rule r2 = Rule.withHead(S).addSymbols(A, S, d).build();
-		Rule r3 = Rule.withHead(S).build();
-		Rule r4 = Rule.withHead(A).addSymbols(a).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(a, S).build();
+		RuntimeRule r2 = RuntimeRule.withHead(S).addSymbols(A, S, d).build();
+		RuntimeRule r3 = RuntimeRule.withHead(S).build();
+		RuntimeRule r4 = RuntimeRule.withHead(A).addSymbols(a).build();
 		
-		grammar = Grammar.builder().addRules(r1, r2, r3, r4).build();
+		grammar = RuntimeGrammar.builder().addRules(r1, r2, r3, r4).build();
 	}
 	
 //	@Test

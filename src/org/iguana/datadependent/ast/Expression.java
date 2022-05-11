@@ -32,6 +32,7 @@ import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
+import org.iguana.result.RecognizerResult;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNodeWithValue;
 
@@ -287,7 +288,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.elements, this.length);
+            return Objects.hash(Arrays.hashCode(this.elements), this.length);
         }
 
         @Override
@@ -404,12 +405,12 @@ public abstract class Expression extends AbstractAST {
 
         private static final long serialVersionUID = 1L;
 
-        private final java.lang.String fun;
-        private final Expression[] arguments;
+        protected final java.lang.String fun;
+        protected final Expression[] arguments;
 
         Call(java.lang.String fun, Expression... arguments) {
             this.fun = fun;
-            this.arguments = arguments;
+            this.arguments = arguments == null ? new Expression[0] : arguments;
         }
 
         public java.lang.String getFunName() {
@@ -442,7 +443,7 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.arguments, this.fun);
+            return Objects.hash(Arrays.hashCode(this.arguments), this.fun);
         }
 
         @Override
@@ -643,9 +644,9 @@ public abstract class Expression extends AbstractAST {
             if (!(obj instanceof OrIndent)) return false;
             OrIndent other = (OrIndent) obj;
             return this.index.equals(other.index) &&
-                    this.ind.equals(other.ind) &&
-                    this.first.equals(other.first) &&
-                    this.lExt.equals(other.lExt);
+                this.ind.equals(other.ind) &&
+                this.first.equals(other.first) &&
+                this.lExt.equals(other.lExt);
         }
 
         @Override
@@ -717,7 +718,7 @@ public abstract class Expression extends AbstractAST {
 //			return returnIndex? "(" +first + " && " + lExt + " - " + index + " == 0)?" + index
 //					          : first + " && " + lExt + " - " + index + " == 0";
             return returnIndex ? java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 1)
-                    : java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 0);
+                : java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 0);
         }
 
         @Override
@@ -726,8 +727,8 @@ public abstract class Expression extends AbstractAST {
             if (!(obj instanceof AndIndent)) return false;
             AndIndent other = (AndIndent) obj;
             return this.index.equals(other.index) &&
-                    this.first.equals(other.first) &&
-                    this.lExt.equals(other.lExt);
+                this.first.equals(other.first) &&
+                this.lExt.equals(other.lExt);
         }
 
         @Override
@@ -1296,11 +1297,14 @@ public abstract class Expression extends AbstractAST {
                 throw new UndeclaredVariableException(label);
             }
 
-            if (!(value instanceof NonPackedNode)) {
+            if (value instanceof NonPackedNode) {
+                return ((NonPackedNode) value).getRightExtent();
+                // In case of recognizer, we don't have a node. The right extent will be equal to the recognized value.
+            } else if (value instanceof RecognizerResult) {
+                return ((RecognizerResult) value).getIndex();
+            } else {
                 throw new UnexpectedTypeOfArgumentException(this);
             }
-
-            return ((NonPackedNode) value).getRightExtent();
         }
 
         @Override
@@ -1356,12 +1360,15 @@ public abstract class Expression extends AbstractAST {
                 throw new UndeclaredVariableException(label);
             }
 
-            if (!(value instanceof NonPackedNode)) {
+            if (value instanceof NonPackedNode) {
+                NonPackedNode node = (NonPackedNode) value;
+                return input.subString(node.getLeftExtent(), node.getRightExtent());
+            } // In case of recognizer, we don't have a node.
+            else if (value instanceof RecognizerResult) {
+                return input.subString(((RecognizerResult) value).getLeftExtent(), ((RecognizerResult) value).getIndex());
+            } else {
                 throw new UnexpectedTypeOfArgumentException(this);
             }
-
-            NonPackedNode node = (NonPackedNode) value;
-            return input.subString(node.getLeftExtent(), node.getRightExtent());
         }
 
         @Override
@@ -1410,13 +1417,15 @@ public abstract class Expression extends AbstractAST {
                 throw new UndeclaredVariableException(label);
             }
 
-            if (!(value instanceof NonterminalNodeWithValue)) {
+            if (value instanceof NonterminalNodeWithValue) {
+                NonterminalNodeWithValue node = (NonterminalNodeWithValue) value;
+                return node.getValue();
+            } // In case of recognizer, we don't have a node.
+            else if (value instanceof RecognizerResult) {
+                return ((RecognizerResult) value).getValue();
+            } else {
                 throw new UnexpectedTypeOfArgumentException(this);
             }
-
-            NonterminalNodeWithValue node = (NonterminalNodeWithValue) value;
-
-            return node.getValue();
         }
 
         @Override
@@ -1535,8 +1544,8 @@ public abstract class Expression extends AbstractAST {
             if (!(obj instanceof IfThenElse)) return false;
             IfThenElse other = (IfThenElse) obj;
             return this.condition.equals(other.condition) &&
-                    this.thenPart.equals(other.thenPart) &&
-                    this.elsePart.equals(other.elsePart);
+                this.thenPart.equals(other.thenPart) &&
+                this.elsePart.equals(other.elsePart);
         }
 
         @Override

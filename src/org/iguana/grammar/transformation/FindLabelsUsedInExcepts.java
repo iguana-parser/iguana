@@ -1,6 +1,7 @@
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -17,12 +18,12 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 		return labels;
 	}
 	
-	public void compute(Grammar grammar) {
-		for (Rule rule : grammar.getRules())
+	public void compute(RuntimeGrammar grammar) {
+		for (RuntimeRule rule : grammar.getRules())
 			compute(rule);
 	}
 	
-	public void compute(Rule rule) {
+	public void compute(RuntimeRule rule) {
 		
 		if (rule.getBody() == null)
 			return;
@@ -106,7 +107,7 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Alt<E> symbol) {
+	public Void visit(Alt symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 
@@ -121,7 +122,7 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public <E extends Symbol> Void visit(Sequence<E> symbol) {
+	public Void visit(Group symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 

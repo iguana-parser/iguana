@@ -29,6 +29,10 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 public class Offside extends AbstractSymbol {
 	
 	private static final long serialVersionUID = 1L;
@@ -41,7 +45,7 @@ public class Offside extends AbstractSymbol {
 	}
 	
 	public static Offside offside(Symbol symbol) {
-		return builder(symbol).build();
+		return new Builder(symbol).build();
 	}
 	
 	public Symbol getSymbol() {
@@ -49,10 +53,15 @@ public class Offside extends AbstractSymbol {
 	}
 	
 	@Override
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
-	
+
+	@Override
+	public List<Symbol> getChildren() {
+		return Collections.singletonList(symbol);
+	}
+
 	@Override
 	public int size() {
 		return symbol.size();
@@ -67,14 +76,25 @@ public class Offside extends AbstractSymbol {
 	public String toString(int j) {
 		return String.format("offside %s", symbol.toString(j));
 	}
-	
-	public static Builder builder(Symbol symbol) {
-		return new Builder(symbol);
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Offside)) return false;
+		Offside offside = (Offside) o;
+		return Objects.equals(symbol, offside.symbol);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(symbol);
+	}
+
 	public static class Builder extends SymbolBuilder<Offside> {
 		
-		private final Symbol symbol;
+		private Symbol symbol;
+
+		public Builder() { }
 
 		public Builder(Offside offside) {
 			super(offside);
@@ -82,15 +102,20 @@ public class Offside extends AbstractSymbol {
 		}
 		
 		public Builder(Symbol symbol) {
-			super(String.format("offside %s", symbol.toString()));
 			this.symbol = symbol;
 		}
 
 		@Override
+		public SymbolBuilder<Offside> setChildren(List<Symbol> symbols) {
+			this.symbol = symbols.get(0);
+			return this;
+		}
+
+		@Override
 		public Offside build() {
+			this.name = String.format("offside %s", symbol.toString());
 			return new Offside(this);
 		}
-		
 	}
 
 	@Override

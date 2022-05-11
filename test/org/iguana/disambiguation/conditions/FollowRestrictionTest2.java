@@ -30,11 +30,11 @@ package org.iguana.disambiguation.conditions;
 import iguana.regex.CharRange;
 import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
@@ -56,21 +56,21 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class FollowRestrictionTest2 {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 	
 	@Before
 	public void init() {
 		
 		Nonterminal S = Nonterminal.withName("S");
-		Nonterminal Label = Nonterminal.builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from("8"))).build();
+		Nonterminal Label = new Nonterminal.Builder("Label").addPostCondition(RegularExpressionCondition.notFollow(Seq.from("8"))).build();
 		CharRange az = CharRange.in('a', 'z');
 		CharRange zero_nine = CharRange.in('0', '9');
-		Plus AZPlus = Plus.builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
+		Plus AZPlus = new Plus.Builder(Terminal.from(az)).addPreCondition(RegularExpressionCondition.notFollow(az)).build();
 		
-		Rule r1 = Rule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
-		Rule r2 = Rule.withHead(Label).addSymbol(AZPlus).build();
+		RuntimeRule r1 = RuntimeRule.withHead(S).addSymbols(Label, Terminal.from(zero_nine)).build();
+		RuntimeRule r2 = RuntimeRule.withHead(Label).addSymbol(AZPlus).build();
 
-		grammar = Grammar.builder().addRule(r1).addRule(r2).build();
+		grammar = RuntimeGrammar.builder().addRule(r1).addRule(r2).build();
         grammar = new EBNFToBNF().transform(grammar);
     }
 	

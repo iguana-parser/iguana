@@ -29,9 +29,9 @@ package org.iguana.parser.recursion;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -53,20 +53,20 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class HiddenLeftRecursion {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	@Before
 	public void createGrammar() {
 		Nonterminal A = Nonterminal.withName("A");
 		Nonterminal B = Nonterminal.withName("B");
 
-		Rule r1 = Rule.withHead(A).addSymbols(B, A, Terminal.from(Char.from('+')), A).build();
-		Rule r2 = Rule.withHead(A).addSymbols(Terminal.from(Char.from('a'))).build();
+		RuntimeRule r1 = RuntimeRule.withHead(A).addSymbols(B, A, Terminal.from(Char.from('+')), A).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbols(Terminal.from(Char.from('a'))).build();
 		
-		Rule r3 = Rule.withHead(B).addSymbols(Terminal.from(Char.from('b'))).build();
-		Rule r4 = Rule.withHead(B).build();
+		RuntimeRule r3 = RuntimeRule.withHead(B).addSymbols(Terminal.from(Char.from('b'))).build();
+		RuntimeRule r4 = RuntimeRule.withHead(B).build();
 		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
+		grammar = new RuntimeGrammar.Builder().addRule(r1).addRule(r2).addRule(r3).addRule(r4).build();
 	}
 	
 	@Test

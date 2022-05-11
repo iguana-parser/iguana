@@ -1,0 +1,13 @@
+
+start S
+  = X
+
+X = A s:(b:B | c:C d:D)*
+
+A = 'a'
+
+B = 'b'
+
+C = 'c'
+
+D = 'd'

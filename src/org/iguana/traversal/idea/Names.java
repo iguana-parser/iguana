@@ -27,7 +27,10 @@
 
 package org.iguana.traversal.idea;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.Recursion;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.GrammarTransformation;
 import org.iguana.traversal.ISymbolVisitor;
@@ -43,15 +46,15 @@ import java.util.*;
 public class Names implements GrammarTransformation {
 
     @Override
-    public Grammar transform(Grammar grammar) {
-        List<Rule> rules = new ArrayList<>();
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
+        List<RuntimeRule> rules = new ArrayList<>();
 
         NameVisitor visitor = new NameVisitor(rules, (Nonterminal) grammar.getLayout());
 
-        for (Rule rule : grammar.getRules())
+        for (RuntimeRule rule : grammar.getRules())
             rules.add(visitor.visitRule(rule));
 
-        return Grammar.builder()
+        return RuntimeGrammar.builder()
                 .addRules(rules)
                 .addEBNFl(grammar.getEBNFLefts())
                 .addEBNFr(grammar.getEBNFRights())
@@ -61,18 +64,18 @@ public class Names implements GrammarTransformation {
 
     private static class NameVisitor implements ISymbolVisitor<Symbol> {
 
-        final List<Rule> rules;
+        final List<RuntimeRule> rules;
         private Set<Nonterminal> heads = new HashSet<>();
 
         private final Nonterminal layout;
 
-        NameVisitor(List<Rule> rules, Nonterminal layout) {
+        NameVisitor(List<RuntimeRule> rules, Nonterminal layout) {
             this.rules = rules;
             this.layout = layout;
         }
 
-        public Rule visitRule(Rule rule) {
-            Rule.Builder builder = rule.copyBuilder();
+        public RuntimeRule visitRule(RuntimeRule rule) {
+            RuntimeRule.Builder builder = rule.copyBuilder();
             List<Symbol> symbols = new ArrayList<>();
             for (Symbol symbol : rule.getBody())
                 symbols.add(visitSymbol(symbol));
@@ -80,7 +83,7 @@ public class Names implements GrammarTransformation {
         }
 
         public Symbol visitSymbol(Symbol symbol) {
-            SymbolBuilder<? extends Symbol> builder = symbol.accept(this).copyBuilder();
+            SymbolBuilder<? extends Symbol> builder = symbol.accept(this).copy();
             builder.addPreConditions(symbol.getPreConditions());
             builder.addPostConditions(symbol.getPostConditions());
             builder.setLabel(symbol.getLabel());
@@ -133,7 +136,7 @@ public class Names implements GrammarTransformation {
                         sym = Nonterminal.withName(symbol.getName() + "$Declaration");
                         if (!heads.contains(sym)) {
                             heads.add(sym);
-                            rules.add(Rule.withHead(sym).addSymbol(symbol)
+                            rules.add(RuntimeRule.withHead(sym).addSymbol(symbol)
                                         .setLayout(layout).setLayoutStrategy(LayoutStrategy.INHERITED)
                                         .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
                                         .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
@@ -144,7 +147,7 @@ public class Names implements GrammarTransformation {
                         sym = Nonterminal.withName(symbol.getName() + "$Reference");
                         if (!heads.contains(sym)) {
                             heads.add(sym);
-                            rules.add(Rule.withHead(sym).addSymbol(symbol)
+                            rules.add(RuntimeRule.withHead(sym).addSymbol(symbol)
                                         .setLayout(layout).setLayoutStrategy(LayoutStrategy.INHERITED)
                                         .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)
                                         .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
@@ -179,7 +182,7 @@ public class Names implements GrammarTransformation {
         }
 
         @Override
-        public <E extends Symbol> Symbol visit(Alt<E> symbol) {
+        public Symbol visit(Alt symbol) {
             return Alt.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
         }
 
@@ -190,22 +193,23 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(Plus symbol) {
-            return Plus.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
+            return new Plus.Builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
 
         @Override
-        public <E extends Symbol> Symbol visit(Sequence<E> symbol) {
-            return Sequence.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
+        public Symbol visit(Group symbol) {
+            return Group.from(symbol.getSymbols().stream().map(s -> visitSymbol(s)).toArray(Symbol[]::new));
         }
 
         @Override
         public Symbol visit(Star symbol) {
-            return Star.builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
+            return new Star.Builder(visitSymbol(symbol.getSymbol())).addSeparators(symbol.getSeparators()).build();
         }
 
         @Override
         public Symbol visit(Start start) {
-            return Start.from((Nonterminal) start.getNonterminal().accept(this));
+            return start;
+//            return Start.from((Nonterminal) start.getNonterminal().accept(this));
         }
     }
 }

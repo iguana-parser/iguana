@@ -1,0 +1,23 @@
+{
+  "kind" : "MetaSymbolNode",
+  "symbol" : {
+    "kind" : "Start",
+    "name" : "Start(A)",
+    "startSymbol" : "A"
+  },
+  "start" : 0,
+  "end" : 0,
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      },
+      "start" : 0,
+      "end" : 0
+    }
+  ]
+}

@@ -33,25 +33,25 @@ import org.iguana.traversal.ISymbolVisitor;
 public class Start extends AbstractSymbol {
 
 	private static final long serialVersionUID = 1L;
-	
-	private final Nonterminal nonterminal;
 
-    public static Start from(String s) {
-        return builder(Nonterminal.withName(s)).build();
+	private String startSymbol;
+	
+    public static Start from(String startSymbol) {
+        return new Builder(startSymbol).build();
     }
 
-	public static Start from(Nonterminal nonterminal) {
-		return builder(nonterminal).build();
-	}
-	
 	public Start(Builder builder) {
 		super(builder);
-		this.nonterminal = builder.nonterminal;
+		this.startSymbol = builder.startSymbol;
+	}
+
+	public String getStartSymbol() {
+		return startSymbol;
 	}
 
 	@Override
-	public Builder copyBuilder() {
-		return builder(nonterminal);
+	public Builder copy() {
+		return new Builder(name);
 	}
 
     @Override
@@ -59,42 +59,33 @@ public class Start extends AbstractSymbol {
         return visitor.visit(this);
     }
 
-    public Nonterminal getNonterminal() {
-		return nonterminal;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
     	if (this == obj) return true;
     	if (!(obj instanceof Start)) return false;
     	Start other = (Start) obj;
-    	return this.nonterminal.equals(other.nonterminal);
+    	return this.name.equals(other.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return nonterminal.hashCode();
+		return name.hashCode();
 	}
 
-	public static Builder builder(Nonterminal nonterminal) {
-		return new Builder(nonterminal);
-	}
-	
 	public static class Builder extends SymbolBuilder<Start> {
 
-		private Nonterminal nonterminal;
+		private String startSymbol;
 
 		private Builder() {}
 
-		public Builder(Nonterminal nonterminal) {
-			super("Start(" + nonterminal.getName() + ")");
-			this.nonterminal = nonterminal;
+		public Builder(String startSymbol) {
+			this.startSymbol = startSymbol;
 		}
 
 		@Override
 		public Start build() {
+			this.name = "Start(" + startSymbol + ")";
 			return new Start(this);
 		}
 	}
-	
 }

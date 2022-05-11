@@ -29,7 +29,8 @@ package org.iguana.iggy;
 import iguana.regex.Char;
 import iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 
 import java.util.ArrayList;
@@ -43,29 +44,29 @@ import java.util.stream.Collectors;
  */
 public abstract class Builder {
 
-    private Map<String, Rule> regexs = new HashMap<>();
+    private Map<String, RuntimeRule> regexs = new HashMap<>();
 	
-	public Grammar grammar(List<Object> rules) {
-		org.iguana.grammar.Grammar.Builder builder = Grammar.builder();
-		rules.forEach(rule -> builder.addRule((Rule) rule));
+	public RuntimeGrammar grammar(List<Object> rules) {
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder();
+		rules.forEach(rule -> builder.addRule((RuntimeRule) rule));
 		return builder.build();
 	}
 	
-	public List<Rule> rule(List<Object> tag, Object name, List<Object> params, List<Object> body) { // TODO: Add the logic of handling precedence
-		List<Rule> rules = new ArrayList<>();
+	public List<RuntimeRule> rule(List<Object> tag, Object name, List<String> params, List<Object> body) { // TODO: Add the logic of handling precedence
+		List<RuntimeRule> rules = new ArrayList<>();
 		body.forEach(elem -> {
 			((PrecGroup)elem).alts.forEach(alt -> {
 				final Nonterminal head = params.isEmpty() ? Nonterminal.withName((String)name)
-                        : Nonterminal.builder((String)name)
-                              .addParameters(params.stream().map(p -> (String)p).toArray(String[]::new))
+                        : new Nonterminal.Builder((String)name)
+                              .addParameters(params)
                               .build();
 				if (alt instanceof Sequence) {
-					org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
+					RuntimeRule.Builder builder = RuntimeRule.withHead(head);
 					builder.addSymbols(((Sequence)alt).syms);
 					rules.add(builder.build());
 				} else if (alt instanceof AssocGroup) {
 					((AssocGroup)alt).seqs.forEach(seq -> {
-						org.iguana.grammar.symbol.Rule.Builder builder = Rule.withHead(head);
+						RuntimeRule.Builder builder = RuntimeRule.withHead(head);
 						builder.addSymbols(seq.syms);
 						rules.add(builder.build());
 					});
@@ -76,9 +77,9 @@ public abstract class Builder {
 	}
 	
 	public Object rule(Object name, Object body) {
-        Rule.Builder builder = Rule.withHead(Nonterminal.withName((String)name));
+        RuntimeRule.Builder builder = RuntimeRule.withHead(Nonterminal.withName((String)name));
         builder.addSymbol((Symbol)body);
-        Rule rule = builder.build();
+        RuntimeRule rule = builder.build();
         regexs.put((String)name, rule);
         return rule;
 	}
@@ -126,7 +127,7 @@ public abstract class Builder {
 	}
 	
 	public Object seqGroup(List<Object> syms) {
-        return org.iguana.grammar.symbol.Sequence.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
+        return Group.from(syms.stream().map(sym -> (Symbol)sym).collect(Collectors.toList()));
 	}
 	
 	public Object altGroup(List<Object> elems) {
@@ -135,7 +136,7 @@ public abstract class Builder {
             if (elem instanceof Symbol)
                 syms.add((Symbol)elem);
             else if (elem instanceof Sequence)
-                syms.add(org.iguana.grammar.symbol.Sequence.from(((Sequence)elem).syms));
+                syms.add(Group.from(((Sequence)elem).syms));
         }
 		return Alt.from(syms);
 	}
@@ -175,7 +176,7 @@ public abstract class Builder {
     }
 
 	public Nonterminal nontCall(Object sym, List<Object> args) {
-		org.iguana.grammar.symbol.Nonterminal.Builder builder = Nonterminal.builder((Nonterminal) sym);
+		org.iguana.grammar.symbol.Nonterminal.Builder builder = new Nonterminal.Builder((Nonterminal) sym);
 		if (args.isEmpty()) 
 			return builder.build();
 		return builder
@@ -184,15 +185,11 @@ public abstract class Builder {
 	}
 	
 	public Nonterminal variable(Object name, Object sym) {
-		return Nonterminal.builder(((Nonterminal)sym)).setVariable((String) name).build();
+		return new Nonterminal.Builder(((Nonterminal)sym)).setVariable((String) name).build();
 	}
 	
 	public Symbol label(Object name, Object sym) {
-		return ((Symbol)sym).copyBuilder().setLabel((String)name).build();
-	}
-	
-	public Nonterminal nont(Object name) {
-		return Nonterminal.withName((String)name);
+		return ((Symbol)sym).copy().setLabel((String)name).build();
 	}
 	
 	public iguana.regex.Seq<Char> string(Object obj) {

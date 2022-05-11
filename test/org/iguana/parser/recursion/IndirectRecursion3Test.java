@@ -29,9 +29,9 @@ package org.iguana.parser.recursion;
 
 import iguana.regex.Char;
 import iguana.utils.input.Input;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -55,7 +55,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class IndirectRecursion3Test {
 	
-	private Grammar grammar;
+	private RuntimeGrammar grammar;
 
 	private Nonterminal A = Nonterminal.withName("A");
 	private Nonterminal B = Nonterminal.withName("B");
@@ -68,13 +68,13 @@ public class IndirectRecursion3Test {
 
 	@Before
 	public void init() {
-		Rule r1 = Rule.withHead(A).addSymbols(B, c).build();
-		Rule r2 = Rule.withHead(A).addSymbols(C, d).build();
-		Rule r3 = Rule.withHead(A).addSymbols(e).build();
-		Rule r4 = Rule.withHead(B).addSymbols(A, f).build();
-		Rule r5 = Rule.withHead(C).addSymbols(A, g).build();
+		RuntimeRule r1 = RuntimeRule.withHead(A).addSymbols(B, c).build();
+		RuntimeRule r2 = RuntimeRule.withHead(A).addSymbols(C, d).build();
+		RuntimeRule r3 = RuntimeRule.withHead(A).addSymbols(e).build();
+		RuntimeRule r4 = RuntimeRule.withHead(B).addSymbols(A, f).build();
+		RuntimeRule r5 = RuntimeRule.withHead(C).addSymbols(A, g).build();
 		
-		grammar = new Grammar.Builder().addRule(r1).addRule(r2).addRule(r3)
+		grammar = new RuntimeGrammar.Builder().addRule(r1).addRule(r2).addRule(r3)
 								    .addRule(r4).addRule(r5).build();
 	}
 	

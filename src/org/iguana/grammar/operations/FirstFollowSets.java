@@ -31,7 +31,8 @@ import iguana.regex.CharRange;
 import iguana.regex.EOF;
 import iguana.regex.Epsilon;
 import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
@@ -45,13 +46,13 @@ import java.util.*;
  */
 public class FirstFollowSets {
 	
-	private final Map<Nonterminal, List<Rule>> definitions;
+	private final Map<Nonterminal, List<RuntimeRule>> definitions;
 
 	private final Map<Nonterminal, Set<CharRange>> firstSets;
 	
 	private final Map<Nonterminal, Set<CharRange>> followSets;
 	
-	private final Map<Tuple<Rule, Integer>, Set<CharRange>> predictionSets;
+	private final Map<Tuple<RuntimeRule, Integer>, Set<CharRange>> predictionSets;
 
 	private final Set<Nonterminal> nullableNonterminals;
 	
@@ -61,7 +62,7 @@ public class FirstFollowSets {
 	
 	private final ISymbolVisitor<Nonterminal> nonterminalVisitor;
 	
-	public FirstFollowSets(Grammar grammar) {
+	public FirstFollowSets(RuntimeGrammar grammar) {
 		this.definitions = grammar.getDefinitions();
 		this.firstSets = new HashMap<>();
 		this.nullableNonterminals = new HashSet<>();
@@ -88,7 +89,7 @@ public class FirstFollowSets {
 		return followSets;
 	}
 	
-	public Map<Tuple<Rule, Integer>, Set<CharRange>> getPredictionSets() {
+	public Map<Tuple<RuntimeRule, Integer>, Set<CharRange>> getPredictionSets() {
 		return predictionSets;
 	}
 	
@@ -107,7 +108,7 @@ public class FirstFollowSets {
 		return followSets.get(nonterminal);
 	}
 	
-	public Set<CharRange> getPredictionSet(Rule rule, int index) {
+	public Set<CharRange> getPredictionSet(RuntimeRule rule, int index) {
 		return predictionSets.get(Tuple.of(rule, index));
 	}
 	
@@ -123,7 +124,7 @@ public class FirstFollowSets {
 			
 			for (Nonterminal head : nonterminals) {
 				Set<CharRange> firstSet = firstSets.get(head);
-				for (Rule alternate : definitions.get(head)) {
+				for (RuntimeRule alternate : definitions.get(head)) {
 					changed |= addFirstSet(firstSet, alternate.getBody(), 0);
 				}
 			}
@@ -139,7 +140,7 @@ public class FirstFollowSets {
 			changed = false;
 			
 			for (Nonterminal head : nonterminals) {
-				for (Rule rule : definitions.get(head)) {
+				for (RuntimeRule rule : definitions.get(head)) {
 					if (rule.size() == 0 || rule.getBody().stream().allMatch(s -> isNullable(s))) {
 						changed |= nullableNonterminals.add(head);
 						break;
@@ -202,7 +203,7 @@ public class FirstFollowSets {
 			
 			for (Nonterminal head : nonterminals) {
 
-				for (Rule rule : definitions.get(head)) {
+				for (RuntimeRule rule : definitions.get(head)) {
 					List<Symbol> alternative = rule.getBody();
 					
 					if(alternative == null || alternative.size() == 0) continue;
@@ -240,9 +241,9 @@ public class FirstFollowSets {
 	private void calcualtePredictionSets() {
 
 		for (Nonterminal nonterminal : definitions.keySet()) {
-			List<Rule> rules = definitions.get(nonterminal);
+			List<RuntimeRule> rules = definitions.get(nonterminal);
 			
-			for (Rule rule : rules) {
+			for (RuntimeRule rule : rules) {
 				for (int i = 0; i <= rule.size(); i++) {
 					calculatePredictionSet(rule, i);
 				}
@@ -250,9 +251,9 @@ public class FirstFollowSets {
 		}
 	}
 	
-	private void calculatePredictionSet(Rule rule, int index) {
+	private void calculatePredictionSet(RuntimeRule rule, int index) {
 		
-		Tuple<Rule, Integer> position = Tuple.of(rule, index);
+		Tuple<RuntimeRule, Integer> position = Tuple.of(rule, index);
 		List<Symbol> alternate = rule.getBody();
 		
 		if (alternate == null)

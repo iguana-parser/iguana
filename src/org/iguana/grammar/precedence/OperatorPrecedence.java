@@ -27,13 +27,13 @@
 
 package org.iguana.grammar.precedence;
 
-import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.patterns.AbstractPattern;
 import org.iguana.grammar.patterns.ExceptPattern;
 import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.symbol.LayoutStrategy;
 import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.EBNFToBNF;
 
@@ -70,12 +70,12 @@ public class OperatorPrecedence {
 		exceptPatterns.forEach(x -> add(x));
 	}
 	
-	public Grammar transform(Grammar grammar) {
+	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		
-		Map<Nonterminal, List<Rule>> l = grammar.getDefinitions();
+		Map<Nonterminal, List<RuntimeRule>> l = grammar.getDefinitions();
 		
 		this.definitions = new HashMap<>();
-		for (Entry<Nonterminal, List<Rule>> e : l.entrySet()) {
+		for (Entry<Nonterminal, List<RuntimeRule>> e : l.entrySet()) {
 			List<List<Symbol>> listOfList = new ArrayList<>();
 			for (List<Symbol> list : e.getValue().stream().map(r -> r.getBody()).collect(Collectors.toList())) {
 				List<Symbol> newList = new ArrayList<>(list); 
@@ -93,14 +93,14 @@ public class OperatorPrecedence {
 			}
 		}
 		
-		Grammar.Builder builder = new Grammar.Builder();
+		RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder();
 		for (Entry<Nonterminal, List<List<Symbol>>> e : definitions.entrySet()) {
 			Nonterminal head = e.getKey();
 			for (int i = 0; i < e.getValue().size(); i++) {
 				List<Symbol> list = definitions.get(head).get(i);
 				Symbol layout = grammar.getDefinitions().get(plain(head)).get(i).getLayout();
 				LayoutStrategy strategy = grammar.getDefinitions().get(plain(head)).get(i).getLayoutStrategy();
-				Rule rule = Rule.withHead(head).addSymbols(list).setLayout(layout).setLayoutStrategy(strategy).build();
+				RuntimeRule rule = RuntimeRule.withHead(head).addSymbols(list).setLayout(layout).setLayoutStrategy(strategy).build();
 				if (rule.getBody() != null)
 					builder.addRule(rule);
 			}
@@ -318,7 +318,7 @@ public class OperatorPrecedence {
 				continue;
 			}
 
-			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
+			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1);
 			
 			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {
@@ -350,7 +350,7 @@ public class OperatorPrecedence {
 				continue;
 			}
 
-			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1); 
+			Nonterminal last = (Nonterminal) alternate.get(alternate.size() - 1);
 			
 			if (plainEqual(last, pattern.getNonterminal())) {
 				if(contains(last, children)) {
@@ -723,10 +723,10 @@ public class OperatorPrecedence {
 		return list;
 	}
 	
-	public static Rule plain(Rule rule) {
+	public static RuntimeRule plain(RuntimeRule rule) {
 		Nonterminal plainHead = (Nonterminal) plain(rule.getHead());
 		List<Symbol> plainAlternate = plain(rule.getBody());
-		return Rule.withHead(plainHead).addSymbols(plainAlternate).build();
+		return RuntimeRule.withHead(plainHead).addSymbols(plainAlternate).build();
 	}
 	
 	public static List<Symbol> plain(List<Symbol> alternate) {

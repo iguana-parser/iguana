@@ -27,21 +27,23 @@
 
 package org.iguana.parser;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.gss.GSSNode;
+
+import java.util.Objects;
 
 
 public class ParseError {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
-	private final String message;
+	private final int lineNumber;
+	private final int columnNumber;
 
-    public ParseError(GrammarSlot slot, Input input, int inputIndex) {
+    public ParseError(GrammarSlot slot, int inputIndex, int lineNumber, int columnNumber) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
-		this.message = getMessage(input, inputIndex);
+		this.lineNumber = lineNumber;
+		this.columnNumber = columnNumber;
     }
 	
 	public int getInputIndex() {
@@ -52,15 +54,31 @@ public class ParseError {
 		return slot;
 	}
 
-    @Override
-    public String toString() {
-        return message;
-    }
-
-    private static String getMessage(Input input, int inputIndex) {
-		int lineNumber = input.getLineNumber(inputIndex);
-		int columnNumber = input.getColumnNumber(inputIndex);
-		
-		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
+	public int getLineNumber() {
+		return lineNumber;
 	}
+
+	public int getColumnNumber() {
+		return columnNumber;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof ParseError)) return false;
+		ParseError other = (ParseError) obj;
+		return inputIndex == other.inputIndex &&
+			   lineNumber == other.lineNumber &&
+			   columnNumber == other.columnNumber;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(inputIndex, lineNumber, columnNumber);
+	}
+
+	@Override
+    public String toString() {
+		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
+    }
 }
