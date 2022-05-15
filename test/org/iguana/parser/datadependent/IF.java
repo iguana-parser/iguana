@@ -43,7 +43,7 @@ RuntimeGrammar.builder()
          Input input = Input.fromString("ca");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
     }

@@ -80,7 +80,8 @@ public class FollowRestrictionTest {
 	public void testParser() {
 		Input input = Input.fromString("abc:");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        parser.parse(input, "S");
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}
@@ -124,7 +125,8 @@ public class FollowRestrictionTest {
         public void test() {
             Input input = Input.fromString("aasb");
             IguanaParser parser = new IguanaParser(grammar);
-            ParseTreeNode result = parser.getParserTree(input);
+            parser.parse(input, "S");
+            ParseTreeNode result = parser.getParseTree();
 
             assertNotNull(result);
     //		assertTrue(result.asParseSuccess().getResult().deepEquals(getExpectedSPPF(parser.getGrammarGraph())));

@@ -65,7 +65,7 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test1.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 
@@ -86,7 +86,7 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test2.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 
@@ -109,7 +109,7 @@ public class TestCSharp {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test7.cs").getPath()));
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 

@@ -79,7 +79,8 @@ public class KeywordExclusionTest {
 	public void testWhen() {
 		Input input = Input.fromString("when");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+		parser.parse(input, "S");
+        ParseTreeNode result = parser.getParseTree();
 
         assertNull(result);
 	}
@@ -89,7 +90,8 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("if");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+		parser.parse(input, "S");
+        ParseTreeNode result = parser.getParseTree();
 
         assertNull(result);
 	}
@@ -99,7 +101,8 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("do");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+		parser.parse(input, "S");
+        ParseTreeNode result = parser.getParseTree();
 
         assertNull(result);
 	}
@@ -109,7 +112,8 @@ public class KeywordExclusionTest {
 		Input input = Input.fromString("while");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+		parser.parse(input, "S");
+        ParseTreeNode result = parser.getParseTree();
 
         assertNull(result);
 	}

@@ -87,7 +87,7 @@ public class HiddenLeftRecursion1Test {
 	public void test1() {
 		Input input = Input.fromString("xca");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}
@@ -96,7 +96,7 @@ public class HiddenLeftRecursion1Test {
 	public void test2() {
 		Input input = Input.fromString("ycb");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}
@@ -105,7 +105,7 @@ public class HiddenLeftRecursion1Test {
 	public void test3() {
 		Input input = Input.fromString("cababaab");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}
@@ -114,7 +114,7 @@ public class HiddenLeftRecursion1Test {
 	public void test4() {
 		Input input = Input.fromString("xcabbbbb");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}
@@ -123,7 +123,7 @@ public class HiddenLeftRecursion1Test {
 	public void test5() {
 		Input input = Input.fromString("ycaaaabaaaa");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}

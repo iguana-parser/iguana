@@ -52,6 +52,10 @@ public class Grammar implements Serializable {
         return layout;
     }
 
+    public Map<String, Object> getGlobals() {
+        return globals;
+    }
+
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
             computeEnds();

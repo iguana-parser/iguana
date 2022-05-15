@@ -59,7 +59,7 @@ RuntimeGrammar.builder()
          Input input = Input.fromString("a^a*a&aa+a"); // ((a^a)((*a)&a)a)+a
 
         IguanaParser parser = new IguanaParser(grammar);
-        assertNotNull(parser.getParserTree(input));
+        assertNotNull(parser.getParseTree());
 
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
     }

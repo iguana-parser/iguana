@@ -76,7 +76,7 @@ RuntimeGrammar.builder()
          Input input = Input.fromString("+a^a");
 
         IguanaParser parser = new IguanaParser(grammar);
-        assertNotNull(parser.getParserTree(input));
+        assertNotNull(parser.getParseTree());
 
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
 
