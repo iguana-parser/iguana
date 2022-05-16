@@ -90,24 +90,6 @@
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : "a",
-                "preConditions" : [
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "Greater",
-                      "lhs" : {
-                        "kind" : "Name",
-                        "name" : "v",
-                        "i" : -1
-                      },
-                      "rhs" : {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
-                    }
-                  }
-                ],
                 "regex" : {
                   "kind" : "Char",
                   "val" : 97

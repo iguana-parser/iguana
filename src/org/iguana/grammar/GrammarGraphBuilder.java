@@ -112,6 +112,7 @@ public class GrammarGraphBuilder implements Serializable {
 
     private GrammarGraphBuilder(RuntimeGrammar grammar, Configuration config) {
         if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {
+            // TODO: move this transformation to IguanaRecognizer
             VarToInt transformer = new VarToInt();
             this.grammar = transformer.transform(grammar);
             this.mapping = transformer.getMapping();
@@ -439,12 +440,6 @@ public class GrammarGraphBuilder implements Serializable {
         if ((parameters == null && arguments == null) || (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length)) return;
 
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
-    }
-
-    public void reset() {
-        bodyGrammarSlots.forEach(GrammarSlot::reset);
-        nonterminalsMap.values().forEach(GrammarSlot::reset);
-        terminalsMap.values().forEach(GrammarSlot::reset);
     }
 
     private Conditions getConditions(Set<Condition> conditions) {

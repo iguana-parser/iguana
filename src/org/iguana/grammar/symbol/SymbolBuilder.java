@@ -29,10 +29,7 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.grammar.condition.Condition;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class SymbolBuilder<T extends Symbol> {
 	
@@ -42,9 +39,9 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	
 	protected Object object;
 
-	protected Set<Condition> preConditions = new HashSet<>();
+	protected Set<Condition> preConditions = new LinkedHashSet<>();
 	
-	protected Set<Condition> postConditions = new HashSet<>();
+	protected Set<Condition> postConditions = new LinkedHashSet<>();
 
 	public SymbolBuilder(T symbol) {
 		this.name = symbol.getName();

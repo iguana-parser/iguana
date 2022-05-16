@@ -97,7 +97,7 @@ RuntimeGrammar.builder()
                                         "        a");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
     }

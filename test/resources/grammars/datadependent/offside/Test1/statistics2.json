@@ -4,7 +4,7 @@
   "gssEdgesCount" : 9,
   "nonterminalNodesCount" : 3,
   "terminalNodesCount" : 13,
-  "intermediateNodesCount" : 11,
+  "intermediateNodesCount" : 10,
   "packedNodesCount" : 0,
   "ambiguousNodesCount" : 0
 }

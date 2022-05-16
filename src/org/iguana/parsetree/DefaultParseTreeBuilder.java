@@ -1,13 +1,13 @@
 package org.iguana.parsetree;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.runtime.RuntimeRule;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
 
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> {
 
@@ -32,7 +32,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     }
 
     @Override
-    public AmbiguityNode ambiguityNode(Set<ParseTreeNode> ambiguities) {
+    public AmbiguityNode ambiguityNode(LinkedHashSet<ParseTreeNode> ambiguities) {
         return new AmbiguityNode(ambiguities);
     }
 

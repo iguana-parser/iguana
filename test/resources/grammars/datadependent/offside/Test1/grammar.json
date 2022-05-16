@@ -141,11 +141,8 @@
   ],
   "terminals" : {
     "Layout" : {
-      "kind" : "regex.Star",
-      "regex" : {
-        "kind" : "Reference",
-        "name" : "WhiteSpace"
-      }
+      "kind" : "Reference",
+      "name" : "WhiteSpace"
     },
     "WhiteSpace" : {
       "kind" : "regex.Star",

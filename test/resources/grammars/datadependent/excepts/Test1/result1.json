@@ -88,6 +88,12 @@
                         },
                         "rhs" : {
                           "kind" : "Get",
+                          "arg1" : {
+                            "kind" : "Name",
+                            "name" : "p",
+                            "i" : -1
+                          },
+                          "arg2" : 0,
                           "fun" : "get",
                           "arguments" : [
                             {
@@ -99,19 +105,19 @@
                               "kind" : "Integer",
                               "value" : 0
                             }
-                          ],
-                          "arg1" : {
-                            "kind" : "Name",
-                            "name" : "p",
-                            "i" : -1
-                          },
-                          "arg2" : 0
+                          ]
                         }
                       },
                       "rhs" : {
                         "kind" : "NotEqual",
                         "lhs" : {
                           "kind" : "Get",
+                          "arg1" : {
+                            "kind" : "Name",
+                            "name" : "p",
+                            "i" : -1
+                          },
+                          "arg2" : 1,
                           "fun" : "get",
                           "arguments" : [
                             {
@@ -123,13 +129,7 @@
                               "kind" : "Integer",
                               "value" : 1
                             }
-                          ],
-                          "arg1" : {
-                            "kind" : "Name",
-                            "name" : "p",
-                            "i" : -1
-                          },
-                          "arg2" : 1
+                          ]
                         },
                         "rhs" : {
                           "kind" : "Integer",
@@ -149,6 +149,12 @@
                         "kind" : "LessThanEqual",
                         "lhs" : {
                           "kind" : "Get",
+                          "arg1" : {
+                            "kind" : "Name",
+                            "name" : "l",
+                            "i" : -1
+                          },
+                          "arg2" : 0,
                           "fun" : "get",
                           "arguments" : [
                             {
@@ -160,13 +166,7 @@
                               "kind" : "Integer",
                               "value" : 0
                             }
-                          ],
-                          "arg1" : {
-                            "kind" : "Name",
-                            "name" : "l",
-                            "i" : -1
-                          },
-                          "arg2" : 0
+                          ]
                         },
                         "rhs" : {
                           "kind" : "Integer",
@@ -177,6 +177,12 @@
                         "kind" : "GreaterThanEqual",
                         "lhs" : {
                           "kind" : "Get",
+                          "arg1" : {
+                            "kind" : "Name",
+                            "name" : "l",
+                            "i" : -1
+                          },
+                          "arg2" : 0,
                           "fun" : "get",
                           "arguments" : [
                             {
@@ -188,13 +194,7 @@
                               "kind" : "Integer",
                               "value" : 0
                             }
-                          ],
-                          "arg1" : {
-                            "kind" : "Name",
-                            "name" : "l",
-                            "i" : -1
-                          },
-                          "arg2" : 0
+                          ]
                         },
                         "rhs" : {
                           "kind" : "Integer",
@@ -211,6 +211,12 @@
                     "elements" : [
                       {
                         "kind" : "Get",
+                        "arg1" : {
+                          "kind" : "Name",
+                          "name" : "p",
+                          "i" : -1
+                        },
+                        "arg2" : 0,
                         "fun" : "get",
                         "arguments" : [
                           {
@@ -222,13 +228,7 @@
                             "kind" : "Integer",
                             "value" : 0
                           }
-                        ],
-                        "arg1" : {
-                          "kind" : "Name",
-                          "name" : "p",
-                          "i" : -1
-                        },
-                        "arg2" : 0
+                        ]
                       },
                       {
                         "kind" : "Integer",
@@ -406,6 +406,12 @@
                           },
                           "rhs" : {
                             "kind" : "Get",
+                            "arg1" : {
+                              "kind" : "Name",
+                              "name" : "p",
+                              "i" : -1
+                            },
+                            "arg2" : 0,
                             "fun" : "get",
                             "arguments" : [
                               {
@@ -417,13 +423,7 @@
                                 "kind" : "Integer",
                                 "value" : 0
                               }
-                            ],
-                            "arg1" : {
-                              "kind" : "Name",
-                              "name" : "p",
-                              "i" : -1
-                            },
-                            "arg2" : 0
+                            ]
                           }
                         }
                       }
@@ -438,6 +438,12 @@
                             "kind" : "Equal",
                             "lhs" : {
                               "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 1,
                               "fun" : "get",
                               "arguments" : [
                                 {
@@ -449,13 +455,7 @@
                                   "kind" : "Integer",
                                   "value" : 1
                                 }
-                              ],
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 1
+                              ]
                             },
                             "rhs" : {
                               "kind" : "Integer",
@@ -470,6 +470,12 @@
                             },
                             "rhs" : {
                               "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 1,
                               "fun" : "get",
                               "arguments" : [
                                 {
@@ -481,13 +487,7 @@
                                   "kind" : "Integer",
                                   "value" : 1
                                 }
-                              ],
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 1
+                              ]
                             }
                           }
                         }
@@ -501,6 +501,12 @@
                             "kind" : "LessThanEqual",
                             "lhs" : {
                               "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 0,
                               "fun" : "get",
                               "arguments" : [
                                 {
@@ -512,13 +518,7 @@
                                   "kind" : "Integer",
                                   "value" : 0
                                 }
-                              ],
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 0
+                              ]
                             },
                             "rhs" : {
                               "kind" : "Integer",
@@ -529,6 +529,12 @@
                             "kind" : "GreaterThanEqual",
                             "lhs" : {
                               "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 0,
                               "fun" : "get",
                               "arguments" : [
                                 {
@@ -540,13 +546,7 @@
                                   "kind" : "Integer",
                                   "value" : 0
                                 }
-                              ],
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 0
+                              ]
                             },
                             "rhs" : {
                               "kind" : "Integer",
@@ -563,6 +563,12 @@
                         "elements" : [
                           {
                             "kind" : "Get",
+                            "arg1" : {
+                              "kind" : "Name",
+                              "name" : "p",
+                              "i" : -1
+                            },
+                            "arg2" : 0,
                             "fun" : "get",
                             "arguments" : [
                               {
@@ -574,13 +580,7 @@
                                 "kind" : "Integer",
                                 "value" : 0
                               }
-                            ],
-                            "arg1" : {
-                              "kind" : "Name",
-                              "name" : "p",
-                              "i" : -1
-                            },
-                            "arg2" : 0
+                            ]
                           },
                           {
                             "kind" : "Integer",

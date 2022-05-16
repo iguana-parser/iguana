@@ -89,7 +89,7 @@ public class Test1 {
 		Input input = Input.fromString("ab");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}

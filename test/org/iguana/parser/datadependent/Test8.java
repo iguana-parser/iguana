@@ -97,7 +97,7 @@ public class Test8 {
 		Input input = Input.fromString("xawz");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}

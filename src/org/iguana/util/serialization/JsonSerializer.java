@@ -29,6 +29,7 @@ import org.iguana.parser.ParseError;
 import org.iguana.parsetree.*;
 
 import java.io.*;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -450,7 +451,7 @@ public class JsonSerializer {
     }
 
     abstract static class AmbiguityNodeMixIn {
-        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) { }
+        AmbiguityNodeMixIn(@JsonProperty("alternatives") LinkedHashSet<ParseTreeNode> alternatives) { }
     }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)

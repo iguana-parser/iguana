@@ -80,7 +80,7 @@ public class IndirectRecursion2Test {
 	public void testParser() {
 		Input input = Input.fromString("ad");
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
 	}

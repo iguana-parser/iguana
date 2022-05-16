@@ -1,11 +1,10 @@
 package org.iguana.iggy;
 
 import iguana.utils.input.Input;
-import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.transformation.*;
 import org.iguana.parser.IguanaParser;
-import org.iguana.parsetree.*;
+import org.iguana.parser.ParseError;
+import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
 
 import java.io.File;
@@ -36,37 +35,18 @@ public class IggyParser {
     }
 
     public static Grammar getGrammar(String path) throws IOException {
-        IguanaParser parser = new IguanaParser(transform(iggyGrammar().toRuntimeGrammar()));
+        IguanaParser parser = new IguanaParser(iggyGrammar());
 
         Input input = Input.fromFile(new File(path));
-        ParseTreeNode parseTree = parser.getParserTree(input);
-        if (parseTree == null) {
+        String startNonterminal = "Definition";
+        try {
+            parser.parse(input, startNonterminal);
+        } catch (ParseError error) {
             System.out.println(parser.getParseError());
-            throw new RuntimeException("Parse error: " + path);
+            throw error;
         }
+        ParseTreeNode parseTree = parser.getParseTree();
 
         return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
-
-    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
-        RuntimeGrammar grammar = new ResolveIdentifiers().transform(runtimeGrammar);
-        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
-        desugarAlignAndOffside.doAlign();
-        grammar = desugarAlignAndOffside.transform(grammar);
-        grammar = new EBNFToBNF().transform(grammar);
-        desugarAlignAndOffside.doOffside();
-        grammar = desugarAlignAndOffside.transform(grammar);
-        grammar = new DesugarStartSymbol().transform(grammar);
-        grammar = new DesugarState().transform(grammar);
-        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-        precedenceAndAssociativity.setOP2();
-        grammar = precedenceAndAssociativity.transform(grammar);
-        grammar = new LayoutWeaver().transform(grammar);
-        return grammar;
-    }
-
-    public static RuntimeGrammar getRuntimeGrammar(String path) throws IOException {
-        return transform(getGrammar(path).toRuntimeGrammar());
-    }
-
 }

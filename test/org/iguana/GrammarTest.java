@@ -4,7 +4,6 @@ import iguana.utils.input.Input;
 import iguana.utils.io.FileUtils;
 import iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.iggy.IggyParser;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static iguana.utils.io.FileUtils.readFile;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class GrammarTest {
 
@@ -97,12 +97,11 @@ public class GrammarTest {
             }
 
             String parserTestName = "Parser test " + category + " " + testName;
-            RuntimeGrammar runtimeGrammar = IggyParser.transform(grammar.toRuntimeGrammar());
-            IguanaParser parser = new IguanaParser(runtimeGrammar);
+            IguanaParser parser = new IguanaParser(grammar);
             DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
-            IguanaRecognizer recognizer = new IguanaRecognizer(runtimeGrammar);
+            IguanaRecognizer recognizer = new IguanaRecognizer(grammar);
             DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
 
             grammarTests.add(dynamicParserTest);
@@ -127,8 +126,23 @@ public class GrammarTest {
             ParseTreeNode actualParseTree = null;
             boolean isCyclic = false;
 
+            ParseError parseError = null;
             try {
-                actualParseTree = parser.getParserTree(input);
+                parser.parse(input);
+            } catch (ParseError error) {
+                parseError = error;
+            }
+
+            String statisticsPath = testPath + "/statistics" + j + ".json";
+            if (REGENERATE_FILES || !Files.exists(Paths.get(statisticsPath))) {
+                record(parser.getStatistics(), statisticsPath);
+            } else {
+                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
+                assertEquals(expectedStatistics, parser.getStatistics());
+            }
+
+            try {
+                actualParseTree = parser.getParseTree();
                 // No parse error
                 if (actualParseTree != null) {
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
@@ -136,7 +150,7 @@ public class GrammarTest {
                 }
             } catch (AmbiguityException e) {
                 try {
-                    actualParseTree = parser.getParserTree(input, new ParseOptions.Builder().setAmbiguous(true).build());
+                    actualParseTree = parser.getParseTree(true, true);
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
                     dotGraph.generate(testPath + "/tree" + j + ".pdf");
                 } catch (CyclicGrammarException ee) {
@@ -150,6 +164,7 @@ public class GrammarTest {
                 String resultPath = testPath + "/result" + j + ".json";
 
                 if (actualParseTree == null) { // Parse error
+                    assertNotNull(parseError);
                     if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                         record(parser.getParseError(), resultPath);
                     } else {
@@ -163,14 +178,6 @@ public class GrammarTest {
                         ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
                         assertEquals(expectedParseTree, actualParseTree);
                     }
-                }
-
-                String statisticsPath = testPath + "/statistics" + j + ".json";
-                if (REGENERATE_FILES || !Files.exists(Paths.get(statisticsPath))) {
-                    record(parser.getStatistics(), statisticsPath);
-                } else {
-                    ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
-                    assertEquals(expectedStatistics, parser.getStatistics());
                 }
             }
         };

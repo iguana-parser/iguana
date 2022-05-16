@@ -6,20 +6,14 @@ import static java.util.Collections.emptyMap;
 
 public class ParseOptions {
 
-    private final boolean ambiguous;
     private final boolean ignoreLayout;
     private final Map<String, Object> map;
     private final boolean global;
 
     private ParseOptions(Builder builder) {
-        this.ambiguous = builder.ambiguous;
         this.ignoreLayout = builder.ignoreLayout;
         this.map = builder.map;
         this.global= builder.global;
-    }
-
-    public boolean ambiguous() {
-        return ambiguous;
     }
 
     public boolean ignoreLayout() {

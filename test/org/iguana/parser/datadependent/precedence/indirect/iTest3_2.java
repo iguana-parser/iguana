@@ -55,7 +55,7 @@ RuntimeGrammar.builder()
          Input input = Input.fromString("a+fa");
 
         IguanaParser parser = new IguanaParser(grammar);
-        ParseTreeNode result = parser.getParserTree(input);
+        ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);
         assertEquals(0, parser.getStatistics().getAmbiguousNodesCount());
