@@ -1,60 +1,25 @@
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.Grammar;
-import org.iguana.grammar.symbol.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 
 public class GrammarTransformer {
 
-    public static Grammar transform(Grammar grammar, SymbolTransformation symbolTransformation) {
-        Grammar.Builder grammarBuilder = new Grammar.Builder();
-
-        for (Rule rule : grammar.getRules()) {
-            Rule.Builder ruleBuilder = new Rule.Builder(rule.getHead());
-            for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
-                PriorityLevel.Builder priorityLevelBuilder = new PriorityLevel.Builder();
-                for (Alternative alt : priorityLevel.getAlternatives()) {
-                    Alternative.Builder altBuilder = new Alternative.Builder();
-                    altBuilder.setAssociativity(alt.getAssociativity());
-                    for (Sequence sequence : alt.seqs()) {
-                        Sequence.Builder seqBuilder = new Sequence.Builder();
-                        seqBuilder.setAssociativity(sequence.getAssociativity());
-                        seqBuilder.setLabel(sequence.getLabel());
-                        for (Symbol symbol : sequence.getSymbols()) {
-                            seqBuilder.addSymbol(transform(symbol, symbolTransformation));
-                        }
-                        altBuilder.addSequence(seqBuilder.build());
-                    }
-                    priorityLevelBuilder.addAlternative(altBuilder.build());
-                }
-                ruleBuilder.addPriorityLevel(priorityLevelBuilder.build());
-            }
-            grammarBuilder.addRule(ruleBuilder.build());
-        }
-
-        return grammarBuilder
-                .setStartSymbol(grammar.getStartSymbol())
-                .addTerminals(grammar.getTerminals())
-                .setLayout(grammar.getLayout())
-                .build();
+    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar, String startNonterminal) {
+        RuntimeGrammar grammar = new ResolveIdentifiers().transform(runtimeGrammar);
+        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
+        desugarAlignAndOffside.doAlign();
+        grammar = desugarAlignAndOffside.transform(grammar);
+        grammar = new EBNFToBNF().transform(grammar);
+        desugarAlignAndOffside.doOffside();
+        grammar = desugarAlignAndOffside.transform(grammar);
+        grammar = new DesugarStartSymbol(startNonterminal).transform(grammar);
+        grammar = new DesugarState().transform(grammar);
+        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
+        precedenceAndAssociativity.setOP2();
+        grammar = precedenceAndAssociativity.transform(grammar);
+        grammar = new LayoutWeaver().transform(grammar);
+        return grammar;
     }
-
-    private static Symbol transform(Symbol symbol, SymbolTransformation symbolTransformation) {
-        List<Symbol> transformedChildren = new ArrayList<>();
-        for (Symbol child : symbol.getChildren()) {
-            transformedChildren.add(transform(child, symbolTransformation));
-        }
-
-        if (symbolTransformation.isDefinedAt(symbol)) {
-            Symbol transformedSymbol = symbolTransformation.apply(symbol);
-            return transformedSymbol.copy().setChildren(transformedChildren).build();
-        } else {
-            return symbol.copy().setChildren(transformedChildren).build();
-        }
-    }
-
 }
 
 

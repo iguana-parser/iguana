@@ -41,7 +41,7 @@ import org.iguana.util.Configuration;
 
 public class IguanaParser extends IguanaRecognizer {
 
-    private static ParserResultOps parserResultOps;
+    private static final ParserResultOps parserResultOps = new ParserResultOps();
 
     private ParseTreeNode parseTree;
     private NonterminalNode sppf;
@@ -74,7 +74,6 @@ public class IguanaParser extends IguanaRecognizer {
     public void parse(Input input, String startNonterminal, ParseOptions options) {
         clear();
         this.input = input;
-        parserResultOps = new ParserResultOps();
         IguanaRuntime<?> runtime = new IguanaRuntime<>(config, parserResultOps);
         GrammarGraph grammarGraph = createGrammarGraph(startNonterminal);
         this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());

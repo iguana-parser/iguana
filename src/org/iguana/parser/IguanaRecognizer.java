@@ -2,10 +2,10 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
-import org.iguana.grammar.transformation.*;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IguanaRecognizer {
+
+    private static final RecognizerResultOps recognizerResultOps = new RecognizerResultOps();
 
     protected final RuntimeGrammar grammar;
     protected final Configuration config;
@@ -38,7 +40,7 @@ public class IguanaRecognizer {
     }
 
     public IguanaRecognizer(Grammar grammar, Configuration config) {
-       this(grammar.toRuntimeGrammar(), config);
+        this(grammar.toRuntimeGrammar(), config);
     }
 
     public boolean recognize(Input input) {
@@ -50,7 +52,7 @@ public class IguanaRecognizer {
     }
 
     public boolean recognize(Input input, String startNonterminal, Map<String, Object> map, boolean global) {
-        IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, new RecognizerResultOps());
+        IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps);
         GrammarGraph grammarGraph = createGrammarGraph(startNonterminal);
         RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
         this.parseError = runtime.getParseError();
@@ -75,23 +77,6 @@ public class IguanaRecognizer {
     protected GrammarGraph createGrammarGraph(String startNonterminal) {
         return grammarGraphs.computeIfAbsent(
             startNonterminal,
-            key -> GrammarGraphBuilder.from(transform(grammar, startNonterminal), config));
-    }
-
-    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar, String startNonterminal) {
-        RuntimeGrammar grammar = new ResolveIdentifiers().transform(runtimeGrammar);
-        DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
-        desugarAlignAndOffside.doAlign();
-        grammar = desugarAlignAndOffside.transform(grammar);
-        grammar = new EBNFToBNF().transform(grammar);
-        desugarAlignAndOffside.doOffside();
-        grammar = desugarAlignAndOffside.transform(grammar);
-        grammar = new DesugarStartSymbol(startNonterminal).transform(grammar);
-        grammar = new DesugarState().transform(grammar);
-        DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
-        precedenceAndAssociativity.setOP2();
-        grammar = precedenceAndAssociativity.transform(grammar);
-        grammar = new LayoutWeaver().transform(grammar);
-        return grammar;
+            key -> GrammarGraphBuilder.from(GrammarTransformer.transform(grammar, startNonterminal), config));
     }
 }
