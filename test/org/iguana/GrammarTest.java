@@ -98,7 +98,7 @@ public class GrammarTest {
 
             String parserTestName = "Parser test " + category + " " + testName;
             IguanaParser parser = new IguanaParser(grammar);
-            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, grammar.getStartSymbol().getStartSymbol(), i, input));
+            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
             IguanaRecognizer recognizer = new IguanaRecognizer(grammar);
@@ -120,7 +120,7 @@ public class GrammarTest {
         };
     }
 
-    private Executable getParserTest(String testPath, IguanaParser parser, String start, int j, Input input) {
+    private Executable getParserTest(String testPath, IguanaParser parser, int j, Input input) {
         return () -> {
 
             ParseTreeNode actualParseTree = null;
@@ -128,7 +128,7 @@ public class GrammarTest {
 
             ParseError parseError = null;
             try {
-                parser.parse(input, start);
+                parser.parse(input);
             } catch (ParseError error) {
                 parseError = error;
             }

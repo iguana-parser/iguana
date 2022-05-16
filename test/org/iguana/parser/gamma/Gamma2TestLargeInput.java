@@ -51,7 +51,7 @@ public class Gamma2TestLargeInput {
 		RuntimeRule rule1 = RuntimeRule.withHead(S).addSymbols(S, S, S).build();
 		RuntimeRule rule2 = RuntimeRule.withHead(S).addSymbols(S, S).build();
 		RuntimeRule rule3 = RuntimeRule.withHead(S).addSymbols(b).build();
-		return new DesugarStartSymbol().transform(RuntimeGrammar.builder().addRules(rule1, rule2, rule3).setStartSymbol(Start.from("S")).build());
+		return RuntimeGrammar.builder().addRules(rule1, rule2, rule3).setStartSymbol(Start.from("S")).build();
 	}
 
 	private static Nonterminal getStartSymbol() {

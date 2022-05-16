@@ -79,17 +79,17 @@ public class GrammarGraphBuilder implements Serializable {
     private static MatcherFactory matcherFactory = new DFAMatcherFactory();
 
     public static GrammarGraph from(RuntimeGrammar grammar) {
-        return from(grammar, Configuration.load());
+        return from(grammar, grammar.getStartSymbol().getStartSymbol(), Configuration.load());
     }
 
-    public static GrammarGraph from(RuntimeGrammar grammar, Configuration config) {
+    public static GrammarGraph from(RuntimeGrammar grammar, String startNonterminal, Configuration config) {
         GrammarGraphBuilder builder = new GrammarGraphBuilder(grammar, config);
         builder.convert();
         List<GrammarSlot> grammarSlots = new ArrayList<>();
         grammarSlots.addAll(builder.nonterminalsMap.values());
         grammarSlots.addAll(builder.terminalsMap.values());
         grammarSlots.addAll(builder.bodyGrammarSlots);
-        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(grammar.getStartSymbol().getName())));
+        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(startNonterminal)));
     }
 
     private void convert() {
@@ -439,12 +439,6 @@ public class GrammarGraphBuilder implements Serializable {
         if ((parameters == null && arguments == null) || (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length)) return;
 
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
-    }
-
-    public void reset() {
-        bodyGrammarSlots.forEach(GrammarSlot::reset);
-        nonterminalsMap.values().forEach(GrammarSlot::reset);
-        terminalsMap.values().forEach(GrammarSlot::reset);
     }
 
     private Conditions getConditions(Set<Condition> conditions) {

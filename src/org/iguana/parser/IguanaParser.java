@@ -29,6 +29,7 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -62,6 +63,10 @@ public class IguanaParser extends IguanaRecognizer {
         super(grammar, Configuration.load());
     }
 
+    public void parse(Input input) {
+        parse(input, grammar.getStartSymbol().getStartSymbol());
+    }
+
     public void parse(Input input, String startNonterminal) {
         parse(input, startNonterminal, new ParseOptions.Builder().setMap(globals).setGlobal(false).build());
     }
@@ -71,6 +76,7 @@ public class IguanaParser extends IguanaRecognizer {
         this.input = input;
         parserResultOps = new ParserResultOps();
         IguanaRuntime<?> runtime = new IguanaRuntime<>(config, parserResultOps);
+        GrammarGraph grammarGraph = createGrammarGraph(startNonterminal);
         this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
@@ -108,7 +114,7 @@ public class IguanaParser extends IguanaRecognizer {
             return (ParseTreeNode) sppf.accept(visitor).getValues().get(0);
         }
 
-        DefaultSPPFToParseTreeVisitor converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
+        DefaultSPPFToParseTreeVisitor<?> converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
         this.parseTree = (ParseTreeNode) converter.convertNonterminalNode(sppf);
         return parseTree;
     }
