@@ -75,7 +75,7 @@ public class IguanaRecognizer {
     protected GrammarGraph createGrammarGraph(String startNonterminal) {
         return grammarGraphs.computeIfAbsent(
             startNonterminal,
-            key -> GrammarGraphBuilder.from(transform(grammar, startNonterminal), startNonterminal, config));
+            key -> GrammarGraphBuilder.from(transform(grammar, startNonterminal), config));
     }
 
     public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar, String startNonterminal) {

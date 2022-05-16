@@ -11,31 +11,34 @@ import org.iguana.grammar.symbol.Start;
 
 public class DesugarStartSymbol implements GrammarTransformation {
 
-    private final String startSymbol;
+    private final String startSymbolName;
 
-    public DesugarStartSymbol(String startSymbol) {
-        this.startSymbol = startSymbol;
+    public DesugarStartSymbol(String startSymbolName) {
+        this.startSymbolName = startSymbolName;
     }
 
     @Override
     public RuntimeGrammar transform(RuntimeGrammar grammar) {
-        if (startSymbol == null) return grammar;
+        if (startSymbolName == null) return grammar;
+
+        Start startSymbol = Start.from(startSymbolName);
 
         RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder(grammar);
 
-        Nonterminal startNonterminal = new Nonterminal.Builder(startSymbol).setNodeType(NonterminalNodeType.Start).build();
+        Nonterminal startNonterminal = new Nonterminal.Builder(startSymbol.getName()).setNodeType(NonterminalNodeType.Start).build();
 
         RuntimeRule startRule = RuntimeRule.withHead(startNonterminal)
-            .addSymbol(Nonterminal.withName(startSymbol))
+            .addSymbol(Nonterminal.withName(startSymbolName))
             .setRecursion(Recursion.NON_REC)
             .setAssociativity(Associativity.UNDEFINED)
             .setPrecedence(-1)
             .setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())
-            .setDefinition(Start.from(startSymbol))
+            .setDefinition(startSymbol)
             .build();
 
         builder.addRule(startRule);
         builder.setGlobals(grammar.getGlobals());
+        builder.setStartSymbol(startSymbol);
         return builder.build();
     }
 }

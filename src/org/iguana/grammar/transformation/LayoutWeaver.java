@@ -45,7 +45,7 @@ public class LayoutWeaver implements GrammarTransformation {
 	@Override
 	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Symbol layout = grammar.getLayout();
-		
+
 		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
 		
 		for (RuntimeRule rule : grammar.getRules()) {
@@ -64,7 +64,9 @@ public class LayoutWeaver implements GrammarTransformation {
 			}
 
 			if (rule.getHead().getNodeType() == NonterminalNodeType.Start) {
-				if (layout != null) {
+				if (layout == null) {
+					builder.addRule(ruleBuilder.addSymbol(rule.symbolAt(0)).build());
+				} else {
 					builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout).build());
 				}
 				continue;
@@ -109,7 +111,7 @@ public class LayoutWeaver implements GrammarTransformation {
 		builder.setGlobals(grammar.getGlobals());
 		builder.setEbnfLefts(grammar.getEBNFLefts());
 		builder.setEbnfRights(grammar.getEBNFRights());
-		
+
 		return builder.build();
 	}
 

@@ -79,17 +79,17 @@ public class GrammarGraphBuilder implements Serializable {
     private static MatcherFactory matcherFactory = new DFAMatcherFactory();
 
     public static GrammarGraph from(RuntimeGrammar grammar) {
-        return from(grammar, grammar.getStartSymbol().getStartSymbol(), Configuration.load());
+        return from(grammar, Configuration.load());
     }
 
-    public static GrammarGraph from(RuntimeGrammar grammar, String startNonterminal, Configuration config) {
+    public static GrammarGraph from(RuntimeGrammar grammar, Configuration config) {
         GrammarGraphBuilder builder = new GrammarGraphBuilder(grammar, config);
         builder.convert();
         List<GrammarSlot> grammarSlots = new ArrayList<>();
         grammarSlots.addAll(builder.nonterminalsMap.values());
         grammarSlots.addAll(builder.terminalsMap.values());
         grammarSlots.addAll(builder.bodyGrammarSlots);
-        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(startNonterminal)));
+        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(grammar.getStartSymbol().getName())));
     }
 
     private void convert() {
@@ -112,6 +112,7 @@ public class GrammarGraphBuilder implements Serializable {
 
     private GrammarGraphBuilder(RuntimeGrammar grammar, Configuration config) {
         if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {
+            // TODO: move this transformation to IguanaRecognizer
             VarToInt transformer = new VarToInt();
             this.grammar = transformer.transform(grammar);
             this.mapping = transformer.getMapping();
