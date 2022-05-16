@@ -79,7 +79,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
         }
 
         if (node.isAmbiguous()) {
-            Set<T> children = new HashSet<>();
+            LinkedHashSet<T> children = new LinkedHashSet<>();
             for (PackedNode packedNode : resultOps.getPackedNodes(node)) {
                 VisitResult visitResult = packedNode.accept(this);
                 children.addAll(visitResult.accept(createNodeVisitor, packedNode));
@@ -92,7 +92,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                 case Layout: {
                     List<T> children = packedNode.accept(this).accept(createNodeVisitor, packedNode);
                     if (children.size() > 1) {
-                        result = single(parseTreeBuilder.ambiguityNode(new HashSet<>(children)));
+                        result = single(parseTreeBuilder.ambiguityNode(new LinkedHashSet<>(children)));
                     } else {
                         T child = children.get(0);
                         if (child instanceof MetaSymbolNode) { // Last Plus node propagated up

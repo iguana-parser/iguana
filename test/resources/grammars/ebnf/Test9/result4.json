@@ -43,7 +43,7 @@
                 }
               },
               "start" : 0,
-              "end" : 3,
+              "end" : 1,
               "children" : [
                 {
                   "kind" : "NonterminalNode",
@@ -80,7 +80,22 @@
                   ],
                   "start" : 0,
                   "end" : 1
-                },
+                }
+              ]
+            },
+            {
+              "kind" : "MetaSymbolNode",
+              "symbol" : {
+                "kind" : "Star",
+                "name" : "A*",
+                "s" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                }
+              },
+              "start" : 1,
+              "end" : 3,
+              "children" : [
                 {
                   "kind" : "NonterminalNode",
                   "rule" : {
@@ -154,19 +169,6 @@
                   "end" : 3
                 }
               ]
-            },
-            {
-              "kind" : "MetaSymbolNode",
-              "symbol" : {
-                "kind" : "Star",
-                "name" : "A*",
-                "s" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                }
-              },
-              "start" : 3,
-              "end" : 3
             }
           ],
           "start" : 0,
@@ -528,7 +530,7 @@
                 }
               },
               "start" : 0,
-              "end" : 1,
+              "end" : 3,
               "children" : [
                 {
                   "kind" : "NonterminalNode",
@@ -565,22 +567,7 @@
                   ],
                   "start" : 0,
                   "end" : 1
-                }
-              ]
-            },
-            {
-              "kind" : "MetaSymbolNode",
-              "symbol" : {
-                "kind" : "Star",
-                "name" : "A*",
-                "s" : {
-                  "kind" : "Nonterminal",
-                  "name" : "A"
-                }
-              },
-              "start" : 1,
-              "end" : 3,
-              "children" : [
+                },
                 {
                   "kind" : "NonterminalNode",
                   "rule" : {
@@ -654,6 +641,19 @@
                   "end" : 3
                 }
               ]
+            },
+            {
+              "kind" : "MetaSymbolNode",
+              "symbol" : {
+                "kind" : "Star",
+                "name" : "A*",
+                "s" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                }
+              },
+              "start" : 3,
+              "end" : 3
             }
           ],
           "start" : 0,

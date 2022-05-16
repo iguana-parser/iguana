@@ -3,6 +3,7 @@ package org.iguana.parsetree;
 import org.iguana.grammar.runtime.RuntimeRule;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,9 +12,9 @@ import static java.util.Objects.requireNonNull;
 
 public class AmbiguityNode implements ParseTreeNode {
 
-    private final Set<ParseTreeNode> alternatives;
+    private final LinkedHashSet<ParseTreeNode> alternatives;
 
-    public AmbiguityNode(Set<ParseTreeNode> alternatives) {
+    public AmbiguityNode(LinkedHashSet<ParseTreeNode> alternatives) {
         this.alternatives = requireNonNull(alternatives);
     }
 
