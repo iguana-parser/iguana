@@ -31,6 +31,10 @@ public class IguanaRecognizer {
         this(GrammarTransformer.transform(grammar.toRuntimeGrammar(), startNonterminal), config);
     }
 
+    public IguanaRecognizer(RuntimeGrammar grammar) {
+        this(grammar, Configuration.load());
+    }
+
     public IguanaRecognizer(RuntimeGrammar grammar, Configuration config) {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.config = config;
