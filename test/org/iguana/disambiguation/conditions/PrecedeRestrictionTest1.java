@@ -83,7 +83,7 @@ public class PrecedeRestrictionTest1 {
 	public void test() {
 		Input input = Input.fromString("forall");
         IguanaParser parser = new IguanaParser(grammar);
-		parser.parse(input, "S");
+		parser.parse(input);
         ParseTreeNode result = parser.getParseTree();
 
         assertNotNull(result);

@@ -38,9 +38,8 @@ public class IggyParser {
         IguanaParser parser = new IguanaParser(iggyGrammar());
 
         Input input = Input.fromFile(new File(path));
-        String startNonterminal = "Definition";
         try {
-            parser.parse(input, startNonterminal);
+            parser.parse(input);
         } catch (ParseError error) {
             System.out.println(parser.getParseError());
             throw error;
