@@ -1,0 +1,625 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "X"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B)*",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Star"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B)+",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Plus"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(B)*",
+        "label" : "b",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "postConditions" : [
+                {
+                  "kind" : "DataDependentCondition",
+                  "type" : "DATA_DEPENDENT",
+                  "expression" : {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "RightExtent",
+                      "label" : "a"
+                    },
+                    "rhs" : {
+                      "kind" : "LeftExtent",
+                      "label" : "b"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B)*",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Star"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(B)*",
+        "label" : "b",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "postConditions" : [
+                {
+                  "kind" : "DataDependentCondition",
+                  "type" : "DATA_DEPENDENT",
+                  "expression" : {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "RightExtent",
+                      "label" : "a"
+                    },
+                    "rhs" : {
+                      "kind" : "LeftExtent",
+                      "label" : "b"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A",
+          "label" : "a"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B)*",
+          "label" : "b",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Star"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B)",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Seq"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "B",
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Equal",
+                "lhs" : {
+                  "kind" : "RightExtent",
+                  "label" : "a"
+                },
+                "rhs" : {
+                  "kind" : "LeftExtent",
+                  "label" : "b"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Sequence",
+        "name" : "(B)",
+        "symbols" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "B",
+            "postConditions" : [
+              {
+                "kind" : "DataDependentCondition",
+                "type" : "DATA_DEPENDENT",
+                "expression" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "RightExtent",
+                    "label" : "a"
+                  },
+                  "rhs" : {
+                    "kind" : "LeftExtent",
+                    "label" : "b"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B)+",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B)+",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B)",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Seq"
+        }
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(B)+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "postConditions" : [
+                {
+                  "kind" : "DataDependentCondition",
+                  "type" : "DATA_DEPENDENT",
+                  "expression" : {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "RightExtent",
+                      "label" : "a"
+                    },
+                    "rhs" : {
+                      "kind" : "LeftExtent",
+                      "label" : "b"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B)+",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B)",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Seq"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(B)+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "postConditions" : [
+                {
+                  "kind" : "DataDependentCondition",
+                  "type" : "DATA_DEPENDENT",
+                  "expression" : {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "RightExtent",
+                      "label" : "a"
+                    },
+                    "rhs" : {
+                      "kind" : "LeftExtent",
+                      "label" : "b"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "ebnfLefts" : {
+    "(B)*" : [
+      "(B)+"
+    ],
+    "(B)" : [
+      "B"
+    ],
+    "(B)+" : [
+      "(B)"
+    ]
+  },
+  "ebnfRights" : {
+    "(B)*" : [
+      "B",
+      "$B",
+      "(B)+",
+      "(B)"
+    ],
+    "(B)" : [
+      "B",
+      "$B"
+    ],
+    "(B)+" : [
+      "B",
+      "$B",
+      "(B)"
+    ]
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

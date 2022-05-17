@@ -108,7 +108,24 @@
               "value" : 1
             }
           }
-        ]
+        ],
+        "recursion" : "LEFT_RIGHT_REC",
+        "irecursion" : "NON_REC",
+        "associativity" : "LEFT",
+        "precedence" : 1,
+        "precedenceLevel" : {
+          "lhs" : 1,
+          "rhs" : 1,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
+          "index" : 2,
+          "containsAssociativityGroup" : false,
+          "assoc_lhs" : -1,
+          "assoc_rhs" : -1
+        }
       },
       "children" : [
         {
@@ -138,7 +155,24 @@
                   "value" : 0
                 }
               }
-            ]
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 2,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
           },
           "children" : [
             {
@@ -271,7 +305,24 @@
                   "value" : 2
                 }
               }
-            ]
+            ],
+            "recursion" : "LEFT_RIGHT_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "LEFT",
+            "precedence" : 2,
+            "precedenceLevel" : {
+              "lhs" : 2,
+              "rhs" : 2,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 3,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
           },
           "children" : [
             {
@@ -374,7 +425,24 @@
                       "value" : 2
                     }
                   }
-                ]
+                ],
+                "recursion" : "LEFT_RIGHT_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "LEFT",
+                "precedence" : 2,
+                "precedenceLevel" : {
+                  "lhs" : 2,
+                  "rhs" : 2,
+                  "undefined" : -1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 3,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
               },
               "children" : [
                 {
@@ -404,7 +472,24 @@
                           "value" : 0
                         }
                       }
-                    ]
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : -1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
                   },
                   "children" : [
                     {
@@ -464,7 +549,24 @@
                           "value" : 0
                         }
                       }
-                    ]
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : -1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
                   },
                   "children" : [
                     {
@@ -528,7 +630,24 @@
                       "value" : 0
                     }
                   }
-                ]
+                ],
+                "recursion" : "NON_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : -1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : -1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
               },
               "children" : [
                 {

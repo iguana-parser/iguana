@@ -241,6 +241,11 @@ public class RuntimeGrammar {
         }
 		
 		public RuntimeGrammar build() {
+			if (definitions.isEmpty()) {
+				for (RuntimeRule rule : rules) {
+					definitions.computeIfAbsent(rule.getHead(), k -> new ArrayList<>()).add(rule);
+				}
+			}
 			Set<RuntimeException> exceptions = validate(rules, definitions);
 			
 			if (!exceptions.isEmpty()) {

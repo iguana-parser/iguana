@@ -29,7 +29,6 @@ package org.iguana.parser;
 
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -41,18 +40,18 @@ import org.iguana.util.Configuration;
 
 public class IguanaParser extends IguanaRecognizer {
 
-    private static ParserResultOps parserResultOps;
+    private static final ParserResultOps parserResultOps = new ParserResultOps();
 
     private ParseTreeNode parseTree;
     private NonterminalNode sppf;
     private Input input;
 
     public IguanaParser(Grammar grammar) {
-        this(grammar, Configuration.load());
+        this(grammar, grammar.getStartSymbol().getStartSymbol(), Configuration.load());
     }
 
-    public IguanaParser(Grammar grammar, Configuration config) {
-        super(grammar, config);
+    public IguanaParser(Grammar grammar, String startNonterminal, Configuration config) {
+        super(grammar, startNonterminal, config);
     }
 
     public IguanaParser(RuntimeGrammar grammar, Configuration config) {
@@ -64,25 +63,16 @@ public class IguanaParser extends IguanaRecognizer {
     }
 
     public void parse(Input input) {
-        parse(input, grammar.getStartSymbol().getStartSymbol());
+        parse(input, new ParseOptions.Builder().setMap(globals).setGlobal(false).build());
     }
 
-    public void parse(Input input, String startNonterminal) {
-        parse(input, startNonterminal, new ParseOptions.Builder().setMap(globals).setGlobal(false).build());
-    }
-
-    public void parse(Input input, String startNonterminal, ParseOptions options) {
+    public void parse(Input input, ParseOptions options) {
         clear();
         this.input = input;
-        parserResultOps = new ParserResultOps();
         IguanaRuntime<?> runtime = new IguanaRuntime<>(config, parserResultOps);
-        GrammarGraph grammarGraph = createGrammarGraph(startNonterminal);
         this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
-        if (parseError != null) {
-            throw parseError;
-        }
     }
 
     @Override
@@ -90,6 +80,7 @@ public class IguanaParser extends IguanaRecognizer {
         super.clear();
         this.sppf = null;
         this.parseTree = null;
+        this.input = null;
     }
 
     public NonterminalNode getSPPF() {

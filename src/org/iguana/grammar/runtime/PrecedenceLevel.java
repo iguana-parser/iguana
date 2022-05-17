@@ -55,10 +55,24 @@ public class PrecedenceLevel implements Serializable {
 	private boolean containsAssociativityGroup = false;
 	private int assoc_lhs = -1;
 	private int assoc_rhs = -1;
-	
+
 	PrecedenceLevel(int lhs) {
 		this.lhs = lhs;
 		this.index = lhs;
+	}
+
+	public PrecedenceLevel(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary,
+					boolean hasPrefixUnaryBelow, Integer[] prefixUnaryBelow, boolean hasPostfixUnaryBelow, Integer[] postfixUnaryBelow) {
+		this.lhs = lhs;
+		this.index = lhs;
+		this.rhs = rhs;
+		this.undefined = undefined;
+		this.hasPrefixUnary = hasPrefixUnary;
+		this.hasPostfixUnary = hasPostfixUnary;
+		this.prefixUnaryBelow = prefixUnaryBelow;
+		this.hasPrefixUnaryBelow = hasPrefixUnaryBelow;
+		this.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
+		this.postfixUnaryBelow = postfixUnaryBelow;
 	}
 	
 	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 

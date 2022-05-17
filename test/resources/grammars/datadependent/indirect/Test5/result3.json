@@ -30,7 +30,24 @@
               }
             ]
           }
-        ]
+        ],
+        "recursion" : "NON_REC",
+        "irecursion" : "NON_REC",
+        "associativity" : "UNDEFINED",
+        "precedence" : -1,
+        "precedenceLevel" : {
+          "lhs" : 1,
+          "rhs" : 1,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
+          "index" : 1,
+          "containsAssociativityGroup" : false,
+          "assoc_lhs" : -1,
+          "assoc_rhs" : -1
+        }
       },
       "children" : [
         {
@@ -284,6 +301,26 @@
                 }
               }
             ],
+            "recursion" : "LEFT_RIGHT_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "RIGHT",
+            "precedence" : 2,
+            "precedenceLevel" : {
+              "lhs" : 2,
+              "rhs" : 2,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : true,
+              "prefixUnaryBelow" : [
+                1
+              ],
+              "hasPostfixUnaryBelow" : false,
+              "index" : 3,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            },
             "label" : "arrow"
           },
           "children" : [
@@ -307,22 +344,6 @@
                         "kind" : "DataDependentCondition",
                         "type" : "DATA_DEPENDENT",
                         "expression" : {
-                          "kind" : "LShiftANDEqZero",
-                          "lhs" : {
-                            "kind" : "Name",
-                            "name" : "_not",
-                            "i" : -1
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 0
-                          }
-                        }
-                      },
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
                           "kind" : "GreaterThanEqual",
                           "lhs" : {
                             "kind" : "Integer",
@@ -332,6 +353,22 @@
                             "kind" : "Name",
                             "name" : "p",
                             "i" : -1
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "LShiftANDEqZero",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "_not",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 0
                           }
                         }
                       }
@@ -526,6 +563,26 @@
                     }
                   }
                 ],
+                "recursion" : "LEFT_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "NON_ASSOC",
+                "precedence" : 3,
+                "precedenceLevel" : {
+                  "lhs" : 3,
+                  "rhs" : 3,
+                  "undefined" : -1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : true,
+                  "hasPrefixUnaryBelow" : true,
+                  "prefixUnaryBelow" : [
+                    1
+                  ],
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 4,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                },
                 "label" : "star"
               },
               "children" : [
@@ -567,7 +624,24 @@
                           "length" : 2
                         }
                       }
-                    ]
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : 1,
+                      "hasPrefixUnary" : true,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
                   },
                   "children" : [
                     {
@@ -665,7 +739,24 @@
                               "length" : 2
                             }
                           }
-                        ]
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : 1,
+                          "hasPrefixUnary" : true,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 2,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
                       },
                       "children" : [
                         {
@@ -765,7 +856,24 @@
                       "length" : 2
                     }
                   }
-                ]
+                ],
+                "recursion" : "RIGHT_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : 1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : 1,
+                  "hasPrefixUnary" : true,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
               },
               "children" : [
                 {
@@ -1032,6 +1140,26 @@
                         }
                       }
                     ],
+                    "recursion" : "LEFT_RIGHT_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "RIGHT",
+                    "precedence" : 2,
+                    "precedenceLevel" : {
+                      "lhs" : 2,
+                      "rhs" : 2,
+                      "undefined" : -1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : true,
+                      "prefixUnaryBelow" : [
+                        1
+                      ],
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 3,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    },
                     "label" : "arrow"
                   },
                   "children" : [
@@ -1073,7 +1201,24 @@
                               "length" : 2
                             }
                           }
-                        ]
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : 1,
+                          "hasPrefixUnary" : true,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 2,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
                       },
                       "children" : [
                         {
@@ -1135,22 +1280,6 @@
                                 "kind" : "DataDependentCondition",
                                 "type" : "DATA_DEPENDENT",
                                 "expression" : {
-                                  "kind" : "LShiftANDEqZero",
-                                  "lhs" : {
-                                    "kind" : "Name",
-                                    "name" : "_not",
-                                    "i" : -1
-                                  },
-                                  "rhs" : {
-                                    "kind" : "Integer",
-                                    "value" : 0
-                                  }
-                                }
-                              },
-                              {
-                                "kind" : "DataDependentCondition",
-                                "type" : "DATA_DEPENDENT",
-                                "expression" : {
                                   "kind" : "GreaterThanEqual",
                                   "lhs" : {
                                     "kind" : "Integer",
@@ -1160,6 +1289,22 @@
                                     "kind" : "Name",
                                     "name" : "p",
                                     "i" : -1
+                                  }
+                                }
+                              },
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "LShiftANDEqZero",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "_not",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 0
                                   }
                                 }
                               }
@@ -1354,6 +1499,26 @@
                             }
                           }
                         ],
+                        "recursion" : "LEFT_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "NON_ASSOC",
+                        "precedence" : 3,
+                        "precedenceLevel" : {
+                          "lhs" : 3,
+                          "rhs" : 3,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : true,
+                          "hasPrefixUnaryBelow" : true,
+                          "prefixUnaryBelow" : [
+                            1
+                          ],
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 4,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        },
                         "label" : "star"
                       },
                       "children" : [
@@ -1395,7 +1560,24 @@
                                   "length" : 2
                                 }
                               }
-                            ]
+                            ],
+                            "recursion" : "NON_REC",
+                            "irecursion" : "NON_REC",
+                            "associativity" : "UNDEFINED",
+                            "precedence" : -1,
+                            "precedenceLevel" : {
+                              "lhs" : 1,
+                              "rhs" : 1,
+                              "undefined" : 1,
+                              "hasPrefixUnary" : true,
+                              "hasPostfixUnary" : false,
+                              "hasPrefixUnaryBelow" : false,
+                              "hasPostfixUnaryBelow" : false,
+                              "index" : 2,
+                              "containsAssociativityGroup" : false,
+                              "assoc_lhs" : -1,
+                              "assoc_rhs" : -1
+                            }
                           },
                           "children" : [
                             {
@@ -1493,7 +1675,24 @@
                                       "length" : 2
                                     }
                                   }
-                                ]
+                                ],
+                                "recursion" : "NON_REC",
+                                "irecursion" : "NON_REC",
+                                "associativity" : "UNDEFINED",
+                                "precedence" : -1,
+                                "precedenceLevel" : {
+                                  "lhs" : 1,
+                                  "rhs" : 1,
+                                  "undefined" : 1,
+                                  "hasPrefixUnary" : true,
+                                  "hasPostfixUnary" : false,
+                                  "hasPrefixUnaryBelow" : false,
+                                  "hasPostfixUnaryBelow" : false,
+                                  "index" : 2,
+                                  "containsAssociativityGroup" : false,
+                                  "assoc_lhs" : -1,
+                                  "assoc_rhs" : -1
+                                }
                               },
                               "children" : [
                                 {
