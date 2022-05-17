@@ -12,6 +12,23 @@
           "name" : "A"
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Start",
         "name" : "Start(A)",
@@ -29,7 +46,24 @@
           "name" : "a*",
           "nodeType" : "Star"
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -44,6 +78,23 @@
           "nodeType" : "Plus"
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Star",
         "name" : "a*",
@@ -62,6 +113,23 @@
         "kind" : "Nonterminal",
         "name" : "a*",
         "nodeType" : "Star"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
       },
       "definition" : {
         "kind" : "Star",
@@ -97,6 +165,23 @@
           }
         }
       ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Plus",
         "name" : "a+",
@@ -126,6 +211,23 @@
           }
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Plus",
         "name" : "a+",

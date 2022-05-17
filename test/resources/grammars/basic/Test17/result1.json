@@ -36,7 +36,24 @@
               "val" : 98
             }
           }
-        ]
+        ],
+        "recursion" : "NON_REC",
+        "irecursion" : "NON_REC",
+        "associativity" : "UNDEFINED",
+        "precedence" : -1,
+        "precedenceLevel" : {
+          "lhs" : 1,
+          "rhs" : 1,
+          "hasPrefixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnary" : false,
+          "hasPostfixUnaryBelow" : false,
+          "undefined" : -1,
+          "index" : 1,
+          "containsAssociativityGroup" : false,
+          "assoc_lhs" : -1,
+          "assoc_rhs" : -1
+        }
       },
       "children" : [
         {
@@ -80,7 +97,24 @@
                   "val" : 98
                 }
               }
-            ]
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "hasPrefixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnary" : false,
+              "hasPostfixUnaryBelow" : false,
+              "undefined" : -1,
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
           },
           "children" : [
             {
@@ -112,7 +146,24 @@
                       "val" : 97
                     }
                   }
-                ]
+                ],
+                "recursion" : "NON_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : -1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "hasPrefixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "undefined" : -1,
+                  "index" : 1,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
               },
               "children" : [
                 {

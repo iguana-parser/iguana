@@ -12,6 +12,23 @@
           "name" : "S"
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Start",
         "name" : "Start(S)",
@@ -38,7 +55,24 @@
             }
           ]
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -99,6 +133,23 @@
           }
         }
       ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Plus",
         "name" : "E+",
@@ -162,6 +213,23 @@
           }
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Plus",
         "name" : "E+",
@@ -203,22 +271,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "LShiftANDEqZero",
                 "lhs" : {
                   "kind" : "Name",
@@ -228,6 +280,22 @@
                 "rhs" : {
                   "kind" : "Integer",
                   "value" : 0
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
                 }
               }
             }
@@ -422,6 +490,26 @@
           }
         }
       ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "NON_ASSOC",
+      "precedence" : 3,
+      "precedenceLevel" : {
+        "lhs" : 3,
+        "rhs" : 3,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "hasPostfixUnary" : true,
+        "hasPostfixUnaryBelow" : false,
+        "prefixUnaryBelow" : [
+          1
+        ],
+        "undefined" : -1,
+        "index" : 4,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "label" : "star"
     },
     {
@@ -673,6 +761,26 @@
           }
         }
       ],
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "RIGHT",
+      "precedence" : 2,
+      "precedenceLevel" : {
+        "lhs" : 2,
+        "rhs" : 2,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "prefixUnaryBelow" : [
+          1
+        ],
+        "undefined" : -1,
+        "index" : 3,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "label" : "arrow"
     },
     {
@@ -725,7 +833,24 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : 1,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -763,7 +888,24 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : 1,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     }
   ],
   "ebnfLefts" : {

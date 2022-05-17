@@ -43,6 +43,23 @@
           }
         }
       ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Plus",
         "name" : "Arg+",
@@ -84,6 +101,23 @@
           }
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Plus",
         "name" : "Arg+",
@@ -105,6 +139,23 @@
           "name" : "S"
         }
       ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
       "definition" : {
         "kind" : "Start",
         "name" : "Start(S)",
@@ -127,7 +178,24 @@
             }
           ]
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -332,7 +400,30 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "RIGHT",
+      "precedence" : 3,
+      "precedenceLevel" : {
+        "lhs" : 3,
+        "rhs" : 3,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2
+        ],
+        "postfixUnaryBelow" : [
+          2
+        ],
+        "undefined" : -1,
+        "index" : 4,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -648,7 +739,43 @@
             }
           }
         }
-      ]
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "associativityGroup" : {
+        "associativity" : "NON_ASSOC",
+        "precedenceLevel" : {
+          "lhs" : 2,
+          "rhs" : 2,
+          "hasPrefixUnary" : true,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnary" : true,
+          "hasPostfixUnaryBelow" : false,
+          "undefined" : -1,
+          "index" : 3,
+          "containsAssociativityGroup" : true,
+          "assoc_lhs" : 2,
+          "assoc_rhs" : 2
+        },
+        "precedence" : 2,
+        "lhs" : 2,
+        "rhs" : 2
+      },
+      "precedence" : 2,
+      "precedenceLevel" : {
+        "lhs" : 2,
+        "rhs" : 2,
+        "hasPrefixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : true,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 3,
+        "containsAssociativityGroup" : true,
+        "assoc_lhs" : 2,
+        "assoc_rhs" : 2
+      }
     },
     {
       "head" : {
@@ -713,7 +840,43 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "associativityGroup" : {
+        "associativity" : "NON_ASSOC",
+        "precedenceLevel" : {
+          "lhs" : 2,
+          "rhs" : 2,
+          "hasPrefixUnary" : true,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnary" : true,
+          "hasPostfixUnaryBelow" : false,
+          "undefined" : -1,
+          "index" : 3,
+          "containsAssociativityGroup" : true,
+          "assoc_lhs" : 2,
+          "assoc_rhs" : 2
+        },
+        "precedence" : 2,
+        "lhs" : 2,
+        "rhs" : 2
+      },
+      "precedence" : 2,
+      "precedenceLevel" : {
+        "lhs" : 2,
+        "rhs" : 2,
+        "hasPrefixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : true,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 3,
+        "containsAssociativityGroup" : true,
+        "assoc_lhs" : 2,
+        "assoc_rhs" : 2
+      }
     },
     {
       "head" : {
@@ -778,7 +941,43 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "associativityGroup" : {
+        "associativity" : "NON_ASSOC",
+        "precedenceLevel" : {
+          "lhs" : 2,
+          "rhs" : 2,
+          "hasPrefixUnary" : true,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnary" : true,
+          "hasPostfixUnaryBelow" : false,
+          "undefined" : -1,
+          "index" : 3,
+          "containsAssociativityGroup" : true,
+          "assoc_lhs" : 2,
+          "assoc_rhs" : 2
+        },
+        "precedence" : 2,
+        "lhs" : 2,
+        "rhs" : 2
+      },
+      "precedence" : 2,
+      "precedenceLevel" : {
+        "lhs" : 2,
+        "rhs" : 2,
+        "hasPrefixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : true,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 3,
+        "containsAssociativityGroup" : true,
+        "assoc_lhs" : 2,
+        "assoc_rhs" : 2
+      }
     },
     {
       "head" : {
@@ -920,7 +1119,24 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "LEFT",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -957,7 +1173,24 @@
             "length" : 2
           }
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : -1,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -989,7 +1222,24 @@
             "i" : -1
           }
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : 1,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     },
     {
       "head" : {
@@ -1016,7 +1266,24 @@
             "fun" : "undef"
           }
         }
-      ]
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "hasPrefixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnary" : false,
+        "hasPostfixUnaryBelow" : false,
+        "undefined" : 1,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
     }
   ],
   "ebnfLefts" : {

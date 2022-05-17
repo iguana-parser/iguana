@@ -163,6 +163,9 @@ public class JsonSerializer {
 
         mapper.addMixIn(ParseError.class, ParseErrorMixIn.class);
 
+        mapper.addMixIn(PrecedenceLevel.class, PrecedenceLevelMixIn.class);
+        mapper.addMixIn(AssociativityGroup.class, AssociativityGroupMixIn.class);
+
         // Some @JsonIgnore doesn't work on a map property with non-string keys and Jackson
         // tries to deserialize the definitions field. This is a solution to let Jackson know
         // about the Nonterminal key type.
@@ -245,28 +248,6 @@ public class JsonSerializer {
     abstract static class RuntimeRuleMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LayoutStrategyFilter.class)
         LayoutStrategy layoutStrategy;
-        @JsonIgnore
-        Recursion recursion;
-        @JsonIgnore
-        Recursion irecursion;
-        @JsonIgnore
-        String leftEnd;
-        @JsonIgnore
-        String rightEnd;
-        @JsonIgnore
-        Set<String> leftEnds;
-        @JsonIgnore
-        Set<String> rightEnds;
-        @JsonIgnore
-        Associativity associativity;
-        @JsonIgnore
-        AssociativityGroup associativityGroup;
-        @JsonIgnore
-        int precedence;
-        @JsonIgnore
-        PrecedenceLevel precedenceLevel;
-        @JsonIgnore
-        Map<String, Object> attributes;
     }
 
     @JsonDeserialize(builder = Grammar.Builder.class)
@@ -835,6 +816,29 @@ public class JsonSerializer {
                 @JsonProperty("inputIndex") int inputIndex,
                 @JsonProperty("lineNumber") int lineNumber,
                 @JsonProperty("columnNumber") int columnNumber) { }
+    }
+
+    abstract static class PrecedenceLevelMixIn {
+        PrecedenceLevelMixIn(
+            @JsonProperty("lhs") int lhs,
+            @JsonProperty("rhs") int rhs,
+            @JsonProperty("undefined") int undefined,
+            @JsonProperty("hasPrefixUnary") boolean hasPrefixUnary,
+            @JsonProperty("hasPostfixUnary") boolean hasPostfixUnary,
+            @JsonProperty("hasPrefixUnaryBelow") boolean hasPrefixUnaryBelow,
+            @JsonProperty("prefixUnaryBelow") Integer[] prefixUnaryBelow,
+            @JsonProperty("hasPostfixUnaryBelow") boolean hasPostfixUnaryBelow,
+            @JsonProperty("postfixUnaryBelow") Integer[] postfixUnaryBelow
+        ) { }
+    }
+
+    abstract static class AssociativityGroupMixIn {
+        AssociativityGroupMixIn(
+            @JsonProperty("associativity") Associativity associativity,
+            @JsonProperty("precedenceLevel") PrecedenceLevel precedenceLevel,
+            @JsonProperty("lhs") int lhs,
+            @JsonProperty("rhs") int rhs,
+            @JsonProperty("precedence") int precedence) { }
     }
 }
 
