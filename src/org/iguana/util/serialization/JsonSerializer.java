@@ -3,12 +3,9 @@ package org.iguana.util.serialization;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DatabindContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import iguana.regex.RegularExpression;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
@@ -21,6 +18,8 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.patterns.ExceptPattern;
+import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
@@ -47,6 +46,7 @@ public class JsonSerializer {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
+        mapper.addMixIn(RuntimeGrammar.class, RuntimeGrammarMixIn.class);
         mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
@@ -162,6 +162,20 @@ public class JsonSerializer {
         mapper.addMixIn(KeywordTerminalNode.class, KeywordTerminalNodeMixIn.class);
 
         mapper.addMixIn(ParseError.class, ParseErrorMixIn.class);
+
+        // Some @JsonIgnore doesn't work on a map property with non-string keys and Jackson
+        // tries to deserialize the definitions field. This is a solution to let Jackson know
+        // about the Nonterminal key type.
+        class NonterminalKeyDeserializer extends KeyDeserializer {
+            @Override
+            public Object deserializeKey(String key, DeserializationContext ctxt) throws IOException {
+                return mapper.readValue(key, Nonterminal.class);
+            }
+        }
+
+        SimpleModule module = new SimpleModule();
+        module.addKeyDeserializer(Nonterminal.class, new NonterminalKeyDeserializer());
+        mapper.registerModule(module);
     }
 
     public static String toJSON(Grammar grammar) {
@@ -203,104 +217,6 @@ public class JsonSerializer {
         return mapper.readValue(in, clazz);
     }
 
-    public static class MyTypeIdResolver extends TypeIdResolverBase {
-
-        @Override
-        public String idFromValue(Object value) {
-            return getId(value);
-        }
-
-        @Override
-        public String idFromValueAndType(Object value, Class<?> suggestedType) {
-            return getId(value);
-        }
-
-        @Override
-        public JsonTypeInfo.Id getMechanism() {
-            return JsonTypeInfo.Id.CUSTOM;
-        }
-
-        private String getId(Object value) {
-            if (value.getClass() == iguana.regex.Star.class) return "regex.Star";
-            if (value.getClass() == iguana.regex.Plus.class) return "regex.Plus";
-            if (value.getClass() == iguana.regex.Alt.class) return "regex.Alt";
-            if (value.getClass() == iguana.regex.Opt.class) return "regex.Opt";
-            if (value.getClass() == iguana.regex.Seq.class) return "regex.Seq";
-            if (value.getClass() == Expression.IfThenElse.class) return "IfThenElseExpr";
-
-            String id = value.getClass().getSimpleName();
-            if (id.equals("")) { // For anonymous inner classes, use their super class name
-                id = value.getClass().getSuperclass().getSimpleName();
-            }
-            return id;
-        }
-
-        @Override
-        public JavaType typeFromId(DatabindContext context, String id) {
-            switch (id) {
-                case "regex.Star":
-                    return context.constructType(iguana.regex.Star.class);
-                case "regex.Plus":
-                    return context.constructType(iguana.regex.Plus.class);
-                case "regex.Alt":
-                    return context.constructType(iguana.regex.Alt.class);
-                case "regex.Opt":
-                    return context.constructType(iguana.regex.Opt.class);
-                case "regex.Seq":
-                    return context.constructType(iguana.regex.Seq.class);
-                case "IfThenElseExpr":
-                    return context.constructType(Expression.IfThenElse.class);
-            }
-
-            String[] packages = {
-                    "org.iguana.grammar.",
-                    "org.iguana.parsetree.",
-                    "org.iguana.grammar.symbol.",
-                    "org.iguana.grammar.condition.",
-                    "iguana.regex.",
-                    "org.iguana.datadependent.ast.Expression$"
-            };
-
-            JavaType javaType = null;
-            for (String packageName : packages) {
-                try {
-                    Class<?> clazz = Class.forName(packageName + id);
-                    javaType = context.constructType(clazz);
-                    break;
-                } catch (ClassNotFoundException e) {
-                    // skip
-                }
-            }
-
-            if (javaType == null)
-                throw new RuntimeException("No JavaType for the given id (" + id + ") found.");
-
-            return javaType;
-        }
-    }
-
-    static Symbol getLayout(JsonNode node) throws IOException {
-        JsonNode layoutNode = node.get("layout");
-        if (layoutNode == null)
-            return null;
-
-        String layoutKind = layoutNode.get("kind").asText();
-        if (layoutKind.equals("Nonterminal"))
-            return mapper.readValue(layoutNode.toString(), Nonterminal.class);
-        else if (layoutKind.equals("Terminal"))
-            return mapper.readValue(layoutNode.toString(), Terminal.class);
-        else
-            throw new RuntimeException("Unknown layout kind '" + layoutKind + "'");
-    }
-
-    static Start getStartSymbol(JsonNode node) throws IOException {
-        JsonNode layoutNode = node.get("startSymbol");
-        if (layoutNode == null)
-            return null;
-
-        return mapper.readValue(layoutNode.toString(), Start.class);
-    }
-
     static class LayoutStrategyFilter {
         @Override
         public boolean equals(Object obj) {
@@ -311,6 +227,18 @@ public class JsonSerializer {
         public int hashCode() {
             return LayoutStrategy.INHERITED.hashCode();
         }
+    }
+
+    @JsonDeserialize(builder = RuntimeGrammar.Builder.class)
+    abstract static class RuntimeGrammarMixIn {
+        @JsonIgnore
+        Map<Nonterminal, List<RuntimeRule>> definitions;
+        @JsonIgnore
+        List<PrecedencePattern> precedencePatterns;
+        @JsonIgnore
+        List<ExceptPattern> exceptPatterns;
+        @JsonIgnore
+        Map<String, RegularExpression> terminals;
     }
 
     @JsonDeserialize(builder = RuntimeRule.Builder.class)

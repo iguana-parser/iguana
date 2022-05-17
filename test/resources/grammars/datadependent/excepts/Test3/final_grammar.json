@@ -1,0 +1,401 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "_not"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 0
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : -1
+                  }
+                },
+                "rhs" : {
+                  "kind" : "LShiftANDEqZero",
+                  "lhs" : {
+                    "kind" : "Integer",
+                    "value" : 8
+                  },
+                  "rhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ],
+          "excepts" : [
+            "plus"
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "*",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 42
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 3
+            }
+          ],
+          "excepts" : [
+            "star",
+            "hat"
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{0}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 0
+          }
+        }
+      ],
+      "label" : "star"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "_not"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : -1
+                  }
+                },
+                "rhs" : {
+                  "kind" : "LShiftANDEqZero",
+                  "lhs" : {
+                    "kind" : "Integer",
+                    "value" : 12
+                  },
+                  "rhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ],
+          "excepts" : [
+            "minus",
+            "plus"
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "^",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 94
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ],
+          "excepts" : [
+            "hat"
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{1}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 1
+          }
+        }
+      ],
+      "label" : "hat"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "_not"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "-",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 45
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{2}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 2
+          }
+        }
+      ],
+      "label" : "minus"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "_not"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "+",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 43
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{3}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 3
+          }
+        }
+      ],
+      "label" : "plus"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "_not"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{-1}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : -1
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 1
+            }
+          ],
+          "excepts" : [
+            "star"
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

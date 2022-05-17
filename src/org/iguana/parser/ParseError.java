@@ -32,7 +32,7 @@ import org.iguana.grammar.slot.GrammarSlot;
 import java.util.Objects;
 
 
-public class ParseError extends RuntimeException {
+public class ParseError {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;

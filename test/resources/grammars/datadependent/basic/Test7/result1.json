@@ -60,7 +60,7 @@
                       },
                       "rhs" : {
                         "kind" : "Name",
-                        "name" : "l",
+                        "name" : "r",
                         "i" : -1
                       }
                     }
@@ -76,7 +76,7 @@
                       },
                       "rhs" : {
                         "kind" : "Name",
-                        "name" : "r",
+                        "name" : "l",
                         "i" : -1
                       }
                     }
@@ -199,7 +199,7 @@
                           },
                           "rhs" : {
                             "kind" : "Name",
-                            "name" : "r",
+                            "name" : "l",
                             "i" : -1
                           }
                         }
@@ -215,7 +215,7 @@
                           },
                           "rhs" : {
                             "kind" : "Name",
-                            "name" : "l",
+                            "name" : "r",
                             "i" : -1
                           }
                         }
@@ -338,7 +338,7 @@
                               },
                               "rhs" : {
                                 "kind" : "Name",
-                                "name" : "r",
+                                "name" : "l",
                                 "i" : -1
                               }
                             }
@@ -354,7 +354,7 @@
                               },
                               "rhs" : {
                                 "kind" : "Name",
-                                "name" : "l",
+                                "name" : "r",
                                 "i" : -1
                               }
                             }
@@ -563,7 +563,7 @@
                                       },
                                       "rhs" : {
                                         "kind" : "Name",
-                                        "name" : "l",
+                                        "name" : "r",
                                         "i" : -1
                                       }
                                     }
@@ -579,7 +579,7 @@
                                       },
                                       "rhs" : {
                                         "kind" : "Name",
-                                        "name" : "r",
+                                        "name" : "l",
                                         "i" : -1
                                       }
                                     }

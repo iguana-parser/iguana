@@ -1,0 +1,202 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(X)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "X"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(X)",
+        "startSymbol" : "X"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Code",
+          "name" : "a:A[a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "A",
+            "label" : "a",
+            "postConditions" : [
+              {
+                "kind" : "DataDependentCondition",
+                "type" : "DATA_DEPENDENT",
+                "expression" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "LeftExtent",
+                    "label" : "a"
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                }
+              }
+            ]
+          },
+          "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Println",
+                "arguments" : [
+                  {
+                    "kind" : "RightExtent",
+                    "label" : "a"
+                  },
+                  {
+                    "kind" : "Indent",
+                    "fun" : "indent",
+                    "arguments" : [
+                      {
+                        "kind" : "RightExtent",
+                        "label" : "a"
+                      }
+                    ]
+                  }
+                ],
+                "fun" : "println"
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Code",
+          "name" : "b:B[b.lExt == 5] {println(b.lExt,b.rExt,indent(b.rExt))}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "B",
+            "label" : "b",
+            "postConditions" : [
+              {
+                "kind" : "DataDependentCondition",
+                "type" : "DATA_DEPENDENT",
+                "expression" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "LeftExtent",
+                    "label" : "b"
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 5
+                  }
+                }
+              }
+            ]
+          },
+          "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Println",
+                "arguments" : [
+                  {
+                    "kind" : "LeftExtent",
+                    "label" : "b"
+                  },
+                  {
+                    "kind" : "RightExtent",
+                    "label" : "b"
+                  },
+                  {
+                    "kind" : "Indent",
+                    "fun" : "indent",
+                    "arguments" : [
+                      {
+                        "kind" : "RightExtent",
+                        "label" : "b"
+                      }
+                    ]
+                  }
+                ],
+                "fun" : "println"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(X)",
+    "startSymbol" : "X"
+  }
+}

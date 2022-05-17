@@ -1,0 +1,65 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(A)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(A)",
+        "startSymbol" : "A"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      }
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(A)",
+    "startSymbol" : "A"
+  }
+}

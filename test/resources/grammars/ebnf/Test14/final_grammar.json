@@ -1,0 +1,138 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(A B C)",
+          "nodeType" : "Seq"
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "c",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 99
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(A B C)",
+        "nodeType" : "Seq"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      ],
+      "definition" : {
+        "kind" : "Sequence",
+        "name" : "(A B C)",
+        "symbols" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "A"
+          },
+          {
+            "kind" : "Nonterminal",
+            "name" : "B"
+          },
+          {
+            "kind" : "Nonterminal",
+            "name" : "C"
+          }
+        ]
+      }
+    }
+  ],
+  "ebnfLefts" : {
+    "(A B C)" : [
+      "C"
+    ]
+  },
+  "ebnfRights" : {
+    "(A B C)" : [
+      "C",
+      "$C"
+    ]
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

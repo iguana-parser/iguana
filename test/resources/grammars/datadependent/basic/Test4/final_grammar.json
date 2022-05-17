@@ -1,0 +1,170 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "l",
+          "r"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 4
+            },
+            {
+              "kind" : "Name",
+              "name" : "r",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "^",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 94
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            },
+            {
+              "kind" : "Integer",
+              "value" : 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "l",
+          "r"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "r",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            },
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "-",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 45
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "l",
+          "r"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            },
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

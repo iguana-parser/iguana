@@ -1,0 +1,284 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A?",
+          "nodeType" : "Opt"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "B+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "C*",
+          "nodeType" : "Star"
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "c",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 99
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C*",
+        "nodeType" : "Star"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "C+",
+          "nodeType" : "Plus"
+        }
+      ],
+      "definition" : {
+        "kind" : "Star",
+        "name" : "C*",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C*",
+        "nodeType" : "Star"
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "C*",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "C+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      ],
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "C+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      ],
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "C+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "B+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        }
+      ],
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "B+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        }
+      ],
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "B+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A?",
+        "nodeType" : "Opt"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      ],
+      "definition" : {
+        "kind" : "Opt",
+        "name" : "A?",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A?",
+        "nodeType" : "Opt"
+      },
+      "definition" : {
+        "kind" : "Opt",
+        "name" : "A?",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        }
+      }
+    }
+  ],
+  "ebnfLefts" : {
+    "C+" : [
+      "C"
+    ],
+    "C*" : [
+      "C+"
+    ]
+  },
+  "ebnfRights" : {
+    "C+" : [
+      "C",
+      "$C"
+    ],
+    "C*" : [
+      "C",
+      "C+",
+      "$C"
+    ]
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

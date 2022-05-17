@@ -38,12 +38,12 @@ public class IggyParser {
         IguanaParser parser = new IguanaParser(iggyGrammar());
 
         Input input = Input.fromFile(new File(path));
-        try {
-            parser.parse(input);
-        } catch (ParseError error) {
+        parser.parse(input);
+        if (parser.hasParseError()) {
             System.out.println(parser.getParseError());
-            throw error;
+            throw new RuntimeException(parser.getParseError().toString());
         }
+
         ParseTreeNode parseTree = parser.getParseTree();
 
         return (Grammar) parseTree.accept(new IggyToGrammarVisitor());

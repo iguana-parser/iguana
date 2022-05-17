@@ -1,0 +1,1040 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Arg+",
+        "parameters" : [
+          "p0"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Arg+",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ],
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Arg",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p0",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{r}",
+          "expression" : {
+            "kind" : "Name",
+            "name" : "r",
+            "i" : -1
+          }
+        }
+      ],
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "Arg+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "Arg"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Arg+",
+        "parameters" : [
+          "p0"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Arg",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p0",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{r}",
+          "expression" : {
+            "kind" : "Name",
+            "name" : "r",
+            "i" : -1
+          }
+        }
+      ],
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "Arg+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "Arg"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 4
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "^",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 94
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 3
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{((r.0 <= 0)? 3 : min(r.0,3),0)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "IfThenElse",
+                "condition" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "r",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "r",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "thenPart" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                },
+                "elsePart" : {
+                  "kind" : "Min",
+                  "arguments" : [
+                    {
+                      "kind" : "Get",
+                      "arg1" : {
+                        "kind" : "Name",
+                        "name" : "r",
+                        "i" : -1
+                      },
+                      "arg2" : 0,
+                      "fun" : "get",
+                      "arguments" : [
+                        {
+                          "kind" : "Name",
+                          "name" : "r",
+                          "i" : -1
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : 0
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Integer",
+                      "value" : 3
+                    }
+                  ],
+                  "fun" : "min"
+                }
+              },
+              {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "And",
+                "lhs" : {
+                  "kind" : "NotEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "p",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
+                  },
+                  "rhs" : {
+                    "kind" : "Name",
+                    "name" : "p",
+                    "i" : -1
+                  }
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "And",
+                "lhs" : {
+                  "kind" : "Or",
+                  "lhs" : {
+                    "kind" : "And",
+                    "lhs" : {
+                      "kind" : "LessThanEqual",
+                      "lhs" : {
+                        "kind" : "Get",
+                        "arg1" : {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        "arg2" : 1,
+                        "fun" : "get",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "l",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
+                        ]
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    },
+                    "rhs" : {
+                      "kind" : "NotEqual",
+                      "lhs" : {
+                        "kind" : "Get",
+                        "arg1" : {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        "arg2" : 1,
+                        "fun" : "get",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "l",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
+                        ]
+                      },
+                      "rhs" : {
+                        "kind" : "Neg",
+                        "arguments" : [
+                          {
+                            "kind" : "Integer",
+                            "value" : 2
+                          }
+                        ],
+                        "fun" : "neg"
+                      }
+                    }
+                  },
+                  "rhs" : {
+                    "kind" : "And",
+                    "lhs" : {
+                      "kind" : "Greater",
+                      "lhs" : {
+                        "kind" : "Get",
+                        "arg1" : {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        "arg2" : 1,
+                        "fun" : "get",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "l",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
+                        ]
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    },
+                    "rhs" : {
+                      "kind" : "NotEqual",
+                      "lhs" : {
+                        "kind" : "Get",
+                        "arg1" : {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        "arg2" : 1,
+                        "fun" : "get",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "l",
+                            "i" : -1
+                          },
+                          {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
+                        ]
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    }
+                  }
+                },
+                "rhs" : {
+                  "kind" : "Or",
+                  "lhs" : {
+                    "kind" : "LessThanEqual",
+                    "lhs" : {
+                      "kind" : "Get",
+                      "arg1" : {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      "arg2" : 0,
+                      "fun" : "get",
+                      "arguments" : [
+                        {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : 0
+                        }
+                      ]
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 0
+                    }
+                  },
+                  "rhs" : {
+                    "kind" : "GreaterThanEqual",
+                    "lhs" : {
+                      "kind" : "Get",
+                      "arg1" : {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      "arg2" : 0,
+                      "fun" : "get",
+                      "arguments" : [
+                        {
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : 0
+                        }
+                      ]
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 2
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Arg+",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ],
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(r == UNDEF)? (0,-(2)) : (2,2)}",
+          "expression" : {
+            "kind" : "IfThenElse",
+            "condition" : {
+              "kind" : "Equal",
+              "lhs" : {
+                "kind" : "Name",
+                "name" : "r",
+                "i" : -1
+              },
+              "rhs" : {
+                "kind" : "Undef",
+                "fun" : "undef"
+              }
+            },
+            "thenPart" : {
+              "kind" : "Tuple",
+              "elements" : [
+                {
+                  "kind" : "Integer",
+                  "value" : 0
+                },
+                {
+                  "kind" : "Neg",
+                  "arguments" : [
+                    {
+                      "kind" : "Integer",
+                      "value" : 2
+                    }
+                  ],
+                  "fun" : "neg"
+                }
+              ],
+              "length" : 2
+            },
+            "elsePart" : {
+              "kind" : "Tuple",
+              "elements" : [
+                {
+                  "kind" : "Integer",
+                  "value" : 2
+                },
+                {
+                  "kind" : "Integer",
+                  "value" : 2
+                }
+              ],
+              "length" : 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "*",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "NotEqual",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 42
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(2,2)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Integer",
+                "value" : 2
+              },
+              {
+                "kind" : "Integer",
+                "value" : 2
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "&",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "NotEqual",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 38
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(2,2)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Integer",
+                "value" : 2
+              },
+              {
+                "kind" : "Integer",
+                "value" : 2
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 1
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 1
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "+",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 43
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(1,0)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Integer",
+                "value" : 1
+              },
+              {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(0,0)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Integer",
+                "value" : 0
+              },
+              {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Arg",
+        "parameters" : [
+          "p0"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p0",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{r}",
+          "expression" : {
+            "kind" : "Name",
+            "name" : "r",
+            "i" : -1
+          }
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Arg",
+        "parameters" : [
+          "p0"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{UNDEF}",
+          "expression" : {
+            "kind" : "Undef",
+            "fun" : "undef"
+          }
+        }
+      ]
+    }
+  ],
+  "ebnfLefts" : {
+    "Arg+" : [
+      "Arg"
+    ]
+  },
+  "ebnfRights" : {
+    "Arg+" : [
+      "$E",
+      "$Arg",
+      "E",
+      "Arg"
+    ]
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

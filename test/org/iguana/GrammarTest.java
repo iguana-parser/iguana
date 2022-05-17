@@ -87,6 +87,20 @@ public class GrammarTest {
 
         RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar(), grammar.getStartSymbol().getStartSymbol());
 
+        String finalGrammarPath = test + "/final_grammar.json";
+        if (REGENERATE_FILES || !Files.exists(Paths.get(finalGrammarPath))) {
+            record(runtimeGrammar, finalGrammarPath);
+        } else {
+            RuntimeGrammar jsonFinalGrammar;
+            try {
+                jsonFinalGrammar = JsonSerializer.deserialize(readFile(finalGrammarPath), RuntimeGrammar.class);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException("No grammar.json file is present");
+            }
+            assertEquals(runtimeGrammar, jsonFinalGrammar);
+        }
+
+
         File testDir = new File(testPath);
         int size = testDir.list((dir, name) -> name.matches("input\\d*.txt")).length;
 
@@ -130,12 +144,7 @@ public class GrammarTest {
             ParseTreeNode actualParseTree = null;
             boolean isCyclic = false;
 
-            ParseError parseError = null;
-            try {
-                parser.parse(input);
-            } catch (ParseError error) {
-                parseError = error;
-            }
+            parser.parse(input);
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
             if (REGENERATE_FILES || !Files.exists(Paths.get(statisticsPath))) {
@@ -168,7 +177,7 @@ public class GrammarTest {
                 String resultPath = testPath + "/result" + j + ".json";
 
                 if (actualParseTree == null) { // Parse error
-                    assertNotNull(parseError);
+                    assertNotNull(parser.getParseError());
                     if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                         record(parser.getParseError(), resultPath);
                     } else {
@@ -188,12 +197,8 @@ public class GrammarTest {
     }
 
     private static void record(Object obj, String path) throws IOException {
-        try {
-            String json = JsonSerializer.serialize(obj);
-            FileUtils.writeFile(json, path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String json = JsonSerializer.serialize(obj);
+        FileUtils.writeFile(json, path);
     }
 
     private static List<String> getTests(String rootPath) {

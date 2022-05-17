@@ -1,0 +1,992 @@
+{
+  "layout" : {
+    "kind" : "Terminal",
+    "name" : "Layout",
+    "nodeType" : "Layout",
+    "regex" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 32
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 10
+          }
+        ]
+      }
+    }
+  },
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "{offside Stat, ;, null}+",
+          "nodeType" : "Plus"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Layout",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 32
+              },
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 12
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Stat",
+        "parameters" : [
+          "i",
+          "ind",
+          "fst"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "x",
+          "label" : "o0",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "OrIndent",
+                "index" : {
+                  "kind" : "Name",
+                  "name" : "i",
+                  "i" : -1
+                },
+                "ind" : {
+                  "kind" : "Name",
+                  "name" : "ind",
+                  "i" : -1
+                },
+                "first" : {
+                  "kind" : "Name",
+                  "name" : "fst",
+                  "i" : -1
+                },
+                "lExt" : {
+                  "kind" : "LeftExtent",
+                  "label" : "o0"
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 120
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "=",
+          "label" : "o1",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "OrIndent",
+                "index" : {
+                  "kind" : "Name",
+                  "name" : "i",
+                  "i" : -1
+                },
+                "ind" : {
+                  "kind" : "Name",
+                  "name" : "ind",
+                  "i" : -1
+                },
+                "first" : {
+                  "kind" : "Name",
+                  "name" : "fst",
+                  "i" : -1
+                },
+                "lExt" : {
+                  "kind" : "LeftExtent",
+                  "label" : "o1"
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 61
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Exp",
+          "label" : "o2",
+          "arguments" : [
+            {
+              "kind" : "AndIndent",
+              "index" : {
+                "kind" : "Name",
+                "name" : "i",
+                "i" : -1
+              },
+              "first" : {
+                "kind" : "Name",
+                "name" : "fst",
+                "i" : -1
+              },
+              "lExt" : {
+                "kind" : "LeftExtent",
+                "label" : "o2"
+              },
+              "returnIndex" : true
+            },
+            {
+              "kind" : "Name",
+              "name" : "ind",
+              "i" : -1
+            },
+            {
+              "kind" : "AndIndent",
+              "index" : {
+                "kind" : "Name",
+                "name" : "i",
+                "i" : -1
+              },
+              "first" : {
+                "kind" : "Name",
+                "name" : "fst",
+                "i" : -1
+              },
+              "lExt" : {
+                "kind" : "LeftExtent",
+                "label" : "o2"
+              },
+              "returnIndex" : false
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Layout",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 32
+              },
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 12
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Exp",
+        "parameters" : [
+          "i",
+          "ind",
+          "fst"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Exp",
+          "label" : "o0",
+          "arguments" : [
+            {
+              "kind" : "AndIndent",
+              "index" : {
+                "kind" : "Name",
+                "name" : "i",
+                "i" : -1
+              },
+              "first" : {
+                "kind" : "Name",
+                "name" : "fst",
+                "i" : -1
+              },
+              "lExt" : {
+                "kind" : "LeftExtent",
+                "label" : "o0"
+              },
+              "returnIndex" : true
+            },
+            {
+              "kind" : "Name",
+              "name" : "ind",
+              "i" : -1
+            },
+            {
+              "kind" : "AndIndent",
+              "index" : {
+                "kind" : "Name",
+                "name" : "i",
+                "i" : -1
+              },
+              "first" : {
+                "kind" : "Name",
+                "name" : "fst",
+                "i" : -1
+              },
+              "lExt" : {
+                "kind" : "LeftExtent",
+                "label" : "o0"
+              },
+              "returnIndex" : false
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "+",
+          "label" : "o1",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "OrIndent",
+                "index" : {
+                  "kind" : "Name",
+                  "name" : "i",
+                  "i" : -1
+                },
+                "ind" : {
+                  "kind" : "Name",
+                  "name" : "ind",
+                  "i" : -1
+                },
+                "first" : {
+                  "kind" : "Name",
+                  "name" : "fst",
+                  "i" : -1
+                },
+                "lExt" : {
+                  "kind" : "LeftExtent",
+                  "label" : "o1"
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 43
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "label" : "o2",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "OrIndent",
+                "index" : {
+                  "kind" : "Name",
+                  "name" : "i",
+                  "i" : -1
+                },
+                "ind" : {
+                  "kind" : "Name",
+                  "name" : "ind",
+                  "i" : -1
+                },
+                "first" : {
+                  "kind" : "Name",
+                  "name" : "fst",
+                  "i" : -1
+                },
+                "lExt" : {
+                  "kind" : "LeftExtent",
+                  "label" : "o2"
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Layout",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 32
+              },
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 12
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Exp",
+        "parameters" : [
+          "i",
+          "ind",
+          "fst"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "label" : "o0",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "OrIndent",
+                "index" : {
+                  "kind" : "Name",
+                  "name" : "i",
+                  "i" : -1
+                },
+                "ind" : {
+                  "kind" : "Name",
+                  "name" : "ind",
+                  "i" : -1
+                },
+                "first" : {
+                  "kind" : "Name",
+                  "name" : "fst",
+                  "i" : -1
+                },
+                "lExt" : {
+                  "kind" : "LeftExtent",
+                  "label" : "o0"
+                }
+              }
+            }
+          ],
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Layout",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 32
+              },
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 12
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "{offside Stat, ;, null}+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "{offside Stat, ;, null}+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ";",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 59
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Layout",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 12
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Stat",
+          "label" : "o0",
+          "arguments" : [
+            {
+              "kind" : "LeftExtent",
+              "label" : "o0"
+            },
+            {
+              "kind" : "Indent",
+              "fun" : "indent",
+              "arguments" : [
+                {
+                  "kind" : "LeftExtent",
+                  "label" : "o0"
+                }
+              ]
+            },
+            {
+              "kind" : "Integer",
+              "value" : 1
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Layout",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 32
+              },
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 12
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              }
+            ]
+          }
+        }
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "offside Stat+",
+        "s" : {
+          "kind" : "Offside",
+          "name" : "offside Stat",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "Stat"
+          }
+        },
+        "separators" : [
+          {
+            "kind" : "Terminal",
+            "name" : ";",
+            "regex" : {
+              "kind" : "Char",
+              "val" : 59
+            }
+          }
+        ]
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "{offside Stat, ;, null}+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Stat",
+          "label" : "o0",
+          "arguments" : [
+            {
+              "kind" : "LeftExtent",
+              "label" : "o0"
+            },
+            {
+              "kind" : "Indent",
+              "fun" : "indent",
+              "arguments" : [
+                {
+                  "kind" : "LeftExtent",
+                  "label" : "o0"
+                }
+              ]
+            },
+            {
+              "kind" : "Integer",
+              "value" : 1
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Layout",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 32
+              },
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 12
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              }
+            ]
+          }
+        }
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "offside Stat+",
+        "s" : {
+          "kind" : "Offside",
+          "name" : "offside Stat",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "Stat"
+          }
+        },
+        "separators" : [
+          {
+            "kind" : "Terminal",
+            "name" : ";",
+            "regex" : {
+              "kind" : "Char",
+              "val" : 59
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "ebnfLefts" : {
+    "{Stat, ;, null}+" : [
+      "Stat"
+    ]
+  },
+  "ebnfRights" : {
+    "{Stat, ;, null}+" : [
+      "Stat",
+      "$Exp",
+      "Exp"
+    ]
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

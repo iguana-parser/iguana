@@ -73,9 +73,6 @@ public class IguanaParser extends IguanaRecognizer {
         this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
-        if (parseError != null) {
-            throw parseError;
-        }
     }
 
     @Override

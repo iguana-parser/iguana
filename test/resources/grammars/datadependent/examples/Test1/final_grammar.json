@@ -1,0 +1,1092 @@
+{
+  "layout" : {
+    "kind" : "Terminal",
+    "name" : "L",
+    "nodeType" : "Layout",
+    "regex" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 10
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    }
+  },
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "STag"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "<",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 60
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Name",
+          "label" : "n",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Plus",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ">",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 62
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{n.yield}",
+          "expression" : {
+            "kind" : "Yield",
+            "label" : "n",
+            "i" : -1
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(Element)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Element"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(Element)",
+        "startSymbol" : "Element"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(Element CharData)+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)",
+          "nodeType" : "Seq"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(Element CharData)+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(Element CharData)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "Element"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : "CharData",
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Star",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 65,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(Element CharData)+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)",
+          "nodeType" : "Seq"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(Element CharData)+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(Element CharData)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "Element"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : "CharData",
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Star",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 65,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "ETag",
+        "parameters" : [
+          "s"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "</",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 60
+              },
+              {
+                "kind" : "Char",
+                "val" : 47
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Name",
+          "label" : "n",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Plus",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          },
+          "terminalPostConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Equal",
+                "lhs" : {
+                  "kind" : "Yield",
+                  "label" : "n",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "s",
+                  "i" : -1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ">",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 62
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Content"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "CharData",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 65,
+                  "end" : 90
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)*",
+          "nodeType" : "Star"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Element"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "STag",
+          "label" : "s"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Content"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "ETag",
+          "arguments" : [
+            {
+              "kind" : "Val",
+              "label" : "s"
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(Element CharData)*",
+        "nodeType" : "Star"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)+",
+          "nodeType" : "Plus"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(Element CharData)*",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(Element CharData)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "Element"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : "CharData",
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Star",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 65,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(Element CharData)*",
+        "nodeType" : "Star"
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(Element CharData)*",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(Element CharData)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "Element"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : "CharData",
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Star",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 65,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(Element CharData)",
+        "nodeType" : "Seq"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "Element"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "CharData",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 65,
+                  "end" : 90
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "definition" : {
+        "kind" : "Sequence",
+        "name" : "(Element CharData)",
+        "symbols" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "Element"
+          },
+          {
+            "kind" : "Terminal",
+            "name" : "CharData",
+            "nodeType" : "Regex",
+            "regex" : {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "CharRange",
+                    "start" : 65,
+                    "end" : 90
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 97,
+                    "end" : 122
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "ebnfLefts" : {
+    "(Element CharData)" : [
+      "CharData"
+    ],
+    "(Element CharData)+" : [
+      "(Element CharData)"
+    ],
+    "(Element CharData)*" : [
+      "(Element CharData)+"
+    ]
+  },
+  "ebnfRights" : {
+    "(Element CharData)" : [
+      "CharData"
+    ],
+    "(Element CharData)+" : [
+      "CharData",
+      "(Element CharData)"
+    ],
+    "(Element CharData)*" : [
+      "CharData",
+      "(Element CharData)+",
+      "(Element CharData)"
+    ]
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(Element)",
+    "startSymbol" : "Element"
+  }
+}

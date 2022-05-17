@@ -62,6 +62,10 @@ public class IguanaRecognizer {
         return parseError;
     }
 
+    public boolean hasParseError() {
+        return parseError != null;
+    }
+
     protected void clear() {
         grammarGraph.clear();
         parseError = null;
