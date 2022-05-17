@@ -46,8 +46,8 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	public SymbolBuilder(T symbol) {
 		this.name = symbol.getName();
 		this.label = symbol.getLabel();
-		this.preConditions = new HashSet<>(symbol.getPreConditions());
-		this.postConditions = new HashSet<>(symbol.getPostConditions());
+		this.preConditions = new LinkedHashSet<>(symbol.getPreConditions());
+		this.postConditions = new LinkedHashSet<>(symbol.getPostConditions());
 	}
 	
 	public SymbolBuilder() { }

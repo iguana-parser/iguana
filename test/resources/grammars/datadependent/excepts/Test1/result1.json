@@ -63,6 +63,22 @@
                     "kind" : "DataDependentCondition",
                     "type" : "DATA_DEPENDENT",
                     "expression" : {
+                      "kind" : "LShiftANDEqZero",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "_not",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
                       "kind" : "And",
                       "lhs" : {
                         "kind" : "GreaterThanEqual",
@@ -119,22 +135,6 @@
                           "kind" : "Integer",
                           "value" : 1
                         }
-                      }
-                    }
-                  },
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "LShiftANDEqZero",
-                      "lhs" : {
-                        "kind" : "Name",
-                        "name" : "_not",
-                        "i" : -1
-                      },
-                      "rhs" : {
-                        "kind" : "Integer",
-                        "value" : 0
                       }
                     }
                   }
@@ -435,69 +435,6 @@
                         "expression" : {
                           "kind" : "Or",
                           "lhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "Get",
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 1,
-                              "fun" : "get",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "l",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Integer",
-                                  "value" : 1
-                                }
-                              ]
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : -1
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "LShiftANDEqZero",
-                            "lhs" : {
-                              "kind" : "Integer",
-                              "value" : 1
-                            },
-                            "rhs" : {
-                              "kind" : "Get",
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 1,
-                              "fun" : "get",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "l",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Integer",
-                                  "value" : 1
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
-                          "kind" : "Or",
-                          "lhs" : {
                             "kind" : "LessThanEqual",
                             "lhs" : {
                               "kind" : "Get",
@@ -551,6 +488,69 @@
                             "rhs" : {
                               "kind" : "Integer",
                               "value" : 2
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 1,
+                              "fun" : "get",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "l",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              ]
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : -1
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "LShiftANDEqZero",
+                            "lhs" : {
+                              "kind" : "Integer",
+                              "value" : 1
+                            },
+                            "rhs" : {
+                              "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 1,
+                              "fun" : "get",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "l",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              ]
                             }
                           }
                         }
