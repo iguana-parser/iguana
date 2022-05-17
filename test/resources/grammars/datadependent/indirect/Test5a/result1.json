@@ -38,11 +38,11 @@
         "precedenceLevel" : {
           "lhs" : 1,
           "rhs" : 1,
-          "hasPrefixUnary" : false,
-          "hasPrefixUnaryBelow" : false,
-          "hasPostfixUnary" : false,
-          "hasPostfixUnaryBelow" : false,
           "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
           "index" : 1,
           "containsAssociativityGroup" : false,
           "assoc_lhs" : -1,
@@ -308,14 +308,14 @@
             "precedenceLevel" : {
               "lhs" : 2,
               "rhs" : 2,
+              "undefined" : -1,
               "hasPrefixUnary" : false,
-              "hasPrefixUnaryBelow" : true,
               "hasPostfixUnary" : false,
-              "hasPostfixUnaryBelow" : false,
+              "hasPrefixUnaryBelow" : true,
               "prefixUnaryBelow" : [
                 1
               ],
-              "undefined" : -1,
+              "hasPostfixUnaryBelow" : false,
               "index" : 3,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
@@ -344,22 +344,6 @@
                         "kind" : "DataDependentCondition",
                         "type" : "DATA_DEPENDENT",
                         "expression" : {
-                          "kind" : "GreaterThanEqual",
-                          "lhs" : {
-                            "kind" : "Integer",
-                            "value" : 3
-                          },
-                          "rhs" : {
-                            "kind" : "Name",
-                            "name" : "p",
-                            "i" : -1
-                          }
-                        }
-                      },
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
                           "kind" : "LShiftANDEqZero",
                           "lhs" : {
                             "kind" : "Name",
@@ -369,6 +353,22 @@
                           "rhs" : {
                             "kind" : "Integer",
                             "value" : 0
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "GreaterThanEqual",
+                          "lhs" : {
+                            "kind" : "Integer",
+                            "value" : 3
+                          },
+                          "rhs" : {
+                            "kind" : "Name",
+                            "name" : "p",
+                            "i" : -1
                           }
                         }
                       }
@@ -570,14 +570,14 @@
                 "precedenceLevel" : {
                   "lhs" : 3,
                   "rhs" : 3,
+                  "undefined" : -1,
                   "hasPrefixUnary" : false,
-                  "hasPrefixUnaryBelow" : true,
                   "hasPostfixUnary" : true,
-                  "hasPostfixUnaryBelow" : false,
+                  "hasPrefixUnaryBelow" : true,
                   "prefixUnaryBelow" : [
                     1
                   ],
-                  "undefined" : -1,
+                  "hasPostfixUnaryBelow" : false,
                   "index" : 4,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -632,11 +632,11 @@
                     "precedenceLevel" : {
                       "lhs" : 1,
                       "rhs" : 1,
-                      "hasPrefixUnary" : true,
-                      "hasPrefixUnaryBelow" : false,
-                      "hasPostfixUnary" : false,
-                      "hasPostfixUnaryBelow" : false,
                       "undefined" : 1,
+                      "hasPrefixUnary" : true,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
                       "index" : 2,
                       "containsAssociativityGroup" : false,
                       "assoc_lhs" : -1,
@@ -745,11 +745,11 @@
                         "precedenceLevel" : {
                           "lhs" : 1,
                           "rhs" : 1,
-                          "hasPrefixUnary" : false,
-                          "hasPrefixUnaryBelow" : false,
-                          "hasPostfixUnary" : false,
-                          "hasPostfixUnaryBelow" : false,
                           "undefined" : 1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
                           "index" : 2,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -803,11 +803,11 @@
                             "precedenceLevel" : {
                               "lhs" : 1,
                               "rhs" : 1,
-                              "hasPrefixUnary" : true,
-                              "hasPrefixUnaryBelow" : false,
-                              "hasPostfixUnary" : false,
-                              "hasPostfixUnaryBelow" : false,
                               "undefined" : 1,
+                              "hasPrefixUnary" : true,
+                              "hasPostfixUnary" : false,
+                              "hasPrefixUnaryBelow" : false,
+                              "hasPostfixUnaryBelow" : false,
                               "index" : 2,
                               "containsAssociativityGroup" : false,
                               "assoc_lhs" : -1,
@@ -924,11 +924,11 @@
                 "precedenceLevel" : {
                   "lhs" : 1,
                   "rhs" : 1,
-                  "hasPrefixUnary" : true,
-                  "hasPrefixUnaryBelow" : false,
-                  "hasPostfixUnary" : false,
-                  "hasPostfixUnaryBelow" : false,
                   "undefined" : 1,
+                  "hasPrefixUnary" : true,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
                   "index" : 2,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -1207,14 +1207,14 @@
                     "precedenceLevel" : {
                       "lhs" : 2,
                       "rhs" : 2,
+                      "undefined" : -1,
                       "hasPrefixUnary" : false,
-                      "hasPrefixUnaryBelow" : true,
                       "hasPostfixUnary" : false,
-                      "hasPostfixUnaryBelow" : false,
+                      "hasPrefixUnaryBelow" : true,
                       "prefixUnaryBelow" : [
                         1
                       ],
-                      "undefined" : -1,
+                      "hasPostfixUnaryBelow" : false,
                       "index" : 3,
                       "containsAssociativityGroup" : false,
                       "assoc_lhs" : -1,
@@ -1269,11 +1269,11 @@
                         "precedenceLevel" : {
                           "lhs" : 1,
                           "rhs" : 1,
-                          "hasPrefixUnary" : true,
-                          "hasPrefixUnaryBelow" : false,
-                          "hasPostfixUnary" : false,
-                          "hasPostfixUnaryBelow" : false,
                           "undefined" : 1,
+                          "hasPrefixUnary" : true,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
                           "index" : 2,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -1340,22 +1340,6 @@
                                 "kind" : "DataDependentCondition",
                                 "type" : "DATA_DEPENDENT",
                                 "expression" : {
-                                  "kind" : "GreaterThanEqual",
-                                  "lhs" : {
-                                    "kind" : "Integer",
-                                    "value" : 3
-                                  },
-                                  "rhs" : {
-                                    "kind" : "Name",
-                                    "name" : "p",
-                                    "i" : -1
-                                  }
-                                }
-                              },
-                              {
-                                "kind" : "DataDependentCondition",
-                                "type" : "DATA_DEPENDENT",
-                                "expression" : {
                                   "kind" : "LShiftANDEqZero",
                                   "lhs" : {
                                     "kind" : "Name",
@@ -1365,6 +1349,22 @@
                                   "rhs" : {
                                     "kind" : "Integer",
                                     "value" : 0
+                                  }
+                                }
+                              },
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "GreaterThanEqual",
+                                  "lhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 3
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Name",
+                                    "name" : "p",
+                                    "i" : -1
                                   }
                                 }
                               }
@@ -1566,14 +1566,14 @@
                         "precedenceLevel" : {
                           "lhs" : 3,
                           "rhs" : 3,
+                          "undefined" : -1,
                           "hasPrefixUnary" : false,
-                          "hasPrefixUnaryBelow" : true,
                           "hasPostfixUnary" : true,
-                          "hasPostfixUnaryBelow" : false,
+                          "hasPrefixUnaryBelow" : true,
                           "prefixUnaryBelow" : [
                             1
                           ],
-                          "undefined" : -1,
+                          "hasPostfixUnaryBelow" : false,
                           "index" : 4,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -1628,11 +1628,11 @@
                             "precedenceLevel" : {
                               "lhs" : 1,
                               "rhs" : 1,
-                              "hasPrefixUnary" : true,
-                              "hasPrefixUnaryBelow" : false,
-                              "hasPostfixUnary" : false,
-                              "hasPostfixUnaryBelow" : false,
                               "undefined" : 1,
+                              "hasPrefixUnary" : true,
+                              "hasPostfixUnary" : false,
+                              "hasPrefixUnaryBelow" : false,
+                              "hasPostfixUnaryBelow" : false,
                               "index" : 2,
                               "containsAssociativityGroup" : false,
                               "assoc_lhs" : -1,
@@ -1741,11 +1741,11 @@
                                 "precedenceLevel" : {
                                   "lhs" : 1,
                                   "rhs" : 1,
-                                  "hasPrefixUnary" : false,
-                                  "hasPrefixUnaryBelow" : false,
-                                  "hasPostfixUnary" : false,
-                                  "hasPostfixUnaryBelow" : false,
                                   "undefined" : 1,
+                                  "hasPrefixUnary" : false,
+                                  "hasPostfixUnary" : false,
+                                  "hasPrefixUnaryBelow" : false,
+                                  "hasPostfixUnaryBelow" : false,
                                   "index" : 2,
                                   "containsAssociativityGroup" : false,
                                   "assoc_lhs" : -1,
@@ -1799,11 +1799,11 @@
                                     "precedenceLevel" : {
                                       "lhs" : 1,
                                       "rhs" : 1,
-                                      "hasPrefixUnary" : true,
-                                      "hasPrefixUnaryBelow" : false,
-                                      "hasPostfixUnary" : false,
-                                      "hasPostfixUnaryBelow" : false,
                                       "undefined" : 1,
+                                      "hasPrefixUnary" : true,
+                                      "hasPostfixUnary" : false,
+                                      "hasPrefixUnaryBelow" : false,
+                                      "hasPostfixUnaryBelow" : false,
                                       "index" : 2,
                                       "containsAssociativityGroup" : false,
                                       "assoc_lhs" : -1,

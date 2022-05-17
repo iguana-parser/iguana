@@ -38,11 +38,11 @@
         "precedenceLevel" : {
           "lhs" : 1,
           "rhs" : 1,
-          "hasPrefixUnary" : false,
-          "hasPrefixUnaryBelow" : false,
-          "hasPostfixUnary" : false,
-          "hasPostfixUnaryBelow" : false,
           "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
           "index" : 1,
           "containsAssociativityGroup" : false,
           "assoc_lhs" : -1,
@@ -245,11 +245,11 @@
             "precedenceLevel" : {
               "lhs" : 1,
               "rhs" : 1,
-              "hasPrefixUnary" : false,
-              "hasPrefixUnaryBelow" : false,
-              "hasPostfixUnary" : false,
-              "hasPostfixUnaryBelow" : false,
               "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
               "index" : 2,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
@@ -278,22 +278,6 @@
                         "kind" : "DataDependentCondition",
                         "type" : "DATA_DEPENDENT",
                         "expression" : {
-                          "kind" : "LShiftANDEqZero",
-                          "lhs" : {
-                            "kind" : "Name",
-                            "name" : "_not",
-                            "i" : -1
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 0
-                          }
-                        }
-                      },
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
                           "kind" : "GreaterThanEqual",
                           "lhs" : {
                             "kind" : "Integer",
@@ -303,6 +287,22 @@
                             "kind" : "Name",
                             "name" : "p",
                             "i" : -1
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "LShiftANDEqZero",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "_not",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 0
                           }
                         }
                       }
@@ -441,11 +441,11 @@
                 "precedenceLevel" : {
                   "lhs" : 2,
                   "rhs" : 2,
-                  "hasPrefixUnary" : false,
-                  "hasPrefixUnaryBelow" : false,
-                  "hasPostfixUnary" : true,
-                  "hasPostfixUnaryBelow" : false,
                   "undefined" : -1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : true,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
                   "index" : 3,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -500,11 +500,11 @@
                     "precedenceLevel" : {
                       "lhs" : 1,
                       "rhs" : 1,
-                      "hasPrefixUnary" : false,
-                      "hasPrefixUnaryBelow" : false,
-                      "hasPostfixUnary" : false,
-                      "hasPostfixUnaryBelow" : false,
                       "undefined" : -1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
                       "index" : 2,
                       "containsAssociativityGroup" : false,
                       "assoc_lhs" : -1,
@@ -615,11 +615,11 @@
                         "precedenceLevel" : {
                           "lhs" : 1,
                           "rhs" : 1,
-                          "hasPrefixUnary" : false,
-                          "hasPrefixUnaryBelow" : false,
-                          "hasPostfixUnary" : false,
-                          "hasPostfixUnaryBelow" : false,
                           "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
                           "index" : 2,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -867,11 +867,11 @@
                 "precedenceLevel" : {
                   "lhs" : 1,
                   "rhs" : 1,
-                  "hasPrefixUnary" : false,
-                  "hasPrefixUnaryBelow" : false,
-                  "hasPostfixUnary" : false,
-                  "hasPostfixUnaryBelow" : false,
                   "undefined" : -1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
                   "index" : 2,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -926,11 +926,11 @@
                     "precedenceLevel" : {
                       "lhs" : 1,
                       "rhs" : 1,
-                      "hasPrefixUnary" : false,
-                      "hasPrefixUnaryBelow" : false,
-                      "hasPostfixUnary" : false,
-                      "hasPostfixUnaryBelow" : false,
                       "undefined" : -1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
                       "index" : 2,
                       "containsAssociativityGroup" : false,
                       "assoc_lhs" : -1,
@@ -997,22 +997,6 @@
                             "kind" : "DataDependentCondition",
                             "type" : "DATA_DEPENDENT",
                             "expression" : {
-                              "kind" : "LShiftANDEqZero",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "_not",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 0
-                              }
-                            }
-                          },
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
                               "kind" : "GreaterThanEqual",
                               "lhs" : {
                                 "kind" : "Integer",
@@ -1022,6 +1006,22 @@
                                 "kind" : "Name",
                                 "name" : "p",
                                 "i" : -1
+                              }
+                            }
+                          },
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "LShiftANDEqZero",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "_not",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 0
                               }
                             }
                           }
@@ -1160,11 +1160,11 @@
                     "precedenceLevel" : {
                       "lhs" : 2,
                       "rhs" : 2,
-                      "hasPrefixUnary" : false,
-                      "hasPrefixUnaryBelow" : false,
-                      "hasPostfixUnary" : true,
-                      "hasPostfixUnaryBelow" : false,
                       "undefined" : -1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : true,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
                       "index" : 3,
                       "containsAssociativityGroup" : false,
                       "assoc_lhs" : -1,
@@ -1219,11 +1219,11 @@
                         "precedenceLevel" : {
                           "lhs" : 1,
                           "rhs" : 1,
-                          "hasPrefixUnary" : false,
-                          "hasPrefixUnaryBelow" : false,
-                          "hasPostfixUnary" : false,
-                          "hasPostfixUnaryBelow" : false,
                           "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
                           "index" : 2,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -1334,11 +1334,11 @@
                             "precedenceLevel" : {
                               "lhs" : 1,
                               "rhs" : 1,
-                              "hasPrefixUnary" : false,
-                              "hasPrefixUnaryBelow" : false,
-                              "hasPostfixUnary" : false,
-                              "hasPostfixUnaryBelow" : false,
                               "undefined" : -1,
+                              "hasPrefixUnary" : false,
+                              "hasPostfixUnary" : false,
+                              "hasPrefixUnaryBelow" : false,
+                              "hasPostfixUnaryBelow" : false,
                               "index" : 2,
                               "containsAssociativityGroup" : false,
                               "assoc_lhs" : -1,

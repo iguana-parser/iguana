@@ -54,69 +54,6 @@
               "expression" : {
                 "kind" : "Or",
                 "lhs" : {
-                  "kind" : "LessThanEqual",
-                  "lhs" : {
-                    "kind" : "Get",
-                    "arg1" : {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    "arg2" : 0,
-                    "fun" : "get",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "l",
-                        "i" : -1
-                      },
-                      {
-                        "kind" : "Integer",
-                        "value" : 0
-                      }
-                    ]
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "GreaterThanEqual",
-                  "lhs" : {
-                    "kind" : "Get",
-                    "arg1" : {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    "arg2" : 0,
-                    "fun" : "get",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "l",
-                        "i" : -1
-                      },
-                      {
-                        "kind" : "Integer",
-                        "value" : 0
-                      }
-                    ]
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 2
-                  }
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
                   "kind" : "Equal",
                   "lhs" : {
                     "kind" : "Get",
@@ -170,6 +107,69 @@
                         "value" : 1
                       }
                     ]
+                  }
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 0,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 0
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
                   }
                 }
               }
@@ -262,11 +262,11 @@
       "precedenceLevel" : {
         "lhs" : 1,
         "rhs" : 2,
-        "hasPrefixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnary" : true,
-        "hasPostfixUnaryBelow" : false,
         "undefined" : 2,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
         "index" : 3,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -540,11 +540,11 @@
       "precedenceLevel" : {
         "lhs" : 1,
         "rhs" : 2,
-        "hasPrefixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnary" : true,
-        "hasPostfixUnaryBelow" : false,
         "undefined" : 2,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
         "index" : 3,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -596,11 +596,11 @@
       "precedenceLevel" : {
         "lhs" : 1,
         "rhs" : 2,
-        "hasPrefixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnary" : true,
-        "hasPostfixUnaryBelow" : false,
         "undefined" : 2,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : true,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
         "index" : 3,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -626,11 +626,11 @@
       "precedenceLevel" : {
         "lhs" : 1,
         "rhs" : 1,
-        "hasPrefixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnary" : false,
-        "hasPostfixUnaryBelow" : false,
         "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -680,11 +680,11 @@
       "precedenceLevel" : {
         "lhs" : 1,
         "rhs" : 1,
-        "hasPrefixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnary" : false,
-        "hasPostfixUnaryBelow" : false,
         "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
