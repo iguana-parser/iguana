@@ -301,8 +301,8 @@ public class GrammarGraphBuilder implements Serializable {
             else
                 slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), symbol.getLabel(), null, null);
 
-            Set<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptySet() : symbol.getPreConditions();
-            TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions, symbol.getPostConditions());
+            Set<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptySet() : symbol.getTerminalPreConditions();
+            TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions, symbol.getTerminalPostConditions());
             setTransition(transition);
             currentSlot = slot;
 

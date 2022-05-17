@@ -34,6 +34,7 @@ import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Terminal extends AbstractSymbol {
@@ -121,8 +122,8 @@ public class Terminal extends AbstractSymbol {
 			super(terminal);
 			this.regex = terminal.regex;
 			this.nodeType = terminal.getNodeType();
-            this.terminalPreConditions = terminal.getTerminalPreConditions();
-            this.terminalPostConditions = terminal.getTerminalPostConditions();
+            this.terminalPreConditions = new LinkedHashSet<>(terminal.getTerminalPreConditions());
+            this.terminalPostConditions = new LinkedHashSet<>(terminal.getTerminalPostConditions());
 		}
 
 		public Builder setNodeType(TerminalNodeType nodeType) {
@@ -131,12 +132,12 @@ public class Terminal extends AbstractSymbol {
 		}
 
 		public Builder setTerminalPreConditions(Set<Condition> conditions) {
-			this.terminalPreConditions = conditions;
+			this.terminalPreConditions = new LinkedHashSet<>(conditions);
 			return this;
 		}
 
 		public Builder setTerminalPostConditions(Set<Condition> conditions) {
-			this.terminalPostConditions = conditions;
+			this.terminalPostConditions = new LinkedHashSet<>(conditions);
 			return this;
 		}
 
