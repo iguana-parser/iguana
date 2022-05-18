@@ -12,6 +12,7 @@ import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -205,11 +206,19 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
     }
 
     default Set<Condition> visitPreConditions(Symbol symbol) {
-        return symbol.getPreConditions().stream().map(c -> c.accept(this)).collect(Collectors.toSet());
+        Set<Condition> preConditions = new LinkedHashSet<>();
+        for (Condition condition : symbol.getPreConditions()) {
+            preConditions.add(condition.accept(this));
+        }
+        return preConditions;
     }
 
     default Set<Condition> visitPostConditions(Symbol symbol) {
-        return symbol.getPostConditions().stream().map(c -> c.accept(this)).collect(Collectors.toSet());
+        Set<Condition> postConditions = new LinkedHashSet<>();
+        for (Condition condition : symbol.getPostConditions()) {
+            postConditions.add(condition.accept(this));
+        }
+        return postConditions;
     }
 
     default RegularExpression visitRegularExpression(RegularExpression regex) {

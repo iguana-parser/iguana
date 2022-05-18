@@ -18,8 +18,6 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.patterns.ExceptPattern;
-import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
@@ -28,7 +26,6 @@ import org.iguana.parser.ParseError;
 import org.iguana.parsetree.*;
 
 import java.io.*;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -237,10 +234,6 @@ public class JsonSerializer {
         @JsonIgnore
         Map<Nonterminal, List<RuntimeRule>> definitions;
         @JsonIgnore
-        List<PrecedencePattern> precedencePatterns;
-        @JsonIgnore
-        List<ExceptPattern> exceptPatterns;
-        @JsonIgnore
         Map<String, RegularExpression> terminals;
     }
 
@@ -360,7 +353,7 @@ public class JsonSerializer {
     }
 
     abstract static class AmbiguityNodeMixIn {
-        AmbiguityNodeMixIn(@JsonProperty("alternatives") LinkedHashSet<ParseTreeNode> alternatives) { }
+        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) { }
     }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)

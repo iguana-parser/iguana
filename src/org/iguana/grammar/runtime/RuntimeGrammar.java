@@ -30,8 +30,6 @@ package org.iguana.grammar.runtime;
 import iguana.regex.RegularExpression;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
-import org.iguana.grammar.patterns.ExceptPattern;
-import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
 
@@ -53,11 +51,7 @@ import static iguana.utils.string.StringUtil.listToString;
 public class RuntimeGrammar {
 
 	private final Map<Nonterminal, List<RuntimeRule>> definitions;
-	
-	private final List<PrecedencePattern> precedencePatterns;
-	
-	private final List<ExceptPattern> exceptPatterns;
-	
+
 	private final Symbol layout;
 	
 	private final List<RuntimeRule> rules;
@@ -77,8 +71,6 @@ public class RuntimeGrammar {
 
 	public RuntimeGrammar(Builder builder) {
 		this.definitions = builder.definitions;
-		this.precedencePatterns = builder.precedencePatterns;
-		this.exceptPatterns = builder.exceptPatterns;
 		this.layout = builder.layout;
 		this.startSymbol = builder.startSymbol;
 		this.rules = builder.rules;
@@ -122,14 +114,6 @@ public class RuntimeGrammar {
 			num += definitions.get(head).size();
 		}
 		return num;
-	}
-	
-	public List<PrecedencePattern> getPrecedencePatterns() {
-		return precedencePatterns;
-	}
-	
-	public List<ExceptPattern> getExceptPatterns() {
-		return exceptPatterns;
 	}
 	
 	public Set<RegularExpression> getPredictionSet(RuntimeRule rule, int index) {
@@ -214,8 +198,6 @@ public class RuntimeGrammar {
 	public static class Builder {
 		
 		private final Map<Nonterminal, List<RuntimeRule>> definitions = new HashMap<>();
-		private final List<PrecedencePattern> precedencePatterns = new ArrayList<>();
-		private final List<ExceptPattern> exceptPatterns = new ArrayList<>();
 		private List<RuntimeRule> rules = new ArrayList<>();
 		private Symbol layout;
 		private Start startSymbol;
@@ -229,8 +211,6 @@ public class RuntimeGrammar {
 
         public Builder(RuntimeGrammar grammar) {
             definitions.putAll(grammar.definitions);
-            precedencePatterns.addAll(grammar.precedencePatterns);
-            exceptPatterns.addAll(grammar.exceptPatterns);
             rules.addAll(grammar.rules);
             layout = grammar.layout;
             ebnfLefts.putAll(grammar.ebnfLefts);
@@ -285,26 +265,6 @@ public class RuntimeGrammar {
 		    this.startSymbol = startSymbol;
 		    return this;
         }
-		
-		public Builder addPrecedencePattern(PrecedencePattern pattern) {
-			precedencePatterns.add(pattern);
-			return this;
-		}
-		
-		public Builder addPrecedencePatterns(Collection<PrecedencePattern> patterns) {
-			precedencePatterns.addAll(patterns);
-			return this;
-		}		
-		
-		public Builder addExceptPattern(ExceptPattern pattern) {
-			exceptPatterns.add(pattern);
-			return this;
-		}
-		
-		public Builder addExceptPatterns(Collection<ExceptPattern> patterns) {
-			exceptPatterns.addAll(patterns);
-			return this;
-		}
 		
 		public Builder addEBNFl(Map<String, Set<String>> ebnfLefts) {
 			this.ebnfLefts.putAll(ebnfLefts);
