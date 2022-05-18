@@ -190,9 +190,9 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     @Override
     public Symbol visit(Terminal symbol) {
         return new Terminal.Builder(symbol.getRegularExpression())
-                .setTerminalPreConditions(symbol.getTerminalPreConditions())
-                .setTerminalPostConditions(symbol.getTerminalPostConditions())
                 .setNodeType(symbol.getNodeType())
+                .setPreConditions(symbol.getPreConditions())
+                .setPostConditions(symbol.getPostConditions())
                 .setName(symbol.getName())
                 .build();
     }

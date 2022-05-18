@@ -565,21 +565,7 @@
           "kind" : "Terminal",
           "name" : "Name",
           "label" : "n",
-          "nodeType" : "Regex",
-          "regex" : {
-            "kind" : "regex.Plus",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "CharRange",
-                  "start" : 97,
-                  "end" : 122
-                }
-              ]
-            }
-          },
-          "terminalPostConditions" : [
+          "postConditions" : [
             {
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
@@ -597,7 +583,21 @@
                 }
               }
             }
-          ]
+          ],
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Plus",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
         },
         {
           "kind" : "Terminal",
