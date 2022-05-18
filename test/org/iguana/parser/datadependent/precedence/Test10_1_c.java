@@ -7,7 +7,6 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.Recursion;
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.precedence.OperatorPrecedence;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.DesugarPrecedenceAndAssociativity;
@@ -70,10 +69,6 @@ RuntimeGrammar.builder()
          
 		 RuntimeGrammar grammar1 = desugarPrecedenceAndAssociativity.transform(grammar);
 
-         grammar2 = new OperatorPrecedence(grammar2.getPrecedencePatterns(), grammar2.getExceptPatterns()).transform(grammar2);
-         
-         System.out.println(grammar2);
-         
          desugarPrecedenceAndAssociativity.setOP2();
          
          RuntimeGrammar grammar3 = desugarPrecedenceAndAssociativity.transform(grammar);

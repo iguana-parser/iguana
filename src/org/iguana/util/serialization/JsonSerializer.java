@@ -18,8 +18,6 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.patterns.ExceptPattern;
-import org.iguana.grammar.patterns.PrecedencePattern;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
@@ -236,10 +234,6 @@ public class JsonSerializer {
     abstract static class RuntimeGrammarMixIn {
         @JsonIgnore
         Map<Nonterminal, List<RuntimeRule>> definitions;
-        @JsonIgnore
-        List<PrecedencePattern> precedencePatterns;
-        @JsonIgnore
-        List<ExceptPattern> exceptPatterns;
         @JsonIgnore
         Map<String, RegularExpression> terminals;
     }
