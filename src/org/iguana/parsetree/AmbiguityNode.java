@@ -12,9 +12,9 @@ import static java.util.Objects.requireNonNull;
 
 public class AmbiguityNode implements ParseTreeNode {
 
-    private final LinkedHashSet<ParseTreeNode> alternatives;
+    private final Set<ParseTreeNode> alternatives;
 
-    public AmbiguityNode(LinkedHashSet<ParseTreeNode> alternatives) {
+    public AmbiguityNode(Set<ParseTreeNode> alternatives) {
         this.alternatives = requireNonNull(alternatives);
     }
 

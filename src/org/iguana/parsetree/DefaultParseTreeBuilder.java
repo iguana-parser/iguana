@@ -6,8 +6,8 @@ import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
 
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> {
 
@@ -32,7 +32,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     }
 
     @Override
-    public AmbiguityNode ambiguityNode(LinkedHashSet<ParseTreeNode> ambiguities) {
+    public AmbiguityNode ambiguityNode(Set<ParseTreeNode> ambiguities) {
         return new AmbiguityNode(ambiguities);
     }
 

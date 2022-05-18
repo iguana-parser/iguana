@@ -379,10 +379,7 @@ public class GrammarGraphBuilder implements Serializable {
     }
 
     private TerminalGrammarSlot getTerminalGrammarSlot(Terminal t) {
-        Conditions preConditions = getConditions(t.getTerminalPreConditions());
-        Conditions postConditions = getConditions(t.getTerminalPostConditions());
-        TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot(t, matcherFactory, preConditions, postConditions));
-        return terminalSlot;
+        return terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot(t, matcherFactory));
     }
 
     private NonterminalGrammarSlot getNonterminalSlot(Nonterminal nonterminal) {

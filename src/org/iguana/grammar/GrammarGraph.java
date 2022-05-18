@@ -1,7 +1,6 @@
 package org.iguana.grammar;
 
 import iguana.regex.matcher.DFAMatcherFactory;
-import org.iguana.grammar.condition.ConditionsFactory;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
@@ -14,7 +13,7 @@ import static java.util.stream.Collectors.toList;
 
 public class GrammarGraph {
 
-    public static final TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), new DFAMatcherFactory(), ConditionsFactory.DEFAULT, ConditionsFactory.DEFAULT);;
+    public static final TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), new DFAMatcherFactory());
     private final List<GrammarSlot> slots;
     private NonterminalGrammarSlot startSlot;
 

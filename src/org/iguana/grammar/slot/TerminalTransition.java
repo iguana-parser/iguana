@@ -37,26 +37,26 @@ import org.iguana.result.Result;
 
 public class TerminalTransition extends AbstractTransition {
 
-    protected final TerminalGrammarSlot slot;
+    protected final TerminalGrammarSlot terminalSlot;
 	
 	private final Conditions preConditions;
 	
 	private final Conditions postConditions;
 
-	public TerminalTransition(TerminalGrammarSlot slot, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions, Conditions postConditions) {
+	public TerminalTransition(TerminalGrammarSlot terminalSlot, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions, Conditions postConditions) {
 		super(origin, dest);
-        this.slot = slot;
+        this.terminalSlot = terminalSlot;
         this.preConditions = preConditions;
         this.postConditions = postConditions;
 	}
 
-	public TerminalGrammarSlot getSlot() {
-		return slot;
+	public TerminalGrammarSlot getTerminalSlot() {
+		return terminalSlot;
 	}
 	
 	@Override
 	public String getLabel() {
-		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getSlot();
+		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getTerminalSlot();
 	}
 	
 	@Override
@@ -68,10 +68,12 @@ public class TerminalTransition extends AbstractTransition {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
+		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime)) {
+			terminalSlot.recordFailure(i);
 			return;
+		}
 
-		T cr = slot.getResult(input, i, origin, u, runtime);
+		T cr = terminalSlot.getResult(input, i, origin, u, runtime);
 		
 		if (cr == null) {
 			runtime.recordParseError(i, origin, u);
@@ -81,8 +83,10 @@ public class TerminalTransition extends AbstractTransition {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getIndex(), runtime.getEvaluatorContext(), runtime))
+		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getIndex(), runtime.getEvaluatorContext(), runtime)) {
+			terminalSlot.recordFailure(cr.getIndex());
 			return;
+		}
 
 		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
 				

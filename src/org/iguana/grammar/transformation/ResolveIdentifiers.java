@@ -70,8 +70,8 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
             RegularExpression regularExpression = terminals.get(id.getName());
             return new Terminal.Builder(regularExpression)
                 .setNodeType(TerminalNodeType.Regex)
-                .setTerminalPreConditions(visitPreConditions(id))
-                .setTerminalPostConditions(visitPostConditions(id))
+                .setPreConditions(visitPreConditions(id))
+                .setPostConditions(visitPostConditions(id))
                 .setLabel(id.getLabel())
                 .setName(id.getName())
                 .build();

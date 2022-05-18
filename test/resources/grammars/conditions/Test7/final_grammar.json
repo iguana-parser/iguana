@@ -227,21 +227,7 @@
         {
           "kind" : "Terminal",
           "name" : "Chars",
-          "nodeType" : "Regex",
-          "regex" : {
-            "kind" : "regex.Plus",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "CharRange",
-                  "start" : 97,
-                  "end" : 122
-                }
-              ]
-            }
-          },
-          "terminalPreConditions" : [
+          "preConditions" : [
             {
               "kind" : "RegularExpressionCondition",
               "type" : "NOT_PRECEDE",
@@ -263,7 +249,21 @@
                 ]
               }
             }
-          ]
+          ],
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Plus",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
         }
       ],
       "recursion" : "NON_REC",

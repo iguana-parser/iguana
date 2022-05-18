@@ -32,7 +32,6 @@ import iguana.regex.matcher.MatcherFactory;
 import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;
-import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
@@ -43,16 +42,12 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	private final Terminal terminal;
     private final Matcher matcher;
 	private IntHashMap<Object> terminalNodes;
-    private final Conditions preConditions;
-    private final Conditions postConditions;
 
     // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
 	private static final Object failure = "failure";
 
-	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory, Conditions preConditions, Conditions postConditions) {
+	public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
 		this.terminal = terminal;
-        this.preConditions = preConditions;
-        this.postConditions = postConditions;
         this.matcher = factory.getMatcher(terminal.getRegularExpression());
     }
 
@@ -65,26 +60,21 @@ public class TerminalGrammarSlot implements GrammarSlot {
 	        return null;
         }
 
-        if (preConditions.execute(input, slot, gssNode, i, runtime)) {
-            terminalNodes.put(i, failure);
-            return null;
-        }
-
 		if (node == null) {
 			int length = matcher.match(input, i);
 			if (length < 0) {
-				node = null;
 				terminalNodes.put(i, failure);
 			} else {
-                if (postConditions.execute(input, slot, gssNode, i, i + length, runtime)) {
-                    terminalNodes.put(i, failure);
-                    return null;
-                }
 				node = runtime.getResultOps().base(this, i, i + length);
 				terminalNodes.put(i, node);
 			}
 		}
 		return (T) node;
+	}
+
+
+	public void recordFailure(int index) {
+		terminalNodes.put(index, failure);
 	}
 
 	public int countTerminalNodes() {
