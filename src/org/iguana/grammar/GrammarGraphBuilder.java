@@ -301,8 +301,8 @@ public class GrammarGraphBuilder implements Serializable {
             else
                 slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), symbol.getLabel(), null, null);
 
-            Set<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptySet() : symbol.getTerminalPreConditions();
-            TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions, symbol.getTerminalPostConditions());
+            Set<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptySet() : symbol.getPreConditions();
+            TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions, symbol.getPostConditions());
             setTransition(transition);
             currentSlot = slot;
 
@@ -379,10 +379,7 @@ public class GrammarGraphBuilder implements Serializable {
     }
 
     private TerminalGrammarSlot getTerminalGrammarSlot(Terminal t) {
-        Conditions preConditions = getConditions(t.getTerminalPreConditions());
-        Conditions postConditions = getConditions(t.getTerminalPostConditions());
-        TerminalGrammarSlot terminalSlot = terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot(t, matcherFactory, preConditions, postConditions));
-        return terminalSlot;
+        return terminalsMap.computeIfAbsent(t, k -> new TerminalGrammarSlot(t, matcherFactory));
     }
 
     private NonterminalGrammarSlot getNonterminalSlot(Nonterminal nonterminal) {
