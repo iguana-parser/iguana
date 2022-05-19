@@ -1,0 +1,4 @@
+start S
+  = S S S
+  | S S
+  | 'b'

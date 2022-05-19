@@ -70,7 +70,10 @@ public class IguanaParser extends IguanaRecognizer {
         clear();
         this.input = input;
         IguanaRuntime<?> runtime = new IguanaRuntime<>(config, parserResultOps);
+        long start = System.nanoTime();
         this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
+        long end = System.nanoTime();
+        System.out.println("Parsing finished in " + (end - start) / 1000_000 + "ms.");
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
     }
@@ -102,11 +105,19 @@ public class IguanaParser extends IguanaRecognizer {
 
         if (ambiguous) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), ignoreLayout, parserResultOps);
-            return (ParseTreeNode) sppf.accept(visitor).getValues().get(0);
+            long start = System.nanoTime();
+            ParseTreeNode node = (ParseTreeNode) sppf.accept(visitor).getValues().get(0);
+            long end = System.nanoTime();
+            System.out.println("Parse tree creation finished in " + (end - start) / 1000_000 + "ms.");
+            return node;
         }
 
         DefaultSPPFToParseTreeVisitor<?> converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
+        long start = System.nanoTime();
         this.parseTree = (ParseTreeNode) converter.convertNonterminalNode(sppf);
+        long end = System.nanoTime();
+        System.out.println("Parse tree creation finished in " + (end - start) / 1000_000 + "ms.");
+
         return parseTree;
     }
 
