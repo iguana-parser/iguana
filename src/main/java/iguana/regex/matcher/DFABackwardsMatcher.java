@@ -33,7 +33,7 @@ import iguana.utils.input.Input;
 
 public class DFABackwardsMatcher extends DFAMatcher {
 
-	DFABackwardsMatcher(RegularExpression regex) {
+	public DFABackwardsMatcher(RegularExpression regex) {
 		super(AutomatonOperations.reverse(regex.getAutomaton()));
 	}
 

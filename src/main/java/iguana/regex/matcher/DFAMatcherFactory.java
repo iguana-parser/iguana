@@ -37,7 +37,8 @@ import java.util.Map;
 
 public class DFAMatcherFactory implements MatcherFactory {
 	
-	private Map<RegularExpression, Matcher> cache = new HashMap<>();
+	private Map<RegularExpression, Matcher> matcherCache = new HashMap<>();
+    private Map<RegularExpression, Matcher> backwardsMatcherCache = new HashMap<>();
 
     public Matcher getMatcher(RegularExpression regex) {
         
@@ -50,7 +51,7 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex instanceof CharRange)
             return characterRangeMatcher((CharRange) regex);
             
-        return cache.computeIfAbsent(regex, DFAMatcher::new);
+        return matcherCache.computeIfAbsent(regex, DFAMatcher::new);
     }
     
     public Matcher getBackwardsMatcher(RegularExpression regex) {
@@ -61,7 +62,7 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex instanceof CharRange)
             return characterRangeBackwardsMatcher((CharRange) regex);
         
-        return cache.computeIfAbsent(regex, DFABackwardsMatcher::new);
+        return backwardsMatcherCache.computeIfAbsent(regex, DFABackwardsMatcher::new);
     }
     
     public static Matcher characterMatcher(Char c) {
