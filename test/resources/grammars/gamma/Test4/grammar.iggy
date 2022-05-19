@@ -1,0 +1,8 @@
+
+// Gamma wit epsilon
+
+start S
+  = S S S
+  | S S
+  | 'b'
+  |

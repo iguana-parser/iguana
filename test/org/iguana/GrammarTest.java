@@ -15,6 +15,7 @@ import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.RecognizerStatisticsSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
@@ -163,9 +164,11 @@ public class GrammarTest {
                 }
             } catch (AmbiguityException e) {
                 try {
-                    actualParseTree = parser.getParseTree(true, true);
-                    DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
-                    dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                    if (parser.getStatistics().getAmbiguousNodesCount() < 10) {
+                        actualParseTree = parser.getParseTree(true, true);
+                        DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
+                        dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                    }
                 } catch (CyclicGrammarException ee) {
                     isCyclic = true;
                 }
@@ -176,20 +179,22 @@ public class GrammarTest {
             if (!isCyclic) {
                 String resultPath = testPath + "/result" + j + ".json";
 
-                if (actualParseTree == null) { // Parse error
-                    assertNotNull(parser.getParseError());
+                if (parser.hasParseError()) {
+                    Assertions.assertNotNull(parser.getParseError());
                     if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                         record(parser.getParseError(), resultPath);
                     } else {
                         ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
-                        assertEquals(expectedParseError, parser.getParseError());
+                        Assertions.assertEquals(expectedParseError, parser.getParseError());
                     }
                 } else {
-                    if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
-                        record(actualParseTree, resultPath);
-                    } else {
-                        ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
-                        assertEquals(expectedParseTree, actualParseTree);
+                    if (actualParseTree != null) {
+                        if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
+                            record(actualParseTree, resultPath);
+                        } else {
+                            ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
+                            Assertions.assertEquals(expectedParseTree, actualParseTree);
+                        }
                     }
                 }
             }
