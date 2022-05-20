@@ -95,7 +95,7 @@ public class BodyGrammarSlot implements GrammarSlot {
 		if (isFirst())
 			return rightResult;
 
-		Key key = Keys.from(destinationIndex, rightResult.getIndex(), env);
+		Key key = Keys.from(destinationIndex, rightResult.getRightExtent(), env);
 
 		if (intermediateNodes == null) {
 		    intermediateNodes = new OpenAddressingHashMap<>();

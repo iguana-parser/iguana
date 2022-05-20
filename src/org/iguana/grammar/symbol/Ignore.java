@@ -31,6 +31,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Ignore extends AbstractSymbol {
 	
@@ -75,10 +76,25 @@ private static final long serialVersionUID = 1L;
 	public String toString(int j) {
 		return String.format("ignore %s", symbol.toString(j));
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Ignore)) return false;
+		Ignore ignore = (Ignore) o;
+		return Objects.equals(symbol, ignore.symbol);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(symbol);
+	}
+
 	public static class Builder extends SymbolBuilder<Ignore> {
 		
 		private Symbol symbol;
+
+		public Builder() { }
 
 		public Builder(Ignore ignore) {
 			super(ignore);
@@ -100,7 +116,6 @@ private static final long serialVersionUID = 1L;
 			this.name = String.format("ignore %s", symbol.toString());
 			return new Ignore(this);
 		}
-		
 	}
 
 	@Override

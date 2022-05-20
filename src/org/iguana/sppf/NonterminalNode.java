@@ -99,11 +99,11 @@ public class NonterminalNode extends NonPackedNode {
 
     @Override
 	public String toString() {
-		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getIndex());
+		return String.format("(%s, %d, %d)", slot, getLeftExtent(), getRightExtent());
 	}
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return rightExtent;
     }
 

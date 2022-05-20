@@ -1,0 +1,23 @@
+// OCaml sample
+
+start expr
+  =        expr '.' field
+  > left   expr expr
+  >        '-' expr
+  > left   expr '*' expr
+  > left   (expr '+' expr | expr '-' expr)
+  >        'if' expr 'then' expr 'else' expr
+  > right  expr ';' expr
+  |        '(' expr ')'
+  |        num
+
+
+terminal field
+  = [a-zA-Z][a-zA-Z0-9]*
+
+terminal num
+  = [0] | [1-9][0-9]*
+
+layout terminal whitespaces
+  = [\n\r\t\f\ ]*
+

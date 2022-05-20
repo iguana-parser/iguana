@@ -42,8 +42,8 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
             return empty();
         }
         return convertedNodes.computeIfAbsent(node, key -> {
-                    if (node.getLeftExtent() == node.getIndex()) return empty();
-                    Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());
+                    if (node.getLeftExtent() == node.getRightExtent()) return empty();
+                    Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
                     return single(terminalNode);
                 }
         );

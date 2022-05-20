@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 
 import static iguana.utils.io.FileUtils.readFile;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class GrammarTest {
 

@@ -8,7 +8,7 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
 
     private static final RecognizerResult dummy = new RecognizerResult() {
         @Override
-        public int getIndex() {
+        public int getRightExtent() {
             return -1;
         }
 
@@ -40,7 +40,7 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
 
     @Override
     public RecognizerResult base(TerminalGrammarSlot slot, int start, int end) {
-        return RecognizerResult.of(end);
+        return RecognizerResult.of(start, end);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
             if (value == null) {
                 return result;
             }
-            return RecognizerResult.of(result.getIndex(), value);
+            return RecognizerResult.of(result.getRightExtent(), value);
         }
         return result;
     }

@@ -78,7 +78,7 @@ public class IntermediateNode extends NonPackedNode {
     }
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return rightChild.getRightExtent();
     }
 

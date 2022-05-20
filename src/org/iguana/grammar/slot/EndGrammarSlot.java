@@ -72,7 +72,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 	
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
-		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
+		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		// TODO: this is tricky for grammars that are layout sensitive.
 		int nextChar = input.charAtIgnoreLayout(rightExtent);

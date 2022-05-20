@@ -50,7 +50,7 @@ public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
 
     @Override
     public int getInputIndex() {
-        return result.getIndex();
+        return result.getRightExtent();
     }
 
     @Override

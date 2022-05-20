@@ -138,7 +138,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
     }
 
     public <T extends Result> void create(Input input, BodyGrammarSlot returnSlot, GSSNode<T> u, T result, Expression[] arguments, Environment env, IguanaRuntime<T> runtime) {
-        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
+        int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
         Key key = null;
         Object[] data = null;
@@ -193,7 +193,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                 if (slot.getLabel() != null)
                     runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
-                int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getIndex();
+                int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getRightExtent();
                 if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, runtime.getEvaluatorContext(), runtime))
                     runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
 

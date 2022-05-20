@@ -1301,7 +1301,7 @@ public abstract class Expression extends AbstractAST {
                 return ((NonPackedNode) value).getRightExtent();
                 // In case of recognizer, we don't have a node. The right extent will be equal to the recognized value.
             } else if (value instanceof RecognizerResult) {
-                return ((RecognizerResult) value).getIndex();
+                return ((RecognizerResult) value).getRightExtent();
             } else {
                 throw new UnexpectedTypeOfArgumentException(this);
             }
@@ -1365,7 +1365,7 @@ public abstract class Expression extends AbstractAST {
                 return input.subString(node.getLeftExtent(), node.getRightExtent());
             } // In case of recognizer, we don't have a node.
             else if (value instanceof RecognizerResult) {
-                return input.subString(((RecognizerResult) value).getLeftExtent(), ((RecognizerResult) value).getIndex());
+                return input.subString(((RecognizerResult) value).getLeftExtent(), ((RecognizerResult) value).getRightExtent());
             } else {
                 throw new UnexpectedTypeOfArgumentException(this);
             }

@@ -1,0 +1,447 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "expr"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ".",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 46
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "field"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ],
+                  "associativity" : "LEFT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "-",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 45
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "*",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 42
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ],
+                  "associativity" : "LEFT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "+",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 43
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ]
+                },
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "-",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 45
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "LEFT"
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "if",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "then",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 104
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "else",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 115
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    }
+                  ],
+                  "associativity" : "RIGHT"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "(",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 40
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "expr"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ")",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 41
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "num"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "terminals" : {
+    "field" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 97,
+              "end" : 122
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 65,
+              "end" : 90
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "CharRange",
+                "start" : 97,
+                "end" : 122
+              },
+              {
+                "kind" : "CharRange",
+                "start" : 65,
+                "end" : 90
+              },
+              {
+                "kind" : "CharRange",
+                "start" : 48,
+                "end" : 57
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "num" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 48
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 49,
+                  "end" : 57
+                }
+              ]
+            },
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "CharRange",
+                    "start" : 48,
+                    "end" : 57
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "whitespaces" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 10
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(expr)",
+    "startSymbol" : "expr"
+  },
+  "layout" : {
+    "kind" : "Identifier",
+    "name" : "whitespaces"
+  }
+}
