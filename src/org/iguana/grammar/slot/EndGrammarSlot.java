@@ -74,8 +74,14 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
 		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
-		if (nonterminal.testFollow(input.charAtIgnoreLayout(rightExtent)))
-            u.pop(input, this, result, value, runtime);
+		// TODO: this is tricky for grammars that are layout sensitive.
+		int nextChar = input.charAtIgnoreLayout(rightExtent);
+		FollowTest followTest = nonterminal.getFollowTest();
+		if (followTest.test(nextChar)) {
+			u.pop(input, this, result, value, runtime);
+		} else {
+			runtime.recordParseError(rightExtent, this, u, "Expected " + followTest + " but was " + (char) nextChar);
+		}
 	}
 
 }

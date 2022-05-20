@@ -113,8 +113,8 @@ public class ParserLogger {
         if (logEnabled) logger.log("Pop %s, %d, %s, %s", gssNode, inputIndex, child, value);
     }
 
-    public void error(GrammarSlot slot, int i) {
-        if (logEnabled) logger.log("Error recorded at %s %d", slot, i);
+    public void error(GrammarSlot slot, int i, String errorDescription) {
+        if (logEnabled) logger.log("Error recorded at %s %d %s", slot, i, errorDescription);
     }
 
     public <T extends Result> void processDescriptor(Descriptor<T> descriptor) {

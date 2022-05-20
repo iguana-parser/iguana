@@ -92,8 +92,8 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         this.followTest = followTest;
     }
 
-    boolean testFollow(int v) {
-        return followTest.test(v);
+    public FollowTest getFollowTest() {
+        return followTest;
     }
 
     public Nonterminal getNonterminal() {

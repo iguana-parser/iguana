@@ -1,5 +1,6 @@
 {
-  "inputIndex" : 0,
+  "inputIndex" : 3,
   "lineNumber" : 1,
-  "columnNumber" : 1
+  "columnNumber" : 4,
+  "description" : "Expected [a-z, \\uFFFFFFFF] but was :"
 }

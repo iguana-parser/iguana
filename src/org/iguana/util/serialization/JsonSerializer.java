@@ -809,7 +809,8 @@ public class JsonSerializer {
                 @JsonProperty("slot") GrammarSlot slot,
                 @JsonProperty("inputIndex") int inputIndex,
                 @JsonProperty("lineNumber") int lineNumber,
-                @JsonProperty("columnNumber") int columnNumber) { }
+                @JsonProperty("columnNumber") int columnNumber,
+                @JsonProperty("description") String description) { }
     }
 
     abstract static class PrecedenceLevelMixIn {
