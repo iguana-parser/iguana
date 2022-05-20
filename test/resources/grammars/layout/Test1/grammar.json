@@ -1,0 +1,106 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "A"
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "B"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "terminals" : {
+    "L" : {
+      "kind" : "regex.Opt",
+      "regex" : {
+        "kind" : "Char",
+        "val" : 32
+      }
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  },
+  "layout" : {
+    "kind" : "Identifier",
+    "name" : "L"
+  }
+}

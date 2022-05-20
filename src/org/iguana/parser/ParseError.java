@@ -38,12 +38,14 @@ public class ParseError {
 	private final int inputIndex;
 	private final int lineNumber;
 	private final int columnNumber;
+	private final String description;
 
-    public ParseError(GrammarSlot slot, int inputIndex, int lineNumber, int columnNumber) {
+    public ParseError(GrammarSlot slot, int inputIndex, int lineNumber, int columnNumber, String description) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.lineNumber = lineNumber;
 		this.columnNumber = columnNumber;
+		this.description = description;
     }
 	
 	public int getInputIndex() {
@@ -79,6 +81,6 @@ public class ParseError {
 
 	@Override
     public String toString() {
-		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
+		return String.format("Parse error at input index: %d, line: %d, column: %d, grammar rule: %s, description: %s", inputIndex, lineNumber, columnNumber, slot, description);
     }
 }

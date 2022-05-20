@@ -46,9 +46,9 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
 	private final MatcherFactory factory;
 	
-	private Map<PositionalCondition, SlotAction> cachePositional = new HashMap<>();
+	private final Map<PositionalCondition, SlotAction> cachePositional = new HashMap<>();
 	
-	private Map<RegularExpressionCondition, SlotAction> cacheRegular = new HashMap<>();
+	private final Map<RegularExpressionCondition, SlotAction> cacheRegular = new HashMap<>();
 
 	public ToSlotActionConditionVisitor(MatcherFactory factory) {
 		this.factory = factory;
@@ -87,6 +87,11 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
                         return !input.isStartOfLine(rightExtent);
                     }
+
+					@Override
+					public String toString() {
+						return condition.getType().getDescription();
+					}
 				};
 
 
@@ -98,6 +103,10 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                         return !input.isEndOfLine(rightExtent);
                     }
 
+					@Override
+					public String toString() {
+						return condition.getType().getDescription();
+					}
 				};
 
 			case END_OF_FILE:
@@ -107,6 +116,11 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
                         return !input.isEndOfFile(rightExtent);
                     }
+
+					@Override
+					public String toString() {
+						return condition.getType().getDescription();
+					}
 				};
 
 
@@ -126,7 +140,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		    case FOLLOW:
 		    case FOLLOW_IGNORE_LAYOUT:		    	
 		    	return new SlotAction() {
-		    		Matcher matcher = factory.getMatcher(condition.getRegularExpression());
+		    		final Matcher matcher = factory.getMatcher(condition.getRegularExpression());
 
                     @Override
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
@@ -135,14 +149,14 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
 					@Override
 					public String toString() {
-					    return condition.toString();
+					    return condition.getType().getDescription();
 					}
 				};
 		    	
 		    case NOT_FOLLOW:
 		    case NOT_FOLLOW_IGNORE_LAYOUT: 
 			    return new SlotAction() {
-			    	Matcher matcher = factory.getMatcher(condition.getRegularExpression());
+			    	final Matcher matcher = factory.getMatcher(condition.getRegularExpression());
 
                     @Override
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
@@ -150,7 +164,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                     }
 
 					@Override
-					public String toString() { return condition.toString(); }
+					public String toString() { return condition.getType().toString(); }
 				};
 		    	
 		    case MATCH:
@@ -158,8 +172,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 		
 			case NOT_MATCH: 
 				return new SlotAction() {
-					Matcher matcher = factory.getMatcher(condition.getRegularExpression());
-
+					final Matcher matcher = factory.getMatcher(condition.getRegularExpression());
 
                     @Override
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
@@ -167,12 +180,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                     }
 
 					@Override
-					public String toString() { return condition.toString(); }
+					public String toString() { return condition.getType().toString(); }
 				};
 				
 			case NOT_PRECEDE: 
 				return new SlotAction() {
-					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
+					final Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
 
                     @Override
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
@@ -180,12 +193,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                     }
 
 					@Override
-					public String toString() { return condition.toString(); }
+					public String toString() { return condition.getType().toString(); }
 				};
 				
 			case PRECEDE:
 				return new SlotAction() {
-					Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
+					final Matcher matcher = factory.getBackwardsMatcher(condition.getRegularExpression());
 
                     @Override
                     public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx) {
@@ -193,7 +206,7 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
                     }
 
 					@Override
-					public String toString() { return condition.toString(); }
+					public String toString() { return condition.getType().toString(); }
 				};
 				
 			default:

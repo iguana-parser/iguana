@@ -1,0 +1,13 @@
+
+start S
+  = A B C
+
+A = 'a'
+
+B =
+
+C = 'c'
+
+layout L
+  = ' '
+  |

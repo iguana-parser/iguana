@@ -804,11 +804,13 @@ public class JsonSerializer {
     }
 
     abstract static class ParseErrorMixIn {
+        @JsonIgnore GrammarSlot slot;
         ParseErrorMixIn(
                 @JsonProperty("slot") GrammarSlot slot,
                 @JsonProperty("inputIndex") int inputIndex,
                 @JsonProperty("lineNumber") int lineNumber,
-                @JsonProperty("columnNumber") int columnNumber) { }
+                @JsonProperty("columnNumber") int columnNumber,
+                @JsonProperty("description") String description) { }
     }
 
     abstract static class PrecedenceLevelMixIn {

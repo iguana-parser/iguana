@@ -8,12 +8,14 @@ import java.util.Set;
 
 public class RangeTreeFollowTest implements FollowTest {
 
-	private IntRangeMap rangeMap;
+	private final IntRangeMap rangeMap;
+	private final String followTestToString;
 	
 	public RangeTreeFollowTest(Set<CharRange> set) {
 		RangeMapBuilder<Integer> builder = new RangeMapBuilder<>();
 		set.forEach(r -> builder.put(r, 1));
 		rangeMap = builder.buildIntRangeMap();
+		followTestToString = set.toString();
 	}
 	
 	@Override
@@ -21,4 +23,8 @@ public class RangeTreeFollowTest implements FollowTest {
 		return rangeMap.get(v) == 1;
 	}
 
+	@Override
+	public String toString() {
+		return followTestToString;
+	}
 }

@@ -1,5 +1,6 @@
 {
   "inputIndex" : 48,
   "lineNumber" : 6,
-  "columnNumber" : 2
+  "columnNumber" : 2,
+  "description" : "[indent(a1.lExt) == indent(a0.lExt)]"
 }

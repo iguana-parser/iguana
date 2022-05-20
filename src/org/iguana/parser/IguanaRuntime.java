@@ -34,6 +34,8 @@ public class IguanaRuntime<T extends Result> {
      */
     private int errorIndex;
 
+    private String errorDescription;
+
     private final Deque<Descriptor<T>> descriptorPool;
 
     private final Deque<Descriptor<T>> descriptorsStack;
@@ -105,7 +107,7 @@ public class IguanaRuntime<T extends Result> {
         descriptorsStack.clear();
 
         T result = startGSSNode.getResult(inputLength);
-        hasParseError = result == null;
+        hasParseError = result == null || result.getIndex() != input.length() - 1;
         return result;
     }
 
@@ -116,12 +118,12 @@ public class IguanaRuntime<T extends Result> {
      * the next position of input.
      *
      */
-    public void recordParseError(int i, GrammarSlot slot, GSSNode<T> u) {
+    public void recordParseError(int i, GrammarSlot slot, GSSNode<T> u, String description) {
         if (i >= this.errorIndex) {
-            logger.error(slot, i);
             this.errorIndex = i;
             this.errorSlot = slot;
-            logger.error(errorSlot, errorIndex);
+            this.errorDescription = description;
+            logger.error(errorSlot, errorIndex, errorDescription);
         }
     }
 
@@ -214,7 +216,7 @@ public class IguanaRuntime<T extends Result> {
 
     public ParseError getParseError() {
         if (!hasParseError) return null;
-        return new ParseError(errorSlot, errorIndex, input.getLineNumber(errorIndex), input.getColumnNumber(errorIndex));
+        return new ParseError(errorSlot, errorIndex, input.getLineNumber(errorIndex), input.getColumnNumber(errorIndex), errorDescription);
     }
 
     public RecognizerStatistics getStatistics() {

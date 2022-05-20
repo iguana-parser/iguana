@@ -38,7 +38,7 @@ import org.iguana.result.Result;
 
 public class EpsilonGrammarSlot extends EndGrammarSlot {
 
-	private TerminalGrammarSlot epsilonSlot;
+	private final TerminalGrammarSlot epsilonSlot;
 
 	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, Conditions conditions) {
 		super(position, nonterminal, null, null, null, conditions, FollowTest.DEFAULT);
@@ -54,8 +54,14 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
 
-		if (getNonterminal().testFollow(input.charAtIgnoreLayout(i)))
-            u.pop(input, this, epsilonSlot.getResult(input, i, this, u, runtime), value, runtime);
+		// TODO: this is tricky for grammars that are layout sensitive.
+		int nextChar = input.charAtIgnoreLayout(i);
+		FollowTest followTest = nonterminal.getFollowTest();
+		if (followTest.test(nextChar)) {
+			u.pop(input, this, epsilonSlot.getResult(input, i, this, u, runtime), value, runtime);
+		} else {
+			runtime.recordParseError(i, this, u, "Expected " + followTest + " but was " + (char) nextChar);
+		}
 	}
 
 }
