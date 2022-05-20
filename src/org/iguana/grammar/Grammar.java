@@ -5,6 +5,7 @@ import iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.iggy.IggyParser;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.serialization.JsonSerializer;
 
@@ -146,6 +147,10 @@ public class Grammar implements Serializable {
                     changed = true;
             }
         }
+    }
+
+    public static Grammar fromIggyGrammar(String content) {
+        return IggyParser.fromGrammar(content);
     }
 
     public static Grammar load(URI uri, String format) throws FileNotFoundException {

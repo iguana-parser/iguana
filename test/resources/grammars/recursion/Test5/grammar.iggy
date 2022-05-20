@@ -1,0 +1,10 @@
+
+start A
+  = B 'c'
+  | C 'd'
+  | 'e'
+
+B = A 'f'
+  | A 'g'
+
+C = A 'g'

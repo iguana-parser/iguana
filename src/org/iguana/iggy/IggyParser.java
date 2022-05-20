@@ -3,7 +3,6 @@ package org.iguana.iggy;
 import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.parser.IguanaParser;
-import org.iguana.parser.ParseError;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
 
@@ -14,6 +13,8 @@ import java.nio.file.Paths;
 import static iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
+
+    private static final IguanaParser parser = new IguanaParser(iggyGrammar());
 
     private static Grammar iggyGrammar() {
         try {
@@ -34,10 +35,15 @@ public class IggyParser {
         JsonSerializer.serialize(grammar, Paths.get("src/resources/iggy.json").toAbsolutePath().toString());
     }
 
-    public static Grammar getGrammar(String path) throws IOException {
-        IguanaParser parser = new IguanaParser(iggyGrammar());
+    public static Grammar fromGrammar(String grammar)  {
+        return getGrammar(Input.fromString(grammar));
+    }
 
-        Input input = Input.fromFile(new File(path));
+    public static Grammar getGrammar(String path) throws IOException {
+        return getGrammar(Input.fromFile(new File(path)));
+    }
+
+    private static Grammar getGrammar(Input input) {
         parser.parse(input);
         if (parser.hasParseError()) {
             System.out.println(parser.getParseError());

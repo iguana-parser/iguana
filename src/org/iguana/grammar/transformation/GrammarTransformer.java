@@ -4,6 +4,10 @@ import org.iguana.grammar.runtime.RuntimeGrammar;
 
 public class GrammarTransformer {
 
+    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
+        return transform(runtimeGrammar, runtimeGrammar.getStartSymbol().getStartSymbol());
+    }
+
     public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar, String startNonterminal) {
         RuntimeGrammar grammar = new ResolveIdentifiers().transform(runtimeGrammar);
         DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
