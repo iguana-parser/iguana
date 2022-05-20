@@ -16,17 +16,14 @@ public class IggyParserTest {
 
     @Test
     public void test() throws Exception {
-        Path grammarPath = Paths.get("test/resources/Grammar.iggy");
+        Path grammarPath = Paths.get("src/resources/Iguana.iggy");
         Grammar grammar = IggyParser.getGrammar(grammarPath.toAbsolutePath().toString());
 
-        System.out.println(grammar);
-        System.out.println(JsonSerializer.serialize(grammar));
-
-        String expectedJson = getFileContent(Paths.get("test/resources/Grammar.json"));
+        String expectedJson = getFileContent(Paths.get("src/resources/iggy.json"));
         assertEquals(expectedJson.trim(), JsonSerializer.serialize(grammar).trim());
 
-        Grammar expectedGrammar = JsonSerializer.deserialize(expectedJson, Grammar.class);
-        assertEquals(expectedGrammar, grammar);
+        Grammar deserializedGrammar = JsonSerializer.deserialize(expectedJson, Grammar.class);
+        assertEquals(deserializedGrammar, grammar);
     }
 
     private static String getFileContent(Path path) throws IOException {
