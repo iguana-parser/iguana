@@ -61,7 +61,7 @@ public class PackedNode implements SPPFNode {
     }
 
     private int getPivot() {
-        return leftChild.getIndex();
+        return leftChild.getRightExtent();
     }
 
     @Override
@@ -75,8 +75,8 @@ public class PackedNode implements SPPFNode {
     }
 
     @Override
-    public int getIndex() {
-        return (rightChild != null) ? rightChild.getIndex() : leftChild.getIndex();
+    public int getRightExtent() {
+        return (rightChild != null) ? rightChild.getRightExtent() : leftChild.getRightExtent();
     }
 
     @Override

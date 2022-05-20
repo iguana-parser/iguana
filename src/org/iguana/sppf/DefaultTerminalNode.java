@@ -14,7 +14,7 @@ public class DefaultTerminalNode extends TerminalNode {
     }
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return righExtent;
     }
 

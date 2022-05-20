@@ -103,7 +103,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public boolean pop(Input input, EndGrammarSlot slot, T result, Object value, IguanaRuntime<T> runtime) {
-		ParserLogger.getInstance().pop(this, result.getIndex(), result, value);
+		ParserLogger.getInstance().pop(this, result.getRightExtent(), result, value);
 		T node = addPoppedElements(slot, result, value, runtime.getResultOps());
 		if (node != null)
 			iterateOverEdges(input, node, runtime);
@@ -119,10 +119,10 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 			firstPoppedElement = ops.convert(null, child, slot, value);
 			return firstPoppedElement;
 		} else {
-			int rightIndex = child.getIndex();
+			int rightIndex = child.getRightExtent();
 
 			// Only one node is added and there is an ambiguity
-			if (rightIndex == firstPoppedElement.getIndex() && Objects.equals(value, firstPoppedElement.getValue())) {
+			if (rightIndex == firstPoppedElement.getRightExtent() && Objects.equals(value, firstPoppedElement.getValue())) {
 				ops.convert(firstPoppedElement, child, slot, value);
 				return null;
 			} else {
@@ -149,7 +149,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
-		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getIndex()))) {
+		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getRightExtent()))) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
 			if (result != null) {
 				// TODO: verify if this fix is correct with more data-dependent examples.
@@ -178,7 +178,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
-		if (!returnSlot.testFollow(input.charAt(node.getIndex()))) return;
+		if (!returnSlot.testFollow(input.charAt(node.getRightExtent()))) return;
 
 		T result = addDescriptor(input, this, node, edge, returnSlot, runtime);
 		if (result != null) {
@@ -197,7 +197,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
      *
      */
     private T addDescriptor(Input input, GSSNode<T> source, T result, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
-        int inputIndex = result.isDummy() ? source.getInputIndex() : result.getIndex();
+        int inputIndex = result.isDummy() ? source.getInputIndex() : result.getRightExtent();
         Environment env = edge.getEnv() == null ? runtime.getEmptyEnvironment() : edge.getEnv();
         GSSNode<T> destination = edge.getDestination() != null ? edge.getDestination() : source;
 

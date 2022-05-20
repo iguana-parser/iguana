@@ -1,4 +1,4 @@
 <note>
-    <from>Bob</from>
+    <from>Bob</to>
     <to>Alice</to>
 </note>

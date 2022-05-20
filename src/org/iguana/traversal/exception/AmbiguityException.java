@@ -19,8 +19,8 @@ public class AmbiguityException extends RuntimeException {
 
     @Override
     public String toString() {
-        int lineNumber = input.getLineNumber(node.getIndex());
-        int columnNumber = input.getColumnNumber(node.getIndex());
+        int lineNumber = input.getLineNumber(node.getRightExtent());
+        int columnNumber = input.getColumnNumber(node.getRightExtent());
         return String.format("Ambiguity found for node %s at (%d, %d)", node, lineNumber, columnNumber);
     }
 }

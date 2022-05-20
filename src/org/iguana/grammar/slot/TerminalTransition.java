@@ -61,7 +61,7 @@ public class TerminalTransition extends AbstractTransition {
 	
 	@Override
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-        int i = result.isDummy() ? u.getInputIndex() : result.getIndex();
+        int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		runtime.setEnvironment(env);
 		
@@ -83,8 +83,8 @@ public class TerminalTransition extends AbstractTransition {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getIndex(), runtime.getEvaluatorContext(), runtime)) {
-			terminalSlot.recordFailure(cr.getIndex());
+		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(), runtime.getEvaluatorContext(), runtime)) {
+			terminalSlot.recordFailure(cr.getRightExtent());
 			return;
 		}
 

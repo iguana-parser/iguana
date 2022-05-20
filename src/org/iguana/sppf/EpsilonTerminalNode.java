@@ -15,7 +15,7 @@ public class EpsilonTerminalNode extends TerminalNode {
     }
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return getLeftExtent();
     }
 }

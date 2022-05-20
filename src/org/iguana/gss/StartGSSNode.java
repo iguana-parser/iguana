@@ -61,7 +61,7 @@ public class StartGSSNode<T extends Result> implements GSSNode<T> {
     public boolean pop(Input input, EndGrammarSlot slot, T result, Object value, IguanaRuntime<T> runtime) {
         ParserLogger.getInstance().pop(this, result.getLeftExtent(), result, value);
 
-        int index = result.getIndex();
+        int index = result.getRightExtent();
         T poppedElement = poppedElements.get(index);
 
         if (poppedElement == null) {

@@ -1,7 +1,7 @@
 package org.iguana.result;
 
 public interface Result {
-    int getIndex();
+    int getRightExtent();
     int getLeftExtent();
     boolean isDummy();
     Object getValue();

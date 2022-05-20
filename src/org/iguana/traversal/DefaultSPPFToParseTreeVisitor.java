@@ -254,7 +254,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
             return null;
         }
-        return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getIndex());
+        return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
     }
 
     private T convertSPPFNode(SPPFNode node) {

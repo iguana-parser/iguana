@@ -14,7 +14,7 @@ public class KeywordTerminalNode extends TerminalNode {
     }
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return rightExtent;
     }
 

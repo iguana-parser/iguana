@@ -1,8 +1,8 @@
 package org.iguana.result;
 
 public interface RecognizerResult extends Result {
-    static RecognizerResult of(int index) {
-        return new SimpleRecognizerResult(index);
+    static RecognizerResult of(int start, int end) {
+        return new SimpleRecognizerResult(start, end);
     }
 
     static RecognizerResult of(int index, Object value) {
@@ -12,20 +12,22 @@ public interface RecognizerResult extends Result {
 
 class SimpleRecognizerResult implements RecognizerResult {
 
+    private final int start;
     private final int index;
 
-    SimpleRecognizerResult(int index) {
-        this.index = index;
+    SimpleRecognizerResult(int start, int end) {
+        this.start = start;
+        this.index = end;
     }
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return index;
     }
 
     @Override
     public int getLeftExtent() {
-        return index;
+        return start;
     }
 
         @Override
@@ -55,7 +57,7 @@ class DataDependentRecognizerResult implements RecognizerResult {
     }
 
     @Override
-    public int getIndex() {
+    public int getRightExtent() {
         return index;
     }
 

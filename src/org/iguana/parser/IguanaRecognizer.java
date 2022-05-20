@@ -46,12 +46,13 @@ public class IguanaRecognizer {
     }
 
     public boolean recognize(Input input,  Map<String, Object> map, boolean global) {
+        clear();
         IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps);
         RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
         this.parseError = runtime.getParseError();
         this.statistics = runtime.getStatistics();
         if (root == null) return false;
-        return root.getIndex() == input.length() - 1;
+        return root.getRightExtent() == input.length() - 1;
     }
 
     public RecognizerStatistics getStatistics() {
