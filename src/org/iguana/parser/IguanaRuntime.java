@@ -105,7 +105,7 @@ public class IguanaRuntime<T extends Result> {
         descriptorsStack.clear();
 
         T result = startGSSNode.getResult(inputLength);
-        hasParseError = result == null;
+        hasParseError = result == null || result.getIndex() != input.length() - 1;
         return result;
     }
 

@@ -315,35 +315,74 @@
                   "symbols" : [
                     {
                       "kind" : "Opt",
-                      "name" : "start?",
+                      "name" : "(start | layout)?",
                       "s" : {
-                        "kind" : "Terminal",
-                        "name" : "start",
-                        "regex" : {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 115
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 116
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 97
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 114
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 116
+                        "kind" : "Alt",
+                        "name" : "(start | layout)",
+                        "symbols" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "start",
+                            "regex" : {
+                              "kind" : "regex.Seq",
+                              "symbols" : [
+                                {
+                                  "kind" : "Char",
+                                  "val" : 115
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 116
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 97
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 114
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 116
+                                }
+                              ]
                             }
-                          ]
-                        }
+                          },
+                          {
+                            "kind" : "Terminal",
+                            "name" : "layout",
+                            "regex" : {
+                              "kind" : "regex.Seq",
+                              "symbols" : [
+                                {
+                                  "kind" : "Char",
+                                  "val" : 108
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 97
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 121
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 111
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 117
+                                },
+                                {
+                                  "kind" : "Char",
+                                  "val" : 116
+                                }
+                              ]
+                            }
+                          }
+                        ]
                       }
                     },
                     {

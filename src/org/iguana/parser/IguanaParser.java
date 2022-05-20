@@ -73,9 +73,13 @@ public class IguanaParser extends IguanaRecognizer {
         long start = System.nanoTime();
         this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
         long end = System.nanoTime();
-        System.out.println("Parsing finished in " + (end - start) / 1000_000 + "ms.");
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
+        if (parseError != null) {
+            System.out.println(parseError);
+        } else {
+            System.out.println("Parsing finished in " + (end - start) / 1000_000 + "ms.");
+        }
     }
 
     @Override

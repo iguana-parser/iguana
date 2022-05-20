@@ -107,7 +107,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     /*
-     * Rule : "start"? Identifier Parameters? ":" Body          %Syntax
+     * Rule : ("start" | "layout")? Identifier Parameters? ":" Body          %Syntax
      *      | "layout"? "terminal" Identifier ":" RegexBody     %Lexical
      *      ;
      */
@@ -120,7 +120,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
 
                 if (!node.childAt(0).children().isEmpty()) { // start symbol
-                    start = nonterminalName.getName();
+                    String text = node.childAt(0).getText();
+                    if (text.equals("start")) {
+                        start = nonterminalName.getName();
+                    } else { // "layout"
+                        layout = nonterminalName;
+                    }
                 }
 
                 Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters).build();

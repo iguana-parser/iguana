@@ -16,7 +16,7 @@ MapEntry
   = Identifier '=' Initializer
 
 Rule
-  = "start"? Identifier Parameters? "=" Body        %Syntax
+  = ("start" | "layout")? Identifier Parameters? "=" Body        %Syntax
   | "layout"? "terminal" Identifier "=" RegexBody   %Lexical
 
 RegexRule

@@ -79,6 +79,6 @@ public class ParseError {
 
 	@Override
     public String toString() {
-		return String.format("Parse error at input index: %d, line: %d, column: %d", inputIndex, lineNumber, columnNumber);
+		return String.format("Parse error at input index: %d, line: %d, column: %d, grammar rule: %s", inputIndex, lineNumber, columnNumber, slot);
     }
 }

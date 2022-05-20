@@ -804,6 +804,7 @@ public class JsonSerializer {
     }
 
     abstract static class ParseErrorMixIn {
+        @JsonIgnore GrammarSlot slot;
         ParseErrorMixIn(
                 @JsonProperty("slot") GrammarSlot slot,
                 @JsonProperty("inputIndex") int inputIndex,
