@@ -370,7 +370,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return Align.align((Symbol) node.childAt(1).accept(this));
 
             case "Ignore":
-                return Ignore.ignore((Symbol) node.childAt(0).accept(this));
+                return Ignore.ignore((Symbol) node.childAt(1).accept(this));
 
             case "IfThenElse":
                 return IfThenElse.ifThenElse(

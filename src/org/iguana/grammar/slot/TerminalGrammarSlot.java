@@ -74,6 +74,9 @@ public class TerminalGrammarSlot implements GrammarSlot {
 
 
 	public void recordFailure(int index) {
+		if (terminalNodes == null) {
+			terminalNodes = new OpenAddressingIntHashMap<>();
+		}
 		terminalNodes.put(index, failure);
 	}
 

@@ -1,4 +1,0 @@
-<note>
-    <from>Bob</to>
-    <to>Alice</to>
-</note>

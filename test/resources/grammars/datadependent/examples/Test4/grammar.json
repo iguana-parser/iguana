@@ -1,0 +1,371 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Exp"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "+",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 43
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    }
+                  ],
+                  "associativity" : "LEFT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "let",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Decls"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "in",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Num"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Decls"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Align",
+                      "name" : "align offside Decl*",
+                      "symbol" : {
+                        "kind" : "Star",
+                        "name" : "offside Decl*",
+                        "s" : {
+                          "kind" : "Offside",
+                          "name" : "offside Decl",
+                          "symbol" : {
+                            "kind" : "Identifier",
+                            "name" : "Decl"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Ignore",
+                      "name" : "ignore {",
+                      "symbol" : {
+                        "kind" : "Terminal",
+                        "name" : "{",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 123
+                        }
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Decl"
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "(; Decl)*",
+                      "s" : {
+                        "kind" : "Sequence",
+                        "name" : "(; Decl)",
+                        "symbols" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : ";",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 59
+                            }
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "Decl"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "}",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 125
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Decl"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Id"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "=",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 61
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Exp"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "terminals" : {
+    "Whitespaces" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 10
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    },
+    "Num" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 49,
+              "end" : 57
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "CharRange",
+                "start" : 48,
+                "end" : 57
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Id" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 97,
+              "end" : 122
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 65,
+              "end" : 90
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "CharRange",
+                "start" : 97,
+                "end" : 122
+              },
+              {
+                "kind" : "CharRange",
+                "start" : 65,
+                "end" : 90
+              },
+              {
+                "kind" : "CharRange",
+                "start" : 48,
+                "end" : 57
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(Start)",
+    "startSymbol" : "Start"
+  },
+  "layout" : {
+    "kind" : "Identifier",
+    "name" : "Whitespaces"
+  }
+}
