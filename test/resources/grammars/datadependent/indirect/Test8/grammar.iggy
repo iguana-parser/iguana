@@ -1,0 +1,11 @@
+
+start S
+  = E
+
+E =        E X
+  > right  E ';' E
+  > '-' E
+  | 'a'
+
+X = X ',' E
+  | ',' E

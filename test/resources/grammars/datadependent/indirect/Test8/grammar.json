@@ -1,0 +1,186 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "X"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    }
+                  ],
+                  "associativity" : "RIGHT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "-",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 45
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "X"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ",",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 44
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : ",",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 44
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "E"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}
