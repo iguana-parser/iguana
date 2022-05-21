@@ -1,0 +1,411 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "-",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 45
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 3
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{3}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 3
+          }
+        }
+      ],
+      "recursion" : "RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 3,
+      "precedenceLevel" : {
+        "lhs" : 3,
+        "rhs" : 3,
+        "undefined" : 3,
+        "hasPrefixUnary" : true,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 4,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "*",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 42
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 3
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{2}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 2
+          }
+        }
+      ],
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "LEFT",
+      "precedence" : 2,
+      "precedenceLevel" : {
+        "lhs" : 2,
+        "rhs" : 2,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 3,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 1
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 1
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "+",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 43
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{1}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 1
+          }
+        }
+      ],
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "LEFT",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{0}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 0
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}

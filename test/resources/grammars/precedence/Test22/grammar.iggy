@@ -1,0 +1,10 @@
+
+start S
+  = E
+
+E = left  E '+' E
+  >       'if' E 'then' E 'else' E
+  |       'a'
+
+layout terminal Whitespaces
+  = [\t\n\r\ ]*

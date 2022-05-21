@@ -1,0 +1,2157 @@
+{
+  "layout" : {
+    "kind" : "Terminal",
+    "name" : "Whitespaces",
+    "nodeType" : "Layout",
+    "regex" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 10
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    }
+  },
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 7
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 7
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ".",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 46
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Id",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 105
+              },
+              {
+                "kind" : "Char",
+                "val" : 100
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{0}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 0
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 7,
+      "precedenceLevel" : {
+        "lhs" : 7,
+        "rhs" : 7,
+        "undefined" : 7,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : true,
+        "hasPrefixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2,
+          5
+        ],
+        "hasPostfixUnaryBelow" : false,
+        "index" : 8,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 6
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 6
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 7
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(r <= 0)? 6 : min(r,6)}",
+          "expression" : {
+            "kind" : "IfThenElse",
+            "condition" : {
+              "kind" : "LessThanEqual",
+              "lhs" : {
+                "kind" : "Name",
+                "name" : "r",
+                "i" : -1
+              },
+              "rhs" : {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            },
+            "thenPart" : {
+              "kind" : "Integer",
+              "value" : 6
+            },
+            "elsePart" : {
+              "kind" : "Min",
+              "arguments" : [
+                {
+                  "kind" : "Name",
+                  "name" : "r",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Integer",
+                  "value" : 6
+                }
+              ],
+              "fun" : "min"
+            }
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "LEFT",
+      "precedence" : 6,
+      "precedenceLevel" : {
+        "lhs" : 6,
+        "rhs" : 6,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2,
+          5
+        ],
+        "hasPostfixUnaryBelow" : false,
+        "index" : 7,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "-",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 45
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 5
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(r <= 0)? 5 : min(r,5)}",
+          "expression" : {
+            "kind" : "IfThenElse",
+            "condition" : {
+              "kind" : "LessThanEqual",
+              "lhs" : {
+                "kind" : "Name",
+                "name" : "r",
+                "i" : -1
+              },
+              "rhs" : {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            },
+            "thenPart" : {
+              "kind" : "Integer",
+              "value" : 5
+            },
+            "elsePart" : {
+              "kind" : "Min",
+              "arguments" : [
+                {
+                  "kind" : "Name",
+                  "name" : "r",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Integer",
+                  "value" : 5
+                }
+              ],
+              "fun" : "min"
+            }
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 5,
+      "precedenceLevel" : {
+        "lhs" : 5,
+        "rhs" : 5,
+        "undefined" : 5,
+        "hasPrefixUnary" : true,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2
+        ],
+        "hasPostfixUnaryBelow" : false,
+        "index" : 6,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 4
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 4
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "*",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 42
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 5
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(r <= 0)? 4 : min(r,4)}",
+          "expression" : {
+            "kind" : "IfThenElse",
+            "condition" : {
+              "kind" : "LessThanEqual",
+              "lhs" : {
+                "kind" : "Name",
+                "name" : "r",
+                "i" : -1
+              },
+              "rhs" : {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            },
+            "thenPart" : {
+              "kind" : "Integer",
+              "value" : 4
+            },
+            "elsePart" : {
+              "kind" : "Min",
+              "arguments" : [
+                {
+                  "kind" : "Name",
+                  "name" : "r",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Integer",
+                  "value" : 4
+                }
+              ],
+              "fun" : "min"
+            }
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "LEFT",
+      "precedence" : 4,
+      "precedenceLevel" : {
+        "lhs" : 4,
+        "rhs" : 4,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2
+        ],
+        "hasPostfixUnaryBelow" : false,
+        "index" : 5,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 3
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "+",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 43
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 4
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(r <= 0)? 3 : min(r,3)}",
+          "expression" : {
+            "kind" : "IfThenElse",
+            "condition" : {
+              "kind" : "LessThanEqual",
+              "lhs" : {
+                "kind" : "Name",
+                "name" : "r",
+                "i" : -1
+              },
+              "rhs" : {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            },
+            "thenPart" : {
+              "kind" : "Integer",
+              "value" : 3
+            },
+            "elsePart" : {
+              "kind" : "Min",
+              "arguments" : [
+                {
+                  "kind" : "Name",
+                  "name" : "r",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Integer",
+                  "value" : 3
+                }
+              ],
+              "fun" : "min"
+            }
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "associativityGroup" : {
+        "associativity" : "LEFT",
+        "precedenceLevel" : {
+          "lhs" : 3,
+          "rhs" : 3,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : true,
+          "prefixUnaryBelow" : [
+            2
+          ],
+          "hasPostfixUnaryBelow" : false,
+          "index" : 4,
+          "containsAssociativityGroup" : true,
+          "assoc_lhs" : 3,
+          "assoc_rhs" : 3
+        },
+        "lhs" : 3,
+        "rhs" : 3,
+        "precedence" : 3
+      },
+      "precedence" : 3,
+      "precedenceLevel" : {
+        "lhs" : 3,
+        "rhs" : 3,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2
+        ],
+        "hasPostfixUnaryBelow" : false,
+        "index" : 4,
+        "containsAssociativityGroup" : true,
+        "assoc_lhs" : 3,
+        "assoc_rhs" : 3
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 3
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "-",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 45
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 4
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(r <= 0)? 3 : min(r,3)}",
+          "expression" : {
+            "kind" : "IfThenElse",
+            "condition" : {
+              "kind" : "LessThanEqual",
+              "lhs" : {
+                "kind" : "Name",
+                "name" : "r",
+                "i" : -1
+              },
+              "rhs" : {
+                "kind" : "Integer",
+                "value" : 0
+              }
+            },
+            "thenPart" : {
+              "kind" : "Integer",
+              "value" : 3
+            },
+            "elsePart" : {
+              "kind" : "Min",
+              "arguments" : [
+                {
+                  "kind" : "Name",
+                  "name" : "r",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Integer",
+                  "value" : 3
+                }
+              ],
+              "fun" : "min"
+            }
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "associativityGroup" : {
+        "associativity" : "LEFT",
+        "precedenceLevel" : {
+          "lhs" : 3,
+          "rhs" : 3,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : true,
+          "prefixUnaryBelow" : [
+            2
+          ],
+          "hasPostfixUnaryBelow" : false,
+          "index" : 4,
+          "containsAssociativityGroup" : true,
+          "assoc_lhs" : 3,
+          "assoc_rhs" : 3
+        },
+        "lhs" : 3,
+        "rhs" : 3,
+        "precedence" : 3
+      },
+      "precedence" : 3,
+      "precedenceLevel" : {
+        "lhs" : 3,
+        "rhs" : 3,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : true,
+        "prefixUnaryBelow" : [
+          2
+        ],
+        "hasPostfixUnaryBelow" : false,
+        "index" : 4,
+        "containsAssociativityGroup" : true,
+        "assoc_lhs" : 3,
+        "assoc_rhs" : 3
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "if",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 105
+              },
+              {
+                "kind" : "Char",
+                "val" : 102
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "then",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 116
+              },
+              {
+                "kind" : "Char",
+                "val" : 104
+              },
+              {
+                "kind" : "Char",
+                "val" : 101
+              },
+              {
+                "kind" : "Char",
+                "val" : 110
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 2
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{2}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 2
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 2,
+      "precedenceLevel" : {
+        "lhs" : 2,
+        "rhs" : 2,
+        "undefined" : 2,
+        "hasPrefixUnary" : true,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 3,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 1
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
+                }
+              }
+            }
+          ],
+          "postConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "LessThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 0
+                  }
+                },
+                "rhs" : {
+                  "kind" : "GreaterThanEqual",
+                  "lhs" : {
+                    "kind" : "Name",
+                    "name" : "l",
+                    "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
+                  }
+                }
+              }
+            }
+          ],
+          "variable" : "l",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ";",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 59
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{1}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 1
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "LEFT_RIGHT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "RIGHT",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "(",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 40
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : ")",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 41
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{0}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 0
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E",
+        "parameters" : [
+          "p"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{0}",
+          "expression" : {
+            "kind" : "Integer",
+            "value" : 0
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "Whitespaces",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    }
+  ],
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  }
+}
