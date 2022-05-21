@@ -1,0 +1,8 @@
+
+start S
+  = E
+
+E = right   E '^' E
+  > left    E '+' E
+  >         '-' E
+  |         'a'
