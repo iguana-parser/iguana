@@ -61,23 +61,7 @@
                             "kind" : "GreaterThanEqual",
                             "lhs" : {
                               "kind" : "Integer",
-                              "value" : 3
-                            },
-                            "rhs" : {
-                              "kind" : "Name",
-                              "name" : "l",
-                              "i" : -1
-                            }
-                          }
-                        },
-                        {
-                          "kind" : "DataDependentCondition",
-                          "type" : "DATA_DEPENDENT",
-                          "expression" : {
-                            "kind" : "GreaterThanEqual",
-                            "lhs" : {
-                              "kind" : "Integer",
-                              "value" : 3
+                              "value" : 5
                             },
                             "rhs" : {
                               "kind" : "Name",
@@ -90,7 +74,7 @@
                       "arguments" : [
                         {
                           "kind" : "Integer",
-                          "value" : 4
+                          "value" : 5
                         },
                         {
                           "kind" : "Name",
@@ -101,10 +85,44 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "^",
+                      "name" : "z",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 94
+                        "val" : 122
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "x",
+                      "preConditions" : [
+                        {
+                          "kind" : "DataDependentCondition",
+                          "type" : "DATA_DEPENDENT",
+                          "expression" : {
+                            "kind" : "GreaterThanEqual",
+                            "lhs" : {
+                              "kind" : "Integer",
+                              "value" : 4
+                            },
+                            "rhs" : {
+                              "kind" : "Name",
+                              "name" : "l",
+                              "i" : -1
+                            }
+                          }
+                        }
+                      ],
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 120
                       }
                     },
                     {
@@ -112,12 +130,13 @@
                       "name" : "E",
                       "arguments" : [
                         {
-                          "kind" : "Integer",
-                          "value" : 0
+                          "kind" : "Name",
+                          "name" : "l",
+                          "i" : -1
                         },
                         {
                           "kind" : "Integer",
-                          "value" : 3
+                          "value" : 4
                         }
                       ]
                     }
@@ -140,7 +159,7 @@
                             "kind" : "GreaterThanEqual",
                             "lhs" : {
                               "kind" : "Integer",
-                              "value" : 2
+                              "value" : 3
                             },
                             "rhs" : {
                               "kind" : "Name",
@@ -153,7 +172,7 @@
                       "arguments" : [
                         {
                           "kind" : "Integer",
-                          "value" : 0
+                          "value" : 3
                         },
                         {
                           "kind" : "Integer",
@@ -163,11 +182,59 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "-",
+                      "name" : "w",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 45
+                        "val" : 119
                       }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "y",
+                      "preConditions" : [
+                        {
+                          "kind" : "DataDependentCondition",
+                          "type" : "DATA_DEPENDENT",
+                          "expression" : {
+                            "kind" : "GreaterThanEqual",
+                            "lhs" : {
+                              "kind" : "Integer",
+                              "value" : 2
+                            },
+                            "rhs" : {
+                              "kind" : "Name",
+                              "name" : "l",
+                              "i" : -1
+                            }
+                          }
+                        }
+                      ],
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 121
+                      }
+                    },
+                    {
+                      "kind" : "Nonterminal",
+                      "name" : "E",
+                      "arguments" : [
+                        {
+                          "kind" : "Integer",
+                          "value" : 0
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : 0
+                        }
+                      ]
                     }
                   ]
                 }
