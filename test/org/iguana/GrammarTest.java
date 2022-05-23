@@ -48,7 +48,7 @@ public class GrammarTest {
     }
 
     @TestFactory
-    Collection<DynamicTest> grammarTests() throws IOException {
+    public Collection<DynamicTest> grammarTests() throws IOException {
         String path = Paths.get("test/resources/grammars").toAbsolutePath().toString();
 
         List<Path> testPaths = getTests(path).stream().map(test -> Paths.get(test)).collect(Collectors.toList());
