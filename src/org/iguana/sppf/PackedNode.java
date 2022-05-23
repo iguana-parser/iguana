@@ -111,13 +111,4 @@ public class PackedNode implements SPPFNode {
     public int childrenCount() {
         return (rightChild == null) ? 1 : 2;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof PackedNode)) return false;
-
-        PackedNode other = (PackedNode) obj;
-        return slot == other.slot && getPivot() == other.getPivot();
-    }
 }

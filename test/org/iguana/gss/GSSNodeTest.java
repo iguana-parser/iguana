@@ -1,16 +1,15 @@
 package org.iguana.gss;
 
-import iguana.regex.Seq;
 import iguana.utils.input.Input;
-import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.ParserResultOps;
+import org.iguana.sppf.DefaultTerminalNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
@@ -29,8 +28,8 @@ public class GSSNodeTest {
 
     @Before
     public void init() {
-        RuntimeRule rule = RuntimeRule.withHead(Nonterminal.withName("A")).addSymbol(Terminal.from(Seq.from("a"))).build();
-        RuntimeGrammar grammar = RuntimeGrammar.builder().addRule(rule).build();
+        RuntimeGrammar grammar = Grammar.fromIggyGrammar(
+            "start A = 'a'").toRuntimeGrammar();
 
         grammarGraph = GrammarGraphBuilder.from(grammar);
         input = Input.fromString("Test");
@@ -38,51 +37,59 @@ public class GSSNodeTest {
 
     @Test
     public void test() {
-        GSSNode gssNode = new DefaultGSSNode(null, 0);
+        GSSNode gssNode = new StartGSSNode<>(grammarGraph.getNonterminalGrammarSlots().get(0), 0);
 
-        // TODO: find another way to write these tests
-        EndGrammarSlot endGrammarSlot = null; // grammarGraph.getEndGrammarSlot("A ::= a .");
+        NonterminalGrammarSlot nonterminalGrammarSlot = grammarGraph.getNonterminalGrammarSlots().get(0);// A
+        EndGrammarSlot endGrammarSlot = (EndGrammarSlot) grammarGraph.getBodyGrammarSlots().get(1); // A ::= a.
 
-        TerminalNode terminalNode01 = null; //new DefaultTerminalNode("a", 0, 1);
-        TerminalNode terminalNode02 = null; //sppfFactory.createTerminalNode("a", 0, 2);
-        TerminalNode terminalNode03 = null; //sppfFactory.createTerminalNode("a", 0, 3);
+        TerminalNode terminalNode01 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 1);
+        TerminalNode terminalNode02 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 2);
+        TerminalNode terminalNode03 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 3);
 
-        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(Configuration.load(), new ParserResultOps());
+        ParserResultOps resultOps = new ParserResultOps();
+        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(Configuration.load(), resultOps);
 
         // Pop ("a", 0, 1)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));
 
-        NonterminalNode expected = null; //sppfFactory.createNonterminalNode("A ::= a .", terminalNode01);
         Iterator<NonPackedNode> it = gssNode.getPoppedElements().iterator();
-        assertEquals(expected, it.next());
+        NonterminalNode nonterminalNode1 = (NonterminalNode) it.next(); // (A, 0, 1)
+        assertEquals(nonterminalGrammarSlot, nonterminalNode1.getGrammarSlot());
+        assertEquals(0, nonterminalNode1.getLeftExtent());
+        assertEquals(1, nonterminalNode1.getRightExtent());
 
         // Pop ("a", 0, 1)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));
         assertEquals(1, gssNode.countPoppedElements());
-        it = gssNode.getPoppedElements().iterator();
-        assertEquals(2, (it.next()).childrenCount());
+        assertTrue(nonterminalNode1.isAmbiguous());
+        assertEquals(2, resultOps.getPackedNodes(nonterminalNode1).size());
 
         // Pop ("a", 0, 2)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(2, gssNode.countPoppedElements());
         it = gssNode.getPoppedElements().iterator();
-        assertEquals(2, it.next().childrenCount());
-        assertEquals(1, it.next().childrenCount());
+        it.next(); // (A, 0, 1)
+        NonterminalNode nonterminalNode2 = (NonterminalNode) it.next(); // (A, 0, 2)
+        assertFalse(nonterminalNode2.isAmbiguous());
+        assertEquals(2, resultOps.getPackedNodes(nonterminalNode1).size());
 
         // Pop ("a", 0, 3)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode03, runtime));
         assertEquals(3, gssNode.countPoppedElements());
         it = gssNode.getPoppedElements().iterator();
-        assertEquals(2, it.next().childrenCount());
-        assertEquals(1, it.next().childrenCount());
-        assertEquals(1, it.next().childrenCount());
+        it.next(); // (A, 0, 1)
+        it.next(); // (A, 0, 2)
+        NonterminalNode nonterminalNode3 = (NonterminalNode) it.next();
+        assertEquals(2, resultOps.getPackedNodes(nonterminalNode1).size());
+        assertFalse(nonterminalNode2.isAmbiguous());
+        assertFalse(nonterminalNode3.isAmbiguous());
 
         // Pop ("a", 0, 2)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(3, gssNode.countPoppedElements());
         it = gssNode.getPoppedElements().iterator();
-        assertEquals(2, it.next().childrenCount());
-        assertEquals(2, it.next().childrenCount());
-        assertEquals(1, it.next().childrenCount());
+        assertTrue(nonterminalNode2.isAmbiguous());
+        assertEquals(2, resultOps.getPackedNodes(nonterminalNode1).size());
+        assertEquals(2, resultOps.getPackedNodes(nonterminalNode2).size());
     }
 }
