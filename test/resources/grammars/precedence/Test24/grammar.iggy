@@ -1,0 +1,19 @@
+
+start S
+  = E
+
+E =         E '.' Id
+  > left    E E
+  >         '-' E
+  > left    E '*' E
+  > left    (E '+' E |  E '-' E)
+  > 'if'    E 'then' E
+  > right   E ';' E
+  |         '(' E ')'
+  |         'a'
+
+terminal Id
+  = 'id'
+
+layout terminal Whitespaces
+  = [\t\n\r\ ]*

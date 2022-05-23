@@ -53,8 +53,8 @@ public class StartGSSNode<T extends Result> implements GSSNode<T> {
     }
 
     @Override
-    public boolean pop(Input input, EndGrammarSlot slot, T child, IguanaRuntime<T> runtime) {
-        return false;
+    public boolean pop(Input input, EndGrammarSlot slot, T result, IguanaRuntime<T> runtime) {
+        return pop(input, slot, result, null, runtime);
     }
 
     @Override

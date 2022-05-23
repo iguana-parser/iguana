@@ -65,6 +65,40 @@
               {
                 "kind" : "Nonterminal",
                 "name" : "E",
+                "preConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "GreaterThanEqual",
+                      "lhs" : {
+                        "kind" : "Integer",
+                        "value" : 3
+                      },
+                      "rhs" : {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      }
+                    }
+                  },
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "GreaterThanEqual",
+                      "lhs" : {
+                        "kind" : "Integer",
+                        "value" : 3
+                      },
+                      "rhs" : {
+                        "kind" : "Name",
+                        "name" : "r",
+                        "i" : -1
+                      }
+                    }
+                  }
+                ],
                 "arguments" : [
                   {
                     "kind" : "Integer",
@@ -206,6 +240,40 @@
                       {
                         "kind" : "Nonterminal",
                         "name" : "E",
+                        "preConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "GreaterThanEqual",
+                              "lhs" : {
+                                "kind" : "Integer",
+                                "value" : 3
+                              },
+                              "rhs" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              }
+                            }
+                          },
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "GreaterThanEqual",
+                              "lhs" : {
+                                "kind" : "Integer",
+                                "value" : 3
+                              },
+                              "rhs" : {
+                                "kind" : "Name",
+                                "name" : "r",
+                                "i" : -1
+                              }
+                            }
+                          }
+                        ],
                         "arguments" : [
                           {
                             "kind" : "Integer",

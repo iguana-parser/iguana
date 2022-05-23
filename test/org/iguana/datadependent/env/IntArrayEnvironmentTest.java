@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class IntArrayEnvironmentTest {
 
-    private long combine(int first, int second) {
+    private static long combine(int first, int second) {
         return toUnsignedLong(first) << 32 | toUnsignedLong(second);
     }
 

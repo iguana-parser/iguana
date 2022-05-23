@@ -1,5 +1,5 @@
 
 start E
   = left E '+' E
-  > '-' E
-  | 'a'
+  >      '-' E
+  |      'a'

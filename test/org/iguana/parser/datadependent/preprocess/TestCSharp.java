@@ -60,7 +60,6 @@ public class TestCSharp {
 	private static RuntimeGrammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));
 	private static Nonterminal start = Nonterminal.withName("CompilationUnit");
 	
-	@Test
 	public void test1() throws Exception {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test1.cs").getPath()));
 
@@ -81,7 +80,6 @@ public class TestCSharp {
 		
 	}
 	
-	@Test
 	public void test2() throws Exception {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test2.cs").getPath()));
 
@@ -104,7 +102,6 @@ public class TestCSharp {
 //		assertTrue(nodes.isEmpty());
 	}
 
-	@Test
 	public void test3() throws Exception {
 		Input input = Input.fromFile(new File(getClass().getResource("examples/Test7.cs").getPath()));
 

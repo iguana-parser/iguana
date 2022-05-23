@@ -1,0 +1,9 @@
+
+start S
+  = E
+
+E = E 'z'
+  > 'x' E
+  > E 'w'
+  > 'y' E
+  | 'a'

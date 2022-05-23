@@ -126,15 +126,12 @@ public class IntArrayEnvironment implements Environment {
         return new IntArrayEnvironment(set(i, (int) value, this.value));
     }
 
-    static MutableLong mutableLong = new MutableLong();
-
     @Override
     public Object lookup(int i) {
         if (i == 0 || i == 1) {
             return get(i);
         }
-        mutableLong.setValue(getTuple(i));
-        return mutableLong;
+        return getTuple(i);
     }
 
     private int get(int i) {
