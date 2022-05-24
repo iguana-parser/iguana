@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.condition;
 
-import iguana.regex.matcher.MatcherFactory;
+import org.iguana.regex.matcher.MatcherFactory;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.slot.BodyGrammarSlot;

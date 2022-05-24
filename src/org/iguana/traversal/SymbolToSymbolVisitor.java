@@ -1,7 +1,6 @@
 package org.iguana.traversal;
 
-import iguana.regex.*;
-import iguana.regex.visitor.RegularExpressionVisitor;
+import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditionVisitor<Condition>, RegularExpressionVisitor<RegularExpression> {
+public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditionVisitor<Condition>, RegularExpressionVisitor<org.iguana.regex.RegularExpression> {
 
     @Override
     default Symbol visit(Align symbol) {
@@ -126,7 +125,7 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
 
     @Override
     default Condition visit(RegularExpressionCondition condition) {
-        RegularExpression newRegex = condition.getRegularExpression().accept(this);
+        org.iguana.regex.RegularExpression newRegex = condition.getRegularExpression().accept(this);
         Condition newCondition = new RegularExpressionCondition(condition.getType(), newRegex);
         if (newCondition.equals(condition)) {
             return condition;
@@ -136,52 +135,52 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
     }
 
     @Override
-    default RegularExpression visit(Char c) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.Char c) {
         return c;
     }
 
     @Override
-    default RegularExpression visit(CharRange r) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.CharRange r) {
         return r;
     }
 
     @Override
-    default RegularExpression visit(EOF eof) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.EOF eof) {
         return eof;
     }
 
     @Override
-    default RegularExpression visit(Epsilon e) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.Epsilon e) {
         return e;
     }
 
     @Override
-    default RegularExpression visit(iguana.regex.Star s) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.Star s) {
         return visitRegularExpression(s);
     }
 
     @Override
-    default RegularExpression visit(iguana.regex.Plus p) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.Plus p) {
         return visitRegularExpression(p);
     }
 
     @Override
-    default RegularExpression visit(iguana.regex.Opt o) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.Opt o) {
         return visitRegularExpression(o);
     }
 
     @Override
-    default <E extends RegularExpression> RegularExpression visit(iguana.regex.Alt<E> alt) {
+    default <E extends org.iguana.regex.RegularExpression> org.iguana.regex.RegularExpression visit(org.iguana.regex.Alt<E> alt) {
         return visitRegularExpression(alt);
     }
 
     @Override
-    default <E extends RegularExpression> RegularExpression visit(Seq<E> seq) {
+    default <E extends org.iguana.regex.RegularExpression> org.iguana.regex.RegularExpression visit(org.iguana.regex.Seq<E> seq) {
         return visitRegularExpression(seq);
     }
 
     @Override
-    default RegularExpression visit(Reference ref) {
+    default org.iguana.regex.RegularExpression visit(org.iguana.regex.Reference ref) {
         return ref;
     }
 
@@ -221,9 +220,9 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
         return postConditions;
     }
 
-    default RegularExpression visitRegularExpression(RegularExpression regex) {
-        List<RegularExpression> newChildren = regex.getChildren().stream().map(r -> r.accept(this)).collect(Collectors.toList());
-        RegularExpression newRegex = regex.copy().setChildren(newChildren).build();
+    default org.iguana.regex.RegularExpression visitRegularExpression(org.iguana.regex.RegularExpression regex) {
+        List<org.iguana.regex.RegularExpression> newChildren = regex.getChildren().stream().map(r -> r.accept(this)).collect(Collectors.toList());
+        org.iguana.regex.RegularExpression newRegex = regex.copy().setChildren(newChildren).build();
         if (newRegex.equals(regex)) {
             return regex;
         } else {

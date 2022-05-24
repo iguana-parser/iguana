@@ -1,7 +1,7 @@
 package org.iguana.parser.firstfollow;
 
-import iguana.regex.CharRange;
-import iguana.regex.EOF;
+import org.iguana.regex.CharRange;
+import org.iguana.regex.EOF;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.runtime.RuntimeGrammar;

@@ -1,7 +1,7 @@
 package org.iguana.parser.datadependent;
 
-import iguana.regex.Char;
-import iguana.regex.Seq;
+import org.iguana.regex.Char;
+import org.iguana.regex.Seq;
 import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.runtime.PrecedenceLevel;

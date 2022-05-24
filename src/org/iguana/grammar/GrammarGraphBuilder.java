@@ -27,9 +27,9 @@
 
 package org.iguana.grammar;
 
-import iguana.regex.CharRange;
-import iguana.regex.matcher.DFAMatcherFactory;
-import iguana.regex.matcher.MatcherFactory;
+import org.iguana.regex.CharRange;
+import org.iguana.regex.matcher.DFAMatcherFactory;
+import org.iguana.regex.matcher.MatcherFactory;
 import iguana.utils.collections.rangemap.RangeMap;
 import iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.iguana.datadependent.ast.Expression;

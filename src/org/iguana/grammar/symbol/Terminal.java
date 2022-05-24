@@ -27,8 +27,8 @@
 
 package org.iguana.grammar.symbol;
 
-import iguana.regex.Epsilon;
-import iguana.regex.RegularExpression;
+import org.iguana.regex.Epsilon;
+import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
 

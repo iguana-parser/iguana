@@ -27,7 +27,7 @@
 
 package org.iguana.traversal.idea;
 
-import iguana.regex.RegularExpression;
+import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 
 import java.util.HashSet;

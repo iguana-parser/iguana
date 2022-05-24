@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.runtime;
 
-import iguana.regex.RegularExpression;
+import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.symbol.*;

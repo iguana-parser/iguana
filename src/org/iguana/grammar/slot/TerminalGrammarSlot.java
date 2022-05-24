@@ -27,8 +27,8 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.regex.matcher.Matcher;
-import iguana.regex.matcher.MatcherFactory;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.regex.matcher.MatcherFactory;
 import iguana.utils.collections.IntHashMap;
 import iguana.utils.collections.OpenAddressingIntHashMap;
 import iguana.utils.input.Input;

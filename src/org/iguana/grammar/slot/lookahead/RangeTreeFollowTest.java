@@ -1,6 +1,6 @@
 package org.iguana.grammar.slot.lookahead;
 
-import iguana.regex.CharRange;
+import org.iguana.regex.CharRange;
 import iguana.utils.collections.rangemap.IntRangeMap;
 import iguana.utils.collections.rangemap.RangeMapBuilder;
 

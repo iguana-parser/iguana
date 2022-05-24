@@ -27,9 +27,9 @@
 
 package org.iguana.traversal.idea;
 
-import iguana.regex.Char;
-import iguana.regex.*;
-import iguana.regex.visitor.RegularExpressionVisitor;
+import org.iguana.regex.Char;
+import org.iguana.regex.EOF;
+import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 
@@ -56,7 +56,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     private final String language;
     private final String path;
 
-    private final Map<String, RegularExpression> regularExpressions;
+    private final Map<String, org.iguana.regex.RegularExpression> regularExpressions;
 
     private final Set<String> seenTokenTypes;
 
@@ -65,7 +65,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     private final StringBuffer rules;
     private final StringBuffer tokens;
 
-    public GenerateJFlex(String language, String path, Map<String, RegularExpression> regularExpressions, Set<String> seenTokenTypes) {
+    public GenerateJFlex(String language, String path, Map<String, org.iguana.regex.RegularExpression> regularExpressions, Set<String> seenTokenTypes) {
         this.language = language;
         this.path = path;
         this.regularExpressions = regularExpressions;
@@ -220,7 +220,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public String visit(Epsilon e) {
+    public String visit(org.iguana.regex.Epsilon e) {
         return "";
     }
 
@@ -230,27 +230,27 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public String visit(CharRange r) {
+    public String visit(org.iguana.regex.CharRange r) {
         return "[" +  getRange(r) + "]";
     }
 
     @Override
-    public String visit(iguana.regex.Star s) {
+    public String visit(org.iguana.regex.Star s) {
         return s.getSymbol().accept(this) + "*";
     }
 
     @Override
-    public String visit(iguana.regex.Plus p) {
+    public String visit(org.iguana.regex.Plus p) {
         return p.getSymbol().accept(this) + "+";
     }
 
     @Override
-    public String visit(iguana.regex.Opt o) {
+    public String visit(org.iguana.regex.Opt o) {
         return o.getSymbol().accept(this) + "?";
     }
 
     @Override
-    public <E extends RegularExpression> String visit(iguana.regex.Alt<E> symbol) {
+    public <E extends org.iguana.regex.RegularExpression> String visit(org.iguana.regex.Alt<E> symbol) {
         Map<Boolean, List<E>> parition = symbol.getSymbols().stream().collect(Collectors.partitioningBy(s -> isCharClass(s)));
         List<E> charClasses = parition.get(true);
         List<E> other = parition.get(false);
@@ -259,7 +259,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
 
         if (!charClasses.isEmpty() && !other.isEmpty()) {
             int left  = charClasses.size();
-            int right = other.stream().map(s -> (RegularExpression) s).mapToInt(r -> r.length()).max().getAsInt();
+            int right = other.stream().map(s -> (org.iguana.regex.RegularExpression) s).mapToInt(r -> r.length()).max().getAsInt();
 
             sb.append("(");
             if (left > right) {
@@ -267,7 +267,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
                 sb.append("|");
                 sb.append(other.stream().map(s -> s.accept(this)).collect(Collectors.joining("|")));
             } else {
-                sb.append(other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")));
+                sb.append(other.stream().sorted(org.iguana.regex.RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")));
                 sb.append("|");
                 sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
             }
@@ -277,14 +277,14 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
             sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
         }
         else {
-            sb.append("(" + other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")");
+            sb.append("(" + other.stream().sorted(org.iguana.regex.RegularExpression.lengthComparator()).map(s -> s.accept(this)).collect(Collectors.joining("|")) + ")");
         }
 
         return sb.toString();
     }
 
     @Override
-    public <E extends RegularExpression> String visit(iguana.regex.Seq<E> symbol) {
+    public <E extends org.iguana.regex.RegularExpression> String visit(org.iguana.regex.Seq<E> symbol) {
 
         List<E> symbols = symbol.getSymbols();
 
@@ -295,22 +295,22 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     @Override
-    public String visit(iguana.regex.Reference reference) {
+    public String visit(org.iguana.regex.Reference reference) {
         throw new RuntimeException();
     }
 
-    private boolean isCharClass(RegularExpression s) {
+    private boolean isCharClass(org.iguana.regex.RegularExpression s) {
         if (!s.getLookaheads().isEmpty()) return false;
-        return s instanceof Char || s instanceof CharRange;
+        return s instanceof Char || s instanceof org.iguana.regex.CharRange;
     }
 
-    private String asCharClass(RegularExpression s) {
+    private String asCharClass(org.iguana.regex.RegularExpression s) {
         if (s instanceof Char) {
             Char c = (Char) s;
             return getChar(c.getValue());
         }
-        else if (s instanceof CharRange) {
-            CharRange r = (CharRange) s;
+        else if (s instanceof org.iguana.regex.CharRange) {
+            org.iguana.regex.CharRange r = (org.iguana.regex.CharRange) s;
             return getRange(r);
         }
 
@@ -344,11 +344,11 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
         return code.toString();
     }
 
-    private String getLookaheads(Set<CharRange> lookaheads) {
+    private String getLookaheads(Set<org.iguana.regex.CharRange> lookaheads) {
         return "";
     }
 
-    private String getLookbehinds(Set<CharRange> lookbehinds) {
+    private String getLookbehinds(Set<org.iguana.regex.CharRange> lookbehinds) {
         return "";
     }
 
@@ -362,7 +362,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
         }
     }
 
-    private static RegularExpression getRegularExpression(Condition condition) {
+    private static org.iguana.regex.RegularExpression getRegularExpression(Condition condition) {
         if (condition instanceof RegularExpressionCondition) {
             return ((RegularExpressionCondition) condition).getRegularExpression();
         }
@@ -370,13 +370,13 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     private String getChar(int c) {
-        if(CharacterRanges.isPrintableAscii(c))
+        if(org.iguana.regex.CharacterRanges.isPrintableAscii(c))
             return escape((char) c + "");
         else
             return escape(String.format("\\u%04X", c));
     }
 
-    private String getRange(CharRange r) {
+    private String getRange(org.iguana.regex.CharRange r) {
         return getChar(r.getStart()) + "-" + getChar(r.getEnd());
     }
 
