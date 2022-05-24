@@ -27,26 +27,24 @@
 
 package org.iguana.regex.automaton;
 
-import iguana.utils.input.Input;
-import org.iguana.regex.Char;
-import org.iguana.regex.RegularExpressionExamples;
+import org.iguana.regex.*;
+import org.iguana.utils.input.Input;
 import org.iguana.regex.matcher.DFAMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DiffernceTest {
 	
-	private org.iguana.regex.RegularExpression id = RegularExpressionExamples.getId();
-	private org.iguana.regex.Seq<org.iguana.regex.Char> k1 = org.iguana.regex.Seq.from("if");
-	private org.iguana.regex.Seq<org.iguana.regex.Char> k2 = org.iguana.regex.Seq.from("when");
-	private org.iguana.regex.Seq<org.iguana.regex.Char> k3 = org.iguana.regex.Seq.from("new");
+	private RegularExpression id = RegularExpressionExamples.getId();
+	private Seq<Char> k1 = Seq.from("if");
+	private Seq<Char> k2 = Seq.from("when");
+	private Seq<Char> k3 = Seq.from("new");
 
 	@Test
 	public void test1() {
-		org.iguana.regex.automaton.Automaton a = org.iguana.regex.automaton.AutomatonOperations.difference(id.getAutomaton(), k1.getAutomaton());
+		Automaton a = AutomatonOperations.difference(id.getAutomaton(), k1.getAutomaton());
 		
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("i")));
@@ -59,8 +57,8 @@ public class DiffernceTest {
 	
 	@Test
 	public void test2() {
-		org.iguana.regex.automaton.Automaton union = org.iguana.regex.automaton.AutomatonOperations.union(k1.getAutomaton(), k2.getAutomaton());
-		org.iguana.regex.automaton.Automaton a = org.iguana.regex.automaton.AutomatonOperations.difference(id.getAutomaton(), union);
+		Automaton union = AutomatonOperations.union(k1.getAutomaton(), k2.getAutomaton());
+		Automaton a = AutomatonOperations.difference(id.getAutomaton(), union);
 
 		DFAMatcher matcher = new DFAMatcher(a);
 
@@ -71,7 +69,7 @@ public class DiffernceTest {
 	
 	@Test
 	public void test3() {
-		org.iguana.regex.Alt<org.iguana.regex.Seq<Char>> alt = org.iguana.regex.Alt.from(k1, k2, k3);
+		Alt<Seq<Char>> alt = Alt.from(k1, k2, k3);
 		Automaton a = AutomatonOperations.difference(id.getAutomaton(), alt.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("first")));

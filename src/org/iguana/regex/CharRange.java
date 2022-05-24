@@ -27,14 +27,14 @@
 
 package org.iguana.regex;
 
-import iguana.utils.collections.hash.MurmurHash3;
-import iguana.utils.collections.rangemap.Range;
+import org.iguana.utils.collections.hash.MurmurHash3;
+import org.iguana.utils.collections.rangemap.Range;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
 import java.util.Collections;
 import java.util.Set;
 
-import static iguana.utils.collections.CollectionsUtil.immutableSet;
+import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 /**
  * 

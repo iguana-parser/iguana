@@ -34,7 +34,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Nonterminal extends AbstractSymbol {
 

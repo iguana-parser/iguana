@@ -1,6 +1,6 @@
 package org.iguana.iggy;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import static iguana.utils.io.FileUtils.readFile;
+import static org.iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 

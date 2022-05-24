@@ -39,7 +39,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 
 /**

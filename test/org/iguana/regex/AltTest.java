@@ -27,17 +27,17 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static iguana.utils.collections.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
+import static org.iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class AltTest {
@@ -46,10 +46,10 @@ public class AltTest {
 	
 	@Test
 	public void test1() {
-		org.iguana.regex.Char a = org.iguana.regex.Char.from('a');
-		org.iguana.regex.Char b = org.iguana.regex.Char.from('b');
+		Char a = Char.from('a');
+		Char b = Char.from('b');
 
-		org.iguana.regex.RegularExpression regex = org.iguana.regex.Alt.from(a, b);
+		RegularExpression regex = Alt.from(a, b);
 		
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(5, automaton.getCountStates());
@@ -66,7 +66,7 @@ public class AltTest {
 	
 	@Test
 	public void test2() {
-		org.iguana.regex.Alt<Seq<Char>> alt = org.iguana.regex.Alt.from(org.iguana.regex.Seq.from("for"), org.iguana.regex.Seq.from("forall"));
+		Alt<Seq<Char>> alt = Alt.from(Seq.from("for"), Seq.from("forall"));
 		Matcher matcher = factory.getMatcher(alt);
 		assertEquals(3, matcher.match(Input.fromString("for"), 0));
 		assertEquals(6, matcher.match(Input.fromString("forall"), 0));
@@ -74,7 +74,7 @@ public class AltTest {
 	
 	@Test
 	public void test3() {
-		RegularExpression regex = Alt.from(org.iguana.regex.Seq.from("when"), Seq.from("if"));
+		RegularExpression regex = Alt.from(Seq.from("when"), Seq.from("if"));
 		Matcher matcher = factory.getMatcher(regex);
 		
 		assertEquals(4, matcher.match(Input.fromString("when"), 0));

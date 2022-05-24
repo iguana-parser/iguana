@@ -27,20 +27,20 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
-import static iguana.utils.collections.CollectionsUtil.*;
 import static org.iguana.regex.CharacterRanges.toNonOverlapping;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.iguana.utils.collections.CollectionsUtil.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CharRangeTest {
 	

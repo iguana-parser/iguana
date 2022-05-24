@@ -1,9 +1,6 @@
 package org.iguana.grammar;
 
-import org.iguana.regex.Alt;
-import org.iguana.regex.Opt;
-import org.iguana.regex.Plus;
-import org.iguana.regex.Star;
+import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
@@ -21,7 +18,7 @@ public class Grammar implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final List<Rule> rules;
-    private final Map<String, org.iguana.regex.RegularExpression> terminals;
+    private final Map<String, RegularExpression> terminals;
     private final Start startSymbol;
     private final Symbol layout;
     private final Map<String, Object> globals;
@@ -44,7 +41,7 @@ public class Grammar implements Serializable {
         return rules;
     }
 
-    public Map<String, org.iguana.regex.RegularExpression> getTerminals() {
+    public Map<String, RegularExpression> getTerminals() {
         return terminals;
     }
 
@@ -71,7 +68,7 @@ public class Grammar implements Serializable {
             }
             grammarBuilder.setStartSymbol(startSymbol);
             grammarBuilder.setLayout(layout);
-            grammarBuilder.setTerminals(org.iguana.regex.InlineReferences.inline(terminals));
+            grammarBuilder.setTerminals(InlineReferences.inline(terminals));
             grammarBuilder.setGlobals(globals);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
@@ -222,7 +219,7 @@ public class Grammar implements Serializable {
 
     public static class Builder {
         private final List<Rule> rules = new ArrayList<>();
-        private final Map<String, org.iguana.regex.RegularExpression> terminals = new HashMap<>();
+        private final Map<String, RegularExpression> terminals = new HashMap<>();
         private Start startSymbol;
         private Symbol layout;
         private final Map<String, Object> globals = new HashMap<>();
@@ -242,12 +239,12 @@ public class Grammar implements Serializable {
             return this;
         }
 
-        public Builder addTerminal(String name, org.iguana.regex.RegularExpression regularExpression) {
+        public Builder addTerminal(String name, RegularExpression regularExpression) {
             terminals.put(name, regularExpression);
             return this;
         }
 
-        public Builder addTerminals(Map<String, org.iguana.regex.RegularExpression> terminals) {
+        public Builder addTerminals(Map<String, RegularExpression> terminals) {
             this.terminals.putAll(terminals);
             return this;
         }
@@ -472,12 +469,12 @@ public class Grammar implements Serializable {
         }
 
         @Override
-        public Boolean visit(org.iguana.regex.EOF symbol) {
+        public Boolean visit(EOF symbol) {
             return false;
         }
 
         @Override
-        public Boolean visit(org.iguana.regex.Epsilon symbol) {
+        public Boolean visit(Epsilon symbol) {
             return false;
         }
 
@@ -671,27 +668,27 @@ public class Grammar implements Serializable {
         }
 
         @Override
-        public Boolean visit(Star s) {
+        public Boolean visit(org.iguana.regex.Star s) {
             return false;
         }
 
         @Override
-        public Boolean visit(Plus p) {
+        public Boolean visit(org.iguana.regex.Plus p) {
             return false;
         }
 
         @Override
-        public Boolean visit(Opt o) {
+        public Boolean visit(org.iguana.regex.Opt o) {
             return false;
         }
 
         @Override
-        public <E extends org.iguana.regex.RegularExpression> Boolean visit(Alt<E> alt) {
+        public <E extends RegularExpression> Boolean visit(org.iguana.regex.Alt<E> alt) {
             return false;
         }
 
         @Override
-        public <E extends org.iguana.regex.RegularExpression> Boolean visit(org.iguana.regex.Seq<E> seq) {
+        public <E extends RegularExpression> Boolean visit(org.iguana.regex.Seq<E> seq) {
             return false;
         }
 
@@ -702,7 +699,7 @@ public class Grammar implements Serializable {
         }
 
         @Override
-        public Boolean visit(org.iguana.regex.Reference ref) {
+        public Boolean visit(Reference ref) {
             // TODO Auto-generated method stub
             return null;
         }

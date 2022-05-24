@@ -29,17 +29,20 @@ package org.iguana.regex;
 
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class Plus extends AbstractRegularExpression {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final org.iguana.regex.RegularExpression regex;
+	private final RegularExpression regex;
 	
-	private final List<org.iguana.regex.RegularExpression> separators;
+	private final List<RegularExpression> separators;
 	
-	public static Plus from(org.iguana.regex.RegularExpression s) {
+	public static Plus from(RegularExpression s) {
 		return builder(s).build();
 	}
 	
@@ -69,7 +72,7 @@ public class Plus extends AbstractRegularExpression {
 		return regex.getFirstSet();
 	}
 	
-	public List<org.iguana.regex.RegularExpression> getSeparators() {
+	public List<RegularExpression> getSeparators() {
 		return separators;
 	}
 
@@ -78,7 +81,7 @@ public class Plus extends AbstractRegularExpression {
 		return new Builder(this);
 	}
 
-	public org.iguana.regex.RegularExpression getSymbol() {
+	public RegularExpression getSymbol() {
 		return regex;
 	}
 	
@@ -104,19 +107,19 @@ public class Plus extends AbstractRegularExpression {
 		return regex.toString() + "*";
 	}
 
-	public static Builder builder(org.iguana.regex.RegularExpression s) {
+	public static Builder builder(RegularExpression s) {
 		return new Builder(s);
 	}
 
 	public static class Builder extends org.iguana.regex.RegexBuilder<Plus> {
 
-		private org.iguana.regex.RegularExpression regex;
+		private RegularExpression regex;
 
-		private List<org.iguana.regex.RegularExpression> separators = new ArrayList<>();
+		private List<RegularExpression> separators = new ArrayList<>();
 
 		private Builder() {}
 
-		public Builder(org.iguana.regex.RegularExpression regex) {
+		public Builder(RegularExpression regex) {
 			this.regex = regex;
 		}
 		
@@ -131,18 +134,18 @@ public class Plus extends AbstractRegularExpression {
 			return new Plus(this);
 		}
 
-		public Builder setSymbol(org.iguana.regex.RegularExpression regex) {
+		public Builder setSymbol(RegularExpression regex) {
 			this.regex = regex;
 			return this;
 		}
 
-		public Builder setSeparators(List<org.iguana.regex.RegularExpression> separators) {
+		public Builder setSeparators(List<RegularExpression> separators) {
 			this.separators = separators;
 			return this;
 		}
 
 		@Override
-		public RegexBuilder<Plus> setChildren(List<org.iguana.regex.RegularExpression> children) {
+		public RegexBuilder<Plus> setChildren(List<RegularExpression> children) {
 			if (children.size() != 1) {
 				throw new RuntimeException("Children size should be one.");
 			}

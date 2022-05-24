@@ -1,10 +1,10 @@
 package org.iguana.parser.parsetree;
 
 import org.iguana.parsetree.VisitResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static iguana.utils.collections.CollectionsUtil.list;
-import static org.junit.Assert.assertEquals;
+import static org.iguana.utils.collections.CollectionsUtil.list;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VisitResultTest {
 

@@ -1,12 +1,12 @@
 package org.iguana.regex.automaton;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.Char;
 import org.iguana.regex.Seq;
 import org.iguana.regex.matcher.DFABackwardsMatcher;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BackwardMatcherTest {
 

@@ -1,10 +1,10 @@
 package org.iguana.datadependent.env;
 
 import org.iguana.datadependent.env.intarray.IntArrayEvaluatorContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.lang.Integer.toUnsignedLong;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class IntArrayEnvironmentTest {
 

@@ -1,8 +1,8 @@
 package org.iguana.gss;
 
-import iguana.utils.collections.IntHashMap;
-import iguana.utils.collections.OpenAddressingIntHashMap;
-import iguana.utils.input.Input;
+import org.iguana.utils.collections.IntHashMap;
+import org.iguana.utils.collections.OpenAddressingIntHashMap;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;

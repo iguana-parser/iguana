@@ -27,23 +27,22 @@
 
 package org.iguana.parser.datadependent.preprocess;
 
-import iguana.utils.input.Input;
-import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.LayoutWeaver;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.sppf.NonterminalNode;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestCSharp {
 	

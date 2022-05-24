@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
@@ -35,7 +35,7 @@ import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 
 public class NonterminalTransition extends AbstractTransition {

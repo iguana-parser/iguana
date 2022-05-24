@@ -27,26 +27,26 @@
 
 package org.iguana.regex.automaton;
 
-import iguana.utils.input.Input;
-import org.iguana.regex.Char;
+import org.iguana.regex.*;
 import org.iguana.regex.matcher.DFAMatcher;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReverseAutomatonTest {
 	
 	@Test
 	public void test1() {
-		org.iguana.regex.Seq<org.iguana.regex.Char> r = org.iguana.regex.Seq.from("test");
-		org.iguana.regex.automaton.Automaton a = org.iguana.regex.automaton.AutomatonOperations.reverse(r.getAutomaton());
+		Seq<Char> r = Seq.from("test");
+		Automaton a = AutomatonOperations.reverse(r.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("tset")));
 	}
 	
 	@Test
 	public void test2() {
-		org.iguana.regex.RegularExpression r = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z'), org.iguana.regex.CharRange.in('A', 'Z'), org.iguana.regex.CharRange.in('0', '9'), Char.from('_'));
+		RegularExpression r = Alt.from(CharRange.in('a', 'z'), CharRange.in('A', 'Z'), CharRange.in('0', '9'), Char.from('_'));
 		Automaton a = AutomatonOperations.reverse(r.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 		assertTrue(matcher.match(Input.fromString("a")));

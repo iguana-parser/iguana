@@ -32,7 +32,7 @@ import org.iguana.traversal.ISymbolVisitor;
 import java.util.Arrays;
 import java.util.List;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Block extends AbstractSymbol {
 

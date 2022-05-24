@@ -1,8 +1,8 @@
 package org.iguana;
 
-import iguana.utils.input.Input;
-import iguana.utils.io.FileUtils;
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.io.FileUtils;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.transformation.GrammarTransformer;
@@ -33,8 +33,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static iguana.utils.io.FileUtils.readFile;
-import static org.junit.Assert.assertEquals;
+import static org.iguana.utils.io.FileUtils.readFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GrammarTest {
 
@@ -184,7 +184,7 @@ public class GrammarTest {
                         record(parser.getParseError(), resultPath);
                     } else {
                         ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
-                        Assertions.assertEquals(expectedParseError, parser.getParseError());
+                        assertEquals(expectedParseError, parser.getParseError());
                     }
                 } else {
                     if (actualParseTree != null) {
@@ -192,7 +192,7 @@ public class GrammarTest {
                             record(actualParseTree, resultPath);
                         } else {
                             ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
-                            Assertions.assertEquals(expectedParseTree, actualParseTree);
+                            assertEquals(expectedParseTree, actualParseTree);
                         }
                     }
                 }

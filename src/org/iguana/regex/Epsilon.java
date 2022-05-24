@@ -34,7 +34,7 @@ import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.Set;
 
-import static iguana.utils.collections.CollectionsUtil.immutableSet;
+import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class Epsilon extends AbstractRegularExpression {
 

@@ -27,7 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.env.intarray.MutableLong;
 import org.iguana.datadependent.values.Stack;
@@ -36,10 +36,9 @@ import org.iguana.sppf.NonPackedNode;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 public class AST {
 

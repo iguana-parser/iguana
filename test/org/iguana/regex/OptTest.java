@@ -27,17 +27,17 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static iguana.utils.collections.CollectionsUtil.set;
-import static org.junit.Assert.*;
+import static org.iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OptTest {
 	
@@ -45,8 +45,8 @@ public class OptTest {
 	
 	@Test
 	public void test1() {
-		org.iguana.regex.RegularExpression a = org.iguana.regex.Char.from('a');
-		org.iguana.regex.RegularExpression regex = org.iguana.regex.Opt.from(Char.from('a'));
+		RegularExpression a = Char.from('a');
+		RegularExpression regex = Opt.from(Char.from('a'));
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(2, automaton.getCountStates());
 		assertEquals(set(regex, a), automaton.getRegularExpressions());

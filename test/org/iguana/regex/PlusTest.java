@@ -27,16 +27,16 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PlusTest {
 	

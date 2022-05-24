@@ -27,16 +27,16 @@
 
 package org.iguana.util.visualization;
 
-import iguana.utils.input.Input;
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 
 import java.util.*;
 
-import static iguana.utils.string.StringUtil.listToString;
-import static iguana.utils.visualization.DotGraph.newEdge;
-import static iguana.utils.visualization.DotGraph.newNode;
+import static org.iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.visualization.DotGraph.newEdge;
+import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class SPPFToDot implements SPPFVisitor<Void>  {
 	

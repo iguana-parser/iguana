@@ -1,8 +1,5 @@
 package org.iguana.parser.datadependent;
 
-import org.iguana.regex.Char;
-import org.iguana.regex.Seq;
-import iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.Recursion;
@@ -12,14 +9,15 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
-import org.junit.Test;
+import org.iguana.regex.Char;
+import org.iguana.regex.Seq;
+import org.iguana.utils.input.Input;
 
-import static junit.framework.TestCase.assertNotNull;
 import static org.iguana.grammar.symbol.LayoutStrategy.NO_LAYOUT;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class IF {
 
-    @Test
     public void test() {
          RuntimeGrammar grammar =
 

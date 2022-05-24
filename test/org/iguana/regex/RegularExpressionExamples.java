@@ -35,7 +35,7 @@ public class RegularExpressionExamples {
     /**
      * Id ::= [a-zA-Z][a-zA-Z0-9]*
      */
-    public static org.iguana.regex.RegularExpression getId() {
+    public static RegularExpression getId() {
         org.iguana.regex.Alt<org.iguana.regex.CharRange> c1 = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z'), org.iguana.regex.CharRange.in('A', 'Z'));
         org.iguana.regex.Alt<org.iguana.regex.CharRange> c2 = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z'), org.iguana.regex.CharRange.in('A', 'Z'), org.iguana.regex.CharRange.in('0', '9'));
         return org.iguana.regex.Seq.builder(c1, org.iguana.regex.Star.from(c2)).build();
@@ -44,7 +44,7 @@ public class RegularExpressionExamples {
     /**
      * Float ::= [0-9]+[.][0-9]+
      */
-    public static org.iguana.regex.RegularExpression getFloat() {
+    public static RegularExpression getFloat() {
         org.iguana.regex.Alt<org.iguana.regex.CharRange> c = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('0', '9'));
         return org.iguana.regex.Seq.builder(org.iguana.regex.Plus.from(c), org.iguana.regex.Char.from('.'), org.iguana.regex.Plus.from(c)).build();
     }
@@ -52,8 +52,8 @@ public class RegularExpressionExamples {
     /**
      * UnicodeEscape ::= "\\" [u]+ [0-9 A-F a-f] [0-9 A-F a-f] [0-9 A-F a-f] [0-9 A-F a-f];
      */
-    public static org.iguana.regex.RegularExpression getJavaUnicodeEscape() {
-        List<org.iguana.regex.RegularExpression> regularExpressions = new ArrayList<>();
+    public static RegularExpression getJavaUnicodeEscape() {
+        List<RegularExpression> regularExpressions = new ArrayList<>();
 
         regularExpressions.add(org.iguana.regex.Seq.from("\\"));
 
@@ -73,8 +73,8 @@ public class RegularExpressionExamples {
      *
      * @return
      */
-    public static org.iguana.regex.RegularExpression getCharacter() {
-        List<org.iguana.regex.RegularExpression> regularExpressions = new ArrayList<>();
+    public static RegularExpression getCharacter() {
+        List<RegularExpression> regularExpressions = new ArrayList<>();
         regularExpressions.add(org.iguana.regex.Char.from('\''));
         regularExpressions.add(org.iguana.regex.Plus.from(org.iguana.regex.Alt.not(org.iguana.regex.Char.from('\''))));
         regularExpressions.add(org.iguana.regex.Char.from('\''));
@@ -84,7 +84,7 @@ public class RegularExpressionExamples {
     /**
      * StringPart ::= !["\\]+ | "\n"
      */
-    public static org.iguana.regex.RegularExpression getStringPart() {
+    public static RegularExpression getStringPart() {
         org.iguana.regex.Char c1 = org.iguana.regex.Char.from('"');
         org.iguana.regex.Char c2 = org.iguana.regex.Char.from('\\');
         org.iguana.regex.Seq<org.iguana.regex.Char> newline = org.iguana.regex.Seq.from("\\n");

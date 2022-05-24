@@ -1,6 +1,6 @@
 package org.iguana.traversal.exception;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.sppf.NonPackedNode;
 
 public class AmbiguityException extends RuntimeException {

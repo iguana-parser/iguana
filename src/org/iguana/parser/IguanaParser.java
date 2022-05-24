@@ -27,7 +27,7 @@
 
 package org.iguana.parser;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.parsetree.DefaultParseTreeBuilder;

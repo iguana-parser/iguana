@@ -28,7 +28,7 @@ package org.iguana.regex;
 
 import java.util.*;
 
-import static iguana.utils.collections.CollectionsUtil.toList;
+import static org.iguana.utils.collections.CollectionsUtil.toList;
 
 public class CharacterRanges {
 

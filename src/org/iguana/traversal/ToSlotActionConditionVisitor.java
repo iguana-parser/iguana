@@ -29,7 +29,7 @@ package org.iguana.traversal;
 
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;

@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 
 public class DefaultTerminalNode extends TerminalNode {

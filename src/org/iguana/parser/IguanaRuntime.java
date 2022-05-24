@@ -1,6 +1,6 @@
 package org.iguana.parser;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.env.Environment;

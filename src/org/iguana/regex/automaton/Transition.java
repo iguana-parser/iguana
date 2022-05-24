@@ -29,7 +29,7 @@ package org.iguana.regex.automaton;
 
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
-import iguana.utils.collections.hash.MurmurHash3;
+import org.iguana.utils.collections.hash.MurmurHash3;
 
 import java.io.Serializable;
 

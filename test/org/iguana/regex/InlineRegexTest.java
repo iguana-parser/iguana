@@ -1,11 +1,11 @@
 package org.iguana.regex;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InlineRegexTest {
 
@@ -14,25 +14,25 @@ public class InlineRegexTest {
         // A : a B* c
         // B : c C
         // C : c
-        org.iguana.regex.RegularExpression A = org.iguana.regex.Seq.from(org.iguana.regex.Char.from('a'), org.iguana.regex.Star.from(org.iguana.regex.Reference.from("B")), org.iguana.regex.Char.from('c'));
-        org.iguana.regex.RegularExpression B = org.iguana.regex.Seq.from(org.iguana.regex.Char.from('c'), org.iguana.regex.Reference.from("C"));
-        org.iguana.regex.RegularExpression C = org.iguana.regex.Char.from('c');
+        RegularExpression A = Seq.from(Char.from('a'), Star.from(Reference.from("B")), Char.from('c'));
+        RegularExpression B = Seq.from(Char.from('c'), Reference.from("C"));
+        RegularExpression C = Char.from('c');
 
-        Map<String, org.iguana.regex.RegularExpression> definitions = new HashMap<>();
+        Map<String, RegularExpression> definitions = new HashMap<>();
         definitions.put("A", A);
         definitions.put("B", B);
         definitions.put("C", C);
 
-        org.iguana.regex.RegularExpression newA = org.iguana.regex.Seq.from(org.iguana.regex.Char.from('a'), org.iguana.regex.Star.from(org.iguana.regex.Seq.from(org.iguana.regex.Char.from('c'), org.iguana.regex.Char.from('c'))), org.iguana.regex.Char.from('c'));
-        org.iguana.regex.RegularExpression newB = org.iguana.regex.Seq.from(org.iguana.regex.Char.from('c'), org.iguana.regex.Char.from('c'));
-        org.iguana.regex.RegularExpression newC = org.iguana.regex.Char.from('c');
-        Map<String, org.iguana.regex.RegularExpression> newDefinitions = new HashMap<>();
+        RegularExpression newA = Seq.from(Char.from('a'), Star.from(Seq.from(Char.from('c'), Char.from('c'))), Char.from('c'));
+        RegularExpression newB = Seq.from(Char.from('c'), Char.from('c'));
+        RegularExpression newC = Char.from('c');
+        Map<String, RegularExpression> newDefinitions = new HashMap<>();
         newDefinitions.put("A", newA);
         newDefinitions.put("B", newB);
         newDefinitions.put("C", newC);
 
         // A : a (cc)* c
-        assertEquals(org.iguana.regex.InlineReferences.inline(definitions), newDefinitions);
+        assertEquals(InlineReferences.inline(definitions), newDefinitions);
     }
 
     @Test
@@ -41,9 +41,9 @@ public class InlineRegexTest {
         // B : c C
         // C : A
 
-        org.iguana.regex.RegularExpression A = org.iguana.regex.Seq.from(org.iguana.regex.Char.from('a'), Star.from(org.iguana.regex.Reference.from("B")), org.iguana.regex.Char.from('c'));
-        org.iguana.regex.RegularExpression B = Seq.from(Char.from('c'), org.iguana.regex.Reference.from("C"));
-        org.iguana.regex.RegularExpression C = Reference.from("A");
+        RegularExpression A = Seq.from(Char.from('a'), Star.from(Reference.from("B")), Char.from('c'));
+        RegularExpression B = Seq.from(Char.from('c'), Reference.from("C"));
+        RegularExpression C = Reference.from("A");
 
         Map<String, RegularExpression> definitions = new HashMap<>();
         definitions.put("A", A);

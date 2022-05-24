@@ -11,7 +11,7 @@ import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.regex.*;
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;

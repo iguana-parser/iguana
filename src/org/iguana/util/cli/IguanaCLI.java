@@ -27,9 +27,9 @@
 
 package org.iguana.util.cli;
 
-import iguana.utils.input.Input;
-import iguana.utils.io.FileUtils;
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.io.FileUtils;
+import org.iguana.utils.visualization.DotGraph;
 import org.apache.commons.cli.*;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.parsetree.ParseTreeNode;

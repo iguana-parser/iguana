@@ -27,7 +27,7 @@
 
 package org.iguana.util.visualization;
 
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.*;
 
@@ -36,9 +36,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static iguana.utils.string.StringUtil.listToString;
-import static iguana.utils.visualization.DotGraph.newEdge;
-import static iguana.utils.visualization.DotGraph.newNode;
+import static org.iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.visualization.DotGraph.newEdge;
+import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class GrammarGraphToDot {
 

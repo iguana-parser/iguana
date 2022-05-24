@@ -1,16 +1,16 @@
 package org.iguana.parser.firstfollow;
 
-import org.iguana.regex.CharRange;
-import org.iguana.regex.EOF;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.GrammarTransformer;
-import org.junit.Test;
+import org.iguana.regex.CharRange;
+import org.iguana.regex.EOF;
+import org.junit.jupiter.api.Test;
 
-import static iguana.utils.collections.CollectionsUtil.set;
-import static org.junit.Assert.assertEquals;
+import static org.iguana.utils.collections.CollectionsUtil.set;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FirstFollowTest {
 

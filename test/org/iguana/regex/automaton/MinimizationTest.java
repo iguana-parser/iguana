@@ -27,10 +27,13 @@
 
 package org.iguana.regex.automaton;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MinimizationTest {
-	
+
+	@Test
 	public void test1() {
 		org.iguana.regex.automaton.State q0 = new org.iguana.regex.automaton.State();
 		org.iguana.regex.automaton.State q1 = new org.iguana.regex.automaton.State();

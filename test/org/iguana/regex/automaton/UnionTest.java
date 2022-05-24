@@ -27,15 +27,15 @@
 
 package org.iguana.regex.automaton;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.regex.Char;
 import org.iguana.regex.Seq;
 import org.iguana.regex.matcher.DFAMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.iguana.regex.automaton.AutomatonOperations.union;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnionTest {
 	

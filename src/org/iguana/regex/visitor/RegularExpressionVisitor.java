@@ -1,27 +1,27 @@
 package org.iguana.regex.visitor;
 
-import org.iguana.regex.EOF;
+import org.iguana.regex.*;
 
 public interface RegularExpressionVisitor<T> {
 	
-	T visit(org.iguana.regex.Char c);
+	T visit(Char c);
 	
-    T visit(org.iguana.regex.CharRange r);
+    T visit(CharRange r);
 	
 	T visit(EOF eof);
 	
-	T visit(org.iguana.regex.Epsilon e);
+	T visit(Epsilon e);
 	
-	T visit(org.iguana.regex.Star s);
+	T visit(Star s);
 	
-	T visit(org.iguana.regex.Plus p);
+	T visit(Plus p);
 	
-	T visit(org.iguana.regex.Opt o);
+	T visit(Opt o);
 
-	<E extends org.iguana.regex.RegularExpression> T visit(org.iguana.regex.Alt<E> alt);
+	<E extends RegularExpression> T visit(Alt<E> alt);
 	
-    <E extends org.iguana.regex.RegularExpression> T visit(org.iguana.regex.Seq<E> seq);
+    <E extends RegularExpression> T visit(Seq<E> seq);
 
-    T visit(org.iguana.regex.Reference ref);
+    T visit(Reference ref);
 
 }

@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import iguana.utils.collections.CollectionsUtil;
+import org.iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.sppf.PackedNode;
@@ -321,7 +321,7 @@ public abstract class VisitResult {
 
         @Override
         public ListOfResult visit(List other) {
-            return new ListOfResult(iguana.utils.collections.CollectionsUtil.list(other, result));
+            return new ListOfResult(CollectionsUtil.list(other, result));
         }
 
         @Override

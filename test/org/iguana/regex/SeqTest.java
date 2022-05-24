@@ -27,14 +27,14 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SeqTest {
 	

@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.runtime;
 
-import iguana.utils.collections.hash.MurmurHash3;
+import org.iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
 

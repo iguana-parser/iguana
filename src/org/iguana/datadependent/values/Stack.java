@@ -1,6 +1,6 @@
 package org.iguana.datadependent.values;
 
-import iguana.utils.collections.hash.MurmurHash3;
+import org.iguana.utils.collections.hash.MurmurHash3;
 
 public class Stack<T> {
 	

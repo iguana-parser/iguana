@@ -39,24 +39,24 @@ public class State implements Serializable {
 
 	private final Set<Transition> transitions;
 	
-	private final Map<org.iguana.regex.CharRange, State> reachableStates;
+	private final Map<CharRange, State> reachableStates;
 	
 	private final Set<State> epsilonSates;
 			
 	/**
 	 * The set of regular expressions whose final state is this state.
 	 */
-	private Set<org.iguana.regex.RegularExpression> regularExpressions;
+	private Set<RegularExpression> regularExpressions;
 	
-	private org.iguana.regex.automaton.StateType stateType = org.iguana.regex.automaton.StateType.NORMAL;
+	private StateType stateType = StateType.NORMAL;
 	
 	private int id;
 	
 	public State() {
-		this(org.iguana.regex.automaton.StateType.NORMAL);
+		this(StateType.NORMAL);
 	}
 	
-	public State(org.iguana.regex.automaton.StateType stateType) {
+	public State(StateType stateType) {
 		this.transitions = new HashSet<>();
 		this.reachableStates = new HashMap<>();
 		this.stateType = stateType;
@@ -68,7 +68,7 @@ public class State implements Serializable {
 		return transitions;
 	}
 	
-	public State getState(org.iguana.regex.CharRange r) {
+	public State getState(CharRange r) {
 		return reachableStates.get(r);
 	}
 
@@ -76,12 +76,12 @@ public class State implements Serializable {
 		return reachableStates.get(r) != null;
 	}
 
-	public org.iguana.regex.automaton.StateType getStateType() {
+	public StateType getStateType() {
 		return stateType;
 	}
 	
 	public boolean isFinalState() {
-		return stateType == org.iguana.regex.automaton.StateType.FINAL;
+		return stateType == StateType.FINAL;
 	}
 	
 	public void setStateType(StateType stateType) {
@@ -128,7 +128,7 @@ public class State implements Serializable {
 		regularExpressions.clear();
 	}
 	
-	public Set<org.iguana.regex.RegularExpression> getRegularExpressions() {
+	public Set<RegularExpression> getRegularExpressions() {
 		return regularExpressions;
 	}
 	
@@ -136,7 +136,7 @@ public class State implements Serializable {
 		return epsilonSates;
 	}
 	
-	public State addRegularExpression(org.iguana.regex.RegularExpression regex) {
+	public State addRegularExpression(RegularExpression regex) {
 		regularExpressions.add(regex);
 		return this;
 	}

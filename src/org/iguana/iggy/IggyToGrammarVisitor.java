@@ -14,13 +14,14 @@ import org.iguana.grammar.symbol.Star;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.ParseTreeVisitor;
+import org.iguana.regex.RegularExpression;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
-    private final Map<String, org.iguana.regex.RegularExpression> terminalsMap = new HashMap<>();
+    private final Map<String, RegularExpression> terminalsMap = new HashMap<>();
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
     private final Map<String, Object> globals = new HashMap<>();
@@ -94,7 +95,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 builder.addRule(rule);
             }
         }
-        for (Map.Entry<String, org.iguana.regex.RegularExpression> entry : terminalsMap.entrySet()) {
+        for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
             builder.addTerminal(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<String, Object> entry : globals.entrySet()) {
@@ -133,7 +134,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             // RegexBody : { RegexSequence "|" }*;
             // RegexSequence : Regex+;
             case "Lexical":
-                List<List<org.iguana.regex.RegularExpression>> alts = (List<List<org.iguana.regex.RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
+                List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
                 Identifier identifier = getIdentifier(node.getChildWithName("Identifier"));
                 terminalsMap.put(identifier.getName(), getRegex(alts));
 
@@ -148,18 +149,18 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
     }
 
-    private static org.iguana.regex.RegularExpression getRegex(List<List<org.iguana.regex.RegularExpression>> listOfList) {
+    private static RegularExpression getRegex(List<List<RegularExpression>> listOfList) {
         if (listOfList.size() == 1) {
             return getRegexOfList(listOfList.get(0));
         }
-        org.iguana.regex.Alt.Builder<org.iguana.regex.RegularExpression> builder = new org.iguana.regex.Alt.Builder<>();
-        for (List<org.iguana.regex.RegularExpression> list : listOfList) {
+        org.iguana.regex.Alt.Builder<RegularExpression> builder = new org.iguana.regex.Alt.Builder<>();
+        for (List<RegularExpression> list : listOfList) {
             builder.add(getRegexOfList(list));
         }
         return builder.build();
     }
 
-    private static org.iguana.regex.RegularExpression getRegexOfList(List<org.iguana.regex.RegularExpression> list) {
+    private static RegularExpression getRegexOfList(List<RegularExpression> list) {
         if (list.size() == 1) {
             return list.get(0);
         }
@@ -385,31 +386,31 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Precede": {
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                org.iguana.regex.RegularExpression regex = (org.iguana.regex.RegularExpression) node.childAt(0).accept(this);
+                RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
                 return symbol.copy().addPreCondition(RegularExpressionCondition.precede(regex)).build();
             }
 
             case "NotPrecede": {
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                org.iguana.regex.RegularExpression regex = (org.iguana.regex.RegularExpression) node.childAt(0).accept(this);
+                RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
                 return symbol.copy().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
             }
 
             case "Follow": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                org.iguana.regex.RegularExpression regex = (org.iguana.regex.RegularExpression) node.childAt(2).accept(this);
+                RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
                 return symbol.copy().addPostCondition(RegularExpressionCondition.follow(regex)).build();
             }
 
             case "NotFollow": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                org.iguana.regex.RegularExpression regex = (org.iguana.regex.RegularExpression) node.childAt(2).accept(this);
+                RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
                 return symbol.copy().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
             }
 
             case "Exclude": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                org.iguana.regex.RegularExpression regex = (org.iguana.regex.RegularExpression) node.childAt(2).accept(this);
+                RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
                 return symbol.copy().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
             }
 
@@ -426,7 +427,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return Terminal.from(getCharsRegex(node.getText()));
 
             case "CharClass":
-                return Terminal.from((org.iguana.regex.Alt<org.iguana.regex.RegularExpression>) node.childAt(0).accept(this));
+                return Terminal.from((org.iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this));
 
             case "StarSep": {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);
@@ -493,38 +494,38 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *  | String                        %String
      *  | Char                          %Char
      */
-    private org.iguana.regex.RegularExpression visitRegex(NonterminalNode node) {
+    private RegularExpression visitRegex(NonterminalNode node) {
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
             case "Star":
-                return org.iguana.regex.Star.from((org.iguana.regex.RegularExpression) node.childAt(0).accept(this));
+                return org.iguana.regex.Star.from((RegularExpression) node.childAt(0).accept(this));
 
             case "Plus":
-                return org.iguana.regex.Plus.from((org.iguana.regex.RegularExpression) node.childAt(0).accept(this));
+                return org.iguana.regex.Plus.from((RegularExpression) node.childAt(0).accept(this));
 
             case "Option":
-                return org.iguana.regex.Opt.from((org.iguana.regex.RegularExpression) node.childAt(0).accept(this));
+                return org.iguana.regex.Opt.from((RegularExpression) node.childAt(0).accept(this));
 
             case "Bracket":
-                return (org.iguana.regex.RegularExpression) node.childAt(1).accept(this);
+                return (RegularExpression) node.childAt(1).accept(this);
 
             case "Sequence": {
-                List<org.iguana.regex.RegularExpression> list = new ArrayList<>();
-                list.add((org.iguana.regex.RegularExpression) node.childAt(1).accept(this));
-                list.addAll((Collection<? extends org.iguana.regex.RegularExpression>) node.childAt(2).accept(this));
+                List<RegularExpression> list = new ArrayList<>();
+                list.add((RegularExpression) node.childAt(1).accept(this));
+                list.addAll((Collection<? extends RegularExpression>) node.childAt(2).accept(this));
                 return org.iguana.regex.Seq.from(list);
             }
 
             case "Alternation": {
-                List<org.iguana.regex.RegularExpression> list = new ArrayList<>();
-                List<org.iguana.regex.RegularExpression> first = (List<org.iguana.regex.RegularExpression>) node.childAt(1).accept(this);
+                List<RegularExpression> list = new ArrayList<>();
+                List<RegularExpression> first = (List<RegularExpression>) node.childAt(1).accept(this);
                 if (first.size() == 1) {
                     list.add(first.get(0));
                 } else {
                     list.add(org.iguana.regex.Seq.from(first));
                 }
-                List<List<org.iguana.regex.RegularExpression>> second = (List<List<org.iguana.regex.RegularExpression>>) node.childAt(2).accept(this);
-                for (List<org.iguana.regex.RegularExpression> l : second) {
+                List<List<RegularExpression>> second = (List<List<RegularExpression>>) node.childAt(2).accept(this);
+                for (List<RegularExpression> l : second) {
                     if (l.size() == 1) {
                         list.add(l.get(0));
                     } else {
@@ -538,7 +539,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return org.iguana.regex.Reference.from(getIdentifier(node.childAt(0)).getName());
 
             case "CharClass":
-                return (org.iguana.regex.Alt<org.iguana.regex.RegularExpression>) node.childAt(0).accept(this);
+                return (org.iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this);
 
             // String: String
             case "String":
@@ -570,10 +571,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private org.iguana.regex.Alt visitCharClass(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Chars":
-                return org.iguana.regex.Alt.from((List<org.iguana.regex.RegularExpression>) node.childAt(1).accept(this));
+                return org.iguana.regex.Alt.from((List<RegularExpression>) node.childAt(1).accept(this));
 
             case "NotChars":
-                return org.iguana.regex.Alt.not((List<org.iguana.regex.RegularExpression>) node.childAt(2).accept(this));
+                return org.iguana.regex.Alt.not((List<RegularExpression>) node.childAt(2).accept(this));
 
             default:
                 throw new RuntimeException("Unexpected label");
@@ -586,7 +587,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *  | RangeChar               #Character
      *  ;
      */
-    private org.iguana.regex.RegularExpression visitRange(NonterminalNode node) {
+    private RegularExpression visitRange(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Range": {
                 int start = getRangeChar(node.childAt(0).getText());
@@ -851,7 +852,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         return s.charAt(0);
     }
 
-    private org.iguana.regex.RegularExpression getCharsRegex(String s) {
+    private RegularExpression getCharsRegex(String s) {
         int[] chars = getChars(s.substring(1, s.length() - 1));
         if (chars.length == 1) {
             return org.iguana.regex.Char.from(chars[0]);

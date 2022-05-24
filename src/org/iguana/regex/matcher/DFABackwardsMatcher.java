@@ -29,7 +29,7 @@ package org.iguana.regex.matcher;
 
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.AutomatonOperations;
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 
 public class DFABackwardsMatcher extends DFAMatcher {
 

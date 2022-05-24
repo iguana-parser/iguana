@@ -29,9 +29,9 @@ package org.iguana.grammar.slot;
 
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import iguana.utils.collections.IntHashMap;
-import iguana.utils.collections.OpenAddressingIntHashMap;
-import iguana.utils.input.Input;
+import org.iguana.utils.collections.IntHashMap;
+import org.iguana.utils.collections.OpenAddressingIntHashMap;
+import org.iguana.utils.input.Input;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;

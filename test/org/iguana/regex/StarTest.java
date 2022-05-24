@@ -27,20 +27,20 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.regex.matcher.Matcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StarTest {
 	
 	@Test
 	public void test1() {
-		org.iguana.regex.RegularExpression regex = org.iguana.regex.Star.from(org.iguana.regex.Char.from('a'));
+		RegularExpression regex = Star.from(Char.from('a'));
 
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(4, automaton.getCountStates());
@@ -62,7 +62,7 @@ public class StarTest {
 	@Test
 	public void test2() {
 		// ([a-a]+)*
-		org.iguana.regex.RegularExpression regex = org.iguana.regex.Star.from(Seq.from(org.iguana.regex.Plus.from(org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'a')))));
+		RegularExpression regex = Star.from(Seq.from(Plus.from(Alt.from(CharRange.in('a', 'a')))));
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(7, automaton.getCountStates());
 		
@@ -80,8 +80,8 @@ public class StarTest {
 	@Test
 	public void test3() {
 		// ([a-z]+ | [(-)] | "*")*
-		org.iguana.regex.RegularExpression r1 = org.iguana.regex.Plus.from(org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z')));
-		org.iguana.regex.RegularExpression r2 = Plus.from(org.iguana.regex.Alt.from(CharRange.in('(', ')')));
+		RegularExpression r1 = Plus.from(Alt.from(CharRange.in('a', 'z')));
+		RegularExpression r2 = Plus.from(Alt.from(CharRange.in('(', ')')));
 		RegularExpression r3 = Char.from('*');
 		
 		Automaton automaton = Star.from(Alt.from(r1, r2, r3)).getAutomaton();

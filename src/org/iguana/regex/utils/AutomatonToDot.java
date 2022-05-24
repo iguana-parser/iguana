@@ -3,14 +3,14 @@ package org.iguana.regex.utils;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonVisitor;
 import org.iguana.regex.automaton.State;
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.regex.automaton.Transition;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import static iguana.utils.visualization.DotGraph.newEdge;
-import static iguana.utils.visualization.DotGraph.newNode;
+import static org.iguana.utils.visualization.DotGraph.newEdge;
+import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class AutomatonToDot {
 

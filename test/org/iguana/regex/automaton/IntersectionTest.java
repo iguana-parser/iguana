@@ -27,43 +27,43 @@
 
 package org.iguana.regex.automaton;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
 import org.iguana.regex.matcher.DFAMatcher;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IntersectionTest {
 
 	@Test
 	public void test1() {
 		
-		org.iguana.regex.automaton.State x0 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State x1 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+		State x0 = new State();
+		State x1 = new State(StateType.FINAL);
 		
-		x0.addTransition(new org.iguana.regex.automaton.Transition('0', x0));
-		x0.addTransition(new org.iguana.regex.automaton.Transition('1', x1));
-		x1.addTransition(new org.iguana.regex.automaton.Transition('0', x1));
-		x1.addTransition(new org.iguana.regex.automaton.Transition('1', x0));
+		x0.addTransition(new Transition('0', x0));
+		x0.addTransition(new Transition('1', x1));
+		x1.addTransition(new Transition('0', x1));
+		x1.addTransition(new Transition('1', x0));
 		
 		// Matches an odd number of 1's.
-		org.iguana.regex.automaton.Automaton a1 = org.iguana.regex.automaton.Automaton.builder(x0).build();
+		Automaton a1 = Automaton.builder(x0).build();
 		
-		org.iguana.regex.automaton.State y0 = new org.iguana.regex.automaton.State(StateType.FINAL);
-		org.iguana.regex.automaton.State y1 = new State();
+		State y0 = new State(StateType.FINAL);
+		State y1 = new State();
 		
-		y0.addTransition(new org.iguana.regex.automaton.Transition('0', y1));
-		y0.addTransition(new org.iguana.regex.automaton.Transition('1', y1));
-		y1.addTransition(new org.iguana.regex.automaton.Transition('0', y0));
+		y0.addTransition(new Transition('0', y1));
+		y0.addTransition(new Transition('1', y1));
+		y1.addTransition(new Transition('0', y0));
 		y1.addTransition(new Transition('1', y0));
 		
 		// Matches an string of even length.
-		org.iguana.regex.automaton.Automaton a2 = org.iguana.regex.automaton.Automaton.builder(y0).build();
+		Automaton a2 = Automaton.builder(y0).build();
 		
-		org.iguana.regex.automaton.Automaton intersect = org.iguana.regex.automaton.AutomatonOperations.intersect(a1, a2);
+		Automaton intersect = AutomatonOperations.intersect(a1, a2);
 		DFAMatcher matcher = new DFAMatcher(intersect);
 		
 		assertFalse(intersect.isLanguageEmpty());

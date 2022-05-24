@@ -27,15 +27,15 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CharacterClassTest {
 	
@@ -43,7 +43,7 @@ public class CharacterClassTest {
 
 	@Test
 	public void test1() {
-		org.iguana.regex.RegularExpression regex = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z'), org.iguana.regex.CharRange.in('1', '8'));
+		RegularExpression regex = Alt.from(CharRange.in('a', 'z'), CharRange.in('1', '8'));
 
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(5, automaton.getCountStates());
@@ -67,7 +67,7 @@ public class CharacterClassTest {
 	
 	@Test
 	public void test2() {
-		RegularExpression regex = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('1', '5'), org.iguana.regex.CharRange.in('1', '7'), org.iguana.regex.CharRange.in('3', '8'));
+		RegularExpression regex = Alt.from(CharRange.in('1', '5'), CharRange.in('1', '7'), CharRange.in('3', '8'));
 
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(7, automaton.getCountStates());
@@ -92,11 +92,11 @@ public class CharacterClassTest {
 
 	@Test
 	public void notTest() {
-		org.iguana.regex.Alt<org.iguana.regex.CharRange> expected = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in(1, '0' - 1),
-													  org.iguana.regex.CharRange.in('9' + 1, 'a' - 1),
-													  org.iguana.regex.CharRange.in('z' + 1, CharacterRanges.MAX_UTF32_VAL));
+		Alt<CharRange> expected = Alt.from(CharRange.in(1, '0' - 1),
+													  CharRange.in('9' + 1, 'a' - 1),
+													  CharRange.in('z' + 1, CharacterRanges.MAX_UTF32_VAL));
 		
-		assertEquals(expected, Alt.not(org.iguana.regex.CharRange.in('0', '9'), CharRange.in('a', 'z')));
+		assertEquals(expected, Alt.not(CharRange.in('0', '9'), CharRange.in('a', 'z')));
 	}
 	
 }

@@ -27,13 +27,13 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.utils.collections.IntHashMap;
-import iguana.utils.collections.Keys;
-import iguana.utils.collections.OpenAddressingHashMap;
-import iguana.utils.collections.OpenAddressingIntHashMap;
-import iguana.utils.collections.key.Key;
-import iguana.utils.collections.rangemap.RangeMap;
-import iguana.utils.input.Input;
+import org.iguana.utils.collections.IntHashMap;
+import org.iguana.utils.collections.Keys;
+import org.iguana.utils.collections.OpenAddressingHashMap;
+import org.iguana.utils.collections.OpenAddressingIntHashMap;
+import org.iguana.utils.collections.key.Key;
+import org.iguana.utils.collections.rangemap.RangeMap;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;

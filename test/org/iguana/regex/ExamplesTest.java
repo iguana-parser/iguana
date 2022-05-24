@@ -27,22 +27,22 @@
 
 package org.iguana.regex;
 
-import iguana.utils.input.Input;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.utils.AutomatonToDot;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ExamplesTest {
 	
 	@Test
 	public void testId() {
-		org.iguana.regex.RegularExpression id = RegularExpressionExamples.getId();
+		RegularExpression id = RegularExpressionExamples.getId();
 		Automaton automaton = id.getAutomaton();
 		
 		assertEquals(13, automaton.getCountStates());
@@ -71,7 +71,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testFloat() {
-		org.iguana.regex.RegularExpression _float = RegularExpressionExamples.getFloat();
+		RegularExpression _float = RegularExpressionExamples.getFloat();
 		
 		Automaton automaton = _float.getAutomaton();
 		assertEquals(10, automaton.getCountStates());
@@ -93,7 +93,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testJavaUnicodeEscape() {
-		org.iguana.regex.RegularExpression regex = RegularExpressionExamples.getJavaUnicodeEscape();
+		RegularExpression regex = RegularExpressionExamples.getJavaUnicodeEscape();
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(30, automaton.getCountStates());
 		
@@ -106,7 +106,7 @@ public class ExamplesTest {
 	
 	@Test
 	public void testCharacter() {
-		org.iguana.regex.RegularExpression regex = RegularExpressionExamples.getCharacter();
+		RegularExpression regex = RegularExpressionExamples.getCharacter();
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(13, automaton.getCountStates());
 

@@ -1,6 +1,6 @@
 package org.iguana.gss;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;

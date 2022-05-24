@@ -1,74 +1,77 @@
 package org.iguana.regex.visitor;
 
 import org.iguana.regex.EOF;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.AutomatonBuilder;
 import org.iguana.regex.automaton.State;
 
 import java.util.*;
 
-public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<org.iguana.regex.automaton.Automaton> {
+public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automaton> {
 
-	private Map<org.iguana.regex.RegularExpression, org.iguana.regex.automaton.Automaton> cache = new HashMap<>();
+	private Map<RegularExpression, Automaton> cache = new HashMap<>();
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Char c) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(c);
+	public Automaton visit(org.iguana.regex.Char c) {
+		Automaton automaton = cache.get(c);
 		if (automaton == null) {
 			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
 			org.iguana.regex.automaton.State finalState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
 			finalState.addRegularExpression(c);
 			startState.addTransition(new org.iguana.regex.automaton.Transition(c.getValue(), finalState));
-			automaton = org.iguana.regex.automaton.Automaton.builder(startState).build();
+			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.CharRange r) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(r);
+	public Automaton visit(org.iguana.regex.CharRange r) {
+		Automaton automaton = cache.get(r);
 		if (automaton == null) {
 			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
 			org.iguana.regex.automaton.State finalState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
 			finalState.addRegularExpression(r);
 			startState.addTransition(new org.iguana.regex.automaton.Transition(r.getStart(), r.getEnd(), finalState));
-			automaton = org.iguana.regex.automaton.Automaton.builder(startState).build();
+			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.EOF eof) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(eof);
+	public Automaton visit(org.iguana.regex.EOF eof) {
+		Automaton automaton = cache.get(eof);
 		if (automaton == null) {
 			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
 			org.iguana.regex.automaton.State endState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
 			endState.addRegularExpression(eof);
 			startState.addTransition(new org.iguana.regex.automaton.Transition(EOF.VALUE, endState));
-			automaton = org.iguana.regex.automaton.Automaton.builder(startState).build();
+			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Epsilon e) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(e);
+	public Automaton visit(org.iguana.regex.Epsilon e) {
+		Automaton automaton = cache.get(e);
 		if (automaton == null) {
 			org.iguana.regex.automaton.State state = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
 			state.addRegularExpression(e);
-			return org.iguana.regex.automaton.Automaton.builder(state).build();
+			return Automaton.builder(state).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Star star) {
+	public Automaton visit(org.iguana.regex.Star star) {
 		//TODO: add separators to the DFA
-		org.iguana.regex.automaton.Automaton automaton = cache.get(star);
+		Automaton automaton = cache.get(star);
 		if (automaton == null) {
 			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
 			org.iguana.regex.automaton.State finalState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
 			finalState.addRegularExpression(star);
 
-			org.iguana.regex.automaton.Automaton starAutomaton = star.getSymbol().accept(this).copy();
+			Automaton starAutomaton = star.getSymbol().accept(this).copy();
 
 			startState.addEpsilonTransition(starAutomaton.getStartState());
 
@@ -82,14 +85,14 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<org.igu
 
 			startState.addEpsilonTransition(finalState);
 
-			automaton = org.iguana.regex.automaton.Automaton.builder(startState).build();
+			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Plus p) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(p);
+	public Automaton visit(org.iguana.regex.Plus p) {
+		Automaton automaton = cache.get(p);
 		if (automaton == null) {
 			automaton = org.iguana.regex.Seq.from(p.getSymbol(), org.iguana.regex.Star.from(p.getSymbol())).accept(this);
 		}
@@ -97,8 +100,8 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<org.igu
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Opt opt) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(opt);
+	public Automaton visit(org.iguana.regex.Opt opt) {
+		Automaton automaton = cache.get(opt);
 		if (automaton == null) {
 			automaton = opt.getSymbol().accept(this).copy();
 
@@ -112,49 +115,49 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<org.igu
 	}
 
 	@Override
-	public <E extends org.iguana.regex.RegularExpression> org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Alt<E> alt) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(alt);
+	public <E extends RegularExpression> Automaton visit(org.iguana.regex.Alt<E> alt) {
+		Automaton automaton = cache.get(alt);
 		if (automaton == null) {
 			List<E> symbols = alt.getSymbols();
 
 			if (symbols.size() == 1)
 				return symbols.get(0).accept(this);
 
-			List<org.iguana.regex.automaton.Automaton> automatons = new ArrayList<>();
+			List<Automaton> automatons = new ArrayList<>();
 
-			for (org.iguana.regex.RegularExpression e : symbols) {
+			for (RegularExpression e : symbols) {
 				automatons.add(e.accept(this).copy());
 			}
 
 			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
 
-			for (org.iguana.regex.automaton.Automaton a : automatons) {
+			for (Automaton a : automatons) {
 				startState.addEpsilonTransition(a.getStartState());
 				for (org.iguana.regex.automaton.State finalState : a.getFinalStates()) {
 					finalState.addRegularExpression(alt);
 				}
 			}
 
-			automaton = new org.iguana.regex.automaton.AutomatonBuilder(startState).build();
+			automaton = new AutomatonBuilder(startState).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public <E extends org.iguana.regex.RegularExpression> org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Seq<E> seq) {
-		org.iguana.regex.automaton.Automaton automaton = cache.get(seq);
+	public <E extends RegularExpression> Automaton visit(org.iguana.regex.Seq<E> seq) {
+		Automaton automaton = cache.get(seq);
 		if (automaton == null) {
-			List<org.iguana.regex.automaton.Automaton> automatons = new ArrayList<>();
+			List<Automaton> automatons = new ArrayList<>();
 
 			for (E symbol : seq.getSymbols()) {
 				automatons.add(symbol.accept(this).copy());
 			}
 
-			org.iguana.regex.automaton.Automaton current = automatons.get(0);
+			Automaton current = automatons.get(0);
 			org.iguana.regex.automaton.State startState = current.getStartState();
 
 			for (int i = 1; i < automatons.size(); i++) {
-				org.iguana.regex.automaton.Automaton next = automatons.get(i);
+				Automaton next = automatons.get(i);
 
 				for (org.iguana.regex.automaton.State s : current.getFinalStates()) {
 					s.setStateType(org.iguana.regex.automaton.StateType.NORMAL);
@@ -171,13 +174,13 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<org.igu
 				finalState.addRegularExpression(seq);
 			}
 
-			automaton = org.iguana.regex.automaton.Automaton.builder(startState).build();
+			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
 	}
 
 	@Override
-	public org.iguana.regex.automaton.Automaton visit(org.iguana.regex.Reference ref) {
+	public Automaton visit(org.iguana.regex.Reference ref) {
 		throw new RuntimeException("References should be resolved first");
 	}
 
