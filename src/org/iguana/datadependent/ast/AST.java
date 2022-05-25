@@ -112,13 +112,13 @@ public class AST {
 
         @Override
         public Object interpret(IEvaluatorContext ctx, Input input) {
-            Object[] arguments = interpretArguments(ctx, input);
-            for (Object argument : arguments) {
-                if (!(argument instanceof java.lang.Boolean)) {
+            for (Expression argument : arguments) {
+                Object value = argument.interpret(ctx, input);
+                if (!(value instanceof java.lang.Boolean)) {
                     throw new UnexpectedTypeOfArgumentException(this);
                 }
-                if (!((java.lang.Boolean) argument)) {
-                    throw new AssertionFailedException(this);
+                if (!((java.lang.Boolean) value)) {
+                    throw new AssertionFailedException(argument);
                 }
             }
             return null;

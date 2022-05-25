@@ -2,7 +2,7 @@ start X
   = S(1,2)
 
 S(a,b)
-  = l:A println(l,a,b); assert(a == 1); assert(b == 2); assert(l.l == 0); assert(l.r == 1); B
+  = l:A println(l,a,b); assert(a == 1, b == 2, l.l == 0, l.r == 1); B
 
 A = 'a'
 
