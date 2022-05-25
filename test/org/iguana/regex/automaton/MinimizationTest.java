@@ -33,176 +33,175 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MinimizationTest {
 
-	@Test
 	public void test1() {
-		org.iguana.regex.automaton.State q0 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State q1 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State q2 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State q3 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State q4 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State q5 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		org.iguana.regex.automaton.State q6 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		org.iguana.regex.automaton.State q7 = new org.iguana.regex.automaton.State();
+		State q0 = new State();
+		State q1 = new State();
+		State q2 = new State();
+		State q3 = new State();
+		State q4 = new State();
+		State q5 = new State(StateType.FINAL);
+		State q6 = new State(StateType.FINAL);
+		State q7 = new State();
 		
-		q0.addTransition(new org.iguana.regex.automaton.Transition('0', q7));
-		q0.addTransition(new org.iguana.regex.automaton.Transition('1', q1));
+		q0.addTransition(new Transition('0', q7));
+		q0.addTransition(new Transition('1', q1));
 		
-		q1.addTransition(new org.iguana.regex.automaton.Transition('0', q7));
-		q1.addTransition(new org.iguana.regex.automaton.Transition('1', q0));
+		q1.addTransition(new Transition('0', q7));
+		q1.addTransition(new Transition('1', q0));
 
-		q2.addTransition(new org.iguana.regex.automaton.Transition('0', q4));
-		q2.addTransition(new org.iguana.regex.automaton.Transition('1', q5));
+		q2.addTransition(new Transition('0', q4));
+		q2.addTransition(new Transition('1', q5));
 		
-		q3.addTransition(new org.iguana.regex.automaton.Transition('0', q4));
-		q3.addTransition(new org.iguana.regex.automaton.Transition('1', q5));
+		q3.addTransition(new Transition('0', q4));
+		q3.addTransition(new Transition('1', q5));
 		
-		q4.addTransition(new org.iguana.regex.automaton.Transition('1', q6));
+		q4.addTransition(new Transition('1', q6));
 		
-		q5.addTransition(new org.iguana.regex.automaton.Transition('0', q5));
-		q5.addTransition(new org.iguana.regex.automaton.Transition('1', q5));
+		q5.addTransition(new Transition('0', q5));
+		q5.addTransition(new Transition('1', q5));
 		
-		q6.addTransition(new org.iguana.regex.automaton.Transition('0', q6));
-		q6.addTransition(new org.iguana.regex.automaton.Transition('1', q5));
+		q6.addTransition(new Transition('0', q6));
+		q6.addTransition(new Transition('1', q5));
 		
-		q7.addTransition(new org.iguana.regex.automaton.Transition('0', q2));
-		q7.addTransition(new org.iguana.regex.automaton.Transition('1', q2));
+		q7.addTransition(new Transition('0', q2));
+		q7.addTransition(new Transition('1', q2));
 		
-		org.iguana.regex.automaton.Automaton nfa = org.iguana.regex.automaton.Automaton.builder(q0).minimize().build();
+		Automaton nfa = Automaton.builder(q0).minimize().build();
 		
 		assertEquals(getAutomaton1(), nfa);
 	}
 	
-	private org.iguana.regex.automaton.Automaton getAutomaton1() {
-		org.iguana.regex.automaton.State state1 = new org.iguana.regex.automaton.State();
-		state1.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state1));
-		org.iguana.regex.automaton.State state2 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state3 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state4 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state5 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		state5.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state5));
-		state5.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state5));
-		state4.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state5));
-		state3.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state4));
-		state3.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state5));
-		state2.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state3));
-		state2.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state3));
-		state1.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state2));
+	private Automaton getAutomaton1() {
+		State state1 = new State();
+		state1.addTransition(new Transition(49, 49, state1));
+		State state2 = new State();
+		State state3 = new State();
+		State state4 = new State();
+		State state5 = new State(StateType.FINAL);
+		state5.addTransition(new Transition(49, 49, state5));
+		state5.addTransition(new Transition(48, 48, state5));
+		state4.addTransition(new Transition(49, 49, state5));
+		state3.addTransition(new Transition(48, 48, state4));
+		state3.addTransition(new Transition(49, 49, state5));
+		state2.addTransition(new Transition(48, 48, state3));
+		state2.addTransition(new Transition(49, 49, state3));
+		state1.addTransition(new Transition(48, 48, state2));
 		
-		return org.iguana.regex.automaton.Automaton.builder(state1).build();
+		return Automaton.builder(state1).build();
 	}
 	
 	
 	public void test2() {
-		org.iguana.regex.automaton.State a = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State b = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State c = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State d = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State e = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+		State a = new State();
+		State b = new State();
+		State c = new State();
+		State d = new State();
+		State e = new State(StateType.FINAL);
 		
-		a.addTransition(new org.iguana.regex.automaton.Transition('0', b));
-		a.addTransition(new org.iguana.regex.automaton.Transition('1', c));
-		b.addTransition(new org.iguana.regex.automaton.Transition('0', '1', d));
-		c.addTransition(new org.iguana.regex.automaton.Transition('0', '1', d));
-		d.addTransition(new org.iguana.regex.automaton.Transition('0', '1', e));
+		a.addTransition(new Transition('0', b));
+		a.addTransition(new Transition('1', c));
+		b.addTransition(new Transition('0', '1', d));
+		c.addTransition(new Transition('0', '1', d));
+		d.addTransition(new Transition('0', '1', e));
 		
-		org.iguana.regex.automaton.Automaton minimized = org.iguana.regex.automaton.Automaton.builder(a).minimize().build();
+		Automaton minimized = Automaton.builder(a).minimize().build();
 		
 		assertEquals(getAutomaton2(), minimized);
 	}
 	
-	private org.iguana.regex.automaton.Automaton getAutomaton2() {
-		org.iguana.regex.automaton.State state1 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state2 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state3 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state4 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		state3.addTransition(new org.iguana.regex.automaton.Transition(48, 49, state4));
-		state2.addTransition(new org.iguana.regex.automaton.Transition(48, 49, state3));
-		state1.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state2));
-		state1.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state2));
-		return org.iguana.regex.automaton.Automaton.builder(state1).build();
+	private Automaton getAutomaton2() {
+		State state1 = new State();
+		State state2 = new State();
+		State state3 = new State();
+		State state4 = new State(StateType.FINAL);
+		state3.addTransition(new Transition(48, 49, state4));
+		state2.addTransition(new Transition(48, 49, state3));
+		state1.addTransition(new Transition(49, 49, state2));
+		state1.addTransition(new Transition(48, 48, state2));
+		return Automaton.builder(state1).build();
 	}
 	
 	
 	public void test3() {
-		org.iguana.regex.automaton.State a = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		org.iguana.regex.automaton.State b = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State c = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		org.iguana.regex.automaton.State d = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State e = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+		State a = new State(StateType.FINAL);
+		State b = new State();
+		State c = new State(StateType.FINAL);
+		State d = new State();
+		State e = new State(StateType.FINAL);
 		
-		a.addTransition(new org.iguana.regex.automaton.Transition('0', a));
-		a.addTransition(new org.iguana.regex.automaton.Transition('1', b));
-		b.addTransition(new org.iguana.regex.automaton.Transition('0', c));
-		b.addTransition(new org.iguana.regex.automaton.Transition('1', d));
-		c.addTransition(new org.iguana.regex.automaton.Transition('0', c));
-		c.addTransition(new org.iguana.regex.automaton.Transition('1', e));
-		d.addTransition(new org.iguana.regex.automaton.Transition('0', c));
-		d.addTransition(new org.iguana.regex.automaton.Transition('1', d));
-		e.addTransition(new org.iguana.regex.automaton.Transition('0', e));
-		e.addTransition(new org.iguana.regex.automaton.Transition('1', e));
+		a.addTransition(new Transition('0', a));
+		a.addTransition(new Transition('1', b));
+		b.addTransition(new Transition('0', c));
+		b.addTransition(new Transition('1', d));
+		c.addTransition(new Transition('0', c));
+		c.addTransition(new Transition('1', e));
+		d.addTransition(new Transition('0', c));
+		d.addTransition(new Transition('1', d));
+		e.addTransition(new Transition('0', e));
+		e.addTransition(new Transition('1', e));
 		
-		org.iguana.regex.automaton.Automaton minimized = org.iguana.regex.automaton.Automaton.builder(a).minimize().build();
+		Automaton minimized = Automaton.builder(a).minimize().build();
 		
 		assertEquals(getAutomaton3(), minimized);
 	}
 	
-	private org.iguana.regex.automaton.Automaton getAutomaton3() {
-		org.iguana.regex.automaton.State state1 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		state1.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state1));
-		org.iguana.regex.automaton.State state2 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state3 = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
-		state3.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state3));
-		state3.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state3));
-		state2.addTransition(new org.iguana.regex.automaton.Transition(48, 48, state3));
-		state2.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state2));
-		state1.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state2));
-		return org.iguana.regex.automaton.Automaton.builder(state1).build();
+	private Automaton getAutomaton3() {
+		State state1 = new State(StateType.FINAL);
+		state1.addTransition(new Transition(48, 48, state1));
+		State state2 = new State();
+		State state3 = new State(StateType.FINAL);
+		state3.addTransition(new Transition(48, 48, state3));
+		state3.addTransition(new Transition(49, 49, state3));
+		state2.addTransition(new Transition(48, 48, state3));
+		state2.addTransition(new Transition(49, 49, state2));
+		state1.addTransition(new Transition(49, 49, state2));
+		return Automaton.builder(state1).build();
 	}
 	
 	public void test4() {
-		org.iguana.regex.automaton.State a = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State b = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State c = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State d = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State e = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State f = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State g = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State h = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State i = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+		State a = new State();
+		State b = new State();
+		State c = new State();
+		State d = new State();
+		State e = new State();
+		State f = new State();
+		State g = new State();
+		State h = new State();
+		State i = new State(StateType.FINAL);
 		
-		a.addTransition(new org.iguana.regex.automaton.Transition('1', b));
-		a.addTransition(new org.iguana.regex.automaton.Transition('2', c));
-		a.addTransition(new org.iguana.regex.automaton.Transition('3', d));
-		b.addTransition(new org.iguana.regex.automaton.Transition('1', '3', e));
-		c.addTransition(new org.iguana.regex.automaton.Transition('1', '3', e));
-		d.addTransition(new org.iguana.regex.automaton.Transition('1', '3', e));
-		e.addTransition(new org.iguana.regex.automaton.Transition('1', f));
-		e.addTransition(new org.iguana.regex.automaton.Transition('2', g));
-		e.addTransition(new org.iguana.regex.automaton.Transition('3', h));
-		f.addTransition(new org.iguana.regex.automaton.Transition('1', '3', i));
-		g.addTransition(new org.iguana.regex.automaton.Transition('1', '3', i));
-		h.addTransition(new org.iguana.regex.automaton.Transition('1', i));
+		a.addTransition(new Transition('1', b));
+		a.addTransition(new Transition('2', c));
+		a.addTransition(new Transition('3', d));
+		b.addTransition(new Transition('1', '3', e));
+		c.addTransition(new Transition('1', '3', e));
+		d.addTransition(new Transition('1', '3', e));
+		e.addTransition(new Transition('1', f));
+		e.addTransition(new Transition('2', g));
+		e.addTransition(new Transition('3', h));
+		f.addTransition(new Transition('1', '3', i));
+		g.addTransition(new Transition('1', '3', i));
+		h.addTransition(new Transition('1', i));
 		
-		org.iguana.regex.automaton.Automaton minimized = org.iguana.regex.automaton.Automaton.builder(a).minimize().build();
+		Automaton minimized = Automaton.builder(a).minimize().build();
 		
 		assertEquals(getAutomaton4(), minimized);
 	}
 	
-	private org.iguana.regex.automaton.Automaton getAutomaton4() {
-		org.iguana.regex.automaton.State state1 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state2 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state3 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state4 = new org.iguana.regex.automaton.State();
-		org.iguana.regex.automaton.State state5 = new org.iguana.regex.automaton.State(StateType.FINAL);
-		state4.addTransition(new org.iguana.regex.automaton.Transition(49, 51, state5));
-		state3.addTransition(new org.iguana.regex.automaton.Transition(50, 50, state4));
-		org.iguana.regex.automaton.State state6 = new State();
-		state6.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state5));
-		state3.addTransition(new org.iguana.regex.automaton.Transition(51, 51, state6));
-		state3.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state4));
-		state2.addTransition(new org.iguana.regex.automaton.Transition(49, 51, state3));
-		state1.addTransition(new org.iguana.regex.automaton.Transition(50, 50, state2));
-		state1.addTransition(new org.iguana.regex.automaton.Transition(49, 49, state2));
+	private Automaton getAutomaton4() {
+		State state1 = new State();
+		State state2 = new State();
+		State state3 = new State();
+		State state4 = new State();
+		State state5 = new State(StateType.FINAL);
+		state4.addTransition(new Transition(49, 51, state5));
+		state3.addTransition(new Transition(50, 50, state4));
+		State state6 = new State();
+		state6.addTransition(new Transition(49, 49, state5));
+		state3.addTransition(new Transition(51, 51, state6));
+		state3.addTransition(new Transition(49, 49, state4));
+		state2.addTransition(new Transition(49, 51, state3));
+		state1.addTransition(new Transition(50, 50, state2));
+		state1.addTransition(new Transition(49, 49, state2));
 		state1.addTransition(new Transition(51, 51, state2));
 		return Automaton.builder(state1).build();
 	}

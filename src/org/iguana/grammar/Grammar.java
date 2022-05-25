@@ -449,12 +449,12 @@ public class Grammar implements Serializable {
         }
 
         @Override
-        public Boolean visit(org.iguana.regex.Char symbol) {
+        public Boolean visit(Char symbol) {
             return false;
         }
 
         @Override
-        public Boolean visit(org.iguana.regex.CharRange symbol) {
+        public Boolean visit(CharRange symbol) {
             return false;
         }
 

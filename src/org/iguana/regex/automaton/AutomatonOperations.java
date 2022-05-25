@@ -43,12 +43,12 @@ public class AutomatonOperations {
 		return makeDeterministic(automaton.getStartState(), automaton.getAlphabet());
 	}
 
-	public static Automaton makeDeterministic(org.iguana.regex.automaton.State start, org.iguana.regex.CharRange[] alphabet) {
+	public static Automaton makeDeterministic(State start, CharRange[] alphabet) {
 
-		Set<Set<org.iguana.regex.automaton.State>> visitedStates = new HashSet<>();
-		Deque<Set<org.iguana.regex.automaton.State>> processList = new ArrayDeque<>();
+		Set<Set<State>> visitedStates = new HashSet<>();
+		Deque<Set<State>> processList = new ArrayDeque<>();
 		
-		Set<org.iguana.regex.automaton.State> initialState = new HashSet<>();
+		Set<State> initialState = new HashSet<>();
 		initialState.add(start);
 		initialState = epsilonClosure(initialState);
 		visitedStates.add(initialState);
@@ -58,25 +58,25 @@ public class AutomatonOperations {
 		 * A map from the set of NFA states to the new state in the produced DFA.
 		 * This map is used for sharing DFA states.
 		 */
-		Map<Set<org.iguana.regex.automaton.State>, org.iguana.regex.automaton.State> newStatesMap = new HashMap<>();
+		Map<Set<State>, State> newStatesMap = new HashMap<>();
 		
-		org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
+		State startState = new State();
 		
 		newStatesMap.put(initialState, startState);
 		
 		while (!processList.isEmpty()) {
-			Set<org.iguana.regex.automaton.State> stateSet = processList.poll();
+			Set<State> stateSet = processList.poll();
 
-			for (org.iguana.regex.CharRange r : alphabet) {
-				Set<org.iguana.regex.automaton.State> destState = move(stateSet, r);
+			for (CharRange r : alphabet) {
+				Set<State> destState = move(stateSet, r);
 				
 				if (destState.isEmpty())
 					continue;
 				
-				org.iguana.regex.automaton.State source = newStatesMap.get(stateSet);
-				org.iguana.regex.automaton.State dest = newStatesMap.computeIfAbsent(destState, s -> {
-					org.iguana.regex.automaton.State state = new org.iguana.regex.automaton.State();
-					for (org.iguana.regex.automaton.State ds : destState) {
+				State source = newStatesMap.get(stateSet);
+				State dest = newStatesMap.computeIfAbsent(destState, s -> {
+					State state = new State();
+					for (State ds : destState) {
 						state.addRegularExpressions(ds.getRegularExpressions());
 					}
 					return state;
@@ -92,10 +92,10 @@ public class AutomatonOperations {
 		
 		// Setting the final states.
 		outer:
-		for (Entry<Set<org.iguana.regex.automaton.State>, org.iguana.regex.automaton.State> e : newStatesMap.entrySet()) {
-			for (org.iguana.regex.automaton.State s : e.getKey()) {
-				if (s.getStateType() == org.iguana.regex.automaton.StateType.FINAL) {
-					e.getValue().setStateType(org.iguana.regex.automaton.StateType.FINAL);
+		for (Entry<Set<State>, State> e : newStatesMap.entrySet()) {
+			for (State s : e.getKey()) {
+				if (s.getStateType() == StateType.FINAL) {
+					e.getValue().setStateType(StateType.FINAL);
 					continue outer;
 				}
 			}			
@@ -120,11 +120,11 @@ public class AutomatonOperations {
 		a1 = makeDeterministic(a1);
 		a2 = makeDeterministic(a2);
 		
-		Map<org.iguana.regex.CharRange, List<org.iguana.regex.CharRange>> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
+		Map<CharRange, List<CharRange>> rangeMap = merge(a1.getAlphabet(), a2.getAlphabet());
 		convertToNonOverlapping(a1, rangeMap);
 		convertToNonOverlapping(a2, rangeMap);
 		
-		Set<org.iguana.regex.CharRange> values = rangeMap.values().stream()
+		Set<CharRange> values = rangeMap.values().stream()
 				                                      .flatMap(List::stream)
 				                                      .collect(Collectors.toSet());
 		
@@ -137,33 +137,33 @@ public class AutomatonOperations {
 	/**
 	 * Produces the Cartesian product of the states of an automata.
 	 */
-	private static Automaton product(Automaton a1, Automaton a2, Set<org.iguana.regex.CharRange> values, Op op) {
+	private static Automaton product(Automaton a1, Automaton a2, Set<CharRange> values, Op op) {
 		
-		org.iguana.regex.automaton.State[] states1 = a1.getStates();
-		org.iguana.regex.automaton.State[] states2 = a2.getStates();
+		State[] states1 = a1.getStates();
+		State[] states2 = a2.getStates();
 		
-		org.iguana.regex.automaton.State[][] newStates = new org.iguana.regex.automaton.State[states1.length][states2.length];
+		State[][] newStates = new State[states1.length][states2.length];
 		
-		org.iguana.regex.automaton.State startState = null;
+		State startState = null;
 
 		for (int i = 0; i < states1.length; i++) {
 			for (int j = 0; j < states2.length; j++) {
 				
-				org.iguana.regex.automaton.State state = getState(newStates, i, j);
-				org.iguana.regex.automaton.State state1 = states1[i];
-				org.iguana.regex.automaton.State state2 = states2[j];
+				State state = getState(newStates, i, j);
+				State state1 = states1[i];
+				State state2 = states2[j];
 				
-				for (org.iguana.regex.CharRange r : values) {
-					org.iguana.regex.automaton.State dest1 = state1.getState(r);
-					org.iguana.regex.automaton.State dest2 = state2.getState(r);
+				for (CharRange r : values) {
+					State dest1 = state1.getState(r);
+					State dest2 = state2.getState(r);
 					if (dest1 != null && dest2 != null) {
-						org.iguana.regex.automaton.State dest = getState(newStates, dest1.getId(), dest2.getId());
+						State dest = getState(newStates, dest1.getId(), dest2.getId());
 						state.addTransition(new Transition(r, dest));
 					}
 				}
 				
 				if (op.execute(state1, state2)) {
-					state.setStateType(org.iguana.regex.automaton.StateType.FINAL);
+					state.setStateType(StateType.FINAL);
 				}
 				
 				if (state1 == a1.getStartState() && state2 == a2.getStartState()) {
@@ -175,23 +175,23 @@ public class AutomatonOperations {
 		return Automaton.builder(startState).build();
 	}
 
-	private static org.iguana.regex.automaton.State getState(org.iguana.regex.automaton.State[][] newStates, int i, int j) {
-		org.iguana.regex.automaton.State state = newStates[i][j];
+	private static State getState(State[][] newStates, int i, int j) {
+		State state = newStates[i][j];
 		if (state == null) {
-			state = new org.iguana.regex.automaton.State();
+			state = new State();
 			newStates[i][j] = state;
 		}
 		return state;
 	}
 	
-	public static void convertToNonOverlapping(Automaton a, Map<org.iguana.regex.CharRange, List<org.iguana.regex.CharRange>> rangeMap) {
-		for (org.iguana.regex.automaton.State state : a.getStates()) {
+	public static void convertToNonOverlapping(Automaton a, Map<CharRange, List<CharRange>> rangeMap) {
+		for (State state : a.getStates()) {
 			List<Transition> removeList = new ArrayList<>();
 			List<Transition> addList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					removeList.add(transition);
-					for (org.iguana.regex.CharRange range : rangeMap.get(transition.getRange())) {
+					for (CharRange range : rangeMap.get(transition.getRange())) {
 						addList.add(new Transition(range, transition.getDestination()));
 					}					
 				}
@@ -202,13 +202,13 @@ public class AutomatonOperations {
 	}
 	
 	
-	public static Automaton makeComplete(Automaton automaton, Iterable<org.iguana.regex.CharRange> alphabet) {
+	public static Automaton makeComplete(Automaton automaton, Iterable<CharRange> alphabet) {
 		
-		org.iguana.regex.automaton.State dummyState = new org.iguana.regex.automaton.State();
+		State dummyState = new State();
 		alphabet.forEach(r -> dummyState.addTransition(new Transition(r, dummyState)));
 		
-		for (org.iguana.regex.automaton.State state : automaton.getStates()) {
-			for (org.iguana.regex.CharRange r : alphabet) {
+		for (State state : automaton.getStates()) {
+			for (CharRange r : alphabet) {
 				if (!state.hasTransition(r)) {
 					state.addTransition(new Transition(r, dummyState));
 				}
@@ -218,10 +218,10 @@ public class AutomatonOperations {
 		return Automaton.builder(automaton.getStartState()).build();
 	}
 	
-	private static Map<org.iguana.regex.CharRange, List<org.iguana.regex.CharRange>> merge(org.iguana.regex.CharRange[] alphabet1, org.iguana.regex.CharRange[] alphabet2) {
-		List<org.iguana.regex.CharRange> alphabets = new ArrayList<>();
-		for (org.iguana.regex.CharRange r : alphabet1) { alphabets.add(r); }
-		for (org.iguana.regex.CharRange r : alphabet2) { alphabets.add(r); }
+	private static Map<CharRange, List<CharRange>> merge(CharRange[] alphabet1, CharRange[] alphabet2) {
+		List<CharRange> alphabets = new ArrayList<>();
+		for (CharRange r : alphabet1) { alphabets.add(r); }
+		for (CharRange r : alphabet2) { alphabets.add(r); }
 		
 		return CharacterRanges.toNonOverlapping(alphabets);
 	}
@@ -231,7 +231,7 @@ public class AutomatonOperations {
 		if (automaton.isMinimized())
 			return automaton;
 
-		return minimize(automaton.getAlphabet(), automaton.getStates());
+		return minimize(automaton.getAlphabet(), automaton.getStates(), automaton.getStartState());
 	}
 	
 	
@@ -246,29 +246,29 @@ public class AutomatonOperations {
 	public static Automaton reverse(Automaton automaton) {
 
 		// 1. Creating new states for each state of the original automaton
-		final Map<org.iguana.regex.automaton.State, org.iguana.regex.automaton.State> newStates = new HashMap<>();
+		final Map<State, State> newStates = new HashMap<>();
 		
-		for (org.iguana.regex.automaton.State s : automaton.getStates()) {
-			newStates.put(s, new org.iguana.regex.automaton.State());
+		for (State s : automaton.getStates()) {
+			newStates.put(s, new State());
 		}
 		
 		// 2. Creating a new start state and adding epsilon transitions to the final
 		// states of the original automata
-		org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
+		State startState = new State();
 		
-		for (org.iguana.regex.automaton.State finalState : automaton.getFinalStates()) {
+		for (State finalState : automaton.getFinalStates()) {
 			startState.addEpsilonTransition(newStates.get(finalState));
 		}
 		
 		// 3. Reversing the transitions
-		for (org.iguana.regex.automaton.State state : automaton.getStates()) {
+		for (State state : automaton.getStates()) {
 			for (Transition t : state.getTransitions()) {
 				newStates.get(t.getDestination()).addTransition(new Transition(t.getRange(), newStates.get(state)));
 			}
 		}
 		
 		// 4. Making the start state final
-		newStates.get(automaton.getStartState()).setStateType(org.iguana.regex.automaton.StateType.FINAL);
+		newStates.get(automaton.getStartState()).setStateType(StateType.FINAL);
 		 
 		return Automaton.builder(startState).build();
 	}
@@ -280,7 +280,7 @@ public class AutomatonOperations {
 	 * 
 	 * @return
 	 */
-	public static Automaton minimize(org.iguana.regex.CharRange[] alphabet, org.iguana.regex.automaton.State[] states) {
+	public static Automaton minimize(CharRange[] alphabet, State[] states, State startState) {
 		
 		int size = states.length;
 		int[][] table = new int[size][size];
@@ -322,8 +322,8 @@ public class AutomatonOperations {
 						// If two states i and j are distinct
 						if (table[i][j] == EMPTY) {
 							for (int t = 0; t < alphabet.length; t++) {
-								org.iguana.regex.automaton.State q1 = states[i].getState(alphabet[t]);
-								org.iguana.regex.automaton.State q2 = states[j].getState(alphabet[t]);
+								State q1 = states[i].getState(alphabet[t]);
+								State q2 = states[j].getState(alphabet[t]);
 
 								// If both states i and j have no outgoing transitions on the interval t, continue with the
 								// next transition.
@@ -364,19 +364,19 @@ public class AutomatonOperations {
 				}
 		}
 		
-		Map<org.iguana.regex.automaton.State, Set<org.iguana.regex.automaton.State>> partitionsMap = new HashMap<>();
+		Map<State, Set<State>> partitionsMap = new HashMap<>();
 		
 		for (int i = 0; i < table.length; i++) {
 			for (int j = 0; j < i; j++) {
 				if (table[i][j] == EMPTY) {
-					org.iguana.regex.automaton.State stateI = states[i];
-					org.iguana.regex.automaton.State stateJ = states[j];
+					State stateI = states[i];
+					State stateJ = states[j];
 					
-					Set<org.iguana.regex.automaton.State> partitionI = partitionsMap.get(stateI);
-					Set<org.iguana.regex.automaton.State> partitionJ = partitionsMap.get(stateJ);
+					Set<State> partitionI = partitionsMap.get(stateI);
+					Set<State> partitionJ = partitionsMap.get(stateJ);
 					
 					if(partitionI == null && partitionJ == null) {
-						Set<org.iguana.regex.automaton.State> set = new HashSet<>();
+						Set<State> set = new HashSet<>();
 						set.add(stateI);
 						set.add(stateJ);
 						partitionsMap.put(stateI, set);
@@ -398,28 +398,28 @@ public class AutomatonOperations {
 			}
 		}
 		
-		HashSet<Set<org.iguana.regex.automaton.State>> partitions = new HashSet<Set<org.iguana.regex.automaton.State>>(partitionsMap.values());
+		HashSet<Set<State>> partitions = new HashSet<Set<State>>(partitionsMap.values());
 		
-		org.iguana.regex.automaton.State startState = null;
+		State newStartState = null;
 		
-		for (org.iguana.regex.automaton.State state : states) {
+		for (State state : states) {
 			if (partitionsMap.get(state) == null) {
-				Set<org.iguana.regex.automaton.State> set = new HashSet<>();
+				Set<State> set = new HashSet<>();
 				set.add(state);
 				partitions.add(set);
 			}
 		} 
 		
-		Map<org.iguana.regex.automaton.State, org.iguana.regex.automaton.State> newStates = new HashMap<>();
+		Map<State, State> newStates = new HashMap<>();
 
-		for (Set<org.iguana.regex.automaton.State> set : partitions) {
-			org.iguana.regex.automaton.State newState = new org.iguana.regex.automaton.State();
-			for (org.iguana.regex.automaton.State state : set) {
+		for (Set<State> set : partitions) {
+			State newState = new State();
+			for (State state : set) {
 				
 				newState.addRegularExpressions(state.getRegularExpressions());
 				
-				if (startState == state) {
-					startState = newState;
+				if (set.contains(startState)) {
+					newStartState = newState;
 				}
 				if (state.isFinalState()) {
 					newState.setStateType(StateType.FINAL);
@@ -428,21 +428,21 @@ public class AutomatonOperations {
 			}
 		}
 		
-		for (org.iguana.regex.automaton.State state : states) {
+		for (State state : states) {
 			for (Transition t : state.getTransitions()) {
 				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
 			}
 		}
 		
-		return Automaton.builder(startState).build();
+		return Automaton.builder(newStartState).build();
 	}
 
 	
-	private static Set<org.iguana.regex.automaton.State> epsilonClosure(Set<org.iguana.regex.automaton.State> states) {
-		Set<org.iguana.regex.automaton.State> newStates = new HashSet<>(states);
+	private static Set<State> epsilonClosure(Set<State> states) {
+		Set<State> newStates = new HashSet<>(states);
 		
-		for(org.iguana.regex.automaton.State state : states) {
-			Set<org.iguana.regex.automaton.State> s = state.getEpsilonSates();
+		for(State state : states) {
+			Set<State> s = state.getEpsilonSates();
 			if(!s.isEmpty()) {
 				newStates.addAll(s);
 				newStates.addAll(epsilonClosure(s));
@@ -452,10 +452,10 @@ public class AutomatonOperations {
 		return newStates;
 	}
 	
-	private static Set<org.iguana.regex.automaton.State> move(Set<org.iguana.regex.automaton.State> state, CharRange r) {
-		Set<org.iguana.regex.automaton.State> result = new HashSet<>();
-		for (org.iguana.regex.automaton.State s: state) {
-			org.iguana.regex.automaton.State dest = s.getState(r);
+	private static Set<State> move(Set<State> state, CharRange r) {
+		Set<State> result = new HashSet<>();
+		for (State s: state) {
+			State dest = s.getState(r);
 			if (dest != null) {
 				result.add(dest);
 			}
@@ -466,7 +466,7 @@ public class AutomatonOperations {
 	
 	@FunctionalInterface
 	private static interface Op {
-		public boolean execute(org.iguana.regex.automaton.State s1, State s2);
+		public boolean execute(State s1, State s2);
 	}
 	
 }

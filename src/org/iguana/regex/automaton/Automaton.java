@@ -47,19 +47,19 @@ public class Automaton implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final org.iguana.regex.automaton.State startState;
+	private final State startState;
 	
-	private final org.iguana.regex.automaton.State[] states;
+	private final State[] states;
 	
-	private final Set<org.iguana.regex.automaton.State> finalStates;
+	private final Set<State> finalStates;
 	
 	private final boolean minimized;
 	
 	private final boolean deterministic;
 	
-	private final org.iguana.regex.CharRange[] alphabet;
+	private final CharRange[] alphabet;
 	
-	public Automaton(org.iguana.regex.automaton.AutomatonBuilder builder) {
+	public Automaton(AutomatonBuilder builder) {
 		this.startState = builder.getStartState();
 		this.states = builder.getStates();
 		this.finalStates = builder.getFinalStates();
@@ -68,11 +68,11 @@ public class Automaton implements Serializable {
 		this.alphabet = builder.getAlphabet();
 	}
 	
-	public org.iguana.regex.automaton.State getStartState() {
+	public State getStartState() {
 		return startState;
 	}
 	
-	public Set<org.iguana.regex.automaton.State> getFinalStates() {
+	public Set<State> getFinalStates() {
 		return finalStates;
 	}
 	
@@ -80,11 +80,11 @@ public class Automaton implements Serializable {
 		return states.length;
 	}
 	
-	public org.iguana.regex.automaton.State[] getStates() {
+	public State[] getStates() {
 		return states;
 	}
 	
-	public org.iguana.regex.automaton.State getState(int id) {
+	public State getState(int id) {
 		return states[id];
 	}
 	
@@ -108,17 +108,17 @@ public class Automaton implements Serializable {
 	 * All characters accepted by this NFA.
 	 */
 	public BitSet getCharacters() {
-		return org.iguana.regex.automaton.AutomatonBuilder.getCharacters(this);
+		return AutomatonBuilder.getCharacters(this);
 	}
 	
 	public Automaton copy() {
 		
-		final Map<org.iguana.regex.automaton.State, org.iguana.regex.automaton.State> newStates = new HashMap<>();
+		final Map<State, State> newStates = new HashMap<>();
 		
-		final org.iguana.regex.automaton.State[] newStartState = new org.iguana.regex.automaton.State[1];
+		final State[] newStartState = new State[1];
 		
-		org.iguana.regex.automaton.AutomatonVisitor.visit(startState, state -> {
-			org.iguana.regex.automaton.State newState = new org.iguana.regex.automaton.State();
+		AutomatonVisitor.visit(startState, state -> {
+			State newState = new State();
 			
 			newStates.put(state, newState);
 			newState.setStateType(state.getStateType());
@@ -131,7 +131,7 @@ public class Automaton implements Serializable {
 		
 		AutomatonVisitor.visit(startState, state -> {
 				for(Transition transition : state.getTransitions()) {
-					org.iguana.regex.automaton.State newState = newStates.get(state);
+					State newState = newStates.get(state);
 					newState.addTransition(new Transition(transition.getStart(), 
 														  transition.getEnd(), 
 														  newStates.get(transition.getDestination())));
@@ -219,11 +219,11 @@ public class Automaton implements Serializable {
 		return getFinalStates().size() == 0;
 	}
 	
-	public org.iguana.regex.automaton.AutomatonBuilder builder() {
-		return new org.iguana.regex.automaton.AutomatonBuilder(this);
+	public AutomatonBuilder builder() {
+		return new AutomatonBuilder(this);
 	}
 	
-	public static org.iguana.regex.automaton.AutomatonBuilder builder(State startState) {
+	public static AutomatonBuilder builder(State startState) {
 		return new AutomatonBuilder(startState);
 	}
 

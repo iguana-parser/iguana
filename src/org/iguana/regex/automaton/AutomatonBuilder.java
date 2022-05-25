@@ -35,22 +35,22 @@ import java.util.stream.Collectors;
 
 public class AutomatonBuilder {
 	
-	private org.iguana.regex.automaton.State startState;
+	private State startState;
 	
 	private boolean deterministic;
 	
 	private boolean minimized;
 	
-	private org.iguana.regex.CharRange[] alphabet;
+	private CharRange[] alphabet;
 	
-	private org.iguana.regex.automaton.State[] states;
+	private State[] states;
 
-	private Set<org.iguana.regex.automaton.State> finalStates;
+	private Set<State> finalStates;
 
 	/**
 	 * From transitions to non-overlapping transitions
 	 */
-	private Map<org.iguana.regex.CharRange, List<org.iguana.regex.CharRange>> rangeMap;
+	private Map<CharRange, List<CharRange>> rangeMap;
 
 	public AutomatonBuilder(Automaton automaton) {
 		this.deterministic = automaton.isDeterministic();
@@ -65,7 +65,7 @@ public class AutomatonBuilder {
 		}
 	}
 
-	public AutomatonBuilder(org.iguana.regex.automaton.State startState) {
+	public AutomatonBuilder(State startState) {
 		this.states = getAllStates(startState);
 		this.startState = startState;
 		this.finalStates = computeFinalStates();
@@ -77,19 +77,19 @@ public class AutomatonBuilder {
 		return new Automaton(this);
 	}
 
-	public org.iguana.regex.CharRange[] getAlphabet() {
+	public CharRange[] getAlphabet() {
 		return alphabet;
 	}
 
-	public Set<org.iguana.regex.automaton.State> getFinalStates() {
+	public Set<State> getFinalStates() {
 		return finalStates;
 	}
 
-	public org.iguana.regex.automaton.State getStartState() {
+	public State getStartState() {
 		return startState;
 	}
 
-	public org.iguana.regex.automaton.State[] getStates() {
+	public State[] getStates() {
 		return states;
 	}
 
@@ -101,25 +101,25 @@ public class AutomatonBuilder {
 		return deterministic;
 	}
 
-	private static Map<org.iguana.regex.CharRange, List<org.iguana.regex.CharRange>> getRangeMap(org.iguana.regex.automaton.State startState) {
+	private static Map<CharRange, List<CharRange>> getRangeMap(State startState) {
 		return CharacterRanges.toNonOverlapping(getAllRanges(startState));
 	}
 
-	private static org.iguana.regex.CharRange[] getAlphabet(Map<org.iguana.regex.CharRange, List<org.iguana.regex.CharRange>> rangeMap) {
-		Set<org.iguana.regex.CharRange> values = rangeMap.values().stream()
+	private static CharRange[] getAlphabet(Map<CharRange, List<CharRange>> rangeMap) {
+		Set<CharRange> values = rangeMap.values().stream()
 				                                      .flatMap(Collection::stream)
 				                                      .collect(Collectors.toCollection(LinkedHashSet::new));
 
-		org.iguana.regex.CharRange[] alphabet = new org.iguana.regex.CharRange[values.size()];
+		CharRange[] alphabet = new CharRange[values.size()];
 		int i = 0;
-		for (org.iguana.regex.CharRange r : values) {
+		for (CharRange r : values) {
 			alphabet[i++] = r;
 		}
 		return alphabet;
 	}
 
 	public AutomatonBuilder makeDeterministic() {
-		Automaton dfa = org.iguana.regex.automaton.AutomatonOperations.makeDeterministic(startState, alphabet);
+		Automaton dfa = AutomatonOperations.makeDeterministic(startState, alphabet);
 		this.startState = dfa.getStartState();
 		this.finalStates = dfa.getFinalStates();
 		this.states = dfa.getStates();
@@ -142,7 +142,7 @@ public class AutomatonBuilder {
 		if (!deterministic)
 			makeDeterministic();
 
-		Automaton automaton = AutomatonOperations.minimize(alphabet, states);
+		Automaton automaton = AutomatonOperations.minimize(alphabet, states, startState);
 		this.startState = automaton.getStartState();
 		this.finalStates = automaton.getFinalStates();
 		this.states = automaton.getStates();
@@ -171,7 +171,7 @@ public class AutomatonBuilder {
 	public static BitSet getCharacters(Automaton automaton) {
 		final BitSet bitSet = new BitSet();
 
-		org.iguana.regex.automaton.AutomatonVisitor.visit(automaton.getStartState(), state -> {
+		AutomatonVisitor.visit(automaton.getStartState(), state -> {
 				for(Transition transition : state.getTransitions()) {
 					bitSet.set(transition.getStart(), transition.getEnd() + 1);
 				}
@@ -202,15 +202,15 @@ public class AutomatonBuilder {
 		return merged;
 	}
 
-	private void convertToNonOverlapping(org.iguana.regex.automaton.State startState) {
+	private void convertToNonOverlapping(State startState) {
 		this.rangeMap = getRangeMap(startState);
-		for (org.iguana.regex.automaton.State state : states) {
+		for (State state : states) {
 			List<Transition> removeList = new ArrayList<>();
 			List<Transition> addList = new ArrayList<>();
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					removeList.add(transition);
-					for (org.iguana.regex.CharRange range : rangeMap.get(transition.getRange())) {
+					for (CharRange range : rangeMap.get(transition.getRange())) {
 						addList.add(new Transition(range, transition.getDestination()));
 					}
 				}
@@ -221,10 +221,10 @@ public class AutomatonBuilder {
 		this.alphabet = getAlphabet(rangeMap);
 	}
 
-	private static List<org.iguana.regex.CharRange> getAllRanges(org.iguana.regex.automaton.State startState) {
-		final Set<org.iguana.regex.CharRange> ranges = new HashSet<>();
+	private static List<CharRange> getAllRanges(State startState) {
+		final Set<CharRange> ranges = new HashSet<>();
 
-		org.iguana.regex.automaton.AutomatonVisitor.visit(startState, state -> {
+		AutomatonVisitor.visit(startState, state -> {
 			for (Transition transition : state.getTransitions()) {
 				if (!transition.isEpsilonTransition()) {
 					ranges.add(transition.getRange());
@@ -238,18 +238,18 @@ public class AutomatonBuilder {
 	public static int getCountStates(Automaton automaton) {
 		final int[] count = new int[1];
 
-		org.iguana.regex.automaton.AutomatonVisitor.visit(automaton, s -> count[0]++);
+		AutomatonVisitor.visit(automaton, s -> count[0]++);
 
 		return count[0];
 	}
 
-	private static org.iguana.regex.automaton.State[] getAllStates(org.iguana.regex.automaton.State startState) {
-		final Set<org.iguana.regex.automaton.State> set = new LinkedHashSet<>();
-		org.iguana.regex.automaton.AutomatonVisitor.visit(startState, s -> set.add(s));
+	private static State[] getAllStates(State startState) {
+		final Set<State> set = new LinkedHashSet<>();
+		AutomatonVisitor.visit(startState, s -> set.add(s));
 
-		org.iguana.regex.automaton.State[] states = new org.iguana.regex.automaton.State[set.size()];
+		State[] states = new State[set.size()];
 		int i = 0;
-		for (org.iguana.regex.automaton.State s : set) {
+		for (State s : set) {
 			states[i++] = s;
 		}
 		return states;
@@ -261,11 +261,11 @@ public class AutomatonBuilder {
 		}
 	}
 
-	private Set<org.iguana.regex.automaton.State> computeFinalStates() {
+	private Set<State> computeFinalStates() {
 
-		final Set<org.iguana.regex.automaton.State> finalStates = new HashSet<>();
+		final Set<State> finalStates = new HashSet<>();
 
-		org.iguana.regex.automaton.AutomatonVisitor.visit(startState, s -> {
+		AutomatonVisitor.visit(startState, s -> {
 				if (s.isFinalState()) {
 					finalStates.add(s);
 				}
@@ -275,7 +275,7 @@ public class AutomatonBuilder {
 	}
 
 
-	public org.iguana.regex.automaton.State getState(int i) {
+	public State getState(int i) {
 		return states[i];
 	}
 	
@@ -287,7 +287,7 @@ public class AutomatonBuilder {
 		
 		makeDeterministic();
 		
-		org.iguana.regex.automaton.State dummyState = new State();
+		State dummyState = new State();
 		
 		AutomatonVisitor.visit(startState, s -> {
 			for (CharRange r : alphabet) {

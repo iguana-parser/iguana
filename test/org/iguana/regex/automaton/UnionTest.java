@@ -27,10 +27,10 @@
 
 package org.iguana.regex.automaton;
 
-import org.iguana.utils.input.Input;
 import org.iguana.regex.Char;
 import org.iguana.regex.Seq;
 import org.iguana.regex.matcher.DFAMatcher;
+import org.iguana.utils.input.Input;
 import org.junit.jupiter.api.Test;
 
 import static org.iguana.regex.automaton.AutomatonOperations.union;
@@ -45,7 +45,7 @@ public class UnionTest {
 
 	@Test
 	public void test1() {
-		org.iguana.regex.automaton.Automaton a = union(k1.getAutomaton(), k2.getAutomaton());
+		Automaton a = union(k1.getAutomaton(), k2.getAutomaton());
 		DFAMatcher matcher = new DFAMatcher(a);
 
 		assertTrue(matcher.match(Input.fromString("if")));

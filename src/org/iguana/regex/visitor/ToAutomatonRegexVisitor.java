@@ -2,9 +2,7 @@ package org.iguana.regex.visitor;
 
 import org.iguana.regex.EOF;
 import org.iguana.regex.RegularExpression;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.regex.automaton.AutomatonBuilder;
-import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.*;
 
 import java.util.*;
 
@@ -16,10 +14,10 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	public Automaton visit(org.iguana.regex.Char c) {
 		Automaton automaton = cache.get(c);
 		if (automaton == null) {
-			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
-			org.iguana.regex.automaton.State finalState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+			State startState = new State();
+			State finalState = new State(StateType.FINAL);
 			finalState.addRegularExpression(c);
-			startState.addTransition(new org.iguana.regex.automaton.Transition(c.getValue(), finalState));
+			startState.addTransition(new Transition(c.getValue(), finalState));
 			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
@@ -29,10 +27,10 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	public Automaton visit(org.iguana.regex.CharRange r) {
 		Automaton automaton = cache.get(r);
 		if (automaton == null) {
-			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
-			org.iguana.regex.automaton.State finalState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+			State startState = new State();
+			State finalState = new State(StateType.FINAL);
 			finalState.addRegularExpression(r);
-			startState.addTransition(new org.iguana.regex.automaton.Transition(r.getStart(), r.getEnd(), finalState));
+			startState.addTransition(new Transition(r.getStart(), r.getEnd(), finalState));
 			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
@@ -42,10 +40,10 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	public Automaton visit(org.iguana.regex.EOF eof) {
 		Automaton automaton = cache.get(eof);
 		if (automaton == null) {
-			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
-			org.iguana.regex.automaton.State endState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+			State startState = new State();
+			State endState = new State(StateType.FINAL);
 			endState.addRegularExpression(eof);
-			startState.addTransition(new org.iguana.regex.automaton.Transition(EOF.VALUE, endState));
+			startState.addTransition(new Transition(EOF.VALUE, endState));
 			automaton = Automaton.builder(startState).build();
 		}
 		return automaton;
@@ -55,7 +53,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 	public Automaton visit(org.iguana.regex.Epsilon e) {
 		Automaton automaton = cache.get(e);
 		if (automaton == null) {
-			org.iguana.regex.automaton.State state = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+			State state = new State(StateType.FINAL);
 			state.addRegularExpression(e);
 			return Automaton.builder(state).build();
 		}
@@ -67,18 +65,18 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 		//TODO: add separators to the DFA
 		Automaton automaton = cache.get(star);
 		if (automaton == null) {
-			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
-			org.iguana.regex.automaton.State finalState = new org.iguana.regex.automaton.State(org.iguana.regex.automaton.StateType.FINAL);
+			State startState = new State();
+			State finalState = new State(StateType.FINAL);
 			finalState.addRegularExpression(star);
 
 			Automaton starAutomaton = star.getSymbol().accept(this).copy();
 
 			startState.addEpsilonTransition(starAutomaton.getStartState());
 
-			Set<org.iguana.regex.automaton.State> finalStates = starAutomaton.getFinalStates();
+			Set<State> finalStates = starAutomaton.getFinalStates();
 
-			for(org.iguana.regex.automaton.State s : finalStates) {
-				s.setStateType(org.iguana.regex.automaton.StateType.NORMAL);
+			for(State s : finalStates) {
+				s.setStateType(StateType.NORMAL);
 				s.addEpsilonTransition(finalState);
 				s.addEpsilonTransition(starAutomaton.getStartState());
 			}
@@ -105,8 +103,8 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 		if (automaton == null) {
 			automaton = opt.getSymbol().accept(this).copy();
 
-			Set<org.iguana.regex.automaton.State> finalStates = automaton.getFinalStates();
-			for(org.iguana.regex.automaton.State finalState : finalStates) {
+			Set<State> finalStates = automaton.getFinalStates();
+			for(State finalState : finalStates) {
 				automaton.getStartState().addEpsilonTransition(finalState);
 				finalState.addRegularExpression(opt);
 			}
@@ -129,11 +127,11 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 				automatons.add(e.accept(this).copy());
 			}
 
-			org.iguana.regex.automaton.State startState = new org.iguana.regex.automaton.State();
+			State startState = new State();
 
 			for (Automaton a : automatons) {
 				startState.addEpsilonTransition(a.getStartState());
-				for (org.iguana.regex.automaton.State finalState : a.getFinalStates()) {
+				for (State finalState : a.getFinalStates()) {
 					finalState.addRegularExpression(alt);
 				}
 			}
@@ -154,16 +152,16 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 			}
 
 			Automaton current = automatons.get(0);
-			org.iguana.regex.automaton.State startState = current.getStartState();
+			State startState = current.getStartState();
 
 			for (int i = 1; i < automatons.size(); i++) {
 				Automaton next = automatons.get(i);
 
-				for (org.iguana.regex.automaton.State s : current.getFinalStates()) {
-					s.setStateType(org.iguana.regex.automaton.StateType.NORMAL);
+				for (State s : current.getFinalStates()) {
+					s.setStateType(StateType.NORMAL);
 					// Merge the end state with the start state of the next automaton
-					for (org.iguana.regex.automaton.Transition t : next.getStartState().getTransitions()) {
-						s.addTransition(new org.iguana.regex.automaton.Transition(t.getRange(), t.getDestination()));
+					for (Transition t : next.getStartState().getTransitions()) {
+						s.addTransition(new Transition(t.getRange(), t.getDestination()));
 					}
 				}
 

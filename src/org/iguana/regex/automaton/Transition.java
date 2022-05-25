@@ -39,19 +39,19 @@ public class Transition implements Comparable<Transition>, Serializable {
 
 	private CharRange range;
 	
-	private org.iguana.regex.automaton.State destination;
+	private State destination;
 	
 	private int id;
 	
-	public Transition(int start, int end, org.iguana.regex.automaton.State destination) {
+	public Transition(int start, int end, State destination) {
 		this(CharRange.in(start, end), destination);
 	}
 	
-	public Transition(int c, org.iguana.regex.automaton.State destination) {
+	public Transition(int c, State destination) {
 		this(c, c, destination);
 	}
 	
-	public Transition(CharRange range, org.iguana.regex.automaton.State destination) {
+	public Transition(CharRange range, State destination) {
 		if (range.getEnd() < range.getStart())
 			throw new IllegalArgumentException("start cannot be less than end.");
 		
@@ -62,7 +62,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 		this.destination = destination;
 	}
 	
-	public static Transition EOFTransition(org.iguana.regex.automaton.State destination) {
+	public static Transition EOFTransition(State destination) {
 		return new Transition(EOF.VALUE, destination);
 	}
 	
@@ -78,7 +78,7 @@ public class Transition implements Comparable<Transition>, Serializable {
 		return range;
 	}
 	
-	public org.iguana.regex.automaton.State getDestination() {
+	public State getDestination() {
 		return destination;
 	}
 	
