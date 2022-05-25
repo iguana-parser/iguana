@@ -93,11 +93,6 @@ public class AST {
             System.out.println();
             return null;
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s(%s)", "println", listToString(arguments, ","));
-        }
     }
 
     public static Println println(Expression... args) {
@@ -145,11 +140,6 @@ public class AST {
 
             return input.getColumnNumber((java.lang.Integer) value);
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("indent(%s)", arguments[0]);
-        }
     }
 
     public static Indent indent(Expression arg) {
@@ -176,11 +166,6 @@ public class AST {
             ctx.declareGlobalVariable(input.subString(node.getLeftExtent(), node.getRightExtent()), value.interpret(ctx, input));
 
             return null;
-        }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("ppDeclare(%s,%s)", arguments[0], arguments[1]);
         }
     }
 
@@ -212,11 +197,6 @@ public class AST {
 
             Object obj = ctx.lookupGlobalVariable(subString);
             return obj != null ? obj : false;
-        }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("ppLookup(%s)", arguments[0]);
         }
     }
 
@@ -294,11 +274,6 @@ public class AST {
             }
             return false;
         }
-
-        @Override
-        public java.lang.String toString() {
-            return "startsWith(" + listToString(arguments, ",") + ")";
-        }
     }
 
     public static StartsWith startsWith(Expression... args) {
@@ -319,12 +294,6 @@ public class AST {
 
             return !((java.lang.Boolean) value);
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("not(%s)", arguments[0]);
-        }
-
     }
 
     public static Not not(Expression arg) {
@@ -372,11 +341,6 @@ public class AST {
 
             return node.getRightExtent() - node.getLeftExtent();
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("len(%s)", arguments[0]);
-        }
     }
 
     public static Len len(Expression arg) {
@@ -405,14 +369,6 @@ public class AST {
                 return curr;
 
             return 0;
-        }
-
-        @Override
-        public java.lang.String toString() {
-            Expression arg1 = arguments[0];
-            Expression arg2 = arguments[0];
-            Expression arg3 = arguments[0];
-            return java.lang.String.format("pr1(%s,%s,%s)", arg1, arg2, arg3);
         }
     }
 
@@ -470,7 +426,6 @@ public class AST {
         public java.lang.String toString() {
             return java.lang.String.format("pr1(%s,%s,%s)", arg1, arg2, listToString(arg3, ","));
         }
-
     }
 
     public static Pr2 pr2(Expression arg1, Expression arg2, Expression[] arg3) {
@@ -496,12 +451,6 @@ public class AST {
 
             return java.lang.Integer.min(v1, v2);
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("pr3(%s,%s)", arguments[0], arguments[1]);
-        }
-
     }
 
     public static Pr3 pr3(Expression arg1, Expression arg2) {
@@ -519,12 +468,6 @@ public class AST {
             int v2 = (java.lang.Integer) arguments[1].interpret(ctx, input);
             return java.lang.Integer.min(v1, v2);
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("min(%s,%s)", arguments[0], arguments[1]);
-        }
-
     }
 
     public static Min min(Expression arg1, Expression arg2) {
@@ -540,12 +483,6 @@ public class AST {
         public Object interpret(IEvaluatorContext ctx, Input input) {
             return new HashMap<>();
         }
-
-        @Override
-        public java.lang.String toString() {
-            return "map()";
-        }
-
     }
 
     public static Map map() {
@@ -575,11 +512,6 @@ public class AST {
 
             return s;
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("put(%s,%s)", arguments[0], arguments[1]);
-        }
     }
 
     public static Put put(Expression arg1, Expression arg2) {
@@ -605,12 +537,6 @@ public class AST {
 
             return m;
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("put(%s,%s,%s)", arguments[0], arguments[1], arguments[2]);
-        }
-
     }
 
     public static Put3 put(Expression arg1, Expression arg2, Expression arg3) {
@@ -636,12 +562,6 @@ public class AST {
 
             return s.contains(value);
         }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("contains(%s,%s)", arguments[0], arguments[1]);
-        }
-
     }
 
     public static Contains contains(Expression arg1, Expression arg2) {
@@ -761,11 +681,6 @@ public class AST {
             }
 
             return false;
-        }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("find(%s,%s)", arguments[0], arguments[0]);
         }
     }
 

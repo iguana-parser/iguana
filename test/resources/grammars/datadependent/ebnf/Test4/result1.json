@@ -55,7 +55,7 @@
               },
               {
                 "kind" : "Nonterminal",
-                "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})*",
+                "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
                 "label" : "b",
                 "parameters" : [
                   "a",
@@ -152,90 +152,16 @@
               "kind" : "MetaSymbolNode",
               "symbol" : {
                 "kind" : "Star",
-                "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})*",
+                "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
                 "label" : "b",
                 "s" : {
                   "kind" : "Sequence",
-                  "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})",
+                  "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
+                      "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
                       "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B",
-                        "postConditions" : [
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "RightExtent",
-                                "label" : "a"
-                              },
-                              "rhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Println",
-                            "arguments" : [
-                              {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              }
-                            ],
-                            "fun" : "println"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Code",
-                      "name" : "b:C {println(b)}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C",
-                        "label" : "b"
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Println",
-                            "arguments" : [
-                              {
-                                "kind" : "Name",
-                                "name" : "b",
-                                "i" : -1
-                              }
-                            ],
-                            "fun" : "println"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              },
-              "start" : 1,
-              "end" : 7,
-              "children" : [
-                {
-                  "kind" : "MetaSymbolNode",
-                  "symbol" : {
-                    "kind" : "Sequence",
-                    "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})",
-                    "symbols" : [
-                      {
                         "kind" : "Code",
                         "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
                         "symbol" : {
@@ -275,7 +201,33 @@
                           }
                         ]
                       },
-                      {
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assert",
+                            "arguments" : [
+                              {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              }
+                            ],
+                            "fun" : "assert"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Code",
+                      "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+                      "symbol" : {
                         "kind" : "Code",
                         "name" : "b:C {println(b)}",
                         "symbol" : {
@@ -296,6 +248,214 @@
                                 }
                               ],
                               "fun" : "println"
+                            }
+                          }
+                        ]
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assert",
+                            "arguments" : [
+                              {
+                                "kind" : "Or",
+                                "lhs" : {
+                                  "kind" : "Or",
+                                  "lhs" : {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Integer",
+                                      "value" : 2
+                                    }
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Integer",
+                                      "value" : 4
+                                    }
+                                  }
+                                },
+                                "rhs" : {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 6
+                                  }
+                                }
+                              }
+                            ],
+                            "fun" : "assert"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "start" : 1,
+              "end" : 7,
+              "children" : [
+                {
+                  "kind" : "MetaSymbolNode",
+                  "symbol" : {
+                    "kind" : "Sequence",
+                    "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+                    "symbols" : [
+                      {
+                        "kind" : "Code",
+                        "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
+                        "symbol" : {
+                          "kind" : "Code",
+                          "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
+                          "symbol" : {
+                            "kind" : "Nonterminal",
+                            "name" : "B",
+                            "postConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "RightExtent",
+                                    "label" : "a"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Println",
+                                "arguments" : [
+                                  {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                ],
+                                "fun" : "println"
+                              }
+                            }
+                          ]
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 1
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Code",
+                        "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+                        "symbol" : {
+                          "kind" : "Code",
+                          "name" : "b:C {println(b)}",
+                          "symbol" : {
+                            "kind" : "Nonterminal",
+                            "name" : "C",
+                            "label" : "b"
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Println",
+                                "arguments" : [
+                                  {
+                                    "kind" : "Name",
+                                    "name" : "b",
+                                    "i" : -1
+                                  }
+                                ],
+                                "fun" : "println"
+                              }
+                            }
+                          ]
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Or",
+                                  "lhs" : {
+                                    "kind" : "Or",
+                                    "lhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "b"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 2
+                                      }
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "b"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 4
+                                      }
+                                    }
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Integer",
+                                      "value" : 6
+                                    }
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
                             }
                           }
                         ]
@@ -417,28 +577,47 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Sequence",
-                    "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})",
+                    "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
                     "symbols" : [
                       {
                         "kind" : "Code",
-                        "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
+                        "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
                         "symbol" : {
-                          "kind" : "Nonterminal",
-                          "name" : "B",
-                          "postConditions" : [
-                            {
-                              "kind" : "DataDependentCondition",
-                              "type" : "DATA_DEPENDENT",
-                              "expression" : {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "RightExtent",
-                                  "label" : "a"
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
+                          "kind" : "Code",
+                          "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
+                          "symbol" : {
+                            "kind" : "Nonterminal",
+                            "name" : "B",
+                            "postConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "RightExtent",
+                                    "label" : "a"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
                                 }
+                              }
+                            ]
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Println",
+                                "arguments" : [
+                                  {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                ],
+                                "fun" : "println"
                               }
                             }
                           ]
@@ -447,39 +626,100 @@
                           {
                             "kind" : "ExpressionStatement",
                             "exp" : {
-                              "kind" : "Println",
+                              "kind" : "Assert",
                               "arguments" : [
                                 {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 1
+                                  }
                                 }
                               ],
-                              "fun" : "println"
+                              "fun" : "assert"
                             }
                           }
                         ]
                       },
                       {
                         "kind" : "Code",
-                        "name" : "b:C {println(b)}",
+                        "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
                         "symbol" : {
-                          "kind" : "Nonterminal",
-                          "name" : "C",
-                          "label" : "b"
+                          "kind" : "Code",
+                          "name" : "b:C {println(b)}",
+                          "symbol" : {
+                            "kind" : "Nonterminal",
+                            "name" : "C",
+                            "label" : "b"
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Println",
+                                "arguments" : [
+                                  {
+                                    "kind" : "Name",
+                                    "name" : "b",
+                                    "i" : -1
+                                  }
+                                ],
+                                "fun" : "println"
+                              }
+                            }
+                          ]
                         },
                         "statements" : [
                           {
                             "kind" : "ExpressionStatement",
                             "exp" : {
-                              "kind" : "Println",
+                              "kind" : "Assert",
                               "arguments" : [
                                 {
-                                  "kind" : "Name",
-                                  "name" : "b",
-                                  "i" : -1
+                                  "kind" : "Or",
+                                  "lhs" : {
+                                    "kind" : "Or",
+                                    "lhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "b"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 2
+                                      }
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "b"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 4
+                                      }
+                                    }
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Integer",
+                                      "value" : 6
+                                    }
+                                  }
                                 }
                               ],
-                              "fun" : "println"
+                              "fun" : "assert"
                             }
                           }
                         ]
@@ -601,28 +841,47 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Sequence",
-                    "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} b:C {println(b)})",
+                    "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
                     "symbols" : [
                       {
                         "kind" : "Code",
-                        "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
+                        "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
                         "symbol" : {
-                          "kind" : "Nonterminal",
-                          "name" : "B",
-                          "postConditions" : [
-                            {
-                              "kind" : "DataDependentCondition",
-                              "type" : "DATA_DEPENDENT",
-                              "expression" : {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "RightExtent",
-                                  "label" : "a"
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
+                          "kind" : "Code",
+                          "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
+                          "symbol" : {
+                            "kind" : "Nonterminal",
+                            "name" : "B",
+                            "postConditions" : [
+                              {
+                                "kind" : "DataDependentCondition",
+                                "type" : "DATA_DEPENDENT",
+                                "expression" : {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "RightExtent",
+                                    "label" : "a"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
                                 }
+                              }
+                            ]
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Println",
+                                "arguments" : [
+                                  {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                ],
+                                "fun" : "println"
                               }
                             }
                           ]
@@ -631,39 +890,100 @@
                           {
                             "kind" : "ExpressionStatement",
                             "exp" : {
-                              "kind" : "Println",
+                              "kind" : "Assert",
                               "arguments" : [
                                 {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 1
+                                  }
                                 }
                               ],
-                              "fun" : "println"
+                              "fun" : "assert"
                             }
                           }
                         ]
                       },
                       {
                         "kind" : "Code",
-                        "name" : "b:C {println(b)}",
+                        "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
                         "symbol" : {
-                          "kind" : "Nonterminal",
-                          "name" : "C",
-                          "label" : "b"
+                          "kind" : "Code",
+                          "name" : "b:C {println(b)}",
+                          "symbol" : {
+                            "kind" : "Nonterminal",
+                            "name" : "C",
+                            "label" : "b"
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Println",
+                                "arguments" : [
+                                  {
+                                    "kind" : "Name",
+                                    "name" : "b",
+                                    "i" : -1
+                                  }
+                                ],
+                                "fun" : "println"
+                              }
+                            }
+                          ]
                         },
                         "statements" : [
                           {
                             "kind" : "ExpressionStatement",
                             "exp" : {
-                              "kind" : "Println",
+                              "kind" : "Assert",
                               "arguments" : [
                                 {
-                                  "kind" : "Name",
-                                  "name" : "b",
-                                  "i" : -1
+                                  "kind" : "Or",
+                                  "lhs" : {
+                                    "kind" : "Or",
+                                    "lhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "b"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 2
+                                      }
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "b"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 4
+                                      }
+                                    }
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "LeftExtent",
+                                      "label" : "b"
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Integer",
+                                      "value" : 6
+                                    }
+                                  }
                                 }
                               ],
-                              "fun" : "println"
+                              "fun" : "assert"
                             }
                           }
                         ]

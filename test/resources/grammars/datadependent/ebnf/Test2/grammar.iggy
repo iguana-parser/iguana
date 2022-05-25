@@ -1,7 +1,7 @@
 start S
   = X
 
-X = A s:(b:B | c:C println(c.l); d:D)*
+X = A s:(b:B | c:C println(c.l); assert(c.l == 1 || c.l == 3); d:D)*
 
 A = 'a'
 

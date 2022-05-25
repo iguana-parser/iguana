@@ -1,7 +1,7 @@
 start S
   = X
 
-X = a:A b:(B [[a.r == b.l]] println(b.l); b:C println(b); )*  // shadowing (b:C)
+X = a:A b:(B [[a.r == b.l]] println(b.l); assert(b.l == 1); b:C println(b); assert(b.l == 2 || b.l == 4 || b.l == 6);)*  // shadowing (b:C)
 
 A = 'a'
 

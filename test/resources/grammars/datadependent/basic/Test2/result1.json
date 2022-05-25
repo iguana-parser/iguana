@@ -72,7 +72,7 @@
                   },
                   {
                     "kind" : "Code",
-                    "name" : "l2:A {println(l1,l2,a,b)} {org.iguana.datadependent.ast.AST$Assert@1352a202}",
+                    "name" : "l2:A {println(l1,l2,a,b)} {assert(l1.lExt == 0,l1.rExt == 1,l2.lExt == 1,l2.rExt == 2,a == 1,b == 2)}",
                     "symbol" : {
                       "kind" : "Code",
                       "name" : "l2:A {println(l1,l2,a,b)}",
@@ -394,7 +394,7 @@
                 "body" : [
                   {
                     "kind" : "Code",
-                    "name" : "l1:A {println(l1,a,b)} {org.iguana.datadependent.ast.AST$Assert@26d9c23e}",
+                    "name" : "l1:A {println(l1,a,b)} {assert(l1.lExt == 0,l1.rExt == 1 || l1.rExt == 2,a == 1,b == 2)}",
                     "symbol" : {
                       "kind" : "Code",
                       "name" : "l1:A {println(l1,a,b)}",
@@ -504,7 +504,7 @@
                   },
                   {
                     "kind" : "Code",
-                    "name" : "l2:B {org.iguana.datadependent.ast.AST$Assert@6f2956aa}",
+                    "name" : "l2:B {assert(l2.lExt == 1 || l2.lExt == 2,l2.rExt == 3)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "B",
@@ -723,7 +723,7 @@
                 "body" : [
                   {
                     "kind" : "Code",
-                    "name" : "l1:A {println(l1,a,b)} {org.iguana.datadependent.ast.AST$Assert@26d9c23e}",
+                    "name" : "l1:A {println(l1,a,b)} {assert(l1.lExt == 0,l1.rExt == 1 || l1.rExt == 2,a == 1,b == 2)}",
                     "symbol" : {
                       "kind" : "Code",
                       "name" : "l1:A {println(l1,a,b)}",
@@ -833,7 +833,7 @@
                   },
                   {
                     "kind" : "Code",
-                    "name" : "l2:B {org.iguana.datadependent.ast.AST$Assert@6f2956aa}",
+                    "name" : "l2:B {assert(l2.lExt == 1 || l2.lExt == 2,l2.rExt == 3)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "B",

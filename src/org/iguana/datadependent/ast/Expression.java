@@ -426,6 +426,11 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
+        public java.lang.String toString() {
+            return java.lang.String.format("%s(%s)", fun, listToString(arguments, ","));
+        }
+
+        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }

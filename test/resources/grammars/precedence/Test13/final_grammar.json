@@ -279,22 +279,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 2
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "LShiftANDEqZero",
                 "lhs" : {
                   "kind" : "Name",
@@ -304,6 +288,22 @@
                 "rhs" : {
                   "kind" : "Integer",
                   "value" : 1
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "GreaterThanEqual",
+                "lhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                },
+                "rhs" : {
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
                 }
               }
             }

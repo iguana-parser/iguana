@@ -138,7 +138,7 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "a:A[a.lExt == 0] {println(a.rExt,indent(a.rExt))} {org.iguana.datadependent.ast.AST$Assert@b3444ff1}",
+          "name" : "a:A[a.lExt == 0] {println(a.rExt,indent(a.rExt))} {assert(a.rExt == 1,indent(a.rExt) == 2)}",
           "symbol" : {
             "kind" : "Code",
             "name" : "a:A[a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
@@ -249,7 +249,7 @@
         },
         {
           "kind" : "Code",
-          "name" : "b:B[b.lExt == 5] {println(b.lExt,b.rExt,indent(b.rExt))} {org.iguana.datadependent.ast.AST$Assert@ba6f0d0d}",
+          "name" : "b:B[b.lExt == 5] {println(b.lExt,b.rExt,indent(b.rExt))} {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
           "symbol" : {
             "kind" : "Code",
             "name" : "b:B[b.lExt == 5] {println(b.lExt,b.rExt,indent(b.rExt))}",

@@ -41,9 +41,6 @@
           "a0.lExt",
           "i",
           "ind",
-          "fst",
-          "i",
-          "ind",
           "fst"
         ],
         "nodeType" : "Plus"
@@ -55,9 +52,6 @@
           "label" : "o0",
           "parameters" : [
             "a0.lExt",
-            "i",
-            "ind",
-            "fst",
             "i",
             "ind",
             "fst"
@@ -327,9 +321,6 @@
           "a0.lExt",
           "i",
           "ind",
-          "fst",
-          "i",
-          "ind",
           "fst"
         ],
         "nodeType" : "Plus"
@@ -526,9 +517,6 @@
           "label" : "a0",
           "parameters" : [
             "a0.lExt",
-            "i",
-            "ind",
-            "fst",
             "i",
             "ind",
             "fst"
@@ -1056,9 +1044,6 @@
           "a0.lExt",
           "i",
           "ind",
-          "fst",
-          "i",
-          "ind",
           "fst"
         ],
         "nodeType" : "Star"
@@ -1070,9 +1055,6 @@
           "label" : "o0",
           "parameters" : [
             "a0.lExt",
-            "i",
-            "ind",
-            "fst",
             "i",
             "ind",
             "fst"
@@ -1228,9 +1210,6 @@
         "name" : "offside [indent(a1.lExt) == indent(a0.lExt)]a1:Decl*",
         "parameters" : [
           "a0.lExt",
-          "i",
-          "ind",
-          "fst",
           "i",
           "ind",
           "fst"
