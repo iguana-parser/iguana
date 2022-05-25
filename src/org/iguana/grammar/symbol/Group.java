@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 /**
  * A group represents a grouping of symbols, e.g, (A B C) in the EBNF notation.

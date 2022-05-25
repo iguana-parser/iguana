@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.symbol;
 
-import iguana.regex.Epsilon;
+import org.iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 

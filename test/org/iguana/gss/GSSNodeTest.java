@@ -1,6 +1,5 @@
 package org.iguana.gss;
 
-import iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
@@ -14,19 +13,21 @@ import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.TerminalNode;
 import org.iguana.util.Configuration;
-import org.junit.Before;
-import org.junit.Test;
+import org.iguana.utils.input.Input;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class GSSNodeTest {
 
     private Input input;
     private GrammarGraph grammarGraph;
 
-    @Before
+    @BeforeEach
     public void init() {
         RuntimeGrammar grammar = Grammar.fromIggyGrammar(
             "start A = 'a'").toRuntimeGrammar();

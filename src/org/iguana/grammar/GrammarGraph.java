@@ -1,6 +1,6 @@
 package org.iguana.grammar;
 
-import iguana.regex.matcher.DFAMatcherFactory;
+import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;

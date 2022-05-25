@@ -1,7 +1,7 @@
 package org.iguana.traversal;
 
-import iguana.utils.input.Input;
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;

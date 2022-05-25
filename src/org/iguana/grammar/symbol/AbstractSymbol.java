@@ -33,7 +33,7 @@ import org.iguana.grammar.condition.Condition;
 import java.util.Collections;
 import java.util.Set;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 

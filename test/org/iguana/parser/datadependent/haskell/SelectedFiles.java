@@ -29,7 +29,7 @@ package org.iguana.parser.datadependent.haskell;
 
 import java.util.Set;
 
-import static iguana.utils.collections.CollectionsUtil.immutableSet;
+import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class SelectedFiles {
 	

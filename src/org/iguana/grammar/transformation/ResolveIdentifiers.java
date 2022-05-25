@@ -1,7 +1,7 @@
 package org.iguana.grammar.transformation;
 
-import iguana.regex.Reference;
-import iguana.regex.RegularExpression;
+import org.iguana.regex.Reference;
+import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;

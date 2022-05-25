@@ -1,16 +1,16 @@
 package org.iguana.traversal;
 
-import iguana.regex.*;
-import iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Alt;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.*;
+import org.iguana.regex.*;
+import org.iguana.regex.visitor.RegularExpressionVisitor;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -156,27 +156,27 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
     }
 
     @Override
-    default RegularExpression visit(iguana.regex.Star s) {
+    default RegularExpression visit(org.iguana.regex.Star s) {
         return visitRegularExpression(s);
     }
 
     @Override
-    default RegularExpression visit(iguana.regex.Plus p) {
+    default RegularExpression visit(org.iguana.regex.Plus p) {
         return visitRegularExpression(p);
     }
 
     @Override
-    default RegularExpression visit(iguana.regex.Opt o) {
+    default RegularExpression visit(org.iguana.regex.Opt o) {
         return visitRegularExpression(o);
     }
 
     @Override
-    default <E extends RegularExpression> RegularExpression visit(iguana.regex.Alt<E> alt) {
+    default <E extends RegularExpression> RegularExpression visit(org.iguana.regex.Alt<E> alt) {
         return visitRegularExpression(alt);
     }
 
     @Override
-    default <E extends RegularExpression> RegularExpression visit(Seq<E> seq) {
+    default <E extends RegularExpression> RegularExpression visit(org.iguana.regex.Seq<E> seq) {
         return visitRegularExpression(seq);
     }
 

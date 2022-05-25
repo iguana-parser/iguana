@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Symbol;

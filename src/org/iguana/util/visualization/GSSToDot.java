@@ -27,15 +27,15 @@
 
 package org.iguana.util.visualization;
 
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static iguana.utils.visualization.DotGraph.newEdge;
-import static iguana.utils.visualization.DotGraph.newNode;
+import static org.iguana.utils.visualization.DotGraph.newEdge;
+import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class GSSToDot {
 

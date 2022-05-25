@@ -6,8 +6,12 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import iguana.regex.RegularExpression;
-import iguana.utils.input.Input;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.regex.*;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -141,15 +145,15 @@ public class JsonSerializer {
         mapper.addMixIn(Statement.VariableDeclaration.class, StatementMixIn.VariableDeclarationMixIn.class);
 
         // Regex
-        mapper.addMixIn(iguana.regex.RegularExpression.class, RegularExpressionMixIn.class);
-        mapper.addMixIn(iguana.regex.Seq.class, SeqMixIn.class);
-        mapper.addMixIn(iguana.regex.Alt.class, RegexAltMixIn.class);
-        mapper.addMixIn(iguana.regex.Star.class, RegexStarMixIn.class);
-        mapper.addMixIn(iguana.regex.Plus.class, RegexPlusMixIn.class);
-        mapper.addMixIn(iguana.regex.Opt.class, RegexOptMixIn.class);
-        mapper.addMixIn(iguana.regex.Char.class, CharMixIn.class);
-        mapper.addMixIn(iguana.regex.CharRange.class, CharRangeMixIn.class);
-        mapper.addMixIn(iguana.regex.Reference.class, ReferenceMixIn.class);
+        mapper.addMixIn(RegularExpression.class, RegularExpressionMixIn.class);
+        mapper.addMixIn(Seq.class, SeqMixIn.class);
+        mapper.addMixIn(org.iguana.regex.Alt.class, RegexAltMixIn.class);
+        mapper.addMixIn(org.iguana.regex.Star.class, RegexStarMixIn.class);
+        mapper.addMixIn(org.iguana.regex.Plus.class, RegexPlusMixIn.class);
+        mapper.addMixIn(org.iguana.regex.Opt.class, RegexOptMixIn.class);
+        mapper.addMixIn(Char.class, CharMixIn.class);
+        mapper.addMixIn(CharRange.class, CharRangeMixIn.class);
+        mapper.addMixIn(Reference.class, ReferenceMixIn.class);
 
         // Parse tree
         mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
@@ -298,14 +302,14 @@ public class JsonSerializer {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value=iguana.regex.Seq.class, name="regex.Seq"),
-        @JsonSubTypes.Type(value=iguana.regex.Alt.class, name="regex.Alt"),
-        @JsonSubTypes.Type(value=iguana.regex.Star.class, name="regex.Star"),
-        @JsonSubTypes.Type(value=iguana.regex.Plus.class, name="regex.Plus"),
-        @JsonSubTypes.Type(value=iguana.regex.Opt.class, name="regex.Opt"),
-        @JsonSubTypes.Type(value=iguana.regex.Char.class, name="Char"),
-        @JsonSubTypes.Type(value=iguana.regex.CharRange.class, name="CharRange"),
-        @JsonSubTypes.Type(value=iguana.regex.Reference.class, name="Reference")
+        @JsonSubTypes.Type(value= Seq.class, name="regex.Seq"),
+        @JsonSubTypes.Type(value= org.iguana.regex.Alt.class, name="regex.Alt"),
+        @JsonSubTypes.Type(value= org.iguana.regex.Star.class, name="regex.Star"),
+        @JsonSubTypes.Type(value= org.iguana.regex.Plus.class, name="regex.Plus"),
+        @JsonSubTypes.Type(value= org.iguana.regex.Opt.class, name="regex.Opt"),
+        @JsonSubTypes.Type(value= Char.class, name="Char"),
+        @JsonSubTypes.Type(value= CharRange.class, name="CharRange"),
+        @JsonSubTypes.Type(value= Reference.class, name="Reference")
     })
     abstract static class RegularExpressionMixIn { }
 
@@ -426,28 +430,28 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Ignore.Builder.class)
     abstract static class IgnoreMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Seq.Builder.class)
+    @JsonDeserialize(builder = Seq.Builder.class)
     abstract static class SeqMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Alt.Builder.class)
+    @JsonDeserialize(builder = org.iguana.regex.Alt.Builder.class)
     abstract static class RegexAltMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Star.Builder.class)
+    @JsonDeserialize(builder = org.iguana.regex.Star.Builder.class)
     abstract static class RegexStarMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Plus.Builder.class)
+    @JsonDeserialize(builder = org.iguana.regex.Plus.Builder.class)
     abstract static class RegexPlusMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Opt.Builder.class)
+    @JsonDeserialize(builder = org.iguana.regex.Opt.Builder.class)
     abstract static class RegexOptMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Char.Builder.class)
+    @JsonDeserialize(builder = Char.Builder.class)
     abstract static class CharMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.CharRange.Builder.class)
+    @JsonDeserialize(builder = CharRange.Builder.class)
     abstract static class CharRangeMixIn { }
 
-    @JsonDeserialize(builder = iguana.regex.Reference.Builder.class)
+    @JsonDeserialize(builder = Reference.Builder.class)
     abstract static class ReferenceMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")

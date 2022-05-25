@@ -2,7 +2,7 @@ package org.iguana.parsetree;
 
 import org.iguana.grammar.symbol.Terminal;
 
-import static iguana.utils.Assert.requireNonNegative;
+import static org.iguana.utils.Assert.requireNonNegative;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 

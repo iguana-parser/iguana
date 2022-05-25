@@ -26,12 +26,13 @@
  */
 package org.iguana.iggy;
 
-import iguana.regex.Char;
-import iguana.regex.Epsilon;
+import org.iguana.regex.Char;
+import org.iguana.regex.Epsilon;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
+import org.iguana.regex.Seq;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -192,10 +193,10 @@ public abstract class Builder {
 		return ((Symbol)sym).copy().setLabel((String)name).build();
 	}
 	
-	public iguana.regex.Seq<Char> string(Object obj) {
+	public Seq<Char> string(Object obj) {
         String s = (String) obj;
         s = s.substring(1, s.length() - 1);
-        return iguana.regex.Seq.from(s.chars().toArray());
+        return Seq.from(s.chars().toArray());
     }
 	
 	/*

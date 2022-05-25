@@ -1,14 +1,14 @@
 package org.iguana.util.visualization;
 
-import iguana.utils.input.Input;
-import iguana.utils.visualization.DotGraph;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.visualization.DotGraph;
 import org.iguana.parsetree.*;
 
 import java.util.Collections;
 import java.util.Set;
 
-import static iguana.utils.visualization.DotGraph.newEdge;
-import static iguana.utils.visualization.DotGraph.newNode;
+import static org.iguana.utils.visualization.DotGraph.newEdge;
+import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class ParseTreeToDot implements ParseTreeVisitor {
 

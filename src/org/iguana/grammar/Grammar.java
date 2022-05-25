@@ -1,7 +1,7 @@
 package org.iguana.grammar;
 
-import iguana.regex.*;
-import iguana.regex.visitor.RegularExpressionVisitor;
+import org.iguana.regex.*;
+import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -449,7 +449,7 @@ public class Grammar implements Serializable {
         }
 
         @Override
-        public Boolean visit(iguana.regex.Char symbol) {
+        public Boolean visit(Char symbol) {
             return false;
         }
 
@@ -668,27 +668,27 @@ public class Grammar implements Serializable {
         }
 
         @Override
-        public Boolean visit(iguana.regex.Star s) {
+        public Boolean visit(org.iguana.regex.Star s) {
             return false;
         }
 
         @Override
-        public Boolean visit(iguana.regex.Plus p) {
+        public Boolean visit(org.iguana.regex.Plus p) {
             return false;
         }
 
         @Override
-        public Boolean visit(iguana.regex.Opt o) {
+        public Boolean visit(org.iguana.regex.Opt o) {
             return false;
         }
 
         @Override
-        public <E extends RegularExpression> Boolean visit(iguana.regex.Alt<E> alt) {
+        public <E extends RegularExpression> Boolean visit(org.iguana.regex.Alt<E> alt) {
             return false;
         }
 
         @Override
-        public <E extends RegularExpression> Boolean visit(iguana.regex.Seq<E> seq) {
+        public <E extends RegularExpression> Boolean visit(org.iguana.regex.Seq<E> seq) {
             return false;
         }
 

@@ -5,7 +5,7 @@ import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.GrammarTransformer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

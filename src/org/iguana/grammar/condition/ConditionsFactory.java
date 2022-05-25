@@ -27,8 +27,8 @@
 
 package org.iguana.grammar.condition;
 
-import iguana.regex.matcher.MatcherFactory;
-import iguana.utils.input.Input;
+import org.iguana.regex.matcher.MatcherFactory;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static iguana.utils.string.StringUtil.listToString;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 
 public class ConditionsFactory {

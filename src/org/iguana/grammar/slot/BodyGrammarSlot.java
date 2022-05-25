@@ -27,10 +27,10 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.utils.collections.Keys;
-import iguana.utils.collections.OpenAddressingHashMap;
-import iguana.utils.collections.key.Key;
-import iguana.utils.input.Input;
+import org.iguana.utils.collections.Keys;
+import org.iguana.utils.collections.OpenAddressingHashMap;
+import org.iguana.utils.collections.key.Key;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.slot.lookahead.FollowTest;

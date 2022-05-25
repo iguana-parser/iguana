@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.condition;
 
-import iguana.regex.RegularExpression;
+import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.IConditionVisitor;
 
 /**

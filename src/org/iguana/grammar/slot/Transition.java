@@ -27,7 +27,7 @@
 
 package org.iguana.grammar.slot;
 
-import iguana.utils.input.Input;
+import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
