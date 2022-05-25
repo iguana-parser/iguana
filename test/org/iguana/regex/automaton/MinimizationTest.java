@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MinimizationTest {
 
+//	@Test
 	public void test1() {
 		State q0 = new State();
 		State q1 = new State();
