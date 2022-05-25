@@ -7,13 +7,11 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.symbol.Alt;
-import org.iguana.grammar.symbol.Opt;
-import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Star;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.parsetree.ParseTreeVisitor;
+import org.iguana.regex.Char;
+import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
 
 import java.util.*;
@@ -553,7 +551,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                     throw new RuntimeException("Length must be positive");
                 }
                 if (chars.length == 1)
-                    return org.iguana.regex.Char.from(chars[0]);
+                    return Char.from(chars[0]);
                 return org.iguana.regex.Seq.from(chars);
             }
 
@@ -592,12 +590,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Range": {
                 int start = getRangeChar(node.childAt(0).getText());
                 int end = getRangeChar(node.childAt(2).getText());
-                return org.iguana.regex.CharRange.in(start, end);
+                return CharRange.in(start, end);
             }
 
             case "Character":
                 int c = getRangeChar(node.childAt(0).getText());
-                return org.iguana.regex.Char.from(c);
+                return Char.from(c);
 
             default:
                 throw new RuntimeException("Unexpected label");
@@ -855,7 +853,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private RegularExpression getCharsRegex(String s) {
         int[] chars = getChars(s.substring(1, s.length() - 1));
         if (chars.length == 1) {
-            return org.iguana.regex.Char.from(chars[0]);
+            return Char.from(chars[0]);
         }
         return org.iguana.regex.Seq.from(chars);
     }
