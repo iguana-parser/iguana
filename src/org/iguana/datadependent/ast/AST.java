@@ -27,6 +27,7 @@
 
 package org.iguana.datadependent.ast;
 
+import org.iguana.grammar.exception.AssertionFailedException;
 import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.env.intarray.MutableLong;
@@ -101,6 +102,31 @@ public class AST {
 
     public static Println println(Expression... args) {
         return new Println(args);
+    }
+
+    public static class Assert extends Expression.Call {
+
+        Assert(Expression... arguments) {
+            super("assert", arguments);
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object[] arguments = interpretArguments(ctx, input);
+            for (Object argument : arguments) {
+                if (!(argument instanceof java.lang.Boolean)) {
+                    throw new UnexpectedTypeOfArgumentException(this);
+                }
+                if (!((java.lang.Boolean) argument)) {
+                    throw new AssertionFailedException(this);
+                }
+            }
+            return null;
+        }
+    }
+
+    public static Assert assertion(Expression... args) {
+        return new Assert(args);
     }
 
     public static class Indent extends Expression.Call {

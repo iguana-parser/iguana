@@ -112,6 +112,7 @@ public class JsonSerializer {
 
         // Call Expressions
         mapper.addMixIn(AST.Println.class, ExpressionMixIn.CallMixIn.PrintlnMixIn.class);
+        mapper.addMixIn(AST.Assert.class, ExpressionMixIn.CallMixIn.AssertMixIn.class);
         mapper.addMixIn(AST.StartsWith.class, ExpressionMixIn.CallMixIn.StartsWithMixIn.class);
         mapper.addMixIn(AST.Push.class, ExpressionMixIn.CallMixIn.PushMixIn.class);
         mapper.addMixIn(AST.Shift.class, ExpressionMixIn.CallMixIn.ShiftMixIn.class);
@@ -572,6 +573,7 @@ public class JsonSerializer {
             @JsonSubTypes.Type(value = AST.Find.class, name = "Find"),
             @JsonSubTypes.Type(value = AST.Shift.class, name = "Shift"),
             @JsonSubTypes.Type(value = AST.Println.class, name = "Println"),
+            @JsonSubTypes.Type(value = AST.Assert.class, name = "Assert"),
             @JsonSubTypes.Type(value = AST.Indent.class, name = "Indent"),
             @JsonSubTypes.Type(value = AST.Min.class, name = "Min"),
             @JsonSubTypes.Type(value = AST.Not.class, name = "Not"),
@@ -596,6 +598,11 @@ public class JsonSerializer {
             abstract static class PrintlnMixIn {
                 @JsonCreator
                 PrintlnMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+            }
+
+            abstract static class AssertMixIn {
+                @JsonCreator
+                AssertMixIn(@JsonProperty("arguments") Expression[] arguments) { }
             }
 
             abstract static class StartsWithMixIn {

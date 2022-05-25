@@ -52,35 +52,141 @@
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "l:A {println(l,a,b)}",
+                      "name" : "l:A {println(l,a,b)} {org.iguana.datadependent.ast.AST$Assert@ac4b1b05} {org.iguana.datadependent.ast.AST$Assert@ac4b8f83} {org.iguana.datadependent.ast.AST$Assert@ac128493} {org.iguana.datadependent.ast.AST$Assert@ac1284b2}",
                       "symbol" : {
-                        "kind" : "Identifier",
-                        "name" : "A",
-                        "label" : "l"
+                        "kind" : "Code",
+                        "name" : "l:A {println(l,a,b)} {org.iguana.datadependent.ast.AST$Assert@ac4b1b05} {org.iguana.datadependent.ast.AST$Assert@ac4b8f83} {org.iguana.datadependent.ast.AST$Assert@ac128493}",
+                        "symbol" : {
+                          "kind" : "Code",
+                          "name" : "l:A {println(l,a,b)} {org.iguana.datadependent.ast.AST$Assert@ac4b1b05} {org.iguana.datadependent.ast.AST$Assert@ac4b8f83}",
+                          "symbol" : {
+                            "kind" : "Code",
+                            "name" : "l:A {println(l,a,b)} {org.iguana.datadependent.ast.AST$Assert@ac4b1b05}",
+                            "symbol" : {
+                              "kind" : "Code",
+                              "name" : "l:A {println(l,a,b)}",
+                              "symbol" : {
+                                "kind" : "Identifier",
+                                "name" : "A",
+                                "label" : "l"
+                              },
+                              "statements" : [
+                                {
+                                  "kind" : "ExpressionStatement",
+                                  "exp" : {
+                                    "kind" : "Println",
+                                    "arguments" : [
+                                      {
+                                        "kind" : "Name",
+                                        "name" : "l",
+                                        "i" : -1
+                                      },
+                                      {
+                                        "kind" : "Name",
+                                        "name" : "a",
+                                        "i" : -1
+                                      },
+                                      {
+                                        "kind" : "Name",
+                                        "name" : "b",
+                                        "i" : -1
+                                      }
+                                    ],
+                                    "fun" : "println"
+                                  }
+                                }
+                              ]
+                            },
+                            "statements" : [
+                              {
+                                "kind" : "ExpressionStatement",
+                                "exp" : {
+                                  "kind" : "Assert",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "Name",
+                                        "name" : "a",
+                                        "i" : -1
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 1
+                                      }
+                                    }
+                                  ],
+                                  "fun" : "assert"
+                                }
+                              }
+                            ]
+                          },
+                          "statements" : [
+                            {
+                              "kind" : "ExpressionStatement",
+                              "exp" : {
+                                "kind" : "Assert",
+                                "arguments" : [
+                                  {
+                                    "kind" : "Equal",
+                                    "lhs" : {
+                                      "kind" : "Name",
+                                      "name" : "b",
+                                      "i" : -1
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Integer",
+                                      "value" : 2
+                                    }
+                                  }
+                                ],
+                                "fun" : "assert"
+                              }
+                            }
+                          ]
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "l"
+                                  },
+                                  "rhs" : {
+                                    "kind" : "Integer",
+                                    "value" : 0
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          }
+                        ]
                       },
                       "statements" : [
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              {
-                                "kind" : "Name",
-                                "name" : "a",
-                                "i" : -1
-                              },
-                              {
-                                "kind" : "Name",
-                                "name" : "b",
-                                "i" : -1
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "l"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]

@@ -29,13 +29,13 @@ package org.iguana.grammar.exception;
 
 import org.iguana.grammar.symbol.Symbol;
 
-public class UnexpectedSymbol extends RuntimeException {
+public class UnexpectedSymbolException extends RuntimeException {
 
-	public UnexpectedSymbol(Symbol symbol) {
+	public UnexpectedSymbolException(Symbol symbol) {
 		super("Unexpected symbol " + symbol);
 	}
 	
-	public UnexpectedSymbol(Symbol symbol, String phase) {
+	public UnexpectedSymbolException(Symbol symbol, String phase) {
 		super(String.format("Unexpected symbol %s has been encountered in %s. This symbol must be desugared prior to this phase.", symbol, phase));
 	}
 

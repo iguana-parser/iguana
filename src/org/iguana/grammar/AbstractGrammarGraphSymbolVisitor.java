@@ -27,7 +27,7 @@
 
 package org.iguana.grammar;
 
-import org.iguana.grammar.exception.UnexpectedSymbol;
+import org.iguana.grammar.exception.UnexpectedSymbolException;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -35,66 +35,66 @@ public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVis
 	
 	@Override
 	public T visit(Align symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
 	public T visit(Block symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(IfThen symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
 	public T visit(IfThenElse symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(Ignore symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
 	public T visit(Offside symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 	
 	@Override
 	public T visit(While symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(Alt symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(Opt symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(Plus symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(Group symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
 	@Override
 	public T visit(Star symbol) {
-		throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+		throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
 	}
 
     @Override
     public T visit(Start symbol) {
-        throw new UnexpectedSymbol(symbol, "grammar-to-graph transformation");
+        throw new UnexpectedSymbolException(symbol, "grammar-to-graph transformation");
     }
 }

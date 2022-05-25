@@ -212,7 +212,9 @@ terminal Keywords
   | "indent"
   | "if"
   | "else"
+  | "assert"
 
 terminal FunName
   = "println"
   | "indent"
+  | "assert"
