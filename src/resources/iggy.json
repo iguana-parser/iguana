@@ -3176,6 +3176,30 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "VarName"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Label"
       },
       "priorityLevels" : [
@@ -4179,19 +4203,6 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    "VarName" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 36
-        },
-        {
-          "kind" : "Reference",
-          "name" : "LetterOrDigits"
         }
       ]
     },

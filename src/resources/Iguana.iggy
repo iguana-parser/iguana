@@ -188,8 +188,8 @@ terminal Associativity
   | "right"
   | "non-assoc"
 
-terminal VarName
-  = '$' LetterOrDigits
+VarName
+  = Identifier
 
 Label
   = '%' Identifier

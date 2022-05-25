@@ -171,7 +171,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private List<String> visitParameters(NonterminalNode node) {
         return node.childAt(1).children().stream()
             .filter(s -> !s.getText().equals(","))
-            .map(s -> s.getText().substring(1)).collect(Collectors.toList());
+            .map(ParseTreeNode::getText).collect(Collectors.toList());
     }
 
     /*
@@ -803,7 +803,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return AST.val(val);
 
             case "Name":
-                return AST.var((node.childAt(0).getText()).substring(1));
+                return AST.var((node.childAt(0).getText()));
 
             case "Number":
                 return AST.integer(Integer.parseInt(node.childAt(0).getText()));
