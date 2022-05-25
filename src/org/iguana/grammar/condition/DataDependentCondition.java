@@ -31,8 +31,6 @@ import org.iguana.traversal.IConditionVisitor;
 
 public class DataDependentCondition extends Condition {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private final org.iguana.datadependent.ast.Expression expression;
 	
 	private DataDependentCondition(ConditionType type, org.iguana.datadependent.ast.Expression expression) {

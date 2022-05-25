@@ -35,12 +35,8 @@ import java.util.Objects;
 
 public abstract class Statement extends AbstractAST {
 	
-	private static final long serialVersionUID = 1L;
-
 	public static class Expression extends Statement {
 
-		private static final long serialVersionUID = 1L;
-		
 		private final org.iguana.datadependent.ast.Expression exp;
 		
 		Expression(org.iguana.datadependent.ast.Expression exp) {
@@ -82,8 +78,6 @@ public abstract class Statement extends AbstractAST {
 	}
 	
 	public static class VariableDeclaration extends Statement {
-		
-		private static final long serialVersionUID = 1L;
 		
 		private final org.iguana.datadependent.ast.VariableDeclaration decl;
 		

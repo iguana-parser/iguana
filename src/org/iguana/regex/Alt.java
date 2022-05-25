@@ -34,8 +34,6 @@ import java.util.stream.Collectors;
 
 public class Alt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
-	private static final long serialVersionUID = 1L;
-
 	protected final List<T> symbols;
 	
 	public Alt(Builder<T> builder) {

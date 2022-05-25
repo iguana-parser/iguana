@@ -39,8 +39,6 @@ import org.iguana.traversal.IConditionVisitor;
  */
 public class RegularExpressionCondition extends Condition {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private final RegularExpression regularExpression;
 	
 	public RegularExpressionCondition(ConditionType type, RegularExpression regularExpression) {

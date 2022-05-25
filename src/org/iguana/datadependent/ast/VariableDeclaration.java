@@ -35,8 +35,6 @@ import java.util.Objects;
 
 public class VariableDeclaration extends AbstractAST {
 	
-	private static final long serialVersionUID = 1L;
-
 	public static Object defaultValue = new Object() {};
 	
 	private final String name;

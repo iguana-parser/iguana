@@ -32,8 +32,6 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Start extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-
 	private String startSymbol;
 	
     public static Start from(String startSymbol) {

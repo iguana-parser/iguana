@@ -36,8 +36,6 @@ import java.util.Objects;
 
 public class IfThenElse extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-	
 	private final Expression expression;
 	private final Symbol thenPart;
 	private final Symbol elsePart;

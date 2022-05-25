@@ -29,17 +29,14 @@ package org.iguana.grammar.runtime;
 
 import org.iguana.grammar.symbol.Associativity;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.iguana.utils.string.StringUtil.listToString;
 
 
-public class AssociativityGroup implements Serializable {
+public class AssociativityGroup {
 	
-	private static final long serialVersionUID = 1L;
-
 	private final Associativity associativity;
 	
 	private final PrecedenceLevel precedenceLevel;

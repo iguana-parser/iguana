@@ -43,8 +43,6 @@ import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
  */
 public class CharRange extends AbstractRegularExpression implements Range {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private final int start;
 	
 	private final int end;

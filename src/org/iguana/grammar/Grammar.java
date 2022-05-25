@@ -1,11 +1,11 @@
 package org.iguana.grammar;
 
-import org.iguana.regex.*;
-import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.iggy.IggyParser;
+import org.iguana.regex.*;
+import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.serialization.JsonSerializer;
 
@@ -13,9 +13,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 
-public class Grammar implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Grammar {
 
     private final List<Rule> rules;
     private final Map<String, RegularExpression> terminals;

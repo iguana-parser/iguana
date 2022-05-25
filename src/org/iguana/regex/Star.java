@@ -33,8 +33,6 @@ import java.util.*;
 
 public class Star extends AbstractRegularExpression {
 
-    private static final long serialVersionUID = 1L;
-
     private final RegularExpression regex;
 
     private final List<RegularExpression> separators;

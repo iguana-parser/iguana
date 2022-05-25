@@ -1,15 +1,12 @@
 package org.iguana.grammar.symbol;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A priority group is a list of alternatives.
  */
-public class PriorityLevel implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class PriorityLevel {
 
     private final List<Alternative> alternatives;
 

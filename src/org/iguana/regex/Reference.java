@@ -6,8 +6,6 @@ import java.util.Set;
 
 public class Reference extends AbstractRegularExpression {
 
-    private static final long serialVersionUID = 1L;
-
     private String name;
 
     public static Reference from(String name) {

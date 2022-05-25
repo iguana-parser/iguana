@@ -38,8 +38,6 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Nonterminal extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-	
 	private final boolean ebnfList;
 	
 	private final int index;

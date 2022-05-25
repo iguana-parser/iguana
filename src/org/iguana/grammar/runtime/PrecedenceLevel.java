@@ -29,12 +29,9 @@ package org.iguana.grammar.runtime;
 
 import org.iguana.grammar.symbol.Associativity;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
-public class PrecedenceLevel implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class PrecedenceLevel {
 	
 	private final int lhs;
 	private int rhs = -1;
