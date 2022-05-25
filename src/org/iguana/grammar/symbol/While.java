@@ -35,8 +35,6 @@ import java.util.List;
 
 public class While extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-	
 	private final Expression expression;
 	private final Symbol body;
 

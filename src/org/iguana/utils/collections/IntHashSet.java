@@ -1,7 +1,6 @@
 package org.iguana.utils.collections;
 
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -9,9 +8,7 @@ import java.util.Arrays;
  * @author Ali Afroozeh
  *
  */
-public class IntHashSet implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class IntHashSet {
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.7f;

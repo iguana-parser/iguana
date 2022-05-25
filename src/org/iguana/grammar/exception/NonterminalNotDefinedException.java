@@ -31,8 +31,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 
 public class NonterminalNotDefinedException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-	
 	private Nonterminal nonterminal;
 
 	public NonterminalNotDefinedException(Nonterminal nonterminal) {

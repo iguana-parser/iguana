@@ -45,23 +45,17 @@ import static java.lang.Integer.toUnsignedLong;
 
 public abstract class Expression extends AbstractAST {
 
-    private static final long serialVersionUID = 1L;
-
     public boolean isBoolean() {
         return false;
     }
 
     public static abstract class Boolean extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         public boolean isBoolean() {
             return true;
         }
 
         static final Boolean TRUE = new Boolean() {
-
-            private static final long serialVersionUID = 1L;
 
             @Override
             public Object interpret(IEvaluatorContext ctx, Input input) {
@@ -80,8 +74,6 @@ public abstract class Expression extends AbstractAST {
         };
 
         static final Boolean FALSE = new Boolean() {
-
-            private static final long serialVersionUID = 1L;
 
             @Override
             public Object interpret(IEvaluatorContext ctx, Input input) {
@@ -107,8 +99,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Integer extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final java.lang.Integer value;
 
@@ -156,8 +146,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class Real extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final java.lang.Float value;
 
         Real(java.lang.Float value) {
@@ -200,8 +188,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class String extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final java.lang.String value;
 
         String(java.lang.String value) {
@@ -242,8 +228,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Tuple extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final Expression[] elements;
         private final int length;
@@ -299,7 +283,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class IntTuple2 extends Expression {
 
-        private static final long serialVersionUID = 1L;
         private final Integer element1;
         private final Integer element2;
         private final Long longValue;
@@ -348,8 +331,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Name extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final java.lang.String name;
         private final int i;
@@ -403,8 +384,6 @@ public abstract class Expression extends AbstractAST {
 
     public static abstract class Call extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         protected final java.lang.String fun;
         protected final Expression[] arguments;
 
@@ -454,8 +433,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Assignment extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final java.lang.String id;
         private final int i;
@@ -515,8 +492,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class LShiftANDEqZero extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression lhs;
         private final Expression rhs;
 
@@ -571,8 +546,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class OrIndent extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final Expression index;
         private final Expression ind;
@@ -664,8 +637,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class AndIndent extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression index;
         private final Expression first;
         private final Expression lExt;
@@ -746,8 +717,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class Or extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression lhs;
         private final Expression rhs;
 
@@ -799,8 +768,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class And extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression lhs;
         private final Expression rhs;
 
@@ -851,8 +818,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Less extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final Expression lhs;
         private final Expression rhs;
@@ -913,8 +878,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class LessThanEqual extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression lhs;
         private final Expression rhs;
 
@@ -973,8 +936,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Greater extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final Expression lhs;
         private final Expression rhs;
@@ -1035,8 +996,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class GreaterThanEqual extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression lhs;
         private final Expression rhs;
 
@@ -1095,8 +1054,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Equal extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final Expression lhs;
         private final Expression rhs;
@@ -1165,8 +1122,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class NotEqual extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression lhs;
         private final Expression rhs;
 
@@ -1226,8 +1181,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class LeftExtent extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         public static java.lang.String format = "%s.lExt";
 
         private final java.lang.String label;
@@ -1275,8 +1228,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class RightExtent extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         public static java.lang.String format = "%s.rExt";
 
@@ -1333,7 +1284,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Yield extends Expression {
-        private static final long serialVersionUID = 1L;
 
         public static java.lang.String format = "%s.yield";
 
@@ -1396,7 +1346,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class Val extends Expression {
-        private static final long serialVersionUID = 1L;
 
         public static java.lang.String format = "%s.val";
 
@@ -1454,8 +1403,6 @@ public abstract class Expression extends AbstractAST {
 
     public static class EndOfFile extends Expression {
 
-        private static final long serialVersionUID = 1L;
-
         private final Expression index;
 
         EndOfFile(Expression index) {
@@ -1499,8 +1446,6 @@ public abstract class Expression extends AbstractAST {
     }
 
     public static class IfThenElse extends Expression {
-
-        private static final long serialVersionUID = 1L;
 
         private final Expression condition;
         private final Expression thenPart;

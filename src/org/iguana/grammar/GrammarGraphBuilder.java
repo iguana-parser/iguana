@@ -27,11 +27,6 @@
 
 package org.iguana.grammar;
 
-import org.iguana.regex.CharRange;
-import org.iguana.regex.matcher.DFAMatcherFactory;
-import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.utils.collections.rangemap.RangeMap;
-import org.iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
@@ -48,17 +43,19 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.VarToInt;
+import org.iguana.regex.CharRange;
+import org.iguana.regex.matcher.DFAMatcherFactory;
+import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.util.Configuration;
 import org.iguana.util.Configuration.EnvironmentImpl;
+import org.iguana.utils.collections.rangemap.RangeMap;
+import org.iguana.utils.collections.rangemap.RangeMapBuilder;
 
-import java.io.Serializable;
 import java.util.*;
 
 import static org.iguana.grammar.GrammarGraph.epsilonSlot;
 
-public class GrammarGraphBuilder implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class GrammarGraphBuilder {
 
     private Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 

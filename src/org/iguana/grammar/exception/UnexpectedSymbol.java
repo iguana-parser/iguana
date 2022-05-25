@@ -31,9 +31,6 @@ import org.iguana.grammar.symbol.Symbol;
 
 public class UnexpectedSymbol extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-	
-	
 	public UnexpectedSymbol(Symbol symbol) {
 		super("Unexpected symbol " + symbol);
 	}

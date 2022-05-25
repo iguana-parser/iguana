@@ -38,8 +38,6 @@ import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class Epsilon extends AbstractRegularExpression {
 
-	private static final long serialVersionUID = 1L;
-	
 	public static int VALUE = -2;
 	
 	private static final Set<org.iguana.regex.CharRange> firstSet = immutableSet(org.iguana.regex.CharRange.in(VALUE, VALUE));

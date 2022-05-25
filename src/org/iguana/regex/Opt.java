@@ -35,8 +35,6 @@ import java.util.Set;
 
 public class Opt extends AbstractRegularExpression {
 
-	private static final long serialVersionUID = 1L;
-
 	private final RegularExpression regex;
 	
 	private Opt(Builder builder) {

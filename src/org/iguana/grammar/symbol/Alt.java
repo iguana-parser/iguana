@@ -35,8 +35,6 @@ import java.util.stream.Collectors;
 
 public class Alt extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-
 	protected final List<Symbol> symbols;
 	
 	public Alt(Builder builder) {

@@ -31,15 +31,12 @@ import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.regex.visitor.ToAutomatonRegexVisitor;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-public interface RegularExpression extends Serializable {
-
-	long serialVersionUID = 1L;
+public interface RegularExpression {
 
 	boolean isNullable();
 

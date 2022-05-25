@@ -32,8 +32,6 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Return extends AbstractSymbol {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private final Expression expression;
 	
 	public Return(Builder builder) {

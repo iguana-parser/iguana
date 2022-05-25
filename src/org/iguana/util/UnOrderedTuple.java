@@ -29,8 +29,6 @@ package org.iguana.util;
 
 public class UnOrderedTuple<T, K> extends Tuple<T, K>{
 
-	private static final long serialVersionUID = 1L;
-
 	public UnOrderedTuple(T t, K k) {
 		super(t, k);
 	}
@@ -58,6 +56,4 @@ public class UnOrderedTuple<T, K> extends Tuple<T, K>{
 			    k == null ? other.t == null : k.equals(other.t)); 
 
 	}
-
-
 }

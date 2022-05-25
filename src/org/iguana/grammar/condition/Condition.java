@@ -30,13 +30,9 @@ package org.iguana.grammar.condition;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.traversal.IConditionVisitor;
 
-import java.io.Serializable;
 
-
-public abstract class Condition extends AbstractAttrs implements Serializable {
+public abstract class Condition extends AbstractAttrs {
 	
-	private static final long serialVersionUID = 1L;
-
 	protected final ConditionType type;
 
 	public Condition (ConditionType type) {

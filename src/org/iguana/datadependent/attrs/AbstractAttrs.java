@@ -34,8 +34,6 @@ import java.io.Serializable;
 
 public abstract class AbstractAttrs implements Attr, Serializable {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private transient Set.Immutable<String> env;
 
 	@Override

@@ -30,12 +30,9 @@ package org.iguana.regex.automaton;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class State implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class State {
 
 	private final Set<Transition> transitions;
 	

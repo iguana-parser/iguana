@@ -37,8 +37,6 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
-	private static final long serialVersionUID = 1L;
-
 	protected final String name;
 
 	protected final String label;

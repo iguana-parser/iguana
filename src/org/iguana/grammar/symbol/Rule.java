@@ -1,6 +1,5 @@
 package org.iguana.grammar.symbol;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,9 +15,7 @@ import java.util.Objects;
  *   | G H
  *   ;
  */
-public class Rule implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Rule {
 
     private final Nonterminal head;
 

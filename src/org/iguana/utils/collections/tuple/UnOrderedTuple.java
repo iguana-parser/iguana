@@ -29,8 +29,6 @@ package org.iguana.utils.collections.tuple;
 
 public class UnOrderedTuple<T, K> extends Tuple<T, K>{
 
-	private static final long serialVersionUID = 1L;
-
 	public UnOrderedTuple(T t, K k) {
 		super(t, k);
 	}

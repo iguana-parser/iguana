@@ -34,8 +34,6 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-
 	private final TerminalNodeType nodeType;
 
 	private final RegularExpression regex;

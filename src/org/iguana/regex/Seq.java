@@ -34,8 +34,6 @@ import java.util.stream.Collectors;
 
 public class Seq<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
-	private static final long serialVersionUID = 1L;
-
 	private final List<T> symbols;
 
 	public static Seq<Char> from(String s) {

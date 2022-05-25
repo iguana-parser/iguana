@@ -35,8 +35,6 @@ import java.util.Objects;
 
 public class Ignore extends AbstractSymbol {
 	
-private static final long serialVersionUID = 1L;
-	
 	private final Symbol symbol;
 
 	Ignore(Builder builder) {

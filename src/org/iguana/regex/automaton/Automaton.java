@@ -30,7 +30,6 @@ package org.iguana.regex.automaton;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
 
-import java.io.Serializable;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,9 +42,7 @@ import static java.util.stream.Collectors.toSet;
  * @author Ali Afroozeh
  *
  */
-public class Automaton implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class Automaton {
 
 	private final State startState;
 	

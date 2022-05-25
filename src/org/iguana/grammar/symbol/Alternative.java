@@ -1,14 +1,11 @@
 package org.iguana.grammar.symbol;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Alternative implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Alternative {
 
     private final List<Sequence> seqs;
     

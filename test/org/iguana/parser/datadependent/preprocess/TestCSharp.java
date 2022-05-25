@@ -27,7 +27,6 @@
 
 package org.iguana.parser.datadependent.preprocess;
 
-import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -38,7 +37,6 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.utils.input.Input;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,11 +47,7 @@ public class TestCSharp {
 	private static RuntimeGrammar originalGrammar;
 
 	static {
-		try {
-			originalGrammar = Grammar.load(new File("grammars/csharp/csharp")).toRuntimeGrammar();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+//			originalGrammar = Grammar.load(new File("grammars/csharp/csharp")).toRuntimeGrammar();
 	}
 
 	private static RuntimeGrammar grammar = new LayoutWeaver().transform(new EBNFToBNF().transform(originalGrammar));

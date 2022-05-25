@@ -27,12 +27,11 @@
 
 package org.iguana.grammar.symbol;
 
-import org.iguana.utils.collections.CollectionsUtil;
 import org.iguana.datadependent.attrs.Attr;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
+import org.iguana.utils.collections.CollectionsUtil;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -58,10 +57,8 @@ import java.util.Set;
  * </pre>
  *
  */
-public interface Symbol extends Serializable, Attr {
+public interface Symbol extends Attr {
 
-	long serialVersionUID = 1L;
-	
 	String getName();
 	
 	Set<Condition> getPreConditions();

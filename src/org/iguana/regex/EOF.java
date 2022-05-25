@@ -38,8 +38,6 @@ import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class EOF extends AbstractRegularExpression {
 	
-	private static final long serialVersionUID = 1L;
-	
 	public static final int TOKEN_ID = 1;
 	
 	public static int VALUE = -1;

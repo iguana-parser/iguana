@@ -7,8 +7,6 @@ import java.util.Set;
 
 public class Identifier extends AbstractSymbol {
 
-    private static final long serialVersionUID = 1L;
-
     private final Set<String> excepts;
 
     public static Identifier fromName(String name) {

@@ -35,8 +35,6 @@ import java.util.Objects;
 
 public class Offside extends AbstractSymbol {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private final Symbol symbol;
 
 	Offside(Builder builder) {

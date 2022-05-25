@@ -36,8 +36,6 @@ import java.util.List;
 
 public class Plus extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-	
 	private final Symbol s;
 	
 	private final List<Symbol> separators;

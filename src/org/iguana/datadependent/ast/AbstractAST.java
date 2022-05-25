@@ -34,8 +34,6 @@ import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
 public abstract class AbstractAST extends AbstractAttrs {
 	
-	private static final long serialVersionUID = 1L;
-
 	public abstract Object interpret(IEvaluatorContext ctx, Input input);
 	
 	public abstract <T> T accept(IAbstractASTVisitor<T> visitor);

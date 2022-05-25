@@ -36,8 +36,6 @@ import org.iguana.traversal.IConditionVisitor;
  */
 public class PositionalCondition extends Condition {
 	
-	private static final long serialVersionUID = 1L;
-	
 	public PositionalCondition(ConditionType type) {
 		super(type);
 	}

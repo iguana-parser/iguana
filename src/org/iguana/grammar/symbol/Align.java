@@ -35,8 +35,6 @@ import java.util.Objects;
 
 public class Align extends AbstractSymbol {
 	
-	private static final long serialVersionUID = 1L;
-	
 	private final Symbol symbol;
 
 	Align(Builder builder) {

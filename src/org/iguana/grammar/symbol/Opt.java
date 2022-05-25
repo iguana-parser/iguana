@@ -34,8 +34,6 @@ import java.util.List;
 
 public class Opt extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-
 	private final Symbol s;
 	
 	private Opt(Builder builder) {

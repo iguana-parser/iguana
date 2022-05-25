@@ -41,8 +41,6 @@ import static org.iguana.utils.string.StringUtil.listToString;
  */
 public class Group extends AbstractSymbol {
 
-	private static final long serialVersionUID = 1L;
-
 	private final List<Symbol> symbols;
 	
 	public static Group from(List<Symbol> symbols) {

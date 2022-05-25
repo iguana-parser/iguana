@@ -27,12 +27,7 @@
 
 package org.iguana.utils.collections.tuple;
 
-import java.io.Serializable;
-
-
-public class Tuple<T, K> implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class Tuple<T, K> {
 	
 	protected T t;
 	protected K k;
