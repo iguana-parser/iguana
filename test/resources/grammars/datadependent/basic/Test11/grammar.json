@@ -38,55 +38,98 @@
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "a:a [a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
+                      "name" : "a:a [a.lExt == 0] {println(a.rExt,indent(a.rExt))} {org.iguana.datadependent.ast.AST$Assert@b3444ff1}",
                       "symbol" : {
-                        "kind" : "Terminal",
-                        "name" : "a",
-                        "label" : "a",
-                        "postConditions" : [
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "a"
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 0
+                        "kind" : "Code",
+                        "name" : "a:a [a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
+                        "symbol" : {
+                          "kind" : "Terminal",
+                          "name" : "a",
+                          "label" : "a",
+                          "postConditions" : [
+                            {
+                              "kind" : "DataDependentCondition",
+                              "type" : "DATA_DEPENDENT",
+                              "expression" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "a"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 0
+                                }
                               }
                             }
+                          ],
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 97
                           }
-                        ],
-                        "regex" : {
-                          "kind" : "Char",
-                          "val" : 97
-                        }
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Println",
+                              "arguments" : [
+                                {
+                                  "kind" : "RightExtent",
+                                  "label" : "a"
+                                },
+                                {
+                                  "kind" : "Indent",
+                                  "fun" : "indent",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "RightExtent",
+                                      "label" : "a"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "fun" : "println"
+                            }
+                          }
+                        ]
                       },
                       "statements" : [
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "RightExtent",
-                                "label" : "a"
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "a"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
                               },
                               {
-                                "kind" : "Indent",
-                                "fun" : "indent",
-                                "arguments" : [
-                                  {
-                                    "kind" : "RightExtent",
-                                    "label" : "a"
-                                  }
-                                ]
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Indent",
+                                  "fun" : "indent",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "RightExtent",
+                                      "label" : "a"
+                                    }
+                                  ]
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]
@@ -97,55 +140,109 @@
                     },
                     {
                       "kind" : "Code",
-                      "name" : "b:b [b.lExt == 5] {println(b.rExt,indent(b.rExt))}",
+                      "name" : "b:b [b.lExt == 5] {println(b.rExt,indent(b.rExt))} {org.iguana.datadependent.ast.AST$Assert@ba6f0d0d}",
                       "symbol" : {
-                        "kind" : "Terminal",
-                        "name" : "b",
-                        "label" : "b",
-                        "postConditions" : [
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 5
+                        "kind" : "Code",
+                        "name" : "b:b [b.lExt == 5] {println(b.rExt,indent(b.rExt))}",
+                        "symbol" : {
+                          "kind" : "Terminal",
+                          "name" : "b",
+                          "label" : "b",
+                          "postConditions" : [
+                            {
+                              "kind" : "DataDependentCondition",
+                              "type" : "DATA_DEPENDENT",
+                              "expression" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 5
+                                }
                               }
                             }
+                          ],
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 98
                           }
-                        ],
-                        "regex" : {
-                          "kind" : "Char",
-                          "val" : 98
-                        }
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Println",
+                              "arguments" : [
+                                {
+                                  "kind" : "RightExtent",
+                                  "label" : "b"
+                                },
+                                {
+                                  "kind" : "Indent",
+                                  "fun" : "indent",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "RightExtent",
+                                      "label" : "b"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "fun" : "println"
+                            }
+                          }
+                        ]
                       },
                       "statements" : [
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "RightExtent",
-                                "label" : "b"
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 5
+                                }
                               },
                               {
-                                "kind" : "Indent",
-                                "fun" : "indent",
-                                "arguments" : [
-                                  {
-                                    "kind" : "RightExtent",
-                                    "label" : "b"
-                                  }
-                                ]
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 6
+                                }
+                              },
+                              {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Indent",
+                                  "fun" : "indent",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "RightExtent",
+                                      "label" : "b"
+                                    }
+                                  ]
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 7
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]
