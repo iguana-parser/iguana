@@ -740,6 +740,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                         throw new RuntimeException("Unknown function name: " + funName);
                 }
 
+            case "Plus": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.add(lhs, rhs);
+            }
+
             case "GreaterEq": {
                 Expression lhs = (Expression) node.childAt(0).accept(this);
                 Expression rhs = (Expression) node.childAt(2).accept(this);

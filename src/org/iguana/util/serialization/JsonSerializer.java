@@ -94,6 +94,7 @@ public class JsonSerializer {
         mapper.addMixIn(Expression.AndIndent.class, ExpressionMixIn.AndIndentMixIn.class);
         mapper.addMixIn(Expression.Or.class, ExpressionMixIn.OrMixIn.class);
         mapper.addMixIn(Expression.And.class, ExpressionMixIn.AndMixIn.class);
+        mapper.addMixIn(Expression.Add.class, ExpressionMixIn.AddMixIn.class);
         mapper.addMixIn(Expression.Less.class, ExpressionMixIn.LessMixIn.class);
         mapper.addMixIn(Expression.LessThanEqual.class, ExpressionMixIn.LessThanEqualMixIn.class);
         mapper.addMixIn(Expression.Greater.class, ExpressionMixIn.GreaterMixIn.class);
@@ -488,6 +489,7 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value= Expression.OrIndent.class, name="OrIndent"),
         @JsonSubTypes.Type(value= Expression.AndIndent.class, name="AndIndent"),
         @JsonSubTypes.Type(value= Expression.And.class, name="And"),
+        @JsonSubTypes.Type(value= Expression.Add.class, name="Add"),
         @JsonSubTypes.Type(value= Expression.LeftExtent.class, name="LeftExtent"),
         @JsonSubTypes.Type(value= Expression.RightExtent.class, name="RightExtent"),
         @JsonSubTypes.Type(value= Expression.Yield.class, name="Yield"),
@@ -754,6 +756,12 @@ public class JsonSerializer {
         abstract static class AndMixIn {
             @JsonCreator
             AndMixIn(@JsonProperty("lhs") Expression lhs,
+                     @JsonProperty("rhs") Expression rhs) { }
+        }
+
+        abstract static class AddMixIn {
+            @JsonCreator
+            AddMixIn(@JsonProperty("lhs") Expression lhs,
                      @JsonProperty("rhs") Expression rhs) { }
         }
 

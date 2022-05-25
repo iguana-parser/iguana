@@ -484,6 +484,12 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     }
 
     @Override
+    public AbstractAST visit(Add expression) {
+        return AST.and((org.iguana.datadependent.ast.Expression) expression.getLhs().accept(this),
+            (org.iguana.datadependent.ast.Expression) expression.getRhs().accept(this));
+    }
+
+    @Override
     public AbstractAST visit(Expression statement) {
         return AST.stat((org.iguana.datadependent.ast.Expression) statement.getExpression().accept(this));
     }

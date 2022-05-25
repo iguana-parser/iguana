@@ -285,7 +285,22 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		return null;
 	}
-	
+
+	@Override
+	public Void visit(Add expression) {
+		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
+
+		lhs.setEnv(expression.getEnv());
+		lhs.accept(this);
+
+		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
+
+		rhs.setEnv(expression.getEnv());
+		rhs.accept(this);
+
+		return null;
+	}
+
 	@Override
 	public Void visit(And expression) {
 		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();

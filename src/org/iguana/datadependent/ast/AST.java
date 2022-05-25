@@ -950,4 +950,7 @@ public class AST {
         return new VariableDeclaration(name, i, exp);
     }
 
+    public static Expression add(Expression lhs, Expression rhs) {
+        return new Expression.Add(lhs, rhs);
+    }
 }

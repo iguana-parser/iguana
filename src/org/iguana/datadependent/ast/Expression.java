@@ -437,6 +437,60 @@ public abstract class Expression extends AbstractAST {
 
     }
 
+    public static class Add extends Expression {
+
+        private final Expression lhs;
+        private final Expression rhs;
+
+        public Add(Expression lhs, Expression rhs) {
+            this.lhs = lhs;
+            this.rhs = rhs;
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
+
+            if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
+                return (java.lang.Integer) lhs + (java.lang.Integer) rhs;
+
+            throw new UnexpectedTypeOfArgumentException(this);
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Add)) return false;
+            Add other = (Add) obj;
+            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.lhs, this.rhs);
+        }
+
+
+        public Expression getLhs() {
+            return lhs;
+        }
+
+        public Expression getRhs() {
+            return rhs;
+        }
+
+        @Override
+        public java.lang.String toString() {
+            return java.lang.String.format("(%s+%s)", lhs, rhs);
+        }
+    }
+
     public static class Assignment extends Expression {
 
         private final java.lang.String id;

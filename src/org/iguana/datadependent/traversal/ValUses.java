@@ -325,6 +325,13 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	}
 
 	@Override
+	public Void visit(Add expression) {
+		expression.getLhs().accept(this);
+		expression.getRhs().accept(this);
+		return null;
+	}
+
+	@Override
 	public Void visit(Expression statement) {
 		statement.getExpression().accept(this);
 		return null;

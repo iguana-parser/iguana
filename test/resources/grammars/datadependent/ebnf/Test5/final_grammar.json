@@ -3,263 +3,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
-        "parameters" : [
-          "a"
-        ],
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
-          "parameters" : [
-            "a"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-          "parameters" : [
-            "a"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Seq"
-        }
-      ],
-      "recursion" : "LEFT_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : 1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "b:B[b.lExt == a.rExt] {println(b)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "B",
-                "label" : "b",
-                "postConditions" : [
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      },
-                      "rhs" : {
-                        "kind" : "RightExtent",
-                        "label" : "a"
-                      }
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "b",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "c:C {println(c)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "C",
-                "label" : "c"
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "c",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
-        "parameters" : [
-          "a"
-        ],
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-          "parameters" : [
-            "a"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Seq"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "b:B[b.lExt == a.rExt] {println(b)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "B",
-                "label" : "b",
-                "postConditions" : [
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      },
-                      "rhs" : {
-                        "kind" : "RightExtent",
-                        "label" : "a"
-                      }
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "b",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "c:C {println(c)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "C",
-                "label" : "c"
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "c",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "A"
       },
       "body" : [
@@ -326,56 +69,28 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "X"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})*",
+        "name" : "S",
         "parameters" : [
-          "a"
-        ],
-        "nodeType" : "Star"
+          "bCounter",
+          "cCounter"
+        ]
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
-          "parameters" : [
-            "a"
-          ],
+          "name" : "X",
           "arguments" : [
             {
               "kind" : "Name",
-              "name" : "a",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
               "i" : -1
             }
-          ],
-          "nodeType" : "Plus"
+          ]
         }
       ],
       "recursion" : "NON_REC",
@@ -394,189 +109,6 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})*",
-        "label" : "b",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "b:B[b.lExt == a.rExt] {println(b)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "B",
-                "label" : "b",
-                "postConditions" : [
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      },
-                      "rhs" : {
-                        "kind" : "RightExtent",
-                        "label" : "a"
-                      }
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "b",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "c:C {println(c)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "C",
-                "label" : "c"
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "c",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})*",
-        "parameters" : [
-          "a"
-        ],
-        "nodeType" : "Star"
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})*",
-        "label" : "b",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "b:B[b.lExt == a.rExt] {println(b)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "B",
-                "label" : "b",
-                "postConditions" : [
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      },
-                      "rhs" : {
-                        "kind" : "RightExtent",
-                        "label" : "a"
-                      }
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "b",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "c:C {println(c)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "C",
-                "label" : "c"
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "c",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            }
-          ]
-        }
       }
     },
     {
@@ -615,34 +147,541 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
         "parameters" : [
-          "a"
+          "a",
+          "bCounter",
+          "cCounter"
+        ],
+        "nodeType" : "Star"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
+          "state" : [
+            "_"
+          ],
+          "parameters" : [
+            "a",
+            "bCounter",
+            "cCounter"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Plus"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
+        "label" : "b",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "B",
+                    "label" : "b",
+                    "postConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "RightExtent",
+                            "label" : "a"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "b",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "bCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "bCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "bCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "c:C {println(c)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "c"
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "c",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "cCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "c"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "cCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "cCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
+        "parameters" : [
+          "a",
+          "bCounter",
+          "cCounter"
+        ],
+        "nodeType" : "Star"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
+        "label" : "b",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "B",
+                    "label" : "b",
+                    "postConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "RightExtent",
+                            "label" : "a"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "b",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "bCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "bCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "bCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "c:C {println(c)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "c"
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "c",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "cCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "c"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "cCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "cCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+        "parameters" : [
+          "a",
+          "bCounter",
+          "cCounter"
         ],
         "nodeType" : "Seq"
       },
       "body" : [
         {
           "kind" : "Code",
-          "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+          "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
           "symbol" : {
-            "kind" : "Nonterminal",
-            "name" : "B",
-            "label" : "b",
-            "postConditions" : [
-              {
-                "kind" : "DataDependentCondition",
-                "type" : "DATA_DEPENDENT",
-                "expression" : {
-                  "kind" : "Equal",
-                  "lhs" : {
-                    "kind" : "LeftExtent",
-                    "label" : "b"
-                  },
-                  "rhs" : {
-                    "kind" : "RightExtent",
-                    "label" : "a"
+            "kind" : "Code",
+            "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
+            "symbol" : {
+              "kind" : "Code",
+              "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "B",
+                "label" : "b",
+                "postConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      },
+                      "rhs" : {
+                        "kind" : "RightExtent",
+                        "label" : "a"
+                      }
+                    }
                   }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Println",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "b",
+                        "i" : -1
+                      }
+                    ],
+                    "fun" : "println"
+                  }
+                }
+              ]
+            },
+            "statements" : [
+              {
+                "kind" : "ExpressionStatement",
+                "exp" : {
+                  "kind" : "Assert",
+                  "arguments" : [
+                    {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "bCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      }
+                    }
+                  ],
+                  "fun" : "assert"
                 }
               }
             ]
@@ -651,43 +690,122 @@
             {
               "kind" : "ExpressionStatement",
               "exp" : {
-                "kind" : "Println",
-                "arguments" : [
-                  {
+                "kind" : "Assignment",
+                "id" : "bCounter",
+                "exp" : {
+                  "kind" : "Add",
+                  "lhs" : {
                     "kind" : "Name",
-                    "name" : "b",
+                    "name" : "bCounter",
                     "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
                   }
-                ],
-                "fun" : "println"
+                },
+                "i" : -1
               }
             }
           ]
         },
         {
           "kind" : "Code",
-          "name" : "c:C {println(c)}",
+          "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
           "symbol" : {
-            "kind" : "Nonterminal",
-            "name" : "C",
-            "label" : "c"
+            "kind" : "Code",
+            "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
+            "symbol" : {
+              "kind" : "Code",
+              "name" : "c:C {println(c)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "C",
+                "label" : "c"
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Println",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "c",
+                        "i" : -1
+                      }
+                    ],
+                    "fun" : "println"
+                  }
+                }
+              ]
+            },
+            "statements" : [
+              {
+                "kind" : "ExpressionStatement",
+                "exp" : {
+                  "kind" : "Assert",
+                  "arguments" : [
+                    {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "cCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "c"
+                      }
+                    }
+                  ],
+                  "fun" : "assert"
+                }
+              }
+            ]
           },
           "statements" : [
             {
               "kind" : "ExpressionStatement",
               "exp" : {
-                "kind" : "Println",
-                "arguments" : [
-                  {
+                "kind" : "Assignment",
+                "id" : "cCounter",
+                "exp" : {
+                  "kind" : "Add",
+                  "lhs" : {
                     "kind" : "Name",
-                    "name" : "c",
+                    "name" : "cCounter",
                     "i" : -1
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : 2
                   }
-                ],
-                "fun" : "println"
+                },
+                "i" : -1
               }
             }
           ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(bCounter,cCounter)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Name",
+                "name" : "bCounter",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "cCounter",
+                "i" : -1
+              }
+            ],
+            "length" : 2
+          }
         }
       ],
       "recursion" : "NON_REC",
@@ -709,29 +827,76 @@
       },
       "definition" : {
         "kind" : "Sequence",
-        "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
         "symbols" : [
           {
             "kind" : "Code",
-            "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+            "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
             "symbol" : {
-              "kind" : "Nonterminal",
-              "name" : "B",
-              "label" : "b",
-              "postConditions" : [
-                {
-                  "kind" : "DataDependentCondition",
-                  "type" : "DATA_DEPENDENT",
-                  "expression" : {
-                    "kind" : "Equal",
-                    "lhs" : {
-                      "kind" : "LeftExtent",
-                      "label" : "b"
-                    },
-                    "rhs" : {
-                      "kind" : "RightExtent",
-                      "label" : "a"
+              "kind" : "Code",
+              "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+                "symbol" : {
+                  "kind" : "Nonterminal",
+                  "name" : "B",
+                  "label" : "b",
+                  "postConditions" : [
+                    {
+                      "kind" : "DataDependentCondition",
+                      "type" : "DATA_DEPENDENT",
+                      "expression" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "RightExtent",
+                          "label" : "a"
+                        }
+                      }
                     }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Println",
+                      "arguments" : [
+                        {
+                          "kind" : "Name",
+                          "name" : "b",
+                          "i" : -1
+                        }
+                      ],
+                      "fun" : "println"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "Name",
+                          "name" : "bCounter",
+                          "i" : -1
+                        },
+                        "rhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
                   }
                 }
               ]
@@ -740,40 +905,99 @@
               {
                 "kind" : "ExpressionStatement",
                 "exp" : {
-                  "kind" : "Println",
-                  "arguments" : [
-                    {
+                  "kind" : "Assignment",
+                  "id" : "bCounter",
+                  "exp" : {
+                    "kind" : "Add",
+                    "lhs" : {
                       "kind" : "Name",
-                      "name" : "b",
+                      "name" : "bCounter",
                       "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 2
                     }
-                  ],
-                  "fun" : "println"
+                  },
+                  "i" : -1
                 }
               }
             ]
           },
           {
             "kind" : "Code",
-            "name" : "c:C {println(c)}",
+            "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
             "symbol" : {
-              "kind" : "Nonterminal",
-              "name" : "C",
-              "label" : "c"
+              "kind" : "Code",
+              "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "c:C {println(c)}",
+                "symbol" : {
+                  "kind" : "Nonterminal",
+                  "name" : "C",
+                  "label" : "c"
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Println",
+                      "arguments" : [
+                        {
+                          "kind" : "Name",
+                          "name" : "c",
+                          "i" : -1
+                        }
+                      ],
+                      "fun" : "println"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "Name",
+                          "name" : "cCounter",
+                          "i" : -1
+                        },
+                        "rhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "c"
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
             },
             "statements" : [
               {
                 "kind" : "ExpressionStatement",
                 "exp" : {
-                  "kind" : "Println",
-                  "arguments" : [
-                    {
+                  "kind" : "Assignment",
+                  "id" : "cCounter",
+                  "exp" : {
+                    "kind" : "Add",
+                    "lhs" : {
                       "kind" : "Name",
-                      "name" : "c",
+                      "name" : "cCounter",
                       "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 2
                     }
-                  ],
-                  "fun" : "println"
+                  },
+                  "i" : -1
                 }
               }
             ]
@@ -784,7 +1008,572 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "X"
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
+        "parameters" : [
+          "a",
+          "bCounter",
+          "cCounter"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
+          "state" : [
+            "bCounter",
+            "cCounter"
+          ],
+          "parameters" : [
+            "a",
+            "bCounter",
+            "cCounter"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+          "state" : [
+            "bCounter",
+            "cCounter"
+          ],
+          "parameters" : [
+            "a",
+            "bCounter",
+            "cCounter"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Seq"
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(bCounter,cCounter)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Name",
+                "name" : "bCounter",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "cCounter",
+                "i" : -1
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "B",
+                    "label" : "b",
+                    "postConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "RightExtent",
+                            "label" : "a"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "b",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "bCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "bCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "bCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "c:C {println(c)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "c"
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "c",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "cCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "c"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "cCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "cCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
+        "parameters" : [
+          "a",
+          "bCounter",
+          "cCounter"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+          "state" : [
+            "bCounter",
+            "cCounter"
+          ],
+          "parameters" : [
+            "a",
+            "bCounter",
+            "cCounter"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Seq"
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(bCounter,cCounter)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Name",
+                "name" : "bCounter",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "cCounter",
+                "i" : -1
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "b:B[b.lExt == a.rExt] {println(b)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "B",
+                    "label" : "b",
+                    "postConditions" : [
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "RightExtent",
+                            "label" : "a"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "b",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "bCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "bCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "bCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+              "symbol" : {
+                "kind" : "Code",
+                "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
+                "symbol" : {
+                  "kind" : "Code",
+                  "name" : "c:C {println(c)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "c"
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "c",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
+                      }
+                    }
+                  ]
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "cCounter",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "c"
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assignment",
+                    "id" : "cCounter",
+                    "exp" : {
+                      "kind" : "Add",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "cCounter",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      }
+                    },
+                    "i" : -1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X",
+        "parameters" : [
+          "bCounter",
+          "cCounter"
+        ]
       },
       "body" : [
         {
@@ -794,15 +1583,27 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "(b:B[b.lExt == a.rExt] {println(b)} c:C {println(c)})*",
+          "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
           "label" : "b",
           "parameters" : [
-            "a"
+            "a",
+            "bCounter",
+            "cCounter"
           ],
           "arguments" : [
             {
               "kind" : "Name",
               "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
               "i" : -1
             }
           ],
@@ -831,12 +1632,28 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Start(S)",
+        "parameters" : [
+          "bCounter",
+          "cCounter"
+        ],
         "nodeType" : "Start"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "bCounter",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "cCounter",
+              "i" : -1
+            }
+          ]
         }
       ],
       "recursion" : "NON_REC",
@@ -864,30 +1681,30 @@
     }
   ],
   "ebnfLefts" : {
-    "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})" : [
+    "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})" : [
       "C"
     ],
-    "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})*" : [
-      "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})+"
+    "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*" : [
+      "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+"
     ],
-    "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})+" : [
-      "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})"
+    "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+" : [
+      "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})"
     ]
   },
   "ebnfRights" : {
-    "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})" : [
+    "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})" : [
       "C",
       "$C"
     ],
-    "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})*" : [
+    "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*" : [
+      "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
       "C",
-      "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})",
-      "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})+",
+      "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+",
       "$C"
     ],
-    "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})+" : [
+    "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})+" : [
+      "(b:B [b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
       "C",
-      "(b:B [b.lExt == a.rExt] {println(b)} c:C {println(c)})",
       "$C"
     ]
   },
@@ -895,5 +1712,9 @@
     "kind" : "Start",
     "name" : "Start(S)",
     "startSymbol" : "S"
+  },
+  "globals" : {
+    "bCounter" : 1,
+    "cCounter" : 2
   }
 }

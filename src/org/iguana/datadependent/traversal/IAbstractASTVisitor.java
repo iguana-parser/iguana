@@ -97,4 +97,6 @@ public interface IAbstractASTVisitor<T> {
 
     T visit(Statement.VariableDeclaration statement);
 
+    T visit(Add expression);
+
 }
