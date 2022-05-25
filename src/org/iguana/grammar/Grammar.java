@@ -9,8 +9,9 @@ import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.serialization.JsonSerializer;
 
-import java.io.*;
-import java.net.URI;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 public class Grammar {
@@ -21,9 +22,9 @@ public class Grammar {
     private final Symbol layout;
     private final Map<String, Object> globals;
 
-    private Map<String, Set<String>> leftEnds = new HashMap<>();
-    private Map<String, Set<String>> rightEnds = new HashMap<>();
-    private Set<String> ebnfs = new HashSet<>();
+    private final Map<String, Set<String>> leftEnds = new HashMap<>();
+    private final Map<String, Set<String>> rightEnds = new HashMap<>();
+    private final Set<String> ebnfs = new HashSet<>();
 
     private RuntimeGrammar grammar;
 
@@ -151,50 +152,12 @@ public class Grammar {
         return IggyParser.fromGrammar(content);
     }
 
-    public static Grammar load(URI uri, String format) throws FileNotFoundException {
-        return load(new File(uri), format);
-    }
-
-    public static Grammar load(String path, String format) throws FileNotFoundException {
-        return load(new File(path), format);
-    }
-
-    public static Grammar load(File file) throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        return load(fis, "binary");
-    }
-
-    public static Grammar load(File file, String format) throws FileNotFoundException {
-        return load(new FileInputStream(file), format);
-    }
-
-    public static Grammar load(InputStream inputStream) {
-        return load(inputStream, "binary");
-    }
-
-    public static Grammar load(InputStream inputStream, String format) {
-        Grammar grammar;
-        switch (format) {
-            case "binary":
-                try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(inputStream))) {
-                    grammar = (Grammar) in.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-
-            case "json":
-                try {
-                    grammar = JsonSerializer.deserialize(inputStream, Grammar.class);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-
-            default:
-                throw new RuntimeException("Unsupported format exception");
+    public static Grammar fromJsonFile(String path) {
+        try {
+            return JsonSerializer.deserialize(Files.newInputStream(new File(path).toPath()), Grammar.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return grammar;
     }
 
     @Override

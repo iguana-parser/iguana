@@ -1,8 +1,5 @@
 package org.iguana;
 
-import org.iguana.utils.input.Input;
-import org.iguana.utils.io.FileUtils;
-import org.iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.transformation.GrammarTransformer;
@@ -15,6 +12,9 @@ import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.RecognizerStatisticsSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.io.FileUtils;
+import org.iguana.utils.visualization.DotGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -76,12 +76,7 @@ public class GrammarTest {
         if (REGENERATE_FILES || !Files.exists(Paths.get(jsonGrammarPath))) {
             record(grammar, jsonGrammarPath);
         } else {
-            Grammar jsonGrammar;
-            try {
-                jsonGrammar = Grammar.load(jsonGrammarPath, "json");
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException("No grammar.json file is present");
-            }
+            Grammar jsonGrammar = Grammar.fromJsonFile(jsonGrammarPath);
             assertEquals(grammar, jsonGrammar);
         }
 
