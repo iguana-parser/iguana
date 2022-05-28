@@ -3,7 +3,7 @@ global y = 0
 global z = 0
 
 start S
-  = A var m = z; C B var n = x; D [[m == 0 && n == 999]]
+  = A var m = z; C B var n = x; D [[m == 0 && n == 999]] assert(x == 999, y == 2, z == 999);
 
 A = 'a' x = 999; 'a' y = 2; ';'
 

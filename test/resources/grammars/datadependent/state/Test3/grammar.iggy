@@ -2,7 +2,7 @@ global x = 0
 global y = 0
 
 start S
-    = A println(x); A println(y); [[x == 666 && y == 999]]
+    = A assert(x == 666); A assert(y == 999); [[x == 666 && y == 999]]
 
 A = B C
 

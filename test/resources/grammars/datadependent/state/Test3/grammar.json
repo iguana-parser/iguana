@@ -14,7 +14,7 @@
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "A {println(x)}",
+                      "name" : "A {assert(x == 666)}",
                       "symbol" : {
                         "kind" : "Identifier",
                         "name" : "A"
@@ -23,22 +23,29 @@
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "Name",
-                                "name" : "x",
-                                "i" : -1
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "x",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 666
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]
                     },
                     {
                       "kind" : "Code",
-                      "name" : "A {println(y)}",
+                      "name" : "A {assert(y == 999)}",
                       "postConditions" : [
                         {
                           "kind" : "DataDependentCondition",
@@ -80,15 +87,22 @@
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "Name",
-                                "name" : "y",
-                                "i" : -1
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "y",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 999
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]

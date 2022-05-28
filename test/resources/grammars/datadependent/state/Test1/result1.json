@@ -335,30 +335,50 @@
             "body" : [
               {
                 "kind" : "Code",
-                "name" : "b {z = x} {println(x)}",
+                "name" : "b {z = x} {println(x)} {assert(x == 1)}",
                 "symbol" : {
                   "kind" : "Code",
-                  "name" : "b {z = x}",
+                  "name" : "b {z = x} {println(x)}",
                   "symbol" : {
-                    "kind" : "Terminal",
-                    "name" : "b",
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 98
-                    }
+                    "kind" : "Code",
+                    "name" : "b {z = x}",
+                    "symbol" : {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    },
+                    "statements" : [
+                      {
+                        "kind" : "ExpressionStatement",
+                        "exp" : {
+                          "kind" : "Assignment",
+                          "id" : "z",
+                          "exp" : {
+                            "kind" : "Name",
+                            "name" : "x",
+                            "i" : -1
+                          },
+                          "i" : -1
+                        }
+                      }
+                    ]
                   },
                   "statements" : [
                     {
                       "kind" : "ExpressionStatement",
                       "exp" : {
-                        "kind" : "Assignment",
-                        "id" : "z",
-                        "exp" : {
-                          "kind" : "Name",
-                          "name" : "x",
-                          "i" : -1
-                        },
-                        "i" : -1
+                        "kind" : "Println",
+                        "arguments" : [
+                          {
+                            "kind" : "Name",
+                            "name" : "x",
+                            "i" : -1
+                          }
+                        ],
+                        "fun" : "println"
                       }
                     }
                   ]
@@ -367,15 +387,22 @@
                   {
                     "kind" : "ExpressionStatement",
                     "exp" : {
-                      "kind" : "Println",
+                      "kind" : "Assert",
                       "arguments" : [
                         {
-                          "kind" : "Name",
-                          "name" : "x",
-                          "i" : -1
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "x",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
                         }
                       ],
-                      "fun" : "println"
+                      "fun" : "assert"
                     }
                   }
                 ]
