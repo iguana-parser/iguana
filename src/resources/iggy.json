@@ -2473,7 +2473,7 @@
                       "name" : "Expression"
                     }
                   ],
-                  "label" : "Plus"
+                  "label" : "Addition"
                 },
                 {
                   "symbols" : [
@@ -2494,7 +2494,7 @@
                       "name" : "Expression"
                     }
                   ],
-                  "label" : "Minus"
+                  "label" : "Subtraction"
                 }
               ],
               "associativity" : "LEFT"

@@ -170,6 +170,11 @@ public class Grammar {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(rules, layout, startSymbol);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Rule rule : rules) {

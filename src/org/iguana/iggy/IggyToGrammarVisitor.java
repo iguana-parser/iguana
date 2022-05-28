@@ -704,8 +704,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * :           Expression Arguments           %Call
      * > left      (Expression "*" Expression     %Multiplication
      * |            Expression "/" Expression     %Division)
-     * > left      (Expression "+" Expression     %Plus
-     * |            Expression "-" Expression     %Minus)
+     * > left      (Expression "+" Expression     %Addition
+     * |            Expression "-" Expression     %Subtraction)
      * > non-assoc (Expression "\>=" Expression   %GreaterEq
      * |            Expression "\<=" Expression   %LessEq
      * |            Expression "\>" Expression    %Greater
@@ -740,10 +740,28 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                         throw new RuntimeException("Unknown function name: " + funName);
                 }
 
-            case "Plus": {
+            case "Addition": {
                 Expression lhs = (Expression) node.childAt(0).accept(this);
                 Expression rhs = (Expression) node.childAt(2).accept(this);
                 return AST.add(lhs, rhs);
+            }
+
+            case "Subtraction": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.subtract(lhs, rhs);
+            }
+
+            case "Multiplication": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.multiply(lhs, rhs);
+            }
+
+            case "Division": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.divide(lhs, rhs);
             }
 
             case "GreaterEq": {

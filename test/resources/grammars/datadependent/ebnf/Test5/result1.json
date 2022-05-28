@@ -75,7 +75,7 @@
               },
               {
                 "kind" : "Nonterminal",
-                "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
+                "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2})*",
                 "label" : "b",
                 "parameters" : [
                   "a",
@@ -178,15 +178,15 @@
               "kind" : "MetaSymbolNode",
               "symbol" : {
                 "kind" : "Star",
-                "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})*",
+                "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2})*",
                 "label" : "b",
                 "s" : {
                   "kind" : "Sequence",
-                  "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+                  "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2})",
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+                      "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2}",
                       "symbol" : {
                         "kind" : "Code",
                         "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
@@ -281,7 +281,7 @@
                     },
                     {
                       "kind" : "Code",
-                      "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+                      "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2}",
                       "symbol" : {
                         "kind" : "Code",
                         "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
@@ -367,11 +367,11 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Sequence",
-                    "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+                    "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2})",
                     "symbols" : [
                       {
                         "kind" : "Code",
-                        "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+                        "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2}",
                         "symbol" : {
                           "kind" : "Code",
                           "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
@@ -466,7 +466,7 @@
                       },
                       {
                         "kind" : "Code",
-                        "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+                        "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2}",
                         "symbol" : {
                           "kind" : "Code",
                           "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
@@ -659,11 +659,11 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Sequence",
-                    "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+                    "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2})",
                     "symbols" : [
                       {
                         "kind" : "Code",
-                        "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+                        "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2}",
                         "symbol" : {
                           "kind" : "Code",
                           "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
@@ -758,7 +758,7 @@
                       },
                       {
                         "kind" : "Code",
-                        "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+                        "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2}",
                         "symbol" : {
                           "kind" : "Code",
                           "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",
@@ -951,11 +951,11 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Sequence",
-                    "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)})",
+                    "name" : "(b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2} c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2})",
                     "symbols" : [
                       {
                         "kind" : "Code",
-                        "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = (bCounter+2)}",
+                        "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)} {bCounter = bCounter + 2}",
                         "symbol" : {
                           "kind" : "Code",
                           "name" : "b:B[b.lExt == a.rExt] {println(b)} {assert(bCounter == b.lExt)}",
@@ -1050,7 +1050,7 @@
                       },
                       {
                         "kind" : "Code",
-                        "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = (cCounter+2)}",
+                        "name" : "c:C {println(c)} {assert(cCounter == c.lExt)} {cCounter = cCounter + 2}",
                         "symbol" : {
                           "kind" : "Code",
                           "name" : "c:C {println(c)} {assert(cCounter == c.lExt)}",

@@ -365,69 +365,6 @@
                         "expression" : {
                           "kind" : "Or",
                           "lhs" : {
-                            "kind" : "LessThanEqual",
-                            "lhs" : {
-                              "kind" : "Get",
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 0,
-                              "fun" : "get",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "l",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Integer",
-                                  "value" : 0
-                                }
-                              ]
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 0
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "GreaterThanEqual",
-                            "lhs" : {
-                              "kind" : "Get",
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 0,
-                              "fun" : "get",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "l",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Integer",
-                                  "value" : 0
-                                }
-                              ]
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
-                          "kind" : "Or",
-                          "lhs" : {
                             "kind" : "Equal",
                             "lhs" : {
                               "kind" : "Get",
@@ -481,6 +418,69 @@
                                   "value" : 1
                                 }
                               ]
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "LessThanEqual",
+                            "lhs" : {
+                              "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 0,
+                              "fun" : "get",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "l",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Integer",
+                                  "value" : 0
+                                }
+                              ]
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 0
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "GreaterThanEqual",
+                            "lhs" : {
+                              "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 0,
+                              "fun" : "get",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "l",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Integer",
+                                  "value" : 0
+                                }
+                              ]
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 2
                             }
                           }
                         }

@@ -953,4 +953,16 @@ public class AST {
     public static Expression add(Expression lhs, Expression rhs) {
         return new Expression.Add(lhs, rhs);
     }
+
+    public static Expression subtract(Expression lhs, Expression rhs) {
+        return new Expression.Subtract(lhs, rhs);
+    }
+
+    public static Expression multiply(Expression lhs, Expression rhs) {
+        return new Expression.Multiply(lhs, rhs);
+    }
+
+    public static Expression divide(Expression lhs, Expression rhs) {
+        return new Expression.Divide(lhs, rhs);
+    }
 }

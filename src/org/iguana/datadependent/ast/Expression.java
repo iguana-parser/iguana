@@ -27,7 +27,6 @@
 
 package org.iguana.datadependent.ast;
 
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import org.iguana.grammar.exception.UndeclaredVariableException;
@@ -35,13 +34,14 @@ import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.result.RecognizerResult;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNodeWithValue;
+import org.iguana.utils.input.Input;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.iguana.utils.string.StringUtil.listToString;
 import static java.lang.Integer.toUnsignedLong;
+import static org.iguana.utils.string.StringUtil.listToString;
 
 public abstract class Expression extends AbstractAST {
 
@@ -437,60 +437,6 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    public static class Add extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
-
-        public Add(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        @Override
-        public Object interpret(IEvaluatorContext ctx, Input input) {
-            Object lhs = this.lhs.interpret(ctx, input);
-            Object rhs = this.rhs.interpret(ctx, input);
-
-            if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
-                return (java.lang.Integer) lhs + (java.lang.Integer) rhs;
-
-            throw new UnexpectedTypeOfArgumentException(this);
-        }
-
-        @Override
-        public <T> T accept(IAbstractASTVisitor<T> visitor) {
-            return visitor.visit(this);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof Add)) return false;
-            Add other = (Add) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
-        }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("(%s+%s)", lhs, rhs);
-        }
-    }
-
     public static class Assignment extends Expression {
 
         private final java.lang.String id;
@@ -774,14 +720,15 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    public static class Or extends Expression {
+    public static abstract class BinaryExpression extends Expression {
+        protected final Expression lhs;
+        protected final Expression rhs;
+        private final java.lang.String symbolName;
 
-        private final Expression lhs;
-        private final Expression rhs;
-
-        Or(Expression lhs, Expression rhs) {
+        protected BinaryExpression(Expression lhs, Expression rhs, java.lang.String symbolName) {
             this.lhs = lhs;
             this.rhs = rhs;
+            this.symbolName = symbolName;
         }
 
         public Expression getLhs() {
@@ -790,6 +737,31 @@ public abstract class Expression extends AbstractAST {
 
         public Expression getRhs() {
             return rhs;
+        }
+
+        @Override
+        public java.lang.String toString() {
+            return java.lang.String.format("%s %s %s", lhs, symbolName, rhs);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof BinaryExpression)) return false;
+            BinaryExpression other = (BinaryExpression) obj;
+            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs) && Objects.equals(this.symbolName, other.symbolName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.lhs, this.rhs, this.symbolName);
+        }
+    }
+
+    public static class Or extends BinaryExpression {
+
+        Or(Expression lhs, Expression rhs) {
+            super(lhs, rhs, "||");
         }
 
         @Override
@@ -801,46 +773,15 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s || %s", lhs, rhs);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof Or)) return false;
-            Or other = (Or) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
-
     }
 
-    public static class And extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class And extends BinaryExpression {
 
         And(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
+            super(lhs, rhs, "&&");
         }
 
         @Override
@@ -852,46 +793,16 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s && %s", lhs, rhs);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof And)) return false;
-            And other = (And) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
 
     }
 
-    public static class Less extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class Less extends BinaryExpression {
 
         Less(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
+            super(lhs, rhs, "<");
         }
 
         @Override
@@ -911,46 +822,16 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof Less)) return false;
-            Less other = (Less) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s < %s", lhs, rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
 
     }
 
-    public static class LessThanEqual extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class LessThanEqual extends BinaryExpression {
 
         LessThanEqual(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
+            super(lhs, rhs, "<=");
         }
 
         @Override
@@ -970,46 +851,16 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s <= %s", lhs, rhs);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof LessThanEqual)) return false;
-            LessThanEqual other = (LessThanEqual) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
 
     }
 
-    public static class Greater extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class Greater extends BinaryExpression {
 
         Greater(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
+            super(lhs, rhs, ">");
         }
 
         @Override
@@ -1029,38 +880,16 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s > %s", lhs, rhs);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof Greater)) return false;
-            Greater other = (Greater) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
 
     }
 
-    public static class GreaterThanEqual extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class GreaterThanEqual extends BinaryExpression {
 
         GreaterThanEqual(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
+            super(lhs, rhs, ">=");
         }
 
         public Expression getLhs() {
@@ -1088,46 +917,16 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s >= %s", lhs, rhs);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof GreaterThanEqual)) return false;
-            GreaterThanEqual other = (GreaterThanEqual) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
 
     }
 
-    public static class Equal extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class Equal extends BinaryExpression {
 
         Equal(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
+            super(lhs, rhs, "==");
         }
 
         @Override
@@ -1155,46 +954,16 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s == %s", lhs, rhs);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof Equal)) return false;
-            Equal other = (Equal) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
-        }
-
-        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
 
     }
 
-    public static class NotEqual extends Expression {
-
-        private final Expression lhs;
-        private final Expression rhs;
+    public static class NotEqual extends BinaryExpression {
 
         NotEqual(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
-
-        public Expression getLhs() {
-            return lhs;
-        }
-
-        public Expression getRhs() {
-            return rhs;
+            super(lhs, rhs, "!=");
         }
 
         @Override
@@ -1214,28 +983,114 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
-        public java.lang.String toString() {
-            return java.lang.String.format("%s != %s", lhs, rhs);
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+
+    }
+
+    public static class Add extends BinaryExpression {
+
+        public Add(Expression lhs, Expression rhs) {
+            super(lhs, rhs, "+");
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof NotEqual)) return false;
-            NotEqual other = (NotEqual) obj;
-            return this.lhs.equals(other.lhs) && this.rhs.equals(other.rhs);
-        }
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.lhs, this.rhs);
+            if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
+                return (java.lang.Integer) lhs + (java.lang.Integer) rhs;
+
+            if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float)
+                return (java.lang.Float) lhs + (java.lang.Float) rhs;
+
+            throw new UnexpectedTypeOfArgumentException(this);
         }
 
         @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
             return visitor.visit(this);
         }
+    }
 
+    public static class Subtract extends BinaryExpression {
+
+        public Subtract(Expression lhs, Expression rhs) {
+            super(lhs, rhs, "-");
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
+
+            if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
+                return (java.lang.Integer) lhs - (java.lang.Integer) rhs;
+
+            if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float)
+                return (java.lang.Float) lhs - (java.lang.Float) rhs;
+
+            throw new UnexpectedTypeOfArgumentException(this);
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+    }
+
+    public static class Multiply extends BinaryExpression {
+
+        public Multiply(Expression lhs, Expression rhs) {
+            super(lhs, rhs, "*");
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
+
+            if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
+                return (java.lang.Integer) lhs * (java.lang.Integer) rhs;
+
+            if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float)
+                return (java.lang.Float) lhs * (java.lang.Float) rhs;
+
+            throw new UnexpectedTypeOfArgumentException(this);
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+    }
+
+    public static class Divide extends BinaryExpression {
+
+        public Divide(Expression lhs, Expression rhs) {
+            super(lhs, rhs, "/");
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object lhs = this.lhs.interpret(ctx, input);
+            Object rhs = this.rhs.interpret(ctx, input);
+
+            if (lhs instanceof java.lang.Integer && rhs instanceof java.lang.Integer)
+                return (java.lang.Integer) lhs / (java.lang.Integer) rhs;
+
+            if (lhs instanceof java.lang.Float && rhs instanceof java.lang.Float)
+                return (java.lang.Float) lhs / (java.lang.Float) rhs;
+
+            throw new UnexpectedTypeOfArgumentException(this);
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
     }
 
     public static class LeftExtent extends Expression {
