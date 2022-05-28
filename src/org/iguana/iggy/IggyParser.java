@@ -27,8 +27,6 @@ public class IggyParser {
 
 
     public static void main(String[] args) throws IOException {
-//        Grammar grammar = Grammar.load(new File("/Users/afroozeh/iggy"));
-//        System.out.println(JsonSerializer.toJSON(grammar));
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         Grammar grammar = getGrammar(path);
         System.out.println(JsonSerializer.toJSON(grammar));

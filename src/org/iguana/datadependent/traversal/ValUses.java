@@ -11,7 +11,7 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.exception.UnexpectedSymbol;
+import org.iguana.grammar.exception.UnexpectedSymbolException;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.traversal.IConditionVisitor;
@@ -42,12 +42,12 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(Align symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(Block symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
@@ -69,17 +69,17 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(IfThen symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(IfThenElse symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(Ignore symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(Offside symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(While symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
@@ -112,32 +112,32 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(Alt symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(Opt symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(Plus symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(Group symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
 	@Override
 	public Void visit(Star symbol) {
-		throw new UnexpectedSymbol(symbol, "val-uses traversal");
+		throw new UnexpectedSymbolException(symbol, "val-uses traversal");
 	}
 
     @Override
     public Void visit(Start symbol) {
-        throw new UnexpectedSymbol(symbol, "val-uses traversal");
+        throw new UnexpectedSymbolException(symbol, "val-uses traversal");
     }
 
     private void visitSymbol(Symbol symbol) {
@@ -321,6 +321,34 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	@Override
 	public Void visit(org.iguana.datadependent.ast.Statement.VariableDeclaration declaration) {
 		declaration.getDeclaration().accept(this);
+		return null;
+	}
+
+	@Override
+	public Void visit(Add expression) {
+		expression.getLhs().accept(this);
+		expression.getRhs().accept(this);
+		return null;
+	}
+
+	@Override
+	public Void visit(Subtract expression) {
+		expression.getLhs().accept(this);
+		expression.getRhs().accept(this);
+		return null;
+	}
+
+	@Override
+	public Void visit(Multiply expression) {
+		expression.getLhs().accept(this);
+		expression.getRhs().accept(this);
+		return null;
+	}
+
+	@Override
+	public Void visit(Divide expression) {
+		expression.getLhs().accept(this);
+		expression.getRhs().accept(this);
 		return null;
 	}
 

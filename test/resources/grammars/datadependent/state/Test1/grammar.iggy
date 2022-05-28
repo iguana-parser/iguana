@@ -7,7 +7,7 @@ start S
 
 A = 'a' x = 1; 'a' y = 2; ';'
 
-B = 'b' z = $x; println($x); ';'
+B = 'b' z = x; assert(x == 1); ';'
 
 D = 'd'
 

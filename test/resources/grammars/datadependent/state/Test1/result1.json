@@ -335,7 +335,7 @@
             "body" : [
               {
                 "kind" : "Code",
-                "name" : "b {z = x} {println(x)}",
+                "name" : "b {z = x} {assert(x == 1)}",
                 "symbol" : {
                   "kind" : "Code",
                   "name" : "b {z = x}",
@@ -367,15 +367,22 @@
                   {
                     "kind" : "ExpressionStatement",
                     "exp" : {
-                      "kind" : "Println",
+                      "kind" : "Assert",
                       "arguments" : [
                         {
-                          "kind" : "Name",
-                          "name" : "x",
-                          "i" : -1
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "x",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
                         }
                       ],
-                      "fun" : "println"
+                      "fun" : "assert"
                     }
                   }
                 ]

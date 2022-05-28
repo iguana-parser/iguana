@@ -72,7 +72,7 @@
                   },
                   {
                     "kind" : "Code",
-                    "name" : "l2:A {println(l1,l2,a,b)}",
+                    "name" : "l2:A {assert(l1.lExt == 0,l1.rExt == 1,l2.lExt == 1,l2.rExt == 2,a == 1,b == 2)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "A",
@@ -82,30 +82,78 @@
                       {
                         "kind" : "ExpressionStatement",
                         "exp" : {
-                          "kind" : "Println",
+                          "kind" : "Assert",
                           "arguments" : [
                             {
-                              "kind" : "Name",
-                              "name" : "l1",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "l1"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 0
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "l2",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "l1"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "a",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "l2"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "b",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "l2"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 2
+                              }
+                            },
+                            {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "a",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
+                            },
+                            {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "b",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 2
+                              }
                             }
                           ],
-                          "fun" : "println"
+                          "fun" : "assert"
                         }
                       }
                     ]
@@ -311,42 +359,139 @@
                 "body" : [
                   {
                     "kind" : "Code",
-                    "name" : "l:A {println(l,a,b)}",
+                    "name" : "l1:A {assert(l1.lExt == 0,l1.rExt == 1 || l1.rExt == 2,a == 1,b == 2)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "A",
-                      "label" : "l"
+                      "label" : "l1"
                     },
                     "statements" : [
                       {
                         "kind" : "ExpressionStatement",
                         "exp" : {
-                          "kind" : "Println",
+                          "kind" : "Assert",
                           "arguments" : [
                             {
-                              "kind" : "Name",
-                              "name" : "l",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "l1"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 0
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "a",
-                              "i" : -1
+                              "kind" : "Or",
+                              "lhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "l1"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              },
+                              "rhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "l1"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "b",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "a",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
+                            },
+                            {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "b",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 2
+                              }
                             }
                           ],
-                          "fun" : "println"
+                          "fun" : "assert"
                         }
                       }
                     ]
                   },
                   {
-                    "kind" : "Nonterminal",
-                    "name" : "B"
+                    "kind" : "Code",
+                    "name" : "l2:B {assert(l2.lExt == 1 || l2.lExt == 2,l2.rExt == 3)}",
+                    "symbol" : {
+                      "kind" : "Nonterminal",
+                      "name" : "B",
+                      "label" : "l2"
+                    },
+                    "statements" : [
+                      {
+                        "kind" : "ExpressionStatement",
+                        "exp" : {
+                          "kind" : "Assert",
+                          "arguments" : [
+                            {
+                              "kind" : "Or",
+                              "lhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "l2"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              },
+                              "rhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "l2"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              }
+                            },
+                            {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "l2"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 3
+                              }
+                            }
+                          ],
+                          "fun" : "assert"
+                        }
+                      }
+                    ]
                   }
                 ],
                 "recursion" : "NON_REC",
@@ -513,42 +658,139 @@
                 "body" : [
                   {
                     "kind" : "Code",
-                    "name" : "l:A {println(l,a,b)}",
+                    "name" : "l1:A {assert(l1.lExt == 0,l1.rExt == 1 || l1.rExt == 2,a == 1,b == 2)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "A",
-                      "label" : "l"
+                      "label" : "l1"
                     },
                     "statements" : [
                       {
                         "kind" : "ExpressionStatement",
                         "exp" : {
-                          "kind" : "Println",
+                          "kind" : "Assert",
                           "arguments" : [
                             {
-                              "kind" : "Name",
-                              "name" : "l",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "l1"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 0
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "a",
-                              "i" : -1
+                              "kind" : "Or",
+                              "lhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "l1"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              },
+                              "rhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "l1"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              }
                             },
                             {
-                              "kind" : "Name",
-                              "name" : "b",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "a",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
+                            },
+                            {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "b",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 2
+                              }
                             }
                           ],
-                          "fun" : "println"
+                          "fun" : "assert"
                         }
                       }
                     ]
                   },
                   {
-                    "kind" : "Nonterminal",
-                    "name" : "B"
+                    "kind" : "Code",
+                    "name" : "l2:B {assert(l2.lExt == 1 || l2.lExt == 2,l2.rExt == 3)}",
+                    "symbol" : {
+                      "kind" : "Nonterminal",
+                      "name" : "B",
+                      "label" : "l2"
+                    },
+                    "statements" : [
+                      {
+                        "kind" : "ExpressionStatement",
+                        "exp" : {
+                          "kind" : "Assert",
+                          "arguments" : [
+                            {
+                              "kind" : "Or",
+                              "lhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "l2"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              },
+                              "rhs" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "l2"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              }
+                            },
+                            {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "l2"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 3
+                              }
+                            }
+                          ],
+                          "fun" : "assert"
+                        }
+                      }
+                    ]
                   }
                 ],
                 "recursion" : "NON_REC",

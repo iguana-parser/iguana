@@ -181,7 +181,7 @@
                 "body" : [
                   {
                     "kind" : "Code",
-                    "name" : "A {println(x)}",
+                    "name" : "A {assert(x == 5)}",
                     "preConditions" : [
                       {
                         "kind" : "DataDependentCondition",
@@ -201,15 +201,22 @@
                       {
                         "kind" : "ExpressionStatement",
                         "exp" : {
-                          "kind" : "Println",
+                          "kind" : "Assert",
                           "arguments" : [
                             {
-                              "kind" : "Name",
-                              "name" : "x",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "x",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 5
+                              }
                             }
                           ],
-                          "fun" : "println"
+                          "fun" : "assert"
                         }
                       }
                     ]
@@ -234,7 +241,7 @@
                 },
                 "definition" : {
                   "kind" : "IfThenElse",
-                  "name" : "if (x == 5) A {println(x)} else B {println(y)};",
+                  "name" : "if (x == 5) A {assert(x == 5)} else B {assert(y == 6)};",
                   "expression" : {
                     "kind" : "Equal",
                     "lhs" : {
@@ -249,7 +256,7 @@
                   },
                   "thenPart" : {
                     "kind" : "Code",
-                    "name" : "A {println(x)}",
+                    "name" : "A {assert(x == 5)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "A"
@@ -258,22 +265,29 @@
                       {
                         "kind" : "ExpressionStatement",
                         "exp" : {
-                          "kind" : "Println",
+                          "kind" : "Assert",
                           "arguments" : [
                             {
-                              "kind" : "Name",
-                              "name" : "x",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "x",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 5
+                              }
                             }
                           ],
-                          "fun" : "println"
+                          "fun" : "assert"
                         }
                       }
                     ]
                   },
                   "elsePart" : {
                     "kind" : "Code",
-                    "name" : "B {println(y)}",
+                    "name" : "B {assert(y == 6)}",
                     "symbol" : {
                       "kind" : "Nonterminal",
                       "name" : "B"
@@ -282,15 +296,22 @@
                       {
                         "kind" : "ExpressionStatement",
                         "exp" : {
-                          "kind" : "Println",
+                          "kind" : "Assert",
                           "arguments" : [
                             {
-                              "kind" : "Name",
-                              "name" : "y",
-                              "i" : -1
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "y",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 6
+                              }
                             }
                           ],
-                          "fun" : "println"
+                          "fun" : "assert"
                         }
                       }
                     ]

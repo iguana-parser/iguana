@@ -40,8 +40,8 @@
                       "kind" : "Identifier",
                       "name" : "E",
                       "excepts" : [
+                        "unaryPlus",
                         "unaryStar",
-                        "plus",
                         "brackets"
                       ]
                     },

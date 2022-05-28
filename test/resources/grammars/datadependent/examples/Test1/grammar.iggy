@@ -9,8 +9,8 @@ STag
 Content
   = CharData (Element CharData)*
 
-ETag($s)
-  = '</' n:Name [[ n.yield == $s ]] '>'
+ETag(s)
+  = '</' n:Name [[ n.yield == s ]] '>'
 
 layout terminal L
   = [\t\n\r\ ]*

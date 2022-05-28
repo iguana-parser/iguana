@@ -72,7 +72,7 @@
         },
         {
           "kind" : "Return",
-          "name" : "{(x)}",
+          "name" : "{(x,y)}",
           "expression" : {
             "kind" : "Tuple",
             "elements" : [
@@ -80,9 +80,14 @@
                 "kind" : "Name",
                 "name" : "x",
                 "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "y",
+                "i" : -1
               }
             ],
-            "length" : 1
+            "length" : 2
           }
         }
       ],
@@ -147,6 +152,21 @@
           "regex" : {
             "kind" : "Char",
             "val" : 59
+          }
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(z)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Name",
+                "name" : "z",
+                "i" : -1
+              }
+            ],
+            "length" : 1
           }
         }
       ],
@@ -238,12 +258,13 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "x=A(x,y) {var m = z}",
+          "name" : "x:y=A(x,y) {var m = z}",
           "symbol" : {
             "kind" : "Nonterminal",
             "name" : "A",
             "state" : [
-              "x"
+              "x",
+              "y"
             ],
             "arguments" : [
               {
@@ -279,10 +300,13 @@
         },
         {
           "kind" : "Code",
-          "name" : "B(x,z) {var n = x}",
+          "name" : "z=B(x,z) {var n = x}",
           "symbol" : {
             "kind" : "Nonterminal",
             "name" : "B",
+            "state" : [
+              "z"
+            ],
             "arguments" : [
               {
                 "kind" : "Name",
@@ -312,38 +336,89 @@
           ]
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "D",
-          "postConditions" : [
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "And",
-                "lhs" : {
-                  "kind" : "Equal",
+          "kind" : "Code",
+          "name" : "D[m == 0 && n == 999] {assert(x == 999,y == 2,z == 999)}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "D",
+            "postConditions" : [
+              {
+                "kind" : "DataDependentCondition",
+                "type" : "DATA_DEPENDENT",
+                "expression" : {
+                  "kind" : "And",
                   "lhs" : {
-                    "kind" : "Name",
-                    "name" : "m",
-                    "i" : -1
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "m",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 0
+                    }
                   },
                   "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                },
-                "rhs" : {
-                  "kind" : "Equal",
-                  "lhs" : {
-                    "kind" : "Name",
-                    "name" : "n",
-                    "i" : -1
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : 999
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "n",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 999
+                    }
                   }
                 }
+              }
+            ]
+          },
+          "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Assert",
+                "arguments" : [
+                  {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "x",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 999
+                    }
+                  },
+                  {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "y",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 2
+                    }
+                  },
+                  {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "z",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 999
+                    }
+                  }
+                ],
+                "fun" : "assert"
               }
             }
           ]

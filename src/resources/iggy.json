@@ -2473,7 +2473,7 @@
                       "name" : "Expression"
                     }
                   ],
-                  "label" : "Plus"
+                  "label" : "Addition"
                 },
                 {
                   "symbols" : [
@@ -2494,7 +2494,7 @@
                       "name" : "Expression"
                     }
                   ],
-                  "label" : "Minus"
+                  "label" : "Subtraction"
                 }
               ],
               "associativity" : "LEFT"
@@ -3176,6 +3176,30 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "VarName"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Label"
       },
       "priorityLevels" : [
@@ -3711,6 +3735,35 @@
               "val" : 101
             }
           ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 114
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
         }
       ]
     },
@@ -3844,6 +3897,35 @@
             {
               "kind" : "Char",
               "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 114
             },
             {
               "kind" : "Char",
@@ -4179,19 +4261,6 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    "VarName" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 36
-        },
-        {
-          "kind" : "Reference",
-          "name" : "LetterOrDigits"
         }
       ]
     },

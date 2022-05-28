@@ -30,9 +30,7 @@ package org.iguana.datadependent.attrs;
 
 import io.usethesource.capsule.Set;
 
-import java.io.Serializable;
-
-public abstract class AbstractAttrs implements Attr, Serializable {
+public abstract class AbstractAttrs implements Attr {
 	
 	private transient Set.Immutable<String> env;
 

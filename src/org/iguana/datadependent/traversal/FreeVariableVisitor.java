@@ -27,7 +27,6 @@
 
 package org.iguana.datadependent.traversal;
 
-import org.iguana.datadependent.ast.Expression.*;
 import org.iguana.datadependent.ast.Expression.Boolean;
 import org.iguana.datadependent.ast.Expression.Integer;
 import org.iguana.datadependent.ast.Expression.String;
@@ -285,116 +284,74 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		return null;
 	}
-	
+
 	@Override
-	public Void visit(And expression) {
+	public Void visit(Add expression) {
+		return visitBinaryExpression(expression);
+	}
+
+	@Override
+	public Void visit(Subtract expression) {
+		return null;
+	}
+
+	@Override
+	public Void visit(Multiply expression) {
+		return null;
+	}
+
+	@Override
+	public Void visit(Divide expression) {
+		return null;
+	}
+
+	private Void visitBinaryExpression(BinaryExpression expression) {
 		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
+
 		lhs.setEnv(expression.getEnv());
 		lhs.accept(this);
-		
+
 		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(lhs.getEnv());
+
+		rhs.setEnv(expression.getEnv());
 		rhs.accept(this);
-		
+
 		return null;
+	}
+
+	@Override
+	public Void visit(And expression) {
+		return visitBinaryExpression(expression);
 	}
 	
 	@Override
 	public Void visit(Less expression) {
-		
-		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
-		lhs.setEnv(expression.getEnv());
-		lhs.accept(this);
-		
-		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(expression.getEnv());
-		rhs.accept(this);
-		
-		return null;
+		return visitBinaryExpression(expression);
 	}
 	
 	@Override
 	public Void visit(LessThanEqual expression) {
-		
-		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
-		lhs.setEnv(expression.getEnv());
-		lhs.accept(this);
-		
-		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(expression.getEnv());
-		rhs.accept(this);
-		
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	@Override
 	public Void visit(Greater expression) {
-		
-		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
-		lhs.setEnv(expression.getEnv());
-		lhs.accept(this);
-		
-		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(expression.getEnv());
-		rhs.accept(this);
-		
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	@Override
 	public Void visit(GreaterThanEqual expression) {	
-		
-		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
-		lhs.setEnv(expression.getEnv());
-		lhs.accept(this);
-		
-		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(expression.getEnv());
-		rhs.accept(this);
-		
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	@Override
 	public Void visit(Equal expression) {
-		
-		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
-		lhs.setEnv(expression.getEnv());
-		lhs.accept(this);
-		
-		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(expression.getEnv());
-		rhs.accept(this);
-		
-		return null;
+		return visitBinaryExpression(expression);
 	}
 	
 	@Override
 	public Void visit(NotEqual expression) {
-		
-		org.iguana.datadependent.ast.Expression lhs = expression.getLhs();
-		
-		lhs.setEnv(expression.getEnv());
-		lhs.accept(this);
-		
-		org.iguana.datadependent.ast.Expression rhs = expression.getRhs();
-		
-		rhs.setEnv(expression.getEnv());
-		rhs.accept(this);
-		
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	@Override

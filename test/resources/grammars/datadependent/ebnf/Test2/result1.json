@@ -54,7 +54,7 @@
               },
               {
                 "kind" : "Nonterminal",
-                "name" : "(B | (c:C {println(c.lExt)} D))*",
+                "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))*",
                 "label" : "s",
                 "nodeType" : "Star"
               }
@@ -135,11 +135,11 @@
               "kind" : "MetaSymbolNode",
               "symbol" : {
                 "kind" : "Star",
-                "name" : "(B | (c:C {println(c.lExt)} D))*",
+                "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))*",
                 "label" : "s",
                 "s" : {
                   "kind" : "Alt",
-                  "name" : "(B | (c:C {println(c.lExt)} D))",
+                  "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
                   "symbols" : [
                     {
                       "kind" : "Nonterminal",
@@ -148,11 +148,11 @@
                     },
                     {
                       "kind" : "Sequence",
-                      "name" : "(c:C {println(c.lExt)} D)",
+                      "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
                       "symbols" : [
                         {
                           "kind" : "Code",
-                          "name" : "c:C {println(c.lExt)}",
+                          "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
                           "symbol" : {
                             "kind" : "Nonterminal",
                             "name" : "C",
@@ -162,14 +162,35 @@
                             {
                               "kind" : "ExpressionStatement",
                               "exp" : {
-                                "kind" : "Println",
+                                "kind" : "Assert",
                                 "arguments" : [
                                   {
-                                    "kind" : "LeftExtent",
-                                    "label" : "c"
+                                    "kind" : "Or",
+                                    "lhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "c"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 1
+                                      }
+                                    },
+                                    "rhs" : {
+                                      "kind" : "Equal",
+                                      "lhs" : {
+                                        "kind" : "LeftExtent",
+                                        "label" : "c"
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Integer",
+                                        "value" : 3
+                                      }
+                                    }
                                   }
                                 ],
-                                "fun" : "println"
+                                "fun" : "assert"
                               }
                             }
                           ]
@@ -191,7 +212,7 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Alt",
-                    "name" : "(B | (c:C {println(c.lExt)} D))",
+                    "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
                     "symbols" : [
                       {
                         "kind" : "Nonterminal",
@@ -200,11 +221,11 @@
                       },
                       {
                         "kind" : "Sequence",
-                        "name" : "(c:C {println(c.lExt)} D)",
+                        "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
                         "symbols" : [
                           {
                             "kind" : "Code",
-                            "name" : "c:C {println(c.lExt)}",
+                            "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
                             "symbol" : {
                               "kind" : "Nonterminal",
                               "name" : "C",
@@ -214,14 +235,35 @@
                               {
                                 "kind" : "ExpressionStatement",
                                 "exp" : {
-                                  "kind" : "Println",
+                                  "kind" : "Assert",
                                   "arguments" : [
                                     {
-                                      "kind" : "LeftExtent",
-                                      "label" : "c"
+                                      "kind" : "Or",
+                                      "lhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 1
+                                        }
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 3
+                                        }
+                                      }
                                     }
                                   ],
-                                  "fun" : "println"
+                                  "fun" : "assert"
                                 }
                               }
                             ]
@@ -242,11 +284,11 @@
                       "kind" : "MetaSymbolNode",
                       "symbol" : {
                         "kind" : "Sequence",
-                        "name" : "(c:C {println(c.lExt)} D)",
+                        "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
                         "symbols" : [
                           {
                             "kind" : "Code",
-                            "name" : "c:C {println(c.lExt)}",
+                            "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
                             "symbol" : {
                               "kind" : "Nonterminal",
                               "name" : "C",
@@ -256,14 +298,35 @@
                               {
                                 "kind" : "ExpressionStatement",
                                 "exp" : {
-                                  "kind" : "Println",
+                                  "kind" : "Assert",
                                   "arguments" : [
                                     {
-                                      "kind" : "LeftExtent",
-                                      "label" : "c"
+                                      "kind" : "Or",
+                                      "lhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 1
+                                        }
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 3
+                                        }
+                                      }
                                     }
                                   ],
-                                  "fun" : "println"
+                                  "fun" : "assert"
                                 }
                               }
                             ]
@@ -392,7 +455,7 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Alt",
-                    "name" : "(B | (c:C {println(c.lExt)} D))",
+                    "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
                     "symbols" : [
                       {
                         "kind" : "Nonterminal",
@@ -401,11 +464,11 @@
                       },
                       {
                         "kind" : "Sequence",
-                        "name" : "(c:C {println(c.lExt)} D)",
+                        "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
                         "symbols" : [
                           {
                             "kind" : "Code",
-                            "name" : "c:C {println(c.lExt)}",
+                            "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
                             "symbol" : {
                               "kind" : "Nonterminal",
                               "name" : "C",
@@ -415,14 +478,35 @@
                               {
                                 "kind" : "ExpressionStatement",
                                 "exp" : {
-                                  "kind" : "Println",
+                                  "kind" : "Assert",
                                   "arguments" : [
                                     {
-                                      "kind" : "LeftExtent",
-                                      "label" : "c"
+                                      "kind" : "Or",
+                                      "lhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 1
+                                        }
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 3
+                                        }
+                                      }
                                     }
                                   ],
-                                  "fun" : "println"
+                                  "fun" : "assert"
                                 }
                               }
                             ]
@@ -443,11 +527,11 @@
                       "kind" : "MetaSymbolNode",
                       "symbol" : {
                         "kind" : "Sequence",
-                        "name" : "(c:C {println(c.lExt)} D)",
+                        "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
                         "symbols" : [
                           {
                             "kind" : "Code",
-                            "name" : "c:C {println(c.lExt)}",
+                            "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
                             "symbol" : {
                               "kind" : "Nonterminal",
                               "name" : "C",
@@ -457,14 +541,35 @@
                               {
                                 "kind" : "ExpressionStatement",
                                 "exp" : {
-                                  "kind" : "Println",
+                                  "kind" : "Assert",
                                   "arguments" : [
                                     {
-                                      "kind" : "LeftExtent",
-                                      "label" : "c"
+                                      "kind" : "Or",
+                                      "lhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 1
+                                        }
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 3
+                                        }
+                                      }
                                     }
                                   ],
-                                  "fun" : "println"
+                                  "fun" : "assert"
                                 }
                               }
                             ]
@@ -593,7 +698,7 @@
                   "kind" : "MetaSymbolNode",
                   "symbol" : {
                     "kind" : "Alt",
-                    "name" : "(B | (c:C {println(c.lExt)} D))",
+                    "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
                     "symbols" : [
                       {
                         "kind" : "Nonterminal",
@@ -602,11 +707,11 @@
                       },
                       {
                         "kind" : "Sequence",
-                        "name" : "(c:C {println(c.lExt)} D)",
+                        "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
                         "symbols" : [
                           {
                             "kind" : "Code",
-                            "name" : "c:C {println(c.lExt)}",
+                            "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
                             "symbol" : {
                               "kind" : "Nonterminal",
                               "name" : "C",
@@ -616,14 +721,35 @@
                               {
                                 "kind" : "ExpressionStatement",
                                 "exp" : {
-                                  "kind" : "Println",
+                                  "kind" : "Assert",
                                   "arguments" : [
                                     {
-                                      "kind" : "LeftExtent",
-                                      "label" : "c"
+                                      "kind" : "Or",
+                                      "lhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 1
+                                        }
+                                      },
+                                      "rhs" : {
+                                        "kind" : "Equal",
+                                        "lhs" : {
+                                          "kind" : "LeftExtent",
+                                          "label" : "c"
+                                        },
+                                        "rhs" : {
+                                          "kind" : "Integer",
+                                          "value" : 3
+                                        }
+                                      }
                                     }
                                   ],
-                                  "fun" : "println"
+                                  "fun" : "assert"
                                 }
                               }
                             ]

@@ -31,7 +31,7 @@ import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.exception.UnexpectedSymbol;
+import org.iguana.grammar.exception.UnexpectedSymbolException;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
@@ -235,7 +235,7 @@ public class DesugarState implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Block symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
@@ -257,12 +257,12 @@ public class DesugarState implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(IfThen symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
 		public Symbol visit(IfThenElse symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
@@ -327,7 +327,7 @@ public class DesugarState implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(While symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
@@ -337,32 +337,32 @@ public class DesugarState implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Alt symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
 		public Symbol visit(Opt symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
 		public Symbol visit(Plus symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
 		public Symbol visit(Group symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
 		@Override
 		public Symbol visit(Star symbol) {
-			throw new UnexpectedSymbol(symbol, "desugar-state");
+			throw new UnexpectedSymbolException(symbol, "desugar-state");
 		}
 
         @Override
         public Symbol visit(Start symbol) {
-            throw new UnexpectedSymbol(symbol, "desugar-state");
+            throw new UnexpectedSymbolException(symbol, "desugar-state");
         }
 
     }

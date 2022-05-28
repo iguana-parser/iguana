@@ -79,6 +79,14 @@ public interface IAbstractASTVisitor<T> {
 
     T visit(NotEqual expression);
 
+    T visit(Add expression);
+
+    T visit(Subtract expression);
+
+    T visit(Multiply expression);
+
+    T visit(Divide expression);
+
     T visit(LeftExtent expression);
 
     T visit(RightExtent expression);

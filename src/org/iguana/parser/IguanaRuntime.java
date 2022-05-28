@@ -76,7 +76,7 @@ public class IguanaRuntime<T extends Result> {
 
         StartGSSNode<T> startGSSNode;
 
-        if (!global && !map.isEmpty()) {
+        if (!global && !map.isEmpty() && startSymbol.getParameters() != null) { // TODO: Make parameters an empty list by default
             Object[] arguments = new Object[map.size()];
 
             int i = 0;

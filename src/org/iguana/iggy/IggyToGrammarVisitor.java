@@ -171,7 +171,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private List<String> visitParameters(NonterminalNode node) {
         return node.childAt(1).children().stream()
             .filter(s -> !s.getText().equals(","))
-            .map(s -> s.getText().substring(1)).collect(Collectors.toList());
+            .map(ParseTreeNode::getText).collect(Collectors.toList());
     }
 
     /*
@@ -704,8 +704,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      * :           Expression Arguments           %Call
      * > left      (Expression "*" Expression     %Multiplication
      * |            Expression "/" Expression     %Division)
-     * > left      (Expression "+" Expression     %Plus
-     * |            Expression "-" Expression     %Minus)
+     * > left      (Expression "+" Expression     %Addition
+     * |            Expression "-" Expression     %Subtraction)
      * > non-assoc (Expression "\>=" Expression   %GreaterEq
      * |            Expression "\<=" Expression   %LessEq
      * |            Expression "\>" Expression    %Greater
@@ -734,9 +734,35 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                         return AST.println(arguments);
                     case "indent":
                         return AST.indent(arguments[0]);
+                    case "assert":
+                        return AST.assertion(arguments);
                     default:
                         throw new RuntimeException("Unknown function name: " + funName);
                 }
+
+            case "Addition": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.add(lhs, rhs);
+            }
+
+            case "Subtraction": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.subtract(lhs, rhs);
+            }
+
+            case "Multiplication": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.multiply(lhs, rhs);
+            }
+
+            case "Division": {
+                Expression lhs = (Expression) node.childAt(0).accept(this);
+                Expression rhs = (Expression) node.childAt(2).accept(this);
+                return AST.divide(lhs, rhs);
+            }
 
             case "GreaterEq": {
                 Expression lhs = (Expression) node.childAt(0).accept(this);
@@ -803,7 +829,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return AST.val(val);
 
             case "Name":
-                return AST.var((node.childAt(0).getText()).substring(1));
+                return AST.var((node.childAt(0).getText()));
 
             case "Number":
                 return AST.integer(Integer.parseInt(node.childAt(0).getText()));

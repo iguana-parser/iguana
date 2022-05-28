@@ -106,8 +106,8 @@ Expression
   =           FunName Arguments            %Call
   > left      (Expression "*" Expression   %Multiplication
   |            Expression "/" Expression   %Division)
-  > left      (Expression "+" Expression   %Plus
-  |            Expression "-" Expression   %Minus)
+  > left      (Expression "+" Expression   %Addition
+  |            Expression "-" Expression   %Subtraction)
   > non-assoc (Expression ">=" Expression  %GreaterEq
   |            Expression "<=" Expression  %LessEq
   |            Expression ">" Expression   %Greater
@@ -188,8 +188,8 @@ terminal Associativity
   | "right"
   | "non-assoc"
 
-terminal VarName
-  = '$' LetterOrDigits
+VarName
+  = Identifier
 
 Label
   = '%' Identifier
@@ -212,7 +212,9 @@ terminal Keywords
   | "indent"
   | "if"
   | "else"
+  | "assert"
 
 terminal FunName
   = "println"
   | "indent"
+  | "assert"

@@ -38,7 +38,7 @@
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "a:A [a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
+                      "name" : "a:A [a.lExt == 0] {assert(a.rExt == 1,indent(a.rExt) == 2)}",
                       "symbol" : {
                         "kind" : "Identifier",
                         "name" : "A",
@@ -65,24 +65,38 @@
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "RightExtent",
-                                "label" : "a"
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "a"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
                               },
                               {
-                                "kind" : "Indent",
-                                "fun" : "indent",
-                                "arguments" : [
-                                  {
-                                    "kind" : "RightExtent",
-                                    "label" : "a"
-                                  }
-                                ]
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Indent",
+                                  "fun" : "indent",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "RightExtent",
+                                      "label" : "a"
+                                    }
+                                  ]
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]
@@ -93,7 +107,7 @@
                     },
                     {
                       "kind" : "Code",
-                      "name" : "b:B [b.lExt == 5] {println(b.lExt,b.rExt,indent(b.rExt))}",
+                      "name" : "b:B [b.lExt == 5] {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
                       "symbol" : {
                         "kind" : "Identifier",
                         "name" : "B",
@@ -120,28 +134,49 @@
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Println",
+                            "kind" : "Assert",
                             "arguments" : [
                               {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 5
+                                }
                               },
                               {
-                                "kind" : "RightExtent",
-                                "label" : "b"
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 6
+                                }
                               },
                               {
-                                "kind" : "Indent",
-                                "fun" : "indent",
-                                "arguments" : [
-                                  {
-                                    "kind" : "RightExtent",
-                                    "label" : "b"
-                                  }
-                                ]
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Indent",
+                                  "fun" : "indent",
+                                  "arguments" : [
+                                    {
+                                      "kind" : "RightExtent",
+                                      "label" : "b"
+                                    }
+                                  ]
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 7
+                                }
                               }
                             ],
-                            "fun" : "println"
+                            "fun" : "assert"
                           }
                         }
                       ]
