@@ -152,41 +152,11 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "l:A {println(l,a,b)} {assert(a == 1,b == 2,l.lExt == 0,l.rExt == 1)}",
+          "name" : "l:A {assert(a == 1,b == 2,l.lExt == 0,l.rExt == 1)}",
           "symbol" : {
-            "kind" : "Code",
-            "name" : "l:A {println(l,a,b)}",
-            "symbol" : {
-              "kind" : "Nonterminal",
-              "name" : "A",
-              "label" : "l"
-            },
-            "statements" : [
-              {
-                "kind" : "ExpressionStatement",
-                "exp" : {
-                  "kind" : "Println",
-                  "arguments" : [
-                    {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    {
-                      "kind" : "Name",
-                      "name" : "a",
-                      "i" : -1
-                    },
-                    {
-                      "kind" : "Name",
-                      "name" : "b",
-                      "i" : -1
-                    }
-                  ],
-                  "fun" : "println"
-                }
-              }
-            ]
+            "kind" : "Nonterminal",
+            "name" : "A",
+            "label" : "l"
           },
           "statements" : [
             {

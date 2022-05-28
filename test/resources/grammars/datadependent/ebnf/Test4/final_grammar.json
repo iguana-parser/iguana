@@ -3,332 +3,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-        "parameters" : [
-          "a",
-          "b.lExt"
-        ],
-        "nodeType" : "Seq"
-      },
-      "body" : [
-        {
-          "kind" : "Code",
-          "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
-          "symbol" : {
-            "kind" : "Code",
-            "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
-            "symbol" : {
-              "kind" : "Nonterminal",
-              "name" : "B",
-              "postConditions" : [
-                {
-                  "kind" : "DataDependentCondition",
-                  "type" : "DATA_DEPENDENT",
-                  "expression" : {
-                    "kind" : "Equal",
-                    "lhs" : {
-                      "kind" : "RightExtent",
-                      "label" : "a"
-                    },
-                    "rhs" : {
-                      "kind" : "LeftExtent",
-                      "label" : "b"
-                    }
-                  }
-                }
-              ]
-            },
-            "statements" : [
-              {
-                "kind" : "ExpressionStatement",
-                "exp" : {
-                  "kind" : "Println",
-                  "arguments" : [
-                    {
-                      "kind" : "LeftExtent",
-                      "label" : "b"
-                    }
-                  ],
-                  "fun" : "println"
-                }
-              }
-            ]
-          },
-          "statements" : [
-            {
-              "kind" : "ExpressionStatement",
-              "exp" : {
-                "kind" : "Assert",
-                "arguments" : [
-                  {
-                    "kind" : "Equal",
-                    "lhs" : {
-                      "kind" : "LeftExtent",
-                      "label" : "b"
-                    },
-                    "rhs" : {
-                      "kind" : "Integer",
-                      "value" : 1
-                    }
-                  }
-                ],
-                "fun" : "assert"
-              }
-            }
-          ]
-        },
-        {
-          "kind" : "Code",
-          "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
-          "symbol" : {
-            "kind" : "Code",
-            "name" : "b:C {println(b)}",
-            "symbol" : {
-              "kind" : "Nonterminal",
-              "name" : "C",
-              "label" : "b"
-            },
-            "statements" : [
-              {
-                "kind" : "ExpressionStatement",
-                "exp" : {
-                  "kind" : "Println",
-                  "arguments" : [
-                    {
-                      "kind" : "Name",
-                      "name" : "b",
-                      "i" : -1
-                    }
-                  ],
-                  "fun" : "println"
-                }
-              }
-            ]
-          },
-          "statements" : [
-            {
-              "kind" : "ExpressionStatement",
-              "exp" : {
-                "kind" : "Assert",
-                "arguments" : [
-                  {
-                    "kind" : "Or",
-                    "lhs" : {
-                      "kind" : "Or",
-                      "lhs" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 2
-                        }
-                      },
-                      "rhs" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 4
-                        }
-                      }
-                    },
-                    "rhs" : {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      },
-                      "rhs" : {
-                        "kind" : "Integer",
-                        "value" : 6
-                      }
-                    }
-                  }
-                ],
-                "fun" : "assert"
-              }
-            }
-          ]
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Sequence",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-        "symbols" : [
-          {
-            "kind" : "Code",
-            "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
-            "symbol" : {
-              "kind" : "Code",
-              "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "B",
-                "postConditions" : [
-                  {
-                    "kind" : "DataDependentCondition",
-                    "type" : "DATA_DEPENDENT",
-                    "expression" : {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "RightExtent",
-                        "label" : "a"
-                      },
-                      "rhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      }
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            },
-            "statements" : [
-              {
-                "kind" : "ExpressionStatement",
-                "exp" : {
-                  "kind" : "Assert",
-                  "arguments" : [
-                    {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "LeftExtent",
-                        "label" : "b"
-                      },
-                      "rhs" : {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
-                    }
-                  ],
-                  "fun" : "assert"
-                }
-              }
-            ]
-          },
-          {
-            "kind" : "Code",
-            "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
-            "symbol" : {
-              "kind" : "Code",
-              "name" : "b:C {println(b)}",
-              "symbol" : {
-                "kind" : "Nonterminal",
-                "name" : "C",
-                "label" : "b"
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Println",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "b",
-                        "i" : -1
-                      }
-                    ],
-                    "fun" : "println"
-                  }
-                }
-              ]
-            },
-            "statements" : [
-              {
-                "kind" : "ExpressionStatement",
-                "exp" : {
-                  "kind" : "Assert",
-                  "arguments" : [
-                    {
-                      "kind" : "Or",
-                      "lhs" : {
-                        "kind" : "Or",
-                        "lhs" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 2
-                          }
-                        },
-                        "rhs" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 4
-                          }
-                        }
-                      },
-                      "rhs" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 6
-                        }
-                      }
-                    }
-                  ],
-                  "fun" : "assert"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "A"
       },
       "body" : [
@@ -457,6 +131,922 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Seq"
+      },
+      "body" : [
+        {
+          "kind" : "Code",
+          "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "B",
+            "postConditions" : [
+              {
+                "kind" : "DataDependentCondition",
+                "type" : "DATA_DEPENDENT",
+                "expression" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "RightExtent",
+                    "label" : "a"
+                  },
+                  "rhs" : {
+                    "kind" : "LeftExtent",
+                    "label" : "b"
+                  }
+                }
+              }
+            ]
+          },
+          "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Assert",
+                "arguments" : [
+                  {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "LeftExtent",
+                      "label" : "b"
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 1
+                    }
+                  }
+                ],
+                "fun" : "assert"
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Code",
+          "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "C",
+            "label" : "b"
+          },
+          "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Assert",
+                "arguments" : [
+                  {
+                    "kind" : "Or",
+                    "lhs" : {
+                      "kind" : "Or",
+                      "lhs" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 2
+                        }
+                      },
+                      "rhs" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 4
+                        }
+                      }
+                    },
+                    "rhs" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 6
+                      }
+                    }
+                  }
+                ],
+                "fun" : "assert"
+              }
+            }
+          ]
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Sequence",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+        "symbols" : [
+          {
+            "kind" : "Code",
+            "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+            "symbol" : {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "postConditions" : [
+                {
+                  "kind" : "DataDependentCondition",
+                  "type" : "DATA_DEPENDENT",
+                  "expression" : {
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "RightExtent",
+                      "label" : "a"
+                    },
+                    "rhs" : {
+                      "kind" : "LeftExtent",
+                      "label" : "b"
+                    }
+                  }
+                }
+              ]
+            },
+            "statements" : [
+              {
+                "kind" : "ExpressionStatement",
+                "exp" : {
+                  "kind" : "Assert",
+                  "arguments" : [
+                    {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 1
+                      }
+                    }
+                  ],
+                  "fun" : "assert"
+                }
+              }
+            ]
+          },
+          {
+            "kind" : "Code",
+            "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+            "symbol" : {
+              "kind" : "Nonterminal",
+              "name" : "C",
+              "label" : "b"
+            },
+            "statements" : [
+              {
+                "kind" : "ExpressionStatement",
+                "exp" : {
+                  "kind" : "Assert",
+                  "arguments" : [
+                    {
+                      "kind" : "Or",
+                      "lhs" : {
+                        "kind" : "Or",
+                        "lhs" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 2
+                          }
+                        },
+                        "rhs" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 4
+                          }
+                        }
+                      },
+                      "rhs" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 6
+                        }
+                      }
+                    }
+                  ],
+                  "fun" : "assert"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Seq"
+        }
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "B",
+                "postConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "RightExtent",
+                        "label" : "a"
+                      },
+                      "rhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      }
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 1
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "C",
+                "label" : "b"
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Or",
+                        "lhs" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 2
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 4
+                            }
+                          }
+                        },
+                        "rhs" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 6
+                          }
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Seq"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "B",
+                "postConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "RightExtent",
+                        "label" : "a"
+                      },
+                      "rhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      }
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 1
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "C",
+                "label" : "b"
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Or",
+                        "lhs" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 2
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 4
+                            }
+                          }
+                        },
+                        "rhs" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 6
+                          }
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Star"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
+          "parameters" : [
+            "a",
+            "b.lExt"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "a",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "b.lExt",
+              "i" : -1
+            }
+          ],
+          "nodeType" : "Plus"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
+        "label" : "b",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "B",
+                "postConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "RightExtent",
+                        "label" : "a"
+                      },
+                      "rhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      }
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 1
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "C",
+                "label" : "b"
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Or",
+                        "lhs" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 2
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 4
+                            }
+                          }
+                        },
+                        "rhs" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 6
+                          }
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
+        "parameters" : [
+          "a",
+          "b.lExt"
+        ],
+        "nodeType" : "Star"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
+        "label" : "b",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+          "symbols" : [
+            {
+              "kind" : "Code",
+              "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "B",
+                "postConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Equal",
+                      "lhs" : {
+                        "kind" : "RightExtent",
+                        "label" : "a"
+                      },
+                      "rhs" : {
+                        "kind" : "LeftExtent",
+                        "label" : "b"
+                      }
+                    }
+                  }
+                ]
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 1
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            },
+            {
+              "kind" : "Code",
+              "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+              "symbol" : {
+                "kind" : "Nonterminal",
+                "name" : "C",
+                "label" : "b"
+              },
+              "statements" : [
+                {
+                  "kind" : "ExpressionStatement",
+                  "exp" : {
+                    "kind" : "Assert",
+                    "arguments" : [
+                      {
+                        "kind" : "Or",
+                        "lhs" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 2
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "LeftExtent",
+                              "label" : "b"
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : 4
+                            }
+                          }
+                        },
+                        "rhs" : {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "LeftExtent",
+                            "label" : "b"
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 6
+                          }
+                        }
+                      }
+                    ],
+                    "fun" : "assert"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "X"
       },
       "body" : [
@@ -467,7 +1057,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
+          "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
           "label" : "b",
           "parameters" : [
             "a",
@@ -509,397 +1099,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
-        "parameters" : [
-          "a",
-          "b.lExt"
-        ],
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-          "parameters" : [
-            "a",
-            "b.lExt"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "b.lExt",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Plus"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
-        "label" : "b",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B",
-                  "postConditions" : [
-                    {
-                      "kind" : "DataDependentCondition",
-                      "type" : "DATA_DEPENDENT",
-                      "expression" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "RightExtent",
-                          "label" : "a"
-                        },
-                        "rhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      }
-                    }
-                  ]
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 1
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "b:C {println(b)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "C",
-                  "label" : "b"
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "Name",
-                          "name" : "b",
-                          "i" : -1
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Or",
-                        "lhs" : {
-                          "kind" : "Or",
-                          "lhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 4
-                            }
-                          }
-                        },
-                        "rhs" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 6
-                          }
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
-        "parameters" : [
-          "a",
-          "b.lExt"
-        ],
-        "nodeType" : "Star"
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
-        "label" : "b",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B",
-                  "postConditions" : [
-                    {
-                      "kind" : "DataDependentCondition",
-                      "type" : "DATA_DEPENDENT",
-                      "expression" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "RightExtent",
-                          "label" : "a"
-                        },
-                        "rhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      }
-                    }
-                  ]
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 1
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "b:C {println(b)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "C",
-                  "label" : "b"
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "Name",
-                          "name" : "b",
-                          "i" : -1
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Or",
-                        "lhs" : {
-                          "kind" : "Or",
-                          "lhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 4
-                            }
-                          }
-                        },
-                        "rhs" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 6
-                          }
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "Start(S)",
         "nodeType" : "Start"
       },
@@ -931,466 +1130,33 @@
         "name" : "Start(S)",
         "startSymbol" : "S"
       }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-        "parameters" : [
-          "a",
-          "b.lExt"
-        ],
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-          "parameters" : [
-            "a",
-            "b.lExt"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "b.lExt",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-          "parameters" : [
-            "a",
-            "b.lExt"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "b.lExt",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Seq"
-        }
-      ],
-      "recursion" : "LEFT_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : 1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B",
-                  "postConditions" : [
-                    {
-                      "kind" : "DataDependentCondition",
-                      "type" : "DATA_DEPENDENT",
-                      "expression" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "RightExtent",
-                          "label" : "a"
-                        },
-                        "rhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      }
-                    }
-                  ]
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 1
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "b:C {println(b)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "C",
-                  "label" : "b"
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "Name",
-                          "name" : "b",
-                          "i" : -1
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Or",
-                        "lhs" : {
-                          "kind" : "Or",
-                          "lhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 4
-                            }
-                          }
-                        },
-                        "rhs" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 6
-                          }
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-        "parameters" : [
-          "a",
-          "b.lExt"
-        ],
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-          "parameters" : [
-            "a",
-            "b.lExt"
-          ],
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "a",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "b.lExt",
-              "i" : -1
-            }
-          ],
-          "nodeType" : "Seq"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-          "symbols" : [
-            {
-              "kind" : "Code",
-              "name" : "B[a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "B[a.rExt == b.lExt] {println(b.lExt)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "B",
-                  "postConditions" : [
-                    {
-                      "kind" : "DataDependentCondition",
-                      "type" : "DATA_DEPENDENT",
-                      "expression" : {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "RightExtent",
-                          "label" : "a"
-                        },
-                        "rhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      }
-                    }
-                  ]
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "LeftExtent",
-                          "label" : "b"
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 1
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            },
-            {
-              "kind" : "Code",
-              "name" : "b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
-              "symbol" : {
-                "kind" : "Code",
-                "name" : "b:C {println(b)}",
-                "symbol" : {
-                  "kind" : "Nonterminal",
-                  "name" : "C",
-                  "label" : "b"
-                },
-                "statements" : [
-                  {
-                    "kind" : "ExpressionStatement",
-                    "exp" : {
-                      "kind" : "Println",
-                      "arguments" : [
-                        {
-                          "kind" : "Name",
-                          "name" : "b",
-                          "i" : -1
-                        }
-                      ],
-                      "fun" : "println"
-                    }
-                  }
-                ]
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Or",
-                        "lhs" : {
-                          "kind" : "Or",
-                          "lhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 4
-                            }
-                          }
-                        },
-                        "rhs" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 6
-                          }
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
     }
   ],
   "ebnfLefts" : {
-    "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*" : [
-      "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+"
-    ],
-    "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})" : [
+    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})" : [
       "C"
     ],
-    "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+" : [
-      "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})"
+    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+" : [
+      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})"
+    ],
+    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*" : [
+      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+"
     ]
   },
   "ebnfRights" : {
-    "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*" : [
-      "C",
-      "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
-      "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
-      "$C"
-    ],
-    "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})" : [
+    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})" : [
       "C",
       "$C"
     ],
-    "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+" : [
+    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+" : [
+      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
       "C",
-      "(B [a.rExt == b.lExt] {println(b.lExt)} {assert(b.lExt == 1)} b:C {println(b)} {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+      "$C"
+    ],
+    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*" : [
+      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+      "C",
+      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+",
       "$C"
     ]
   },

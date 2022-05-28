@@ -50,61 +50,32 @@
             "body" : [
               {
                 "kind" : "Code",
-                "name" : "a:a [a.lExt == 0] {println(a.rExt,indent(a.rExt))} {assert(a.rExt == 1,indent(a.rExt) == 2)}",
+                "name" : "a:a [a.lExt == 0] {assert(a.rExt == 1,indent(a.rExt) == 2)}",
                 "symbol" : {
-                  "kind" : "Code",
-                  "name" : "a:a [a.lExt == 0] {println(a.rExt,indent(a.rExt))}",
-                  "symbol" : {
-                    "kind" : "Terminal",
-                    "name" : "a",
-                    "label" : "a",
-                    "postConditions" : [
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "a"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 0
-                          }
+                  "kind" : "Terminal",
+                  "name" : "a",
+                  "label" : "a",
+                  "postConditions" : [
+                    {
+                      "kind" : "DataDependentCondition",
+                      "type" : "DATA_DEPENDENT",
+                      "expression" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "a"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 0
                         }
                       }
-                    ],
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 97
                     }
-                  },
-                  "statements" : [
-                    {
-                      "kind" : "ExpressionStatement",
-                      "exp" : {
-                        "kind" : "Println",
-                        "arguments" : [
-                          {
-                            "kind" : "RightExtent",
-                            "label" : "a"
-                          },
-                          {
-                            "kind" : "Indent",
-                            "fun" : "indent",
-                            "arguments" : [
-                              {
-                                "kind" : "RightExtent",
-                                "label" : "a"
-                              }
-                            ]
-                          }
-                        ],
-                        "fun" : "println"
-                      }
-                    }
-                  ]
+                  ],
+                  "regex" : {
+                    "kind" : "Char",
+                    "val" : 97
+                  }
                 },
                 "statements" : [
                   {
@@ -165,61 +136,32 @@
               },
               {
                 "kind" : "Code",
-                "name" : "b:b [b.lExt == 5] {println(b.rExt,indent(b.rExt))} {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
+                "name" : "b:b [b.lExt == 5] {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
                 "symbol" : {
-                  "kind" : "Code",
-                  "name" : "b:b [b.lExt == 5] {println(b.rExt,indent(b.rExt))}",
-                  "symbol" : {
-                    "kind" : "Terminal",
-                    "name" : "b",
-                    "label" : "b",
-                    "postConditions" : [
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
-                          "kind" : "Equal",
-                          "lhs" : {
-                            "kind" : "LeftExtent",
-                            "label" : "b"
-                          },
-                          "rhs" : {
-                            "kind" : "Integer",
-                            "value" : 5
-                          }
+                  "kind" : "Terminal",
+                  "name" : "b",
+                  "label" : "b",
+                  "postConditions" : [
+                    {
+                      "kind" : "DataDependentCondition",
+                      "type" : "DATA_DEPENDENT",
+                      "expression" : {
+                        "kind" : "Equal",
+                        "lhs" : {
+                          "kind" : "LeftExtent",
+                          "label" : "b"
+                        },
+                        "rhs" : {
+                          "kind" : "Integer",
+                          "value" : 5
                         }
                       }
-                    ],
-                    "regex" : {
-                      "kind" : "Char",
-                      "val" : 98
                     }
-                  },
-                  "statements" : [
-                    {
-                      "kind" : "ExpressionStatement",
-                      "exp" : {
-                        "kind" : "Println",
-                        "arguments" : [
-                          {
-                            "kind" : "RightExtent",
-                            "label" : "b"
-                          },
-                          {
-                            "kind" : "Indent",
-                            "fun" : "indent",
-                            "arguments" : [
-                              {
-                                "kind" : "RightExtent",
-                                "label" : "b"
-                              }
-                            ]
-                          }
-                        ],
-                        "fun" : "println"
-                      }
-                    }
-                  ]
+                  ],
+                  "regex" : {
+                    "kind" : "Char",
+                    "val" : 98
+                  }
                 },
                 "statements" : [
                   {
