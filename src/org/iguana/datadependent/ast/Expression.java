@@ -36,7 +36,9 @@ import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNodeWithValue;
 import org.iguana.utils.input.Input;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -400,16 +402,12 @@ public abstract class Expression extends AbstractAST {
             return this.arguments;
         }
 
-        protected Object[] interpretArguments(IEvaluatorContext ctx, Input input) {
-            Object[] values = new Object[arguments.length];
-
-            int i = 0;
-            while (i < arguments.length) {
-                values[i] = arguments[i].interpret(ctx, input);
-                i++;
+        protected List<Object> interpretArguments(IEvaluatorContext ctx, Input input) {
+            List<Object> objects = new ArrayList<>();
+            for (Expression argument : arguments) {
+                objects.add(argument.interpret(ctx, input));
             }
-
-            return values;
+            return objects;
         }
 
         @Override

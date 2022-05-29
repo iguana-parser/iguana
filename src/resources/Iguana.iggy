@@ -3,17 +3,7 @@ start Definition
   = (Rule | Global)+
 
 Global
- = "global" Identifier "=" Initializer
-
-Initializer
-  = "null"                       %Null
-  | Number                       %Number
-  | String                       %String
-  | '[' {Initializer ','}* ']'   %List
-  | '{' {MapEntry ','}* '}'      %Map
-
-MapEntry
-  = Identifier '=' Initializer
+ = "global" Identifier "=" Expression
 
 Rule
   = ("start" | "layout")? Identifier Parameters? "=" Body        %Syntax
@@ -213,8 +203,10 @@ terminal Keywords
   | "if"
   | "else"
   | "assert"
+  | "set"
 
 terminal FunName
   = "println"
   | "indent"
   | "assert"
+  | "set"
