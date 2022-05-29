@@ -18,22 +18,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "GreaterThanEqual",
-                "lhs" : {
-                  "kind" : "Integer",
-                  "value" : 2
-                },
-                "rhs" : {
-                  "kind" : "Name",
-                  "name" : "p",
-                  "i" : -1
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "LShiftANDEqZero",
                 "lhs" : {
                   "kind" : "Name",
@@ -45,72 +29,25 @@
                   "value" : 0
                 }
               }
-            }
-          ],
-          "postConditions" : [
+            },
             {
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "Or",
+                "kind" : "GreaterThanEqual",
                 "lhs" : {
-                  "kind" : "Equal",
-                  "lhs" : {
-                    "kind" : "Get",
-                    "arg1" : {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    "arg2" : 1,
-                    "fun" : "get",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "l",
-                        "i" : -1
-                      },
-                      {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
-                    ]
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : -1
-                  }
+                  "kind" : "Integer",
+                  "value" : 2
                 },
                 "rhs" : {
-                  "kind" : "LShiftANDEqZero",
-                  "lhs" : {
-                    "kind" : "Integer",
-                    "value" : 7
-                  },
-                  "rhs" : {
-                    "kind" : "Get",
-                    "arg1" : {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    "arg2" : 1,
-                    "fun" : "get",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "l",
-                        "i" : -1
-                      },
-                      {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
-                    ]
-                  }
+                  "kind" : "Name",
+                  "name" : "p",
+                  "i" : -1
                 }
               }
-            },
+            }
+          ],
+          "postConditions" : [
             {
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
@@ -170,6 +107,69 @@
                   "rhs" : {
                     "kind" : "Integer",
                     "value" : 2
+                  }
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 1,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 1
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : -1
+                  }
+                },
+                "rhs" : {
+                  "kind" : "LShiftANDEqZero",
+                  "lhs" : {
+                    "kind" : "Integer",
+                    "value" : 7
+                  },
+                  "rhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 1,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 1
+                      }
+                    ]
                   }
                 }
               }
@@ -279,22 +279,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "LShiftANDEqZero",
-                "lhs" : {
-                  "kind" : "Name",
-                  "name" : "_not",
-                  "i" : -1
-                },
-                "rhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "GreaterThanEqual",
                 "lhs" : {
                   "kind" : "Integer",
@@ -304,6 +288,22 @@
                   "kind" : "Name",
                   "name" : "p",
                   "i" : -1
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 1
                 }
               }
             }
@@ -450,22 +450,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "LShiftANDEqZero",
-                "lhs" : {
-                  "kind" : "Name",
-                  "name" : "_not",
-                  "i" : -1
-                },
-                "rhs" : {
-                  "kind" : "Integer",
-                  "value" : 2
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "GreaterThanEqual",
                 "lhs" : {
                   "kind" : "Integer",
@@ -475,6 +459,22 @@
                   "kind" : "Name",
                   "name" : "p",
                   "i" : -1
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 2
                 }
               }
             }

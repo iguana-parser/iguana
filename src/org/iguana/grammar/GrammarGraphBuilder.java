@@ -86,7 +86,7 @@ public class GrammarGraphBuilder {
         grammarSlots.addAll(builder.nonterminalsMap.values());
         grammarSlots.addAll(builder.terminalsMap.values());
         grammarSlots.addAll(builder.bodyGrammarSlots);
-        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(grammar.getStartSymbol().getName())));
+        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(grammar.getStartSymbol().getName())), grammar.getGlobals());
     }
 
     private void convert() {

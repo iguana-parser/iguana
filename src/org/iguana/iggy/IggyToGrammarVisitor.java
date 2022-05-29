@@ -71,12 +71,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Global":
                 return visitGlobal(node);
-
-            case "Initializer":
-                return visitInitializer(node);
-
-            case "MapEntry":
-                return visitMapEntry(node);
         }
 
         return visitChildren(node);
@@ -631,49 +625,6 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         Expression value = (Expression) node.childAt(3).accept(this);
         globals.put(key, value);
         return null;
-    }
-
-    /**
-     * Initializer
-     *   = "null"                       %Null
-     *   | Number                       %Number
-     *   | String                       %String
-     *   | '[' {Initializer ','}* ']'   %List
-     *   | '{' {MapEntry ','}* '}'      %Map
-     */
-    private Object visitInitializer(NonterminalNode node) {
-        String label = node.getGrammarDefinition().getLabel();
-        switch (label) {
-            case "Null":
-                return null;
-
-            case "Number":
-                return Integer.parseInt(node.childAt(0).getText());
-
-            case "String":
-                return node.childAt(1).getText();
-
-            case "List":
-                List<Object> list = new ArrayList<>();
-                List<Object> elements = (List<Object>) node.childAt(1).accept(this);
-                if (elements != null) {
-                    list.addAll(elements);
-                }
-                return list;
-
-            case "Map":
-                Map<String, Object> map = new HashMap<>();
-                List<Map.Entry<String, Object>> entries = (List<Map.Entry<String, Object>> ) node.childAt(1).accept(this);
-                if (entries != null) {
-                    for (Map.Entry<String, Object> entry : entries) {
-                        map.put(entry.getKey(), entry.getValue());
-                    }
-                }
-                return map;
-
-            default:
-                throw new RuntimeException("Unexpected label: " + label);
-        }
     }
 
     /**

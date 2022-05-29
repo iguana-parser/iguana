@@ -74,6 +74,10 @@ public class IguanaRuntime<T extends Result> {
 
         Environment env = ctx.getEmptyEnvironment();
 
+        for (Map.Entry<String, Expression> entry : grammarGraph.getGlobals().entrySet()) {
+            env = env._declare(entry.getKey(), entry.getValue().interpret(ctx, input));
+        }
+
         StartGSSNode<T> startGSSNode;
 
         if (!global && !map.isEmpty() && startSymbol.getParameters() != null) { // TODO: Make parameters an empty list by default

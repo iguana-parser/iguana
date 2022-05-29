@@ -284,7 +284,13 @@
     "startSymbol" : "S"
   },
   "globals" : {
-    "bCounter" : 1,
-    "cCounter" : 2
+    "bCounter" : {
+      "kind" : "Integer",
+      "value" : 1
+    },
+    "cCounter" : {
+      "kind" : "Integer",
+      "value" : 2
+    }
   }
 }
