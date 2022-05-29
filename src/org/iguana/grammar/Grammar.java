@@ -1,5 +1,6 @@
 package org.iguana.grammar;
 
+import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
@@ -20,7 +21,7 @@ public class Grammar {
     private final Map<String, RegularExpression> terminals;
     private final Start startSymbol;
     private final Symbol layout;
-    private final Map<String, Object> globals;
+    private final Map<String, Expression> globals;
 
     private final Map<String, Set<String>> leftEnds = new HashMap<>();
     private final Map<String, Set<String>> rightEnds = new HashMap<>();
@@ -52,7 +53,7 @@ public class Grammar {
         return layout;
     }
 
-    public Map<String, Object> getGlobals() {
+    public Map<String, Expression> getGlobals() {
         return globals;
     }
 
@@ -188,7 +189,7 @@ public class Grammar {
         private final Map<String, RegularExpression> terminals = new HashMap<>();
         private Start startSymbol;
         private Symbol layout;
-        private final Map<String, Object> globals = new HashMap<>();
+        private final Map<String, Expression> globals = new HashMap<>();
 
         public Builder addRule(Rule rule) {
             this.rules.add(rule);
@@ -215,7 +216,7 @@ public class Grammar {
             return this;
         }
 
-        public Builder addGlobal(String key, Object value) {
+        public Builder addGlobal(String key, Expression value) {
             this.globals.put(key, value);
             return this;
         }

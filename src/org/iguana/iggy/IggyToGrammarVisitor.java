@@ -22,7 +22,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private final Map<String, RegularExpression> terminalsMap = new HashMap<>();
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
-    private final Map<String, Object> globals = new HashMap<>();
+    private final Map<String, Expression> globals = new HashMap<>();
 
     @Override
     public Object visitNonterminalNode(NonterminalNode node) {
@@ -96,7 +96,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
             builder.addTerminal(entry.getKey(), entry.getValue());
         }
-        for (Map.Entry<String, Object> entry : globals.entrySet()) {
+        for (Map.Entry<String, Expression> entry : globals.entrySet()) {
             builder.addGlobal(entry.getKey(), entry.getValue());
         }
         builder.setStartSymbol(Start.from(start));
@@ -624,11 +624,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     /**
      * Global
-     *   = "global" Identifier "=" Initializer
+     *   = "global" Identifier "=" Expression
      */
     private Object visitGlobal(NonterminalNode node) {
         String key = node.childAt(1).getText();
-        Object value = node.childAt(3).accept(this);
+        Expression value = (Expression) node.childAt(3).accept(this);
         globals.put(key, value);
         return null;
     }
