@@ -69,6 +69,7 @@ public class GrammarTest {
         String testPath = test.toAbsolutePath().toString();
 
         String grammarPath = test + "/grammar.iggy";
+        System.out.println("Testing " + grammarPath);
         Grammar grammar = IggyParser.getGrammar(grammarPath);
 
         String jsonGrammarPath = testPath + "/grammar.json";
