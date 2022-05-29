@@ -415,12 +415,12 @@ public abstract class Expression extends AbstractAST {
             if (this == obj) return true;
             if (!(obj instanceof Call)) return false;
             Call other = (Call) obj;
-            return Arrays.equals(this.arguments, other.arguments) && this.fun.equals(other.fun);
+            return this.fun.equals(other.fun) && Arrays.equals(this.arguments, other.arguments);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(Arrays.hashCode(this.arguments), this.fun);
+            return Objects.hash(this.fun, Arrays.hashCode(this.arguments));
         }
 
         @Override

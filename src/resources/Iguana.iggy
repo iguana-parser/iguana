@@ -5,14 +5,14 @@ start Definition
   = (Rule | Global)+
 
 Global
- = "global" Identifier "=" Expression
+ = "global" id:Identifier "=" Expression  env=put(env,id.yield);
 
 Rule
   = ("start" | "layout")? Identifier Parameters? "=" Body        %Syntax
-  | "layout"? "terminal" Identifier "=" RegexBody   %Lexical
+  | "layout"? "terminal" Identifier "=" RegexBody                %Lexical
 
 Parameters
-  = "(" {id:Identifier  ","}* ")"
+  = "(" {id:Identifier put(env, id.yield); ","}* ")"
 
 RegexRule
   = NontName ":" RegexBody    %Regex
@@ -181,7 +181,7 @@ terminal Associativity
   | "non-assoc"
 
 VarName
-  = id:Identifier
+  = id:Identifier [[contains(env,id.yield)]]
 
 Label
   = '%' Identifier
