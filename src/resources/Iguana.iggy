@@ -1,4 +1,6 @@
 
+global env = set()
+
 start Definition
   = (Rule | Global)+
 
@@ -8,6 +10,9 @@ Global
 Rule
   = ("start" | "layout")? Identifier Parameters? "=" Body        %Syntax
   | "layout"? "terminal" Identifier "=" RegexBody   %Lexical
+
+Parameters
+  = "(" {id:Identifier  ","}* ")"
 
 RegexRule
   = NontName ":" RegexBody    %Regex
@@ -35,9 +40,6 @@ PreCondition
 
 RegexSequence
   = Regex+    %Sequence
-
-Parameters
-  = "(" {VarName ","}* ")"
 
 Symbol
   = Identifier Arguments                    %Call
@@ -179,7 +181,7 @@ terminal Associativity
   | "non-assoc"
 
 VarName
-  = Identifier
+  = id:Identifier
 
 Label
   = '%' Identifier
@@ -204,9 +206,13 @@ terminal Keywords
   | "else"
   | "assert"
   | "set"
+  | "contains"
+  | "put"
 
 terminal FunName
   = "println"
   | "indent"
   | "assert"
   | "set"
+  | "contains"
+  | "put"

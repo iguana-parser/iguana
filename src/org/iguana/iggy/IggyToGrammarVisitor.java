@@ -687,6 +687,12 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                         return AST.indent(arguments[0]);
                     case "assert":
                         return AST.assertion(arguments);
+                    case "set":
+                        return AST.set(arguments);
+                    case "put":
+                        return AST.put(arguments[0], arguments[1]);
+                    case "contains":
+                        return AST.contains(arguments[0], arguments[1]);
                     default:
                         throw new RuntimeException("Unknown function name: " + funName);
                 }

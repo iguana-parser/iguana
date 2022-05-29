@@ -330,6 +330,61 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "Parameters"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "(",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 40
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Identifier*",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Identifier",
+                        "label" : "id"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ")",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 41
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "RegexRule"
       },
       "priorityLevels" : [
@@ -772,60 +827,6 @@
                     }
                   ],
                   "label" : "Sequence"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Parameters"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "(",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 40
-                      }
-                    },
-                    {
-                      "kind" : "Star",
-                      "name" : "VarName*",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "VarName"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ")",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 41
-                      }
-                    }
-                  ]
                 }
               ]
             }
@@ -2993,7 +2994,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Identifier",
+                      "label" : "id"
                     }
                   ]
                 }
@@ -3587,6 +3589,60 @@
               "val" : 116
             }
           ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 99
+            },
+            {
+              "kind" : "Char",
+              "val" : 111
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 112
+            },
+            {
+              "kind" : "Char",
+              "val" : 117
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
         }
       ]
     },
@@ -3766,6 +3822,60 @@
             {
               "kind" : "Char",
               "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 99
+            },
+            {
+              "kind" : "Char",
+              "val" : 111
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 110
+            },
+            {
+              "kind" : "Char",
+              "val" : 115
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 112
+            },
+            {
+              "kind" : "Char",
+              "val" : 117
             },
             {
               "kind" : "Char",
@@ -4205,5 +4315,11 @@
   "layout" : {
     "kind" : "Identifier",
     "name" : "Layout"
+  },
+  "globals" : {
+    "env" : {
+      "kind" : "Set",
+      "fun" : "set"
+    }
   }
 }
