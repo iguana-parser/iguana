@@ -380,10 +380,10 @@
                     },
                     {
                       "kind" : "Star",
-                      "name" : "id:Identifier {put(env,id.yield)}*",
+                      "name" : "id:Identifier {env = put(env,id.yield)}*",
                       "s" : {
                         "kind" : "Code",
-                        "name" : "id:Identifier {put(env,id.yield)}",
+                        "name" : "id:Identifier {env = put(env,id.yield)}",
                         "symbol" : {
                           "kind" : "Identifier",
                           "name" : "Identifier",
@@ -393,20 +393,25 @@
                           {
                             "kind" : "ExpressionStatement",
                             "exp" : {
-                              "kind" : "Put",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "env",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Yield",
-                                  "label" : "id",
-                                  "i" : -1
-                                }
-                              ],
-                              "fun" : "put"
+                              "kind" : "Assignment",
+                              "id" : "env",
+                              "exp" : {
+                                "kind" : "Put",
+                                "arguments" : [
+                                  {
+                                    "kind" : "Name",
+                                    "name" : "env",
+                                    "i" : -1
+                                  },
+                                  {
+                                    "kind" : "Yield",
+                                    "label" : "id",
+                                    "i" : -1
+                                  }
+                                ],
+                                "fun" : "put"
+                              },
+                              "i" : -1
                             }
                           }
                         ]
@@ -2952,8 +2957,39 @@
                       }
                     },
                     {
-                      "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "kind" : "Code",
+                      "name" : "id:Identifier {env = put(env,id.yield)}",
+                      "symbol" : {
+                        "kind" : "Identifier",
+                        "name" : "Identifier",
+                        "label" : "id"
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assignment",
+                            "id" : "env",
+                            "exp" : {
+                              "kind" : "Put",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "env",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Yield",
+                                  "label" : "id",
+                                  "i" : -1
+                                }
+                              ],
+                              "fun" : "put"
+                            },
+                            "i" : -1
+                          }
+                        }
+                      ]
                     },
                     {
                       "kind" : "Terminal",

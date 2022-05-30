@@ -12,7 +12,7 @@ Rule
   | "layout"? "terminal" Identifier "=" RegexBody                %Lexical
 
 Parameters
-  = "(" {id:Identifier put(env, id.yield); ","}* ")"
+  = "(" {id:Identifier env=put(env, id.yield); ","}* ")"
 
 RegexRule
   = NontName ":" RegexBody    %Regex
@@ -124,8 +124,8 @@ Statement
   | Binding       %Binding
 
 Binding
-  = Identifier "=" Expression         %Assign
-  | "var" Identifier "=" Expression   %Declare
+  = Identifier "=" Expression                                       %Assign
+  | "var" id:Identifier env=put(env, id.yield); "=" Expression      %Declare
 
 terminal Letter
   = [A-Za-z_]
