@@ -165,8 +165,10 @@ public class BodyGrammarSlot implements GrammarSlot {
 					Object[] values = (Object[]) result.getValue();
 					int i = 0;
 					for (String v : state) {
-						if (!v.equals("_"))
-							env = env._declare(v, values[i++]);
+						if (!v.equals("_")) {
+							env = env._declare(v, values[i]);
+						}
+						i++;
 					}
 				} else {
 					// See when this is the case

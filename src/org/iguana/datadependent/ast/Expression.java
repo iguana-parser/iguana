@@ -242,6 +242,10 @@ public abstract class Expression extends AbstractAST {
             this.length = elements.length;
         }
 
+        public int length() {
+            return length;
+        }
+
         public Expression[] getElements() {
             return elements;
         }

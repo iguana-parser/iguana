@@ -1,0 +1,11 @@
+global x = 0
+global y = 0
+
+start S
+  = E println(x,y);
+
+E = '-' E
+  > left E '+' E
+  | A
+
+A = 'a' x = 1, y = 2;
