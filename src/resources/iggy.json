@@ -1835,6 +1835,18 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Arguments"
+                    },
+                    {
+                      "kind" : "Opt",
+                      "name" : ";?",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : ";",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 59
+                        }
+                      }
                     }
                   ],
                   "label" : "Call"
@@ -1848,6 +1860,18 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Binding"
+                    },
+                    {
+                      "kind" : "Opt",
+                      "name" : ";?",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : ";",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 59
+                        }
+                      }
                     }
                   ],
                   "label" : "Binding"

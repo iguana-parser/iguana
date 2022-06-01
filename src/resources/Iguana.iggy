@@ -72,8 +72,12 @@ Arguments
   = "(" {Expression ","}* ")"
 
 Statement
-  = FunName Arguments    %Call
-  | Binding              %Binding
+  = FunName Arguments ";"?    %Call
+  | Binding ";"?              %Binding
+
+Binding
+  = VarName "=" Expression                                            %Assign
+  | "var" {(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
 
 Regex
   = Regex "*"                     %Star
@@ -123,10 +127,6 @@ Expression
 
 ReturnExpression
   = "{" Expression "}"    %ReturnExpression
-
-Binding
-  = VarName "=" Expression                                            %Assign
-  | "var" {(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
 
 terminal Letter
   = [A-Za-z_]
