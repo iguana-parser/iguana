@@ -1,3 +1,6 @@
 
 start Id
-  = [a-z]+ !>> [a-z] \ ('if' | 'while' | 'do')
+  = Char+ !>> [a-z] \ ('if' | 'while' | 'do')
+
+terminal Char
+  = [a-z]

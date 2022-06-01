@@ -64,7 +64,6 @@ Symbol
   | Identifier                              %Nont
   | String                                  %String
   | Char                                    %Character
-  | CharClass                               %CharClass
   | "{" Symbol Symbol+ "}" "*"              %StarSep
   | "{" Symbol Symbol+ "}" "+"              %PlusSep
 

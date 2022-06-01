@@ -1660,19 +1660,6 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier",
-                      "name" : "CharClass"
-                    }
-                  ],
-                  "label" : "CharClass"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
                       "kind" : "Terminal",
                       "name" : "{",
                       "regex" : {
