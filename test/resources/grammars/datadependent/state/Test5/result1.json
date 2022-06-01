@@ -22,7 +22,7 @@
         "body" : [
           {
             "kind" : "Code",
-            "name" : "_:x:y=E(0,x,y) {assert(x == 1,y == 2)}",
+            "name" : "_:x:y=E(0,0,x,y) {println(x,y)}",
             "symbol" : {
               "kind" : "Nonterminal",
               "name" : "E",
@@ -32,6 +32,10 @@
                 "y"
               ],
               "arguments" : [
+                {
+                  "kind" : "Integer",
+                  "value" : 0
+                },
                 {
                   "kind" : "Integer",
                   "value" : 0
@@ -52,34 +56,20 @@
               {
                 "kind" : "ExpressionStatement",
                 "exp" : {
-                  "kind" : "Assert",
+                  "kind" : "Println",
                   "arguments" : [
                     {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "Name",
-                        "name" : "x",
-                        "i" : -1
-                      },
-                      "rhs" : {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
+                      "kind" : "Name",
+                      "name" : "x",
+                      "i" : -1
                     },
                     {
-                      "kind" : "Equal",
-                      "lhs" : {
-                        "kind" : "Name",
-                        "name" : "y",
-                        "i" : -1
-                      },
-                      "rhs" : {
-                        "kind" : "Integer",
-                        "value" : 2
-                      }
+                      "kind" : "Name",
+                      "name" : "y",
+                      "i" : -1
                     }
                   ],
-                  "fun" : "assert"
+                  "fun" : "println"
                 }
               }
             ]
@@ -112,6 +102,7 @@
               "name" : "E",
               "parameters" : [
                 "p",
+                "_not",
                 "x",
                 "y"
               ]
@@ -139,13 +130,23 @@
               },
               {
                 "kind" : "Return",
-                "name" : "{(0,x,y)}",
+                "name" : "{((0,-1),x,y)}",
                 "expression" : {
                   "kind" : "Tuple",
                   "elements" : [
                     {
-                      "kind" : "Integer",
-                      "value" : 0
+                      "kind" : "Tuple",
+                      "elements" : [
+                        {
+                          "kind" : "Integer",
+                          "value" : 0
+                        },
+                        {
+                          "kind" : "Integer",
+                          "value" : -1
+                        }
+                      ],
+                      "length" : 2
                     },
                     {
                       "kind" : "Name",
@@ -168,13 +169,13 @@
             "precedence" : -1,
             "precedenceLevel" : {
               "lhs" : 1,
-              "rhs" : 1,
-              "undefined" : -1,
-              "hasPrefixUnary" : false,
+              "rhs" : 2,
+              "undefined" : 2,
+              "hasPrefixUnary" : true,
               "hasPostfixUnary" : false,
               "hasPrefixUnaryBelow" : false,
               "hasPostfixUnaryBelow" : false,
-              "index" : 2,
+              "index" : 3,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
               "assoc_rhs" : -1

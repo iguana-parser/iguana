@@ -14,7 +14,7 @@
                   "symbols" : [
                     {
                       "kind" : "Code",
-                      "name" : "E {assert(x == 1,y == 2)}",
+                      "name" : "E {println(x,y)}",
                       "symbol" : {
                         "kind" : "Identifier",
                         "name" : "E"
@@ -23,34 +23,20 @@
                         {
                           "kind" : "ExpressionStatement",
                           "exp" : {
-                            "kind" : "Assert",
+                            "kind" : "Println",
                             "arguments" : [
                               {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "x",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "Integer",
-                                  "value" : 1
-                                }
+                                "kind" : "Name",
+                                "name" : "x",
+                                "i" : -1
                               },
                               {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "y",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "Integer",
-                                  "value" : 2
-                                }
+                                "kind" : "Name",
+                                "name" : "y",
+                                "i" : -1
                               }
                             ],
-                            "fun" : "assert"
+                            "fun" : "println"
                           }
                         }
                       ]
@@ -85,16 +71,15 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "excepts" : [
+                        "plus"
+                      ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "alternatives" : [
+            },
             {
               "seqs" : [
                 {
@@ -116,7 +101,8 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "LEFT"
+                  "associativity" : "LEFT",
+                  "label" : "plus"
                 }
               ]
             },

@@ -307,7 +307,7 @@ public class DesugarState implements GrammarTransformation {
 					// We should put _ as placeholders for other values returned by the nonterminal.
 					// This is particularly visible in mixing state threading and operator precedence.
 					// As operator precedence adds a return value, and that return value should be ignored here.
-					// See state/Test4 for an example.
+					// See state/Test4 and state/Test5 for examples.
 					int count = getReturnSize(symbol) - (symbol.getVariable() == null ? 0 : 1);
 					for (int i = 0; i < count; i++) {
 						state.add("_");
@@ -328,7 +328,7 @@ public class DesugarState implements GrammarTransformation {
 			return changed? builder.build() : symbol;
 		}
 
-		// Returns how many values the given nonterminal returns.
+		// Returns 1 if the grammar already returns a value
 		private int getReturnSize(Nonterminal symbol) {
 			List<RuntimeRule> runtimeRules = grammar.getAlternatives(symbol);
 			if (runtimeRules.isEmpty() || runtimeRules.get(0).size() == 0) {
@@ -336,12 +336,7 @@ public class DesugarState implements GrammarTransformation {
 			}
 			Symbol lastSymbol = runtimeRules.get(0).getLastSymbol();
 			if (lastSymbol instanceof Return) {
-				Expression expression = ((Return) lastSymbol).getExpression();
-				if (expression instanceof Expression.Tuple) {
-					return ((Expression.Tuple) expression).length();
-				} else {
-					return 1;
-				}
+				return 1;
 			}
 			return 0;
 		}
