@@ -125,8 +125,8 @@ ReturnExpression
   = "{" Expression "}"    %ReturnExpression
 
 Binding
-  = VarName "=" Expression                                         %Assign
-  | "var" id:Identifier env=put(env, id.yield) "=" Expression      %Declare
+  = VarName "=" Expression                                            %Assign
+  | "var" {(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
 
 terminal Letter
   = [A-Za-z_]

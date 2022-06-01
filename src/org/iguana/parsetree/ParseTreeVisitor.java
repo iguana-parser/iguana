@@ -39,7 +39,11 @@ public interface ParseTreeVisitor {
                 List<Object> result = new ArrayList<>(size);
                 for (int i = 0; i < size; i++) {
                     ParseTreeNode child = node.childAt(i);
-                    result.addAll((List<Object>) child.accept(this));
+                    List<Object> childResult = (List<Object>) child.accept(this);
+                    // This can happen when we have lists with separators, e.g., {A ','}*
+                    if (childResult != null) {
+                        result.addAll(childResult);
+                    }
                 }
                 return result;
             }

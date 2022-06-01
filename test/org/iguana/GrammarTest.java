@@ -78,7 +78,7 @@ public class GrammarTest {
             record(grammar, jsonGrammarPath);
         } else {
             Grammar jsonGrammar = Grammar.fromJsonFile(jsonGrammarPath);
-            assertEquals(grammar, jsonGrammar);
+            assertEquals(jsonGrammar, grammar);
         }
 
         RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar(), grammar.getStartSymbol().getStartSymbol());

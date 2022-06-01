@@ -2967,51 +2967,71 @@
                       }
                     },
                     {
-                      "kind" : "Code",
-                      "name" : "id:Identifier {env = put(env,id.yield)}",
-                      "symbol" : {
-                        "kind" : "Identifier",
-                        "name" : "Identifier",
-                        "label" : "id"
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "env",
-                            "exp" : {
-                              "kind" : "Put",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "env",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Yield",
-                                  "label" : "id",
+                      "kind" : "Plus",
+                      "name" : "(id:Name {env = put(env,id.yield)} = Expression)+",
+                      "s" : {
+                        "kind" : "Sequence",
+                        "name" : "(id:Name {env = put(env,id.yield)} = Expression)",
+                        "symbols" : [
+                          {
+                            "kind" : "Code",
+                            "name" : "id:Name {env = put(env,id.yield)}",
+                            "symbol" : {
+                              "kind" : "Identifier",
+                              "name" : "Name",
+                              "label" : "id"
+                            },
+                            "statements" : [
+                              {
+                                "kind" : "ExpressionStatement",
+                                "exp" : {
+                                  "kind" : "Assignment",
+                                  "id" : "env",
+                                  "exp" : {
+                                    "kind" : "Put",
+                                    "arguments" : [
+                                      {
+                                        "kind" : "Name",
+                                        "name" : "env",
+                                        "i" : -1
+                                      },
+                                      {
+                                        "kind" : "Yield",
+                                        "label" : "id",
+                                        "i" : -1
+                                      }
+                                    ],
+                                    "fun" : "put"
+                                  },
                                   "i" : -1
                                 }
-                              ],
-                              "fun" : "put"
-                            },
-                            "i" : -1
+                              }
+                            ]
+                          },
+                          {
+                            "kind" : "Terminal",
+                            "name" : "=",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 61
+                            }
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "Expression"
+                          }
+                        ]
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
                           }
                         }
                       ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "=",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 61
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Expression"
                     }
                   ],
                   "label" : "Declare"

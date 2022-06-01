@@ -102,6 +102,14 @@ public class CollectionsUtil {
 		return set;
 	}
 
+	public static <T> List<T> flatten(List<List<T>> listOfList) {
+		List<T> result = new ArrayList<>();
+		for (List<T> list : listOfList) {
+			result.addAll(list);
+		}
+		return result;
+	}
+
 	public static <T> T first(List<T> list) {
 		if (list == null || list.isEmpty())
 			throw new IllegalArgumentException("List is empty");
