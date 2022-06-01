@@ -1,6 +1,12 @@
 
 start S
-  = Label !>> '3' [0-9]
+  = Label !>> '3' Nums
 
 Label
-  = [a-z]+ !>> [a-z]
+  = Char+ !>> [a-z]
+
+regex Char
+  = [a-z]
+
+regex Nums
+  = [0-9]

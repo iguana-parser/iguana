@@ -27,7 +27,6 @@
 
 package org.iguana.parser;
 
-import org.iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
@@ -37,6 +36,7 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
+import org.iguana.utils.input.Input;
 
 public class IguanaParser extends IguanaRecognizer {
 
@@ -63,7 +63,7 @@ public class IguanaParser extends IguanaRecognizer {
     }
 
     public void parse(Input input) {
-        parse(input, new ParseOptions.Builder().setMap(globals).setGlobal(false).build());
+        parse(input, new ParseOptions.Builder().setGlobal(false).build());
     }
 
     public void parse(Input input, ParseOptions options) {

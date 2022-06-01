@@ -10,13 +10,13 @@ Content
   = CharData (Element CharData)*
 
 ETag(s)
-  = '</' n:Name [[ n.yield == s ]] '>'
+  = '</' n:Name [ n.yield == s ] '>'
 
-layout terminal L
+layout regex L
   = [\t\n\r\ ]*
 
-terminal CharData
+regex CharData
   = [A-Za-z]*
 
-terminal Name
+regex Name
   = [a-z]+

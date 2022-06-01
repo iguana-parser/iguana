@@ -1,5 +1,6 @@
 package org.iguana.grammar;
 
+import org.iguana.datadependent.ast.Expression;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
@@ -8,6 +9,7 @@ import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.symbol.Terminal;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -16,10 +18,12 @@ public class GrammarGraph {
     public static final TerminalGrammarSlot epsilonSlot = new TerminalGrammarSlot(Terminal.epsilon(), new DFAMatcherFactory());
     private final List<GrammarSlot> slots;
     private NonterminalGrammarSlot startSlot;
+    private final Map<String, Expression> globals;
 
-    public GrammarGraph(List<GrammarSlot> slots, NonterminalGrammarSlot startSlot) {
+    public GrammarGraph(List<GrammarSlot> slots, NonterminalGrammarSlot startSlot, Map<String, Expression> globals) {
         this.slots = slots;
         this.startSlot = startSlot;
+        this.globals = globals;
     }
 
     public List<NonterminalGrammarSlot> getNonterminalGrammarSlots() {
@@ -42,5 +46,9 @@ public class GrammarGraph {
         for (GrammarSlot slot : slots) {
             slot.reset();
         }
+    }
+
+    public Map<String, Expression> getGlobals() {
+        return globals;
     }
 }

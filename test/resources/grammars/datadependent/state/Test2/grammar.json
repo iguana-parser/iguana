@@ -354,8 +354,17 @@
     "startSymbol" : "S"
   },
   "globals" : {
-    "x" : 0,
-    "y" : 0,
-    "z" : 0
+    "x" : {
+      "kind" : "Integer",
+      "value" : 0
+    },
+    "y" : {
+      "kind" : "Integer",
+      "value" : 0
+    },
+    "z" : {
+      "kind" : "Integer",
+      "value" : 0
+    }
   }
 }

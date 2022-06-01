@@ -137,7 +137,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 	public Void visit(String expression) {
 		return null;
 	}
-	
+
+	@Override
+	public Void visit(Not not) {
+		return not.getExp().accept(this);
+	}
+
 	@Override
 	public Void visit(Tuple expression) {
 		

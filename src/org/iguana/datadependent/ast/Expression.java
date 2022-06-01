@@ -36,7 +36,9 @@ import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNodeWithValue;
 import org.iguana.utils.input.Input;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -227,6 +229,33 @@ public abstract class Expression extends AbstractAST {
         }
     }
 
+    public static class Not extends Expression {
+
+        private final Expression exp;
+
+        Not(Expression exp) {
+            this.exp = exp;
+        }
+
+        public Expression getExp() {
+            return exp;
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object value = exp.interpret(ctx, input);
+            if (!(value instanceof java.lang.Boolean)) {
+                throw new UnexpectedTypeOfArgumentException(this);
+            }
+            return !(java.lang.Boolean) value;
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return null;
+        }
+    }
+
     public static class Tuple extends Expression {
 
         private final Expression[] elements;
@@ -238,6 +267,10 @@ public abstract class Expression extends AbstractAST {
                 if (element == null)
                     throw new RuntimeException("Expressions of a tuple should not be null.");
             this.length = elements.length;
+        }
+
+        public int length() {
+            return length;
         }
 
         public Expression[] getElements() {
@@ -400,16 +433,12 @@ public abstract class Expression extends AbstractAST {
             return this.arguments;
         }
 
-        protected Object[] interpretArguments(IEvaluatorContext ctx, Input input) {
-            Object[] values = new Object[arguments.length];
-
-            int i = 0;
-            while (i < arguments.length) {
-                values[i] = arguments[i].interpret(ctx, input);
-                i++;
+        protected List<Object> interpretArguments(IEvaluatorContext ctx, Input input) {
+            List<Object> objects = new ArrayList<>();
+            for (Expression argument : arguments) {
+                objects.add(argument.interpret(ctx, input));
             }
-
-            return values;
+            return objects;
         }
 
         @Override
@@ -417,12 +446,12 @@ public abstract class Expression extends AbstractAST {
             if (this == obj) return true;
             if (!(obj instanceof Call)) return false;
             Call other = (Call) obj;
-            return Arrays.equals(this.arguments, other.arguments) && this.fun.equals(other.fun);
+            return this.fun.equals(other.fun) && Arrays.equals(this.arguments, other.arguments);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(Arrays.hashCode(this.arguments), this.fun);
+            return Objects.hash(this.fun, Arrays.hashCode(this.arguments));
         }
 
         @Override

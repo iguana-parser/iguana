@@ -58,9 +58,11 @@ public class DesugarState implements GrammarTransformation {
 	
 	private final Map<Nonterminal, Set<String>> returns = new HashMap<>();
 	private final Map<Nonterminal, List<Map<Nonterminal, Set<String>>>> bindings = new HashMap<>();
+	private RuntimeGrammar grammar;
 
 	@Override
 	public RuntimeGrammar transform(RuntimeGrammar grammar) {
+		this.grammar = grammar;
 		Set<String> current_uses;
 		Set<String> current_updates;
 		for (Nonterminal head : grammar.getNonterminals()) {
@@ -179,7 +181,7 @@ public class DesugarState implements GrammarTransformation {
 		
 		builder = builder.setSymbols(symbols);
 		
-		DesugarStateVisitor visitor = new DesugarStateVisitor(uses, returns, bindings);
+		DesugarStateVisitor visitor = new DesugarStateVisitor(uses, returns, bindings, grammar);
 		
 		Return rsym = null;
 		for (Symbol symbol : rule.getBody()) {
@@ -218,11 +220,13 @@ public class DesugarState implements GrammarTransformation {
 		private final Map<Nonterminal, Set<String>> uses;
 		private final Map<Nonterminal, Set<String>> returns;
 		private final Map<Nonterminal, Set<String>> bindings;
-		
-		DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings) {
+		private final RuntimeGrammar grammar;
+
+		DesugarStateVisitor(Map<Nonterminal, Set<String>> uses, Map<Nonterminal, Set<String>> returns, Map<Nonterminal, Set<String>> bindings, RuntimeGrammar grammar) {
 			this.uses = uses;
 			this.returns = returns;
 			this.bindings = bindings;
+			this.grammar = grammar;
 		}
 
 		@Override
@@ -297,8 +301,20 @@ public class DesugarState implements GrammarTransformation {
 			
 			if (bind != null) {
 				Set<String> state = new LinkedHashSet<>();
-				
-				for (String ret : returns.get(symbol)) {
+
+				Set<String> stateReturn = returns.get(symbol);
+				if (stateReturn.size() > 0) {
+					// We should put _ as placeholders for other values returned by the nonterminal.
+					// This is particularly visible in mixing state threading and operator precedence.
+					// As operator precedence adds a return value, and that return value should be ignored here.
+					// See state/Test4 and state/Test5 for examples.
+					int count = getReturnSize(symbol) - (symbol.getVariable() == null ? 0 : 1);
+					for (int i = 0; i < count; i++) {
+						state.add("_");
+					}
+				}
+
+				for (String ret : stateReturn) {
 					if (bind.contains(ret)) state.add(ret);
 					else state.add("_");
 				}
@@ -310,6 +326,19 @@ public class DesugarState implements GrammarTransformation {
 			}
 			
 			return changed? builder.build() : symbol;
+		}
+
+		// Returns 1 if the grammar already returns a value
+		private int getReturnSize(Nonterminal symbol) {
+			List<RuntimeRule> runtimeRules = grammar.getAlternatives(symbol);
+			if (runtimeRules.isEmpty() || runtimeRules.get(0).size() == 0) {
+				return 0;
+			}
+			Symbol lastSymbol = runtimeRules.get(0).getLastSymbol();
+			if (lastSymbol instanceof Return) {
+				return 1;
+			}
+			return 0;
 		}
 
 		@Override

@@ -1,11 +1,11 @@
 start X
   = S
 
-S = a:A [[a.l == 0]] assert(a.r == 1, indent(a.r) == 2); Layout b:B [[b.l == 5]] assert(b.l == 5, b.r == 6, indent(b.r) == 7);
+S = a:A [a.l == 0] assert(a.r == 1, indent(a.r) == 2) Layout b:B [b.l == 5] assert(b.l == 5, b.r == 6, indent(b.r) == 7)
 
 A = 'a'
 
 B = 'b'
 
-terminal Layout
+regex Layout
   = [\ ]*

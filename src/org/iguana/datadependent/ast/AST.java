@@ -27,17 +27,17 @@
 
 package org.iguana.datadependent.ast;
 
-import org.iguana.grammar.exception.AssertionFailedException;
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.env.intarray.MutableLong;
 import org.iguana.datadependent.values.Stack;
+import org.iguana.grammar.exception.AssertionFailedException;
 import org.iguana.grammar.exception.UnexpectedTypeOfArgumentException;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.utils.input.Input;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import static org.iguana.utils.string.StringUtil.listToString;
 
@@ -60,6 +60,10 @@ public class AST {
 
     public static Expression string(java.lang.String value) {
         return new Expression.String(value);
+    }
+
+    public static Expression not(Expression exp) {
+        return new Expression.Not(exp);
     }
 
     public static Expression tuple(Expression... args) {
@@ -85,7 +89,7 @@ public class AST {
 
         @Override
         public Object interpret(IEvaluatorContext ctx, Input input) {
-            Object[] arguments = interpretArguments(ctx, input);
+            List<Object> arguments = interpretArguments(ctx, input);
             for (Object argument : arguments) {
                 System.out.print(argument);
                 System.out.print("; ");
@@ -122,6 +126,23 @@ public class AST {
 
     public static Assert assertion(Expression... args) {
         return new Assert(args);
+    }
+
+    public static class Set extends Expression.Call {
+
+        Set(Expression... arguments) {
+            super("set", arguments);
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            List<Object> objects = interpretArguments(ctx, input);
+            return new HashSet<>(objects);
+        }
+    }
+
+    public static Set set(Expression... args) {
+        return new Set(args);
     }
 
     public static class Indent extends Expression.Call {
@@ -278,26 +299,6 @@ public class AST {
 
     public static StartsWith startsWith(Expression... args) {
         return new StartsWith(args);
-    }
-
-    public static class Not extends Expression.Call {
-        Not(Expression... arguments) {
-            super("not", arguments);
-        }
-
-        @Override
-        public Object interpret(IEvaluatorContext ctx, Input input) {
-            Object value = arguments[0].interpret(ctx, input);
-            if (!(value instanceof java.lang.Boolean)) {
-                throw new UnexpectedTypeOfArgumentException(this);
-            }
-
-            return !((java.lang.Boolean) value);
-        }
-    }
-
-    public static Not not(Expression arg) {
-        return new Not(arg);
     }
 
     public static class Neg extends Expression.Call {
@@ -498,11 +499,11 @@ public class AST {
         @Override
         public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = arguments[0].interpret(ctx, input);
-            if (!(value instanceof Set<?>))
+            if (!(value instanceof java.util.Set<?>))
                 throw new UnexpectedTypeOfArgumentException(this);
 
             @SuppressWarnings("unchecked")
-            Set<Object> s = (Set<Object>) value;
+            java.util.Set<Object> s = (java.util.Set<Object>) value;
 
             value = arguments[1].interpret(ctx, input);
             if (!s.contains(value)) {
@@ -552,11 +553,11 @@ public class AST {
         @Override
         public Object interpret(IEvaluatorContext ctx, Input input) {
             Object value = arguments[0].interpret(ctx, input);
-            if (!(value instanceof Set<?>))
+            if (!(value instanceof java.util.Set<?>))
                 throw new UnexpectedTypeOfArgumentException(this);
 
             @SuppressWarnings("unchecked")
-            Set<Object> s = (Set<Object>) value;
+            java.util.Set<Object> s = (java.util.Set<Object>) value;
 
             value = arguments[1].interpret(ctx, input);
 

@@ -15,11 +15,11 @@ Decls
 Decl
   = Id '=' Exp
 
-terminal Id
+regex Id
   = [a-zA-Z][a-zA-Z0-9]*
 
-terminal Num
+regex Num
   = [1-9][0-9]*
 
-layout terminal Whitespaces
+layout regex Whitespaces
   = [\n\r\t\f\ ]*

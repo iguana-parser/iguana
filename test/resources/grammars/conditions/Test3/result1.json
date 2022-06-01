@@ -32,7 +32,8 @@
           },
           {
             "kind" : "Terminal",
-            "name" : "(0-9)",
+            "name" : "Nums",
+            "nodeType" : "Regex",
             "regex" : {
               "kind" : "regex.Alt",
               "symbols" : [
@@ -74,7 +75,7 @@
             "body" : [
               {
                 "kind" : "Nonterminal",
-                "name" : "(a-z)+",
+                "name" : "Char+",
                 "postConditions" : [
                   {
                     "kind" : "RegularExpressionCondition",
@@ -117,7 +118,7 @@
               "kind" : "MetaSymbolNode",
               "symbol" : {
                 "kind" : "Plus",
-                "name" : "(a-z)+",
+                "name" : "Char+",
                 "postConditions" : [
                   {
                     "kind" : "RegularExpressionCondition",
@@ -136,7 +137,8 @@
                 ],
                 "s" : {
                   "kind" : "Terminal",
-                  "name" : "(a-z)",
+                  "name" : "Char",
+                  "nodeType" : "Regex",
                   "regex" : {
                     "kind" : "regex.Alt",
                     "symbols" : [
@@ -156,7 +158,8 @@
                   "kind" : "TerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
-                    "name" : "(a-z)",
+                    "name" : "Char",
+                    "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
                       "symbols" : [
@@ -175,7 +178,8 @@
                   "kind" : "TerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
-                    "name" : "(a-z)",
+                    "name" : "Char",
+                    "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
                       "symbols" : [
@@ -194,7 +198,8 @@
                   "kind" : "TerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
-                    "name" : "(a-z)",
+                    "name" : "Char",
+                    "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
                       "symbols" : [
@@ -219,7 +224,8 @@
           "kind" : "TerminalNode",
           "terminal" : {
             "kind" : "Terminal",
-            "name" : "(0-9)",
+            "name" : "Nums",
+            "nodeType" : "Regex",
             "regex" : {
               "kind" : "regex.Alt",
               "symbols" : [

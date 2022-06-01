@@ -169,7 +169,12 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 	public Void visit(String expression) {
 		return null;
 	}
-	
+
+	@Override
+	public Void visit(Not not) {
+		return not.getExp().accept(this);
+	}
+
 	@Override
 	public Void visit(Tuple expression) {
 		for (org.iguana.datadependent.ast.Expression element : expression.getElements())

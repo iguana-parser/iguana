@@ -69,6 +69,7 @@ public class GrammarTest {
         String testPath = test.toAbsolutePath().toString();
 
         String grammarPath = test + "/grammar.iggy";
+        System.out.println("Testing " + grammarPath);
         Grammar grammar = IggyParser.getGrammar(grammarPath);
 
         String jsonGrammarPath = testPath + "/grammar.json";
@@ -77,7 +78,7 @@ public class GrammarTest {
             record(grammar, jsonGrammarPath);
         } else {
             Grammar jsonGrammar = Grammar.fromJsonFile(jsonGrammarPath);
-            assertEquals(grammar, jsonGrammar);
+            assertEquals(jsonGrammar, grammar);
         }
 
         RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar(), grammar.getStartSymbol().getStartSymbol());

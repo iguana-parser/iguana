@@ -27,18 +27,8 @@
                       ]
                     },
                     {
-                      "kind" : "Terminal",
-                      "name" : "(0-9)",
-                      "regex" : {
-                        "kind" : "regex.Alt",
-                        "symbols" : [
-                          {
-                            "kind" : "CharRange",
-                            "start" : 48,
-                            "end" : 57
-                          }
-                        ]
-                      }
+                      "kind" : "Identifier",
+                      "name" : "Nums"
                     }
                   ]
                 }
@@ -62,7 +52,7 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "(a-z)+",
+                      "name" : "Char+",
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
@@ -80,18 +70,8 @@
                         }
                       ],
                       "s" : {
-                        "kind" : "Terminal",
-                        "name" : "(a-z)",
-                        "regex" : {
-                          "kind" : "regex.Alt",
-                          "symbols" : [
-                            {
-                              "kind" : "CharRange",
-                              "start" : 97,
-                              "end" : 122
-                            }
-                          ]
-                        }
+                        "kind" : "Identifier",
+                        "name" : "Char"
                       }
                     }
                   ]
@@ -103,6 +83,28 @@
       ]
     }
   ],
+  "terminals" : {
+    "Char" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "CharRange",
+          "start" : 97,
+          "end" : 122
+        }
+      ]
+    },
+    "Nums" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "CharRange",
+          "start" : 48,
+          "end" : 57
+        }
+      ]
+    }
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

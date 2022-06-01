@@ -17,12 +17,14 @@ import org.iguana.regex.RegularExpression;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.iguana.utils.collections.CollectionsUtil.flatten;
+
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     private final Map<String, RegularExpression> terminalsMap = new HashMap<>();
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
-    private final Map<String, Object> globals = new HashMap<>();
+    private final Map<String, Expression> globals = new HashMap<>();
 
     @Override
     public Object visitNonterminalNode(NonterminalNode node) {
@@ -72,14 +74,22 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Global":
                 return visitGlobal(node);
 
-            case "Initializer":
-                return visitInitializer(node);
+            case "Name":
+                return visitName(node);
 
-            case "MapEntry":
-                return visitMapEntry(node);
+            case "VarName":
+                return visitVarName(node);
         }
 
         return visitChildren(node);
+    }
+
+    private Identifier visitName(NonterminalNode node) {
+        return getIdentifier(node);
+    }
+
+    private Identifier visitVarName(NonterminalNode node) {
+        return getIdentifier(node);
     }
 
     /*
@@ -96,7 +106,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
             builder.addTerminal(entry.getKey(), entry.getValue());
         }
-        for (Map.Entry<String, Object> entry : globals.entrySet()) {
+        for (Map.Entry<String, Expression> entry : globals.entrySet()) {
             builder.addGlobal(entry.getKey(), entry.getValue());
         }
         builder.setStartSymbol(Start.from(start));
@@ -112,7 +122,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     private Rule visitRule(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
             case "Syntax":
-                Identifier nonterminalName = getIdentifier(node.getChildWithName("Identifier"));
+                Identifier nonterminalName = getIdentifier(node.getChildWithName("Name"));
                 List<String> parameters = (List<String>) node.getChildWithName("Parameters?").accept(this);
                 if (parameters == null) parameters = Collections.emptyList();
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
@@ -133,7 +143,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             // RegexSequence : Regex+;
             case "Lexical":
                 List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
-                Identifier identifier = getIdentifier(node.getChildWithName("Identifier"));
+                Identifier identifier = getIdentifier(node.getChildWithName("Name"));
                 terminalsMap.put(identifier.getName(), getRegex(alts));
 
                 if (!node.childAt(0).children().isEmpty()) {
@@ -441,13 +451,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "Statement": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                List<Statement> statements = (List<Statement>) node.childAt(1).accept(this);
-                return Code.code(symbol, statements.toArray(new Statement[0]));
+                List<List<Statement>> statements = (List<List<Statement>>) node.childAt(1).accept(this);
+                return Code.code(symbol, flatten(statements).toArray(new Statement[0]));
             }
 
             case "PostCondition": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                List<Expression> expressions = (List<Expression>) node.childAt(2).accept(this);
+                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
                 SymbolBuilder<? extends Symbol> builder = symbol.copy();
                 for (Expression expression : expressions) {
                     builder.addPostCondition(DataDependentCondition.predicate(expression));
@@ -461,22 +471,30 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     /**
-     * Binding: Identifier "=" Expression        %Assign
-     *        | "var" Identifier "=" Expression  %Declare
+     * Binding: Identifier "=" Expression                 %Assign
+     *        | "var" {(Identifier "=" Expression) ","}+  %Declare
      */
-    private Statement visitBinding(NonterminalNode node) {
+    private List<Statement> visitBinding(NonterminalNode node) {
+        List<Statement> statements = new ArrayList<>();
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
             case "Assign":
-                return AST.stat(AST.assign(getIdentifier(node.childAt(0)).getName(), (Expression) node.childAt(2).accept(this)));
+                statements.add(AST.stat(AST.assign(getIdentifier(node.childAt(0)).getName(), (Expression) node.childAt(2).accept(this))));
+                break;
 
             case "Declare":
-                Expression expression = (Expression) node.childAt(3).accept(this);
-                return AST.varDeclStat(getIdentifier(node.childAt(1)).getName(), expression);
+                List<Object> elems = (List<Object>) node.childAt(1).accept(this);
+                int i = 0;
+                while (i < elems.size()) {
+                    statements.add(AST.varDeclStat(((Identifier) elems.get(i)).getName(), (Expression) elems.get(i + 1)));
+                    i += 2;
+                }
+                break;
 
             default:
                 throw new RuntimeException("Unexpected label: " + label);
         }
+        return statements;
     }
 
     /**
@@ -604,18 +622,17 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     /*
      * Statement
-     *   = Expression    %Expression
-     *   | Binding       %Binding
+     *   = Identifier Arguments     %Call
+     *   | Binding                  %Binding
      */
-    private Statement visitStatement(NonterminalNode node) {
+    private List<Statement> visitStatement(NonterminalNode node) {
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
-            case "Expression":
-                Expression expression = (Expression) node.childAt(0).accept(this);
-                return AST.stat(expression);
+            case "Call":
+                return Collections.singletonList(AST.stat(getCall(node)));
 
             case "Binding":
-                return (Statement) node.childAt(0).accept(this);
+                return (List<Statement>) node.childAt(0).accept(this);
 
             default:
                 throw new RuntimeException("Unexpected label: " + label);
@@ -624,56 +641,13 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     /**
      * Global
-     *   = "global" Identifier "=" Initializer
+     *   = "global" Identifier "=" Expression
      */
     private Object visitGlobal(NonterminalNode node) {
         String key = node.childAt(1).getText();
-        Object value = node.childAt(3).accept(this);
+        Expression value = (Expression) node.childAt(3).accept(this);
         globals.put(key, value);
         return null;
-    }
-
-    /**
-     * Initializer
-     *   = "null"                       %Null
-     *   | Number                       %Number
-     *   | String                       %String
-     *   | '[' {Initializer ','}* ']'   %List
-     *   | '{' {MapEntry ','}* '}'      %Map
-     */
-    private Object visitInitializer(NonterminalNode node) {
-        String label = node.getGrammarDefinition().getLabel();
-        switch (label) {
-            case "Null":
-                return null;
-
-            case "Number":
-                return Integer.parseInt(node.childAt(0).getText());
-
-            case "String":
-                return node.childAt(1).getText();
-
-            case "List":
-                List<Object> list = new ArrayList<>();
-                List<Object> elements = (List<Object>) node.childAt(1).accept(this);
-                if (elements != null) {
-                    list.addAll(elements);
-                }
-                return list;
-
-            case "Map":
-                Map<String, Object> map = new HashMap<>();
-                List<Map.Entry<String, Object>> entries = (List<Map.Entry<String, Object>> ) node.childAt(1).accept(this);
-                if (entries != null) {
-                    for (Map.Entry<String, Object> entry : entries) {
-                        map.put(entry.getKey(), entry.getValue());
-                    }
-                }
-                return map;
-
-            default:
-                throw new RuntimeException("Unexpected label: " + label);
-        }
     }
 
     /**
@@ -701,7 +675,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
     /*
      * Expression
-     * :           Expression Arguments           %Call
+     * =           Identifier Arguments           %Call
+     *             "!" Expression                 %Not
      * > left      (Expression "*" Expression     %Multiplication
      * |            Expression "/" Expression     %Division)
      * > left      (Expression "+" Expression     %Addition
@@ -727,18 +702,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
             case "Call":
-                String funName = node.childAt(0).getText();
-                Expression[] arguments = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
-                switch (funName) {
-                    case "println":
-                        return AST.println(arguments);
-                    case "indent":
-                        return AST.indent(arguments[0]);
-                    case "assert":
-                        return AST.assertion(arguments);
-                    default:
-                        throw new RuntimeException("Unknown function name: " + funName);
-                }
+                return getCall(node);
+
+            case "Not":
+                Expression exp = (Expression) node.childAt(1).accept(this);
+                return AST.not(exp);
 
             case "Addition": {
                 Expression lhs = (Expression) node.childAt(0).accept(this);
@@ -839,6 +807,27 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             default:
                 throw new RuntimeException("Unexpected label: " +  label);
+        }
+    }
+
+    private Expression.Call getCall(NonterminalNode node) {
+        String funName = node.childAt(0).getText();
+        Expression[] arguments = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
+        switch (funName) {
+            case "println":
+                return AST.println(arguments);
+            case "indent":
+                return AST.indent(arguments[0]);
+            case "assert":
+                return AST.assertion(arguments);
+            case "set":
+                return AST.set(arguments);
+            case "put":
+                return AST.put(arguments[0], arguments[1]);
+            case "contains":
+                return AST.contains(arguments[0], arguments[1]);
+            default:
+                throw new RuntimeException("Unknown function name: " + funName);
         }
     }
 

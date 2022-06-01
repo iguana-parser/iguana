@@ -10,6 +10,8 @@ import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.Result;
 import org.iguana.sppf.*;
 
+import java.util.Arrays;
+
 public class ParserLogger {
 
     private static ParserLogger instance = new ParserLogger();
@@ -90,9 +92,9 @@ public class ParserLogger {
         countGSSNodes++;
         if (logEnabled) {
             if (data != null) {
-                logger.log("GSS node added %s(%s)", node, data);
+                logger.log("GSS node added %s(%s)", node, Arrays.deepToString(data));
             } else {
-                logger.log("GSS node added %s", node, data);
+                logger.log("GSS node added %s", node, Arrays.deepToString(data));
             }
         }
     }

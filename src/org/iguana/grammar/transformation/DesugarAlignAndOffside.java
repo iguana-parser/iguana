@@ -37,6 +37,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
 import java.util.Map;
+import java.util.Set;
 
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;

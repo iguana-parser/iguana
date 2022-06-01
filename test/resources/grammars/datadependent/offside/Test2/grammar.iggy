@@ -8,8 +8,8 @@ Exp
   = Exp '+' 'a'
   | 'a'
 
-layout terminal Layout
+layout regex Layout
   = WhiteSpace
 
-terminal WhiteSpace
+regex WhiteSpace
   = [\ \t \f \r \n]*

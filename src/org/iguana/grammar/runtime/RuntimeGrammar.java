@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.runtime;
 
+import org.iguana.datadependent.ast.Expression;
 import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
@@ -63,7 +64,7 @@ public class RuntimeGrammar {
 
 	private final Start startSymbol;
 
-	private final Map<String, Object> globals;
+	private final Map<String, Expression> globals;
 
 	public Builder copy() {
 		return new Builder(this);
@@ -142,7 +143,7 @@ public class RuntimeGrammar {
 		return layout;
 	}
 
-	public Map<String, Object> getGlobals() {
+	public Map<String, Expression> getGlobals() {
 		return globals;
 	}
 
@@ -205,7 +206,7 @@ public class RuntimeGrammar {
 		
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
-		private Map<String, Object> globals = new HashMap<>();
+		private Map<String, Expression> globals = new HashMap<>();
 
         public Builder() { }
 
@@ -301,7 +302,7 @@ public class RuntimeGrammar {
 			return this;
 		}
 
-		public Builder setGlobals(Map<String, Object> globals) {
+		public Builder setGlobals(Map<String, Expression> globals) {
 			this.globals = globals;
 			return this;
 		}

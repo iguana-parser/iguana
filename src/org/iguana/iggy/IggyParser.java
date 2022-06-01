@@ -29,7 +29,7 @@ public class IggyParser {
     public static void main(String[] args) throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         Grammar grammar = getGrammar(path);
-        System.out.println(JsonSerializer.toJSON(grammar));
+//        System.out.println(JsonSerializer.toJSON(grammar));
         JsonSerializer.serialize(grammar, Paths.get("src/resources/iggy.json").toAbsolutePath().toString());
     }
 

@@ -165,30 +165,26 @@ public class BodyGrammarSlot implements GrammarSlot {
 					Object[] values = (Object[]) result.getValue();
 					int i = 0;
 					for (String v : state) {
-						if (!v.equals("_"))
-							env = env._declare(v, values[i++]);
-					}
-				} else {
-					// See when this is the case
-					List<?> values = (List<?>) result.getValue();
-					Iterator<?> it = values.iterator();
-					for (String v : state) {
-						if (!v.equals("_"))
-							env = env._declare(v, it.next());
+						if (!v.equals("_")) {
+							env = env._declare(v, values[i]);
+						}
+						i++;
 					}
 				}
 			}
 		}
 		
 		if (variable != null && state != null) { // TODO: support for the array-based environment implementation
-			List<?> values = (List<?>) result.getValue();
-			Iterator<?> it = values.iterator();
-			
-			env = env._declare(variable, it.next());
+			Object[] values = (Object[]) result.getValue();
+			env = env._declare(variable, values[0]);
+
+			int i = 1;
 			
 			for (String v : state) {
-				if (!v.equals("_"))
-					env = env._declare(v, it.next());
+				if (!v.equals("_")) {
+					env = env._declare(v, values[i]);
+				}
+				i++;
 			}
 		}
 		

@@ -45,6 +45,8 @@ public interface IAbstractASTVisitor<T> {
 
     T visit(String expression);
 
+    T visit(Not not);
+
     T visit(Tuple expression);
 
     default T visit(IntTuple2 expression) {

@@ -97,6 +97,14 @@ public class RuntimeRule {
 	public List<Symbol> getBody() {
 		return body;
 	}
+
+    public Symbol getFirstSymbol() {
+        return symbolAt(0);
+    }
+
+    public Symbol getLastSymbol() {
+        return symbolAt(size() - 1);
+    }
 	
 	public int size() {
 		return body == null ? 0 : body.size();

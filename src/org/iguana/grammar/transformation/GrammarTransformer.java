@@ -17,10 +17,10 @@ public class GrammarTransformer {
         desugarAlignAndOffside.doOffside();
         grammar = desugarAlignAndOffside.transform(grammar);
         grammar = new DesugarStartSymbol(startNonterminal).transform(grammar);
-        grammar = new DesugarState().transform(grammar);
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
         grammar = precedenceAndAssociativity.transform(grammar);
+        grammar = new DesugarState().transform(grammar);
         grammar = new LayoutWeaver().transform(grammar);
         return grammar;
     }

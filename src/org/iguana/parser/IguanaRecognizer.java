@@ -10,6 +10,7 @@ import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class IguanaRecognizer {
@@ -18,7 +19,6 @@ public class IguanaRecognizer {
 
     protected final GrammarGraph grammarGraph;
     protected final Configuration config;
-    protected final Map<String, Object> globals;
 
     protected ParseError parseError;
     protected RecognizerStatistics statistics;
@@ -38,11 +38,10 @@ public class IguanaRecognizer {
     public IguanaRecognizer(RuntimeGrammar grammar, Configuration config) {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.config = config;
-        this.globals = grammar.getGlobals();
     }
 
     public boolean recognize(Input input) {
-        return recognize(input, globals, false);
+        return recognize(input, Collections.emptyMap(), false);
     }
 
     public boolean recognize(Input input,  Map<String, Object> map, boolean global) {

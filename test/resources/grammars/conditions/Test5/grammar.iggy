@@ -5,5 +5,5 @@ start S
 Id
   = Chars \ ('if' | 'while' | 'do')
 
-terminal Chars
+regex Chars
   = [a-z]+

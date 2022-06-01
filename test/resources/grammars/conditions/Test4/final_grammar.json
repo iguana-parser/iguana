@@ -3,18 +3,19 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(a-z)+",
+        "name" : "Char+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(a-z)+",
+          "name" : "Char+",
           "nodeType" : "Plus"
         },
         {
           "kind" : "Terminal",
-          "name" : "(a-z)",
+          "name" : "Char",
+          "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
             "symbols" : [
@@ -46,7 +47,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "(a-z)+",
+        "name" : "Char+",
         "postConditions" : [
           {
             "kind" : "RegularExpressionCondition",
@@ -125,7 +126,8 @@
         ],
         "s" : {
           "kind" : "Terminal",
-          "name" : "(a-z)",
+          "name" : "Char",
+          "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
             "symbols" : [
@@ -142,13 +144,14 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(a-z)+",
+        "name" : "Char+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "(a-z)",
+          "name" : "Char",
+          "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
             "symbols" : [
@@ -180,7 +183,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "(a-z)+",
+        "name" : "Char+",
         "postConditions" : [
           {
             "kind" : "RegularExpressionCondition",
@@ -259,7 +262,8 @@
         ],
         "s" : {
           "kind" : "Terminal",
-          "name" : "(a-z)",
+          "name" : "Char",
+          "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
             "symbols" : [
@@ -281,7 +285,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(a-z)+",
+          "name" : "Char+",
           "postConditions" : [
             {
               "kind" : "RegularExpressionCondition",
@@ -416,13 +420,13 @@
     }
   ],
   "ebnfLefts" : {
-    "$Id+" : [
-      "$Id"
+    "Char+" : [
+      "Char"
     ]
   },
   "ebnfRights" : {
-    "$Id+" : [
-      "$Id"
+    "Char+" : [
+      "Char"
     ]
   },
   "startSymbol" : {
