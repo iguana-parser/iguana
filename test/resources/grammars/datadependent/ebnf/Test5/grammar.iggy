@@ -5,7 +5,7 @@ global cCounter = 2
 start S
   = X
 
-X = a:A b:(b:B [[b.l == a.r]] assert(bCounter == b.l) bCounter = bCounter + 2 c:C assert(cCounter == c.l) cCounter = cCounter + 2)*  // shadowing (b:B)
+X = a:A b:(b:B [b.l == a.r] assert(bCounter == b.l) bCounter = bCounter + 2 c:C assert(cCounter == c.l) cCounter = cCounter + 2)*  // shadowing (b:B)
 
 A = 'a'
 

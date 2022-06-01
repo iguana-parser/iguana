@@ -714,10 +714,10 @@
                     },
                     {
                       "kind" : "Opt",
-                      "name" : "PreCondition?",
+                      "name" : "Condition?",
                       "s" : {
                         "kind" : "Identifier",
-                        "name" : "PreCondition"
+                        "name" : "Condition"
                       }
                     },
                     {
@@ -759,10 +759,10 @@
                   "symbols" : [
                     {
                       "kind" : "Opt",
-                      "name" : "PreCondition?",
+                      "name" : "Condition?",
                       "s" : {
                         "kind" : "Identifier",
-                        "name" : "PreCondition"
+                        "name" : "Condition"
                       }
                     },
                     {
@@ -797,7 +797,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "PreCondition"
+        "name" : "Condition"
       },
       "priorityLevels" : [
         {
@@ -808,19 +808,10 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "[[",
+                      "name" : "[",
                       "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 91
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 91
-                          }
-                        ]
+                        "kind" : "Char",
+                        "val" : 91
                       }
                     },
                     {
@@ -843,19 +834,10 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "]]",
+                      "name" : "]",
                       "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          }
-                        ]
+                        "kind" : "Char",
+                        "val" : 93
                       }
                     }
                   ]
@@ -1295,56 +1277,8 @@
                       "name" : "Symbol"
                     },
                     {
-                      "kind" : "Terminal",
-                      "name" : "[[",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 91
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 91
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "kind" : "Star",
-                      "name" : "Expression*",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Expression"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "]]",
-                      "regex" : {
-                        "kind" : "regex.Seq",
-                        "symbols" : [
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 93
-                          }
-                        ]
-                      }
+                      "kind" : "Identifier",
+                      "name" : "Condition"
                     }
                   ],
                   "label" : "PostCondition"

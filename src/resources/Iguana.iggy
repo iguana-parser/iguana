@@ -32,11 +32,11 @@ RegexBody
   = {RegexSequence "|"}*
 
 Sequence
-  = Associativity? PreCondition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOne
-  | PreCondition? Symbol ReturnExpression? Label?                          %Single
+  = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOne
+  | Condition? Symbol ReturnExpression? Label?                          %Single
 
-PreCondition
-  = "[[" {Expression ","}* "]]"
+Condition
+  = "[" {Expression ","}* "]"
 
 RegexSequence
   = Regex+    %Sequence
@@ -53,7 +53,7 @@ Symbol
   | "ignore" Symbol                         %Ignore
   > Identifier ":" Symbol                   %Labeled
   > Symbol!Statement Statement+             %Statement
-  | Symbol "[[" {Expression ","}* "]]"      %PostCondition
+  | Symbol Condition                        %PostCondition
   > Regex "<<" Symbol                       %Precede
   | Regex "!<<" Symbol                      %NotPrecede
   > Symbol ">>" Regex                       %Follow
@@ -181,13 +181,13 @@ terminal Associativity
   | "non-assoc"
 
 VarName
-  = id:Identifier [[contains(env,id.yield)]]
+  = id:Identifier   [contains(env,id.yield)]
 
 Label
   = '%' Identifier
 
 Name
-  = id:Identifier   [[!contains(env,id.yield)]]
+  = id:Identifier   [!contains(env,id.yield)]
 
 NontName
   = Identifier

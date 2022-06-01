@@ -2,8 +2,8 @@ start S =
   E(0,0)
 
 E(l,r)
-  = [[5 >= r]] E(5,r) 'z'   // propagate r down
-  | [[4 >= l]] 'x' E(l,4)   // propagate l down
-  | [[3 >= r]] E(3,0) 'w'
-  | [[2 >= l]] 'y' E(0,0)
+  = [5 >= r] E(5,r) 'z'   // propagate r down
+  | [4 >= l] 'x' E(l,4)   // propagate l down
+  | [3 >= r] E(3,0) 'w'
+  | [2 >= l] 'y' E(0,0)
   | 'a'

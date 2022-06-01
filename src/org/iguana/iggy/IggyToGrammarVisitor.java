@@ -457,7 +457,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "PostCondition": {
                 Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                List<Expression> expressions = (List<Expression>) node.childAt(2).accept(this);
+                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
                 SymbolBuilder<? extends Symbol> builder = symbol.copy();
                 for (Expression expression : expressions) {
                     builder.addPostCondition(DataDependentCondition.predicate(expression));
