@@ -8,5 +8,5 @@ Id
 
 L = ' '
 
-terminal Char
+regex Char
   = [a-z]

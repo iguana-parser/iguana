@@ -294,13 +294,13 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "terminal",
+                      "name" : "regex",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
                           {
                             "kind" : "Char",
-                            "val" : 116
+                            "val" : 114
                           },
                           {
                             "kind" : "Char",
@@ -308,27 +308,15 @@
                           },
                           {
                             "kind" : "Char",
-                            "val" : 114
+                            "val" : 103
                           },
                           {
                             "kind" : "Char",
-                            "val" : 109
+                            "val" : 101
                           },
                           {
                             "kind" : "Char",
-                            "val" : 105
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 110
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 97
-                          },
-                          {
-                            "kind" : "Char",
-                            "val" : 108
+                            "val" : 120
                           }
                         ]
                       }
@@ -457,7 +445,7 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "NontName"
+                      "name" : "Name"
                     },
                     {
                       "kind" : "Terminal",
@@ -2131,7 +2119,7 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "NontName"
+                      "name" : "Name"
                     }
                   ],
                   "label" : "Nont"
@@ -2990,66 +2978,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Identifier"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Identifier",
-                      "name" : "LetterOrDigits",
-                      "preConditions" : [
-                        {
-                          "kind" : "RegularExpressionCondition",
-                          "type" : "NOT_PRECEDE",
-                          "regularExpression" : {
-                            "kind" : "regex.Alt",
-                            "symbols" : [
-                              {
-                                "kind" : "CharRange",
-                                "start" : 65,
-                                "end" : 90
-                              },
-                              {
-                                "kind" : "Char",
-                                "val" : 95
-                              },
-                              {
-                                "kind" : "CharRange",
-                                "start" : 97,
-                                "end" : 122
-                              }
-                            ]
-                          }
-                        }
-                      ],
-                      "postConditions" : [
-                        {
-                          "kind" : "RegularExpressionCondition",
-                          "type" : "NOT_MATCH",
-                          "regularExpression" : {
-                            "kind" : "Reference",
-                            "name" : "Keywords"
-                          }
-                        }
-                      ]
-                    }
-                  ],
-                  "label" : "Ident"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "VarName"
       },
       "priorityLevels" : [
@@ -3179,7 +3107,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "NontName"
+        "name" : "Identifier"
       },
       "priorityLevels" : [
         {
@@ -3190,9 +3118,45 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "LetterOrDigits",
+                      "preConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_PRECEDE",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 65,
+                                "end" : 90
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 95
+                              },
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_MATCH",
+                          "regularExpression" : {
+                            "kind" : "Reference",
+                            "name" : "Keywords"
+                          }
+                        }
+                      ]
                     }
-                  ]
+                  ],
+                  "label" : "Ident"
                 }
               ]
             }
@@ -3335,7 +3299,7 @@
           "symbols" : [
             {
               "kind" : "Char",
-              "val" : 116
+              "val" : 114
             },
             {
               "kind" : "Char",
@@ -3343,27 +3307,15 @@
             },
             {
               "kind" : "Char",
-              "val" : 114
+              "val" : 103
             },
             {
               "kind" : "Char",
-              "val" : 109
+              "val" : 101
             },
             {
               "kind" : "Char",
-              "val" : 105
-            },
-            {
-              "kind" : "Char",
-              "val" : 110
-            },
-            {
-              "kind" : "Char",
-              "val" : 97
-            },
-            {
-              "kind" : "Char",
-              "val" : 108
+              "val" : 120
             }
           ]
         },

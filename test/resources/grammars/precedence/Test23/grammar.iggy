@@ -8,5 +8,5 @@ E =       '-' E
   >       'if' E 'then' E 'else' E
   |       'a'
 
-layout terminal Whitespaces
+layout regex Whitespaces
   = [\t\n\r\ ]*

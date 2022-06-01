@@ -12,8 +12,8 @@ E =         E '.' Id
   |         '(' E ')'
   |         'a'
 
-terminal Id
+regex Id
   = 'id'
 
-layout terminal Whitespaces
+layout regex Whitespaces
   = [\t\n\r\ ]*

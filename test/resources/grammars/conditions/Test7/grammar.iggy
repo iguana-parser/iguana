@@ -6,7 +6,7 @@ start S
 Id
   = 'for' !<< Chars
 
-terminal Chars
+regex Chars
   = [a-z]+
 
 L = ' '

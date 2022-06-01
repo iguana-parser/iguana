@@ -5,5 +5,5 @@ start S
 Label
   = Char+ !>> [a-z]
 
-terminal Char
+regex Char
   = [a-z]

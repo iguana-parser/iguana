@@ -5,8 +5,8 @@ start S
 Label
   = Char+ !>> [a-z]
 
-terminal Char
+regex Char
   = [a-z]
 
-terminal Nums
+regex Nums
   = [0-9]

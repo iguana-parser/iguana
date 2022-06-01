@@ -9,13 +9,13 @@ Global
 
 Rule
   = ("start" | "layout")? Name Parameters? "=" Body        %Syntax
-  | "layout"? "terminal" Name "=" RegexBody                %Lexical
+  | "layout"? "regex" Name "=" RegexBody                   %Lexical
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
 
 RegexRule
-  = NontName ":" RegexBody    %Regex
+  = Name ":" RegexBody    %Regex
 
 Body
   = {PriorityLevels ">"}+
@@ -85,7 +85,7 @@ Regex
   | "(" Regex ")"                 %Bracket
   | "(" Regex Regex+ ")"          %Sequence
   | "(" Regexs ("|" Regexs)+ ")"  %Alternation
-  | NontName                      %Nont
+  | Name                          %Nont
   | CharClass                     %CharClass
   | String                        %String
   | Char                          %Character
@@ -127,59 +127,6 @@ Expression
 ReturnExpression
   = "{" Expression "}"    %ReturnExpression
 
-terminal Letter
-  = [A-Za-z_]
-
-terminal LetterOrDigit
-  = [A-Za-z_0-9]
-
-terminal LetterOrDigits
-  = Letter (Letter | LetterOrDigit)*
-
-terminal Number
-  = [0]
-  | [1-9][0-9]*
-
-terminal Character
-  = "\\" [' " \\ t f r n]
-  | ![' " \\]
-
-terminal RangeChar
-  = "\\" [\\ \[ \] \- t f r n \ ]
-  | ![\\ \[ \] \- \ ]
-
-terminal Char
-  = "\'" Character* "\'"
-
-terminal String
-  = "\"" Character* "\""
-
-layout terminal Layout
-  = WhiteSpaceOrComment*
-
-terminal WhiteSpaceOrComment
-  = WhiteSpaces
-  | Comment
-
-terminal WhiteSpaces
-  = [\ \t \f \r \n]+
-
-terminal Comment
-  = "/*" CommentChar* [*]+  "/"
-  | "//" ![\r \n]* [\r\n]
-
-terminal CommentChar
-  = [/]
-  | [*]* ![/ *]
-
-Identifier
-  = [A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
-
-terminal Associativity
-  = "left"
-  | "right"
-  | "non-assoc"
-
 VarName
   = id:Identifier   [contains(env,id.yield)]
 
@@ -189,12 +136,62 @@ Label
 Name
   = id:Identifier   [!contains(env,id.yield)]
 
-NontName
-  = Identifier
+Identifier
+  = [A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
 
-terminal Keywords
+regex Letter
+  = [A-Za-z_]
+
+regex LetterOrDigit
+  = [A-Za-z_0-9]
+
+regex LetterOrDigits
+  = Letter (Letter | LetterOrDigit)*
+
+regex Number
+  = [0]
+  | [1-9][0-9]*
+
+regex Character
+  = "\\" [' " \\ t f r n]
+  | ![' " \\]
+
+regex RangeChar
+  = "\\" [\\ \[ \] \- t f r n \ ]
+  | ![\\ \[ \] \- \ ]
+
+regex Char
+  = "\'" Character* "\'"
+
+regex String
+  = "\"" Character* "\""
+
+layout regex Layout
+  = WhiteSpaceOrComment*
+
+regex WhiteSpaceOrComment
+  = WhiteSpaces
+  | Comment
+
+regex WhiteSpaces
+  = [\ \t \f \r \n]+
+
+regex Comment
+  = "/*" CommentChar* [*]+  "/"
+  | "//" ![\r \n]* [\r\n]
+
+regex CommentChar
+  = [/]
+  | [*]* ![/ *]
+
+regex Associativity
+  = "left"
+  | "right"
+  | "non-assoc"
+
+regex Keywords
   = "start"
-  | "terminal"
+  | "regex"
   | "layout"
   | "var"
   | "left"
@@ -212,7 +209,7 @@ terminal Keywords
   | "contains"
   | "put"
 
-terminal FunName
+regex FunName
   = "println"
   | "indent"
   | "assert"

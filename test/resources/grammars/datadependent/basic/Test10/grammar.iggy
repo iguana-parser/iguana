@@ -7,5 +7,5 @@ A = 'a'
 
 B = 'b'
 
-terminal Layout
+regex Layout
   = [\ ]*

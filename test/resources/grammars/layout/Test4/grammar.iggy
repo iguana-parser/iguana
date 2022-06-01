@@ -8,5 +8,5 @@ B = 'b'
 
 C = 'c'
 
-layout terminal L
+layout regex L
   = ' '?
