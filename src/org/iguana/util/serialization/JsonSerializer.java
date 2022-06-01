@@ -92,6 +92,7 @@ public class JsonSerializer {
         mapper.addMixIn(Expression.LShiftANDEqZero.class, ExpressionMixIn.LShiftANDEqZeroMixIn.class);
         mapper.addMixIn(Expression.OrIndent.class, ExpressionMixIn.OrIndentMixIn.class);
         mapper.addMixIn(Expression.AndIndent.class, ExpressionMixIn.AndIndentMixIn.class);
+        mapper.addMixIn(Expression.Not.class, ExpressionMixIn.NotMixIn.class);
         mapper.addMixIn(Expression.Or.class, ExpressionMixIn.OrMixIn.class);
         mapper.addMixIn(Expression.And.class, ExpressionMixIn.AndMixIn.class);
         mapper.addMixIn(Expression.Add.class, ExpressionMixIn.AddMixIn.class);
@@ -124,7 +125,6 @@ public class JsonSerializer {
         mapper.addMixIn(AST.Println.class, ExpressionMixIn.CallMixIn.PrintlnMixIn.class);
         mapper.addMixIn(AST.Indent.class, ExpressionMixIn.CallMixIn.IndentMixIn.class);
         mapper.addMixIn(AST.Min.class, ExpressionMixIn.CallMixIn.MinMixIn.class);
-        mapper.addMixIn(AST.Not.class, ExpressionMixIn.CallMixIn.NotMixIn.class);
         mapper.addMixIn(AST.Neg.class, ExpressionMixIn.CallMixIn.NegMixIn.class);
         mapper.addMixIn(AST.Pop.class, ExpressionMixIn.CallMixIn.PopMixIn.class);
         mapper.addMixIn(AST.Get.class, ExpressionMixIn.CallMixIn.GetMixIn.class);
@@ -485,6 +485,7 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value= Expression.GreaterThanEqual.class, name="GreaterThanEqual"),
         @JsonSubTypes.Type(value= Expression.LShiftANDEqZero.class, name="LShiftANDEqZero"),
         @JsonSubTypes.Type(value= Expression.Greater.class, name="Greater"),
+        @JsonSubTypes.Type(value= Expression.Not.class, name="Not"),
         @JsonSubTypes.Type(value= Expression.Or.class, name="Or"),
         @JsonSubTypes.Type(value= Expression.LessThanEqual.class, name="LessThanEqual"),
         @JsonSubTypes.Type(value= Expression.IfThenElse.class, name="IfThenElse"),
@@ -553,7 +554,6 @@ public class JsonSerializer {
             @JsonSubTypes.Type(value = AST.Set.class, name = "Set"),
             @JsonSubTypes.Type(value = AST.Indent.class, name = "Indent"),
             @JsonSubTypes.Type(value = AST.Min.class, name = "Min"),
-            @JsonSubTypes.Type(value = AST.Not.class, name = "Not"),
             @JsonSubTypes.Type(value = AST.Neg.class, name = "Neg"),
             @JsonSubTypes.Type(value = AST.Get.class, name = "Get"),
             @JsonSubTypes.Type(value = AST.Len.class, name = "Len"),
@@ -756,6 +756,11 @@ public class JsonSerializer {
         abstract static class GreaterMixIn extends BinaryExpressionMixIn {
             @JsonCreator
             GreaterMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+        }
+
+        abstract static class NotMixIn {
+            @JsonCreator
+            NotMixIn(@JsonProperty("exp") Expression exp) { }
         }
 
         abstract static class OrMixIn extends BinaryExpressionMixIn {

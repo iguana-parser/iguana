@@ -99,7 +99,7 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "_:x:y=E(0,0,x,y) {println(x,y)}",
+          "name" : "_:x:y=E(0,0,x,y) {assert(x == 1,y == 2)}",
           "symbol" : {
             "kind" : "Nonterminal",
             "name" : "E",
@@ -133,20 +133,34 @@
             {
               "kind" : "ExpressionStatement",
               "exp" : {
-                "kind" : "Println",
+                "kind" : "Assert",
                 "arguments" : [
                   {
-                    "kind" : "Name",
-                    "name" : "x",
-                    "i" : -1
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "x",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 1
+                    }
                   },
                   {
-                    "kind" : "Name",
-                    "name" : "y",
-                    "i" : -1
+                    "kind" : "Equal",
+                    "lhs" : {
+                      "kind" : "Name",
+                      "name" : "y",
+                      "i" : -1
+                    },
+                    "rhs" : {
+                      "kind" : "Integer",
+                      "value" : 2
+                    }
                   }
                 ],
-                "fun" : "println"
+                "fun" : "assert"
               }
             }
           ]
@@ -295,22 +309,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "LShiftANDEqZero",
-                "lhs" : {
-                  "kind" : "Name",
-                  "name" : "_not",
-                  "i" : -1
-                },
-                "rhs" : {
-                  "kind" : "Integer",
-                  "value" : 0
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "And",
                 "lhs" : {
                   "kind" : "GreaterThanEqual",
@@ -335,6 +333,22 @@
                     "kind" : "Integer",
                     "value" : 1
                   }
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 0
                 }
               }
             }
@@ -406,7 +420,6 @@
           ],
           "variable" : "l",
           "state" : [
-            "_",
             "x",
             "y"
           ],

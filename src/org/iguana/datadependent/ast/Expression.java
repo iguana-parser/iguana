@@ -229,6 +229,33 @@ public abstract class Expression extends AbstractAST {
         }
     }
 
+    public static class Not extends Expression {
+
+        private final Expression exp;
+
+        Not(Expression exp) {
+            this.exp = exp;
+        }
+
+        public Expression getExp() {
+            return exp;
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            Object value = exp.interpret(ctx, input);
+            if (!(value instanceof java.lang.Boolean)) {
+                throw new UnexpectedTypeOfArgumentException(this);
+            }
+            return !(java.lang.Boolean) value;
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return null;
+        }
+    }
+
     public static class Tuple extends Expression {
 
         private final Expression[] elements;

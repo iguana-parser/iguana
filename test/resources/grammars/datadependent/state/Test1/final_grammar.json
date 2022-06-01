@@ -116,35 +116,29 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "b {z = x} {assert(x == 1)}",
+          "name" : "b {z = x;assert(x == 1)}",
           "symbol" : {
-            "kind" : "Code",
-            "name" : "b {z = x}",
-            "symbol" : {
-              "kind" : "Terminal",
-              "name" : "b",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 98
-              }
-            },
-            "statements" : [
-              {
-                "kind" : "ExpressionStatement",
-                "exp" : {
-                  "kind" : "Assignment",
-                  "id" : "z",
-                  "exp" : {
-                    "kind" : "Name",
-                    "name" : "x",
-                    "i" : -1
-                  },
-                  "i" : -1
-                }
-              }
-            ]
+            "kind" : "Terminal",
+            "name" : "b",
+            "regex" : {
+              "kind" : "Char",
+              "val" : 98
+            }
           },
           "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Assignment",
+                "id" : "z",
+                "exp" : {
+                  "kind" : "Name",
+                  "name" : "x",
+                  "i" : -1
+                },
+                "i" : -1
+              }
+            },
             {
               "kind" : "ExpressionStatement",
               "exp" : {
@@ -193,63 +187,6 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Start(S)",
-        "parameters" : [
-          "x",
-          "y",
-          "z"
-        ],
-        "nodeType" : "Start"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "S",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "x",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "y",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "z",
-              "i" : -1
-            }
-          ]
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Start",
-        "name" : "Start(S)",
-        "startSymbol" : "S"
       }
     },
     {
@@ -423,6 +360,63 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "parameters" : [
+          "x",
+          "y",
+          "z"
+        ],
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "x",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "y",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "z",
+              "i" : -1
+            }
+          ]
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
       }
     }
   ],

@@ -2,10 +2,10 @@ global x = 0
 global y = 0
 
 start S
-  = E assert(x == 1, y == 2);
+  = E assert(x == 1, y == 2)
 
 E = '-' E
   > left E '+' E
   | A
 
-A = 'a' x = 1, y = 2;
+A = 'a' x = 1 y = 2

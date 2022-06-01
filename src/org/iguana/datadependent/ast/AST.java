@@ -62,6 +62,10 @@ public class AST {
         return new Expression.String(value);
     }
 
+    public static Expression not(Expression exp) {
+        return new Expression.Not(exp);
+    }
+
     public static Expression tuple(Expression... args) {
         return new Expression.Tuple(args);
     }
@@ -295,26 +299,6 @@ public class AST {
 
     public static StartsWith startsWith(Expression... args) {
         return new StartsWith(args);
-    }
-
-    public static class Not extends Expression.Call {
-        Not(Expression... arguments) {
-            super("not", arguments);
-        }
-
-        @Override
-        public Object interpret(IEvaluatorContext ctx, Input input) {
-            Object value = arguments[0].interpret(ctx, input);
-            if (!(value instanceof java.lang.Boolean)) {
-                throw new UnexpectedTypeOfArgumentException(this);
-            }
-
-            return !((java.lang.Boolean) value);
-        }
-    }
-
-    public static Not not(Expression arg) {
-        return new Not(arg);
     }
 
     public static class Neg extends Expression.Call {

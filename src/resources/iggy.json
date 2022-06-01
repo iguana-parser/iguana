@@ -224,7 +224,7 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Name"
                     },
                     {
                       "kind" : "Opt",
@@ -335,7 +335,7 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Name"
                     },
                     {
                       "kind" : "Terminal",
@@ -1268,7 +1268,10 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Symbol"
+                      "name" : "Symbol",
+                      "excepts" : [
+                        "Statement"
+                      ]
                     },
                     {
                       "kind" : "Plus",
@@ -1276,24 +1279,6 @@
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Statement"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : ",",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ";",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 59
                       }
                     }
                   ],
@@ -1834,6 +1819,48 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "Statement"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "FunName"
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Arguments"
+                    }
+                  ],
+                  "label" : "Call"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Binding"
+                    }
+                  ],
+                  "label" : "Binding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Regex"
       },
       "priorityLevels" : [
@@ -2262,6 +2289,27 @@
                     }
                   ],
                   "label" : "Call"
+                }
+              ]
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "!",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 33
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression"
+                    }
+                  ],
+                  "label" : "Not"
                 }
               ]
             }
@@ -2863,44 +2911,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Statement"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Expression"
-                    }
-                  ],
-                  "label" : "Expression"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Binding"
-                    }
-                  ],
-                  "label" : "Binding"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "Binding"
       },
       "priorityLevels" : [
@@ -2912,7 +2922,7 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "VarName"
                     },
                     {
                       "kind" : "Terminal",
@@ -3142,6 +3152,56 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Identifier"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Name"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier",
+                      "label" : "id",
+                      "postConditions" : [
+                        {
+                          "kind" : "DataDependentCondition",
+                          "type" : "DATA_DEPENDENT",
+                          "expression" : {
+                            "kind" : "Not",
+                            "exp" : {
+                              "kind" : "Contains",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "env",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Yield",
+                                  "label" : "id",
+                                  "i" : -1
+                                }
+                              ],
+                              "fun" : "contains"
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
                 }

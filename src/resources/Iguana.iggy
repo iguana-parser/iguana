@@ -5,14 +5,14 @@ start Definition
   = (Rule | Global)+
 
 Global
- = "global" id:Identifier "=" Expression  env=put(env,id.yield);
+ = "global" id:Identifier "=" Expression  env=put(env,id.yield)
 
 Rule
-  = ("start" | "layout")? Identifier Parameters? "=" Body        %Syntax
-  | "layout"? "terminal" Identifier "=" RegexBody                %Lexical
+  = ("start" | "layout")? Name Parameters? "=" Body        %Syntax
+  | "layout"? "terminal" Name "=" RegexBody                %Lexical
 
 Parameters
-  = "(" {id:Identifier env=put(env, id.yield); ","}* ")"
+  = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
 
 RegexRule
   = NontName ":" RegexBody    %Regex
@@ -52,7 +52,7 @@ Symbol
   > "align" Symbol                          %Align
   | "ignore" Symbol                         %Ignore
   > Identifier ":" Symbol                   %Labeled
-  > Symbol { Statement "," }+ ";"           %Statement
+  > Symbol!Statement Statement+             %Statement
   | Symbol "[[" {Expression ","}* "]]"      %PostCondition
   > Regex "<<" Symbol                       %Precede
   | Regex "!<<" Symbol                      %NotPrecede
@@ -70,6 +70,10 @@ Symbol
 
 Arguments
   = "(" {Expression ","}* ")"
+
+Statement
+  = FunName Arguments    %Call
+  | Binding              %Binding
 
 Regex
   = Regex "*"                     %Star
@@ -96,6 +100,7 @@ Range
 
 Expression
   =           FunName Arguments            %Call
+  |           "!" Expression               %Not
   > left      (Expression "*" Expression   %Multiplication
   |            Expression "/" Expression   %Division)
   > left      (Expression "+" Expression   %Addition
@@ -119,13 +124,9 @@ Expression
 ReturnExpression
   = "{" Expression "}"    %ReturnExpression
 
-Statement
-  = Expression    %Expression
-  | Binding       %Binding
-
 Binding
-  = Identifier "=" Expression                                       %Assign
-  | "var" id:Identifier env=put(env, id.yield); "=" Expression      %Declare
+  = VarName "=" Expression                                         %Assign
+  | "var" id:Identifier env=put(env, id.yield) "=" Expression      %Declare
 
 terminal Letter
   = [A-Za-z_]
@@ -185,6 +186,9 @@ VarName
 
 Label
   = '%' Identifier
+
+Name
+  = id:Identifier   [[!contains(env,id.yield)]]
 
 NontName
   = Identifier
