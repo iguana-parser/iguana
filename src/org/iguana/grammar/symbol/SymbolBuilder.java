@@ -87,7 +87,8 @@ public abstract class SymbolBuilder<T extends Symbol> {
  		conditions.forEach(c -> preConditions.add(c));
 		return this;
 	}
- 	
+
+	// TODO: Get rid of this method, use the addCondition method instead
  	public SymbolBuilder<T> addPostConditions(Iterable<Condition> conditions) {
  		conditions.forEach(c -> postConditions.add(c));
 		return this;

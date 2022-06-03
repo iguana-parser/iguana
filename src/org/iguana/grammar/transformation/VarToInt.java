@@ -93,8 +93,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
         Symbol sym = symbol.accept(this);
 
-        Set<Condition> preConditions = new HashSet<>();
-        Set<Condition> postConditions = new HashSet<>();
+        Set<Condition> preConditions = new LinkedHashSet<>();
+        Set<Condition> postConditions = new LinkedHashSet<>();
 
         for (Condition condition : symbol.getPreConditions())
             preConditions.add(condition.accept(this));

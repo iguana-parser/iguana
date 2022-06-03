@@ -16,7 +16,7 @@ public class IggyParser {
 
     private static final IguanaParser parser = new IguanaParser(iggyGrammar());
 
-    private static Grammar iggyGrammar() {
+    public static Grammar iggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
             return JsonSerializer.deserialize(content, Grammar.class);
@@ -24,7 +24,6 @@ public class IggyParser {
             throw new RuntimeException(e);
         }
     }
-
 
     public static void main(String[] args) throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
