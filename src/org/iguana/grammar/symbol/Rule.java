@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A rule is comprised of a list of priority levels, which are separated by > in the textual grammar notation.
+ * A rule is comprised of a list of priority levels, which are separated by &gt; in the textual grammar notation.
  * In the following example, there are two priority groups, one consisting of the alternative A B | C D,
  * and second of the alternative E F | G H.
  *
  * S : A B
  *   | C D
- *   > E F
+ *   &gt; E F
  *   | G H
  *   ;
  */
