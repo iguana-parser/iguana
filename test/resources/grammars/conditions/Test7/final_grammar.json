@@ -79,6 +79,7 @@
         {
           "kind" : "Terminal",
           "name" : "for",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -134,6 +135,7 @@
         {
           "kind" : "Terminal",
           "name" : "forall",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -293,6 +295,7 @@
         {
           "kind" : "Terminal",
           "name" : "\\u0020",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 32

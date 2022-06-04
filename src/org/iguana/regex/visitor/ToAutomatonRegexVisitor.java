@@ -4,15 +4,26 @@ import org.iguana.regex.*;
 import org.iguana.regex.automaton.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automaton> {
 
     // TODO: consider making this cache global, across the regular expressions for the whole grammar.
     private final Map<RegularExpression, Automaton> cache = new HashMap<>();
 
+    // Since Java 9, recursive calls to computeIfAbsent throw concurrent modification exception.
+    // This memoize function is a way to provide the same concise interface but avoid the exceptions.
+    private Automaton memoize(RegularExpression regex, Function<RegularExpression, Automaton> f) {
+        Automaton automaton = cache.get(regex);
+        if (automaton != null) return automaton;
+        automaton = f.apply(regex);
+        cache.put(regex, automaton);
+        return automaton;
+    }
+
     @Override
     public Automaton visit(Char c) {
-        return cache.computeIfAbsent(c, k -> {
+        return memoize(c, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
             finalState.addRegularExpression(c);
@@ -23,7 +34,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
     @Override
     public Automaton visit(CharRange r) {
-        return cache.computeIfAbsent(r, k -> {
+        return memoize(r, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
             finalState.addRegularExpression(r);
@@ -34,7 +45,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
     @Override
     public Automaton visit(EOF eof) {
-        return cache.computeIfAbsent(eof, k -> {
+        return memoize(eof, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
             finalState.addRegularExpression(eof);
@@ -45,7 +56,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
     @Override
     public Automaton visit(Epsilon e) {
-        return cache.computeIfAbsent(e, k -> {
+        return memoize(e, regex -> {
             State state = new State(StateType.FINAL);
             state.addRegularExpression(e);
             return Automaton.builder(state).build();
@@ -55,7 +66,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
     @Override
     public Automaton visit(Star star) {
         //TODO: add separators to the DFA
-        return cache.computeIfAbsent(star, k -> {
+        return memoize(star, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
             finalState.addRegularExpression(star);
@@ -80,12 +91,12 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
     @Override
     public Automaton visit(Plus p) {
-        return cache.computeIfAbsent(p, k -> Seq.from(p.getSymbol(), Star.from(p.getSymbol())).accept(this));
+        return memoize(p, regex -> Seq.from(p.getSymbol(), Star.from(p.getSymbol())).accept(this));
     }
 
     @Override
     public Automaton visit(Opt opt) {
-        return cache.computeIfAbsent(opt, k -> {
+        return memoize(opt, regex -> {
             Automaton automaton = opt.getSymbol().accept(this).copy();
 
             Set<State> finalStates = automaton.getFinalStates();
@@ -99,7 +110,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
     @Override
     public <E extends RegularExpression> Automaton visit(Alt<E> alt) {
-        return cache.computeIfAbsent(alt, k -> {
+        return memoize(alt, regex -> {
             List<E> symbols = alt.getSymbols();
 
             if (symbols.size() == 1)
@@ -126,7 +137,7 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
     @Override
     public <E extends RegularExpression> Automaton visit(Seq<E> seq) {
-        return cache.computeIfAbsent(seq, k -> {
+        return memoize(seq, regex -> {
             List<Automaton> automatons = new ArrayList<>();
 
             for (E symbol : seq.getSymbols()) {

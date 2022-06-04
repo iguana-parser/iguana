@@ -211,11 +211,6 @@ public class Grammar {
             return this;
         }
 
-        public Builder addTerminals(Map<String, RegularExpression> terminals) {
-            this.terminals.putAll(terminals);
-            return this;
-        }
-
         public Builder addGlobal(String key, Expression value) {
             this.globals.put(key, value);
             return this;

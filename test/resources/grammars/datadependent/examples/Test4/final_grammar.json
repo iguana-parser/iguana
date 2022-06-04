@@ -666,6 +666,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 123
@@ -899,6 +900,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 125
@@ -1321,6 +1323,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 59
@@ -1465,6 +1468,7 @@
           {
             "kind" : "Terminal",
             "name" : ";",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
               "val" : 59
@@ -1731,6 +1735,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 61
@@ -2055,6 +2060,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 43
@@ -2283,6 +2289,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -2447,6 +2454,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -2944,6 +2952,7 @@
             {
               "kind" : "Terminal",
               "name" : ";",
+              "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
                 "val" : 59
@@ -3079,6 +3088,7 @@
             {
               "kind" : "Terminal",
               "name" : ";",
+              "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
                 "val" : 59
@@ -3214,6 +3224,7 @@
             {
               "kind" : "Terminal",
               "name" : ";",
+              "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
                 "val" : 59
@@ -3265,6 +3276,7 @@
             {
               "kind" : "Terminal",
               "name" : ";",
+              "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
                 "val" : 59

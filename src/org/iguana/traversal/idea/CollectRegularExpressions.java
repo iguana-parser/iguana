@@ -115,7 +115,7 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
 
         if (symbol.getNodeType() == TerminalNodeType.Regex) {
             terminals.put("|regex|:" + symbol.getName(), regex);
-        } else if (symbol.getNodeType() == TerminalNodeType.Keyword)
+        } else if (symbol.getNodeType() == TerminalNodeType.Literal)
             terminals.put("|keyword|:" + symbol.getName(), regex);
         else
             terminals.put(symbol.getName(), regex);

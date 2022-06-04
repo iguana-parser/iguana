@@ -43,6 +43,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "+",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 43
@@ -68,6 +69,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "let",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -93,6 +95,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "in",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -173,6 +176,7 @@
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "{",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 123
@@ -193,6 +197,7 @@
                           {
                             "kind" : "Terminal",
                             "name" : ";",
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 59
@@ -208,6 +213,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "}",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 125
@@ -240,6 +246,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "=",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 61

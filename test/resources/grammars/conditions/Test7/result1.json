@@ -19,6 +19,7 @@
           {
             "kind" : "Terminal",
             "name" : "forall",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "regex.Seq",
               "symbols" : [
@@ -70,10 +71,11 @@
       },
       "children" : [
         {
-          "kind" : "TerminalNode",
+          "kind" : "KeywordTerminalNode",
           "terminal" : {
             "kind" : "Terminal",
             "name" : "forall",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "regex.Seq",
               "symbols" : [

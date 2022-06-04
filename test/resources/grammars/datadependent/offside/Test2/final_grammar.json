@@ -150,6 +150,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 120
@@ -220,6 +221,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 61
@@ -419,6 +421,7 @@
         {
           "kind" : "Terminal",
           "name" : ";",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 59
@@ -608,6 +611,7 @@
           {
             "kind" : "Terminal",
             "name" : ";",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
               "val" : 59
@@ -777,6 +781,7 @@
           {
             "kind" : "Terminal",
             "name" : ";",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
               "val" : 59
@@ -1010,6 +1015,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 43
@@ -1080,6 +1086,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97
@@ -1180,6 +1187,7 @@
               }
             }
           ],
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97

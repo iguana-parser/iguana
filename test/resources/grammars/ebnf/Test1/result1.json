@@ -49,6 +49,7 @@
             "s" : {
               "kind" : "Terminal",
               "name" : "a",
+              "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
                 "val" : 97

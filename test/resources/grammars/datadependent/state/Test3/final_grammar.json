@@ -315,6 +315,7 @@
         {
           "kind" : "Terminal",
           "name" : "a",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97
@@ -415,6 +416,7 @@
           "symbol" : {
             "kind" : "Terminal",
             "name" : "a",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
               "val" : 97
@@ -438,6 +440,7 @@
         {
           "kind" : "Terminal",
           "name" : ";",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 59
@@ -492,6 +495,7 @@
           "symbol" : {
             "kind" : "Terminal",
             "name" : "a",
+            "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
               "val" : 97
@@ -515,6 +519,7 @@
         {
           "kind" : "Terminal",
           "name" : ";",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 59
@@ -563,6 +568,7 @@
         {
           "kind" : "Terminal",
           "name" : "a",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97

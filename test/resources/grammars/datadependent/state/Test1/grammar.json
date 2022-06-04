@@ -88,6 +88,7 @@
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "a",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -114,6 +115,7 @@
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "a",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -137,6 +139,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : ";",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 59
@@ -168,6 +171,7 @@
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "b",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 98
@@ -213,6 +217,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : ";",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 59
@@ -241,6 +246,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "d",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 100
@@ -269,6 +275,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "c",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 99

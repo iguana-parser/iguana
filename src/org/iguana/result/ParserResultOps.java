@@ -73,7 +73,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         TerminalNode node;
         if (start == end) {
             node = new EmptyTerminalNode(slot, start);
-        } else if (slot.getTerminal().getNodeType() == TerminalNodeType.Keyword) {
+        } else if (slot.getTerminal().getNodeType() == TerminalNodeType.Literal) {
             node = new KeywordTerminalNode(slot, start);
         } else if (slot.getTerminal() == Terminal.epsilon())
             return new EpsilonTerminalNode(start);

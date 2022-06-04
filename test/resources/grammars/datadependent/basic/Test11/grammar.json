@@ -60,6 +60,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -133,6 +134,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 98

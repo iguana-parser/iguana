@@ -6,6 +6,7 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
@@ -432,7 +433,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "String":
             case "Character":
-                return Terminal.from(getCharsRegex(node.getText()));
+                return new Terminal.Builder(getCharsRegex(node.getText()))
+                    .setNodeType(TerminalNodeType.Literal)
+                    .build();
 
             case "CharClass":
                 return Terminal.from((org.iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this));
