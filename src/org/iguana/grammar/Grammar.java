@@ -2,8 +2,11 @@ package org.iguana.grammar;
 
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.runtime.*;
+import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.ResolveIdentifiers;
 import org.iguana.iggy.IggyParser;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
@@ -14,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Grammar {
 
@@ -67,14 +71,32 @@ public class Grammar {
         if (grammar == null) {
             computeEnds();
 
+            // TODO: make these transformations explicit
+            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressions);
+            Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
+            ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
+
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (Rule rule : rules) {
                 if (rule.getHead().toString().equals("$default$")) continue;
-                grammarBuilder.addRules(getRules(rule));
+                grammarBuilder.addRules(getRules(rule, resolveIdentifiers));
             }
             grammarBuilder.setStartSymbol(startSymbol);
-            grammarBuilder.setLayout(layout);
-            grammarBuilder.setTerminals(InlineReferences.inline(regularExpressions));
+
+            // Resolve the layout symbol
+            Symbol newLayout = null;
+            if (layout != null) {
+                newLayout = layout.accept(resolveIdentifiers);
+                if (newLayout instanceof Terminal) {
+                    newLayout = ((Terminal) newLayout).copy().setNodeType(TerminalNodeType.Layout).build();
+                } else if (newLayout instanceof Nonterminal) {
+                    newLayout = ((Nonterminal) newLayout).copy().setNodeType(NonterminalNodeType.Layout).build();
+                } else {
+                    throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " + newLayout.getClass().getSimpleName());
+                }
+            }
+
+            grammarBuilder.setLayout(newLayout);
             grammarBuilder.setGlobals(globals);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
@@ -233,7 +255,7 @@ public class Grammar {
         }
     }
 
-    private List<RuntimeRule> getRules(Rule highLevelRule) {
+    private List<RuntimeRule> getRules(Rule highLevelRule, ResolveIdentifiers resolveIdentifiers) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -253,7 +275,7 @@ public class Grammar {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, resolveIdentifiers);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                         rules.add(rule);
@@ -264,7 +286,7 @@ public class Grammar {
                     List<Symbol> symbols = new ArrayList<>();
                     if (alternative.first() == null || alternative.first().isEmpty()) { // Empty alternative
                         String label = alternative.first() == null ? null : alternative.first().label;
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label);
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, resolveIdentifiers);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -272,7 +294,7 @@ public class Grammar {
                         symbols.add(alternative.first().first());
                         if (alternative.first().rest() != null)
                             addAll(symbols, alternative.first().rest());
-                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label);
+                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label, resolveIdentifiers);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -287,7 +309,7 @@ public class Grammar {
         return rules;
     }
 
-    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label) {
+    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label, ResolveIdentifiers resolveIdentifiers) {
         boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs, layout));
         boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs, layout));
 
@@ -334,8 +356,10 @@ public class Grammar {
             associativity = Associativity.UNDEFINED;
         }
 
+        List<Symbol> newSymbols = body.stream().map(symbol -> symbol.accept(resolveIdentifiers)).collect(Collectors.toList());
+
         return RuntimeRule.withHead(head)
-            .addSymbols(body)
+            .addSymbols(newSymbols)
             .setRecursion(recursion)
             .setiRecursion(irecursion)
             .setLeftEnd(leftEnd)
