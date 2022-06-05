@@ -89,6 +89,20 @@
       ]
     }
   ],
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 97
+    },
+    {
+      "kind" : "Char",
+      "val" : 98
+    },
+    {
+      "kind" : "Char",
+      "val" : 43
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(A)",

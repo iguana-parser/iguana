@@ -265,7 +265,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Whitespaces" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -366,6 +366,58 @@
       ]
     }
   },
+  "literals" : [
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
+    },
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 116
+        }
+      ]
+    },
+    {
+      "kind" : "Char",
+      "val" : 43
+    },
+    {
+      "kind" : "Char",
+      "val" : 123
+    },
+    {
+      "kind" : "Char",
+      "val" : 59
+    },
+    {
+      "kind" : "Char",
+      "val" : 125
+    },
+    {
+      "kind" : "Char",
+      "val" : 61
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(Start)",

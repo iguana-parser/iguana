@@ -111,7 +111,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Chars" : {
       "kind" : "regex.Plus",
       "regex" : {

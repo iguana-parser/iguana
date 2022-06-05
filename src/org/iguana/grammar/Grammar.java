@@ -18,7 +18,8 @@ import java.util.*;
 public class Grammar {
 
     private final List<Rule> rules;
-    private final Map<String, RegularExpression> terminals;
+    private final Map<String, RegularExpression> regularExpressions;
+    private final Set<RegularExpression> literals;
     private final Start startSymbol;
     private final Symbol layout;
     private final Map<String, Expression> globals;
@@ -31,7 +32,8 @@ public class Grammar {
 
     Grammar(Builder builder) {
         this.rules = builder.rules;
-        this.terminals = builder.terminals;
+        this.regularExpressions = builder.regularExpressions;
+        this.literals = builder.literals;
         this.startSymbol = builder.startSymbol;
         this.layout = builder.layout;
         this.globals = builder.globals;
@@ -41,8 +43,12 @@ public class Grammar {
         return rules;
     }
 
-    public Map<String, RegularExpression> getTerminals() {
-        return terminals;
+    public Map<String, RegularExpression> getRegularExpressions() {
+        return regularExpressions;
+    }
+
+    public Set<RegularExpression> getLiterals() {
+        return literals;
     }
 
     public Start getStartSymbol() {
@@ -68,7 +74,7 @@ public class Grammar {
             }
             grammarBuilder.setStartSymbol(startSymbol);
             grammarBuilder.setLayout(layout);
-            grammarBuilder.setTerminals(InlineReferences.inline(terminals));
+            grammarBuilder.setTerminals(InlineReferences.inline(regularExpressions));
             grammarBuilder.setGlobals(globals);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
@@ -186,7 +192,8 @@ public class Grammar {
 
     public static class Builder {
         private final List<Rule> rules = new ArrayList<>();
-        private final Map<String, RegularExpression> terminals = new HashMap<>();
+        private final Map<String, RegularExpression> regularExpressions = new HashMap<>();
+        public final Set<RegularExpression> literals = new HashSet<>();
         private Start startSymbol;
         private Symbol layout;
         private final Map<String, Expression> globals = new HashMap<>();
@@ -206,8 +213,13 @@ public class Grammar {
             return this;
         }
 
-        public Builder addTerminal(String name, RegularExpression regularExpression) {
-            terminals.put(name, regularExpression);
+        public Builder addRegularExpression(String name, RegularExpression regularExpression) {
+            regularExpressions.put(name, regularExpression);
+            return this;
+        }
+
+        public Builder addLiteral(RegularExpression regularExpression) {
+            literals.add(regularExpression);
             return this;
         }
 

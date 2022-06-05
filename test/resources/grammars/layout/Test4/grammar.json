@@ -135,7 +135,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "L" : {
       "kind" : "regex.Opt",
       "regex" : {
@@ -144,6 +144,24 @@
       }
     }
   },
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 97
+    },
+    {
+      "kind" : "Char",
+      "val" : 98
+    },
+    {
+      "kind" : "Char",
+      "val" : 99
+    },
+    {
+      "kind" : "Char",
+      "val" : 44
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

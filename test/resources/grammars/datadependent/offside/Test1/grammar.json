@@ -145,7 +145,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Layout" : {
       "kind" : "Reference",
       "name" : "WhiteSpace"
@@ -179,6 +179,28 @@
       }
     }
   },
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 97
+    },
+    {
+      "kind" : "Char",
+      "val" : 120
+    },
+    {
+      "kind" : "Char",
+      "val" : 59
+    },
+    {
+      "kind" : "Char",
+      "val" : 43
+    },
+    {
+      "kind" : "Char",
+      "val" : 61
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

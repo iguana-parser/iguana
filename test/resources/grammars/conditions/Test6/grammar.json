@@ -186,7 +186,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Char" : {
       "kind" : "regex.Alt",
       "symbols" : [
@@ -198,6 +198,58 @@
       ]
     }
   },
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 32
+    },
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 102
+        },
+        {
+          "kind" : "Char",
+          "val" : 111
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        }
+      ]
+    },
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 102
+        },
+        {
+          "kind" : "Char",
+          "val" : 111
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        },
+        {
+          "kind" : "Char",
+          "val" : 97
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        }
+      ]
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

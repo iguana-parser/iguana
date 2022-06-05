@@ -22,7 +22,9 @@ import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
-    private final Map<String, RegularExpression> terminalsMap = new HashMap<>();
+    private final Map<String, RegularExpression> regularExpressionMap = new HashMap<>();
+    private final Set<RegularExpression> literals = new HashSet<>();
+
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
     private final Map<String, Expression> globals = new HashMap<>();
@@ -104,11 +106,14 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 builder.addRule(rule);
             }
         }
-        for (Map.Entry<String, RegularExpression> entry : terminalsMap.entrySet()) {
-            builder.addTerminal(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, RegularExpression> entry : regularExpressionMap.entrySet()) {
+            builder.addRegularExpression(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<String, Expression> entry : globals.entrySet()) {
             builder.addGlobal(entry.getKey(), entry.getValue());
+        }
+        for (RegularExpression regularExpression : literals) {
+            builder.addLiteral(regularExpression);
         }
         builder.setStartSymbol(Start.from(start));
         builder.setLayout(layout);
@@ -145,7 +150,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "Lexical":
                 List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
                 Identifier identifier = getIdentifier(node.getChildWithName("Name"));
-                terminalsMap.put(identifier.getName(), getRegex(alts));
+                regularExpressionMap.put(identifier.getName(), getRegex(alts));
 
                 if (!node.childAt(0).children().isEmpty()) {
                     layout = identifier;
@@ -433,12 +438,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             case "String":
             case "Character":
-                return new Terminal.Builder(getCharsRegex(node.getText()))
+                RegularExpression regex = getCharsRegex(node.getText());
+                literals.add(regex);
+                return new Terminal.Builder(regex)
                     .setNodeType(TerminalNodeType.Literal)
                     .build();
-
-            case "CharClass":
-                return Terminal.from((org.iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this));
 
             case "StarSep": {
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);

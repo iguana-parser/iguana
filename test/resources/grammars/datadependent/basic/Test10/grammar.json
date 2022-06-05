@@ -248,7 +248,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Layout" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -262,6 +262,16 @@
       }
     }
   },
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 97
+    },
+    {
+      "kind" : "Char",
+      "val" : 98
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(X)",

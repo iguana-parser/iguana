@@ -133,6 +133,24 @@
       ]
     }
   ],
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 97
+    },
+    {
+      "kind" : "Char",
+      "val" : 59
+    },
+    {
+      "kind" : "Char",
+      "val" : 44
+    },
+    {
+      "kind" : "Char",
+      "val" : 45
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

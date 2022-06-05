@@ -226,6 +226,79 @@
       ]
     }
   ],
+  "literals" : [
+    {
+      "kind" : "Char",
+      "val" : 97
+    },
+    {
+      "kind" : "Char",
+      "val" : 40
+    },
+    {
+      "kind" : "Char",
+      "val" : 41
+    },
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 116
+        },
+        {
+          "kind" : "Char",
+          "val" : 104
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
+    },
+    {
+      "kind" : "Char",
+      "val" : 43
+    },
+    {
+      "kind" : "Char",
+      "val" : 93
+    },
+    {
+      "kind" : "Char",
+      "val" : 46
+    },
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 46
+        },
+        {
+          "kind" : "Char",
+          "val" : 91
+        }
+      ]
+    },
+    {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 102
+        }
+      ]
+    }
+  ],
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(E)",
