@@ -43,9 +43,9 @@ public class State {
 	/**
 	 * The set of regular expressions whose final state is this state.
 	 */
-	private Set<RegularExpression> regularExpressions;
+	private final Set<RegularExpression> regularExpressions;
 	
-	private StateType stateType = StateType.NORMAL;
+	private StateType stateType;
 	
 	private int id;
 	

@@ -5,6 +5,7 @@ import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.transformation.CollectUsedRegularExpressionIdentifiers;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
 import org.iguana.iggy.IggyParser;
@@ -96,8 +97,18 @@ public class Grammar {
                 }
             }
 
+            CollectUsedRegularExpressionIdentifiers collectUsedRegularExpressionIdentifiers = new CollectUsedRegularExpressionIdentifiers(this);
+            Set<String> collect = collectUsedRegularExpressionIdentifiers.collect();
+            // Layout is not resolved at this point, so should be an identifier.
+            if (layout != null && regularExpressions.containsKey(layout.getName())) {
+                collect.add(layout.getName());
+            }
+            regularExpressions.keySet().retainAll(collect);
+
             grammarBuilder.setLayout(newLayout);
             grammarBuilder.setGlobals(globals);
+            grammarBuilder.setRegularExpressions(regularExpressions);
+            grammarBuilder.setLiterals(literals);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
             Map<String, Set<String>> ebnfRights = new HashMap<>();

@@ -53,11 +53,11 @@ public class AltTest {
 		
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(5, automaton.getCountStates());
-		assertEquals(set(a, b, regex), automaton.getRegularExpressions());
+		assertEquals(set(regex), automaton.getRegularExpressions());
 
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(3, automaton.getCountStates());
-		assertEquals(set(a, b, regex), automaton.getRegularExpressions());
+		assertEquals(set(regex), automaton.getRegularExpressions());
 		
 		Matcher dfa = new DFAMatcher(automaton);
 		assertEquals(1, dfa.match(Input.fromString("a"), 0));

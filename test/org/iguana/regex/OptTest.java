@@ -49,11 +49,11 @@ public class OptTest {
 		RegularExpression regex = Opt.from(Char.from('a'));
 		Automaton automaton = regex.getAutomaton();
 		assertEquals(2, automaton.getCountStates());
-		assertEquals(set(regex, a), automaton.getRegularExpressions());
+		assertEquals(set(regex), automaton.getRegularExpressions());
 
 		automaton = AutomatonOperations.makeDeterministic(automaton);
 		assertEquals(2, automaton.getCountStates());
-		assertEquals(set(a, regex), automaton.getRegularExpressions());
+		assertEquals(set(regex), automaton.getRegularExpressions());
 
 		Matcher matcher = new DFAMatcher(automaton);
 		assertTrue(matcher.match(Input.fromString("a")));

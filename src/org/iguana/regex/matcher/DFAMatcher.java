@@ -31,10 +31,14 @@ import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.Transition;
 import org.iguana.utils.collections.rangemap.IntRangeMap;
 import org.iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.iguana.utils.input.Input;
-import org.iguana.regex.automaton.Transition;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class DFAMatcher implements Matcher {
 	
@@ -46,12 +50,17 @@ public class DFAMatcher implements Matcher {
 
 	protected final int start;
 
+	protected final Map<Integer, State> finalStatesMap;
+
+	private int finalStateId;
+
 	public DFAMatcher(RegularExpression regex) {
 		this(regex.getAutomaton());
 	}
 
 	public DFAMatcher(Automaton automaton) {
 		automaton = AutomatonOperations.makeDeterministic(automaton);
+		finalStatesMap = new HashMap<>();
 
 		finalStates = new boolean[automaton.getStates().length];
 
@@ -67,6 +76,9 @@ public class DFAMatcher implements Matcher {
 			table[i] = builder.buildIntRangeMap();
 
 			finalStates[state.getId()] = state.isFinalState();
+			if (state.isFinalState()) {
+				finalStatesMap.put(state.getId(), state);
+			}
 		}
 
 		this.start = automaton.getStartState().getId();
@@ -74,13 +86,15 @@ public class DFAMatcher implements Matcher {
 
 	@Override
 	public int match(Input input, int inputIndex) {
-
 		int length = 0;
 		int maximumMatched = -1;
 		int state = start;
+		finalStateId = -1;
 
-		if (finalStates[state])
+		if (finalStates[state]) {
 			maximumMatched = 0;
+			finalStateId = state;
+		}
 
 		for (int i = inputIndex; i < input.length(); i++) {
 			state = table[state].get(input.charAt(i));
@@ -90,11 +104,20 @@ public class DFAMatcher implements Matcher {
 
 			length++;
 
-			if (finalStates[state])
+			if (finalStates[state]) {
 				maximumMatched = length;
+				finalStateId = state;
+			}
 		}
 
 		return maximumMatched;
+	}
+
+	public Set<RegularExpression> getMatchedRegularExpression() {
+		if (finalStateId == -1) {
+			throw new IllegalStateException("This method should be called after a successful match.");
+		}
+		return finalStatesMap.get(finalStateId).getRegularExpressions();
 	}
 
 }

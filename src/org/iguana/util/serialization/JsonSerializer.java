@@ -245,6 +245,10 @@ public class JsonSerializer {
     abstract static class RuntimeGrammarMixIn {
         @JsonIgnore
         Map<Nonterminal, List<RuntimeRule>> definitions;
+        @JsonIgnore
+        Map<String, RegularExpression> terminals;
+        @JsonIgnore
+        Set<RegularExpression> literals;
     }
 
     @JsonDeserialize(builder = RuntimeRule.Builder.class)

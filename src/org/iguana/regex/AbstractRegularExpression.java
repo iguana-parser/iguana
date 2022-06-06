@@ -31,6 +31,7 @@ public abstract class AbstractRegularExpression implements RegularExpression {
     public Automaton getAutomaton() {
         if (automaton == null) {
             automaton = accept(new ToAutomatonRegexVisitor());
+            automaton.getFinalStates().forEach(state -> state.addRegularExpression(this));
         }
         return automaton;
     }

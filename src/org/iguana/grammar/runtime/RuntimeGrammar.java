@@ -28,12 +28,10 @@
 package org.iguana.grammar.runtime;
 
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
-import org.iguana.grammar.symbol.Nonterminal;
-import org.iguana.grammar.symbol.Start;
-import org.iguana.grammar.symbol.Symbol;
-import org.iguana.regex.RegularExpression;
+import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
 
 import java.io.*;
@@ -59,6 +57,9 @@ public class RuntimeGrammar {
 	
 	private final List<RuntimeRule> rules;
 
+	private final Map<String, RegularExpression> regularExpressions;
+	private final Set<RegularExpression> literals;
+
 	private final Map<String, Set<String>> ebnfLefts;
 	private final Map<String, Set<String>> ebnfRights;
 
@@ -77,6 +78,8 @@ public class RuntimeGrammar {
 		this.rules = builder.rules;
 		this.ebnfLefts = builder.ebnfLefts;
 		this.ebnfRights = builder.ebnfRights;
+		this.regularExpressions = builder.regularExpressions;
+		this.literals = builder.literals;
 		this.globals = builder.globals;
 	}
 	
@@ -118,6 +121,14 @@ public class RuntimeGrammar {
 	
 	public Set<RegularExpression> getPredictionSet(RuntimeRule rule, int index) {
 		return null;
+	}
+
+	public Map<String, RegularExpression> getRegularExpressions() {
+		return regularExpressions;
+	}
+
+	public Set<RegularExpression> getLiterals() {
+		return literals;
 	}
 
 	private static Set<RuntimeException> validate(List<RuntimeRule> rules, Map<Nonterminal, List<RuntimeRule>> definitions) {
@@ -194,9 +205,11 @@ public class RuntimeGrammar {
 	public static class Builder {
 		
 		private final Map<Nonterminal, List<RuntimeRule>> definitions = new HashMap<>();
-		private List<RuntimeRule> rules = new ArrayList<>();
+		private final List<RuntimeRule> rules = new ArrayList<>();
 		private Symbol layout;
 		private Start startSymbol;
+		private Map<String, RegularExpression> regularExpressions;
+		private Set<RegularExpression> literals;
 
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
@@ -211,6 +224,7 @@ public class RuntimeGrammar {
             ebnfLefts.putAll(grammar.ebnfLefts);
             ebnfRights.putAll(grammar.ebnfRights);
             startSymbol = grammar.startSymbol;
+			regularExpressions = grammar.getRegularExpressions();
 			globals = grammar.globals;
         }
 		
@@ -287,6 +301,16 @@ public class RuntimeGrammar {
 
 		public Builder setEbnfRights(Map<String, Set<String>> ebnfRights) {
 			this.ebnfRights = ebnfRights;
+			return this;
+		}
+
+		public Builder setRegularExpressions(Map<String, RegularExpression> regularExpressions) {
+			this.regularExpressions = regularExpressions;
+			return this;
+		}
+
+		public Builder setLiterals(Set<RegularExpression> literals) {
+			this.literals = literals;
 			return this;
 		}
 

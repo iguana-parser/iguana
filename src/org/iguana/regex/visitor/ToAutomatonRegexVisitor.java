@@ -26,7 +26,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
         return memoize(c, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
-            finalState.addRegularExpression(c);
             startState.addTransition(new Transition(c.getValue(), finalState));
             return Automaton.builder(startState).build();
         });
@@ -37,7 +36,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
         return memoize(r, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
-            finalState.addRegularExpression(r);
             startState.addTransition(new Transition(r.getStart(), r.getEnd(), finalState));
             return Automaton.builder(startState).build();
         });
@@ -48,7 +46,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
         return memoize(eof, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
-            finalState.addRegularExpression(eof);
             startState.addTransition(new Transition(EOF.VALUE, finalState));
             return Automaton.builder(startState).build();
         });
@@ -58,7 +55,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
     public Automaton visit(Epsilon e) {
         return memoize(e, regex -> {
             State state = new State(StateType.FINAL);
-            state.addRegularExpression(e);
             return Automaton.builder(state).build();
         });
     }
@@ -69,7 +65,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
         return memoize(star, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
-            finalState.addRegularExpression(star);
 
             Automaton starAutomaton = star.getSymbol().accept(this).copy();
 
@@ -102,7 +97,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
             Set<State> finalStates = automaton.getFinalStates();
             for (State finalState : finalStates) {
                 automaton.getStartState().addEpsilonTransition(finalState);
-                finalState.addRegularExpression(opt);
             }
             return automaton;
         });
@@ -126,9 +120,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
 
             for (Automaton a : automatons) {
                 startState.addEpsilonTransition(a.getStartState());
-                for (State finalState : a.getFinalStates()) {
-                    finalState.addRegularExpression(alt);
-                }
             }
 
             return new AutomatonBuilder(startState).build();
@@ -159,10 +150,6 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
                 }
 
                 current = next;
-            }
-
-            for (State finalState : current.getFinalStates()) {
-                finalState.addRegularExpression(seq);
             }
 
             return Automaton.builder(startState).build();
