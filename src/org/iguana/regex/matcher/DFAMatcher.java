@@ -27,6 +27,7 @@
 
 package org.iguana.regex.matcher;
 
+import org.iguana.regex.EOF;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
@@ -113,11 +114,14 @@ public class DFAMatcher implements Matcher {
 		return maximumMatched;
 	}
 
-	public Set<RegularExpression> getMatchedRegularExpression() {
+	public RegularExpression getMatchedRegularExpression() {
 		if (finalStateId == -1) {
 			throw new IllegalStateException("This method should be called after a successful match.");
 		}
-		return finalStatesMap.get(finalStateId).getRegularExpressions();
+		if (finalStatesMap.get(finalStateId).getRegularExpressions().isEmpty()) {
+			return EOF.getInstance();
+		}
+		return finalStatesMap.get(finalStateId).getRegularExpressions().iterator().next();
 	}
 
 }

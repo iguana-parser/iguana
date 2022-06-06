@@ -38,8 +38,6 @@ import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class EOF extends AbstractRegularExpression {
 	
-	public static final int TOKEN_ID = 1;
-	
 	public static int VALUE = -1;
 	
 	private static final Set<CharRange> firstSet = immutableSet(CharRange.in(VALUE, VALUE));

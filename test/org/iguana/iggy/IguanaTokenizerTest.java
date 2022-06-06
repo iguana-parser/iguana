@@ -21,7 +21,7 @@ public class IguanaTokenizerTest {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(grammar.getRegularExpressions(), grammar.getLiterals(), Input.fromFile(new File(path)), 0);
         while (iguanaTokenizer.hasNextToken()) {
-            System.out.print(iguanaTokenizer.nextToken());
+            System.out.print(iguanaTokenizer.nextToken().getLexeme());
         }
     }
 }

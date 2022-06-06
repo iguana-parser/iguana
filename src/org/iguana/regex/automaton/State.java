@@ -57,7 +57,7 @@ public class State {
 		this.transitions = new HashSet<>();
 		this.reachableStates = new HashMap<>();
 		this.stateType = stateType;
-		this.regularExpressions = new HashSet<>();
+		this.regularExpressions = new LinkedHashSet<>();
 		this.epsilonSates = new HashSet<>();
 	}
 	

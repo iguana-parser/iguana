@@ -6,10 +6,7 @@ import org.iguana.regex.automaton.State;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.utils.input.Input;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class IguanaTokenizer {
 
@@ -19,12 +16,19 @@ public class IguanaTokenizer {
     private int inputIndex;
     private String nextToken;
 
+    private final Map<RegularExpression, String> regularExpressionsToName = new HashMap<>();
+
     public IguanaTokenizer(Map<String, RegularExpression> regularExpressionsMap,
                            Set<RegularExpression> literals,
                            Input input,
                            int inputIndex) {
         this.input = input;
         this.inputIndex = inputIndex;
+
+        // TODO: encode this in the DFAMatcher
+        for (Map.Entry<String, RegularExpression> entry : regularExpressionsMap.entrySet()) {
+            regularExpressionsToName.put(entry.getValue(), entry.getKey());
+        }
 
         List<RegularExpression> regularExpressions = new ArrayList<>();
         regularExpressions.addAll(regularExpressionsMap.values());
@@ -60,9 +64,24 @@ public class IguanaTokenizer {
         }
     }
 
-    public String nextToken() {
-        String value = nextToken;
-        nextToken = null;
-        return value;
+    public Token nextToken() {
+        if (nextToken != null) {
+            String name;
+            RegularExpression regularExpression;
+            if (inputIndex == input.length()) {
+                regularExpression = EOF.getInstance();
+                name = EOF.getInstance().toString();
+            } else {
+                regularExpression = matcher.getMatchedRegularExpression();
+                name = regularExpressionsToName.get(regularExpression);
+                if (name == null) { // For literals
+                    name = nextToken;
+                }
+            }
+            Token token = new Token(nextToken, regularExpression, name);
+            nextToken = null;
+            return token;
+        }
+        return null;
     }
 }
