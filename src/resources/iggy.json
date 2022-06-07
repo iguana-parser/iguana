@@ -3264,99 +3264,12 @@
       "kind" : "regex.Alt",
       "symbols" : [
         {
-          "kind" : "regex.Seq",
-          "symbols" : [
-            {
-              "kind" : "regex.Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 42
-                }
-              ]
-            },
-            {
-              "kind" : "regex.Star",
-              "regex" : {
-                "kind" : "Reference",
-                "name" : "CommentChar"
-              }
-            },
-            {
-              "kind" : "regex.Plus",
-              "regex" : {
-                "kind" : "regex.Alt",
-                "symbols" : [
-                  {
-                    "kind" : "Char",
-                    "val" : 42
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "Char",
-              "val" : 47
-            }
-          ]
+          "kind" : "Reference",
+          "name" : "SingleLineComment"
         },
         {
-          "kind" : "regex.Seq",
-          "symbols" : [
-            {
-              "kind" : "regex.Seq",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 47
-                }
-              ]
-            },
-            {
-              "kind" : "regex.Star",
-              "regex" : {
-                "kind" : "regex.Alt",
-                "symbols" : [
-                  {
-                    "kind" : "CharRange",
-                    "start" : 1,
-                    "end" : 9
-                  },
-                  {
-                    "kind" : "CharRange",
-                    "start" : 11,
-                    "end" : 12
-                  },
-                  {
-                    "kind" : "CharRange",
-                    "start" : 14,
-                    "end" : 1114111
-                  }
-                ]
-              }
-            },
-            {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 13
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 10
-                }
-              ]
-            }
-          ]
+          "kind" : "Reference",
+          "name" : "MultiLineComment"
         }
       ]
     },
@@ -4075,11 +3988,52 @@
       "symbols" : [
         {
           "kind" : "Reference",
-          "name" : "WhiteSpaces"
+          "name" : "WhiteSpace"
         },
         {
           "kind" : "Reference",
           "name" : "Comment"
+        }
+      ]
+    },
+    "MultiLineComment" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 47
+            },
+            {
+              "kind" : "Char",
+              "val" : 42
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "Reference",
+            "name" : "CommentChar"
+          }
+        },
+        {
+          "kind" : "regex.Plus",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 42
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Char",
+          "val" : 47
         }
       ]
     },
@@ -4107,6 +4061,60 @@
         }
       ]
     },
+    "SingleLineComment" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 47
+            },
+            {
+              "kind" : "Char",
+              "val" : 47
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "CharRange",
+                "start" : 1,
+                "end" : 9
+              },
+              {
+                "kind" : "CharRange",
+                "start" : 11,
+                "end" : 12
+              },
+              {
+                "kind" : "CharRange",
+                "start" : 14,
+                "end" : 1114111
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 13
+            },
+            {
+              "kind" : "Char",
+              "val" : 10
+            }
+          ]
+        }
+      ]
+    },
     "String" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -4126,6 +4134,34 @@
           "val" : 34
         }
       ]
+    },
+    "WhiteSpace" : {
+      "kind" : "regex.Plus",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 32
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 10
+          }
+        ]
+      }
     },
     "LetterOrDigits" : {
       "kind" : "regex.Seq",
@@ -4231,34 +4267,6 @@
           ]
         }
       ]
-    },
-    "WhiteSpaces" : {
-      "kind" : "regex.Plus",
-      "regex" : {
-        "kind" : "regex.Alt",
-        "symbols" : [
-          {
-            "kind" : "Char",
-            "val" : 32
-          },
-          {
-            "kind" : "Char",
-            "val" : 9
-          },
-          {
-            "kind" : "Char",
-            "val" : 12
-          },
-          {
-            "kind" : "Char",
-            "val" : 13
-          },
-          {
-            "kind" : "Char",
-            "val" : 10
-          }
-        ]
-      }
     },
     "Letter" : {
       "kind" : "regex.Alt",
