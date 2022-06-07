@@ -140,12 +140,12 @@
       ]
     }
   ],
-  "literals" : [
-    {
+  "literals" : {
+    "'*'" : {
       "kind" : "Char",
-      "val" : 97
+      "val" : 42
     },
-    {
+    "'->'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -158,11 +158,11 @@
         }
       ]
     },
-    {
+    "'a'" : {
       "kind" : "Char",
-      "val" : 42
+      "val" : 97
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

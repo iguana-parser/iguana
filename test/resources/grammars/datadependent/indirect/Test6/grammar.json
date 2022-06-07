@@ -202,8 +202,24 @@
       ]
     }
   ],
-  "literals" : [
-    {
+  "literals" : {
+    "'/'" : {
+      "kind" : "Char",
+      "val" : 47
+    },
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'-'" : {
+      "kind" : "Char",
+      "val" : 45
+    },
+    "'*'" : {
+      "kind" : "Char",
+      "val" : 42
+    },
+    "'--'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -216,31 +232,15 @@
         }
       ]
     },
-    {
-      "kind" : "Char",
-      "val" : 97
-    },
-    {
+    "'&'" : {
       "kind" : "Char",
       "val" : 38
     },
-    {
+    "'a'" : {
       "kind" : "Char",
-      "val" : 42
-    },
-    {
-      "kind" : "Char",
-      "val" : 43
-    },
-    {
-      "kind" : "Char",
-      "val" : 45
-    },
-    {
-      "kind" : "Char",
-      "val" : 47
+      "val" : 97
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

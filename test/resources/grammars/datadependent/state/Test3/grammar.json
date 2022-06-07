@@ -370,16 +370,16 @@
       ]
     }
   ],
-  "literals" : [
-    {
+  "literals" : {
+    "'a'" : {
       "kind" : "Char",
       "val" : 97
     },
-    {
+    "';'" : {
       "kind" : "Char",
       "val" : 59
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

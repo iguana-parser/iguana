@@ -266,62 +266,6 @@
     }
   ],
   "regularExpressions" : {
-    "Whitespaces" : {
-      "kind" : "regex.Star",
-      "regex" : {
-        "kind" : "regex.Alt",
-        "symbols" : [
-          {
-            "kind" : "Char",
-            "val" : 10
-          },
-          {
-            "kind" : "Char",
-            "val" : 13
-          },
-          {
-            "kind" : "Char",
-            "val" : 9
-          },
-          {
-            "kind" : "Char",
-            "val" : 12
-          },
-          {
-            "kind" : "Char",
-            "val" : 32
-          }
-        ]
-      }
-    },
-    "Num" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "regex.Alt",
-          "symbols" : [
-            {
-              "kind" : "CharRange",
-              "start" : 49,
-              "end" : 57
-            }
-          ]
-        },
-        {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "CharRange",
-                "start" : 48,
-                "end" : 57
-              }
-            ]
-          }
-        }
-      ]
-    },
     "Id" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -364,23 +308,70 @@
           }
         }
       ]
-    }
-  },
-  "literals" : [
-    {
+    },
+    "Num" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
-          "kind" : "Char",
-          "val" : 105
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 49,
+              "end" : 57
+            }
+          ]
         },
         {
-          "kind" : "Char",
-          "val" : 110
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "CharRange",
+                "start" : 48,
+                "end" : 57
+              }
+            ]
+          }
         }
       ]
     },
-    {
+    "Whitespaces" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 10
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    }
+  },
+  "literals" : {
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'let'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -397,27 +388,36 @@
         }
       ]
     },
-    {
-      "kind" : "Char",
-      "val" : 43
+    "'in'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
     },
-    {
+    "'{'" : {
       "kind" : "Char",
       "val" : 123
     },
-    {
+    "';'" : {
       "kind" : "Char",
       "val" : 59
     },
-    {
+    "'}'" : {
       "kind" : "Char",
       "val" : 125
     },
-    {
+    "'='" : {
       "kind" : "Char",
       "val" : 61
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(Start)",

@@ -226,20 +226,50 @@
       ]
     }
   ],
-  "literals" : [
-    {
+  "literals" : {
+    "'.'" : {
+      "kind" : "Char",
+      "val" : 46
+    },
+    "'a'" : {
       "kind" : "Char",
       "val" : 97
     },
-    {
-      "kind" : "Char",
-      "val" : 40
+    "'.['" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 46
+        },
+        {
+          "kind" : "Char",
+          "val" : 91
+        }
+      ]
     },
-    {
+    "']'" : {
       "kind" : "Char",
-      "val" : 41
+      "val" : 93
     },
-    {
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'if'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 102
+        }
+      ]
+    },
+    "'then'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -260,45 +290,15 @@
         }
       ]
     },
-    {
+    "'('" : {
       "kind" : "Char",
-      "val" : 43
+      "val" : 40
     },
-    {
+    "')'" : {
       "kind" : "Char",
-      "val" : 93
-    },
-    {
-      "kind" : "Char",
-      "val" : 46
-    },
-    {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 46
-        },
-        {
-          "kind" : "Char",
-          "val" : 91
-        }
-      ]
-    },
-    {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 105
-        },
-        {
-          "kind" : "Char",
-          "val" : 102
-        }
-      ]
+      "val" : 41
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(E)",

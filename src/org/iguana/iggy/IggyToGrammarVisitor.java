@@ -22,8 +22,8 @@ import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
 public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
-    private final Map<String, RegularExpression> regularExpressionMap = new HashMap<>();
-    private final Set<RegularExpression> literals = new HashSet<>();
+    private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
+    private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
@@ -112,8 +112,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         for (Map.Entry<String, Expression> entry : globals.entrySet()) {
             builder.addGlobal(entry.getKey(), entry.getValue());
         }
-        for (RegularExpression regularExpression : literals) {
-            builder.addLiteral(regularExpression);
+        for (Map.Entry<String, RegularExpression> entry : literals.entrySet()) {
+            builder.addLiteral(entry.getKey(), entry.getValue());
         }
         builder.setStartSymbol(Start.from(start));
         builder.setLayout(layout);
@@ -439,7 +439,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             case "String":
             case "Character":
                 RegularExpression regex = getCharsRegex(node.getText());
-                literals.add(regex);
+                literals.put(node.getText(), regex);
                 return new Terminal.Builder(regex)
                     .setNodeType(TerminalNodeType.Literal)
                     .build();

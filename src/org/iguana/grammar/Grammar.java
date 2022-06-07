@@ -5,7 +5,6 @@ import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
-import org.iguana.grammar.transformation.CollectUsedRegularExpressionIdentifiers;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
 import org.iguana.iggy.IggyParser;
@@ -24,7 +23,7 @@ public class Grammar {
 
     private final List<Rule> rules;
     private final Map<String, RegularExpression> regularExpressions;
-    private final Set<RegularExpression> literals;
+    private final Map<String, RegularExpression> literals;
     private final Start startSymbol;
     private final Symbol layout;
     private final Map<String, Expression> globals;
@@ -52,7 +51,7 @@ public class Grammar {
         return regularExpressions;
     }
 
-    public Set<RegularExpression> getLiterals() {
+    public Map<String, RegularExpression> getLiterals() {
         return literals;
     }
 
@@ -96,14 +95,6 @@ public class Grammar {
                     throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " + newLayout.getClass().getSimpleName());
                 }
             }
-
-            CollectUsedRegularExpressionIdentifiers collectUsedRegularExpressionIdentifiers = new CollectUsedRegularExpressionIdentifiers(this);
-            Set<String> collect = collectUsedRegularExpressionIdentifiers.collect();
-            // Layout is not resolved at this point, so should be an identifier.
-            if (layout != null && regularExpressions.containsKey(layout.getName())) {
-                collect.add(layout.getName());
-            }
-            regularExpressions.keySet().retainAll(collect);
 
             grammarBuilder.setLayout(newLayout);
             grammarBuilder.setGlobals(globals);
@@ -225,8 +216,8 @@ public class Grammar {
 
     public static class Builder {
         private final List<Rule> rules = new ArrayList<>();
-        private final Map<String, RegularExpression> regularExpressions = new HashMap<>();
-        public final Set<RegularExpression> literals = new HashSet<>();
+        private final Map<String, RegularExpression> regularExpressions = new LinkedHashMap<>();
+        public final Map<String, RegularExpression> literals = new LinkedHashMap<>();
         private Start startSymbol;
         private Symbol layout;
         private final Map<String, Expression> globals = new HashMap<>();
@@ -251,8 +242,8 @@ public class Grammar {
             return this;
         }
 
-        public Builder addLiteral(RegularExpression regularExpression) {
-            literals.add(regularExpression);
+        public Builder addLiteral(String name, RegularExpression regularExpression) {
+            literals.put(name, regularExpression);
             return this;
         }
 

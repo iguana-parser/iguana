@@ -27,6 +27,7 @@
 
 package org.iguana.utils.collections;
 
+import org.iguana.regex.RegularExpression;
 import org.iguana.utils.collections.primitive.IntIterable;
 import org.iguana.utils.collections.primitive.IntIterator;
 import org.iguana.utils.collections.tuple.Tuple;
@@ -224,6 +225,14 @@ public class CollectionsUtil {
 		list.addAll(list1);
 		list.addAll(list2);
 		return list;
+	}
+
+	public static <T, U> Map<U, T> reverse(Map<T, U> map) {
+		Map<U, T> result = new HashMap<>();
+		for (Map.Entry<T, U> entry : map.entrySet()) {
+			result.put(entry.getValue(), entry.getKey());
+		}
+		return result;
 	}
 
 }

@@ -210,32 +210,32 @@
       ]
     }
   ],
-  "literals" : [
-    {
+  "literals" : {
+    "'^'" : {
       "kind" : "Char",
-      "val" : 97
+      "val" : 94
     },
-    {
-      "kind" : "Char",
-      "val" : 98
-    },
-    {
-      "kind" : "Char",
-      "val" : 38
-    },
-    {
+    "'*'" : {
       "kind" : "Char",
       "val" : 42
     },
-    {
+    "'&'" : {
+      "kind" : "Char",
+      "val" : 38
+    },
+    "'+'" : {
       "kind" : "Char",
       "val" : 43
     },
-    {
+    "'a'" : {
       "kind" : "Char",
-      "val" : 94
+      "val" : 97
+    },
+    "'b'" : {
+      "kind" : "Char",
+      "val" : 98
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

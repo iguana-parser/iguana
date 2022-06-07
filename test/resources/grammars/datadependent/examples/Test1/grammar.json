@@ -209,24 +209,6 @@
     }
   ],
   "regularExpressions" : {
-    "CharData" : {
-      "kind" : "regex.Star",
-      "regex" : {
-        "kind" : "regex.Alt",
-        "symbols" : [
-          {
-            "kind" : "CharRange",
-            "start" : 65,
-            "end" : 90
-          },
-          {
-            "kind" : "CharRange",
-            "start" : 97,
-            "end" : 122
-          }
-        ]
-      }
-    },
     "L" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -251,6 +233,24 @@
         ]
       }
     },
+    "CharData" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "CharRange",
+            "start" : 65,
+            "end" : 90
+          },
+          {
+            "kind" : "CharRange",
+            "start" : 97,
+            "end" : 122
+          }
+        ]
+      }
+    },
     "Name" : {
       "kind" : "regex.Plus",
       "regex" : {
@@ -265,8 +265,16 @@
       }
     }
   },
-  "literals" : [
-    {
+  "literals" : {
+    "'<'" : {
+      "kind" : "Char",
+      "val" : 60
+    },
+    "'>'" : {
+      "kind" : "Char",
+      "val" : 62
+    },
+    "'</'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -278,16 +286,8 @@
           "val" : 47
         }
       ]
-    },
-    {
-      "kind" : "Char",
-      "val" : 60
-    },
-    {
-      "kind" : "Char",
-      "val" : 62
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(Element)",

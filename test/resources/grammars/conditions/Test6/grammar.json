@@ -198,12 +198,8 @@
       ]
     }
   },
-  "literals" : [
-    {
-      "kind" : "Char",
-      "val" : 32
-    },
-    {
+  "literals" : {
+    "'for'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -220,7 +216,7 @@
         }
       ]
     },
-    {
+    "'forall'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -248,8 +244,12 @@
           "val" : 108
         }
       ]
+    },
+    "' '" : {
+      "kind" : "Char",
+      "val" : 32
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

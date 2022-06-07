@@ -140,28 +140,28 @@
       ]
     }
   ],
-  "literals" : [
-    {
+  "literals" : {
+    "'a'" : {
       "kind" : "Char",
       "val" : 97
     },
-    {
+    "'b'" : {
       "kind" : "Char",
       "val" : 98
     },
-    {
+    "'c'" : {
       "kind" : "Char",
       "val" : 99
     },
-    {
+    "'x'" : {
       "kind" : "Char",
       "val" : 120
     },
-    {
+    "'y'" : {
       "kind" : "Char",
       "val" : 121
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(A)",

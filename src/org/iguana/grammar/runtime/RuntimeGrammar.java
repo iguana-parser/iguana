@@ -28,10 +28,12 @@
 package org.iguana.grammar.runtime;
 
 import org.iguana.datadependent.ast.Expression;
-import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.regex.RegularExpression;
 import org.iguana.traversal.idea.IdeaIDEGenerator;
 
 import java.io.*;
@@ -58,7 +60,7 @@ public class RuntimeGrammar {
 	private final List<RuntimeRule> rules;
 
 	private final Map<String, RegularExpression> regularExpressions;
-	private final Set<RegularExpression> literals;
+	private final Map<String, RegularExpression> literals;
 
 	private final Map<String, Set<String>> ebnfLefts;
 	private final Map<String, Set<String>> ebnfRights;
@@ -127,7 +129,7 @@ public class RuntimeGrammar {
 		return regularExpressions;
 	}
 
-	public Set<RegularExpression> getLiterals() {
+	public Map<String, RegularExpression> getLiterals() {
 		return literals;
 	}
 
@@ -209,7 +211,7 @@ public class RuntimeGrammar {
 		private Symbol layout;
 		private Start startSymbol;
 		private Map<String, RegularExpression> regularExpressions;
-		private Set<RegularExpression> literals;
+		private Map<String, RegularExpression> literals;
 
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
@@ -309,7 +311,7 @@ public class RuntimeGrammar {
 			return this;
 		}
 
-		public Builder setLiterals(Set<RegularExpression> literals) {
+		public Builder setLiterals(Map<String, RegularExpression> literals) {
 			this.literals = literals;
 			return this;
 		}

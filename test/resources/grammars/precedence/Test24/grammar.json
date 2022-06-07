@@ -331,6 +331,19 @@
     }
   ],
   "regularExpressions" : {
+    "Id" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 100
+        }
+      ]
+    },
     "Whitespaces" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -354,8 +367,26 @@
           }
         ]
       }
+    }
+  },
+  "literals" : {
+    "'.'" : {
+      "kind" : "Char",
+      "val" : 46
     },
-    "Id" : {
+    "'-'" : {
+      "kind" : "Char",
+      "val" : 45
+    },
+    "'*'" : {
+      "kind" : "Char",
+      "val" : 42
+    },
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'if'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -364,29 +395,11 @@
         },
         {
           "kind" : "Char",
-          "val" : 100
+          "val" : 102
         }
       ]
-    }
-  },
-  "literals" : [
-    {
-      "kind" : "Char",
-      "val" : 97
     },
-    {
-      "kind" : "Char",
-      "val" : 40
-    },
-    {
-      "kind" : "Char",
-      "val" : 41
-    },
-    {
-      "kind" : "Char",
-      "val" : 42
-    },
-    {
+    "'then'" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -407,36 +420,23 @@
         }
       ]
     },
-    {
-      "kind" : "Char",
-      "val" : 43
-    },
-    {
+    "';'" : {
       "kind" : "Char",
       "val" : 59
     },
-    {
+    "'('" : {
       "kind" : "Char",
-      "val" : 45
+      "val" : 40
     },
-    {
+    "')'" : {
       "kind" : "Char",
-      "val" : 46
+      "val" : 41
     },
-    {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 105
-        },
-        {
-          "kind" : "Char",
-          "val" : 102
-        }
-      ]
+    "'a'" : {
+      "kind" : "Char",
+      "val" : 97
     }
-  ],
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

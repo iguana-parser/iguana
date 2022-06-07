@@ -6,7 +6,9 @@ import org.iguana.regex.automaton.State;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.utils.input.Input;
 
-import java.util.*;
+import java.util.Map;
+
+import static org.iguana.utils.collections.CollectionsUtil.reverse;
 
 public class IguanaTokenizer {
 
@@ -16,27 +18,20 @@ public class IguanaTokenizer {
     private int inputIndex;
     private Token nextToken;
 
-    private final Map<RegularExpression, String> regularExpressionsToName = new HashMap<>();
+    private final Map<RegularExpression, String> regularExpressionsToName;
 
-    public IguanaTokenizer(Map<String, RegularExpression> regularExpressionsMap,
-                           Set<RegularExpression> literals,
+    public IguanaTokenizer(Map<String, RegularExpression> regularExpressions,
                            Input input,
                            int inputIndex) {
         this.input = input;
         this.inputIndex = inputIndex;
 
         // TODO: encode this in the DFAMatcher
-        for (Map.Entry<String, RegularExpression> entry : regularExpressionsMap.entrySet()) {
-            regularExpressionsToName.put(entry.getValue(), entry.getKey());
-        }
-
-        List<RegularExpression> regularExpressions = new ArrayList<>();
-        regularExpressions.addAll(regularExpressionsMap.values());
-        regularExpressions.addAll(literals);
+        regularExpressionsToName = reverse(regularExpressions);
 
         State startState = new State();
         State finalState = new State();
-        for (RegularExpression regularExpression : regularExpressions) {
+        for (RegularExpression regularExpression : regularExpressions.values()) {
             Automaton automaton = regularExpression.getAutomaton();
             startState.addEpsilonTransition(automaton.getStartState());
             for (State automatonFinalState : automaton.getFinalStates()) {
