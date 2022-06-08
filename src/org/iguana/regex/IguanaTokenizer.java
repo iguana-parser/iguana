@@ -12,17 +12,13 @@ public class IguanaTokenizer {
 
     private final DFAMatcher matcher;
     private final Map<RegularExpression, String> regularExpressions;
-    private final Input input;
 
+    private Input input;
     private int inputIndex;
     private Token nextToken;
 
-    public IguanaTokenizer(Map<RegularExpression, String> regularExpressions,
-                           Input input,
-                           int inputIndex) {
+    public IguanaTokenizer(Map<RegularExpression, String> regularExpressions) {
         this.regularExpressions = regularExpressions;
-        this.input = input;
-        this.inputIndex = inputIndex;
 
         State startState = new State();
         State finalState = new State();
@@ -37,7 +33,15 @@ public class IguanaTokenizer {
         this.matcher = new DFAMatcher(automaton);
     }
 
+    public void prepare(Input input, int inputIndex) {
+        this.input = input;
+        this.inputIndex = inputIndex;
+    }
+
     public boolean hasNextToken() {
+        if (input == null) {
+            throw new IllegalStateException("The prepare method should be called first.");
+        }
         if (nextToken != null) return true;
         if (inputIndex >= input.length()) return false;
         int length = matcher.match(input, inputIndex);
