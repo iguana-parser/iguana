@@ -48,7 +48,7 @@ public class AutomatonOperations {
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
 		
-		Set<State> initialState = new HashSet<>();
+		Set<State> initialState = new LinkedHashSet<>();
 		initialState.add(start);
 		initialState = epsilonClosure(initialState);
 		visitedStates.add(initialState);
@@ -278,7 +278,6 @@ public class AutomatonOperations {
 	 * Note: unreachable states are already removed as we gather the states
 	 * reachable from the start state of the given NFA.
 	 * 
-	 * @return
 	 */
 	public static Automaton minimize(CharRange[] alphabet, State[] states, State startState) {
 		
@@ -398,7 +397,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		HashSet<Set<State>> partitions = new HashSet<Set<State>>(partitionsMap.values());
+		HashSet<Set<State>> partitions = new HashSet<>(partitionsMap.values());
 		
 		State newStartState = null;
 		
@@ -430,7 +429,7 @@ public class AutomatonOperations {
 		
 		for (State state : states) {
 			for (Transition t : state.getTransitions()) {
-				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
+				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));
 			}
 		}
 		
@@ -439,7 +438,7 @@ public class AutomatonOperations {
 
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
-		Set<State> newStates = new HashSet<>(states);
+		Set<State> newStates = new LinkedHashSet<>(states);
 		
 		for(State state : states) {
 			Set<State> s = state.getEpsilonSates();
@@ -453,7 +452,7 @@ public class AutomatonOperations {
 	}
 	
 	private static Set<State> move(Set<State> state, CharRange r) {
-		Set<State> result = new HashSet<>();
+		Set<State> result = new LinkedHashSet<>();
 		for (State s: state) {
 			State dest = s.getState(r);
 			if (dest != null) {
@@ -465,8 +464,8 @@ public class AutomatonOperations {
 	}
 	
 	@FunctionalInterface
-	private static interface Op {
-		public boolean execute(State s1, State s2);
+	private interface Op {
+		boolean execute(State s1, State s2);
 	}
 	
 }

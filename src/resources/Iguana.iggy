@@ -156,7 +156,7 @@ regex Character
 
 regex RangeChar
   = "\\" [\\ \[ \] \- t f r n \ ]
-  | ![\\ \[ \] \- \ ]
+  | ![\\ \[ \] \- \t \f \r \n \ ]
 
 regex String
   = "\"" Character* "\""

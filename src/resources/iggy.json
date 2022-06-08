@@ -3475,6 +3475,16 @@
             {
               "kind" : "CharRange",
               "start" : 1,
+              "end" : 8
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 11,
+              "end" : 11
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 14,
               "end" : 31
             },
             {
