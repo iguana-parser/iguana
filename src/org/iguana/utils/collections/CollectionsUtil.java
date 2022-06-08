@@ -227,12 +227,4 @@ public class CollectionsUtil {
 		return list;
 	}
 
-	public static <T, U> Map<U, T> reverse(Map<T, U> map) {
-		Map<U, T> result = new HashMap<>();
-		for (Map.Entry<T, U> entry : map.entrySet()) {
-			result.put(entry.getValue(), entry.getKey());
-		}
-		return result;
-	}
-
 }

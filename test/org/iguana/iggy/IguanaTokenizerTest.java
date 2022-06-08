@@ -1,10 +1,10 @@
 package org.iguana.iggy;
 
-import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.utils.input.Input;
+import org.iguana.utils.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -13,27 +13,78 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class IguanaTokenizerTest {
 
     @Test
     public void test() throws IOException {
         RuntimeGrammar grammar = IggyParser.iggyGrammar().toRuntimeGrammar();
-        System.out.println(grammar.getLiterals());
-        System.out.println(grammar.getRegularExpressions());
 
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
-        Map<String, RegularExpression> regularExpressions = new HashMap<>();
-        regularExpressions.put("Identifier", grammar.getRegularExpressions().get("LetterOrDigits"));
-        regularExpressions.put("Number", grammar.getRegularExpressions().get("Number"));
-        regularExpressions.put("Char", grammar.getRegularExpressions().get("Char"));
-        regularExpressions.put("String", grammar.getRegularExpressions().get("String"));
-        regularExpressions.put("WhiteSpace", grammar.getRegularExpressions().get("WhiteSpace"));
-        regularExpressions.put("SingleLineComment", grammar.getRegularExpressions().get("SingleLineComment"));
-        regularExpressions.put("MultiLineComment", grammar.getRegularExpressions().get("MultiLineComment"));
+        Map<RegularExpression, String> regularExpressionCategories = new HashMap<>();
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("LetterOrDigits"), "Identifier");
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("Number"), "Number");
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("String"), "String");
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("RangeChar"), "RangeChar");
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("WhiteSpace"), "WhiteSpace");
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("SingleLineComment"), "SingleLineComment");
+        regularExpressionCategories.put(grammar.getRegularExpressions().get("MultiLineComment"), "MultiLineComment");
 
-        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(grammar.getRegularExpressions(), Input.fromFile(new File(path)), 0);
+        regularExpressionCategories.put(grammar.getLiterals().get("!<<"), "!<<");
+        regularExpressionCategories.put(grammar.getLiterals().get("!>>"), "!>>");
+        regularExpressionCategories.put(grammar.getLiterals().get(">="), ">=");
+        regularExpressionCategories.put(grammar.getLiterals().get("<<"), "<<");
+        regularExpressionCategories.put(grammar.getLiterals().get(">>"), ">>");
+        regularExpressionCategories.put(grammar.getLiterals().get("&&"), "&&");
+        regularExpressionCategories.put(grammar.getLiterals().get("||"), "||");
+        regularExpressionCategories.put(grammar.getLiterals().get("<="), "<=");
+        regularExpressionCategories.put(grammar.getLiterals().get("var"), "var");
+        regularExpressionCategories.put(grammar.getLiterals().get(".r"), ".r");
+        regularExpressionCategories.put(grammar.getLiterals().get("else"), "else");
+        regularExpressionCategories.put(grammar.getLiterals().get("regex"), "regex");
+        regularExpressionCategories.put(grammar.getLiterals().get(".val"), ".val");
+        regularExpressionCategories.put(grammar.getLiterals().get("align"), "align");
+        regularExpressionCategories.put(grammar.getLiterals().get("["), "[");
+        regularExpressionCategories.put(grammar.getLiterals().get("\\\\"), "\\\\");
+        regularExpressionCategories.put(grammar.getLiterals().get("]"), "]");
+        regularExpressionCategories.put(grammar.getLiterals().get("if"), "if");
+        regularExpressionCategories.put(grammar.getLiterals().get(".yield"), ".yield");
+        regularExpressionCategories.put(grammar.getLiterals().get("ignore"), "ignore");
+        regularExpressionCategories.put(grammar.getLiterals().get("!"), "!");
+        regularExpressionCategories.put(grammar.getLiterals().get("=="), "==");
+        regularExpressionCategories.put(grammar.getLiterals().get("%"), "%");
+        regularExpressionCategories.put(grammar.getLiterals().get("("), "(");
+        regularExpressionCategories.put(grammar.getLiterals().get(")"), ")");
+        regularExpressionCategories.put(grammar.getLiterals().get("layout"), "layout");
+        regularExpressionCategories.put(grammar.getLiterals().get("*"), "*");
+        regularExpressionCategories.put(grammar.getLiterals().get("global"), "global");
+        regularExpressionCategories.put(grammar.getLiterals().get("+"), "+");
+        regularExpressionCategories.put(grammar.getLiterals().get(","), ",");
+        regularExpressionCategories.put(grammar.getLiterals().get("-"), "-");
+        regularExpressionCategories.put(grammar.getLiterals().get("/"), "/");
+        regularExpressionCategories.put(grammar.getLiterals().get("offside"), "offside");
+        regularExpressionCategories.put(grammar.getLiterals().get(":"), ":");
+        regularExpressionCategories.put(grammar.getLiterals().get("{"), "{");
+        regularExpressionCategories.put(grammar.getLiterals().get(";"), ";");
+        regularExpressionCategories.put(grammar.getLiterals().get("|"), "|");
+        regularExpressionCategories.put(grammar.getLiterals().get("<"), "<");
+        regularExpressionCategories.put(grammar.getLiterals().get("="), "=");
+        regularExpressionCategories.put(grammar.getLiterals().get("}"), "}");
+        regularExpressionCategories.put(grammar.getLiterals().get("!="), "!=");
+        regularExpressionCategories.put(grammar.getLiterals().get("start"), "start");
+        regularExpressionCategories.put(grammar.getLiterals().get(">"), ">");
+        regularExpressionCategories.put(grammar.getLiterals().get("?"), "?");
+        regularExpressionCategories.put(grammar.getLiterals().get(".l"), ".l");
+
+        String inputString = FileUtils.readFile(path);
+
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(regularExpressionCategories, Input.fromString(inputString), 0);
+        StringBuilder sb = new StringBuilder();
         while (iguanaTokenizer.hasNextToken()) {
-            System.out.print(iguanaTokenizer.nextToken().getLexeme());
+            sb.append(iguanaTokenizer.nextToken().getLexeme());
         }
+        assertEquals(inputString, sb.toString());
+
     }
 }

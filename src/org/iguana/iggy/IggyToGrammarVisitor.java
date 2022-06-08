@@ -437,9 +437,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).getName());
 
             case "String":
-            case "Character":
-                RegularExpression regex = getCharsRegex(node.getText());
-                literals.put(node.getText(), regex);
+                String text = stripQuotes(node);
+                RegularExpression regex = getCharsRegex(text);
+                literals.put(text, regex);
                 return new Terminal.Builder(regex)
                     .setNodeType(TerminalNodeType.Literal)
                     .build();
@@ -475,6 +475,11 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             default:
                 throw new RuntimeException("Unexpected label: " + label);
         }
+    }
+
+    // Strip the " characters
+    private String stripQuotes(NonterminalNode node) {
+        return node.getText().substring(1, node.getText().length() - 1);
     }
 
     /**
@@ -566,19 +571,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             // String: String
             case "String":
-                return getCharsRegex(node.getText());
-
-            // Char = Char
-            case "Character": {
-                String s = node.getText();
-                int[] chars = getChars(s.substring(1, s.length() - 1));
-                if (chars.length == 0) {
-                    throw new RuntimeException("Length must be positive");
-                }
-                if (chars.length == 1)
-                    return Char.from(chars[0]);
-                return org.iguana.regex.Seq.from(chars);
-            }
+                return getCharsRegex(stripQuotes(node));
 
             default:
                 throw new RuntimeException("Unexpected label: " + label);
@@ -873,7 +866,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
     }
 
     private RegularExpression getCharsRegex(String s) {
-        int[] chars = getChars(s.substring(1, s.length() - 1));
+        int[] chars = getChars(s);
         if (chars.length == 1) {
             return Char.from(chars[0]);
         }

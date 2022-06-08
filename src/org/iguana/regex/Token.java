@@ -5,14 +5,14 @@ import org.iguana.utils.input.Input;
 public class Token {
 
     private final RegularExpression regularExpression;
-    private final String name;
+    private final String category;
     private final Input input;
     private final int start;
     private final int end;
 
-    public Token(RegularExpression regularExpression, String name, Input input, int start, int end) {
+    public Token(RegularExpression regularExpression, String category, Input input, int start, int end) {
         this.regularExpression = regularExpression;
-        this.name = name;
+        this.category = category;
         this.input = input;
         this.start = start;
         this.end = end;
@@ -34,12 +34,12 @@ public class Token {
         return regularExpression;
     }
 
-    public String getName() {
-        return name;
+    public String getCategory() {
+        return category;
     }
 
     @Override
     public String toString() {
-        return String.format("(%s, %s)", name, getLexeme());
+        return String.format("(%s, %s)", category, getLexeme());
     }
 }

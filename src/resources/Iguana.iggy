@@ -63,7 +63,6 @@ Symbol
   | "if" Expression Symbol "else" Symbol    %IfThenElse
   | Identifier                              %Nont
   | String                                  %String
-  | Char                                    %Character
   | "{" Symbol Symbol+ "}" "*"              %StarSep
   | "{" Symbol Symbol+ "}" "+"              %PlusSep
 
@@ -88,7 +87,6 @@ Regex
   | Name                          %Nont
   | CharClass                     %CharClass
   | String                        %String
-  | Char                          %Character
 
 Regexs
   = Regex+  %Sequence
@@ -160,11 +158,9 @@ regex RangeChar
   = "\\" [\\ \[ \] \- t f r n \ ]
   | ![\\ \[ \] \- \ ]
 
-regex Char
-  = "\'" Character* "\'"
-
 regex String
   = "\"" Character* "\""
+  | "\'" Character* "\'"
 
 layout regex Layout
   = WhiteSpaceOrComment*

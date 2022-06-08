@@ -1610,19 +1610,6 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Identifier",
-                      "name" : "Char"
-                    }
-                  ],
-                  "label" : "Character"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
                       "kind" : "Terminal",
                       "name" : "{",
                       "nodeType" : "Literal",
@@ -2215,19 +2202,6 @@
                     }
                   ],
                   "label" : "String"
-                }
-              ]
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Char"
-                    }
-                  ],
-                  "label" : "Character"
                 }
               ]
             }
@@ -3522,43 +3496,48 @@
         }
       ]
     },
-    "Char" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 39
-        },
-        {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "Reference",
-            "name" : "Character"
-          }
-        },
-        {
-          "kind" : "Char",
-          "val" : 39
-        }
-      ]
-    },
     "String" : {
-      "kind" : "regex.Seq",
+      "kind" : "regex.Alt",
       "symbols" : [
         {
-          "kind" : "Char",
-          "val" : 34
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 34
+            },
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "Reference",
+                "name" : "Character"
+              }
+            },
+            {
+              "kind" : "Char",
+              "val" : 34
+            }
+          ]
         },
         {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "Reference",
-            "name" : "Character"
-          }
-        },
-        {
-          "kind" : "Char",
-          "val" : 34
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 39
+            },
+            {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "Reference",
+                "name" : "Character"
+              }
+            },
+            {
+              "kind" : "Char",
+              "val" : 39
+            }
+          ]
         }
       ]
     },
@@ -4501,7 +4480,7 @@
     }
   },
   "literals" : {
-    "\"global\"" : {
+    "global" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4530,11 +4509,11 @@
         }
       ]
     },
-    "\"=\"" : {
+    "=" : {
       "kind" : "Char",
       "val" : 61
     },
-    "\"start\"" : {
+    "start" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4559,7 +4538,7 @@
         }
       ]
     },
-    "\"layout\"" : {
+    "layout" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4588,7 +4567,7 @@
         }
       ]
     },
-    "\"regex\"" : {
+    "regex" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4613,39 +4592,39 @@
         }
       ]
     },
-    "\"(\"" : {
+    "(" : {
       "kind" : "Char",
       "val" : 40
     },
-    "\",\"" : {
+    "," : {
       "kind" : "Char",
       "val" : 44
     },
-    "\")\"" : {
+    ")" : {
       "kind" : "Char",
       "val" : 41
     },
-    "\":\"" : {
+    ":" : {
       "kind" : "Char",
       "val" : 58
     },
-    "\">\"" : {
+    ">" : {
       "kind" : "Char",
       "val" : 62
     },
-    "\"|\"" : {
+    "|" : {
       "kind" : "Char",
       "val" : 124
     },
-    "\"[\"" : {
+    "[" : {
       "kind" : "Char",
       "val" : 91
     },
-    "\"]\"" : {
+    "]" : {
       "kind" : "Char",
       "val" : 93
     },
-    "\"offside\"" : {
+    "offside" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4678,19 +4657,19 @@
         }
       ]
     },
-    "\"*\"" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "\"+\"" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "\"?\"" : {
+    "?" : {
       "kind" : "Char",
       "val" : 63
     },
-    "\"align\"" : {
+    "align" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4715,7 +4694,7 @@
         }
       ]
     },
-    "\"ignore\"" : {
+    "ignore" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4744,7 +4723,7 @@
         }
       ]
     },
-    "\"<<\"" : {
+    "<<" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4757,37 +4736,7 @@
         }
       ]
     },
-    "\"!<<\"" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 33
-        },
-        {
-          "kind" : "Char",
-          "val" : 60
-        },
-        {
-          "kind" : "Char",
-          "val" : 60
-        }
-      ]
-    },
-    "\">>\"" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 62
-        },
-        {
-          "kind" : "Char",
-          "val" : 62
-        }
-      ]
-    },
-    "\"!>>\"" : {
+    "!<<" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4796,6 +4745,19 @@
         },
         {
           "kind" : "Char",
+          "val" : 60
+        },
+        {
+          "kind" : "Char",
+          "val" : 60
+        }
+      ]
+    },
+    ">>" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
           "val" : 62
         },
         {
@@ -4804,15 +4766,32 @@
         }
       ]
     },
-    "\"\\\\\"" : {
+    "!>>" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 33
+        },
+        {
+          "kind" : "Char",
+          "val" : 62
+        },
+        {
+          "kind" : "Char",
+          "val" : 62
+        }
+      ]
+    },
+    "\\\\" : {
       "kind" : "Char",
       "val" : 92
     },
-    "\"!\"" : {
+    "!" : {
       "kind" : "Char",
       "val" : 33
     },
-    "\"if\"" : {
+    "if" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4825,7 +4804,7 @@
         }
       ]
     },
-    "\"else\"" : {
+    "else" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4846,19 +4825,19 @@
         }
       ]
     },
-    "\"{\"" : {
+    "{" : {
       "kind" : "Char",
       "val" : 123
     },
-    "\"}\"" : {
+    "}" : {
       "kind" : "Char",
       "val" : 125
     },
-    "\";\"" : {
+    ";" : {
       "kind" : "Char",
       "val" : 59
     },
-    "\"var\"" : {
+    "var" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4875,15 +4854,15 @@
         }
       ]
     },
-    "\"-\"" : {
+    "-" : {
       "kind" : "Char",
       "val" : 45
     },
-    "\"/\"" : {
+    "/" : {
       "kind" : "Char",
       "val" : 47
     },
-    "\">=\"" : {
+    ">=" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4896,7 +4875,7 @@
         }
       ]
     },
-    "\"<=\"" : {
+    "<=" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4909,11 +4888,11 @@
         }
       ]
     },
-    "\"<\"" : {
+    "<" : {
       "kind" : "Char",
       "val" : 60
     },
-    "\"==\"" : {
+    "==" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4926,7 +4905,7 @@
         }
       ]
     },
-    "\"!=\"" : {
+    "!=" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4939,7 +4918,7 @@
         }
       ]
     },
-    "\"&&\"" : {
+    "&&" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4952,7 +4931,7 @@
         }
       ]
     },
-    "\"||\"" : {
+    "||" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4965,7 +4944,7 @@
         }
       ]
     },
-    "\".l\"" : {
+    ".l" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4978,7 +4957,7 @@
         }
       ]
     },
-    "\".r\"" : {
+    ".r" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -4991,7 +4970,7 @@
         }
       ]
     },
-    "\".yield\"" : {
+    ".yield" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -5020,7 +4999,7 @@
         }
       ]
     },
-    "\".val\"" : {
+    ".val" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -5041,7 +5020,7 @@
         }
       ]
     },
-    "'%'" : {
+    "%" : {
       "kind" : "Char",
       "val" : 37
     }

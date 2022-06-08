@@ -8,30 +8,25 @@ import org.iguana.utils.input.Input;
 
 import java.util.Map;
 
-import static org.iguana.utils.collections.CollectionsUtil.reverse;
-
 public class IguanaTokenizer {
 
     private final DFAMatcher matcher;
+    private final Map<RegularExpression, String> regularExpressions;
     private final Input input;
 
     private int inputIndex;
     private Token nextToken;
 
-    private final Map<RegularExpression, String> regularExpressionsToName;
-
-    public IguanaTokenizer(Map<String, RegularExpression> regularExpressions,
+    public IguanaTokenizer(Map<RegularExpression, String> regularExpressions,
                            Input input,
                            int inputIndex) {
+        this.regularExpressions = regularExpressions;
         this.input = input;
         this.inputIndex = inputIndex;
 
-        // TODO: encode this in the DFAMatcher
-        regularExpressionsToName = reverse(regularExpressions);
-
         State startState = new State();
         State finalState = new State();
-        for (RegularExpression regularExpression : regularExpressions.values()) {
+        for (RegularExpression regularExpression : regularExpressions.keySet()) {
             Automaton automaton = regularExpression.getAutomaton();
             startState.addEpsilonTransition(automaton.getStartState());
             for (State automatonFinalState : automaton.getFinalStates()) {
@@ -52,11 +47,9 @@ public class IguanaTokenizer {
                 return false;
             }
             throw new RuntimeException();
-//            inputIndex++;
-//            return true;
         } else if (length != -1) {
             RegularExpression regularExpression = matcher.getMatchedRegularExpression();
-            String name = regularExpressionsToName.get(regularExpression);
+            String name = regularExpressions.get(regularExpression);
             nextToken = new Token(regularExpression, name, input, inputIndex, inputIndex + length);
             inputIndex = inputIndex + length;
             return true;
