@@ -64,15 +64,6 @@ public class EOF extends AbstractRegularExpression {
 		});
 	}
 	
-	private Object readResolve()  {
-	    return instance;
-	}
-	
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-	    ois.defaultReadObject();
-	    instance = this;
-	}
-
 	@Override
 	public String toString() {
 		return "$";
