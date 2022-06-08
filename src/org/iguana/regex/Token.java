@@ -2,6 +2,8 @@ package org.iguana.regex;
 
 import org.iguana.utils.input.Input;
 
+import java.util.Objects;
+
 public class Token {
 
     private final RegularExpression regularExpression;
@@ -36,6 +38,23 @@ public class Token {
 
     public String getCategory() {
         return category;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Token)) return false;
+        Token token = (Token) o;
+        return start == token.start &&
+            end == token.end &&
+            Objects.equals(regularExpression, token.regularExpression) &&
+            Objects.equals(category, token.category) &&
+            Objects.equals(input, token.input);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(regularExpression, category, input, start, end);
     }
 
     @Override

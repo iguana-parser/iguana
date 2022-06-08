@@ -76,7 +76,7 @@ public class Epsilon extends AbstractRegularExpression {
     }
 
     @Override
-    public Set<org.iguana.regex.CharRange> getFirstSet() {
+    public Set<CharRange> getFirstSet() {
         return firstSet;
     }
 

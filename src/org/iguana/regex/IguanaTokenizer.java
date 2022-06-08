@@ -43,7 +43,7 @@ public class IguanaTokenizer {
             throw new IllegalStateException("The prepare method should be called first.");
         }
         if (nextToken != null) return true;
-        if (inputIndex >= input.length()) return false;
+        if (inputIndex >= input.length() - 1) return false;
         int length = matcher.match(input, inputIndex);
         if (length == 0) {
             if (inputIndex == input.length() - 1) {
@@ -58,7 +58,9 @@ public class IguanaTokenizer {
             inputIndex = inputIndex + length;
             return true;
         } else {
-            return false;
+            nextToken = new Token(null, "Error", input, inputIndex, inputIndex + 1);
+            inputIndex++;
+            return true;
         }
     }
 
