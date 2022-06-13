@@ -55,9 +55,7 @@ public interface RegularExpression {
 
     <T> T accept(RegularExpressionVisitor<T> visitor);
 	
-	default Automaton getAutomaton() {
-		return accept(new ToAutomatonRegexVisitor());
-	}
+	Automaton getAutomaton();
 
 	default List<? extends RegularExpression> getChildren() {
 		return Collections.emptyList();

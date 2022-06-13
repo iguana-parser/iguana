@@ -38,6 +38,7 @@
         {
           "kind" : "Terminal",
           "name" : "<",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 60
@@ -123,6 +124,7 @@
         {
           "kind" : "Terminal",
           "name" : ">",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 62
@@ -518,6 +520,7 @@
         {
           "kind" : "Terminal",
           "name" : "</",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -631,6 +634,7 @@
         {
           "kind" : "Terminal",
           "name" : ">",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 62

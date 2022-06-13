@@ -14,9 +14,16 @@ import static org.iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 
-    private static final IguanaParser parser = new IguanaParser(iggyGrammar());
+    private static IguanaParser iggyParser;
 
-    private static Grammar iggyGrammar() {
+    public static IguanaParser iggyParser() {
+        if (iggyParser == null) {
+            iggyParser = new IguanaParser(iggyGrammar());
+        }
+        return iggyParser;
+    }
+
+    public static Grammar iggyGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
             return JsonSerializer.deserialize(content, Grammar.class);
@@ -24,7 +31,6 @@ public class IggyParser {
             throw new RuntimeException(e);
         }
     }
-
 
     public static void main(String[] args) throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
@@ -42,6 +48,7 @@ public class IggyParser {
     }
 
     private static Grammar getGrammar(Input input) {
+        IguanaParser parser = iggyParser();
         parser.parse(input);
         if (parser.hasParseError()) {
             System.out.println(parser.getParseError());

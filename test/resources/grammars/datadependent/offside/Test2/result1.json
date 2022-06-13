@@ -133,6 +133,7 @@
               {
                 "kind" : "Terminal",
                 "name" : ";",
+                "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
                   "val" : 59
@@ -188,6 +189,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -258,6 +260,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -398,7 +401,7 @@
               },
               "children" : [
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "x",
@@ -431,6 +434,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -440,7 +444,7 @@
                   "end" : 3
                 },
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "=",
@@ -473,6 +477,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -526,6 +531,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -585,7 +591,7 @@
                   },
                   "children" : [
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "a",
@@ -618,6 +624,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -635,10 +642,11 @@
               "end" : 7
             },
             {
-              "kind" : "TerminalNode",
+              "kind" : "KeywordTerminalNode",
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : ";",
+                "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
                   "val" : 59
@@ -692,6 +700,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -762,6 +771,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -902,7 +912,7 @@
               },
               "children" : [
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "x",
@@ -935,6 +945,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -944,7 +955,7 @@
                   "end" : 12
                 },
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "=",
@@ -977,6 +988,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -1111,6 +1123,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -1181,6 +1194,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -1284,6 +1298,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -1343,7 +1358,7 @@
                       },
                       "children" : [
                         {
-                          "kind" : "TerminalNode",
+                          "kind" : "KeywordTerminalNode",
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "a",
@@ -1376,6 +1391,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -1389,7 +1405,7 @@
                       "end" : 23
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "+",
@@ -1422,6 +1438,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -1431,7 +1448,7 @@
                       "end" : 25
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "a",
@@ -1464,6 +1481,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -1481,10 +1499,11 @@
               "end" : 32
             },
             {
-              "kind" : "TerminalNode",
+              "kind" : "KeywordTerminalNode",
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : ";",
+                "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
                   "val" : 59
@@ -1538,6 +1557,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -1608,6 +1628,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -1748,7 +1769,7 @@
               },
               "children" : [
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "x",
@@ -1781,6 +1802,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -1790,7 +1812,7 @@
                   "end" : 37
                 },
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "=",
@@ -1823,6 +1845,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -1957,6 +1980,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -2027,6 +2051,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -2130,6 +2155,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -2189,7 +2215,7 @@
                       },
                       "children" : [
                         {
-                          "kind" : "TerminalNode",
+                          "kind" : "KeywordTerminalNode",
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "a",
@@ -2222,6 +2248,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -2235,7 +2262,7 @@
                       "end" : 41
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "+",
@@ -2268,6 +2295,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -2277,7 +2305,7 @@
                       "end" : 43
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "a",
@@ -2310,6 +2338,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -2327,10 +2356,11 @@
               "end" : 45
             },
             {
-              "kind" : "TerminalNode",
+              "kind" : "KeywordTerminalNode",
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : ";",
+                "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
                   "val" : 59
@@ -2384,6 +2414,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -2454,6 +2485,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -2594,7 +2626,7 @@
               },
               "children" : [
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "x",
@@ -2627,6 +2659,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 120
@@ -2636,7 +2669,7 @@
                   "end" : 50
                 },
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "=",
@@ -2669,6 +2702,7 @@
                         }
                       }
                     ],
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 61
@@ -2803,6 +2837,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -2873,6 +2908,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -3057,6 +3093,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 43
@@ -3127,6 +3164,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -3230,6 +3268,7 @@
                                     }
                                   }
                                 ],
+                                "nodeType" : "Literal",
                                 "regex" : {
                                   "kind" : "Char",
                                   "val" : 97
@@ -3289,7 +3328,7 @@
                           },
                           "children" : [
                             {
-                              "kind" : "TerminalNode",
+                              "kind" : "KeywordTerminalNode",
                               "terminal" : {
                                 "kind" : "Terminal",
                                 "name" : "a",
@@ -3322,6 +3361,7 @@
                                     }
                                   }
                                 ],
+                                "nodeType" : "Literal",
                                 "regex" : {
                                   "kind" : "Char",
                                   "val" : 97
@@ -3335,7 +3375,7 @@
                           "end" : 63
                         },
                         {
-                          "kind" : "TerminalNode",
+                          "kind" : "KeywordTerminalNode",
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "+",
@@ -3368,6 +3408,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 43
@@ -3377,7 +3418,7 @@
                           "end" : 73
                         },
                         {
-                          "kind" : "TerminalNode",
+                          "kind" : "KeywordTerminalNode",
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "a",
@@ -3410,6 +3451,7 @@
                                 }
                               }
                             ],
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -3423,7 +3465,7 @@
                       "end" : 82
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "+",
@@ -3456,6 +3498,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -3465,7 +3508,7 @@
                       "end" : 90
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "a",
@@ -3498,6 +3541,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97

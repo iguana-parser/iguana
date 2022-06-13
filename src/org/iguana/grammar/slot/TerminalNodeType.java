@@ -3,5 +3,5 @@ package org.iguana.grammar.slot;
 public enum TerminalNodeType {
     Regex,
     Layout,
-    Keyword
+    Literal
 }

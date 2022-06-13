@@ -13,6 +13,7 @@
         {
           "kind" : "Terminal",
           "name" : "*",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 42
@@ -54,6 +55,7 @@
         {
           "kind" : "Terminal",
           "name" : "+",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 43
@@ -91,6 +93,7 @@
         {
           "kind" : "Terminal",
           "name" : "a",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97

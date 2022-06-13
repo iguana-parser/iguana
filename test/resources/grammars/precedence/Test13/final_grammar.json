@@ -93,69 +93,6 @@
               "expression" : {
                 "kind" : "Or",
                 "lhs" : {
-                  "kind" : "Equal",
-                  "lhs" : {
-                    "kind" : "Get",
-                    "arg1" : {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    "arg2" : 1,
-                    "fun" : "get",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "l",
-                        "i" : -1
-                      },
-                      {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
-                    ]
-                  },
-                  "rhs" : {
-                    "kind" : "Integer",
-                    "value" : -1
-                  }
-                },
-                "rhs" : {
-                  "kind" : "LShiftANDEqZero",
-                  "lhs" : {
-                    "kind" : "Integer",
-                    "value" : 7
-                  },
-                  "rhs" : {
-                    "kind" : "Get",
-                    "arg1" : {
-                      "kind" : "Name",
-                      "name" : "l",
-                      "i" : -1
-                    },
-                    "arg2" : 1,
-                    "fun" : "get",
-                    "arguments" : [
-                      {
-                        "kind" : "Name",
-                        "name" : "l",
-                        "i" : -1
-                      },
-                      {
-                        "kind" : "Integer",
-                        "value" : 1
-                      }
-                    ]
-                  }
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
-                "kind" : "Or",
-                "lhs" : {
                   "kind" : "LessThanEqual",
                   "lhs" : {
                     "kind" : "Get",
@@ -212,6 +149,69 @@
                   }
                 }
               }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Or",
+                "lhs" : {
+                  "kind" : "Equal",
+                  "lhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 1,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 1
+                      }
+                    ]
+                  },
+                  "rhs" : {
+                    "kind" : "Integer",
+                    "value" : -1
+                  }
+                },
+                "rhs" : {
+                  "kind" : "LShiftANDEqZero",
+                  "lhs" : {
+                    "kind" : "Integer",
+                    "value" : 7
+                  },
+                  "rhs" : {
+                    "kind" : "Get",
+                    "arg1" : {
+                      "kind" : "Name",
+                      "name" : "l",
+                      "i" : -1
+                    },
+                    "arg2" : 1,
+                    "fun" : "get",
+                    "arguments" : [
+                      {
+                        "kind" : "Name",
+                        "name" : "l",
+                        "i" : -1
+                      },
+                      {
+                        "kind" : "Integer",
+                        "value" : 1
+                      }
+                    ]
+                  }
+                }
+              }
             }
           ],
           "variable" : "l",
@@ -235,6 +235,7 @@
         {
           "kind" : "Terminal",
           "name" : "[",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 91
@@ -257,6 +258,7 @@
         {
           "kind" : "Terminal",
           "name" : "]",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 93
@@ -318,22 +320,6 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
-                "kind" : "LShiftANDEqZero",
-                "lhs" : {
-                  "kind" : "Name",
-                  "name" : "_not",
-                  "i" : -1
-                },
-                "rhs" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                }
-              }
-            },
-            {
-              "kind" : "DataDependentCondition",
-              "type" : "DATA_DEPENDENT",
-              "expression" : {
                 "kind" : "GreaterThanEqual",
                 "lhs" : {
                   "kind" : "Integer",
@@ -343,6 +329,22 @@
                   "kind" : "Name",
                   "name" : "p",
                   "i" : -1
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "LShiftANDEqZero",
+                "lhs" : {
+                  "kind" : "Name",
+                  "name" : "_not",
+                  "i" : -1
+                },
+                "rhs" : {
+                  "kind" : "Integer",
+                  "value" : 1
                 }
               }
             }
@@ -428,6 +430,7 @@
         {
           "kind" : "Terminal",
           "name" : "+",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 43
@@ -599,6 +602,7 @@
         {
           "kind" : "Terminal",
           "name" : "*",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 42
@@ -754,6 +758,7 @@
         {
           "kind" : "Terminal",
           "name" : "+",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 43
@@ -823,6 +828,7 @@
         {
           "kind" : "Terminal",
           "name" : "a",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97

@@ -32,7 +32,7 @@ import org.iguana.traversal.SPPFVisitor;
 
 public abstract class TerminalNode extends NonPackedNode {
 
-	private int leftExtent;
+	private final int leftExtent;
 
 	public TerminalNode(int leftExtent) {
 		this.leftExtent = leftExtent;

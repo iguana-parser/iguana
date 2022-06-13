@@ -27,6 +27,7 @@
 
 package org.iguana.utils.collections;
 
+import org.iguana.regex.RegularExpression;
 import org.iguana.utils.collections.primitive.IntIterable;
 import org.iguana.utils.collections.primitive.IntIterator;
 import org.iguana.utils.collections.tuple.Tuple;

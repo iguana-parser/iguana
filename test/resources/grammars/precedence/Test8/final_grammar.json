@@ -75,6 +75,7 @@
         {
           "kind" : "Terminal",
           "name" : ".",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 46
@@ -83,6 +84,7 @@
         {
           "kind" : "Terminal",
           "name" : "a",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97
@@ -193,6 +195,7 @@
         {
           "kind" : "Terminal",
           "name" : ".[",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -220,6 +223,7 @@
         {
           "kind" : "Terminal",
           "name" : "]",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 93
@@ -330,6 +334,7 @@
         {
           "kind" : "Terminal",
           "name" : "+",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 43
@@ -418,6 +423,7 @@
         {
           "kind" : "Terminal",
           "name" : "if",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -445,6 +451,7 @@
         {
           "kind" : "Terminal",
           "name" : "then",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
             "symbols" : [
@@ -516,6 +523,7 @@
         {
           "kind" : "Terminal",
           "name" : "(",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 40
@@ -534,6 +542,7 @@
         {
           "kind" : "Terminal",
           "name" : ")",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 41
@@ -578,6 +587,7 @@
         {
           "kind" : "Terminal",
           "name" : "a",
+          "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
             "val" : 97

@@ -278,7 +278,6 @@ public class AutomatonOperations {
 	 * Note: unreachable states are already removed as we gather the states
 	 * reachable from the start state of the given NFA.
 	 * 
-	 * @return
 	 */
 	public static Automaton minimize(CharRange[] alphabet, State[] states, State startState) {
 		
@@ -398,7 +397,7 @@ public class AutomatonOperations {
 			}
 		}
 		
-		HashSet<Set<State>> partitions = new HashSet<Set<State>>(partitionsMap.values());
+		HashSet<Set<State>> partitions = new HashSet<>(partitionsMap.values());
 		
 		State newStartState = null;
 		
@@ -430,7 +429,7 @@ public class AutomatonOperations {
 		
 		for (State state : states) {
 			for (Transition t : state.getTransitions()) {
-				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));;				
+				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));
 			}
 		}
 		
@@ -465,8 +464,8 @@ public class AutomatonOperations {
 	}
 	
 	@FunctionalInterface
-	private static interface Op {
-		public boolean execute(State s1, State s2);
+	private interface Op {
+		boolean execute(State s1, State s2);
 	}
 	
 }

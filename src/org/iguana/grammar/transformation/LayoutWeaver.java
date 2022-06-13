@@ -35,6 +35,7 @@ import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -133,9 +134,13 @@ public class LayoutWeaver implements GrammarTransformation {
 	}
 	
 	private Set<Condition> getIgnoreLayoutConditions(Symbol s) {
-		return s.getPostConditions().stream()
-				.filter(c -> c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT || c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT)
-				.collect(Collectors.toSet());
+		Set<Condition> conditions = new LinkedHashSet<>();
+		for (Condition c : s.getPostConditions()) {
+			if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT || c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
+				conditions.add(c);
+			}
+		}
+		return conditions;
 	}
 	
 }

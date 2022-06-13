@@ -2253,8 +2253,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						
 						Symbol sym = symbol.accept(this);
 						
-						Set<Condition> preconditions = new HashSet<>();
-						Set<Condition> postconditions = new HashSet<>();
+						Set<Condition> preconditions = new LinkedHashSet<>();
+						Set<Condition> postconditions = new LinkedHashSet<>();
 						
 						if (rcond != null && i == 0)
 							preconditions.add(DataDependentCondition.predicate(rcond));

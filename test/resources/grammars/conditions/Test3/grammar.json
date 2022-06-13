@@ -83,7 +83,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Char" : {
       "kind" : "regex.Alt",
       "symbols" : [

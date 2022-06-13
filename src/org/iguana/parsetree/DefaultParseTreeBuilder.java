@@ -20,7 +20,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     @Override
     public TerminalNode terminalNode(Terminal terminal, int leftExtent, int rightExtent) {
         if (terminal == Terminal.epsilon()) return null;
-        if (terminal.getNodeType() == TerminalNodeType.Keyword) {
+        if (terminal.getNodeType() == TerminalNodeType.Literal) {
             return new KeywordTerminalNode(terminal, leftExtent, rightExtent);
         }
         return new DefaultTerminalNode(terminal, leftExtent, rightExtent, input);

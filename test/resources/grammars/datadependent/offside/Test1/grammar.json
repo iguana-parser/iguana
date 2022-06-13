@@ -27,6 +27,7 @@
                         {
                           "kind" : "Terminal",
                           "name" : ";",
+                          "nodeType" : "Literal",
                           "regex" : {
                             "kind" : "Char",
                             "val" : 59
@@ -57,6 +58,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "x",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 120
@@ -65,6 +67,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "=",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 61
@@ -101,6 +104,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "+",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 43
@@ -109,6 +113,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "a",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 97
@@ -125,6 +130,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "a",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 97
@@ -139,7 +145,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Layout" : {
       "kind" : "Reference",
       "name" : "WhiteSpace"
@@ -171,6 +177,28 @@
           }
         ]
       }
+    }
+  },
+  "literals" : {
+    "\";\"" : {
+      "kind" : "Char",
+      "val" : 59
+    },
+    "'x'" : {
+      "kind" : "Char",
+      "val" : 120
+    },
+    "'='" : {
+      "kind" : "Char",
+      "val" : 61
+    },
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'a'" : {
+      "kind" : "Char",
+      "val" : 97
     }
   },
   "startSymbol" : {

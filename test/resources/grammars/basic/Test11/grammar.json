@@ -23,6 +23,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "b",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 98
@@ -51,6 +52,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "a",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 97
@@ -66,6 +68,16 @@
       ]
     }
   ],
+  "literals" : {
+    "'b'" : {
+      "kind" : "Char",
+      "val" : 98
+    },
+    "'a'" : {
+      "kind" : "Char",
+      "val" : 97
+    }
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

@@ -36,17 +36,17 @@ public class RegularExpressionExamples {
      * Id ::= [a-zA-Z][a-zA-Z0-9]*
      */
     public static RegularExpression getId() {
-        org.iguana.regex.Alt<org.iguana.regex.CharRange> c1 = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z'), org.iguana.regex.CharRange.in('A', 'Z'));
-        org.iguana.regex.Alt<org.iguana.regex.CharRange> c2 = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('a', 'z'), org.iguana.regex.CharRange.in('A', 'Z'), org.iguana.regex.CharRange.in('0', '9'));
-        return org.iguana.regex.Seq.builder(c1, org.iguana.regex.Star.from(c2)).build();
+        Alt<CharRange> c1 = Alt.from(CharRange.in('a', 'z'), CharRange.in('A', 'Z'));
+        Alt<CharRange> c2 = Alt.from(CharRange.in('a', 'z'), CharRange.in('A', 'Z'), CharRange.in('0', '9'));
+        return Seq.builder(c1, Star.from(c2)).build();
     }
 
     /**
      * Float ::= [0-9]+[.][0-9]+
      */
     public static RegularExpression getFloat() {
-        org.iguana.regex.Alt<org.iguana.regex.CharRange> c = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('0', '9'));
-        return org.iguana.regex.Seq.builder(org.iguana.regex.Plus.from(c), org.iguana.regex.Char.from('.'), org.iguana.regex.Plus.from(c)).build();
+        Alt<CharRange> c = Alt.from(CharRange.in('0', '9'));
+        return Seq.builder(Plus.from(c), Char.from('.'), Plus.from(c)).build();
     }
 
     /**
@@ -55,17 +55,17 @@ public class RegularExpressionExamples {
     public static RegularExpression getJavaUnicodeEscape() {
         List<RegularExpression> regularExpressions = new ArrayList<>();
 
-        regularExpressions.add(org.iguana.regex.Seq.from("\\"));
+        regularExpressions.add(Seq.from("\\"));
 
-        regularExpressions.add(org.iguana.regex.Plus.from(org.iguana.regex.Char.from('u')));
+        regularExpressions.add(Plus.from(org.iguana.regex.Char.from('u')));
 
-        org.iguana.regex.Alt<org.iguana.regex.CharRange> c = org.iguana.regex.Alt.from(org.iguana.regex.CharRange.in('0', '9'), org.iguana.regex.CharRange.in('a', 'z'), CharRange.in('A', 'Z'));
+        Alt<CharRange> c = Alt.from(CharRange.in('0', '9'), CharRange.in('a', 'z'), CharRange.in('A', 'Z'));
         regularExpressions.add(c);
         regularExpressions.add(c);
         regularExpressions.add(c);
         regularExpressions.add(c);
 
-        return org.iguana.regex.Seq.builder(regularExpressions).build();
+        return Seq.builder(regularExpressions).build();
     }
 
     /**
@@ -75,32 +75,32 @@ public class RegularExpressionExamples {
      */
     public static RegularExpression getCharacter() {
         List<RegularExpression> regularExpressions = new ArrayList<>();
-        regularExpressions.add(org.iguana.regex.Char.from('\''));
-        regularExpressions.add(org.iguana.regex.Plus.from(org.iguana.regex.Alt.not(org.iguana.regex.Char.from('\''))));
-        regularExpressions.add(org.iguana.regex.Char.from('\''));
-        return org.iguana.regex.Seq.builder(regularExpressions).build();
+        regularExpressions.add(Char.from('\''));
+        regularExpressions.add(Plus.from(Alt.not(Char.from('\''))));
+        regularExpressions.add(Char.from('\''));
+        return Seq.builder(regularExpressions).build();
     }
 
     /**
      * StringPart ::= !["\\]+ | "\n"
      */
     public static RegularExpression getStringPart() {
-        org.iguana.regex.Char c1 = org.iguana.regex.Char.from('"');
-        org.iguana.regex.Char c2 = org.iguana.regex.Char.from('\\');
-        org.iguana.regex.Seq<org.iguana.regex.Char> newline = org.iguana.regex.Seq.from("\\n");
+        Char c1 = Char.from('"');
+        Char c2 = Char.from('\\');
+        Seq<Char> newline = Seq.from("\\n");
 
-        return org.iguana.regex.Alt.builder(Plus.from(org.iguana.regex.Alt.not(c1, c2)), newline).build();
+        return Alt.builder(Plus.from(Alt.not(c1, c2)), newline).build();
     }
 
     // "/*" (![*] | [*] !>> [/])* "*/"
     public static RegularExpression getMultilineComment() {
-        return org.iguana.regex.Seq.builder()
-                .add(org.iguana.regex.Seq.from("/*"))
-                .add(Star.from(org.iguana.regex.Alt.from(
-                                Alt.not(org.iguana.regex.Char.from('*')),
-                                org.iguana.regex.Char.builder('*').addLookahead(Char.from('/')).build())))
-                .add(Seq.from("*/"))
-                .build();
+        return Seq.builder()
+            .add(Seq.from("/*"))
+            .add(Star.from(Alt.from(
+                Alt.not(Char.from('*')),
+                Char.builder('*').addLookahead(Char.from('/')).build())))
+            .add(Seq.from("*/"))
+            .build();
     }
 
 }

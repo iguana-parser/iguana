@@ -60,6 +60,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -133,6 +134,7 @@
                             }
                           }
                         ],
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 98
@@ -198,7 +200,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Layout" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -210,6 +212,16 @@
           }
         ]
       }
+    }
+  },
+  "literals" : {
+    "'a'" : {
+      "kind" : "Char",
+      "val" : 97
+    },
+    "'b'" : {
+      "kind" : "Char",
+      "val" : 98
     }
   },
   "startSymbol" : {

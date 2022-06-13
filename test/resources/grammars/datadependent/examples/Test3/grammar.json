@@ -19,6 +19,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : ".",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 46
@@ -64,6 +65,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "-",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 45
@@ -92,6 +94,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "*",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 42
@@ -121,6 +124,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "+",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 43
@@ -141,6 +145,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "-",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 45
@@ -166,6 +171,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "if",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -187,6 +193,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "then",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -216,6 +223,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "else",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -261,6 +269,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : ";",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 59
@@ -282,6 +291,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "(",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 40
@@ -294,6 +304,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : ")",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 41
@@ -320,7 +331,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "field" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -433,6 +444,91 @@
           }
         ]
       }
+    }
+  },
+  "literals" : {
+    "'.'" : {
+      "kind" : "Char",
+      "val" : 46
+    },
+    "'-'" : {
+      "kind" : "Char",
+      "val" : 45
+    },
+    "'*'" : {
+      "kind" : "Char",
+      "val" : 42
+    },
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'if'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 102
+        }
+      ]
+    },
+    "'then'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 116
+        },
+        {
+          "kind" : "Char",
+          "val" : 104
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
+    },
+    "'else'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 115
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        }
+      ]
+    },
+    "';'" : {
+      "kind" : "Char",
+      "val" : 59
+    },
+    "'('" : {
+      "kind" : "Char",
+      "val" : 40
+    },
+    "')'" : {
+      "kind" : "Char",
+      "val" : 41
     }
   },
   "startSymbol" : {

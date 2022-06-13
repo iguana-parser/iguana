@@ -15,6 +15,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "for",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -56,6 +57,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "forall",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -169,6 +171,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "\\u0020",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 32
@@ -183,7 +186,7 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "Char" : {
       "kind" : "regex.Alt",
       "symbols" : [
@@ -193,6 +196,58 @@
           "end" : 122
         }
       ]
+    }
+  },
+  "literals" : {
+    "'for'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 102
+        },
+        {
+          "kind" : "Char",
+          "val" : 111
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        }
+      ]
+    },
+    "'forall'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 102
+        },
+        {
+          "kind" : "Char",
+          "val" : 111
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        },
+        {
+          "kind" : "Char",
+          "val" : 97
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        }
+      ]
+    },
+    "' '" : {
+      "kind" : "Char",
+      "val" : 32
     }
   },
   "startSymbol" : {

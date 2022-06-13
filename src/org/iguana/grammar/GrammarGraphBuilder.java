@@ -229,7 +229,7 @@ public class GrammarGraphBuilder {
 
             validateNumberOfArguments(nonterminalSlot.getNonterminal(), arguments);
 
-            Set<Condition> preConditions = (i == 0 && j == -1) ? new HashSet<>() : symbol.getPreConditions();
+            Set<Condition> preConditions = (i == 0 && j == -1) ? new LinkedHashSet<>() : symbol.getPreConditions();
             setTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, getConditions(preConditions)));
 
             currentSlot = slot;
@@ -393,7 +393,7 @@ public class GrammarGraphBuilder {
         } else {
             // TODO: This is not a final solution; in particular,
             //       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.
-            Set<Condition> preConditions = new HashSet<>(rule.symbolAt(0).getPreConditions());
+            Set<Condition> preConditions = new LinkedHashSet<>(rule.symbolAt(0).getPreConditions());
 
             slot = new BodyGrammarSlot(rule.getPosition(0, 0), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions), FollowTest.DEFAULT);
         }

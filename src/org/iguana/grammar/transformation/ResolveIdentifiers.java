@@ -1,60 +1,25 @@
 package org.iguana.grammar.transformation;
 
+import org.iguana.grammar.slot.TerminalNodeType;
+import org.iguana.grammar.symbol.Identifier;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.Reference;
 import org.iguana.regex.RegularExpression;
-import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.slot.NonterminalNodeType;
-import org.iguana.grammar.slot.TerminalNodeType;
-import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.SymbolToSymbolVisitor;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Set;
 
-public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbolVisitor {
+public class ResolveIdentifiers implements SymbolToSymbolVisitor {
 
-    private Set<String> nonterminals;
-    private Map<String, RegularExpression> terminals;
+    private final Set<String> nonterminals;
+    private final Map<String, RegularExpression> regularExpressions;
 
-    @Override
-    public RuntimeGrammar transform(RuntimeGrammar grammar) {
-        nonterminals = new HashSet<>();
-        for (RuntimeRule rule : grammar.getRules()) {
-            nonterminals.add(rule.getHead().getName());
-        }
-        terminals = grammar.getTerminals();
-
-
-        List<RuntimeRule> newRules = new ArrayList<>();
-        for (RuntimeRule rule : grammar.getRules()) {
-            List<Symbol> newSymbols = rule.getBody().stream().map(symbol -> symbol.accept(this)).collect(Collectors.toList());
-            RuntimeRule newRule = rule.copyBuilder().setSymbols(newSymbols).build();
-            if (newRule.equals(rule)) {
-                newRules.add(rule);
-            } else {
-                newRules.add(newRule);
-            }
-        }
-
-        Symbol layout = null;
-        if (grammar.getLayout() != null) {
-            layout = grammar.getLayout().accept(this);
-            if (layout instanceof Terminal) {
-                layout = ((Terminal) layout).copy().setNodeType(TerminalNodeType.Layout).build();
-            } else if (layout instanceof Nonterminal) {
-                layout = ((Nonterminal) layout).copy().setNodeType(NonterminalNodeType.Layout).build();
-            } else {
-                throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " + layout.getClass().getSimpleName());
-            }
-        }
-        return RuntimeGrammar.builder()
-            .addRules(newRules)
-            .setLayout(layout)
-            .setGlobals(grammar.getGlobals())
-            .setEbnfLefts(grammar.getEBNFLefts())
-            .setEbnfRights(grammar.getEBNFRights())
-            .setStartSymbol(grammar.getStartSymbol()).build();
+    public ResolveIdentifiers(Set<String> nonterminals, Map<String, RegularExpression> regularExpressions) {
+        this.nonterminals = nonterminals;
+        this.regularExpressions = regularExpressions;
     }
 
     @Override
@@ -66,8 +31,8 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
                 .addExcepts(id.getExcepts())
                 .setLabel(id.getLabel())
                 .build();
-        } else if (terminals.containsKey(id.getName())) {
-            RegularExpression regularExpression = terminals.get(id.getName());
+        } else if (regularExpressions.containsKey(id.getName())) {
+            RegularExpression regularExpression = regularExpressions.get(id.getName());
             return new Terminal.Builder(regularExpression)
                 .setNodeType(TerminalNodeType.Regex)
                 .setPreConditions(visitPreConditions(id))
@@ -82,8 +47,8 @@ public class ResolveIdentifiers implements GrammarTransformation, SymbolToSymbol
 
     @Override
     public RegularExpression visit(Reference ref) {
-        if (terminals.containsKey(ref.getName())) {
-            return terminals.get(ref.getName());
+        if (regularExpressions.containsKey(ref.getName())) {
+            return regularExpressions.get(ref.getName());
         } else {
             throw new RuntimeException("Terminal '" + ref.getName() + "' is not defined.");
         }

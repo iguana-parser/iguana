@@ -164,6 +164,7 @@
               {
                 "kind" : "Terminal",
                 "name" : "+",
+                "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
                   "val" : 43
@@ -236,6 +237,7 @@
                   {
                     "kind" : "Terminal",
                     "name" : "a",
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 97
@@ -280,10 +282,11 @@
               },
               "children" : [
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "a",
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 97
@@ -297,10 +300,11 @@
               "end" : 1
             },
             {
-              "kind" : "TerminalNode",
+              "kind" : "KeywordTerminalNode",
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : "+",
+                "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
                   "val" : 43
@@ -365,69 +369,6 @@
                         "expression" : {
                           "kind" : "Or",
                           "lhs" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "Get",
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 1,
-                              "fun" : "get",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "l",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Integer",
-                                  "value" : 1
-                                }
-                              ]
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : -1
-                            }
-                          },
-                          "rhs" : {
-                            "kind" : "LShiftANDEqZero",
-                            "lhs" : {
-                              "kind" : "Integer",
-                              "value" : 7
-                            },
-                            "rhs" : {
-                              "kind" : "Get",
-                              "arg1" : {
-                                "kind" : "Name",
-                                "name" : "l",
-                                "i" : -1
-                              },
-                              "arg2" : 1,
-                              "fun" : "get",
-                              "arguments" : [
-                                {
-                                  "kind" : "Name",
-                                  "name" : "l",
-                                  "i" : -1
-                                },
-                                {
-                                  "kind" : "Integer",
-                                  "value" : 1
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "kind" : "DataDependentCondition",
-                        "type" : "DATA_DEPENDENT",
-                        "expression" : {
-                          "kind" : "Or",
-                          "lhs" : {
                             "kind" : "LessThanEqual",
                             "lhs" : {
                               "kind" : "Get",
@@ -484,6 +425,69 @@
                             }
                           }
                         }
+                      },
+                      {
+                        "kind" : "DataDependentCondition",
+                        "type" : "DATA_DEPENDENT",
+                        "expression" : {
+                          "kind" : "Or",
+                          "lhs" : {
+                            "kind" : "Equal",
+                            "lhs" : {
+                              "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 1,
+                              "fun" : "get",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "l",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              ]
+                            },
+                            "rhs" : {
+                              "kind" : "Integer",
+                              "value" : -1
+                            }
+                          },
+                          "rhs" : {
+                            "kind" : "LShiftANDEqZero",
+                            "lhs" : {
+                              "kind" : "Integer",
+                              "value" : 7
+                            },
+                            "rhs" : {
+                              "kind" : "Get",
+                              "arg1" : {
+                                "kind" : "Name",
+                                "name" : "l",
+                                "i" : -1
+                              },
+                              "arg2" : 1,
+                              "fun" : "get",
+                              "arguments" : [
+                                {
+                                  "kind" : "Name",
+                                  "name" : "l",
+                                  "i" : -1
+                                },
+                                {
+                                  "kind" : "Integer",
+                                  "value" : 1
+                                }
+                              ]
+                            }
+                          }
+                        }
                       }
                     ],
                     "variable" : "l",
@@ -507,6 +511,7 @@
                   {
                     "kind" : "Terminal",
                     "name" : "[",
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 91
@@ -529,6 +534,7 @@
                   {
                     "kind" : "Terminal",
                     "name" : "]",
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 93
@@ -588,6 +594,7 @@
                       {
                         "kind" : "Terminal",
                         "name" : "a",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -632,10 +639,11 @@
                   },
                   "children" : [
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "a",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 97
@@ -649,10 +657,11 @@
                   "end" : 3
                 },
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "[",
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 91
@@ -775,6 +784,7 @@
                       {
                         "kind" : "Terminal",
                         "name" : "+",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -847,6 +857,7 @@
                           {
                             "kind" : "Terminal",
                             "name" : "a",
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -891,10 +902,11 @@
                       },
                       "children" : [
                         {
-                          "kind" : "TerminalNode",
+                          "kind" : "KeywordTerminalNode",
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "a",
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -908,10 +920,11 @@
                       "end" : 5
                     },
                     {
-                      "kind" : "TerminalNode",
+                      "kind" : "KeywordTerminalNode",
                       "terminal" : {
                         "kind" : "Terminal",
                         "name" : "+",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 43
@@ -935,6 +948,7 @@
                           {
                             "kind" : "Terminal",
                             "name" : "a",
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -979,10 +993,11 @@
                       },
                       "children" : [
                         {
-                          "kind" : "TerminalNode",
+                          "kind" : "KeywordTerminalNode",
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "a",
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 97
@@ -1000,10 +1015,11 @@
                   "end" : 7
                 },
                 {
-                  "kind" : "TerminalNode",
+                  "kind" : "KeywordTerminalNode",
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "]",
+                    "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
                       "val" : 93

@@ -11,6 +11,7 @@ import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.regex.*;
+import org.iguana.regex.automaton.Automaton;
 import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
@@ -246,6 +247,8 @@ public class JsonSerializer {
         Map<Nonterminal, List<RuntimeRule>> definitions;
         @JsonIgnore
         Map<String, RegularExpression> terminals;
+        @JsonIgnore
+        Set<RegularExpression> literals;
     }
 
     @JsonDeserialize(builder = RuntimeRule.Builder.class)
@@ -318,6 +321,10 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value= Reference.class, name="Reference")
     })
     abstract static class RegularExpressionMixIn { }
+
+    abstract static class AbstractRegularExpressionMixIn {
+        @JsonIgnore Automaton automaton;
+    }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
@@ -436,29 +443,29 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Ignore.Builder.class)
     abstract static class IgnoreMixIn { }
 
-    @JsonDeserialize(builder = Seq.Builder.class)
-    abstract static class SeqMixIn { }
+    @JsonDeserialize(builder = org.iguana.regex.Seq.Builder.class)
+    abstract static class SeqMixIn extends AbstractRegularExpressionMixIn { }
 
     @JsonDeserialize(builder = org.iguana.regex.Alt.Builder.class)
-    abstract static class RegexAltMixIn { }
+    abstract static class RegexAltMixIn extends AbstractRegularExpressionMixIn { }
 
     @JsonDeserialize(builder = org.iguana.regex.Star.Builder.class)
-    abstract static class RegexStarMixIn { }
+    abstract static class RegexStarMixIn extends AbstractRegularExpressionMixIn { }
 
     @JsonDeserialize(builder = org.iguana.regex.Plus.Builder.class)
-    abstract static class RegexPlusMixIn { }
+    abstract static class RegexPlusMixIn extends AbstractRegularExpressionMixIn { }
 
     @JsonDeserialize(builder = org.iguana.regex.Opt.Builder.class)
-    abstract static class RegexOptMixIn { }
+    abstract static class RegexOptMixIn extends AbstractRegularExpressionMixIn { }
 
-    @JsonDeserialize(builder = Char.Builder.class)
-    abstract static class CharMixIn { }
+    @JsonDeserialize(builder = org.iguana.regex.Char.Builder.class)
+    abstract static class CharMixIn extends AbstractRegularExpressionMixIn { }
 
-    @JsonDeserialize(builder = CharRange.Builder.class)
-    abstract static class CharRangeMixIn { }
+    @JsonDeserialize(builder = org.iguana.regex.CharRange.Builder.class)
+    abstract static class CharRangeMixIn extends AbstractRegularExpressionMixIn { }
 
-    @JsonDeserialize(builder = Reference.Builder.class)
-    abstract static class ReferenceMixIn { }
+    @JsonDeserialize(builder = org.iguana.regex.Reference.Builder.class)
+    abstract static class ReferenceMixIn extends AbstractRegularExpressionMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({

@@ -43,6 +43,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "+",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 43
@@ -68,6 +69,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "let",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -93,6 +95,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "in",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
                         "symbols" : [
@@ -173,6 +176,7 @@
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "{",
+                        "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
                           "val" : 123
@@ -193,6 +197,7 @@
                           {
                             "kind" : "Terminal",
                             "name" : ";",
+                            "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
                               "val" : 59
@@ -208,6 +213,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "}",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 125
@@ -240,6 +246,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "=",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 61
@@ -258,63 +265,7 @@
       ]
     }
   ],
-  "terminals" : {
-    "Whitespaces" : {
-      "kind" : "regex.Star",
-      "regex" : {
-        "kind" : "regex.Alt",
-        "symbols" : [
-          {
-            "kind" : "Char",
-            "val" : 10
-          },
-          {
-            "kind" : "Char",
-            "val" : 13
-          },
-          {
-            "kind" : "Char",
-            "val" : 9
-          },
-          {
-            "kind" : "Char",
-            "val" : 12
-          },
-          {
-            "kind" : "Char",
-            "val" : 32
-          }
-        ]
-      }
-    },
-    "Num" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "regex.Alt",
-          "symbols" : [
-            {
-              "kind" : "CharRange",
-              "start" : 49,
-              "end" : 57
-            }
-          ]
-        },
-        {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "CharRange",
-                "start" : 48,
-                "end" : 57
-              }
-            ]
-          }
-        }
-      ]
-    },
+  "regularExpressions" : {
     "Id" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -357,6 +308,114 @@
           }
         }
       ]
+    },
+    "Num" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 49,
+              "end" : 57
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "CharRange",
+                "start" : 48,
+                "end" : 57
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Whitespaces" : {
+      "kind" : "regex.Star",
+      "regex" : {
+        "kind" : "regex.Alt",
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "val" : 10
+          },
+          {
+            "kind" : "Char",
+            "val" : 13
+          },
+          {
+            "kind" : "Char",
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "val" : 12
+          },
+          {
+            "kind" : "Char",
+            "val" : 32
+          }
+        ]
+      }
+    }
+  },
+  "literals" : {
+    "'+'" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "'let'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 116
+        }
+      ]
+    },
+    "'in'" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
+    },
+    "'{'" : {
+      "kind" : "Char",
+      "val" : 123
+    },
+    "';'" : {
+      "kind" : "Char",
+      "val" : 59
+    },
+    "'}'" : {
+      "kind" : "Char",
+      "val" : 125
+    },
+    "'='" : {
+      "kind" : "Char",
+      "val" : 61
     }
   },
   "startSymbol" : {

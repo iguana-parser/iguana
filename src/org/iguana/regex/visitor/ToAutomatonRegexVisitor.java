@@ -1,185 +1,164 @@
 package org.iguana.regex.visitor;
 
-import org.iguana.regex.EOF;
-import org.iguana.regex.RegularExpression;
+import org.iguana.regex.*;
 import org.iguana.regex.automaton.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automaton> {
 
-	private Map<RegularExpression, Automaton> cache = new HashMap<>();
+    // TODO: consider making this cache global, across the regular expressions for the whole grammar.
+    private final Map<RegularExpression, Automaton> cache = new HashMap<>();
 
-	@Override
-	public Automaton visit(org.iguana.regex.Char c) {
-		Automaton automaton = cache.get(c);
-		if (automaton == null) {
-			State startState = new State();
-			State finalState = new State(StateType.FINAL);
-			finalState.addRegularExpression(c);
-			startState.addTransition(new Transition(c.getValue(), finalState));
-			automaton = Automaton.builder(startState).build();
-		}
-		return automaton;
-	}
+    // Since Java 9, recursive calls to computeIfAbsent throw concurrent modification exception.
+    // This memoize function is a way to provide the same concise interface but avoid the exceptions.
+    private Automaton memoize(RegularExpression regex, Function<RegularExpression, Automaton> f) {
+        Automaton automaton = cache.get(regex);
+        if (automaton != null) return automaton;
+        automaton = f.apply(regex);
+        cache.put(regex, automaton);
+        return automaton;
+    }
 
-	@Override
-	public Automaton visit(org.iguana.regex.CharRange r) {
-		Automaton automaton = cache.get(r);
-		if (automaton == null) {
-			State startState = new State();
-			State finalState = new State(StateType.FINAL);
-			finalState.addRegularExpression(r);
-			startState.addTransition(new Transition(r.getStart(), r.getEnd(), finalState));
-			automaton = Automaton.builder(startState).build();
-		}
-		return automaton;
-	}
+    @Override
+    public Automaton visit(Char c) {
+        return memoize(c, regex -> {
+            State startState = new State();
+            State finalState = new State(StateType.FINAL);
+            startState.addTransition(new Transition(c.getValue(), finalState));
+            return Automaton.builder(startState).build();
+        });
+    }
 
-	@Override
-	public Automaton visit(org.iguana.regex.EOF eof) {
-		Automaton automaton = cache.get(eof);
-		if (automaton == null) {
-			State startState = new State();
-			State endState = new State(StateType.FINAL);
-			endState.addRegularExpression(eof);
-			startState.addTransition(new Transition(EOF.VALUE, endState));
-			automaton = Automaton.builder(startState).build();
-		}
-		return automaton;
-	}
+    @Override
+    public Automaton visit(CharRange r) {
+        return memoize(r, regex -> {
+            State startState = new State();
+            State finalState = new State(StateType.FINAL);
+            startState.addTransition(new Transition(r.getStart(), r.getEnd(), finalState));
+            return Automaton.builder(startState).build();
+        });
+    }
 
-	@Override
-	public Automaton visit(org.iguana.regex.Epsilon e) {
-		Automaton automaton = cache.get(e);
-		if (automaton == null) {
-			State state = new State(StateType.FINAL);
-			state.addRegularExpression(e);
-			return Automaton.builder(state).build();
-		}
-		return automaton;
-	}
+    @Override
+    public Automaton visit(EOF eof) {
+        return memoize(eof, regex -> {
+            State startState = new State();
+            State finalState = new State(StateType.FINAL);
+            startState.addTransition(new Transition(EOF.VALUE, finalState));
+            return Automaton.builder(startState).build();
+        });
+    }
 
-	@Override
-	public Automaton visit(org.iguana.regex.Star star) {
-		//TODO: add separators to the DFA
-		Automaton automaton = cache.get(star);
-		if (automaton == null) {
-			State startState = new State();
-			State finalState = new State(StateType.FINAL);
-			finalState.addRegularExpression(star);
+    @Override
+    public Automaton visit(Epsilon e) {
+        return memoize(e, regex -> {
+            State state = new State(StateType.FINAL);
+            return Automaton.builder(state).build();
+        });
+    }
 
-			Automaton starAutomaton = star.getSymbol().accept(this).copy();
+    @Override
+    public Automaton visit(Star star) {
+        //TODO: add separators to the DFA
+        return memoize(star, regex -> {
+            State startState = new State();
+            State finalState = new State(StateType.FINAL);
 
-			startState.addEpsilonTransition(starAutomaton.getStartState());
+            Automaton starAutomaton = star.getSymbol().accept(this).copy();
 
-			Set<State> finalStates = starAutomaton.getFinalStates();
+            startState.addEpsilonTransition(starAutomaton.getStartState());
 
-			for(State s : finalStates) {
-				s.setStateType(StateType.NORMAL);
-				s.addEpsilonTransition(finalState);
-				s.addEpsilonTransition(starAutomaton.getStartState());
-			}
+            Set<State> finalStates = starAutomaton.getFinalStates();
 
-			startState.addEpsilonTransition(finalState);
+            for (State s : finalStates) {
+                s.setStateType(StateType.NORMAL);
+                s.addEpsilonTransition(finalState);
+                s.addEpsilonTransition(starAutomaton.getStartState());
+            }
 
-			automaton = Automaton.builder(startState).build();
-		}
-		return automaton;
-	}
+            startState.addEpsilonTransition(finalState);
 
-	@Override
-	public Automaton visit(org.iguana.regex.Plus p) {
-		Automaton automaton = cache.get(p);
-		if (automaton == null) {
-			automaton = org.iguana.regex.Seq.from(p.getSymbol(), org.iguana.regex.Star.from(p.getSymbol())).accept(this);
-		}
-		return automaton;
-	}
+            return Automaton.builder(startState).build();
+        });
+    }
 
-	@Override
-	public Automaton visit(org.iguana.regex.Opt opt) {
-		Automaton automaton = cache.get(opt);
-		if (automaton == null) {
-			automaton = opt.getSymbol().accept(this).copy();
+    @Override
+    public Automaton visit(Plus p) {
+        return memoize(p, regex -> Seq.from(p.getSymbol(), Star.from(p.getSymbol())).accept(this));
+    }
 
-			Set<State> finalStates = automaton.getFinalStates();
-			for(State finalState : finalStates) {
-				automaton.getStartState().addEpsilonTransition(finalState);
-				finalState.addRegularExpression(opt);
-			}
-		}
-		return automaton;
-	}
+    @Override
+    public Automaton visit(Opt opt) {
+        return memoize(opt, regex -> {
+            Automaton automaton = opt.getSymbol().accept(this).copy();
 
-	@Override
-	public <E extends RegularExpression> Automaton visit(org.iguana.regex.Alt<E> alt) {
-		Automaton automaton = cache.get(alt);
-		if (automaton == null) {
-			List<E> symbols = alt.getSymbols();
+            Set<State> finalStates = automaton.getFinalStates();
+            for (State finalState : finalStates) {
+                automaton.getStartState().addEpsilonTransition(finalState);
+            }
+            return automaton;
+        });
+    }
 
-			if (symbols.size() == 1)
-				return symbols.get(0).accept(this);
+    @Override
+    public <E extends RegularExpression> Automaton visit(Alt<E> alt) {
+        return memoize(alt, regex -> {
+            List<E> symbols = alt.getSymbols();
 
-			List<Automaton> automatons = new ArrayList<>();
+            if (symbols.size() == 1)
+                return symbols.get(0).accept(this);
 
-			for (RegularExpression e : symbols) {
-				automatons.add(e.accept(this).copy());
-			}
+            List<Automaton> automatons = new ArrayList<>();
 
-			State startState = new State();
+            for (RegularExpression e : symbols) {
+                automatons.add(e.accept(this).copy());
+            }
 
-			for (Automaton a : automatons) {
-				startState.addEpsilonTransition(a.getStartState());
-				for (State finalState : a.getFinalStates()) {
-					finalState.addRegularExpression(alt);
-				}
-			}
+            State startState = new State();
 
-			automaton = new AutomatonBuilder(startState).build();
-		}
-		return automaton;
-	}
+            for (Automaton a : automatons) {
+                startState.addEpsilonTransition(a.getStartState());
+            }
 
-	@Override
-	public <E extends RegularExpression> Automaton visit(org.iguana.regex.Seq<E> seq) {
-		Automaton automaton = cache.get(seq);
-		if (automaton == null) {
-			List<Automaton> automatons = new ArrayList<>();
+            return new AutomatonBuilder(startState).build();
+        });
+    }
 
-			for (E symbol : seq.getSymbols()) {
-				automatons.add(symbol.accept(this).copy());
-			}
+    @Override
+    public <E extends RegularExpression> Automaton visit(Seq<E> seq) {
+        return memoize(seq, regex -> {
+            List<Automaton> automatons = new ArrayList<>();
 
-			Automaton current = automatons.get(0);
-			State startState = current.getStartState();
+            for (E symbol : seq.getSymbols()) {
+                automatons.add(symbol.accept(this).copy());
+            }
 
-			for (int i = 1; i < automatons.size(); i++) {
-				Automaton next = automatons.get(i);
+            Automaton current = automatons.get(0);
+            State startState = current.getStartState();
 
-				for (State s : current.getFinalStates()) {
-					s.setStateType(StateType.NORMAL);
-					// Merge the end state with the start state of the next automaton
-					for (Transition t : next.getStartState().getTransitions()) {
-						s.addTransition(new Transition(t.getRange(), t.getDestination()));
-					}
-				}
+            for (int i = 1; i < automatons.size(); i++) {
+                Automaton next = automatons.get(i);
 
-				current = next;
-			}
+                for (State s : current.getFinalStates()) {
+                    s.setStateType(StateType.NORMAL);
+                    // Merge the end state with the start state of the next automaton
+                    for (Transition t : next.getStartState().getTransitions()) {
+                        s.addTransition(new Transition(t.getRange(), t.getDestination()));
+                    }
+                }
 
-			for (State finalState : current.getFinalStates()) {
-				finalState.addRegularExpression(seq);
-			}
+                current = next;
+            }
 
-			automaton = Automaton.builder(startState).build();
-		}
-		return automaton;
-	}
+            return Automaton.builder(startState).build();
+        });
+    }
 
-	@Override
-	public Automaton visit(org.iguana.regex.Reference ref) {
-		throw new RuntimeException("References should be resolved first");
-	}
+    @Override
+    public Automaton visit(org.iguana.regex.Reference ref) {
+        throw new RuntimeException("References should be resolved first");
+    }
 
 }

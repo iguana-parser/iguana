@@ -10,7 +10,7 @@ public class KeywordTerminalNode extends TerminalNode {
     public KeywordTerminalNode(TerminalGrammarSlot slot, int leftExtent) {
         super(leftExtent);
         this.slot = slot;
-        this.rightExtent = leftExtent + slot.getTerminal().getName().length();
+        this.rightExtent = leftExtent + slot.getTerminal().getRegularExpression().length();
     }
 
     @Override

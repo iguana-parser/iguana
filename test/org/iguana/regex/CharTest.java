@@ -41,12 +41,12 @@ public class CharTest {
 	
 	MatcherFactory factory = new DFAMatcherFactory();
 
-	org.iguana.regex.Char c = Char.from('a');
+	Char c = Char.from('a');
 	
 	@Test
 	public void testAutomaton() {
 		Automaton automaton = c.getAutomaton();
-		assertArrayEquals(new org.iguana.regex.CharRange[] {CharRange.in('a', 'a')}, automaton.getAlphabet());
+		assertArrayEquals(new CharRange[] {CharRange.in('a', 'a')}, automaton.getAlphabet());
 		assertEquals(2, automaton.getCountStates());
 	}
 

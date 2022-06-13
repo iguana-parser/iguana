@@ -43,6 +43,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "a",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 97
@@ -71,6 +72,7 @@
                     {
                       "kind" : "Terminal",
                       "name" : "b",
+                      "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
                         "val" : 98
@@ -85,13 +87,23 @@
       ]
     }
   ],
-  "terminals" : {
+  "regularExpressions" : {
     "L" : {
       "kind" : "regex.Opt",
       "regex" : {
         "kind" : "Char",
         "val" : 32
       }
+    }
+  },
+  "literals" : {
+    "'a'" : {
+      "kind" : "Char",
+      "val" : 97
+    },
+    "'b'" : {
+      "kind" : "Char",
+      "val" : 98
     }
   },
   "startSymbol" : {
