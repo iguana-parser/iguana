@@ -5,7 +5,6 @@ import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
