@@ -29,13 +29,10 @@ package org.iguana.regex.automaton;
 
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
+import org.iguana.util.Tuple;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -89,8 +86,12 @@ public class Automaton {
 		return alphabet;
 	}
 
-	public Set<RegularExpression> getRegularExpressions() {
-		return finalStates.stream().flatMap(state -> state.getRegularExpressions().stream()).collect(toSet());
+	public Collection<RegularExpression> getRegularExpressions() {
+		return finalStates.stream()
+			.flatMap(state -> state.getRegularExpressions().stream())
+			.sorted(Comparator.comparing(Tuple::getSecond))
+			.map(Tuple::getFirst)
+			.collect(Collectors.toList());
 	}
 	
 	public boolean isDeterministic() {

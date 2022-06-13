@@ -3,6 +3,7 @@ package org.iguana.iggy;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Seq;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,19 +24,22 @@ public class IggyTokenizer {
         RuntimeGrammar grammar = IggyParser.iggyGrammar().toRuntimeGrammar();
         Map<RegularExpression, String> regularExpressionCategories = new LinkedHashMap<>();
 
-        regularExpressionCategories.put(grammar.getLiterals().get("var"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("else"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("regex"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("align"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("ignore"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("layout"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("global"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("offside"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("if"), "Keyword");
-        regularExpressionCategories.put(grammar.getLiterals().get("start"), "Keyword");
-//        regularExpressionCategories.put(grammar.getLiterals().get("left"), "Keyword");
-//        regularExpressionCategories.put(grammar.getLiterals().get("right"), "Keyword");
-//        regularExpressionCategories.put(grammar.getLiterals().get("non-assoc"), "Keyword");
+        regularExpressionCategories.put(Seq.from("var"), "Keyword");
+        regularExpressionCategories.put(Seq.from("else"), "Keyword");
+        regularExpressionCategories.put(Seq.from("regex"), "Keyword");
+        regularExpressionCategories.put(Seq.from("align"), "Keyword");
+        regularExpressionCategories.put(Seq.from("ignore"), "Keyword");
+        regularExpressionCategories.put(Seq.from("layout"), "Keyword");
+        regularExpressionCategories.put(Seq.from("global"), "Keyword");
+        regularExpressionCategories.put(Seq.from("offside"), "Keyword");
+        regularExpressionCategories.put(Seq.from("if"), "Keyword");
+        regularExpressionCategories.put(Seq.from("start"), "Keyword");
+        regularExpressionCategories.put(Seq.from("left"), "Keyword");
+        regularExpressionCategories.put(Seq.from("right"), "Keyword");
+        regularExpressionCategories.put(Seq.from("non-assoc"), "Keyword");
+        regularExpressionCategories.put(Seq.from("put"), "Keyword");
+        regularExpressionCategories.put(Seq.from("set"), "Keyword");
+        regularExpressionCategories.put(Seq.from("contains"), "Keyword");
 
         regularExpressionCategories.put(grammar.getLiterals().get("!<<"), "!<<");
         regularExpressionCategories.put(grammar.getLiterals().get("!>>"), "!>>");

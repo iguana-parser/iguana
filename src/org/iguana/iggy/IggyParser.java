@@ -14,7 +14,14 @@ import static org.iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser {
 
-    private static final IguanaParser parser = new IguanaParser(iggyGrammar());
+    private static IguanaParser iggyParser;
+
+    public static IguanaParser iggyParser() {
+        if (iggyParser == null) {
+            iggyParser = new IguanaParser(iggyGrammar());
+        }
+        return iggyParser;
+    }
 
     public static Grammar iggyGrammar() {
         try {
@@ -41,6 +48,7 @@ public class IggyParser {
     }
 
     private static Grammar getGrammar(Input input) {
+        IguanaParser parser = iggyParser();
         parser.parse(input);
         if (parser.hasParseError()) {
             System.out.println(parser.getParseError());

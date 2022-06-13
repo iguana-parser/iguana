@@ -48,7 +48,7 @@ public class AutomatonOperations {
 		Set<Set<State>> visitedStates = new HashSet<>();
 		Deque<Set<State>> processList = new ArrayDeque<>();
 		
-		Set<State> initialState = new LinkedHashSet<>();
+		Set<State> initialState = new HashSet<>();
 		initialState.add(start);
 		initialState = epsilonClosure(initialState);
 		visitedStates.add(initialState);
@@ -438,7 +438,7 @@ public class AutomatonOperations {
 
 	
 	private static Set<State> epsilonClosure(Set<State> states) {
-		Set<State> newStates = new LinkedHashSet<>(states);
+		Set<State> newStates = new HashSet<>(states);
 		
 		for(State state : states) {
 			Set<State> s = state.getEpsilonSates();
@@ -452,7 +452,7 @@ public class AutomatonOperations {
 	}
 	
 	private static Set<State> move(Set<State> state, CharRange r) {
-		Set<State> result = new LinkedHashSet<>();
+		Set<State> result = new HashSet<>();
 		for (State s: state) {
 			State dest = s.getState(r);
 			if (dest != null) {

@@ -1,5 +1,6 @@
 package org.iguana.iggy;
 
+import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
@@ -29,6 +30,38 @@ public class IggyTokenizerTest {
             sb.append(token.getLexeme());
         }
         assertEquals(inputString, sb.toString());
+    }
+
+    @Test
+    public void testOrderOfRegularExpressions() {
+        IguanaTokenizer iguanaTokenizer = IggyTokenizer.getIggyTokenizer();
+        Input input = Input.fromString("var a = 1");
+        iguanaTokenizer.prepare(input, 0);
+
+        RuntimeGrammar grammar = IggyParser.iggyGrammar().toRuntimeGrammar();
+        RegularExpression id = grammar.getRegularExpressions().get("LetterOrDigits");
+        RegularExpression number = grammar.getRegularExpressions().get("Number");
+        RegularExpression whitespace = grammar.getRegularExpressions().get("WhiteSpace");
+        RegularExpression equals = grammar.getLiterals().get("=");
+        RegularExpression var = grammar.getLiterals().get("var");
+
+        List<Token> expected = Arrays.asList(
+            new Token(var, "Keyword", input, 0, 3),
+            new Token(whitespace, "WhiteSpace", input, 3, 4),
+            new Token(id, "Identifier", input, 4, 5),
+            new Token(whitespace, "WhiteSpace", input, 5, 6),
+            new Token(equals, "=", input, 6, 7),
+            new Token(whitespace, "WhiteSpace", input, 7, 8),
+            new Token(number, "Number", input, 8, 9)
+        );
+
+        List<Token> actual = new ArrayList<>();
+        while (iguanaTokenizer.hasNextToken()) {
+            Token token = iguanaTokenizer.nextToken();
+            actual.add(token);
+        }
+
+        assertEquals(expected, actual);
     }
 
     @Test

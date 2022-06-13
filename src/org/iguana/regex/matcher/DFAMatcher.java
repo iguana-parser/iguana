@@ -33,13 +33,13 @@ import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonOperations;
 import org.iguana.regex.automaton.State;
 import org.iguana.regex.automaton.Transition;
+import org.iguana.util.Tuple;
 import org.iguana.utils.collections.rangemap.IntRangeMap;
 import org.iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.iguana.utils.input.Input;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class DFAMatcher implements Matcher {
 	
@@ -121,7 +121,16 @@ public class DFAMatcher implements Matcher {
 		if (finalStatesMap.get(finalStateId).getRegularExpressions().isEmpty()) {
 			return EOF.getInstance();
 		}
-		return finalStatesMap.get(finalStateId).getRegularExpressions().iterator().next();
+
+		int min = Integer.MAX_VALUE;
+		RegularExpression matchedRegularExpression = null;
+		for (Tuple<RegularExpression, Integer> t : finalStatesMap.get(finalStateId).getRegularExpressions()) {
+			if (t.getSecond() < min) {
+				min = t.getSecond();
+				matchedRegularExpression = t.getFirst();
+			}
+		}
+		return matchedRegularExpression;
 	}
 
 }

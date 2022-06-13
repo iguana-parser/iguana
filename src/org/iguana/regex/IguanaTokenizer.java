@@ -20,10 +20,14 @@ public class IguanaTokenizer {
     public IguanaTokenizer(Map<RegularExpression, String> regularExpressions) {
         this.regularExpressions = regularExpressions;
 
+        int order = 0;
         State startState = new State();
         State finalState = new State();
         for (RegularExpression regularExpression : regularExpressions.keySet()) {
             Automaton automaton = regularExpression.getAutomaton();
+            for (State state : automaton.getFinalStates()) {
+                state.addRegularExpression(regularExpression, order++);
+            }
             startState.addEpsilonTransition(automaton.getStartState());
             for (State automatonFinalState : automaton.getFinalStates()) {
                 automatonFinalState.addEpsilonTransition(finalState);

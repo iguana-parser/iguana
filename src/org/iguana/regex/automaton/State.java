@@ -29,6 +29,7 @@ package org.iguana.regex.automaton;
 
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
+import org.iguana.util.Tuple;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class State {
 	/**
 	 * The set of regular expressions whose final state is this state.
 	 */
-	private final Set<RegularExpression> regularExpressions;
+	private final Set<Tuple<RegularExpression, Integer>> regularExpressions;
 	
 	private StateType stateType;
 	
@@ -57,7 +58,7 @@ public class State {
 		this.transitions = new HashSet<>();
 		this.reachableStates = new HashMap<>();
 		this.stateType = stateType;
-		this.regularExpressions = new LinkedHashSet<>();
+		this.regularExpressions = new HashSet<>();
 		this.epsilonSates = new HashSet<>();
 	}
 	
@@ -125,7 +126,7 @@ public class State {
 		regularExpressions.clear();
 	}
 	
-	public Set<RegularExpression> getRegularExpressions() {
+	public Set<Tuple<RegularExpression, Integer>> getRegularExpressions() {
 		return regularExpressions;
 	}
 	
@@ -133,12 +134,12 @@ public class State {
 		return epsilonSates;
 	}
 	
-	public State addRegularExpression(RegularExpression regex) {
-		regularExpressions.add(regex);
+	public State addRegularExpression(RegularExpression regex, int order) {
+		regularExpressions.add(Tuple.of(regex, order));
 		return this;
 	}
 	
-	public State addRegularExpressions(Collection<? extends RegularExpression> c) {
+	public State addRegularExpressions(Collection<? extends Tuple<RegularExpression, Integer>> c) {
 		regularExpressions.addAll(c);
 		return this;
 	}
