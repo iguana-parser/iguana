@@ -252,7 +252,7 @@
                       "name" : "Body"
                     }
                   ],
-                  "label" : "Syntax"
+                  "label" : "ContextFree"
                 }
               ]
             },
@@ -346,7 +346,7 @@
                       "name" : "RegexBody"
                     }
                   ],
-                  "label" : "Lexical"
+                  "label" : "Regex"
                 }
               ]
             }
@@ -471,8 +471,7 @@
                       "kind" : "Identifier",
                       "name" : "RegexBody"
                     }
-                  ],
-                  "label" : "Regex"
+                  ]
                 }
               ]
             }
@@ -550,8 +549,7 @@
                         }
                       ]
                     }
-                  ],
-                  "label" : "Prec"
+                  ]
                 }
               ]
             }
@@ -634,7 +632,7 @@
                       }
                     }
                   ],
-                  "label" : "Assoc"
+                  "label" : "Associativity"
                 }
               ]
             },
@@ -755,7 +753,7 @@
                       }
                     }
                   ],
-                  "label" : "MoreThanOne"
+                  "label" : "MoreThanOneElem"
                 }
               ]
             },
@@ -792,7 +790,7 @@
                       }
                     }
                   ],
-                  "label" : "Single"
+                  "label" : "SingleElem"
                 }
               ]
             }
@@ -877,8 +875,7 @@
                         "name" : "Regex"
                       }
                     }
-                  ],
-                  "label" : "Sequence"
+                  ]
                 }
               ]
             }
@@ -1588,7 +1585,7 @@
                       "name" : "Identifier"
                     }
                   ],
-                  "label" : "Nont"
+                  "label" : "Identifier"
                 }
               ]
             },
@@ -3033,8 +3030,7 @@
                         "val" : 125
                       }
                     }
-                  ],
-                  "label" : "ReturnExpression"
+                  ]
                 }
               ]
             }
@@ -3223,8 +3219,7 @@
                         }
                       ]
                     }
-                  ],
-                  "label" : "Ident"
+                  ]
                 }
               ]
             }
@@ -3234,22 +3229,28 @@
     }
   ],
   "regularExpressions" : {
-    "Letter" : {
-      "kind" : "regex.Alt",
+    "LetterOrDigits" : {
+      "kind" : "regex.Seq",
       "symbols" : [
         {
-          "kind" : "CharRange",
-          "start" : 65,
-          "end" : 90
+          "kind" : "Reference",
+          "name" : "Letter"
         },
         {
-          "kind" : "CharRange",
-          "start" : 97,
-          "end" : 122
-        },
-        {
-          "kind" : "Char",
-          "val" : 95
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Reference",
+                "name" : "Letter"
+              },
+              {
+                "kind" : "Reference",
+                "name" : "LetterOrDigit"
+              }
+            ]
+          }
         }
       ]
     },
@@ -3277,28 +3278,22 @@
         }
       ]
     },
-    "LetterOrDigits" : {
-      "kind" : "regex.Seq",
+    "Letter" : {
+      "kind" : "regex.Alt",
       "symbols" : [
         {
-          "kind" : "Reference",
-          "name" : "Letter"
+          "kind" : "CharRange",
+          "start" : 65,
+          "end" : 90
         },
         {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Reference",
-                "name" : "Letter"
-              },
-              {
-                "kind" : "Reference",
-                "name" : "LetterOrDigit"
-              }
-            ]
-          }
+          "kind" : "CharRange",
+          "start" : 97,
+          "end" : 122
+        },
+        {
+          "kind" : "Char",
+          "val" : 95
         }
       ]
     },

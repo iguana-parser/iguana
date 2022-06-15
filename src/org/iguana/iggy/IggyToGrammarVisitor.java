@@ -126,8 +126,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *      ;
      */
     private Rule visitRule(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
-            case "Syntax":
+        String label = node.getGrammarDefinition().getLabel();
+        switch (label) {
+            case "ContextFree":
                 Identifier nonterminalName = getIdentifier(node.getChildWithName("Name"));
                 List<String> parameters = (List<String>) node.getChildWithName("Parameters?").accept(this);
                 if (parameters == null) parameters = Collections.emptyList();
@@ -147,7 +148,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
 
             // RegexBody : { RegexSequence "|" }*;
             // RegexSequence : Regex+;
-            case "Lexical":
+            case "Regex":
                 List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
                 Identifier identifier = getIdentifier(node.getChildWithName("Name"));
                 regularExpressionMap.put(identifier.getName(), getRegex(alts));
@@ -159,7 +160,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return null;
 
             default:
-                throw new RuntimeException("Unexpected label");
+                throw new RuntimeException("Unexpected label: " + label);
         }
     }
 
@@ -207,14 +208,15 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      *   ;
      */
     private Alternative visitAlternative(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
+        String label = node.getGrammarDefinition().getLabel();
+        switch (label) {
             case "Sequence": {
                 Alternative.Builder builder = new Alternative.Builder();
                 builder.addSequence((Sequence) node.childAt(0).accept(this));
                 return builder.build();
             }
 
-            case "Assoc": {
+            case "Associativity": {
                 Associativity associativity = getAssociativity(node.childAt(0));
                 List<Sequence> seqs = new ArrayList<>();
                 seqs.add((Sequence) node.childAt(2).accept(this));
@@ -222,17 +224,18 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return new Alternative.Builder(seqs, associativity).build();
             }
 
-            case "Empty":
-                String label = (String) node.childAt(0).accept(this);
-                if (label != null) {
-                    Sequence sequence = new Sequence.Builder().setLabel(label).build();
+            case "Empty": {
+                String definedLabel = (String) node.childAt(0).accept(this);
+                if (definedLabel != null) {
+                    Sequence sequence = new Sequence.Builder().setLabel(definedLabel).build();
                     return new Alternative.Builder().addSequence(sequence).build();
                 } else {
                     return new Alternative.Builder().build();
                 }
+            }
 
             default:
-                throw new RuntimeException("Unexpected label");
+                throw new RuntimeException("Unexpected label: " + label);
         }
     }
 
@@ -243,7 +246,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
      */
     private Sequence visitSequence(NonterminalNode node) {
         switch (node.getGrammarDefinition().getLabel()) {
-            case "MoreThanOne": {
+            case "MoreThanOneElem": {
                 Associativity associativity = null;
                 if (!node.childAt(0).children().isEmpty()) {
                     associativity = getAssociativity(node.childAt(0).childAt(0));
@@ -271,7 +274,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return builder.build();
             }
 
-            case "Single": {
+            case "SingleElem": {
                 Sequence.Builder builder = new Sequence.Builder();
                 List<Expression> expressions = (List<Expression>) node.childAt(0).accept(this);
                 Symbol symbol = (Symbol) node.childAt(1).accept(this);
@@ -433,7 +436,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
                 return symbol.copy().addExcept(getIdentifier(node.childAt(2)).getName()).build();
             }
 
-            case "Nont":
+            case "Identifier":
                 return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).getName());
 
             case "String":
