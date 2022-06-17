@@ -17,6 +17,9 @@ Parameters
 RegexRule
   = Name ":" RegexBody
 
+RegexBody
+  = {RegexSequence "|"}*
+
 Body
   = {PriorityLevels ">"}+
 
@@ -27,9 +30,6 @@ Alternative
   = Sequence                                         %Sequence
   | Associativity "(" Sequence ("|" Sequence)+ ")"   %Associativity
   | Label?                                           %Empty
-
-RegexBody
-  = {RegexSequence "|"}*
 
 Sequence
   = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOneElem
@@ -89,7 +89,7 @@ Regex
   | String                        %String
 
 Regexs
-  = Regex+  %Sequence
+  = Regex+
 
 CharClass
   = "[" Range* "]"      %Chars

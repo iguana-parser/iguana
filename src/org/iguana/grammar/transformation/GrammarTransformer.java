@@ -21,7 +21,8 @@ public class GrammarTransformer {
         grammar = precedenceAndAssociativity.transform(grammar);
         grammar = new DesugarState().transform(grammar);
         grammar = new LayoutWeaver().transform(grammar);
-        return grammar;    }
+        return grammar;
+    }
 }
 
 

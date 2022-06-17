@@ -482,6 +482,45 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "RegexBody"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Star",
+                      "name" : "RegexSequence*",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "RegexSequence"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : "|",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 124
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Body"
       },
       "priorityLevels" : [
@@ -650,45 +689,6 @@
                     }
                   ],
                   "label" : "Empty"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "RegexBody"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Star",
-                      "name" : "RegexSequence*",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "RegexSequence"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "|",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 124
-                          }
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
             }
@@ -2226,8 +2226,7 @@
                         "name" : "Regex"
                       }
                     }
-                  ],
-                  "label" : "Sequence"
+                  ]
                 }
               ]
             }
@@ -4613,13 +4612,13 @@
       "kind" : "Char",
       "val" : 58
     },
-    ">" : {
-      "kind" : "Char",
-      "val" : 62
-    },
     "|" : {
       "kind" : "Char",
       "val" : 124
+    },
+    ">" : {
+      "kind" : "Char",
+      "val" : 62
     },
     "[" : {
       "kind" : "Char",

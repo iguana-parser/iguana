@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>iguana</groupId>
     <artifactId>iguana</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <name>Iguana</name>
     <description>Iguana</description>
 
@@ -40,6 +40,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava-testlib</artifactId>
             <version>18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.6.3</version>
         </dependency>
     </dependencies>
 
@@ -119,6 +124,21 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathLayoutType>repository</classpathLayoutType>
+                            <classpathPrefix>${user.home}/.m2/repository</classpathPrefix>
+                            <mainClass>org.iguana.Iguana</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
