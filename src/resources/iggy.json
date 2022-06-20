@@ -445,43 +445,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "RegexRule"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Name"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : ":",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 58
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "RegexBody"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "RegexBody"
       },
       "priorityLevels" : [
@@ -4608,10 +4571,6 @@
       "kind" : "Char",
       "val" : 41
     },
-    ":" : {
-      "kind" : "Char",
-      "val" : 58
-    },
     "|" : {
       "kind" : "Char",
       "val" : 124
@@ -4726,6 +4685,10 @@
           "val" : 101
         }
       ]
+    },
+    ":" : {
+      "kind" : "Char",
+      "val" : 58
     },
     "<<" : {
       "kind" : "regex.Seq",

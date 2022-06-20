@@ -14,9 +14,6 @@ Rule
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
 
-RegexRule
-  = Name ":" RegexBody
-
 RegexBody
   = {RegexSequence "|"}*
 

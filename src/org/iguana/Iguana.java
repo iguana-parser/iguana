@@ -38,7 +38,7 @@ public class Iguana implements Callable<Integer> {
             return 1;
         }
         Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
-        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.gen.parsetree", genDirectory);
+        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.parsetree", genDirectory);
         return 0;
     }
 }

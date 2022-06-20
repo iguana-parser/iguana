@@ -60,5 +60,9 @@ public class StringUtil {
 	public static String repeat(String s, int count) {
 		return Stream.generate(() -> s).limit(count).collect(Collectors.joining());
 	}
-	
+
+	public static String toFirstUpperCase(String s) {
+		if (s.length() == 0) return s;
+		return s.substring(0, 1).toUpperCase() + s.substring(1);
+	}
 }
