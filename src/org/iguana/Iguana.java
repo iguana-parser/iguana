@@ -8,6 +8,7 @@ import org.iguana.parsetree.ParseTreeVisitorGenerator;
 import org.iguana.utils.input.Input;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.File;
@@ -19,6 +20,9 @@ public class Iguana implements Callable<Integer> {
 
     @Parameters(index = "0", description = "The grammar file")
     private File grammarFile;
+
+    @Option(names = { "--visitor"}, description = "generate visitors")
+    private File genDirectory;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Iguana()).execute(args);
@@ -34,7 +38,7 @@ public class Iguana implements Callable<Integer> {
             return 1;
         }
         Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
-        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.parsetree", null);
+        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.gen.parsetree", genDirectory);
         return 0;
     }
 }
