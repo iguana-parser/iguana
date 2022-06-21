@@ -199,7 +199,7 @@
     }
   },
   "literals" : {
-    "'for'" : {
+    "for" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -216,7 +216,7 @@
         }
       ]
     },
-    "'forall'" : {
+    "forall" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -245,7 +245,7 @@
         }
       ]
     },
-    "' '" : {
+    " " : {
       "kind" : "Char",
       "val" : 32
     }

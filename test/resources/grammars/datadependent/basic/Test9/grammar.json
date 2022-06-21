@@ -267,23 +267,23 @@
     }
   ],
   "literals" : {
-    "'z'" : {
+    "z" : {
       "kind" : "Char",
       "val" : 122
     },
-    "'x'" : {
+    "x" : {
       "kind" : "Char",
       "val" : 120
     },
-    "'w'" : {
+    "w" : {
       "kind" : "Char",
       "val" : 119
     },
-    "'y'" : {
+    "y" : {
       "kind" : "Char",
       "val" : 121
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

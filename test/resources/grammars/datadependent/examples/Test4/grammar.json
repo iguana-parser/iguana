@@ -367,11 +367,11 @@
     }
   },
   "literals" : {
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'let'" : {
+    "let" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -388,7 +388,7 @@
         }
       ]
     },
-    "'in'" : {
+    "in" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -401,19 +401,19 @@
         }
       ]
     },
-    "'{'" : {
+    "{" : {
       "kind" : "Char",
       "val" : 123
     },
-    "';'" : {
+    ";" : {
       "kind" : "Char",
       "val" : 59
     },
-    "'}'" : {
+    "}" : {
       "kind" : "Char",
       "val" : 125
     },
-    "'='" : {
+    "=" : {
       "kind" : "Char",
       "val" : 61
     }

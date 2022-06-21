@@ -90,11 +90,11 @@
     }
   ],
   "literals" : {
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     },
-    "'d'" : {
+    "d" : {
       "kind" : "Char",
       "val" : 100
     }

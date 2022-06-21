@@ -90,15 +90,15 @@
     }
   ],
   "literals" : {
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     },
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     }

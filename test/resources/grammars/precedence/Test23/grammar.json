@@ -256,19 +256,19 @@
     }
   },
   "literals" : {
-    "'-'" : {
+    "-" : {
       "kind" : "Char",
       "val" : 45
     },
-    "'*'" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'if'" : {
+    "if" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -281,7 +281,7 @@
         }
       ]
     },
-    "'then'" : {
+    "then" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -302,7 +302,7 @@
         }
       ]
     },
-    "'else'" : {
+    "else" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -323,7 +323,7 @@
         }
       ]
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

@@ -160,23 +160,23 @@
     }
   ],
   "literals" : {
-    "'c'" : {
+    "c" : {
       "kind" : "Char",
       "val" : 99
     },
-    "'d'" : {
+    "d" : {
       "kind" : "Char",
       "val" : 100
     },
-    "'e'" : {
+    "e" : {
       "kind" : "Char",
       "val" : 101
     },
-    "'f'" : {
+    "f" : {
       "kind" : "Char",
       "val" : 102
     },
-    "'g'" : {
+    "g" : {
       "kind" : "Char",
       "val" : 103
     }

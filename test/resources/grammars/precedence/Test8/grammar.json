@@ -227,15 +227,15 @@
     }
   ],
   "literals" : {
-    "'.'" : {
+    "." : {
       "kind" : "Char",
       "val" : 46
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     },
-    "'.['" : {
+    ".[" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -248,15 +248,15 @@
         }
       ]
     },
-    "']'" : {
+    "]" : {
       "kind" : "Char",
       "val" : 93
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'if'" : {
+    "if" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -269,7 +269,7 @@
         }
       ]
     },
-    "'then'" : {
+    "then" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -290,11 +290,11 @@
         }
       ]
     },
-    "'('" : {
+    "(" : {
       "kind" : "Char",
       "val" : 40
     },
-    "')'" : {
+    ")" : {
       "kind" : "Char",
       "val" : 41
     }

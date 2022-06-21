@@ -235,15 +235,15 @@
     }
   ],
   "literals" : {
-    "'c'" : {
+    "c" : {
       "kind" : "Char",
       "val" : 99
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     },
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     }

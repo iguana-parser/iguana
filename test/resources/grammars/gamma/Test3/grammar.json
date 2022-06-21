@@ -67,7 +67,7 @@
     }
   ],
   "literals" : {
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     }
