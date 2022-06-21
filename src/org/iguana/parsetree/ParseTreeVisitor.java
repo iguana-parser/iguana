@@ -4,6 +4,7 @@ package org.iguana.parsetree;
 import org.iguana.grammar.symbol.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public interface ParseTreeVisitor {
@@ -18,7 +19,7 @@ public interface ParseTreeVisitor {
         return null;
     }
 
-    default Object visitMetaSymbolNode(MetaSymbolNode node) {
+    default List<Object> visitMetaSymbolNode(MetaSymbolNode node) {
         Symbol symbol = node.getGrammarDefinition();
 
         boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
@@ -29,11 +30,7 @@ public interface ParseTreeVisitor {
                 if (node.children().size() == 0) {
                     return null;
                 }
-                List<Object> result = (List<Object>) node.childAt(0).accept(this);
-                if (result.size() == 1) {
-                    return result.get(0);
-                }
-                return result;
+                return (List<Object>) node.childAt(0).accept(this);
             } else {
                 int size = node.children().size();
                 List<Object> result = new ArrayList<>(size);
@@ -49,36 +46,11 @@ public interface ParseTreeVisitor {
             }
         }
 
-        if (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Group) {
-            List<Object> result = new ArrayList<>(node.children().size());
-            for (int i = 0; i < node.children().size(); i++) {
-                ParseTreeNode child = node.childAt(i);
-                Object childResult = child.accept(this);
-                if (childResult != null) {
-                    result.add(childResult);
-                }
-            }
-            return result;
-        } else if (symbol instanceof Alt) {
-            return node.childAt(0).accept(this);
-        } else { // Opt
-            if (node.children().size() == 0) {
-                return null;
-            }
-            return node.childAt(0).accept(this);
+        if (node.children().size() == 0) {
+            return Collections.emptyList();
         }
-    }
-
-    default Object visitChildren(ParseTreeNode node) {
-        int size = node.children().size();
-
-        if (size == 1) {
-            return node.childAt(0).accept(this);
-        }
-
-        List<Object> result = new ArrayList<>(size);
-
-        for (int i = 0; i < size; i++) {
+        List<Object> result = new ArrayList<>(node.children().size());
+        for (int i = 0; i < node.children().size(); i++) {
             ParseTreeNode child = node.childAt(i);
             Object childResult = child.accept(this);
             if (childResult != null) {
@@ -86,12 +58,28 @@ public interface ParseTreeVisitor {
             }
         }
 
-        if (result.isEmpty()) {
-            return null;
+        return result;
+    }
+
+    default List<Object> visitChildren(ParseTreeNode node) {
+        int size = node.children().size();
+
+        List<Object> result = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            ParseTreeNode child = node.childAt(i);
+            Object childResult = child.accept(this);
+            if (childResult != null) {
+                if (childResult instanceof List<?>) {
+                    result.addAll((List<?>) childResult);
+                } else {
+                    result.add(childResult);
+                }
+            }
         }
 
-        if (result.size() == 1) {
-            return result.get(0);
+        if (result.isEmpty()) {
+            return Collections.emptyList();
         }
 
         return result;

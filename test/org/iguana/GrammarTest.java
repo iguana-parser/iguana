@@ -153,7 +153,7 @@ public class GrammarTest {
             try {
                 actualParseTree = parser.getParseTree();
                 // No parse error
-                if (actualParseTree != null) {
+                if (actualParseTree != null && REGENERATE_FILES) {
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
                     dotGraph.generate(testPath + "/tree" + j + ".pdf");
                 }
@@ -161,8 +161,10 @@ public class GrammarTest {
                 try {
                     if (parser.getStatistics().getAmbiguousNodesCount() < 10) {
                         actualParseTree = parser.getParseTree(true, true);
-                        DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
-                        dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                        if (REGENERATE_FILES) {
+                            DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
+                            dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                        }
                     }
                 } catch (CyclicGrammarException ee) {
                     isCyclic = true;

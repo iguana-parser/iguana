@@ -5,6 +5,7 @@ import org.iguana.utils.visualization.DotGraph;
 import org.iguana.parsetree.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.iguana.utils.visualization.DotGraph.newEdge;
@@ -43,13 +44,13 @@ public class ParseTreeToDot implements ParseTreeVisitor {
     }
 
     @Override
-    public Integer visitMetaSymbolNode(MetaSymbolNode node) {
+    public List<Object> visitMetaSymbolNode(MetaSymbolNode node) {
         int id = nextId();
         String label = String.format("%s", node.getName());
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));
 
         visitChildren(node, id);
-        return id;
+        return Collections.singletonList(id);
     }
 
     @Override
@@ -84,9 +85,14 @@ public class ParseTreeToDot implements ParseTreeVisitor {
     private void visitChildren(ParseTreeNode node, int nodeId) {
         for (ParseTreeNode child : node.children()) {
             if (child != null) {
-                Integer childId = (Integer) child.accept(this);
-                if (childId != null)
-                    addEdgeToChild(nodeId, childId);
+                Object childId = child.accept(this);
+                if (childId != null) {
+                    if (childId instanceof List<?>) {
+                        addEdgeToChild(nodeId, ((List<Integer>) childId).get(0));
+                    } else {
+                        addEdgeToChild(nodeId, (Integer) childId);
+                    }
+                }
             }
         }
     }

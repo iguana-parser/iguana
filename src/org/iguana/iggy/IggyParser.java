@@ -9,6 +9,7 @@ import org.iguana.util.serialization.JsonSerializer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 
@@ -57,6 +58,6 @@ public class IggyParser {
 
         ParseTreeNode parseTree = parser.getParseTree();
 
-        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+        return ((List<Grammar>) parseTree.accept(new IggyToGrammarVisitor())).get(0);
     }
 }
