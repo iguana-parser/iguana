@@ -1,8 +1,8 @@
 package org.iguana.util.visualization;
 
+import org.iguana.parsetree.*;
 import org.iguana.utils.input.Input;
 import org.iguana.utils.visualization.DotGraph;
-import org.iguana.parsetree.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.Set;
 import static org.iguana.utils.visualization.DotGraph.newEdge;
 import static org.iguana.utils.visualization.DotGraph.newNode;
 
-public class ParseTreeToDot implements ParseTreeVisitor {
+public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
 
-    private DotGraph dotGraph;
+    private final DotGraph dotGraph;
     private final Input input;
     private final Set<String> exclude;
 
@@ -44,7 +44,7 @@ public class ParseTreeToDot implements ParseTreeVisitor {
     }
 
     @Override
-    public List<Object> visitMetaSymbolNode(MetaSymbolNode node) {
+    public List<Integer> visitMetaSymbolNode(MetaSymbolNode node) {
         int id = nextId();
         String label = String.format("%s", node.getName());
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));
@@ -54,12 +54,12 @@ public class ParseTreeToDot implements ParseTreeVisitor {
     }
 
     @Override
-    public Integer visitAmbiguityNode(AmbiguityNode node) {
+    public List<Integer> visitAmbiguityNode(AmbiguityNode node) {
         int id = nextId();
         dotGraph.addNode(newNode(id).setShape(DotGraph.Shape.DIAMOND).setColor(DotGraph.Color.RED));
 
         visitChildren(node, id);
-        return id;
+        return Collections.singletonList(id);
     }
 
     @Override

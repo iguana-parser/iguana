@@ -7,19 +7,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public interface ParseTreeVisitor {
+public interface ParseTreeVisitor<T> {
 
-    Object visitNonterminalNode(NonterminalNode node);
+    T visitNonterminalNode(NonterminalNode node);
 
-    default Object visitAmbiguityNode(AmbiguityNode node) {
+    default List<T> visitAmbiguityNode(AmbiguityNode node) {
         throw new RuntimeException("Ambiguity");
     }
 
-    default Object visitTerminalNode(TerminalNode node) {
+    default T visitTerminalNode(TerminalNode node) {
         return null;
     }
 
-    default List<Object> visitMetaSymbolNode(MetaSymbolNode node) {
+    default List<T> visitMetaSymbolNode(MetaSymbolNode node) {
         Symbol symbol = node.getGrammarDefinition();
 
         boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
@@ -30,13 +30,13 @@ public interface ParseTreeVisitor {
                 if (node.children().size() == 0) {
                     return null;
                 }
-                return (List<Object>) node.childAt(0).accept(this);
+                return (List<T>) node.childAt(0).accept(this);
             } else {
                 int size = node.children().size();
-                List<Object> result = new ArrayList<>(size);
+                List<T> result = new ArrayList<>(size);
                 for (int i = 0; i < size; i++) {
                     ParseTreeNode child = node.childAt(i);
-                    List<Object> childResult = (List<Object>) child.accept(this);
+                    List<T> childResult = (List<T>) child.accept(this);
                     // This can happen when we have lists with separators, e.g., {A ','}*
                     if (childResult != null) {
                         result.addAll(childResult);
@@ -49,10 +49,10 @@ public interface ParseTreeVisitor {
         if (node.children().size() == 0) {
             return Collections.emptyList();
         }
-        List<Object> result = new ArrayList<>(node.children().size());
+        List<T> result = new ArrayList<>(node.children().size());
         for (int i = 0; i < node.children().size(); i++) {
             ParseTreeNode child = node.childAt(i);
-            Object childResult = child.accept(this);
+            T childResult = (T) child.accept(this);
             if (childResult != null) {
                 result.add(childResult);
             }
@@ -61,17 +61,17 @@ public interface ParseTreeVisitor {
         return result;
     }
 
-    default List<Object> visitChildren(ParseTreeNode node) {
+    default List<T> visitChildren(ParseTreeNode node) {
         int size = node.children().size();
 
-        List<Object> result = new ArrayList<>(size);
+        List<T> result = new ArrayList<>(size);
 
         for (int i = 0; i < size; i++) {
             ParseTreeNode child = node.childAt(i);
-            Object childResult = child.accept(this);
+            T childResult = (T) child.accept(this);
             if (childResult != null) {
                 if (childResult instanceof List<?>) {
-                    result.addAll((List<?>) childResult);
+                    result.addAll((List<T>) childResult);
                 } else {
                     result.add(childResult);
                 }

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
-public class IggyToGrammarVisitor implements ParseTreeVisitor {
+public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
 
     private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
