@@ -38,7 +38,7 @@ public class AmbiguityNode implements ParseTreeNode {
     }
 
     @Override
-    public Object accept(ParseTreeVisitor visitor) {
+    public <T> List<T> accept(ParseTreeVisitor<T> visitor) {
         return visitor.visitAmbiguityNode(this);
     }
 

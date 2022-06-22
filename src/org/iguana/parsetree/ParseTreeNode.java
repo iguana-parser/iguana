@@ -11,7 +11,7 @@ public interface ParseTreeNode {
     Object getGrammarDefinition();
     String getText();
 
-    Object accept(ParseTreeVisitor visitor);
+    <T> Object accept(ParseTreeVisitor<T> visitor);
 
     default List<ParseTreeNode> children() {
         return Collections.emptyList();

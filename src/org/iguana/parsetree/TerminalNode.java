@@ -34,7 +34,7 @@ public abstract class TerminalNode implements ParseTreeNode {
     }
 
     @Override
-    public Object accept(ParseTreeVisitor visitor) {
+    public <T> T accept(ParseTreeVisitor<T> visitor) {
         return visitor.visitTerminalNode(this);
     }
 
