@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public class IggyParseTree {
+    // Regexs = Regex+
     public static class Regexs extends NonterminalNode {
         public Regexs(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -17,19 +18,20 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexs(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Symbol extends NonterminalNode {
+    public static abstract class Symbol extends NonterminalNode {
         public Symbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Symbol = Identifier Arguments
@@ -46,8 +48,12 @@ public class IggyParseTree {
            return (Arguments) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCallSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -65,8 +71,12 @@ public class IggyParseTree {
            return (Symbol) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitOffsideSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -84,8 +94,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStarSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -103,8 +117,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPlusSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -122,8 +140,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitOptionSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -149,8 +171,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(3);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSequenceSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -176,8 +202,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(3);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAlternationSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -195,8 +225,12 @@ public class IggyParseTree {
            return (Symbol) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAlignSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -214,8 +248,12 @@ public class IggyParseTree {
            return (Symbol) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitIgnoreSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -237,8 +275,12 @@ public class IggyParseTree {
            return (Symbol) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLabeledSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -256,8 +298,12 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStatementSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -275,8 +321,12 @@ public class IggyParseTree {
            return (Condition) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPostConditionSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -298,8 +348,12 @@ public class IggyParseTree {
            return (Symbol) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPrecedeSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -321,8 +375,12 @@ public class IggyParseTree {
            return (Symbol) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNotPrecedeSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -344,8 +402,12 @@ public class IggyParseTree {
            return (Regex) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitFollowSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -367,8 +429,12 @@ public class IggyParseTree {
            return (Regex) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNotFollowSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -390,8 +456,12 @@ public class IggyParseTree {
            return (Regex) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitExcludeSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -413,8 +483,12 @@ public class IggyParseTree {
            return (Identifier) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitExceptSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -444,8 +518,12 @@ public class IggyParseTree {
            return (Symbol) childAt(4);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitIfThenElseSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -459,8 +537,12 @@ public class IggyParseTree {
            return (Identifier) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitIdentifierSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -474,8 +556,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStringSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -505,8 +591,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(4);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStarSepSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -536,11 +626,16 @@ public class IggyParseTree {
            return (TerminalNode) childAt(4);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPlusSepSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Label = '%' Identifier
     public static class Label extends NonterminalNode {
         public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -554,11 +649,16 @@ public class IggyParseTree {
            return (Identifier) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Global = 'global' Identifier '=' Expression {env = put(env,id.yield)}
     public static class Global extends NonterminalNode {
         public Global(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -580,11 +680,16 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitGlobal(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Name = Identifier
     public static class Name extends NonterminalNode {
         public Name(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -598,11 +703,16 @@ public class IggyParseTree {
            return (Identifier) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitName(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // RegexBody = RegexSequence*
     public static class RegexBody extends NonterminalNode {
         public RegexBody(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -612,11 +722,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexBody(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // ReturnExpression = '{' Expression '}'
     public static class ReturnExpression extends NonterminalNode {
         public ReturnExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -634,11 +749,16 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitReturnExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Identifier = LetterOrDigits
     public static class Identifier extends NonterminalNode {
         public Identifier(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -648,19 +768,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitIdentifier(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Regex extends NonterminalNode {
+    public static abstract class Regex extends NonterminalNode {
         public Regex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Regex = Regex '*'
@@ -677,8 +798,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStarRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -696,8 +821,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPlusRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -715,8 +844,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitOptionRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -738,8 +871,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitBracketRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -765,8 +902,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(3);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSequenceRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -792,8 +933,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(3);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAlternationRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -807,8 +952,12 @@ public class IggyParseTree {
            return (Name) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNontRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -822,8 +971,12 @@ public class IggyParseTree {
            return (CharClass) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCharClassRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -837,11 +990,16 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStringRegex(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // PriorityLevels = Alternative+
     public static class PriorityLevels extends NonterminalNode {
         public PriorityLevels(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -851,11 +1009,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPriorityLevels(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Body = PriorityLevels+
     public static class Body extends NonterminalNode {
         public Body(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -865,11 +1028,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitBody(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Condition = '[' Expression* ']'
     public static class Condition extends NonterminalNode {
         public Condition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -887,19 +1055,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCondition(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Binding extends NonterminalNode {
+    public static abstract class Binding extends NonterminalNode {
         public Binding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Binding = VarName '=' Expression
@@ -920,8 +1089,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAssignBinding(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -939,11 +1112,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitDeclareBinding(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // RegexSequence = Regex+
     public static class RegexSequence extends NonterminalNode {
         public RegexSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -953,11 +1131,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexSequence(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Parameters = '(' id:Identifier {env = put(env,id.yield)}* ')'
     public static class Parameters extends NonterminalNode {
         public Parameters(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -975,19 +1158,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitParameters(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Alternative extends NonterminalNode {
+    public static abstract class Alternative extends NonterminalNode {
         public Alternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Alternative = Sequence
@@ -1000,8 +1184,12 @@ public class IggyParseTree {
            return (Sequence) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSequenceAlternative(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1031,8 +1219,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(4);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAssociativityAlternative(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1046,19 +1238,20 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEmptyAlternative(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Statement extends NonterminalNode {
+    public static abstract class Statement extends NonterminalNode {
         public Statement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Statement = FunName Arguments ;?
@@ -1079,8 +1272,12 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCallStatement(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1098,11 +1295,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitBindingStatement(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Definition = (Rule | Global)+
     public static class Definition extends NonterminalNode {
         public Definition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1112,11 +1314,16 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitDefinition(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // Arguments = '(' Expression* ')'
     public static class Arguments extends NonterminalNode {
         public Arguments(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1134,19 +1341,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitArguments(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class CharClass extends NonterminalNode {
+    public static abstract class CharClass extends NonterminalNode {
         public CharClass(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // CharClass = '[' Range* ']'
@@ -1167,8 +1375,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCharsCharClass(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1194,19 +1406,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(3);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNotCharsCharClass(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Sequence extends NonterminalNode {
+    public static abstract class Sequence extends NonterminalNode {
         public Sequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Sequence = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?
@@ -1239,8 +1452,12 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(5);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitMoreThanOneElemSequence(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1266,19 +1483,20 @@ public class IggyParseTree {
            return (MetaSymbolNode) childAt(3);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSingleElemSequence(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Range extends NonterminalNode {
+    public static abstract class Range extends NonterminalNode {
         public Range(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Range = RangeChar '-' RangeChar
@@ -1299,8 +1517,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRangeRange(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1314,19 +1536,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCharacterRange(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Expression extends NonterminalNode {
+    public static abstract class Expression extends NonterminalNode {
         public Expression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Expression = FunName Arguments
@@ -1343,8 +1566,12 @@ public class IggyParseTree {
            return (Arguments) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCallExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1362,8 +1589,12 @@ public class IggyParseTree {
            return (Expression) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNotExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1385,8 +1616,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitMultiplicationExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1408,8 +1643,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitDivisionExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1431,8 +1670,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAdditionExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1454,8 +1697,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSubtractionExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1477,8 +1724,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitGreaterEqExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1500,8 +1751,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLessEqExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1523,8 +1778,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitGreaterExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1546,8 +1805,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLessExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1569,8 +1832,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEqualExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1592,8 +1859,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNotEqualExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1615,8 +1886,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAndExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1638,8 +1913,12 @@ public class IggyParseTree {
            return (Expression) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitOrExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1657,8 +1936,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLExtentExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1676,8 +1959,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRExtentExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1695,8 +1982,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitYieldExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1714,8 +2005,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitValExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1729,8 +2024,12 @@ public class IggyParseTree {
            return (VarName) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNameExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1744,8 +2043,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNumberExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1767,19 +2070,20 @@ public class IggyParseTree {
            return (TerminalNode) childAt(2);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitBracketExpression(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
-    public static class Rule extends NonterminalNode {
+    public static abstract class Rule extends NonterminalNode {
         public Rule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
-        }
     }
 
     // Rule = (start | layout)? Name Parameters? '=' Body
@@ -1808,8 +2112,12 @@ public class IggyParseTree {
            return (Body) childAt(4);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitContextFreeRule(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
@@ -1839,11 +2147,16 @@ public class IggyParseTree {
            return (RegexBody) childAt(4);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexRule(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 
+    // VarName = Identifier
     public static class VarName extends NonterminalNode {
         public VarName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1857,8 +2170,12 @@ public class IggyParseTree {
            return (Identifier) childAt(0);
         }
 
-        // @Override
-        public void accept(IggyParseTreeVisitor visitor) {
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitVarName(this);
+            }
+            return visitor.visitNonterminalNode(this);
         }
     }
 

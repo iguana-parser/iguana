@@ -12,6 +12,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @Command(name = "iguana", mixinStandardHelpOptions = true, version = "0.1-SNAPSHOT",
@@ -37,8 +38,8 @@ public class Iguana implements Callable<Integer> {
             System.out.println(parser.getParseError());
             return 1;
         }
-        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
-        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.parsetree", genDirectory);
+        List<Grammar> grammar = (List<Grammar>) parser.getParseTree().accept(new IggyToGrammarVisitor());
+        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.get(0).toRuntimeGrammar(), "Iggy", "org.iguana.iggy.parsetree", genDirectory);
         return 0;
     }
 }
