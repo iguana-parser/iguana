@@ -29,6 +29,65 @@ public class ParseTreeVisitorGenerator {
 
         generateParseTreeTypes(grammar);
         generateVisitor(grammar);
+        generateParseTreeBuilder(grammar);
+    }
+
+    private void generateParseTreeBuilder(RuntimeGrammar grammar) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("package " + packageName + ";\n\n");
+        sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
+        sb.append("import org.iguana.parsetree.DefaultParseTreeBuilder;\n");
+        sb.append("import org.iguana.parsetree.NonterminalNode;\n");
+        sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
+        sb.append("import org.iguana.utils.input.Input;\n\n");
+        sb.append("import java.util.List;\n\n");
+        sb.append("import static org.iguana.iggy.parsetree.IggyParseTree.*;\n\n");
+
+        String className = toFirstUpperCase(grammarName) + "ParseTreeBuilder";
+        sb.append("public class " + className + " extends DefaultParseTreeBuilder {\n\n");
+        sb.append("    public IggyParseTreeBuilder(Input input) {\n");
+        sb.append("        super(input);\n");
+        sb.append("    }\n\n");
+
+        sb.append("    @Override\n");
+        sb.append("    public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {\n");
+        sb.append("        String name = rule.getHead().getName();\n");
+        sb.append("        String label = rule.getLabel();\n\n");
+        sb.append("        switch (name) {\n");
+        generateBuilderCases(grammar, sb);
+        sb.append("            default:\n");
+        sb.append("                throw new RuntimeException(\"Unexpected nonterminal:\" + name);\n");
+        sb.append("        }\n");
+        sb.append("    }\n");
+        sb.append("}\n");
+
+        writeToFile(sb.toString(), className);
+    }
+
+    private void generateBuilderCases(RuntimeGrammar grammar, StringBuilder sb) {
+        for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
+            String nonterminalName = entry.getKey().getName();
+            List<RuntimeRule> alternatives = entry.getValue();
+
+            sb.append("            case \"" + nonterminalName + "\":\n");
+            if (alternatives.size() == 0) {
+                sb.append("                return new " + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
+            } else if (alternatives.size() == 1) {
+                sb.append("                return new " + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
+            } else {
+                sb.append("                switch (label) {\n");
+                for (RuntimeRule alternative : alternatives) {
+                    if (alternative.getLabel() == null) throw new RuntimeException("All alternatives must have a label: " + alternative);
+                    sb.append("                    case \"" + alternative.getLabel() + "\":\n");
+                    String className = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
+                    sb.append("                        return new " + className + "(rule, children, leftExtent, rightExtent);\n");
+                }
+                sb.append("                    default:\n");
+                sb.append("                        throw new RuntimeException(\"Unexpected label:\" + label);\n");
+                sb.append("                }\n");
+            }
+        }
     }
 
     private void generateParseTreeTypes(RuntimeGrammar grammar) {
