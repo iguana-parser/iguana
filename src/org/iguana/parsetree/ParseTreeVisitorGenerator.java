@@ -30,6 +30,33 @@ public class ParseTreeVisitorGenerator {
         generateParseTreeTypes(grammar);
         generateVisitor(grammar);
         generateParseTreeBuilder(grammar);
+        generateIggyParser();
+    }
+
+    private void generateIggyParser() {
+        String className = toFirstUpperCase(grammarName);
+        String content =
+            "// This file has been generated, do not directly edit this file!\n" +
+            "package " + packageName + ";\n" +
+            "\n" +
+            "import org.iguana.grammar.Grammar;\n" +
+            "import org.iguana.parser.IguanaParser;\n" +
+            "import org.iguana.parsetree.ParseTreeBuilder;\n" +
+            "import org.iguana.parsetree.ParseTreeNode;\n" +
+            "import org.iguana.utils.input.Input;\n" +
+            "\n" +
+            "public class " + className + "Parser extends IguanaParser {\n" +
+            "\n" +
+            "    public IggyParser(Grammar grammar) {\n" +
+            "        super(grammar);\n" +
+            "    }\n" +
+            "\n" +
+            "    @Override\n" +
+            "    protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {\n" +
+            "        return new " + className + "ParseTreeBuilder(input);\n" +
+            "    }\n" +
+            "}\n";
+        writeToFile(content, className + "Parser");
     }
 
     private void generateParseTreeBuilder(RuntimeGrammar grammar) {
@@ -42,7 +69,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
         sb.append("import org.iguana.utils.input.Input;\n\n");
         sb.append("import java.util.List;\n\n");
-        sb.append("import static org.iguana.iggy.parsetree.IggyParseTree.*;\n\n");
+        sb.append("import static " + packageName + ".IggyParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeBuilder";
         sb.append("public class " + className + " extends DefaultParseTreeBuilder {\n\n");
@@ -96,7 +123,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
         sb.append("import org.iguana.parsetree.*;\n\n");
-        sb.append("import java.util.List;\n\n\n");
+        sb.append("import java.util.List;\n\n");
         String className = toFirstUpperCase(grammarName) + "ParseTree";
         sb.append("public class " + className + " {\n");
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
@@ -128,7 +155,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n\n");
-        sb.append("import static org.iguana.iggy.parsetree.IggyParseTree.*;\n");
+        sb.append("import static " + packageName + ".IggyParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         sb.append("public class " +  className + "<T> implements ParseTreeVisitor<T> {\n\n");

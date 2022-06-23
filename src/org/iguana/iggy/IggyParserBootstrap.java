@@ -1,10 +1,11 @@
 package org.iguana.iggy;
 
-import org.iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
+import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,20 +14,20 @@ import java.util.List;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 
-public class IggyParser {
+public class IggyParserBootstrap {
 
     private static IguanaParser iggyParser;
 
     public static IguanaParser iggyParser() {
         if (iggyParser == null) {
-            iggyParser = new IguanaParser(iggyGrammar());
+            iggyParser = new IggyParser(iggyGrammar());
         }
         return iggyParser;
     }
 
     public static Grammar iggyGrammar() {
         try {
-            String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
+            String content = readFile(IggyParserBootstrap.class.getResourceAsStream("/iggy.json"));
             return JsonSerializer.deserialize(content, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);

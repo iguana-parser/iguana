@@ -12,12 +12,12 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IggyParserTest {
+public class IggyParserBootstrapTest {
 
     @Test
     public void test() throws Exception {
         Path grammarPath = Paths.get("src/resources/Iguana.iggy");
-        Grammar grammar = IggyParser.getGrammar(grammarPath.toAbsolutePath().toString());
+        Grammar grammar = IggyParserBootstrap.getGrammar(grammarPath.toAbsolutePath().toString());
 
         String expectedJson = getFileContent(Paths.get("src/resources/iggy.json"));
         assertEquals(expectedJson.trim(), JsonSerializer.serialize(grammar).trim());

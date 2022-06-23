@@ -7,7 +7,7 @@ import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
-import org.iguana.iggy.IggyParser;
+import org.iguana.iggy.IggyParserBootstrap;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
@@ -180,7 +180,7 @@ public class Grammar {
     }
 
     public static Grammar fromIggyGrammar(String content) {
-        return IggyParser.fromGrammar(content);
+        return IggyParserBootstrap.fromGrammar(content);
     }
 
     public static Grammar fromJsonFile(String path) {

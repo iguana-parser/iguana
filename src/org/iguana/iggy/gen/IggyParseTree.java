@@ -1,11 +1,10 @@
 // This file has been generated, do not directly edit this file!
-package org.iguana.iggy.parsetree;
+package org.iguana.iggy.gen;
 
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.parsetree.*;
 
 import java.util.List;
-
 
 public class IggyParseTree {
     // Regexs = Regex+

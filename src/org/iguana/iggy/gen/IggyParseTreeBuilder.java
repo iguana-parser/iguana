@@ -1,5 +1,5 @@
 // This file has been generated, do not directly edit this file!
-package org.iguana.iggy.parsetree;
+package org.iguana.iggy.gen;
 
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
@@ -9,7 +9,7 @@ import org.iguana.utils.input.Input;
 
 import java.util.List;
 
-import static org.iguana.iggy.parsetree.IggyParseTree.*;
+import static org.iguana.iggy.gen.IggyParseTree.*;
 
 public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
 

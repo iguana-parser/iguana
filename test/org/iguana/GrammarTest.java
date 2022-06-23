@@ -3,7 +3,7 @@ package org.iguana;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.transformation.GrammarTransformer;
-import org.iguana.iggy.IggyParser;
+import org.iguana.iggy.IggyParserBootstrap;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.traversal.exception.AmbiguityException;
@@ -70,7 +70,7 @@ public class GrammarTest {
 
         String grammarPath = test + "/grammar.iggy";
         System.out.println("Testing " + grammarPath);
-        Grammar grammar = IggyParser.getGrammar(grammarPath);
+        Grammar grammar = IggyParserBootstrap.getGrammar(grammarPath);
 
         String jsonGrammarPath = testPath + "/grammar.json";
 

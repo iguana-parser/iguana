@@ -1,7 +1,7 @@
 package org.iguana;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.iggy.IggyParser;
+import org.iguana.iggy.IggyParserBootstrap;
 import org.iguana.iggy.IggyToGrammarVisitor;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeVisitorGenerator;
@@ -32,14 +32,14 @@ public class Iguana implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        IguanaParser parser = IggyParser.iggyParser();
+        IguanaParser parser = IggyParserBootstrap.iggyParser();
         parser.parse(Input.fromFile(grammarFile));
         if (parser.hasParseError()) {
             System.out.println(parser.getParseError());
             return 1;
         }
         List<Grammar> grammar = (List<Grammar>) parser.getParseTree().accept(new IggyToGrammarVisitor());
-        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.get(0).toRuntimeGrammar(), "Iggy", "org.iguana.iggy.parsetree", genDirectory);
+        ParseTreeVisitorGenerator visitor = new ParseTreeVisitorGenerator(grammar.get(0).toRuntimeGrammar(), "Iggy", "org.iguana.iggy.gen", genDirectory);
         return 0;
     }
 }

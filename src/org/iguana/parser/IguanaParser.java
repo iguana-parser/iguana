@@ -30,6 +30,7 @@ package org.iguana.parser;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
+import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.NonterminalNode;
@@ -108,7 +109,7 @@ public class IguanaParser extends IguanaRecognizer {
         }
 
         if (ambiguous) {
-            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), ignoreLayout, parserResultOps);
+            AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(getParseTreeBuilder(input), ignoreLayout, parserResultOps);
             long start = System.nanoTime();
             ParseTreeNode node = (ParseTreeNode) sppf.accept(visitor).getValues().get(0);
             long end = System.nanoTime();
@@ -116,7 +117,7 @@ public class IguanaParser extends IguanaRecognizer {
             return node;
         }
 
-        DefaultSPPFToParseTreeVisitor<?> converter = new DefaultSPPFToParseTreeVisitor<>(new DefaultParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
+        DefaultSPPFToParseTreeVisitor<?> converter = new DefaultSPPFToParseTreeVisitor<>(getParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
         long start = System.nanoTime();
         this.parseTree = (ParseTreeNode) converter.convertNonterminalNode(sppf);
         long end = System.nanoTime();
@@ -127,5 +128,9 @@ public class IguanaParser extends IguanaRecognizer {
 
     public ParseStatistics getStatistics() {
         return (ParseStatistics) statistics;
+    }
+
+    protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {
+        return new DefaultParseTreeBuilder(input);
     }
 }

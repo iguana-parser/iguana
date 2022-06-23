@@ -1,9 +1,10 @@
-package org.iguana.iggy.parsetree;
+package org.iguana.iggy.gen;
 
 import org.iguana.parsetree.ParseTreeVisitor;
 import org.iguana.parsetree.NonterminalNode;
 
-import static org.iguana.iggy.parsetree.IggyParseTree.*;
+import static org.iguana.iggy.gen.IggyParseTree.*;
+
 public class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     @Override
