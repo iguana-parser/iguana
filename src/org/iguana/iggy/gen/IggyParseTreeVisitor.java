@@ -1,3 +1,4 @@
+// This file has been generated, do not directly edit this file!
 package org.iguana.iggy.gen;
 
 import org.iguana.parsetree.ParseTreeVisitor;
@@ -5,7 +6,7 @@ import org.iguana.parsetree.NonterminalNode;
 
 import static org.iguana.iggy.gen.IggyParseTree.*;
 
-public class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
+public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     @Override
     public T visitNonterminalNode(NonterminalNode node) {
@@ -13,418 +14,335 @@ public class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
     }
 
     public T visitRegexs(Regexs node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCallSymbol(CallSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitOffsideSymbol(OffsideSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitStarSymbol(StarSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitPlusSymbol(PlusSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitOptionSymbol(OptionSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitSequenceSymbol(SequenceSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAlternationSymbol(AlternationSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAlignSymbol(AlignSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitIgnoreSymbol(IgnoreSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitLabeledSymbol(LabeledSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitStatementSymbol(StatementSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitPostConditionSymbol(PostConditionSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitPrecedeSymbol(PrecedeSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNotPrecedeSymbol(NotPrecedeSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitFollowSymbol(FollowSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNotFollowSymbol(NotFollowSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitExcludeSymbol(ExcludeSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitExceptSymbol(ExceptSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitIfThenElseSymbol(IfThenElseSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitIdentifierSymbol(IdentifierSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitStringSymbol(StringSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitStarSepSymbol(StarSepSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitPlusSepSymbol(PlusSepSymbol node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitLabel(Label node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitGlobal(Global node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitName(Name node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitRegexBody(RegexBody node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitReturnExpression(ReturnExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitIdentifier(Identifier node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitStarRegex(StarRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitPlusRegex(PlusRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitOptionRegex(OptionRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitBracketRegex(BracketRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitSequenceRegex(SequenceRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAlternationRegex(AlternationRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNontRegex(NontRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCharClassRegex(CharClassRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitStringRegex(StringRegex node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitPriorityLevels(PriorityLevels node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitBody(Body node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCondition(Condition node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAssignBinding(AssignBinding node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitDeclareBinding(DeclareBinding node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitRegexSequence(RegexSequence node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitParameters(Parameters node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitSequenceAlternative(SequenceAlternative node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAssociativityAlternative(AssociativityAlternative node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitEmptyAlternative(EmptyAlternative node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCallStatement(CallStatement node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitBindingStatement(BindingStatement node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitDefinition(Definition node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitArguments(Arguments node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCharsCharClass(CharsCharClass node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNotCharsCharClass(NotCharsCharClass node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitMoreThanOneElemSequence(MoreThanOneElemSequence node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitSingleElemSequence(SingleElemSequence node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitRangeRange(RangeRange node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCharacterRange(CharacterRange node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitCallExpression(CallExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNotExpression(NotExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitMultiplicationExpression(MultiplicationExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitDivisionExpression(DivisionExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAdditionExpression(AdditionExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitSubtractionExpression(SubtractionExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitGreaterEqExpression(GreaterEqExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitLessEqExpression(LessEqExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitGreaterExpression(GreaterExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitLessExpression(LessExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitEqualExpression(EqualExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNotEqualExpression(NotEqualExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitAndExpression(AndExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitOrExpression(OrExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitLExtentExpression(LExtentExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitRExtentExpression(RExtentExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitYieldExpression(YieldExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitValExpression(ValExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNameExpression(NameExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitNumberExpression(NumberExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitBracketExpression(BracketExpression node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitContextFreeRule(ContextFreeRule node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitRegexRule(RegexRule node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public T visitVarName(VarName node) {
-        // Implement me!!!
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }

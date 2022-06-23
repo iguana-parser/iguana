@@ -152,13 +152,14 @@ public class ParseTreeVisitorGenerator {
 
     private void generateVisitor(RuntimeGrammar grammar) {
         StringBuilder sb = new StringBuilder();
+        sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n\n");
         sb.append("import static " + packageName + ".IggyParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
-        sb.append("public class " +  className + "<T> implements ParseTreeVisitor<T> {\n\n");
+        sb.append("public abstract class " +  className + "<T> implements ParseTreeVisitor<T> {\n\n");
         sb.append("    @Override\n");
         sb.append("    public T visitNonterminalNode(NonterminalNode node) {\n");
         sb.append("        throw new UnsupportedOperationException();\n");
@@ -190,8 +191,7 @@ public class ParseTreeVisitorGenerator {
 
     private String generateVisitorMethod(String name) {
         return "    public T visit" + name + "(" + name + " node) {\n" +
-               "        // Implement me!!!\n" +
-               "        return null;\n" +
+               "        throw new UnsupportedOperationException();\n" +
                "    }\n\n";
     }
 
@@ -215,10 +215,11 @@ public class ParseTreeVisitorGenerator {
     }
 
     private String generateAcceptMethod(String symbolClass) {
+        String visitorName = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         return "        @Override\n" +
                "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n" +
-               "            if (visitor instanceof IggyParseTreeVisitor) {\n" +
-               "                return ((IggyParseTreeVisitor<T>) visitor).visit" + symbolClass + "(this);\n" +
+               "            if (visitor instanceof " + visitorName + ") {\n" +
+               "                return ((" + visitorName + "<T>) visitor).visit" + symbolClass + "(this);\n" +
                "            }\n" +
                "            return visitor.visitNonterminalNode(this);\n" +
                "        }\n";
