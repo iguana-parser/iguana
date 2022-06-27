@@ -3,6 +3,113 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "S",
+        "parameters" : [
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Code",
+          "name" : "x=A(x,y) {var m = 3}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "A",
+            "state" : [
+              "x"
+            ],
+            "arguments" : [
+              {
+                "kind" : "Name",
+                "name" : "x",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "y",
+                "i" : -1
+              }
+            ]
+          },
+          "statements" : [
+            {
+              "kind" : "VariableDeclaration",
+              "decl" : {
+                "name" : "m",
+                "i" : -1,
+                "expression" : {
+                  "kind" : "Integer",
+                  "value" : 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        },
+        {
+          "kind" : "Code",
+          "name" : "B(x,z) {var n = 4}",
+          "symbol" : {
+            "kind" : "Nonterminal",
+            "name" : "B",
+            "arguments" : [
+              {
+                "kind" : "Name",
+                "name" : "x",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "z",
+                "i" : -1
+              }
+            ]
+          },
+          "statements" : [
+            {
+              "kind" : "VariableDeclaration",
+              "decl" : {
+                "name" : "n",
+                "i" : -1,
+                "expression" : {
+                  "kind" : "Integer",
+                  "value" : 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "D"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "A",
         "parameters" : [
           "x",
@@ -197,90 +304,17 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S",
-        "parameters" : [
-          "x",
-          "y",
-          "z"
-        ]
+        "name" : "D"
       },
       "body" : [
         {
-          "kind" : "Code",
-          "name" : "x=A(x,y) {var m = 3}",
-          "symbol" : {
-            "kind" : "Nonterminal",
-            "name" : "A",
-            "state" : [
-              "x"
-            ],
-            "arguments" : [
-              {
-                "kind" : "Name",
-                "name" : "x",
-                "i" : -1
-              },
-              {
-                "kind" : "Name",
-                "name" : "y",
-                "i" : -1
-              }
-            ]
-          },
-          "statements" : [
-            {
-              "kind" : "VariableDeclaration",
-              "decl" : {
-                "name" : "m",
-                "i" : -1,
-                "expression" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                }
-              }
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "C"
-        },
-        {
-          "kind" : "Code",
-          "name" : "B(x,z) {var n = 4}",
-          "symbol" : {
-            "kind" : "Nonterminal",
-            "name" : "B",
-            "arguments" : [
-              {
-                "kind" : "Name",
-                "name" : "x",
-                "i" : -1
-              },
-              {
-                "kind" : "Name",
-                "name" : "z",
-                "i" : -1
-              }
-            ]
-          },
-          "statements" : [
-            {
-              "kind" : "VariableDeclaration",
-              "decl" : {
-                "name" : "n",
-                "i" : -1,
-                "expression" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                }
-              }
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "D"
+          "kind" : "Terminal",
+          "name" : "d",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 100
+          }
         }
       ],
       "recursion" : "NON_REC",
@@ -314,40 +348,6 @@
           "regex" : {
             "kind" : "Char",
             "val" : 99
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "D"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "d",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 100
           }
         }
       ],

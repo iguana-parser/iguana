@@ -8,6 +8,58 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "L",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "B"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "L",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "C"
+        }
+      ],
+      "layout" : {
+        "kind" : "Nonterminal",
+        "name" : "L",
+        "nodeType" : "Layout"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "A"
       },
       "body" : [
@@ -70,58 +122,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "L",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "B"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "L",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "C"
-        }
-      ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "L",
-        "nodeType" : "Layout"
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "C"
       },
       "body" : [
@@ -156,51 +156,6 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Start(S)",
-        "nodeType" : "Start"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "L",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "S"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "L",
-          "nodeType" : "Layout"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Start",
-        "name" : "Start(S)",
-        "startSymbol" : "S"
       }
     },
     {
@@ -263,6 +218,51 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "L",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "L",
+          "nodeType" : "Layout"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
       }
     }
   ],

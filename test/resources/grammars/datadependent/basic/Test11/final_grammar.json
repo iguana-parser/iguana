@@ -3,13 +3,12 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Start(X)",
-        "nodeType" : "Start"
+        "name" : "X"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "X"
+          "name" : "S"
         }
       ],
       "recursion" : "NON_REC",
@@ -28,11 +27,6 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Start",
-        "name" : "Start(X)",
-        "startSymbol" : "X"
       }
     },
     {
@@ -231,12 +225,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "X"
+        "name" : "Start(X)",
+        "nodeType" : "Start"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "X"
         }
       ],
       "recursion" : "NON_REC",
@@ -255,6 +250,11 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(X)",
+        "startSymbol" : "X"
       }
     }
   ],

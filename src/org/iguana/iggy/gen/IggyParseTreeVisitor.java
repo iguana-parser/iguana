@@ -13,7 +13,35 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
         throw new UnsupportedOperationException();
     }
 
-    public abstract T visitRegexs(Regexs node);
+    public abstract T visitDefinition(Definition node);
+
+    public abstract T visitGlobal(Global node);
+
+    public abstract T visitContextFreeRule(ContextFreeRule node);
+
+    public abstract T visitRegexRule(RegexRule node);
+
+    public abstract T visitParameters(Parameters node);
+
+    public abstract T visitRegexBody(RegexBody node);
+
+    public abstract T visitBody(Body node);
+
+    public abstract T visitPriorityLevels(PriorityLevels node);
+
+    public abstract T visitSequenceAlternative(SequenceAlternative node);
+
+    public abstract T visitAssociativityAlternative(AssociativityAlternative node);
+
+    public abstract T visitEmptyAlternative(EmptyAlternative node);
+
+    public abstract T visitMoreThanOneElemSequence(MoreThanOneElemSequence node);
+
+    public abstract T visitSingleElemSequence(SingleElemSequence node);
+
+    public abstract T visitCondition(Condition node);
+
+    public abstract T visitRegexSequence(RegexSequence node);
 
     public abstract T visitCallSymbol(CallSymbol node);
 
@@ -61,17 +89,15 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitPlusSepSymbol(PlusSepSymbol node);
 
-    public abstract T visitLabel(Label node);
+    public abstract T visitArguments(Arguments node);
 
-    public abstract T visitGlobal(Global node);
+    public abstract T visitCallStatement(CallStatement node);
 
-    public abstract T visitName(Name node);
+    public abstract T visitBindingStatement(BindingStatement node);
 
-    public abstract T visitRegexBody(RegexBody node);
+    public abstract T visitAssignBinding(AssignBinding node);
 
-    public abstract T visitReturnExpression(ReturnExpression node);
-
-    public abstract T visitIdentifier(Identifier node);
+    public abstract T visitDeclareBinding(DeclareBinding node);
 
     public abstract T visitStarRegex(StarRegex node);
 
@@ -91,41 +117,11 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitStringRegex(StringRegex node);
 
-    public abstract T visitPriorityLevels(PriorityLevels node);
-
-    public abstract T visitBody(Body node);
-
-    public abstract T visitCondition(Condition node);
-
-    public abstract T visitAssignBinding(AssignBinding node);
-
-    public abstract T visitDeclareBinding(DeclareBinding node);
-
-    public abstract T visitRegexSequence(RegexSequence node);
-
-    public abstract T visitParameters(Parameters node);
-
-    public abstract T visitSequenceAlternative(SequenceAlternative node);
-
-    public abstract T visitAssociativityAlternative(AssociativityAlternative node);
-
-    public abstract T visitEmptyAlternative(EmptyAlternative node);
-
-    public abstract T visitCallStatement(CallStatement node);
-
-    public abstract T visitBindingStatement(BindingStatement node);
-
-    public abstract T visitDefinition(Definition node);
-
-    public abstract T visitArguments(Arguments node);
+    public abstract T visitRegexs(Regexs node);
 
     public abstract T visitCharsCharClass(CharsCharClass node);
 
     public abstract T visitNotCharsCharClass(NotCharsCharClass node);
-
-    public abstract T visitMoreThanOneElemSequence(MoreThanOneElemSequence node);
-
-    public abstract T visitSingleElemSequence(SingleElemSequence node);
 
     public abstract T visitRangeRange(RangeRange node);
 
@@ -173,10 +169,14 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitBracketExpression(BracketExpression node);
 
-    public abstract T visitContextFreeRule(ContextFreeRule node);
-
-    public abstract T visitRegexRule(RegexRule node);
+    public abstract T visitReturnExpression(ReturnExpression node);
 
     public abstract T visitVarName(VarName node);
+
+    public abstract T visitLabel(Label node);
+
+    public abstract T visitName(Name node);
+
+    public abstract T visitIdentifier(Identifier node);
 
 }

@@ -43,17 +43,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "A"
+        "name" : "S"
       },
       "body" : [
         {
-          "kind" : "Terminal",
-          "name" : "a",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 97
-          }
+          "kind" : "Nonterminal",
+          "name" : "(A)",
+          "nodeType" : "Seq"
         }
       ],
       "recursion" : "NON_REC",
@@ -77,13 +73,17 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "A"
       },
       "body" : [
         {
-          "kind" : "Nonterminal",
-          "name" : "(A)",
-          "nodeType" : "Seq"
+          "kind" : "Terminal",
+          "name" : "a",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
         }
       ],
       "recursion" : "NON_REC",

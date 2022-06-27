@@ -127,6 +127,24 @@
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : "a",
+                "preConditions" : [
+                  {
+                    "kind" : "DataDependentCondition",
+                    "type" : "DATA_DEPENDENT",
+                    "expression" : {
+                      "kind" : "Greater",
+                      "lhs" : {
+                        "kind" : "Name",
+                        "name" : "v",
+                        "i" : -1
+                      },
+                      "rhs" : {
+                        "kind" : "Integer",
+                        "value" : 1
+                      }
+                    }
+                  }
+                ],
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",

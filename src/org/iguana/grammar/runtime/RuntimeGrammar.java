@@ -206,7 +206,7 @@ public class RuntimeGrammar {
  	
 	public static class Builder {
 		
-		private final Map<Nonterminal, List<RuntimeRule>> definitions = new HashMap<>();
+		private final Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
 		private final List<RuntimeRule> rules = new ArrayList<>();
 		private Symbol layout;
 		private Start startSymbol;

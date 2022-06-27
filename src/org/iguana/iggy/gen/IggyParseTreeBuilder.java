@@ -23,8 +23,51 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
         String label = rule.getLabel();
 
         switch (name) {
-            case "Regexs":
-                return new Regexs(rule, children, leftExtent, rightExtent);
+            case "Definition":
+                return new Definition(rule, children, leftExtent, rightExtent);
+            case "Global":
+                return new Global(rule, children, leftExtent, rightExtent);
+            case "Rule":
+                switch (label) {
+                    case "ContextFree":
+                        return new ContextFreeRule(rule, children, leftExtent, rightExtent);
+                    case "Regex":
+                        return new RegexRule(rule, children, leftExtent, rightExtent);
+                    default:
+                        throw new RuntimeException("Unexpected label:" + label);
+                }
+            case "Parameters":
+                return new Parameters(rule, children, leftExtent, rightExtent);
+            case "RegexBody":
+                return new RegexBody(rule, children, leftExtent, rightExtent);
+            case "Body":
+                return new Body(rule, children, leftExtent, rightExtent);
+            case "PriorityLevels":
+                return new PriorityLevels(rule, children, leftExtent, rightExtent);
+            case "Alternative":
+                switch (label) {
+                    case "Sequence":
+                        return new SequenceAlternative(rule, children, leftExtent, rightExtent);
+                    case "Associativity":
+                        return new AssociativityAlternative(rule, children, leftExtent, rightExtent);
+                    case "Empty":
+                        return new EmptyAlternative(rule, children, leftExtent, rightExtent);
+                    default:
+                        throw new RuntimeException("Unexpected label:" + label);
+                }
+            case "Sequence":
+                switch (label) {
+                    case "MoreThanOneElem":
+                        return new MoreThanOneElemSequence(rule, children, leftExtent, rightExtent);
+                    case "SingleElem":
+                        return new SingleElemSequence(rule, children, leftExtent, rightExtent);
+                    default:
+                        throw new RuntimeException("Unexpected label:" + label);
+                }
+            case "Condition":
+                return new Condition(rule, children, leftExtent, rightExtent);
+            case "RegexSequence":
+                return new RegexSequence(rule, children, leftExtent, rightExtent);
             case "Symbol":
                 switch (label) {
                     case "Call":
@@ -76,18 +119,26 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
-            case "Label":
-                return new Label(rule, children, leftExtent, rightExtent);
-            case "Global":
-                return new Global(rule, children, leftExtent, rightExtent);
-            case "Name":
-                return new Name(rule, children, leftExtent, rightExtent);
-            case "RegexBody":
-                return new RegexBody(rule, children, leftExtent, rightExtent);
-            case "ReturnExpression":
-                return new ReturnExpression(rule, children, leftExtent, rightExtent);
-            case "Identifier":
-                return new Identifier(rule, children, leftExtent, rightExtent);
+            case "Arguments":
+                return new Arguments(rule, children, leftExtent, rightExtent);
+            case "Statement":
+                switch (label) {
+                    case "Call":
+                        return new CallStatement(rule, children, leftExtent, rightExtent);
+                    case "Binding":
+                        return new BindingStatement(rule, children, leftExtent, rightExtent);
+                    default:
+                        throw new RuntimeException("Unexpected label:" + label);
+                }
+            case "Binding":
+                switch (label) {
+                    case "Assign":
+                        return new AssignBinding(rule, children, leftExtent, rightExtent);
+                    case "Declare":
+                        return new DeclareBinding(rule, children, leftExtent, rightExtent);
+                    default:
+                        throw new RuntimeException("Unexpected label:" + label);
+                }
             case "Regex":
                 switch (label) {
                     case "Star":
@@ -111,64 +162,14 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
-            case "PriorityLevels":
-                return new PriorityLevels(rule, children, leftExtent, rightExtent);
-            case "Body":
-                return new Body(rule, children, leftExtent, rightExtent);
-            case "Condition":
-                return new Condition(rule, children, leftExtent, rightExtent);
-            case "Binding":
-                switch (label) {
-                    case "Assign":
-                        return new AssignBinding(rule, children, leftExtent, rightExtent);
-                    case "Declare":
-                        return new DeclareBinding(rule, children, leftExtent, rightExtent);
-                    default:
-                        throw new RuntimeException("Unexpected label:" + label);
-                }
-            case "RegexSequence":
-                return new RegexSequence(rule, children, leftExtent, rightExtent);
-            case "Parameters":
-                return new Parameters(rule, children, leftExtent, rightExtent);
-            case "Alternative":
-                switch (label) {
-                    case "Sequence":
-                        return new SequenceAlternative(rule, children, leftExtent, rightExtent);
-                    case "Associativity":
-                        return new AssociativityAlternative(rule, children, leftExtent, rightExtent);
-                    case "Empty":
-                        return new EmptyAlternative(rule, children, leftExtent, rightExtent);
-                    default:
-                        throw new RuntimeException("Unexpected label:" + label);
-                }
-            case "Statement":
-                switch (label) {
-                    case "Call":
-                        return new CallStatement(rule, children, leftExtent, rightExtent);
-                    case "Binding":
-                        return new BindingStatement(rule, children, leftExtent, rightExtent);
-                    default:
-                        throw new RuntimeException("Unexpected label:" + label);
-                }
-            case "Definition":
-                return new Definition(rule, children, leftExtent, rightExtent);
-            case "Arguments":
-                return new Arguments(rule, children, leftExtent, rightExtent);
+            case "Regexs":
+                return new Regexs(rule, children, leftExtent, rightExtent);
             case "CharClass":
                 switch (label) {
                     case "Chars":
                         return new CharsCharClass(rule, children, leftExtent, rightExtent);
                     case "NotChars":
                         return new NotCharsCharClass(rule, children, leftExtent, rightExtent);
-                    default:
-                        throw new RuntimeException("Unexpected label:" + label);
-                }
-            case "Sequence":
-                switch (label) {
-                    case "MoreThanOneElem":
-                        return new MoreThanOneElemSequence(rule, children, leftExtent, rightExtent);
-                    case "SingleElem":
-                        return new SingleElemSequence(rule, children, leftExtent, rightExtent);
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
@@ -228,17 +229,16 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
-            case "Rule":
-                switch (label) {
-                    case "ContextFree":
-                        return new ContextFreeRule(rule, children, leftExtent, rightExtent);
-                    case "Regex":
-                        return new RegexRule(rule, children, leftExtent, rightExtent);
-                    default:
-                        throw new RuntimeException("Unexpected label:" + label);
-                }
+            case "ReturnExpression":
+                return new ReturnExpression(rule, children, leftExtent, rightExtent);
             case "VarName":
                 return new VarName(rule, children, leftExtent, rightExtent);
+            case "Label":
+                return new Label(rule, children, leftExtent, rightExtent);
+            case "Name":
+                return new Name(rule, children, leftExtent, rightExtent);
+            case "Identifier":
+                return new Identifier(rule, children, leftExtent, rightExtent);
             default:
                 throw new RuntimeException("Unexpected nonterminal:" + name);
         }

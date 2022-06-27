@@ -7,9 +7,9 @@ import org.iguana.parsetree.*;
 import java.util.List;
 
 public class IggyParseTree {
-    // Regexs = Regex+
-    public static class Regexs extends NonterminalNode {
-        public Regexs(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // Definition = (Rule | Global)+
+    public static class Definition extends NonterminalNode {
+        public Definition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
@@ -20,7 +20,402 @@ public class IggyParseTree {
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitRegexs(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitDefinition(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Global = 'global' Identifier '=' Expression {env = put(env,id.yield)}
+    public static class Global extends NonterminalNode {
+        public Global(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public Identifier child1() {
+           return (Identifier) childAt(1);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(1);
+        }
+
+        public TerminalNode child2() {
+           return (TerminalNode) childAt(2);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitGlobal(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    public static abstract class Rule extends NonterminalNode {
+        public Rule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+    }
+
+    // Rule = (start | layout)? Name Parameters? '=' Body
+    public static class ContextFreeRule extends Rule {
+        public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        public Name child1() {
+           return (Name) childAt(1);
+        }
+
+        public MetaSymbolNode child2() {
+           return (MetaSymbolNode) childAt(2);
+        }
+
+        public TerminalNode child3() {
+           return (TerminalNode) childAt(3);
+        }
+
+        public Body child4() {
+           return (Body) childAt(4);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitContextFreeRule(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Rule = layout? 'regex' Name '=' RegexBody
+    public static class RegexRule extends Rule {
+        public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        public TerminalNode child1() {
+           return (TerminalNode) childAt(1);
+        }
+
+        public Name child2() {
+           return (Name) childAt(2);
+        }
+
+        public TerminalNode child3() {
+           return (TerminalNode) childAt(3);
+        }
+
+        public RegexBody child4() {
+           return (RegexBody) childAt(4);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexRule(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Parameters = '(' id:Identifier {env = put(env,id.yield)}* ')'
+    public static class Parameters extends NonterminalNode {
+        public Parameters(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public MetaSymbolNode child1() {
+           return (MetaSymbolNode) childAt(1);
+        }
+
+        public TerminalNode child2() {
+           return (TerminalNode) childAt(2);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitParameters(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // RegexBody = RegexSequence*
+    public static class RegexBody extends NonterminalNode {
+        public RegexBody(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexBody(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Body = PriorityLevels+
+    public static class Body extends NonterminalNode {
+        public Body(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitBody(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // PriorityLevels = Alternative+
+    public static class PriorityLevels extends NonterminalNode {
+        public PriorityLevels(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPriorityLevels(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    public static abstract class Alternative extends NonterminalNode {
+        public Alternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+    }
+
+    // Alternative = Sequence
+    public static class SequenceAlternative extends Alternative {
+        public SequenceAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Sequence child0() {
+           return (Sequence) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSequenceAlternative(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Alternative = Associativity '(' Sequence (| Sequence)+ ')'
+    public static class AssociativityAlternative extends Alternative {
+        public AssociativityAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public TerminalNode child1() {
+           return (TerminalNode) childAt(1);
+        }
+
+        public Sequence child2() {
+           return (Sequence) childAt(2);
+        }
+
+        public MetaSymbolNode child3() {
+           return (MetaSymbolNode) childAt(3);
+        }
+
+        public TerminalNode child4() {
+           return (TerminalNode) childAt(4);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAssociativityAlternative(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Alternative = Label?
+    public static class EmptyAlternative extends Alternative {
+        public EmptyAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEmptyAlternative(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    public static abstract class Sequence extends NonterminalNode {
+        public Sequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+    }
+
+    // Sequence = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?
+    public static class MoreThanOneElemSequence extends Sequence {
+        public MoreThanOneElemSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        public MetaSymbolNode child1() {
+           return (MetaSymbolNode) childAt(1);
+        }
+
+        public Symbol child2() {
+           return (Symbol) childAt(2);
+        }
+
+        public MetaSymbolNode child3() {
+           return (MetaSymbolNode) childAt(3);
+        }
+
+        public MetaSymbolNode child4() {
+           return (MetaSymbolNode) childAt(4);
+        }
+
+        public MetaSymbolNode child5() {
+           return (MetaSymbolNode) childAt(5);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitMoreThanOneElemSequence(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Sequence = Condition? Symbol ReturnExpression? Label?
+    public static class SingleElemSequence extends Sequence {
+        public SingleElemSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        public Symbol child1() {
+           return (Symbol) childAt(1);
+        }
+
+        public MetaSymbolNode child2() {
+           return (MetaSymbolNode) childAt(2);
+        }
+
+        public MetaSymbolNode child3() {
+           return (MetaSymbolNode) childAt(3);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSingleElemSequence(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Condition = '[' Expression* ']'
+    public static class Condition extends NonterminalNode {
+        public Condition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public MetaSymbolNode child1() {
+           return (MetaSymbolNode) childAt(1);
+        }
+
+        public TerminalNode child2() {
+           return (TerminalNode) childAt(2);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCondition(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // RegexSequence = Regex+
+    public static class RegexSequence extends NonterminalNode {
+        public RegexSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public MetaSymbolNode child0() {
+           return (MetaSymbolNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexSequence(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -634,9 +1029,9 @@ public class IggyParseTree {
         }
     }
 
-    // Label = '%' Identifier
-    public static class Label extends NonterminalNode {
-        public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // Arguments = '(' Expression* ')'
+    public static class Arguments extends NonterminalNode {
+        public Arguments(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
@@ -644,35 +1039,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public Identifier child1() {
-           return (Identifier) childAt(1);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Global = 'global' Identifier '=' Expression {env = put(env,id.yield)}
-    public static class Global extends NonterminalNode {
-        public Global(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public Identifier child1() {
-           return (Identifier) childAt(1);
-        }
-
-        public Identifier id() {
-           return (Identifier) childAt(1);
+        public MetaSymbolNode child1() {
+           return (MetaSymbolNode) childAt(1);
         }
 
         public TerminalNode child2() {
@@ -682,57 +1050,22 @@ public class IggyParseTree {
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitGlobal(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitArguments(this);
             }
             return visitor.visitNonterminalNode(this);
         }
     }
 
-    // Name = Identifier
-    public static class Name extends NonterminalNode {
-        public Name(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    public static abstract class Statement extends NonterminalNode {
+        public Statement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        public Identifier child0() {
-           return (Identifier) childAt(0);
-        }
-
-        public Identifier id() {
-           return (Identifier) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitName(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
     }
 
-    // RegexBody = RegexSequence*
-    public static class RegexBody extends NonterminalNode {
-        public RegexBody(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitRegexBody(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // ReturnExpression = '{' Expression '}'
-    public static class ReturnExpression extends NonterminalNode {
-        public ReturnExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // Statement = FunName Arguments ;?
+    public static class CallStatement extends Statement {
+        public CallStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
@@ -740,26 +1073,83 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public Expression child1() {
-           return (Expression) childAt(1);
+        public Arguments child1() {
+           return (Arguments) childAt(1);
         }
 
-        public TerminalNode child2() {
-           return (TerminalNode) childAt(2);
+        public MetaSymbolNode child2() {
+           return (MetaSymbolNode) childAt(2);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitReturnExpression(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitCallStatement(this);
             }
             return visitor.visitNonterminalNode(this);
         }
     }
 
-    // Identifier = LetterOrDigits
-    public static class Identifier extends NonterminalNode {
-        public Identifier(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // Statement = Binding ;?
+    public static class BindingStatement extends Statement {
+        public BindingStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Binding child0() {
+           return (Binding) childAt(0);
+        }
+
+        public MetaSymbolNode child1() {
+           return (MetaSymbolNode) childAt(1);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitBindingStatement(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    public static abstract class Binding extends NonterminalNode {
+        public Binding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+    }
+
+    // Binding = VarName '=' Expression
+    public static class AssignBinding extends Binding {
+        public AssignBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public VarName child0() {
+           return (VarName) childAt(0);
+        }
+
+        public TerminalNode child1() {
+           return (TerminalNode) childAt(1);
+        }
+
+        public Expression child2() {
+           return (Expression) childAt(2);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAssignBinding(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Binding = 'var' (id:Name {env = put(env,id.yield)} = Expression)+
+    public static class DeclareBinding extends Binding {
+        public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
@@ -767,10 +1157,14 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
+        public MetaSymbolNode child1() {
+           return (MetaSymbolNode) childAt(1);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitIdentifier(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitDeclareBinding(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -998,9 +1392,9 @@ public class IggyParseTree {
         }
     }
 
-    // PriorityLevels = Alternative+
-    public static class PriorityLevels extends NonterminalNode {
-        public PriorityLevels(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // Regexs = Regex+
+    public static class Regexs extends NonterminalNode {
+        public Regexs(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
@@ -1011,339 +1405,7 @@ public class IggyParseTree {
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitPriorityLevels(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Body = PriorityLevels+
-    public static class Body extends NonterminalNode {
-        public Body(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitBody(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Condition = '[' Expression* ']'
-    public static class Condition extends NonterminalNode {
-        public Condition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
-        }
-
-        public TerminalNode child2() {
-           return (TerminalNode) childAt(2);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitCondition(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    public static abstract class Binding extends NonterminalNode {
-        public Binding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-    }
-
-    // Binding = VarName '=' Expression
-    public static class AssignBinding extends Binding {
-        public AssignBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public VarName child0() {
-           return (VarName) childAt(0);
-        }
-
-        public TerminalNode child1() {
-           return (TerminalNode) childAt(1);
-        }
-
-        public Expression child2() {
-           return (Expression) childAt(2);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitAssignBinding(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Binding = 'var' (id:Name {env = put(env,id.yield)} = Expression)+
-    public static class DeclareBinding extends Binding {
-        public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitDeclareBinding(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // RegexSequence = Regex+
-    public static class RegexSequence extends NonterminalNode {
-        public RegexSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitRegexSequence(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Parameters = '(' id:Identifier {env = put(env,id.yield)}* ')'
-    public static class Parameters extends NonterminalNode {
-        public Parameters(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
-        }
-
-        public TerminalNode child2() {
-           return (TerminalNode) childAt(2);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitParameters(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    public static abstract class Alternative extends NonterminalNode {
-        public Alternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-    }
-
-    // Alternative = Sequence
-    public static class SequenceAlternative extends Alternative {
-        public SequenceAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public Sequence child0() {
-           return (Sequence) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitSequenceAlternative(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Alternative = Associativity '(' Sequence (| Sequence)+ ')'
-    public static class AssociativityAlternative extends Alternative {
-        public AssociativityAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public TerminalNode child1() {
-           return (TerminalNode) childAt(1);
-        }
-
-        public Sequence child2() {
-           return (Sequence) childAt(2);
-        }
-
-        public MetaSymbolNode child3() {
-           return (MetaSymbolNode) childAt(3);
-        }
-
-        public TerminalNode child4() {
-           return (TerminalNode) childAt(4);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitAssociativityAlternative(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Alternative = Label?
-    public static class EmptyAlternative extends Alternative {
-        public EmptyAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitEmptyAlternative(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    public static abstract class Statement extends NonterminalNode {
-        public Statement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-    }
-
-    // Statement = FunName Arguments ;?
-    public static class CallStatement extends Statement {
-        public CallStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public Arguments child1() {
-           return (Arguments) childAt(1);
-        }
-
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitCallStatement(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Statement = Binding ;?
-    public static class BindingStatement extends Statement {
-        public BindingStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public Binding child0() {
-           return (Binding) childAt(0);
-        }
-
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitBindingStatement(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Definition = (Rule | Global)+
-    public static class Definition extends NonterminalNode {
-        public Definition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitDefinition(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Arguments = '(' Expression* ')'
-    public static class Arguments extends NonterminalNode {
-        public Arguments(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public TerminalNode child0() {
-           return (TerminalNode) childAt(0);
-        }
-
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
-        }
-
-        public TerminalNode child2() {
-           return (TerminalNode) childAt(2);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitArguments(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitRegexs(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -1409,83 +1471,6 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitNotCharsCharClass(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    public static abstract class Sequence extends NonterminalNode {
-        public Sequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-    }
-
-    // Sequence = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?
-    public static class MoreThanOneElemSequence extends Sequence {
-        public MoreThanOneElemSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
-        }
-
-        public Symbol child2() {
-           return (Symbol) childAt(2);
-        }
-
-        public MetaSymbolNode child3() {
-           return (MetaSymbolNode) childAt(3);
-        }
-
-        public MetaSymbolNode child4() {
-           return (MetaSymbolNode) childAt(4);
-        }
-
-        public MetaSymbolNode child5() {
-           return (MetaSymbolNode) childAt(5);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitMoreThanOneElemSequence(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Sequence = Condition? Symbol ReturnExpression? Label?
-    public static class SingleElemSequence extends Sequence {
-        public SingleElemSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        public Symbol child1() {
-           return (Symbol) childAt(1);
-        }
-
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
-        }
-
-        public MetaSymbolNode child3() {
-           return (MetaSymbolNode) childAt(3);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitSingleElemSequence(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -2078,78 +2063,28 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Rule extends NonterminalNode {
-        public Rule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // ReturnExpression = '{' Expression '}'
+    public static class ReturnExpression extends NonterminalNode {
+        public ReturnExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-    }
-
-    // Rule = (start | layout)? Name Parameters? '=' Body
-    public static class ContextFreeRule extends Rule {
-        public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public Expression child1() {
+           return (Expression) childAt(1);
         }
 
-        public Name child1() {
-           return (Name) childAt(1);
-        }
-
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
-        }
-
-        public TerminalNode child3() {
-           return (TerminalNode) childAt(3);
-        }
-
-        public Body child4() {
-           return (Body) childAt(4);
+        public TerminalNode child2() {
+           return (TerminalNode) childAt(2);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitContextFreeRule(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Rule = layout? 'regex' Name '=' RegexBody
-    public static class RegexRule extends Rule {
-        public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
-        }
-
-        public TerminalNode child1() {
-           return (TerminalNode) childAt(1);
-        }
-
-        public Name child2() {
-           return (Name) childAt(2);
-        }
-
-        public TerminalNode child3() {
-           return (TerminalNode) childAt(3);
-        }
-
-        public RegexBody child4() {
-           return (RegexBody) childAt(4);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitRegexRule(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitReturnExpression(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -2173,6 +2108,71 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitVarName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Label = '%' Identifier
+    public static class Label extends NonterminalNode {
+        public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public Identifier child1() {
+           return (Identifier) childAt(1);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Name = Identifier
+    public static class Name extends NonterminalNode {
+        public Name(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Identifier child0() {
+           return (Identifier) childAt(0);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Identifier = LetterOrDigits
+    public static class Identifier extends NonterminalNode {
+        public Identifier(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public TerminalNode child0() {
+           return (TerminalNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitIdentifier(this);
             }
             return visitor.visitNonterminalNode(this);
         }

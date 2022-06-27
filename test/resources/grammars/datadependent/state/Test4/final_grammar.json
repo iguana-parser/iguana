@@ -3,94 +3,6 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "A",
-        "parameters" : [
-          "x",
-          "y"
-        ]
-      },
-      "body" : [
-        {
-          "kind" : "Code",
-          "name" : "a {x = 1;y = 2}",
-          "symbol" : {
-            "kind" : "Terminal",
-            "name" : "a",
-            "nodeType" : "Literal",
-            "regex" : {
-              "kind" : "Char",
-              "val" : 97
-            }
-          },
-          "statements" : [
-            {
-              "kind" : "ExpressionStatement",
-              "exp" : {
-                "kind" : "Assignment",
-                "id" : "x",
-                "exp" : {
-                  "kind" : "Integer",
-                  "value" : 1
-                },
-                "i" : -1
-              }
-            },
-            {
-              "kind" : "ExpressionStatement",
-              "exp" : {
-                "kind" : "Assignment",
-                "id" : "y",
-                "exp" : {
-                  "kind" : "Integer",
-                  "value" : 2
-                },
-                "i" : -1
-              }
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{(x,y)}",
-          "expression" : {
-            "kind" : "Tuple",
-            "elements" : [
-              {
-                "kind" : "Name",
-                "name" : "x",
-                "i" : -1
-              },
-              {
-                "kind" : "Name",
-                "name" : "y",
-                "i" : -1
-              }
-            ],
-            "length" : 2
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "S",
         "parameters" : [
           "x",
@@ -503,6 +415,94 @@
         "hasPrefixUnaryBelow" : false,
         "hasPostfixUnaryBelow" : false,
         "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A",
+        "parameters" : [
+          "x",
+          "y"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Code",
+          "name" : "a {x = 1;y = 2}",
+          "symbol" : {
+            "kind" : "Terminal",
+            "name" : "a",
+            "nodeType" : "Literal",
+            "regex" : {
+              "kind" : "Char",
+              "val" : 97
+            }
+          },
+          "statements" : [
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Assignment",
+                "id" : "x",
+                "exp" : {
+                  "kind" : "Integer",
+                  "value" : 1
+                },
+                "i" : -1
+              }
+            },
+            {
+              "kind" : "ExpressionStatement",
+              "exp" : {
+                "kind" : "Assignment",
+                "id" : "y",
+                "exp" : {
+                  "kind" : "Integer",
+                  "value" : 2
+                },
+                "i" : -1
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{(x,y)}",
+          "expression" : {
+            "kind" : "Tuple",
+            "elements" : [
+              {
+                "kind" : "Name",
+                "name" : "x",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "y",
+                "i" : -1
+              }
+            ],
+            "length" : 2
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
