@@ -19,36 +19,62 @@ public interface ParseTreeVisitor<T> {
         return null;
     }
 
-    default List<T> visitMetaSymbolNode(MetaSymbolNode node) {
-        Symbol symbol = node.getGrammarDefinition();
+    default List<T> visitStarNode(MetaSymbolNode.StarNode node) {
+        return visitStarOrPlusNode(node);
+    }
 
-        boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
+    default List<T> visitPlusNode(MetaSymbolNode.PlusNode node) {
+        return visitStarOrPlusNode(node);
+    }
 
-        // Flatten sequence inside star and plus
-        if (shouldBeFlattened) {
-            if (symbol instanceof Opt) {
-                if (node.children().size() == 0) {
-                    return null;
-                }
-                return (List<T>) node.childAt(0).accept(this);
-            } else {
-                int size = node.children().size();
-                List<T> result = new ArrayList<>(size);
-                for (int i = 0; i < size; i++) {
-                    ParseTreeNode child = node.childAt(i);
-                    List<T> childResult = (List<T>) child.accept(this);
-                    // This can happen when we have lists with separators, e.g., {A ','}*
-                    if (childResult != null) {
-                        result.addAll(childResult);
-                    }
-                }
-                return result;
+    default T visitOptionNode(MetaSymbolNode.OptionNode node) {
+        if (node.children().size() == 0) {
+            return null;
+        }
+        return (T) node.childAt(0).accept(this);
+    }
+
+    default T visitStartNode(MetaSymbolNode.StartNode node) {
+        return (T) node.childAt(0).accept(this);
+    }
+
+    default T visitAltNode(MetaSymbolNode.AltNode node) {
+        return (T) node.childAt(0).accept(this);
+    }
+
+    default List<T> visitGroupNode(MetaSymbolNode.GroupNode node) {
+        List<T> result = new ArrayList<>(node.children().size());
+        for (int i = 0; i < node.children().size(); i++) {
+            ParseTreeNode child = node.childAt(i);
+            T childResult = (T) child.accept(this);
+            if (childResult != null) {
+                result.add(childResult);
             }
         }
+        return result;
+    }
 
+    default List<T> visitStarOrPlusNode(MetaSymbolNode node) {
         if (node.children().size() == 0) {
             return Collections.emptyList();
         }
+
+        Symbol symbol = node.getGrammarDefinition();
+
+        if (getSymbol(symbol) instanceof Group) {
+            int size = node.children().size();
+            List<T> result = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                ParseTreeNode child = node.childAt(i);
+                List<T> childResult = (List<T>) child.accept(this);
+                // This can happen when we have lists with separators, e.g., {A ','}*
+                if (childResult != null) {
+                    result.addAll(childResult);
+                }
+            }
+            return result;
+        }
+
         List<T> result = new ArrayList<>(node.children().size());
         for (int i = 0; i < node.children().size(); i++) {
             ParseTreeNode child = node.childAt(i);
@@ -83,6 +109,10 @@ public interface ParseTreeVisitor<T> {
         }
 
         return result;
+    }
+
+    default boolean shouldBeFlatted(Symbol symbol) {
+        return (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
     }
 
     static Symbol getSymbol(Symbol symbol) {

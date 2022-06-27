@@ -44,7 +44,36 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public List<Integer> visitMetaSymbolNode(MetaSymbolNode node) {
+    public List<Integer> visitStarNode(MetaSymbolNode.StarNode node) {
+        return visitMetaSymbolNode(node);
+    }
+
+    @Override
+    public List<Integer> visitPlusNode(MetaSymbolNode.PlusNode node) {
+        return visitMetaSymbolNode(node);
+    }
+
+    @Override
+    public Integer visitOptionNode(MetaSymbolNode.OptionNode node) {
+        return visitMetaSymbolNode(node).get(0);
+    }
+
+    @Override
+    public Integer visitStartNode(MetaSymbolNode.StartNode node) {
+        return visitMetaSymbolNode(node).get(0);
+    }
+
+    @Override
+    public Integer visitAltNode(MetaSymbolNode.AltNode node) {
+        return visitMetaSymbolNode(node).get(0);
+    }
+
+    @Override
+    public List<Integer> visitGroupNode(MetaSymbolNode.GroupNode node) {
+        return visitMetaSymbolNode(node);
+    }
+
+    private List<Integer> visitMetaSymbolNode(MetaSymbolNode node) {
         int id = nextId();
         String label = String.format("%s", node.getName());
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));

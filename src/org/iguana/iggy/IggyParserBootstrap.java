@@ -10,7 +10,6 @@ import org.iguana.utils.input.Input;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 
@@ -59,6 +58,6 @@ public class IggyParserBootstrap {
 
         ParseTreeNode parseTree = parser.getParseTree();
 
-        return ((List<Grammar>) parseTree.accept(new IggyToGrammarVisitor())).get(0);
+        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 }

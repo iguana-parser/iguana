@@ -108,10 +108,10 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
      */
     private Grammar visitDefinition(NonterminalNode node) {
         Grammar.Builder builder = new Grammar.Builder();
-        List<List<Rule>> rules = (List<List<Rule>>) node.childAt(0).accept(this);
-        for (List<Rule> rule : rules) {
-            if (!rule.isEmpty()) { // null means a global definition
-                builder.addRule(rule.get(0));
+        List<Rule> rules = (List<Rule>) node.childAt(0).accept(this);
+        for (Rule rule : rules) {
+            if (rule != null) { // null means a global definition
+                builder.addRule(rule);
             }
         }
         for (Map.Entry<String, RegularExpression> entry : regularExpressionMap.entrySet()) {
@@ -138,7 +138,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
         switch (label) {
             case "ContextFree":
                 Identifier nonterminalName = getIdentifier(node.childAt(1));
-                List<List<String>> parameters = (List<List<String>>) node.childAt(2).accept(this);
+                List<String> parameters = (List<String>) node.childAt(2).accept(this);
                 List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.childAt(4).accept(this);
 
                 if (!node.childAt(0).children().isEmpty()) { // start symbol
@@ -150,7 +150,7 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
                     }
                 }
 
-                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters.isEmpty() ? Collections.emptyList() : parameters.get(0)).build();
+                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters == null ? Collections.emptyList() : parameters).build();
                 return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
 
             // RegexBody : { RegexSequence "|" }*;
@@ -232,9 +232,9 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
             }
 
             case "Empty": {
-                List<String> definedLabel = (List<String>) node.childAt(0).accept(this);
-                if (!definedLabel.isEmpty()) {
-                    Sequence sequence = new Sequence.Builder().setLabel(definedLabel.get(0)).build();
+                String definedLabel = (String) node.childAt(0).accept(this);
+                if (definedLabel != null) {
+                    Sequence sequence = new Sequence.Builder().setLabel(definedLabel).build();
                     return new Alternative.Builder().addSequence(sequence).build();
                 } else {
                     return new Alternative.Builder().build();
@@ -259,26 +259,26 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
                     associativity = getAssociativity(node.childAt(0).childAt(0));
                 }
                 Sequence.Builder builder = new Sequence.Builder();
-                List<List<Expression>> expressions = (List<List<Expression>>) node.childAt(1).accept(this);
+                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
                 List<Symbol> symbols = new ArrayList<>();
                 Symbol symbol = (Symbol) node.childAt(2).accept(this);
                 SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
-                if (!expressions.isEmpty()) {
-                    for (Expression expression : expressions.get(0)) {
+                if (expressions != null) {
+                    for (Expression expression : expressions) {
                         symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
                     }
                 }
                 symbols.add(symbolBuilder.build());
                 symbols.addAll((List<Symbol>) node.childAt(3).accept(this));
                 builder.addSymbols(symbols);
-                List<Expression> returnExpression = (List<Expression>) node.childAt(4).accept(this);
-                if (!returnExpression.isEmpty()) {
-                    builder.addSymbol(Return.ret(returnExpression.get(0)));
+                Expression returnExpression = (Expression) node.childAt(4).accept(this);
+                if (returnExpression != null) {
+                    builder.addSymbol(Return.ret(returnExpression));
                 }
-                List<String> label = (List<String>) node.childAt(5).accept(this);
+                String label = (String) node.childAt(5).accept(this);
                 builder.setAssociativity(associativity);
-                if (!label.isEmpty()) {
-                    builder.setLabel(label.get(0));
+                if (label != null) {
+                    builder.setLabel(label);
                 }
                 return builder.build();
             }
@@ -293,14 +293,14 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
                         symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
                     }
                 }
-                List<Expression> returnExpression = (List<Expression>) node.childAt(2).accept(this);
-                if (!returnExpression.isEmpty()) {
-                    builder.addSymbol(Return.ret(returnExpression.get(0)));
+                Expression returnExpression = (Expression) node.childAt(2).accept(this);
+                if (returnExpression != null) {
+                    builder.addSymbol(Return.ret(returnExpression));
                 }
                 builder.addSymbol(symbolBuilder.build());
-                List<String> label = (List<String>) node.childAt(3).accept(this);
-                if (!label.isEmpty()) {
-                    builder.setLabel(label.get(0));
+                String label = (String) node.childAt(3).accept(this);
+                if (label != null) {
+                    builder.setLabel(label);
                 }
                 return builder.build();
             }

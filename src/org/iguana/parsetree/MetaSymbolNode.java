@@ -37,11 +37,6 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     @Override
-    public <T> List<T> accept(ParseTreeVisitor<T> visitor) {
-        return visitor.visitMetaSymbolNode(this);
-    }
-
-    @Override
     public Symbol getGrammarDefinition() {
         return symbol;
     }
@@ -119,11 +114,21 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         public StarNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
         }
+
+        @Override
+        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+            return visitor.visitStarNode(this);
+        }
     }
 
     public static class PlusNode extends MultiChildMetaSymbolNode {
         public PlusNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
+        }
+
+        @Override
+        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+            return visitor.visitPlusNode(this);
         }
     }
 
@@ -131,11 +136,21 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         public GroupNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
         }
+
+        @Override
+        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+            return visitor.visitGroupNode(this);
+        }
     }
 
     public static class OptionNode extends SingleChildMetaSymbolNode {
         public OptionNode(Symbol symbol, ParseTreeNode child, int start, int end) {
             super(symbol, child, start, end);
+        }
+
+        @Override
+        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+            return visitor.visitOptionNode(this);
         }
     }
 
@@ -143,11 +158,21 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         public AltNode(Symbol symbol, ParseTreeNode child, int start, int end) {
             super(symbol, child, start, end);
         }
+
+        @Override
+        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+            return visitor.visitAltNode(this);
+        }
     }
 
     public static class StartNode extends SingleChildMetaSymbolNode {
         public StartNode(Symbol symbol, ParseTreeNode child, int start, int end) {
             super(symbol, child, start, end);
+        }
+
+        @Override
+        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+            return visitor.visitStartNode(this);
         }
     }
 }
