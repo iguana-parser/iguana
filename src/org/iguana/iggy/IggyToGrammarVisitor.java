@@ -129,17 +129,17 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
     }
 
     /*
-     * Rule : ("start" | "layout")? Identifier Parameters? ":" Body          %Syntax
-     *      | "layout"? "terminal" Identifier ":" RegexBody     %Lexical
+     * Rule : ("start" | "layout")? Name Parameters? ":" Body          %Syntax
+     *      | "layout"? "terminal" Name ":" RegexBody                  %Lexical
      *      ;
      */
     private Rule visitRule(NonterminalNode node) {
         String label = node.getGrammarDefinition().getLabel();
         switch (label) {
             case "ContextFree":
-                Identifier nonterminalName = getIdentifier(node.getChildWithName("Name"));
-                List<List<String>> parameters = (List<List<String>>) node.getChildWithName("Parameters?").accept(this);
-                List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
+                Identifier nonterminalName = getIdentifier(node.childAt(1));
+                List<List<String>> parameters = (List<List<String>>) node.childAt(2).accept(this);
+                List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.childAt(4).accept(this);
 
                 if (!node.childAt(0).children().isEmpty()) { // start symbol
                     String text = node.childAt(0).getText();
@@ -156,8 +156,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor<Object> {
             // RegexBody : { RegexSequence "|" }*;
             // RegexSequence : Regex+;
             case "Regex":
-                List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
-                Identifier identifier = getIdentifier(node.getChildWithName("Name"));
+                List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.childAt(4).accept(this);
+                Identifier identifier = getIdentifier(node.childAt(2));
                 regularExpressionMap.put(identifier.getName(), getRegex(alts));
 
                 if (!node.childAt(0).children().isEmpty()) {

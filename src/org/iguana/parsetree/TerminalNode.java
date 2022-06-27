@@ -2,6 +2,9 @@ package org.iguana.parsetree;
 
 import org.iguana.grammar.symbol.Terminal;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.iguana.utils.Assert.requireNonNegative;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
@@ -31,6 +34,11 @@ public abstract class TerminalNode implements ParseTreeNode {
     @Override
     public String getName() {
         return terminal.getName();
+    }
+
+    @Override
+    public List<ParseTreeNode> children() {
+        return Collections.emptyList();
     }
 
     @Override
