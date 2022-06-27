@@ -13,7 +13,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -39,11 +39,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        Arguments child1() {
+        public Arguments child1() {
            return (Arguments) childAt(1);
         }
 
@@ -62,11 +62,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
@@ -85,11 +85,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -108,11 +108,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -131,11 +131,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -154,19 +154,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
@@ -185,19 +185,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
@@ -216,11 +216,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
@@ -239,11 +239,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
@@ -262,15 +262,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Symbol child2() {
+        public Symbol child2() {
            return (Symbol) childAt(2);
         }
 
@@ -289,11 +289,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
@@ -312,11 +312,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        Condition child1() {
+        public Condition child1() {
            return (Condition) childAt(1);
         }
 
@@ -335,15 +335,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Regex child0() {
+        public Regex child0() {
            return (Regex) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Symbol child2() {
+        public Symbol child2() {
            return (Symbol) childAt(2);
         }
 
@@ -362,15 +362,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Regex child0() {
+        public Regex child0() {
            return (Regex) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Symbol child2() {
+        public Symbol child2() {
            return (Symbol) childAt(2);
         }
 
@@ -389,15 +389,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Regex child2() {
+        public Regex child2() {
            return (Regex) childAt(2);
         }
 
@@ -416,15 +416,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Regex child2() {
+        public Regex child2() {
            return (Regex) childAt(2);
         }
 
@@ -443,15 +443,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Regex child2() {
+        public Regex child2() {
            return (Regex) childAt(2);
         }
 
@@ -470,15 +470,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Symbol child0() {
+        public Symbol child0() {
            return (Symbol) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Identifier child2() {
+        public Identifier child2() {
            return (Identifier) childAt(2);
         }
 
@@ -497,23 +497,23 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Expression child1() {
+        public Expression child1() {
            return (Expression) childAt(1);
         }
 
-        Symbol child2() {
+        public Symbol child2() {
            return (Symbol) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
-        Symbol child4() {
+        public Symbol child4() {
            return (Symbol) childAt(4);
         }
 
@@ -532,7 +532,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
@@ -551,7 +551,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
@@ -570,23 +570,23 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
-        TerminalNode child4() {
+        public TerminalNode child4() {
            return (TerminalNode) childAt(4);
         }
 
@@ -605,23 +605,23 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
-        TerminalNode child4() {
+        public TerminalNode child4() {
            return (TerminalNode) childAt(4);
         }
 
@@ -640,11 +640,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Identifier child1() {
+        public Identifier child1() {
            return (Identifier) childAt(1);
         }
 
@@ -663,19 +663,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Identifier child1() {
+        public Identifier child1() {
            return (Identifier) childAt(1);
         }
 
-        Identifier id() {
+        public Identifier id() {
            return (Identifier) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -694,11 +694,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        Identifier id() {
+        public Identifier id() {
            return (Identifier) childAt(0);
         }
 
@@ -717,7 +717,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -736,15 +736,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Expression child1() {
+        public Expression child1() {
            return (Expression) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -763,7 +763,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
@@ -789,11 +789,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Regex child0() {
+        public Regex child0() {
            return (Regex) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -812,11 +812,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Regex child0() {
+        public Regex child0() {
            return (Regex) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -835,11 +835,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Regex child0() {
+        public Regex child0() {
            return (Regex) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -858,15 +858,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Regex child1() {
+        public Regex child1() {
            return (Regex) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -885,19 +885,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Regex child1() {
+        public Regex child1() {
            return (Regex) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
@@ -916,19 +916,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Regexs child1() {
+        public Regexs child1() {
            return (Regexs) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
@@ -947,7 +947,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Name child0() {
+        public Name child0() {
            return (Name) childAt(0);
         }
 
@@ -966,7 +966,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        CharClass child0() {
+        public CharClass child0() {
            return (CharClass) childAt(0);
         }
 
@@ -985,7 +985,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
@@ -1004,7 +1004,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -1023,7 +1023,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -1042,15 +1042,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -1076,15 +1076,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        VarName child0() {
+        public VarName child0() {
            return (VarName) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1103,11 +1103,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
@@ -1126,7 +1126,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -1145,15 +1145,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -1179,7 +1179,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Sequence child0() {
+        public Sequence child0() {
            return (Sequence) childAt(0);
         }
 
@@ -1198,23 +1198,23 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Sequence child2() {
+        public Sequence child2() {
            return (Sequence) childAt(2);
         }
 
-        MetaSymbolNode child3() {
+        public MetaSymbolNode child3() {
            return (MetaSymbolNode) childAt(3);
         }
 
-        TerminalNode child4() {
+        public TerminalNode child4() {
            return (TerminalNode) childAt(4);
         }
 
@@ -1233,7 +1233,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -1259,15 +1259,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Arguments child1() {
+        public Arguments child1() {
            return (Arguments) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
@@ -1286,11 +1286,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Binding child0() {
+        public Binding child0() {
            return (Binding) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
@@ -1309,7 +1309,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
@@ -1328,15 +1328,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -1362,15 +1362,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -1389,19 +1389,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
@@ -1427,27 +1427,27 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
-        MetaSymbolNode child1() {
+        public MetaSymbolNode child1() {
            return (MetaSymbolNode) childAt(1);
         }
 
-        Symbol child2() {
+        public Symbol child2() {
            return (Symbol) childAt(2);
         }
 
-        MetaSymbolNode child3() {
+        public MetaSymbolNode child3() {
            return (MetaSymbolNode) childAt(3);
         }
 
-        MetaSymbolNode child4() {
+        public MetaSymbolNode child4() {
            return (MetaSymbolNode) childAt(4);
         }
 
-        MetaSymbolNode child5() {
+        public MetaSymbolNode child5() {
            return (MetaSymbolNode) childAt(5);
         }
 
@@ -1466,19 +1466,19 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
-        Symbol child1() {
+        public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        MetaSymbolNode child3() {
+        public MetaSymbolNode child3() {
            return (MetaSymbolNode) childAt(3);
         }
 
@@ -1504,15 +1504,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -1531,7 +1531,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
@@ -1557,11 +1557,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Arguments child1() {
+        public Arguments child1() {
            return (Arguments) childAt(1);
         }
 
@@ -1580,11 +1580,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Expression child1() {
+        public Expression child1() {
            return (Expression) childAt(1);
         }
 
@@ -1603,15 +1603,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1630,15 +1630,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1657,15 +1657,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1684,15 +1684,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1711,15 +1711,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1738,15 +1738,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1765,15 +1765,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1792,15 +1792,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1819,15 +1819,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1846,15 +1846,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1873,15 +1873,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1900,15 +1900,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Expression child0() {
+        public Expression child0() {
            return (Expression) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Expression child2() {
+        public Expression child2() {
            return (Expression) childAt(2);
         }
 
@@ -1927,11 +1927,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -1950,11 +1950,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -1973,11 +1973,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -1996,11 +1996,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
@@ -2019,7 +2019,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        VarName child0() {
+        public VarName child0() {
            return (VarName) childAt(0);
         }
 
@@ -2038,7 +2038,7 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
@@ -2057,15 +2057,15 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        TerminalNode child0() {
+        public TerminalNode child0() {
            return (TerminalNode) childAt(0);
         }
 
-        Expression child1() {
+        public Expression child1() {
            return (Expression) childAt(1);
         }
 
-        TerminalNode child2() {
+        public TerminalNode child2() {
            return (TerminalNode) childAt(2);
         }
 
@@ -2091,23 +2091,23 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
-        Name child1() {
+        public Name child1() {
            return (Name) childAt(1);
         }
 
-        MetaSymbolNode child2() {
+        public MetaSymbolNode child2() {
            return (MetaSymbolNode) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
-        Body child4() {
+        public Body child4() {
            return (Body) childAt(4);
         }
 
@@ -2126,23 +2126,23 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        MetaSymbolNode child0() {
+        public MetaSymbolNode child0() {
            return (MetaSymbolNode) childAt(0);
         }
 
-        TerminalNode child1() {
+        public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        Name child2() {
+        public Name child2() {
            return (Name) childAt(2);
         }
 
-        TerminalNode child3() {
+        public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
-        RegexBody child4() {
+        public RegexBody child4() {
            return (RegexBody) childAt(4);
         }
 
@@ -2161,11 +2161,11 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        Identifier child0() {
+        public Identifier child0() {
            return (Identifier) childAt(0);
         }
 
-        Identifier id() {
+        public Identifier id() {
            return (Identifier) childAt(0);
         }
 

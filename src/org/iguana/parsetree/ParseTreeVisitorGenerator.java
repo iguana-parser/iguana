@@ -190,9 +190,7 @@ public class ParseTreeVisitorGenerator {
     }
 
     private String generateVisitorMethod(String name) {
-        return "    public T visit" + name + "(" + name + " node) {\n" +
-               "        throw new UnsupportedOperationException();\n" +
-               "    }\n\n";
+        return "    public abstract T visit" + name + "(" + name + " node);\n\n";
     }
 
     private void writeToFile(String content, String className) {
@@ -232,13 +230,13 @@ public class ParseTreeVisitorGenerator {
             String type = getSymbolType(symbol);
             // When type == null, it's a data-dependent construct that does not contribute to parse trees
             if (type != null) {
-                sb.append("        " + type + " child" + i + "() {\n");
+                sb.append("        public " + type + " child" + i + "() {\n");
                 sb.append("           return (" + type + ") childAt(" + i + ");\n");
                 sb.append("        }\n\n");
             }
 
             if (symbol.getLabel() != null) {
-                sb.append("        " + type + " " + symbol.getLabel() + "() {\n");
+                sb.append("        public " + type + " " + symbol.getLabel() + "() {\n");
                 sb.append("           return (" + type + ") childAt(" + i + ");\n");
                 sb.append("        }\n\n");
             }
