@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import static org.iguana.regex.utils.RegexUtils.isLiteral;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
+import static org.iguana.parsetree.MetaSymbolNode.*;
 
 public class ParseTreeVisitorGenerator {
 
@@ -37,25 +38,25 @@ public class ParseTreeVisitorGenerator {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n" +
-            "package " + packageName + ";\n" +
-            "\n" +
-            "import org.iguana.grammar.Grammar;\n" +
-            "import org.iguana.parser.IguanaParser;\n" +
-            "import org.iguana.parsetree.ParseTreeBuilder;\n" +
-            "import org.iguana.parsetree.ParseTreeNode;\n" +
-            "import org.iguana.utils.input.Input;\n" +
-            "\n" +
-            "public class " + className + "Parser extends IguanaParser {\n" +
-            "\n" +
-            "    public IggyParser(Grammar grammar) {\n" +
-            "        super(grammar);\n" +
-            "    }\n" +
-            "\n" +
-            "    @Override\n" +
-            "    protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {\n" +
-            "        return new " + className + "ParseTreeBuilder(input);\n" +
-            "    }\n" +
-            "}\n";
+                "package " + packageName + ";\n" +
+                "\n" +
+                "import org.iguana.grammar.Grammar;\n" +
+                "import org.iguana.parser.IguanaParser;\n" +
+                "import org.iguana.parsetree.ParseTreeBuilder;\n" +
+                "import org.iguana.parsetree.ParseTreeNode;\n" +
+                "import org.iguana.utils.input.Input;\n" +
+                "\n" +
+                "public class " + className + "Parser extends IguanaParser {\n" +
+                "\n" +
+                "    public IggyParser(Grammar grammar) {\n" +
+                "        super(grammar);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {\n" +
+                "        return new " + className + "ParseTreeBuilder(input);\n" +
+                "    }\n" +
+                "}\n";
         writeToFile(content, className + "Parser");
     }
 
@@ -105,7 +106,8 @@ public class ParseTreeVisitorGenerator {
             } else {
                 sb.append("                switch (label) {\n");
                 for (RuntimeRule alternative : alternatives) {
-                    if (alternative.getLabel() == null) throw new RuntimeException("All alternatives must have a label: " + alternative);
+                    if (alternative.getLabel() == null)
+                        throw new RuntimeException("All alternatives must have a label: " + alternative);
                     sb.append("                    case \"" + alternative.getLabel() + "\":\n");
                     String className = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
                     sb.append("                        return new " + className + "(rule, children, leftExtent, rightExtent);\n");
@@ -124,6 +126,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
         sb.append("import org.iguana.parsetree.*;\n\n");
         sb.append("import java.util.List;\n\n");
+        sb.append("import static org.iguana.parsetree.MetaSymbolNode.*;\n\n");
         String className = toFirstUpperCase(grammarName) + "ParseTree";
         sb.append("public class " + className + " {\n");
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
@@ -139,7 +142,8 @@ public class ParseTreeVisitorGenerator {
             } else {
                 sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), true, Collections.emptyList()));
                 for (RuntimeRule alternative : alternatives) {
-                    if (alternative.getLabel() == null) throw new RuntimeException("All alternatives must have a label: " + alternative);
+                    if (alternative.getLabel() == null)
+                        throw new RuntimeException("All alternatives must have a label: " + alternative);
                     String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
                     sb.append("    // " + nonterminalName + " = " + listToString(alternative.getBody().stream().map(this::symbolToString).collect(Collectors.toList())) + "\n");
                     sb.append(generateSymbolClass(nodeName, nonterminalName, false, alternative.getBody()));
@@ -159,7 +163,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("import static " + packageName + ".IggyParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
-        sb.append("public abstract class " +  className + "<T> implements ParseTreeVisitor<T> {\n\n");
+        sb.append("public abstract class " + className + "<T> implements ParseTreeVisitor<T> {\n\n");
         sb.append("    @Override\n");
         sb.append("    public T visitNonterminalNode(NonterminalNode node) {\n");
         sb.append("        throw new UnsupportedOperationException();\n");
@@ -176,12 +180,12 @@ public class ParseTreeVisitorGenerator {
 
             if (alternatives.size() == 0) {
                 sb.append(generateVisitorMethod(nonterminalName));
-            }
-            else if (alternatives.size() == 1) {
+            } else if (alternatives.size() == 1) {
                 sb.append(generateVisitorMethod(nonterminalName));
             } else {
                 for (RuntimeRule alternative : alternatives) {
-                    if (alternative.getLabel() == null) throw new RuntimeException("All alternatives must have a label: " + alternative);
+                    if (alternative.getLabel() == null)
+                        throw new RuntimeException("All alternatives must have a label: " + alternative);
                     String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
                     sb.append(generateVisitorMethod(nodeName));
                 }
@@ -204,23 +208,23 @@ public class ParseTreeVisitorGenerator {
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
         return
             "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass + " extends " + superType + " {\n" +
-            "        public " + symbolClass + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
-            "            super(rule, children, start, end);\n" +
-            "        }\n\n" +
-            generateSymbols(symbols) +
-            (isAbstract ? "" : generateAcceptMethod(symbolClass)) +
-            "    }\n\n";
+                "        public " + symbolClass + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
+                "            super(rule, children, start, end);\n" +
+                "        }\n\n" +
+                generateSymbols(symbols) +
+                (isAbstract ? "" : generateAcceptMethod(symbolClass)) +
+                "    }\n\n";
     }
 
     private String generateAcceptMethod(String symbolClass) {
         String visitorName = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         return "        @Override\n" +
-               "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n" +
-               "            if (visitor instanceof " + visitorName + ") {\n" +
-               "                return ((" + visitorName + "<T>) visitor).visit" + symbolClass + "(this);\n" +
-               "            }\n" +
-               "            return visitor.visitNonterminalNode(this);\n" +
-               "        }\n";
+            "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n" +
+            "            if (visitor instanceof " + visitorName + ") {\n" +
+            "                return ((" + visitorName + "<T>) visitor).visit" + symbolClass + "(this);\n" +
+            "            }\n" +
+            "            return visitor.visitNonterminalNode(this);\n" +
+            "        }\n";
     }
 
     private String generateSymbols(List<Symbol> symbols) {
@@ -258,9 +262,20 @@ public class ParseTreeVisitorGenerator {
             return symbol.getName();
         } else if (symbol instanceof Terminal) {
             return TerminalNode.class.getSimpleName();
-        } else if (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt || symbol instanceof Group) {
-            return MetaSymbolNode.class.getSimpleName();
+        } else if (symbol instanceof Star) {
+            return StarNode.class.getSimpleName();
+        } else if (symbol instanceof Plus) {
+            return PlusNode.class.getSimpleName();
+        } else if (symbol instanceof Group) {
+            return GroupNode.class.getSimpleName();
+        } else if (symbol instanceof Alt) {
+            return AltNode.class.getSimpleName();
+        } else if (symbol instanceof Opt) {
+            return OptionNode.class.getSimpleName();
+        } else if (symbol instanceof Start) {
+            return StartNode.class.getSimpleName();
         } else {
+            // Data dependent symbols do not have a type
             return null;
         }
     }

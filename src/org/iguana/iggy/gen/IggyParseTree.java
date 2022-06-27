@@ -6,6 +6,8 @@ import org.iguana.parsetree.*;
 
 import java.util.List;
 
+import static org.iguana.parsetree.MetaSymbolNode.*;
+
 public class IggyParseTree {
     // Definition = (Rule | Global)+
     public static class Definition extends NonterminalNode {
@@ -13,8 +15,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public PlusNode child0() {
+           return (PlusNode) childAt(0);
         }
 
         @Override
@@ -70,16 +72,16 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public OptionNode child0() {
+           return (OptionNode) childAt(0);
         }
 
         public Name child1() {
            return (Name) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public OptionNode child2() {
+           return (OptionNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -105,8 +107,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public OptionNode child0() {
+           return (OptionNode) childAt(0);
         }
 
         public TerminalNode child1() {
@@ -144,8 +146,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public StarNode child1() {
+           return (StarNode) childAt(1);
         }
 
         public TerminalNode child2() {
@@ -167,8 +169,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public StarNode child0() {
+           return (StarNode) childAt(0);
         }
 
         @Override
@@ -186,8 +188,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public PlusNode child0() {
+           return (PlusNode) childAt(0);
         }
 
         @Override
@@ -205,8 +207,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public PlusNode child0() {
+           return (PlusNode) childAt(0);
         }
 
         @Override
@@ -262,8 +264,8 @@ public class IggyParseTree {
            return (Sequence) childAt(2);
         }
 
-        public MetaSymbolNode child3() {
-           return (MetaSymbolNode) childAt(3);
+        public PlusNode child3() {
+           return (PlusNode) childAt(3);
         }
 
         public TerminalNode child4() {
@@ -285,8 +287,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public OptionNode child0() {
+           return (OptionNode) childAt(0);
         }
 
         @Override
@@ -311,28 +313,28 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public OptionNode child0() {
+           return (OptionNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public OptionNode child1() {
+           return (OptionNode) childAt(1);
         }
 
         public Symbol child2() {
            return (Symbol) childAt(2);
         }
 
-        public MetaSymbolNode child3() {
-           return (MetaSymbolNode) childAt(3);
+        public PlusNode child3() {
+           return (PlusNode) childAt(3);
         }
 
-        public MetaSymbolNode child4() {
-           return (MetaSymbolNode) childAt(4);
+        public OptionNode child4() {
+           return (OptionNode) childAt(4);
         }
 
-        public MetaSymbolNode child5() {
-           return (MetaSymbolNode) childAt(5);
+        public OptionNode child5() {
+           return (OptionNode) childAt(5);
         }
 
         @Override
@@ -350,20 +352,20 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public OptionNode child0() {
+           return (OptionNode) childAt(0);
         }
 
         public Symbol child1() {
            return (Symbol) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public OptionNode child2() {
+           return (OptionNode) childAt(2);
         }
 
-        public MetaSymbolNode child3() {
-           return (MetaSymbolNode) childAt(3);
+        public OptionNode child3() {
+           return (OptionNode) childAt(3);
         }
 
         @Override
@@ -385,8 +387,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public StarNode child1() {
+           return (StarNode) childAt(1);
         }
 
         public TerminalNode child2() {
@@ -408,8 +410,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public PlusNode child0() {
+           return (PlusNode) childAt(0);
         }
 
         @Override
@@ -557,8 +559,8 @@ public class IggyParseTree {
            return (Symbol) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public StarNode child2() {
+           return (StarNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -584,12 +586,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public PlusNode child1() {
+           return (PlusNode) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public PlusNode child2() {
+           return (PlusNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -688,8 +690,8 @@ public class IggyParseTree {
            return (Symbol) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public PlusNode child1() {
+           return (PlusNode) childAt(1);
         }
 
         @Override
@@ -973,8 +975,8 @@ public class IggyParseTree {
            return (Symbol) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public PlusNode child2() {
+           return (PlusNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -1008,8 +1010,8 @@ public class IggyParseTree {
            return (Symbol) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public PlusNode child2() {
+           return (PlusNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -1039,8 +1041,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public StarNode child1() {
+           return (StarNode) childAt(1);
         }
 
         public TerminalNode child2() {
@@ -1077,8 +1079,8 @@ public class IggyParseTree {
            return (Arguments) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public OptionNode child2() {
+           return (OptionNode) childAt(2);
         }
 
         @Override
@@ -1100,8 +1102,8 @@ public class IggyParseTree {
            return (Binding) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public OptionNode child1() {
+           return (OptionNode) childAt(1);
         }
 
         @Override
@@ -1157,8 +1159,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public PlusNode child1() {
+           return (PlusNode) childAt(1);
         }
 
         @Override
@@ -1287,8 +1289,8 @@ public class IggyParseTree {
            return (Regex) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public PlusNode child2() {
+           return (PlusNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -1318,8 +1320,8 @@ public class IggyParseTree {
            return (Regexs) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public PlusNode child2() {
+           return (PlusNode) childAt(2);
         }
 
         public TerminalNode child3() {
@@ -1398,8 +1400,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public MetaSymbolNode child0() {
-           return (MetaSymbolNode) childAt(0);
+        public PlusNode child0() {
+           return (PlusNode) childAt(0);
         }
 
         @Override
@@ -1428,8 +1430,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public MetaSymbolNode child1() {
-           return (MetaSymbolNode) childAt(1);
+        public StarNode child1() {
+           return (StarNode) childAt(1);
         }
 
         public TerminalNode child2() {
@@ -1459,8 +1461,8 @@ public class IggyParseTree {
            return (TerminalNode) childAt(1);
         }
 
-        public MetaSymbolNode child2() {
-           return (MetaSymbolNode) childAt(2);
+        public StarNode child2() {
+           return (StarNode) childAt(2);
         }
 
         public TerminalNode child3() {
