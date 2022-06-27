@@ -160,8 +160,6 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
-            case "Regexs":
-                return new Regexs(rule, children, leftExtent, rightExtent);
             case "CharClass":
                 switch (label) {
                     case "Chars":

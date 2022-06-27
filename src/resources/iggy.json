@@ -2062,31 +2062,27 @@
                       }
                     },
                     {
-                      "kind" : "Identifier",
-                      "name" : "Regexs"
-                    },
-                    {
                       "kind" : "Plus",
-                      "name" : "(| Regexs)+",
+                      "name" : "Regex++",
                       "s" : {
-                        "kind" : "Sequence",
-                        "name" : "(| Regexs)",
-                        "symbols" : [
-                          {
-                            "kind" : "Terminal",
-                            "name" : "|",
-                            "nodeType" : "Literal",
-                            "regex" : {
-                              "kind" : "Char",
-                              "val" : 124
-                            }
-                          },
-                          {
-                            "kind" : "Identifier",
-                            "name" : "Regexs"
+                        "kind" : "Plus",
+                        "name" : "Regex+",
+                        "s" : {
+                          "kind" : "Identifier",
+                          "name" : "Regex"
+                        }
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : "|",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 124
                           }
-                        ]
-                      }
+                        }
+                      ]
                     },
                     {
                       "kind" : "Terminal",
@@ -2138,34 +2134,6 @@
                     }
                   ],
                   "label" : "String"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Regexs"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Plus",
-                      "name" : "Regex+",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Regex"
-                      }
-                    }
-                  ]
                 }
               ]
             }

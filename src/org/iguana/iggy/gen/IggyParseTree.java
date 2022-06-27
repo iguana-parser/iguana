@@ -1287,7 +1287,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' Regexs (| Regexs)+ ')'
+    // Regex = '(' Regex++ ')'
     public static class AlternationRegex extends Regex {
         public AlternationRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1297,16 +1297,12 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
-        public Regexs child1() {
-           return (Regexs) childAt(1);
+        public PlusNode child1() {
+           return (PlusNode) childAt(1);
         }
 
-        public PlusNode child2() {
-           return (PlusNode) childAt(2);
-        }
-
-        public TerminalNode child3() {
-           return (TerminalNode) childAt(3);
+        public TerminalNode child2() {
+           return (TerminalNode) childAt(2);
         }
 
         @Override
@@ -1370,25 +1366,6 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitStringRegex(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // Regexs = Regex+
-    public static class Regexs extends NonterminalNode {
-        public Regexs(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public PlusNode child0() {
-           return (PlusNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitRegexs(this);
             }
             return visitor.visitNonterminalNode(this);
         }

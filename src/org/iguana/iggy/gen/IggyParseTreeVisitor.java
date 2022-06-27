@@ -115,8 +115,6 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitStringRegex(StringRegex node);
 
-    public abstract T visitRegexs(Regexs node);
-
     public abstract T visitCharsCharClass(CharsCharClass node);
 
     public abstract T visitNotCharsCharClass(NotCharsCharClass node);

@@ -11,7 +11,6 @@ import org.iguana.utils.input.Input;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 

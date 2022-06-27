@@ -77,13 +77,10 @@ Regex
   | Regex "?"                     %Option
   | "(" Regex ")"                 %Bracket
   | "(" Regex Regex+ ")"          %Sequence
-  | "(" Regexs ("|" Regexs)+ ")"  %Alternation
+  | "(" { Regex+ "|" }+ ")"       %Alternation
   | Name                          %Nont
   | CharClass                     %CharClass
   | String                        %String
-
-Regexs
-  = Regex+
 
 CharClass
   = "[" Range* "]"      %Chars
