@@ -4,12 +4,14 @@ import org.iguana.grammar.Grammar;
 import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.ParseTreeVisitorGenerator;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 
@@ -36,8 +38,10 @@ public class IggyParserBootstrap {
     public static void main(String[] args) throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         Grammar grammar = getGrammar(path);
-//        System.out.println(JsonSerializer.toJSON(grammar));
         JsonSerializer.serialize(grammar, Paths.get("src/resources/iggy.json").toAbsolutePath().toString());
+
+        ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.gen", Paths.get("src/org/iguana/iggy/gen").toAbsolutePath().toString());
+        generator.generate();
     }
 
     public static Grammar fromGrammar(String grammar)  {

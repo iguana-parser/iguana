@@ -456,10 +456,14 @@
                   "symbols" : [
                     {
                       "kind" : "Star",
-                      "name" : "RegexSequence*",
+                      "name" : "Regex+*",
                       "s" : {
-                        "kind" : "Identifier",
-                        "name" : "RegexSequence"
+                        "kind" : "Plus",
+                        "name" : "Regex+",
+                        "s" : {
+                          "kind" : "Identifier",
+                          "name" : "Regex"
+                        }
                       },
                       "separators" : [
                         {
@@ -808,34 +812,6 @@
                       "regex" : {
                         "kind" : "Char",
                         "val" : 93
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "RegexSequence"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Plus",
-                      "name" : "Regex+",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Regex"
                       }
                     }
                   ]

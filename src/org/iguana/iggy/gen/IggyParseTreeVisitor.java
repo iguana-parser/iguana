@@ -41,8 +41,6 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitCondition(Condition node);
 
-    public abstract T visitRegexSequence(RegexSequence node);
-
     public abstract T visitCallSymbol(CallSymbol node);
 
     public abstract T visitOffsideSymbol(OffsideSymbol node);

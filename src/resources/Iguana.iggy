@@ -15,7 +15,7 @@ Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
 
 RegexBody
-  = {RegexSequence "|"}*
+  = { Regex+ "|" }*
 
 Body
   = {PriorityLevels ">"}+
@@ -34,9 +34,6 @@ Sequence
 
 Condition
   = "[" {Expression ","}* "]"
-
-RegexSequence
-  = Regex+
 
 Symbol
   = Identifier Arguments                    %Call

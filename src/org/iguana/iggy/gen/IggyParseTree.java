@@ -163,7 +163,7 @@ public class IggyParseTree {
         }
     }
 
-    // RegexBody = RegexSequence*
+    // RegexBody = Regex+*
     public static class RegexBody extends NonterminalNode {
         public RegexBody(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -399,25 +399,6 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitCondition(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
-    // RegexSequence = Regex+
-    public static class RegexSequence extends NonterminalNode {
-        public RegexSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public PlusNode child0() {
-           return (PlusNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitRegexSequence(this);
             }
             return visitor.visitNonterminalNode(this);
         }

@@ -19,15 +19,19 @@ import static org.iguana.parsetree.MetaSymbolNode.*;
 
 public class ParseTreeVisitorGenerator {
 
+    private final RuntimeGrammar grammar;
     private final String grammarName;
     private final String packageName;
-    private final File genDirectory;
+    private final String genDirectory;
 
-    public ParseTreeVisitorGenerator(RuntimeGrammar grammar, String grammarName, String packageName, File genDirectory) {
+    public ParseTreeVisitorGenerator(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
+        this.grammar = grammar;
         this.grammarName = grammarName;
         this.packageName = packageName;
         this.genDirectory = genDirectory;
+    }
 
+    public void generate() {
         generateParseTreeTypes(grammar);
         generateVisitor(grammar);
         generateParseTreeBuilder(grammar);

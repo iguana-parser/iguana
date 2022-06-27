@@ -66,8 +66,6 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                 }
             case "Condition":
                 return new Condition(rule, children, leftExtent, rightExtent);
-            case "RegexSequence":
-                return new RegexSequence(rule, children, leftExtent, rightExtent);
             case "Symbol":
                 switch (label) {
                     case "Call":
