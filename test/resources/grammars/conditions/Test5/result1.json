@@ -1,245 +1,243 @@
 {
-  "kind" : "MetaSymbolNode",
+  "kind" : "StartNode",
   "symbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
-  "start" : 0,
-  "end" : 4,
-  "children" : [
-    {
-      "kind" : "NonterminalNode",
-      "rule" : {
-        "head" : {
-          "kind" : "Nonterminal",
-          "name" : "S"
-        },
-        "body" : [
-          {
-            "kind" : "Nonterminal",
-            "name" : "Id"
-          }
-        ],
-        "recursion" : "NON_REC",
-        "irecursion" : "NON_REC",
-        "associativity" : "UNDEFINED",
-        "precedence" : -1,
-        "precedenceLevel" : {
-          "lhs" : 1,
-          "rhs" : 1,
-          "undefined" : -1,
-          "hasPrefixUnary" : false,
-          "hasPostfixUnary" : false,
-          "hasPrefixUnaryBelow" : false,
-          "hasPostfixUnaryBelow" : false,
-          "index" : 1,
-          "containsAssociativityGroup" : false,
-          "assoc_lhs" : -1,
-          "assoc_rhs" : -1
-        }
+  "child" : {
+    "kind" : "NonterminalNode",
+    "rule" : {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
       },
-      "children" : [
+      "body" : [
         {
-          "kind" : "NonterminalNode",
-          "rule" : {
-            "head" : {
-              "kind" : "Nonterminal",
-              "name" : "Id"
-            },
-            "body" : [
-              {
-                "kind" : "Terminal",
-                "name" : "Chars",
-                "postConditions" : [
-                  {
-                    "kind" : "RegularExpressionCondition",
-                    "type" : "NOT_MATCH",
-                    "regularExpression" : {
-                      "kind" : "regex.Alt",
-                      "symbols" : [
-                        {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 105
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 102
-                            }
-                          ]
-                        },
-                        {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 119
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 104
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 105
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 108
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 101
-                            }
-                          ]
-                        },
-                        {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 100
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 111
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                ],
-                "nodeType" : "Regex",
-                "regex" : {
-                  "kind" : "regex.Plus",
-                  "regex" : {
-                    "kind" : "regex.Alt",
-                    "symbols" : [
-                      {
-                        "kind" : "CharRange",
-                        "start" : 97,
-                        "end" : 122
-                      }
-                    ]
-                  }
-                }
-              }
-            ],
-            "recursion" : "NON_REC",
-            "irecursion" : "NON_REC",
-            "associativity" : "UNDEFINED",
-            "precedence" : -1,
-            "precedenceLevel" : {
-              "lhs" : 1,
-              "rhs" : 1,
-              "undefined" : -1,
-              "hasPrefixUnary" : false,
-              "hasPostfixUnary" : false,
-              "hasPrefixUnaryBelow" : false,
-              "hasPostfixUnaryBelow" : false,
-              "index" : 1,
-              "containsAssociativityGroup" : false,
-              "assoc_lhs" : -1,
-              "assoc_rhs" : -1
-            }
-          },
-          "children" : [
-            {
-              "kind" : "TerminalNode",
-              "terminal" : {
-                "kind" : "Terminal",
-                "name" : "Chars",
-                "postConditions" : [
-                  {
-                    "kind" : "RegularExpressionCondition",
-                    "type" : "NOT_MATCH",
-                    "regularExpression" : {
-                      "kind" : "regex.Alt",
-                      "symbols" : [
-                        {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 105
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 102
-                            }
-                          ]
-                        },
-                        {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 119
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 104
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 105
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 108
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 101
-                            }
-                          ]
-                        },
-                        {
-                          "kind" : "regex.Seq",
-                          "symbols" : [
-                            {
-                              "kind" : "Char",
-                              "val" : 100
-                            },
-                            {
-                              "kind" : "Char",
-                              "val" : 111
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                ],
-                "nodeType" : "Regex",
-                "regex" : {
-                  "kind" : "regex.Plus",
-                  "regex" : {
-                    "kind" : "regex.Alt",
-                    "symbols" : [
-                      {
-                        "kind" : "CharRange",
-                        "start" : 97,
-                        "end" : 122
-                      }
-                    ]
-                  }
-                }
-              },
-              "start" : 0,
-              "end" : 4
-            }
-          ],
-          "start" : 0,
-          "end" : 4
+          "kind" : "Nonterminal",
+          "name" : "Id"
         }
       ],
-      "start" : 0,
-      "end" : 4
-    }
-  ]
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    "children" : [
+      {
+        "kind" : "NonterminalNode",
+        "rule" : {
+          "head" : {
+            "kind" : "Nonterminal",
+            "name" : "Id"
+          },
+          "body" : [
+            {
+              "kind" : "Terminal",
+              "name" : "Chars",
+              "postConditions" : [
+                {
+                  "kind" : "RegularExpressionCondition",
+                  "type" : "NOT_MATCH",
+                  "regularExpression" : {
+                    "kind" : "regex.Alt",
+                    "symbols" : [
+                      {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 119
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 104
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 100
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Plus",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "recursion" : "NON_REC",
+          "irecursion" : "NON_REC",
+          "associativity" : "UNDEFINED",
+          "precedence" : -1,
+          "precedenceLevel" : {
+            "lhs" : 1,
+            "rhs" : 1,
+            "undefined" : -1,
+            "hasPrefixUnary" : false,
+            "hasPostfixUnary" : false,
+            "hasPrefixUnaryBelow" : false,
+            "hasPostfixUnaryBelow" : false,
+            "index" : 1,
+            "containsAssociativityGroup" : false,
+            "assoc_lhs" : -1,
+            "assoc_rhs" : -1
+          }
+        },
+        "children" : [
+          {
+            "kind" : "TerminalNode",
+            "terminal" : {
+              "kind" : "Terminal",
+              "name" : "Chars",
+              "postConditions" : [
+                {
+                  "kind" : "RegularExpressionCondition",
+                  "type" : "NOT_MATCH",
+                  "regularExpression" : {
+                    "kind" : "regex.Alt",
+                    "symbols" : [
+                      {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 119
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 104
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 100
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Plus",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            },
+            "start" : 0,
+            "end" : 4
+          }
+        ],
+        "start" : 0,
+        "end" : 4
+      }
+    ],
+    "start" : 0,
+    "end" : 4
+  },
+  "start" : 0,
+  "end" : 4
 }
