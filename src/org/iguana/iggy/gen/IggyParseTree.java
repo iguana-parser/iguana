@@ -80,6 +80,10 @@ public class IggyParseTree {
            return (OptionNode) childAt(0);
         }
 
+        public OptionNode modifier() {
+           return (OptionNode) childAt(0);
+        }
+
         public Name child1() {
            return (Name) childAt(1);
         }
@@ -124,6 +128,10 @@ public class IggyParseTree {
         }
 
         public OptionNode child0() {
+           return (OptionNode) childAt(0);
+        }
+
+        public OptionNode modifier() {
            return (OptionNode) childAt(0);
         }
 
@@ -261,6 +269,10 @@ public class IggyParseTree {
            return (Sequence) childAt(0);
         }
 
+        public Sequence seq() {
+           return (Sequence) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -270,7 +282,7 @@ public class IggyParseTree {
         }
     }
 
-    // Alternative = Associativity '(' Sequence (| Sequence)+ ')'
+    // Alternative = Associativity '(' Sequence+ ')'
     public static class AssociativityAlternative extends Alternative {
         public AssociativityAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -280,20 +292,24 @@ public class IggyParseTree {
            return (TerminalNode) childAt(0);
         }
 
+        public TerminalNode assoc() {
+           return (TerminalNode) childAt(0);
+        }
+
         public TerminalNode child1() {
            return (TerminalNode) childAt(1);
         }
 
-        public Sequence child2() {
-           return (Sequence) childAt(2);
+        public PlusNode child2() {
+           return (PlusNode) childAt(2);
         }
 
-        public PlusNode child3() {
-           return (PlusNode) childAt(3);
+        public PlusNode seqs() {
+           return (PlusNode) childAt(2);
         }
 
-        public TerminalNode child4() {
-           return (TerminalNode) childAt(4);
+        public TerminalNode child3() {
+           return (TerminalNode) childAt(3);
         }
 
         @Override
@@ -312,6 +328,10 @@ public class IggyParseTree {
         }
 
         public OptionNode child0() {
+           return (OptionNode) childAt(0);
+        }
+
+        public OptionNode label() {
            return (OptionNode) childAt(0);
         }
 

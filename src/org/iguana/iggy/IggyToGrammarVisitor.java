@@ -69,8 +69,8 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
         Optional<List<Identifier>> parameters = (Optional<List<Identifier>>) node.params().accept(this);
         List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.body().accept(this);
 
-        if (!node.child0().children().isEmpty()) { // start symbol
-            String text = node.child0().getText();
+        if (node.modifier().hasChildren()) { // start symbol
+            String text = node.modifier().getText();
             if (text.equals("start")) {
                 start = nonterminalName.getName();
             } else { // "layout"
@@ -78,17 +78,17 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
             }
         }
 
-        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(!parameters.isPresent() ? Collections.emptyList() : parameters.get().stream().map(AbstractSymbol::toString).collect(Collectors.toList())).build();
+        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList())).build();
         return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
     }
 
     @Override
     public Void visitRegexRule(RegexRule node) {
-        List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.child4().accept(this);
-        Identifier identifier = getIdentifier(node.childAt(2));
+        List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.body().accept(this);
+        Identifier identifier = (Identifier) node.name().accept(this);
         regularExpressionMap.put(identifier.getName(), getRegex(alts));
 
-        if (!node.childAt(0).children().isEmpty()) {
+        if (node.modifier().hasChildren()) {
             layout = identifier;
         }
 
@@ -126,10 +126,8 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitAssociativityAlternative(IggyParseTree.AssociativityAlternative node) {
-        Associativity associativity = getAssociativity(node.childAt(0));
-        List<Sequence> seqs = new ArrayList<>();
-        seqs.add((Sequence) node.childAt(2).accept(this));
-        seqs.addAll((List<Sequence>) node.childAt(3).accept(this));
+        Associativity associativity = getAssociativity(node.assoc());
+        List<Sequence> seqs = (List<Sequence>) node.seqs().accept(this);
         return new Alternative.Builder(seqs, associativity).build();
     }
 

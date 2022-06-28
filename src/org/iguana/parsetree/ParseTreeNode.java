@@ -13,6 +13,10 @@ public interface ParseTreeNode {
 
     List<ParseTreeNode> children();
 
+    default boolean hasChildren() {
+        return !children().isEmpty();
+    }
+
     default ParseTreeNode childAt(int i) {
         if (i < 0 || i >= children().size())
             throw new IndexOutOfBoundsException();

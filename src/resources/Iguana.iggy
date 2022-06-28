@@ -8,8 +8,8 @@ Global
  = "global" id:Identifier "=" exp:Expression  env=put(env,id.yield)
 
 Rule
-  = ("start" | "layout")? name:Name params:Parameters? "=" body:Body        %ContextFree
-  | "layout"? "regex" name:Name "=" body:RegexBody                          %Regex
+  = modifier: ("start" | "layout")? name:Name params:Parameters? "=" body:Body      %ContextFree
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                        %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
@@ -24,9 +24,9 @@ PriorityLevels
   = {Alternative "|"}+
 
 Alternative
-  = Sequence                                         %Sequence
-  | Associativity "(" Sequence ("|" Sequence)+ ")"   %Associativity
-  | Label?                                           %Empty
+  = seq:Sequence                                        %Sequence
+  | assoc:Associativity "(" seqs: {Sequence "|"}+ ")"   %Associativity
+  | label:Label?                                        %Empty
 
 Sequence
   = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOneElem

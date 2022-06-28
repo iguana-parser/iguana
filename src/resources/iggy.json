@@ -157,6 +157,7 @@
                     {
                       "kind" : "Opt",
                       "name" : "(start | layout)?",
+                      "label" : "modifier",
                       "s" : {
                         "kind" : "Alt",
                         "name" : "(start | layout)",
@@ -268,6 +269,7 @@
                     {
                       "kind" : "Opt",
                       "name" : "layout?",
+                      "label" : "modifier",
                       "s" : {
                         "kind" : "Terminal",
                         "name" : "layout",
@@ -584,7 +586,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Sequence"
+                      "name" : "Sequence",
+                      "label" : "seq"
                     }
                   ],
                   "label" : "Sequence"
@@ -597,7 +600,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Associativity"
+                      "name" : "Associativity",
+                      "label" : "assoc"
                     },
                     {
                       "kind" : "Terminal",
@@ -609,31 +613,24 @@
                       }
                     },
                     {
-                      "kind" : "Identifier",
-                      "name" : "Sequence"
-                    },
-                    {
                       "kind" : "Plus",
-                      "name" : "(| Sequence)+",
+                      "name" : "Sequence+",
+                      "label" : "seqs",
                       "s" : {
-                        "kind" : "Sequence",
-                        "name" : "(| Sequence)",
-                        "symbols" : [
-                          {
-                            "kind" : "Terminal",
-                            "name" : "|",
-                            "nodeType" : "Literal",
-                            "regex" : {
-                              "kind" : "Char",
-                              "val" : 124
-                            }
-                          },
-                          {
-                            "kind" : "Identifier",
-                            "name" : "Sequence"
+                        "kind" : "Identifier",
+                        "name" : "Sequence"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : "|",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 124
                           }
-                        ]
-                      }
+                        }
+                      ]
                     },
                     {
                       "kind" : "Terminal",
@@ -656,6 +653,7 @@
                     {
                       "kind" : "Opt",
                       "name" : "Label?",
+                      "label" : "label",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Label"
