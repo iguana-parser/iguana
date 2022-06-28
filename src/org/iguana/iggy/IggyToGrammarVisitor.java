@@ -66,8 +66,8 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public Object visitContextFreeRule(IggyParseTree.ContextFreeRule node) {
         Identifier nonterminalName = getIdentifier(node.childAt(1));
-        List<String> parameters = (List<String>) node.child2().accept(this);
-        List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.child4().accept(this);
+        Optional<List<Identifier>> parameters = (Optional<List<Identifier>>) node.params().accept(this);
+        List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.body().accept(this);
 
         if (!node.child0().children().isEmpty()) { // start symbol
             String text = node.child0().getText();
@@ -78,7 +78,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
             }
         }
 
-        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters == null ? Collections.emptyList() : parameters).build();
+        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(!parameters.isPresent() ? Collections.emptyList() : parameters.get().stream().map(AbstractSymbol::toString).collect(Collectors.toList())).build();
         return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
     }
 
@@ -96,10 +96,8 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public List<String> visitParameters(IggyParseTree.Parameters node) {
-        return node.childAt(1).children().stream()
-            .filter(s -> !s.getText().equals(","))
-            .map(ParseTreeNode::getText).collect(Collectors.toList());
+    public List<Identifier> visitParameters(IggyParseTree.Parameters node) {
+        return (List<Identifier>) visitChildren(node);
     }
 
     @Override
@@ -137,9 +135,9 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitEmptyAlternative(IggyParseTree.EmptyAlternative node) {
-        String definedLabel = (String) node.child0().accept(this);
-        if (definedLabel != null) {
-            Sequence sequence = new Sequence.Builder().setLabel(definedLabel).build();
+        Optional<String> label = (Optional<String>) node.child0().accept(this);
+        if (label.isPresent()) {
+            Sequence sequence = new Sequence.Builder().setLabel(label.get()).build();
             return new Alternative.Builder().addSequence(sequence).build();
         } else {
             return new Alternative.Builder().build();
@@ -153,26 +151,26 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
             associativity = getAssociativity(node.child0().childAt(0));
         }
         Sequence.Builder builder = new Sequence.Builder();
-        List<Expression> expressions = (List<Expression>) node.child1().accept(this);
+        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.child1().accept(this);
         List<Symbol> symbols = new ArrayList<>();
         Symbol symbol = (Symbol) node.childAt(2).accept(this);
         SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
-        if (expressions != null) {
-            for (Expression expression : expressions) {
+        if (expressions.isPresent()) {
+            for (Expression expression : expressions.get()) {
                 symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
             }
         }
         symbols.add(symbolBuilder.build());
         symbols.addAll((List<Symbol>) node.child3().accept(this));
         builder.addSymbols(symbols);
-        Expression returnExpression = (Expression) node.child4().accept(this);
-        if (returnExpression != null) {
-            builder.addSymbol(Return.ret(returnExpression));
+        Optional<Expression> returnExpression = (Optional<Expression>) node.child4().accept(this);
+        if (returnExpression.isPresent()) {
+            builder.addSymbol(Return.ret(returnExpression.get()));
         }
-        String label = (String) node.child5().accept(this);
+        Optional<String> label = (Optional<String>) node.child5().accept(this);
         builder.setAssociativity(associativity);
-        if (label != null) {
-            builder.setLabel(label);
+        if (label.isPresent()) {
+            builder.setLabel(label.get());
         }
         return builder.build();
     }
@@ -180,22 +178,22 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public Object visitSingleElemSequence(IggyParseTree.SingleElemSequence node) {
         Sequence.Builder builder = new Sequence.Builder();
-        List<Expression> expressions = (List<Expression>) node.child0().accept(this);
+        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.child0().accept(this);
         Symbol symbol = (Symbol) node.child1().accept(this);
         SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
-        if (expressions != null) {
-            for (Expression expression : expressions) {
+        if (expressions.isPresent()) {
+            for (Expression expression : expressions.get()) {
                 symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
             }
         }
-        Expression returnExpression = (Expression) node.child2().accept(this);
-        if (returnExpression != null) {
-            builder.addSymbol(Return.ret(returnExpression));
+        Optional<Expression> returnExpression = (Optional<Expression>) node.child2().accept(this);
+        if (returnExpression.isPresent()) {
+            builder.addSymbol(Return.ret(returnExpression.get()));
         }
         builder.addSymbol(symbolBuilder.build());
-        String label = (String) node.child3().accept(this);
-        if (label != null) {
-            builder.setLabel(label);
+        Optional<String> label = (Optional<String>) node.child3().accept(this);
+        if (label.isPresent()) {
+            builder.setLabel(label.get());
         }
         return builder.build();
     }

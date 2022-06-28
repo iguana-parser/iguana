@@ -6,6 +6,7 @@ import org.iguana.grammar.symbol.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public interface ParseTreeVisitor<T> {
 
@@ -27,11 +28,11 @@ public interface ParseTreeVisitor<T> {
         return visitStarOrPlusNode(node);
     }
 
-    default T visitOptionNode(MetaSymbolNode.OptionNode node) {
+    default Optional<T> visitOptionNode(MetaSymbolNode.OptionNode node) {
         if (node.children().size() == 0) {
-            return null;
+            return Optional.empty();
         }
-        return (T) node.childAt(0).accept(this);
+        return Optional.of((T) node.childAt(0).accept(this));
     }
 
     default T visitStartNode(MetaSymbolNode.StartNode node) {
@@ -87,7 +88,7 @@ public interface ParseTreeVisitor<T> {
         return result;
     }
 
-    default List<T> visitChildren(ParseTreeNode node) {
+    default List<? extends T> visitChildren(ParseTreeNode node) {
         int size = node.children().size();
 
         List<T> result = new ArrayList<>(size);

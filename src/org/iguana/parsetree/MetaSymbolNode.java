@@ -5,6 +5,7 @@ import org.iguana.grammar.symbol.Symbol;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
@@ -116,7 +117,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         }
 
         @Override
-        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+        public <T> List<? extends T> accept(ParseTreeVisitor<T> visitor) {
             return visitor.visitStarNode(this);
         }
     }
@@ -127,7 +128,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         }
 
         @Override
-        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+        public <T> List<? extends T> accept(ParseTreeVisitor<T> visitor) {
             return visitor.visitPlusNode(this);
         }
     }
@@ -138,7 +139,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         }
 
         @Override
-        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+        public <T> List<? extends T> accept(ParseTreeVisitor<T> visitor) {
             return visitor.visitGroupNode(this);
         }
     }
@@ -149,7 +150,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         }
 
         @Override
-        public <T> Object accept(ParseTreeVisitor<T> visitor) {
+        public <T> Optional<? extends T> accept(ParseTreeVisitor<T> visitor) {
             return visitor.visitOptionNode(this);
         }
     }

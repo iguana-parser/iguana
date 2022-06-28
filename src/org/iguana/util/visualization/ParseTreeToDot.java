@@ -6,6 +6,7 @@ import org.iguana.utils.visualization.DotGraph;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.iguana.utils.visualization.DotGraph.newEdge;
@@ -54,8 +55,8 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public Integer visitOptionNode(MetaSymbolNode.OptionNode node) {
-        return visitMetaSymbolNode(node).get(0);
+    public Optional<Integer> visitOptionNode(MetaSymbolNode.OptionNode node) {
+        return Optional.of(visitMetaSymbolNode(node).get(0));
     }
 
     @Override
