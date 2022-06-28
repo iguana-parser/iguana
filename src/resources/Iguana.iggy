@@ -5,7 +5,7 @@ start Definition
   = defs:(Rule | Global)+
 
 Global
- = "global" id:Identifier "=" exp:Expression  env=put(env,id.yield)
+ = "global" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
   = modifier: ("start" | "layout")? name:Name params:Parameters? "=" body:Body      %ContextFree
@@ -29,36 +29,36 @@ Alternative
   | label:Label?                                        %Empty
 
 Sequence
-  = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOneElem
-  | Condition? Symbol ReturnExpression? Label?                          %SingleElem
+  = assoc:Associativity? cond:Condition? first:Symbol rest:Symbol+ ret:ReturnExpression? label:Label?   %MoreThanOneElem
+  | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                    %SingleElem
 
 Condition
   = "[" {Expression ","}* "]"
 
 Symbol
-  = Identifier Arguments                    %Call
-  > "offside" Symbol                        %Offside
-  > Symbol "*"                              %Star
-  | Symbol "+"                              %Plus
-  | Symbol "?"                              %Option
-  | "(" Symbol Symbol* ")"                  %Sequence
-  | "(" Symbol+ ("|" Symbol+)+ ")"          %Alternation
-  > "align" Symbol                          %Align
-  | "ignore" Symbol                         %Ignore
-  > Identifier ":" Symbol                   %Labeled
-  > Symbol!Statement Statement+             %Statement
-  | Symbol Condition                        %PostCondition
-  > Regex "<<" Symbol                       %Precede
-  | Regex "!<<" Symbol                      %NotPrecede
-  > Symbol ">>" Regex                       %Follow
-  | Symbol "!>>" Regex                      %NotFollow
-  | Symbol "\\" Regex                       %Exclude
-  | Symbol "!" Identifier                   %Except
-  | "if" Expression Symbol "else" Symbol    %IfThenElse
-  | Identifier                              %Identifier
-  | String                                  %String
-  | "{" Symbol Symbol+ "}" "*"              %StarSep
-  | "{" Symbol Symbol+ "}" "+"              %PlusSep
+  = id:Identifier args:Arguments                                 %Call
+  > "offside" sym:Symbol                                         %Offside
+  > sym:Symbol "*"                                               %Star
+  | sym:Symbol "+"                                               %Plus
+  | sym:Symbol "?"                                               %Option
+  | "(" syms:Symbol+ ")"                                         %Sequence
+  | "(" first:Symbol+ rest:("|" Symbol+)+ ")"                    %Alternation
+  > "align" sym:Symbol                                           %Align
+  | "ignore" sym:Symbol                                          %Ignore
+  > id:Identifier ":" sym:Symbol                                 %Labeled
+  > sym:Symbol !Statement stmts:Statement+                       %Statement
+  | sym:Symbol cond:Condition                                    %PostCondition
+  > reg:Regex "<<" sym:Symbol                                    %Precede
+  | reg:Regex "!<<" sym:Symbol                                   %NotPrecede
+  > sym:Symbol ">>" reg:Regex                                    %Follow
+  | sym:Symbol "!>>" reg:Regex                                   %NotFollow
+  | sym:Symbol "\\" reg:Regex                                    %Exclude
+  | sym:Symbol "!" id:Identifier                                 %Except
+  | "if" exp:Expression ifPart:Symbol "else" elsePart:Symbol     %IfThenElse
+  | id:Identifier                                                %Identifier
+  | string:String                                                %String
+  | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
+  | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
 
 Arguments
   = "(" {Expression ","}* ")"

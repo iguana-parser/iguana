@@ -119,6 +119,8 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
                 if (childId != null) {
                     if (childId instanceof List<?>) {
                         addEdgeToChild(nodeId, ((List<Integer>) childId).get(0));
+                    } else if (childId instanceof Optional<?>) {
+                        addEdgeToChild(nodeId, ((Optional<Integer>) childId).get());
                     } else {
                         addEdgeToChild(nodeId, (Integer) childId);
                     }

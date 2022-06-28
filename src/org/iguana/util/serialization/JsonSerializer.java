@@ -280,23 +280,10 @@ public class JsonSerializer {
     abstract static class PriorityLevelMixIn { }
 
     @JsonDeserialize(builder = Alternative.Builder.class)
-    abstract static class AlternativeMixIn {
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
-        Associativity associativity;
-    }
+    abstract static class AlternativeMixIn { }
 
     @JsonDeserialize(builder = Sequence.Builder.class)
-    abstract static class SequenceMixIn {
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
-        Associativity associativity;
-    }
-
-    private static class AssociativityFilter {
-        @Override
-        public boolean equals(Object obj) {
-            return obj == null || obj == Associativity.UNDEFINED;
-        }
-    }
+    abstract static class SequenceMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({

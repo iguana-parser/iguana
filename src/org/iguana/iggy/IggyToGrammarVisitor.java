@@ -133,7 +133,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitEmptyAlternative(IggyParseTree.EmptyAlternative node) {
-        Optional<String> label = (Optional<String>) node.child0().accept(this);
+        Optional<String> label = (Optional<String>) node.label().accept(this);
         if (label.isPresent()) {
             Sequence sequence = new Sequence.Builder().setLabel(label.get()).build();
             return new Alternative.Builder().addSequence(sequence).build();
@@ -145,13 +145,13 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public Object visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node) {
         Associativity associativity = null;
-        if (!node.child0().children().isEmpty()) {
-            associativity = getAssociativity(node.child0().childAt(0));
+        if (node.hasChildren()) {
+            associativity = getAssociativity(node.assoc());
         }
         Sequence.Builder builder = new Sequence.Builder();
-        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.child1().accept(this);
+        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
         List<Symbol> symbols = new ArrayList<>();
-        Symbol symbol = (Symbol) node.childAt(2).accept(this);
+        Symbol symbol = (Symbol) node.first().accept(this);
         SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
         if (expressions.isPresent()) {
             for (Expression expression : expressions.get()) {
@@ -159,13 +159,13 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
             }
         }
         symbols.add(symbolBuilder.build());
-        symbols.addAll((List<Symbol>) node.child3().accept(this));
+        symbols.addAll((List<Symbol>) node.rest().accept(this));
         builder.addSymbols(symbols);
-        Optional<Expression> returnExpression = (Optional<Expression>) node.child4().accept(this);
+        Optional<Expression> returnExpression = (Optional<Expression>) node.ret().accept(this);
         if (returnExpression.isPresent()) {
             builder.addSymbol(Return.ret(returnExpression.get()));
         }
-        Optional<String> label = (Optional<String>) node.child5().accept(this);
+        Optional<String> label = (Optional<String>) node.label().accept(this);
         builder.setAssociativity(associativity);
         if (label.isPresent()) {
             builder.setLabel(label.get());
@@ -176,7 +176,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public Object visitSingleElemSequence(IggyParseTree.SingleElemSequence node) {
         Sequence.Builder builder = new Sequence.Builder();
-        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.child0().accept(this);
+        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
         Symbol symbol = (Symbol) node.child1().accept(this);
         SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
         if (expressions.isPresent()) {
@@ -184,12 +184,12 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
                 symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
             }
         }
-        Optional<Expression> returnExpression = (Optional<Expression>) node.child2().accept(this);
+        Optional<Expression> returnExpression = (Optional<Expression>) node.ret().accept(this);
         if (returnExpression.isPresent()) {
             builder.addSymbol(Return.ret(returnExpression.get()));
         }
         builder.addSymbol(symbolBuilder.build());
-        Optional<String> label = (Optional<String>) node.child3().accept(this);
+        Optional<String> label = (Optional<String>) node.label().accept(this);
         if (label.isPresent()) {
             builder.setLabel(label.get());
         }
@@ -203,43 +203,42 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Nonterminal visitCallSymbol(IggyParseTree.CallSymbol node) {
-        Expression[] expressions = ((List<Expression>) node.child1().accept(this)).toArray(new Expression[]{});
-        return new Nonterminal.Builder(getIdentifier(node.child0()).getName()).apply(expressions).build();
+        Expression[] expressions = ((List<Expression>) node.args().accept(this)).toArray(new Expression[]{});
+        Identifier id = (Identifier) node.id().accept(this);
+        return new Nonterminal.Builder(id.getName()).apply(expressions).build();
     }
 
     @Override
     public Offside visitOffsideSymbol(IggyParseTree.OffsideSymbol node) {
-        return Offside.offside((Symbol) node.child1().accept(this));
+        return Offside.offside((Symbol) node.sym().accept(this));
     }
 
     @Override
     public Star visitStarSymbol(IggyParseTree.StarSymbol node) {
-        return Star.from((Symbol) node.child0().accept(this));
+        return Star.from((Symbol) node.sym().accept(this));
     }
 
     @Override
     public Plus visitPlusSymbol(IggyParseTree.PlusSymbol node) {
-        return Plus.from((Symbol) node.child0().accept(this));
+        return Plus.from((Symbol) node.sym().accept(this));
     }
 
     @Override
     public Object visitOptionSymbol(IggyParseTree.OptionSymbol node) {
-        return Opt.from((Symbol) node.child0().accept(this));
+        return Opt.from((Symbol) node.sym().accept(this));
     }
 
     @Override
     public Object visitSequenceSymbol(IggyParseTree.SequenceSymbol node) {
-        List<Symbol> symbols = new ArrayList<>();
-        symbols.add((Symbol) node.child1().accept(this));
-        symbols.addAll((List<? extends Symbol>) node.child2().accept(this));
+        List<Symbol> symbols = (List<Symbol>) node.syms().accept(this);
         return Group.from(symbols);
     }
 
     @Override
     public Object visitAlternationSymbol(IggyParseTree.AlternationSymbol node) {
         List<Symbol> symbols = new ArrayList<>();
-        List<Symbol> first = (List<Symbol>) node.child1().accept(this);
-        List<List<Symbol>> second = (List<List<Symbol>>) node.child2().accept(this);
+        List<Symbol> first = (List<Symbol>) node.first().accept(this);
+        List<List<Symbol>> second = (List<List<Symbol>>) node.rest().accept(this);
         if (first.size() == 1) {
             symbols.add(first.get(0));
         } else {
@@ -257,18 +256,19 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitAlignSymbol(IggyParseTree.AlignSymbol node) {
-        return Align.align((Symbol) node.childAt(1).accept(this));
+        return Align.align((Symbol) node.sym().accept(this));
     }
 
     @Override
     public Object visitIgnoreSymbol(IggyParseTree.IgnoreSymbol node) {
-        return Ignore.ignore((Symbol) node.childAt(1).accept(this));
+        return Ignore.ignore((Symbol) node.sym().accept(this));
     }
 
     @Override
     public Object visitLabeledSymbol(IggyParseTree.LabeledSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(2).accept(this);
-        return symbol.copy().setLabel(getIdentifier(node.childAt(0)).getName()).build();
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        Identifier id = (Identifier) node.id().accept(this);
+        return symbol.copy().setLabel(id.getName()).build();
     }
 
     @Override
@@ -661,7 +661,6 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     private static Associativity getAssociativity(ParseTreeNode node) {
-        if (node == null) return null;
         switch (node.getText()) {
             case "left":
                 return Associativity.LEFT;
