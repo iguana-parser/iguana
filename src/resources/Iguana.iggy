@@ -2,14 +2,14 @@
 global env = set()
 
 start Definition
-  = (Rule | Global)+
+  = defs:(Rule | Global)+
 
 Global
- = "global" id:Identifier "=" Expression  env=put(env,id.yield)
+ = "global" id:Identifier "=" exp:Expression  env=put(env,id.yield)
 
 Rule
-  = ("start" | "layout")? Name Parameters? "=" Body        %ContextFree
-  | "layout"? "regex" Name "=" RegexBody                   %Regex
+  = ("start" | "layout")? name:Name params:Parameters? "=" body:Body        %ContextFree
+  | "layout"? "regex" name:Name "=" body:RegexBody                          %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"

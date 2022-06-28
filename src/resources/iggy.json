@@ -15,6 +15,7 @@
                     {
                       "kind" : "Plus",
                       "name" : "(Rule | Global)+",
+                      "label" : "defs",
                       "s" : {
                         "kind" : "Alt",
                         "name" : "(Rule | Global)",
@@ -100,10 +101,11 @@
                     },
                     {
                       "kind" : "Code",
-                      "name" : "Expression {env = put(env,id.yield)}",
+                      "name" : "exp:Expression {env = put(env,id.yield)}",
                       "symbol" : {
                         "kind" : "Identifier",
-                        "name" : "Expression"
+                        "name" : "Expression",
+                        "label" : "exp"
                       },
                       "statements" : [
                         {
@@ -228,11 +230,13 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Name"
+                      "name" : "Name",
+                      "label" : "name"
                     },
                     {
                       "kind" : "Opt",
                       "name" : "Parameters?",
+                      "label" : "params",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Parameters"
@@ -249,7 +253,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Body"
+                      "name" : "Body",
+                      "label" : "body"
                     }
                   ],
                   "label" : "ContextFree"
@@ -330,7 +335,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Name"
+                      "name" : "Name",
+                      "label" : "name"
                     },
                     {
                       "kind" : "Terminal",
@@ -343,7 +349,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "RegexBody"
+                      "name" : "RegexBody",
+                      "label" : "body"
                     }
                   ],
                   "label" : "Regex"

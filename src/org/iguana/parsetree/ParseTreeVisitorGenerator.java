@@ -241,12 +241,12 @@ public class ParseTreeVisitorGenerator {
                 sb.append("        public " + type + " child" + i + "() {\n");
                 sb.append("           return (" + type + ") childAt(" + i + ");\n");
                 sb.append("        }\n\n");
-            }
 
-            if (symbol.getLabel() != null) {
-                sb.append("        public " + type + " " + symbol.getLabel() + "() {\n");
-                sb.append("           return (" + type + ") childAt(" + i + ");\n");
-                sb.append("        }\n\n");
+                if (symbol.getLabel() != null) {
+                    sb.append("        public " + type + " " + symbol.getLabel() + "() {\n");
+                    sb.append("           return (" + type + ") childAt(" + i + ");\n");
+                    sb.append("        }\n\n");
+                }
             }
         }
         return sb.toString();

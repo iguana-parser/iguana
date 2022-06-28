@@ -19,6 +19,10 @@ public class IggyParseTree {
            return (PlusNode) childAt(0);
         }
 
+        public PlusNode defs() {
+           return (PlusNode) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -28,7 +32,7 @@ public class IggyParseTree {
         }
     }
 
-    // Global = 'global' Identifier '=' Expression {env = put(env,id.yield)}
+    // Global = 'global' Identifier '=' exp:Expression {env = put(env,id.yield)}
     public static class Global extends NonterminalNode {
         public Global(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -80,7 +84,15 @@ public class IggyParseTree {
            return (Name) childAt(1);
         }
 
+        public Name name() {
+           return (Name) childAt(1);
+        }
+
         public OptionNode child2() {
+           return (OptionNode) childAt(2);
+        }
+
+        public OptionNode params() {
            return (OptionNode) childAt(2);
         }
 
@@ -89,6 +101,10 @@ public class IggyParseTree {
         }
 
         public Body child4() {
+           return (Body) childAt(4);
+        }
+
+        public Body body() {
            return (Body) childAt(4);
         }
 
@@ -119,11 +135,19 @@ public class IggyParseTree {
            return (Name) childAt(2);
         }
 
+        public Name name() {
+           return (Name) childAt(2);
+        }
+
         public TerminalNode child3() {
            return (TerminalNode) childAt(3);
         }
 
         public RegexBody child4() {
+           return (RegexBody) childAt(4);
+        }
+
+        public RegexBody body() {
            return (RegexBody) childAt(4);
         }
 
