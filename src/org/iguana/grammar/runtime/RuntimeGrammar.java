@@ -69,6 +69,8 @@ public class RuntimeGrammar {
 
 	private final Map<String, Expression> globals;
 
+	private final String name;
+
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -83,6 +85,7 @@ public class RuntimeGrammar {
 		this.regularExpressions = builder.regularExpressions;
 		this.literals = builder.literals;
 		this.globals = builder.globals;
+		this.name = builder.name;
 	}
 	
 	public Map<Nonterminal, List<RuntimeRule>> getDefinitions() {
@@ -208,6 +211,7 @@ public class RuntimeGrammar {
 		
 		private final Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
 		private final List<RuntimeRule> rules = new ArrayList<>();
+		public String name;
 		private Symbol layout;
 		private Start startSymbol;
 		private Map<String, RegularExpression> regularExpressions;
@@ -228,6 +232,7 @@ public class RuntimeGrammar {
             startSymbol = grammar.startSymbol;
 			regularExpressions = grammar.getRegularExpressions();
 			globals = grammar.globals;
+			name = grammar.name;
         }
 		
 		public RuntimeGrammar build() {
@@ -268,6 +273,11 @@ public class RuntimeGrammar {
 		
 		public Builder setLayout(Symbol layout) {
 			this.layout = layout;
+			return this;
+		}
+
+		public Builder setName(String name) {
+			this.name = name;
 			return this;
 		}
 

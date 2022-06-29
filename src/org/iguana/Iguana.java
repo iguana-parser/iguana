@@ -24,6 +24,8 @@ public class Iguana implements Callable<Integer> {
     @Option(names = {"--visitor"}, description = "generate visitors")
     private File genDirectory;
 
+    @Option(names = "--package", description = "package name for the generated code")
+
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Iguana()).execute(args);
         System.exit(exitCode);

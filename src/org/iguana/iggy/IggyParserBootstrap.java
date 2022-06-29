@@ -37,7 +37,9 @@ public class IggyParserBootstrap {
     public static void main(String[] args) throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         Grammar grammar = getGrammar(path);
-        JsonSerializer.serialize(grammar, Paths.get("src/resources/iggy.json").toAbsolutePath().toString());
+        String jsonPath = "src/resources/iggy.json";
+        JsonSerializer.serialize(grammar, Paths.get(jsonPath).toAbsolutePath().toString());
+        System.out.println("New Json file is generated: " + "src/resources/iggy.json");
 
         ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.gen", Paths.get("src/org/iguana/iggy/gen").toAbsolutePath().toString());
         generator.generate();

@@ -1,11 +1,12 @@
+grammar Iggy
 
-global env = set()
+var env = set()
 
-start Definition
-  = defs:(Rule | Global)+
+start Grammar
+  = "grammar"? name:Identifier? defs:(Rule | TopLevelVar)+
 
-Global
- = "global" id:Identifier "=" exp:Expression env=put(env,id.yield)
+TopLevelVar
+ = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
   = modifier: ("start" | "layout")? name:Name params:Parameters? "=" body:Body      %ContextFree

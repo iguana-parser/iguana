@@ -23,10 +23,10 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
         String label = rule.getLabel();
 
         switch (name) {
-            case "Definition":
-                return new Definition(rule, children, leftExtent, rightExtent);
-            case "Global":
-                return new Global(rule, children, leftExtent, rightExtent);
+            case "Grammar":
+                return new Grammar(rule, children, leftExtent, rightExtent);
+            case "TopLevelVar":
+                return new TopLevelVar(rule, children, leftExtent, rightExtent);
             case "Rule":
                 switch (label) {
                     case "ContextFree":

@@ -13,9 +13,9 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
         throw new UnsupportedOperationException();
     }
 
-    public abstract T visitDefinition(Definition node);
+    public abstract T visitGrammar(Grammar node);
 
-    public abstract T visitGlobal(Global node);
+    public abstract T visitTopLevelVar(TopLevelVar node);
 
     public abstract T visitContextFreeRule(ContextFreeRule node);
 

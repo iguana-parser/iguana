@@ -17,6 +17,7 @@ import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
+import org.iguana.util.Tuple;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,15 +31,21 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
-    private final Map<String, Expression> globals = new HashMap<>();
 
     @Override
-    public Grammar visitDefinition(IggyParseTree.Definition node) {
+    public Grammar visitGrammar(IggyParseTree.Grammar node) {
+        Optional<Identifier> name = (Optional<Identifier>) node.name().accept(this);
         Grammar.Builder builder = new Grammar.Builder();
-        List<Rule> rules = (List<Rule>) node.defs().accept(this);
-        for (Rule rule : rules) {
-            if (rule != null) { // null means a global definition
-                builder.addRule(rule);
+        List<Object> defs = (List<Object>) node.defs().accept(this);
+
+        final Map<String, Expression> globals = new HashMap<>();
+
+        for (Object def : defs) {
+            if (def instanceof Rule) {
+                builder.addRule((Rule) def);
+            } else { // Tuple<String, Expression)
+                Tuple<String, Expression> var = (Tuple<String, Expression>) def;
+                globals.put(var.getFirst(), var.getSecond());
             }
         }
         for (Map.Entry<String, RegularExpression> entry : regularExpressionMap.entrySet()) {
@@ -52,15 +59,15 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
         }
         builder.setStartSymbol(Start.from(start));
         builder.setLayout(layout);
+        name.ifPresent(identifier -> builder.setName(identifier.getName()));
         return builder.build();
     }
 
     @Override
-    public Void visitGlobal(IggyParseTree.Global node) {
+    public Tuple<String, Expression> visitTopLevelVar(IggyParseTree.TopLevelVar node) {
         String key = node.id().getText();
         Expression value = (Expression) node.exp().accept(this);
-        globals.put(key, value);
-        return null;
+        return Tuple.of(key, value);
     }
 
     @Override

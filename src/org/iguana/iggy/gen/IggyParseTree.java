@@ -9,43 +9,47 @@ import java.util.List;
 import static org.iguana.parsetree.MetaSymbolNode.*;
 
 public class IggyParseTree {
-    // Definition = defs:(Rule | Global)+
-    public static class Definition extends NonterminalNode {
-        public Definition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // Grammar = grammar? name:Identifier? defs:(Rule | TopLevelVar)+
+    public static class Grammar extends NonterminalNode {
+        public Grammar(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
+        public OptionNode name() {
+           return (OptionNode) childAt(1);
+        }
+
         public PlusNode defs() {
-           return (PlusNode) childAt(0);
+           return (PlusNode) childAt(2);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitDefinition(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitGrammar(this);
             }
             return visitor.visitNonterminalNode(this);
         }
     }
 
-    // Global = 'global' id:Identifier '=' exp:Expression {env = put(env,id.yield)}
-    public static class Global extends NonterminalNode {
-        public Global(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+    // TopLevelVar = global? 'var' id:Identifier '=' exp:exp:Expression {env = put(env,id.yield)}
+    public static class TopLevelVar extends NonterminalNode {
+        public TopLevelVar(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
         public Identifier id() {
-           return (Identifier) childAt(1);
+           return (Identifier) childAt(2);
         }
 
         public Expression exp() {
-           return (Expression) childAt(3);
+           return (Expression) childAt(4);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitGlobal(this);
+                return ((IggyParseTreeVisitor<T>) visitor).visitTopLevelVar(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -116,7 +120,7 @@ public class IggyParseTree {
         }
     }
 
-    // Parameters = '(' Identifier {env = put(env,id.yield)}* ')'
+    // Parameters = '(' id:Identifier {env = put(env,id.yield)}* ')'
     public static class Parameters extends NonterminalNode {
         public Parameters(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -934,7 +938,7 @@ public class IggyParseTree {
         }
     }
 
-    // Binding = 'var' decls:(Name {env = put(env,id.yield)} = Expression)+
+    // Binding = 'var' decls:(id:Name {env = put(env,id.yield)} = Expression)+
     public static class DeclareBinding extends Binding {
         public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
