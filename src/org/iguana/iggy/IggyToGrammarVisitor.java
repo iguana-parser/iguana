@@ -65,7 +65,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitContextFreeRule(IggyParseTree.ContextFreeRule node) {
-        Identifier nonterminalName = getIdentifier(node.childAt(1));
+        Identifier nonterminalName = (Identifier) node.name().accept(this);
         Optional<List<Identifier>> parameters = (Optional<List<Identifier>>) node.params().accept(this);
         List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.body().accept(this);
 
@@ -273,15 +273,15 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitStatementSymbol(IggyParseTree.StatementSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(0).accept(this);
-        List<List<Statement>> statements = (List<List<Statement>>) node.childAt(1).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<List<Statement>> statements = (List<List<Statement>>) node.stmts().accept(this);
         return Code.code(symbol, flatten(statements).toArray(new Statement[0]));
     }
 
     @Override
     public Object visitPostConditionSymbol(IggyParseTree.PostConditionSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(0).accept(this);
-        List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<Expression> expressions = (List<Expression>) node.cond().accept(this);
         SymbolBuilder<? extends Symbol> builder = symbol.copy();
         for (Expression expression : expressions) {
             builder.addPostCondition(DataDependentCondition.predicate(expression));
@@ -291,57 +291,63 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitPrecedeSymbol(IggyParseTree.PrecedeSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(2).accept(this);
-        RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPreCondition(RegularExpressionCondition.precede(regex)).build();
     }
 
     @Override
     public Object visitNotPrecedeSymbol(IggyParseTree.NotPrecedeSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(2).accept(this);
-        RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
     }
 
     @Override
     public Object visitFollowSymbol(IggyParseTree.FollowSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(0).accept(this);
-        RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPostCondition(RegularExpressionCondition.follow(regex)).build();
     }
 
     @Override
     public Object visitNotFollowSymbol(IggyParseTree.NotFollowSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(0).accept(this);
-        RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
     }
 
     @Override
     public Object visitExcludeSymbol(IggyParseTree.ExcludeSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(0).accept(this);
-        RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
     }
 
     @Override
     public Object visitExceptSymbol(IggyParseTree.ExceptSymbol node) {
-        Identifier symbol = (Identifier) node.childAt(0).accept(this);
-        return symbol.copy().addExcept(getIdentifier(node.childAt(2)).getName()).build();
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        Identifier id = (Identifier) node.id().accept(this);
+        if (symbol instanceof Identifier) {
+            return ((Identifier) symbol).copy().addExcept(id.getName()).build();
+        } else {
+            // TODO: I think nonterminal calls are also allowed here, handle it.
+            throw new RuntimeException("Unexpected symbol");
+        }
     }
 
     @Override
     public Object visitIfThenElseSymbol(IggyParseTree.IfThenElseSymbol node) {
         return IfThenElse.ifThenElse(
-            (Expression) node.childAt(1).accept(this),
-            (Symbol) node.childAt(2).accept(this),
-            (Symbol) node.childAt(4).accept(this)
+            (Expression) node.exp().accept(this),
+            (Symbol) node.thenPart().accept(this),
+            (Symbol) node.elsePart().accept(this)
         );
     }
 
     @Override
-    public Object visitIdentifierSymbol(IggyParseTree.IdentifierSymbol node) {
-        return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).getName());
+    public Identifier visitIdentifierSymbol(IggyParseTree.IdentifierSymbol node) {
+        return (Identifier) node.id().accept(this);
     }
 
     @Override
@@ -355,22 +361,22 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitStarSepSymbol(IggyParseTree.StarSepSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(1).accept(this);
-        List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
+    public Star visitStarSepSymbol(IggyParseTree.StarSepSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<Symbol> seps = (List<Symbol>) node.sep().accept(this);
         return new Star.Builder(symbol).addSeparators(seps).build();
     }
 
     @Override
-    public Object visitPlusSepSymbol(IggyParseTree.PlusSepSymbol node) {
-        Symbol symbol = (Symbol) node.childAt(1).accept(this);
-        List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
+    public Plus visitPlusSepSymbol(IggyParseTree.PlusSepSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<Symbol> seps = (List<Symbol>) node.sep().accept(this);
         return new Plus.Builder(symbol).addSeparators(seps).build();
     }
 
     @Override
-    public Object visitArguments(IggyParseTree.Arguments node) {
-        return visitChildren(node);
+    public List<Expression> visitArguments(IggyParseTree.Arguments node) {
+        return (List<Expression>) visitChildren(node);
     }
 
     @Override
@@ -482,164 +488,161 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Expression.Call visitCallExpression(IggyParseTree.CallExpression node) {
-        return getCall(node.childAt(0).getText(), (IggyParseTree.Arguments) node.childAt(1));
+        return getCall(node.fun().getText(), node.args());
     }
 
     @Override
     public Expression.Not visitNotExpression(IggyParseTree.NotExpression node) {
-        Expression exp = (Expression) node.childAt(1).accept(this);
+        Expression exp = (Expression) node.exp().accept(this);
         return AST.not(exp);
     }
 
     @Override
     public Expression.Multiply visitMultiplicationExpression(IggyParseTree.MultiplicationExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.multiply(lhs, rhs);
     }
 
     @Override
     public Expression.Divide visitDivisionExpression(IggyParseTree.DivisionExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.divide(lhs, rhs);
     }
 
     @Override
     public Expression.Add visitAdditionExpression(IggyParseTree.AdditionExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.add(lhs, rhs);
     }
 
     @Override
     public Expression.Subtract visitSubtractionExpression(IggyParseTree.SubtractionExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.subtract(lhs, rhs);
     }
 
     @Override
     public Object visitGreaterEqExpression(IggyParseTree.GreaterEqExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.greaterEq(lhs, rhs);
     }
 
     @Override
     public Expression.LessThanEqual visitLessEqExpression(IggyParseTree.LessEqExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.lessEq(lhs, rhs);
     }
 
     @Override
     public Expression.Greater visitGreaterExpression(IggyParseTree.GreaterExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.greater(lhs, rhs);
     }
 
     @Override
     public Expression.Less visitLessExpression(IggyParseTree.LessExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.less(lhs, rhs);
     }
 
     @Override
     public Expression.Equal visitEqualExpression(IggyParseTree.EqualExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.equal(lhs, rhs);
     }
 
     @Override
     public Expression.NotEqual visitNotEqualExpression(IggyParseTree.NotEqualExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.notEqual(lhs, rhs);
     }
 
     @Override
     public Expression.And visitAndExpression(IggyParseTree.AndExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.and(lhs, rhs);
     }
 
     @Override
     public Expression.Or visitOrExpression(IggyParseTree.OrExpression node) {
-        Expression lhs = (Expression) node.childAt(0).accept(this);
-        Expression rhs = (Expression) node.childAt(2).accept(this);
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
         return AST.or(lhs, rhs);
     }
 
     @Override
     public Expression.LeftExtent visitLExtentExpression(IggyParseTree.LExtentExpression node) {
-        String l = node.childAt(0).getText();
+        String l = node.id().getText();
         return AST.lExt(l);
     }
 
     @Override
     public Expression.RightExtent visitRExtentExpression(IggyParseTree.RExtentExpression node) {
-        String r = node.childAt(0).getText();
+        String r = node.id().getText();
         return AST.rExt(r);
     }
 
     @Override
     public Expression.Yield visitYieldExpression(IggyParseTree.YieldExpression node) {
-        String yield = node.childAt(0).getText();
+        String yield = node.id().getText();
         return AST.yield(yield);
     }
 
     @Override
     public Expression.Val visitValExpression(IggyParseTree.ValExpression node) {
-        String val = node.childAt(0).getText();
+        String val = node.id().getText();
         return AST.val(val);
     }
 
     @Override
     public Expression.Name visitNameExpression(IggyParseTree.NameExpression node) {
-        return AST.var((node.childAt(0).getText()));
+        return AST.var((node.varName().getText()));
     }
 
     @Override
     public Expression.Integer visitNumberExpression(IggyParseTree.NumberExpression node) {
-        return AST.integer(Integer.parseInt(node.childAt(0).getText()));
+        return AST.integer(Integer.parseInt(node.number().getText()));
     }
 
     @Override
     public Expression visitBracketExpression(IggyParseTree.BracketExpression node) {
-        return (Expression) node.childAt(1).accept(this);
+        return (Expression) node.exp().accept(this);
     }
 
     @Override
     public Expression visitReturnExpression(IggyParseTree.ReturnExpression node) {
-        return (Expression) node.childAt(1).accept(this);
+        return (Expression) node.exp().accept(this);
     }
 
     @Override
     public Identifier visitVarName(IggyParseTree.VarName node) {
-        return getIdentifier(node);
+        return (Identifier) node.id().accept(this);
     }
 
     @Override
     public String visitLabel(IggyParseTree.Label node) {
-        return getIdentifier(node.childAt(1)).getName();
+        Identifier id = (Identifier) node.id().accept(this);
+        return id.getName();
     }
 
     @Override
     public Identifier visitName(IggyParseTree.Name node) {
-        return getIdentifier(node);
+        return (Identifier) node.id().accept(this);
     }
 
     @Override
     public Identifier visitIdentifier(IggyParseTree.Identifier node) {
-        return getIdentifier(node);
-    }
-
-    private static Identifier getIdentifier(ParseTreeNode node) {
         return Identifier.fromName(node.getText());
     }
 

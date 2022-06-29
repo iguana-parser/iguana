@@ -735,7 +735,7 @@ public class IggyParseTree {
            return (Expression) childAt(1);
         }
 
-        public Symbol ifPart() {
+        public Symbol thenPart() {
            return (Symbol) childAt(2);
         }
 
@@ -1238,6 +1238,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public TerminalNode fun() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public Arguments args() {
+           return (Arguments) childAt(1);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1251,6 +1259,10 @@ public class IggyParseTree {
     public static class NotExpression extends Expression {
         public NotExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression exp() {
+           return (Expression) childAt(1);
         }
 
         @Override
@@ -1268,6 +1280,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1281,6 +1301,14 @@ public class IggyParseTree {
     public static class DivisionExpression extends Expression {
         public DivisionExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
         }
 
         @Override
@@ -1298,6 +1326,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1311,6 +1347,14 @@ public class IggyParseTree {
     public static class SubtractionExpression extends Expression {
         public SubtractionExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
         }
 
         @Override
@@ -1328,6 +1372,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1341,6 +1393,14 @@ public class IggyParseTree {
     public static class LessEqExpression extends Expression {
         public LessEqExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
         }
 
         @Override
@@ -1358,6 +1418,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1371,6 +1439,14 @@ public class IggyParseTree {
     public static class LessExpression extends Expression {
         public LessExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
         }
 
         @Override
@@ -1388,6 +1464,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1401,6 +1485,14 @@ public class IggyParseTree {
     public static class NotEqualExpression extends Expression {
         public NotEqualExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
         }
 
         @Override
@@ -1418,6 +1510,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1431,6 +1531,14 @@ public class IggyParseTree {
     public static class OrExpression extends Expression {
         public OrExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression lhs() {
+           return (Expression) childAt(0);
+        }
+
+        public Expression rhs() {
+           return (Expression) childAt(2);
         }
 
         @Override
@@ -1448,6 +1556,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Identifier id() {
+           return (Identifier) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1461,6 +1573,10 @@ public class IggyParseTree {
     public static class RExtentExpression extends Expression {
         public RExtentExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(0);
         }
 
         @Override
@@ -1478,6 +1594,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Identifier id() {
+           return (Identifier) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1491,6 +1611,10 @@ public class IggyParseTree {
     public static class ValExpression extends Expression {
         public ValExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(0);
         }
 
         @Override
@@ -1508,6 +1632,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public VarName varName() {
+           return (VarName) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1521,6 +1649,10 @@ public class IggyParseTree {
     public static class NumberExpression extends Expression {
         public NumberExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public TerminalNode number() {
+           return (TerminalNode) childAt(0);
         }
 
         @Override
@@ -1538,6 +1670,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Expression exp() {
+           return (Expression) childAt(1);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1551,6 +1687,10 @@ public class IggyParseTree {
     public static class ReturnExpression extends NonterminalNode {
         public ReturnExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Expression exp() {
+           return (Expression) childAt(1);
         }
 
         @Override
@@ -1585,6 +1725,10 @@ public class IggyParseTree {
     public static class Label extends NonterminalNode {
         public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(1);
         }
 
         @Override

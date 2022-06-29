@@ -54,7 +54,7 @@ Symbol
   | sym:Symbol "!>>" reg:Regex                                   %NotFollow
   | sym:Symbol "\\" reg:Regex                                    %Exclude
   | sym:Symbol "!" id:Identifier                                 %Except
-  | "if" exp:Expression ifPart:Symbol "else" elsePart:Symbol     %IfThenElse
+  | "if" exp:Expression thenPart:Symbol "else" elsePart:Symbol   %IfThenElse
   | id:Identifier                                                %Identifier
   | string:String                                                %String
   | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
@@ -91,36 +91,36 @@ Range
   | range:RangeChar                        %Character
 
 Expression
-  =           FunName Arguments            %Call
-  |           "!" Expression               %Not
-  > left      (Expression "*" Expression   %Multiplication
-  |            Expression "/" Expression   %Division)
-  > left      (Expression "+" Expression   %Addition
-  |            Expression "-" Expression   %Subtraction)
-  > non-assoc (Expression ">=" Expression  %GreaterEq
-  |            Expression "<=" Expression  %LessEq
-  |            Expression ">" Expression   %Greater
-  |            Expression "<" Expression   %Less)
-  > non-assoc (Expression "==" Expression  %Equal
-  |            Expression "!=" Expression  %NotEqual)
-  > left      (Expression "&&" Expression  %And
-  |            Expression "||" Expression  %Or)
-  |           Identifier ".l"              %LExtent
-  |           Identifier ".r"              %RExtent
-  |           Identifier ".yield"          %Yield
-  |           Identifier ".val"            %Val
-  |           VarName                      %Name
-  |           Number                       %Number
-  |           "(" Expression ")"           %Bracket
+  =           fun:FunName args:Arguments            %Call
+  |           "!" exp:Expression                    %Not
+  > left      (lhs:Expression "*" rhs:Expression    %Multiplication
+  |            lhs:Expression "/" rhs:Expression    %Division)
+  > left      (lhs:Expression "+" rhs:Expression    %Addition
+  |            lhs:Expression "-" rhs:Expression    %Subtraction)
+  > non-assoc (lhs:Expression ">=" rhs:Expression   %GreaterEq
+  |            lhs:Expression "<=" rhs:Expression   %LessEq
+  |            lhs:Expression ">" rhs:Expression    %Greater
+  |            lhs:Expression "<" rhs:Expression    %Less)
+  > non-assoc (lhs:Expression "==" rhs:Expression   %Equal
+  |            lhs:Expression "!=" rhs:Expression   %NotEqual)
+  > left      (lhs:Expression "&&" rhs:Expression   %And
+  |            lhs:Expression "||" rhs:Expression   %Or)
+  |           id:Identifier ".l"                    %LExtent
+  |           id:Identifier ".r"                    %RExtent
+  |           id:Identifier ".yield"                %Yield
+  |           id:Identifier ".val"                  %Val
+  |           varName:VarName                       %Name
+  |           number:Number                         %Number
+  |           "(" exp:Expression ")"                %Bracket
 
 ReturnExpression
-  = "{" Expression "}"
+  = "{" exp:Expression "}"
 
 VarName
   = id:Identifier   [contains(env,id.yield)]
 
 Label
-  = '%' Identifier
+  = '%' id:Identifier
 
 Name
   = id:Identifier   [!contains(env,id.yield)]

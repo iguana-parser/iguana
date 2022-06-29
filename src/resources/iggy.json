@@ -1578,7 +1578,7 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Symbol",
-                      "label" : "ifPart"
+                      "label" : "thenPart"
                     },
                     {
                       "kind" : "Terminal",
@@ -2465,11 +2465,13 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "FunName"
+                      "name" : "FunName",
+                      "label" : "fun"
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Arguments"
+                      "name" : "Arguments",
+                      "label" : "args"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2493,7 +2495,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "exp"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2512,7 +2515,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2525,7 +2529,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2535,7 +2540,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2548,7 +2554,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2567,7 +2574,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2580,7 +2588,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2590,7 +2599,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2603,7 +2613,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2622,7 +2633,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2644,7 +2656,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2654,7 +2667,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2676,7 +2690,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2686,7 +2701,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2699,7 +2715,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2709,7 +2726,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2722,7 +2740,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2741,7 +2760,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2763,7 +2783,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2773,7 +2794,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2795,7 +2817,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2814,7 +2837,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2836,7 +2860,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2846,7 +2871,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "lhs"
                     },
                     {
                       "kind" : "Terminal",
@@ -2868,7 +2894,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "rhs"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2883,7 +2910,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Identifier",
+                      "label" : "id"
                     },
                     {
                       "kind" : "Terminal",
@@ -2916,7 +2944,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Identifier",
+                      "label" : "id"
                     },
                     {
                       "kind" : "Terminal",
@@ -2949,7 +2978,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Identifier",
+                      "label" : "id"
                     },
                     {
                       "kind" : "Terminal",
@@ -2998,7 +3028,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Identifier",
+                      "label" : "id"
                     },
                     {
                       "kind" : "Terminal",
@@ -3039,7 +3070,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "VarName"
+                      "name" : "VarName",
+                      "label" : "varName"
                     }
                   ],
                   "label" : "Name"
@@ -3053,7 +3085,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Number"
+                      "name" : "Number",
+                      "label" : "number"
                     }
                   ],
                   "label" : "Number"
@@ -3076,7 +3109,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "exp"
                     },
                     {
                       "kind" : "Terminal",
@@ -3121,7 +3155,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "exp"
                     },
                     {
                       "kind" : "Terminal",
@@ -3213,7 +3248,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Identifier"
+                      "name" : "Identifier",
+                      "label" : "id"
                     }
                   ],
                   "associativity" : "UNDEFINED"
