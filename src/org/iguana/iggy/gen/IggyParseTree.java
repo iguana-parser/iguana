@@ -38,6 +38,10 @@ public class IggyParseTree {
            return (Identifier) childAt(1);
         }
 
+        public Expression exp() {
+           return (Expression) childAt(3);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {

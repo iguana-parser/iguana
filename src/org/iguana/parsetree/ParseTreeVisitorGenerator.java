@@ -238,8 +238,9 @@ public class ParseTreeVisitorGenerator {
             String type = getSymbolType(symbol);
             // When type == null, it's a data-dependent construct that does not contribute to parse trees
             if (type != null) {
-                if (symbol.getLabel() != null) {
-                    sb.append("        public " + type + " " + symbol.getLabel() + "() {\n");
+                String label = getLabel(symbol);
+                if (label != null) {
+                    sb.append("        public " + type + " " + label + "() {\n");
                     sb.append("           return (" + type + ") childAt(" + i + ");\n");
                     sb.append("        }\n\n");
                 }
@@ -255,6 +256,14 @@ public class ParseTreeVisitorGenerator {
             }
         }
         return symbol.getName();
+    }
+
+    private String getLabel(Symbol symbol) {
+        if (symbol instanceof Code) {
+            if (symbol.getLabel() != null) return symbol.getLabel();
+            return ((Code) symbol).getSymbol().getLabel();
+        }
+        return symbol.getLabel();
     }
 
     private String getSymbolType(Symbol symbol) {
@@ -274,6 +283,8 @@ public class ParseTreeVisitorGenerator {
             return OptionNode.class.getSimpleName();
         } else if (symbol instanceof Start) {
             return StartNode.class.getSimpleName();
+        } else if (symbol instanceof Code) {
+            return getSymbolType(((Code) symbol).getSymbol());
         } else {
             // Data dependent symbols do not have a type
             return null;

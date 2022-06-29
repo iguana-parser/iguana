@@ -58,7 +58,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public Void visitGlobal(IggyParseTree.Global node) {
         String key = node.id().getText();
-        Expression value = (Expression) node.childAt(3).accept(this);
+        Expression value = (Expression) node.exp().accept(this);
         globals.put(key, value);
         return null;
     }
