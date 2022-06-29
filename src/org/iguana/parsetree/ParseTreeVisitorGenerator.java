@@ -250,12 +250,13 @@ public class ParseTreeVisitorGenerator {
     }
 
     private String symbolToString(Symbol symbol) {
+        String label = getLabel(symbol);
         if (symbol instanceof Terminal) {
             if (isLiteral(((Terminal) symbol).getRegularExpression())) {
-                return "'" + symbol.getName() + "'";
+                return (label == null ? "" : label + ":") + "'" + symbol.getName() + "'";
             }
         }
-        return symbol.getName();
+        return (label == null ? "" : label + ":") + symbol.getName();
     }
 
     private String getLabel(Symbol symbol) {

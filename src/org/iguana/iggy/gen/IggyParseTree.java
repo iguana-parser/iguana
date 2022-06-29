@@ -9,7 +9,7 @@ import java.util.List;
 import static org.iguana.parsetree.MetaSymbolNode.*;
 
 public class IggyParseTree {
-    // Definition = (Rule | Global)+
+    // Definition = defs:(Rule | Global)+
     public static class Definition extends NonterminalNode {
         public Definition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -28,7 +28,7 @@ public class IggyParseTree {
         }
     }
 
-    // Global = 'global' Identifier '=' exp:Expression {env = put(env,id.yield)}
+    // Global = 'global' id:Identifier '=' exp:Expression {env = put(env,id.yield)}
     public static class Global extends NonterminalNode {
         public Global(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -58,7 +58,7 @@ public class IggyParseTree {
 
     }
 
-    // Rule = (start | layout)? Name Parameters? '=' Body
+    // Rule = modifier:(start | layout)? name:Name params:Parameters? '=' body:Body
     public static class ContextFreeRule extends Rule {
         public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -89,7 +89,7 @@ public class IggyParseTree {
         }
     }
 
-    // Rule = layout? 'regex' Name '=' RegexBody
+    // Rule = modifier:layout? 'regex' name:Name '=' body:RegexBody
     public static class RegexRule extends Rule {
         public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -116,7 +116,7 @@ public class IggyParseTree {
         }
     }
 
-    // Parameters = '(' id:Identifier {env = put(env,id.yield)}* ')'
+    // Parameters = '(' Identifier {env = put(env,id.yield)}* ')'
     public static class Parameters extends NonterminalNode {
         public Parameters(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -183,7 +183,7 @@ public class IggyParseTree {
 
     }
 
-    // Alternative = Sequence
+    // Alternative = seq:Sequence
     public static class SequenceAlternative extends Alternative {
         public SequenceAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -202,7 +202,7 @@ public class IggyParseTree {
         }
     }
 
-    // Alternative = Associativity '(' Sequence+ ')'
+    // Alternative = assoc:Associativity '(' seqs:Sequence+ ')'
     public static class AssociativityAlternative extends Alternative {
         public AssociativityAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -225,7 +225,7 @@ public class IggyParseTree {
         }
     }
 
-    // Alternative = Label?
+    // Alternative = label:Label?
     public static class EmptyAlternative extends Alternative {
         public EmptyAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -251,7 +251,7 @@ public class IggyParseTree {
 
     }
 
-    // Sequence = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?
+    // Sequence = assoc:Associativity? cond:Condition? first:Symbol rest:Symbol+ ret:ReturnExpression? label:Label?
     public static class MoreThanOneElemSequence extends Sequence {
         public MoreThanOneElemSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -290,7 +290,7 @@ public class IggyParseTree {
         }
     }
 
-    // Sequence = Condition? Symbol ReturnExpression? Label?
+    // Sequence = cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?
     public static class SingleElemSequence extends Sequence {
         public SingleElemSequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -343,7 +343,7 @@ public class IggyParseTree {
 
     }
 
-    // Symbol = Identifier Arguments
+    // Symbol = id:Identifier args:Arguments
     public static class CallSymbol extends Symbol {
         public CallSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -366,7 +366,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = 'offside' Symbol
+    // Symbol = 'offside' sym:Symbol
     public static class OffsideSymbol extends Symbol {
         public OffsideSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -385,7 +385,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '*'
+    // Symbol = sym:Symbol '*'
     public static class StarSymbol extends Symbol {
         public StarSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -404,7 +404,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '+'
+    // Symbol = sym:Symbol '+'
     public static class PlusSymbol extends Symbol {
         public PlusSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -423,7 +423,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '?'
+    // Symbol = sym:Symbol '?'
     public static class OptionSymbol extends Symbol {
         public OptionSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -442,7 +442,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = '(' Symbol+ ')'
+    // Symbol = '(' syms:Symbol+ ')'
     public static class SequenceSymbol extends Symbol {
         public SequenceSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -461,7 +461,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = '(' Symbol+ (| Symbol+)+ ')'
+    // Symbol = '(' first:Symbol+ rest:(| Symbol+)+ ')'
     public static class AlternationSymbol extends Symbol {
         public AlternationSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -484,7 +484,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = 'align' Symbol
+    // Symbol = 'align' sym:Symbol
     public static class AlignSymbol extends Symbol {
         public AlignSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -503,7 +503,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = 'ignore' Symbol
+    // Symbol = 'ignore' sym:Symbol
     public static class IgnoreSymbol extends Symbol {
         public IgnoreSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -522,7 +522,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Identifier ':' Symbol
+    // Symbol = id:Identifier ':' sym:Symbol
     public static class LabeledSymbol extends Symbol {
         public LabeledSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -545,7 +545,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol Statement+
+    // Symbol = sym:Symbol stmts:Statement+
     public static class StatementSymbol extends Symbol {
         public StatementSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -568,7 +568,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol Condition
+    // Symbol = sym:Symbol cond:Condition
     public static class PostConditionSymbol extends Symbol {
         public PostConditionSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -591,7 +591,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Regex '<<' Symbol
+    // Symbol = reg:Regex '<<' sym:Symbol
     public static class PrecedeSymbol extends Symbol {
         public PrecedeSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -614,7 +614,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Regex '!<<' Symbol
+    // Symbol = reg:Regex '!<<' sym:Symbol
     public static class NotPrecedeSymbol extends Symbol {
         public NotPrecedeSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -637,7 +637,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '>>' Regex
+    // Symbol = sym:Symbol '>>' reg:Regex
     public static class FollowSymbol extends Symbol {
         public FollowSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -660,7 +660,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '!>>' Regex
+    // Symbol = sym:Symbol '!>>' reg:Regex
     public static class NotFollowSymbol extends Symbol {
         public NotFollowSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -683,7 +683,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '\' Regex
+    // Symbol = sym:Symbol '\' reg:Regex
     public static class ExcludeSymbol extends Symbol {
         public ExcludeSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -706,7 +706,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Symbol '!' Identifier
+    // Symbol = sym:Symbol '!' id:Identifier
     public static class ExceptSymbol extends Symbol {
         public ExceptSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -729,7 +729,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = 'if' Expression Symbol 'else' Symbol
+    // Symbol = 'if' exp:Expression thenPart:Symbol 'else' elsePart:Symbol
     public static class IfThenElseSymbol extends Symbol {
         public IfThenElseSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -756,7 +756,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = Identifier
+    // Symbol = id:Identifier
     public static class IdentifierSymbol extends Symbol {
         public IdentifierSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -775,7 +775,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = String
+    // Symbol = string:String
     public static class StringSymbol extends Symbol {
         public StringSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -794,7 +794,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = '{' Symbol Symbol+ '}' '*'
+    // Symbol = '{' sym:Symbol sep:Symbol+ '}' '*'
     public static class StarSepSymbol extends Symbol {
         public StarSepSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -817,7 +817,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = '{' Symbol Symbol+ '}' '+'
+    // Symbol = '{' sym:Symbol sep:Symbol+ '}' '+'
     public static class PlusSepSymbol extends Symbol {
         public PlusSepSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -862,7 +862,7 @@ public class IggyParseTree {
 
     }
 
-    // Statement = FunName Arguments ;?
+    // Statement = fun:FunName args:Arguments ;?
     public static class CallStatement extends Statement {
         public CallStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -885,7 +885,7 @@ public class IggyParseTree {
         }
     }
 
-    // Statement = Binding ;?
+    // Statement = bindings:Binding ;?
     public static class BindingStatement extends Statement {
         public BindingStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -911,7 +911,7 @@ public class IggyParseTree {
 
     }
 
-    // Binding = VarName '=' Expression
+    // Binding = varName:VarName '=' exp:Expression
     public static class AssignBinding extends Binding {
         public AssignBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -934,7 +934,7 @@ public class IggyParseTree {
         }
     }
 
-    // Binding = 'var' (id:Name {env = put(env,id.yield)} = Expression)+
+    // Binding = 'var' decls:(Name {env = put(env,id.yield)} = Expression)+
     public static class DeclareBinding extends Binding {
         public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -960,7 +960,7 @@ public class IggyParseTree {
 
     }
 
-    // Regex = Regex '*'
+    // Regex = reg:Regex '*'
     public static class StarRegex extends Regex {
         public StarRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -979,7 +979,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = Regex '+'
+    // Regex = reg:Regex '+'
     public static class PlusRegex extends Regex {
         public PlusRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -998,7 +998,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = Regex '?'
+    // Regex = reg:Regex '?'
     public static class OptionRegex extends Regex {
         public OptionRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1017,7 +1017,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' Regex ')'
+    // Regex = '(' reg:Regex ')'
     public static class BracketRegex extends Regex {
         public BracketRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1036,7 +1036,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' Regex Regex+ ')'
+    // Regex = '(' first:Regex rest:Regex+ ')'
     public static class SequenceRegex extends Regex {
         public SequenceRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1059,7 +1059,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' Regex++ ')'
+    // Regex = '(' regs:Regex++ ')'
     public static class AlternationRegex extends Regex {
         public AlternationRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1078,7 +1078,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = Name
+    // Regex = name:Name
     public static class NontRegex extends Regex {
         public NontRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1097,7 +1097,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = CharClass
+    // Regex = charClass:CharClass
     public static class CharClassRegex extends Regex {
         public CharClassRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1116,7 +1116,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = String
+    // Regex = string:String
     public static class StringRegex extends Regex {
         public StringRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1142,7 +1142,7 @@ public class IggyParseTree {
 
     }
 
-    // CharClass = '[' Range* ']'
+    // CharClass = '[' ranges:Range* ']'
     public static class CharsCharClass extends CharClass {
         public CharsCharClass(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1161,7 +1161,7 @@ public class IggyParseTree {
         }
     }
 
-    // CharClass = '!' '[' Range* ']'
+    // CharClass = '!' '[' ranges:Range* ']'
     public static class NotCharsCharClass extends CharClass {
         public NotCharsCharClass(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1187,7 +1187,7 @@ public class IggyParseTree {
 
     }
 
-    // Range = RangeChar '-' RangeChar
+    // Range = first:RangeChar '-' second:RangeChar
     public static class RangeRange extends Range {
         public RangeRange(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1210,7 +1210,7 @@ public class IggyParseTree {
         }
     }
 
-    // Range = RangeChar
+    // Range = range:RangeChar
     public static class CharacterRange extends Range {
         public CharacterRange(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1236,7 +1236,7 @@ public class IggyParseTree {
 
     }
 
-    // Expression = FunName Arguments
+    // Expression = fun:FunName args:Arguments
     public static class CallExpression extends Expression {
         public CallExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1259,7 +1259,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = '!' Expression
+    // Expression = '!' exp:Expression
     public static class NotExpression extends Expression {
         public NotExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1278,7 +1278,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '*' Expression
+    // Expression = lhs:Expression '*' rhs:Expression
     public static class MultiplicationExpression extends Expression {
         public MultiplicationExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1301,7 +1301,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '/' Expression
+    // Expression = lhs:Expression '/' rhs:Expression
     public static class DivisionExpression extends Expression {
         public DivisionExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1324,7 +1324,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '+' Expression
+    // Expression = lhs:Expression '+' rhs:Expression
     public static class AdditionExpression extends Expression {
         public AdditionExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1347,7 +1347,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '-' Expression
+    // Expression = lhs:Expression '-' rhs:Expression
     public static class SubtractionExpression extends Expression {
         public SubtractionExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1370,7 +1370,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '>=' Expression
+    // Expression = lhs:Expression '>=' rhs:Expression
     public static class GreaterEqExpression extends Expression {
         public GreaterEqExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1393,7 +1393,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '<=' Expression
+    // Expression = lhs:Expression '<=' rhs:Expression
     public static class LessEqExpression extends Expression {
         public LessEqExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1416,7 +1416,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '>' Expression
+    // Expression = lhs:Expression '>' rhs:Expression
     public static class GreaterExpression extends Expression {
         public GreaterExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1439,7 +1439,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '<' Expression
+    // Expression = lhs:Expression '<' rhs:Expression
     public static class LessExpression extends Expression {
         public LessExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1462,7 +1462,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '==' Expression
+    // Expression = lhs:Expression '==' rhs:Expression
     public static class EqualExpression extends Expression {
         public EqualExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1485,7 +1485,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '!=' Expression
+    // Expression = lhs:Expression '!=' rhs:Expression
     public static class NotEqualExpression extends Expression {
         public NotEqualExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1508,7 +1508,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '&&' Expression
+    // Expression = lhs:Expression '&&' rhs:Expression
     public static class AndExpression extends Expression {
         public AndExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1531,7 +1531,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Expression '||' Expression
+    // Expression = lhs:Expression '||' rhs:Expression
     public static class OrExpression extends Expression {
         public OrExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1554,7 +1554,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Identifier '.l'
+    // Expression = id:Identifier '.l'
     public static class LExtentExpression extends Expression {
         public LExtentExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1573,7 +1573,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Identifier '.r'
+    // Expression = id:Identifier '.r'
     public static class RExtentExpression extends Expression {
         public RExtentExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1592,7 +1592,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Identifier '.yield'
+    // Expression = id:Identifier '.yield'
     public static class YieldExpression extends Expression {
         public YieldExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1611,7 +1611,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Identifier '.val'
+    // Expression = id:Identifier '.val'
     public static class ValExpression extends Expression {
         public ValExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1630,7 +1630,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = VarName
+    // Expression = varName:VarName
     public static class NameExpression extends Expression {
         public NameExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1649,7 +1649,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = Number
+    // Expression = number:Number
     public static class NumberExpression extends Expression {
         public NumberExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1668,7 +1668,7 @@ public class IggyParseTree {
         }
     }
 
-    // Expression = '(' Expression ')'
+    // Expression = '(' exp:Expression ')'
     public static class BracketExpression extends Expression {
         public BracketExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1687,7 +1687,7 @@ public class IggyParseTree {
         }
     }
 
-    // ReturnExpression = '{' Expression '}'
+    // ReturnExpression = '{' exp:Expression '}'
     public static class ReturnExpression extends NonterminalNode {
         public ReturnExpression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1706,7 +1706,7 @@ public class IggyParseTree {
         }
     }
 
-    // VarName = Identifier
+    // VarName = id:Identifier
     public static class VarName extends NonterminalNode {
         public VarName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1725,7 +1725,7 @@ public class IggyParseTree {
         }
     }
 
-    // Label = '%' Identifier
+    // Label = '%' id:Identifier
     public static class Label extends NonterminalNode {
         public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1744,7 +1744,7 @@ public class IggyParseTree {
         }
     }
 
-    // Name = Identifier
+    // Name = id:Identifier
     public static class Name extends NonterminalNode {
         public Name(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);

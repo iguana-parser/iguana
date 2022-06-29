@@ -102,7 +102,7 @@
                     },
                     {
                       "kind" : "Code",
-                      "name" : "exp:Expression {env = put(env,id.yield)}",
+                      "name" : "Expression {env = put(env,id.yield)}",
                       "symbol" : {
                         "kind" : "Identifier",
                         "name" : "Expression",
@@ -393,10 +393,10 @@
                     },
                     {
                       "kind" : "Star",
-                      "name" : "id:Identifier {env = put(env,id.yield)}*",
+                      "name" : "Identifier {env = put(env,id.yield)}*",
                       "s" : {
                         "kind" : "Code",
-                        "name" : "id:Identifier {env = put(env,id.yield)}",
+                        "name" : "Identifier {env = put(env,id.yield)}",
                         "symbol" : {
                           "kind" : "Identifier",
                           "name" : "Identifier",
@@ -1956,15 +1956,15 @@
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "(id:Name {env = put(env,id.yield)} = Expression)+",
+                      "name" : "(Name {env = put(env,id.yield)} = Expression)+",
                       "label" : "decls",
                       "s" : {
                         "kind" : "Sequence",
-                        "name" : "(id:Name {env = put(env,id.yield)} = Expression)",
+                        "name" : "(Name {env = put(env,id.yield)} = Expression)",
                         "symbols" : [
                           {
                             "kind" : "Code",
-                            "name" : "id:Name {env = put(env,id.yield)}",
+                            "name" : "Name {env = put(env,id.yield)}",
                             "symbol" : {
                               "kind" : "Identifier",
                               "name" : "Name",

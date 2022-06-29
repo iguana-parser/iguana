@@ -118,7 +118,7 @@ public class Code extends AbstractSymbol {
 
 		@Override
 		public Code build() {
-			this.name = String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
+			this.name = String.format("%s {%s}", symbol.getName(), listToString(statements, ";"));
 			return new Code(this);
 		}
 		
