@@ -25,6 +25,7 @@ public class Iguana implements Callable<Integer> {
     private File genDirectory;
 
     @Option(names = "--package", description = "package name for the generated code")
+    private String packageName;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Iguana()).execute(args);
@@ -40,7 +41,7 @@ public class Iguana implements Callable<Integer> {
             return 1;
         }
         Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
-        ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), "Iggy", "org.iguana.iggy.gen", genDirectory.getAbsolutePath());
+        ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammar.getName(), packageName, genDirectory.getAbsolutePath());
         generator.generate();
         return 0;
     }
