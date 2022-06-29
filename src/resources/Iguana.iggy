@@ -30,7 +30,7 @@ Alternative
 
 Sequence
   = assoc:Associativity? cond:Condition? first:Symbol rest:Symbol+ ret:ReturnExpression? label:Label?   %MoreThanOneElem
-  | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                    %SingleElem
+  | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
 
 Condition
   = "[" {Expression ","}* "]"

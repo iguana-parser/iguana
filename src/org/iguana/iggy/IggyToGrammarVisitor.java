@@ -35,7 +35,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public Grammar visitDefinition(IggyParseTree.Definition node) {
         Grammar.Builder builder = new Grammar.Builder();
-        List<Rule> rules = (List<Rule>) node.child0().accept(this);
+        List<Rule> rules = (List<Rule>) node.defs().accept(this);
         for (Rule rule : rules) {
             if (rule != null) { // null means a global definition
                 builder.addRule(rule);
@@ -57,7 +57,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Void visitGlobal(IggyParseTree.Global node) {
-        String key = node.child1().getText();
+        String key = node.id().getText();
         Expression value = (Expression) node.childAt(3).accept(this);
         globals.put(key, value);
         return null;
@@ -113,14 +113,14 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     @Override
     public PriorityLevel visitPriorityLevels(IggyParseTree.PriorityLevels node) {
         PriorityLevel.Builder builder = new PriorityLevel.Builder();
-        builder.addAlternatives((List<Alternative>) node.child0().accept(this));
+        builder.addAlternatives((List<Alternative>) visitChildren(node));
         return builder.build();
     }
 
     @Override
     public Alternative visitSequenceAlternative(IggyParseTree.SequenceAlternative node) {
         Alternative.Builder builder = new Alternative.Builder();
-        builder.addSequence((Sequence) node.child0().accept(this));
+        builder.addSequence((Sequence) node.seq().accept(this));
         return builder.build();
     }
 
@@ -177,7 +177,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     public Object visitSingleElemSequence(IggyParseTree.SingleElemSequence node) {
         Sequence.Builder builder = new Sequence.Builder();
         Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
-        Symbol symbol = (Symbol) node.child1().accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
         SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
         if (expressions.isPresent()) {
             for (Expression expression : expressions.get()) {
@@ -420,7 +420,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public RegularExpression visitBracketRegex(IggyParseTree.BracketRegex node) {
-        return (RegularExpression) node.child1().accept(this);
+        return (RegularExpression) node.childAt(1).accept(this);
     }
 
     @Override
