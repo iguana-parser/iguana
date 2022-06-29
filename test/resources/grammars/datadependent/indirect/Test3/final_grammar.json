@@ -38,6 +38,113 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "E+",
+        "parameters" : [
+          "p0"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E+",
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ],
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p0",
+              "i" : -1
+            }
+          ]
+        }
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "E+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "E"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "E+",
+        "parameters" : [
+          "p0"
+        ],
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p0",
+              "i" : -1
+            }
+          ]
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "E+",
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "E"
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "E",
         "parameters" : [
           "p"
@@ -351,113 +458,6 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "E+",
-        "parameters" : [
-          "p0"
-        ],
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "E+",
-          "arguments" : [
-            {
-              "kind" : "Integer",
-              "value" : 0
-            }
-          ],
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "E",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p0",
-              "i" : -1
-            }
-          ]
-        }
-      ],
-      "recursion" : "LEFT_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : 1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "E+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "E"
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "E+",
-        "parameters" : [
-          "p0"
-        ],
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "E",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p0",
-              "i" : -1
-            }
-          ]
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "E+",
-        "s" : {
-          "kind" : "Nonterminal",
-          "name" : "E"
-        }
       }
     },
     {

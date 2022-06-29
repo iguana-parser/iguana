@@ -21,7 +21,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -64,9 +65,11 @@
                       ]
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "star"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -97,9 +100,11 @@
                       ]
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "hat"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -119,9 +124,11 @@
                       "name" : "E"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "minus"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -141,9 +148,11 @@
                       "name" : "E"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "plus"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -160,7 +169,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -168,23 +178,23 @@
     }
   ],
   "literals" : {
-    "'*'" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "'^'" : {
+    "^" : {
       "kind" : "Char",
       "val" : 94
     },
-    "'-'" : {
+    "-" : {
       "kind" : "Char",
       "val" : 45
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

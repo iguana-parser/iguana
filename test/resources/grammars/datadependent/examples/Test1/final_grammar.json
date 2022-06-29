@@ -32,6 +32,137 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "Element"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "STag",
+          "label" : "s"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Content"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "ETag",
+          "arguments" : [
+            {
+              "kind" : "Val",
+              "label" : "s"
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "STag"
       },
       "body" : [
@@ -190,39 +321,10 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Start(Element)",
-        "nodeType" : "Start"
+        "name" : "(Element CharData)",
+        "nodeType" : "Seq"
       },
       "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "L",
-          "nodeType" : "Layout",
-          "regex" : {
-            "kind" : "regex.Star",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 9
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 10
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 13
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 32
-                }
-              ]
-            }
-          }
-        },
         {
           "kind" : "Nonterminal",
           "name" : "Element"
@@ -255,8 +357,60 @@
               ]
             }
           }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "CharData",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 65,
+                  "end" : 90
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
         }
       ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -275,9 +429,37 @@
         "assoc_rhs" : -1
       },
       "definition" : {
-        "kind" : "Start",
-        "name" : "Start(Element)",
-        "startSymbol" : "Element"
+        "kind" : "Sequence",
+        "name" : "(Element CharData)",
+        "symbols" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "Element"
+          },
+          {
+            "kind" : "Terminal",
+            "name" : "CharData",
+            "nodeType" : "Regex",
+            "regex" : {
+              "kind" : "regex.Star",
+              "regex" : {
+                "kind" : "regex.Alt",
+                "symbols" : [
+                  {
+                    "kind" : "CharRange",
+                    "start" : 65,
+                    "end" : 90
+                  },
+                  {
+                    "kind" : "CharRange",
+                    "start" : 97,
+                    "end" : 122
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     {
@@ -511,6 +693,275 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "(Element CharData)*",
+        "nodeType" : "Star"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)+",
+          "nodeType" : "Plus"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(Element CharData)*",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(Element CharData)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "Element"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : "CharData",
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Star",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 65,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(Element CharData)*",
+        "nodeType" : "Star"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "(Element CharData)*",
+        "s" : {
+          "kind" : "Sequence",
+          "name" : "(Element CharData)",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "Element"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : "CharData",
+              "nodeType" : "Regex",
+              "regex" : {
+                "kind" : "regex.Star",
+                "regex" : {
+                  "kind" : "regex.Alt",
+                  "symbols" : [
+                    {
+                      "kind" : "CharRange",
+                      "start" : 65,
+                      "end" : 90
+                    },
+                    {
+                      "kind" : "CharRange",
+                      "start" : 97,
+                      "end" : 122
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Content"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "CharData",
+          "nodeType" : "Regex",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "CharRange",
+                  "start" : 65,
+                  "end" : 90
+                },
+                {
+                  "kind" : "CharRange",
+                  "start" : 97,
+                  "end" : 122
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "L",
+          "nodeType" : "Layout",
+          "regex" : {
+            "kind" : "regex.Star",
+            "regex" : {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 9
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 10
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 13
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(Element CharData)*",
+          "nodeType" : "Star"
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "L",
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "regex" : {
+            "kind" : "regex.Alt",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "val" : 32
+              }
+            ]
+          }
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "ETag",
         "parameters" : [
           "s"
@@ -691,32 +1142,10 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Content"
+        "name" : "Start(Element)",
+        "nodeType" : "Start"
       },
       "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "CharData",
-          "nodeType" : "Regex",
-          "regex" : {
-            "kind" : "regex.Star",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "CharRange",
-                  "start" : 65,
-                  "end" : 90
-                },
-                {
-                  "kind" : "CharRange",
-                  "start" : 97,
-                  "end" : 122
-                }
-              ]
-            }
-          }
-        },
         {
           "kind" : "Terminal",
           "name" : "L",
@@ -746,355 +1175,6 @@
             }
           }
         },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(Element CharData)*",
-          "nodeType" : "Star"
-        }
-      ],
-      "layout" : {
-        "kind" : "Terminal",
-        "name" : "L",
-        "nodeType" : "Layout",
-        "regex" : {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 9
-              },
-              {
-                "kind" : "Char",
-                "val" : 10
-              },
-              {
-                "kind" : "Char",
-                "val" : 13
-              },
-              {
-                "kind" : "Char",
-                "val" : 32
-              }
-            ]
-          }
-        }
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Element"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "STag",
-          "label" : "s"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "L",
-          "nodeType" : "Layout",
-          "regex" : {
-            "kind" : "regex.Star",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 9
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 10
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 13
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 32
-                }
-              ]
-            }
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "Content"
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "L",
-          "nodeType" : "Layout",
-          "regex" : {
-            "kind" : "regex.Star",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 9
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 10
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 13
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 32
-                }
-              ]
-            }
-          }
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "ETag",
-          "arguments" : [
-            {
-              "kind" : "Val",
-              "label" : "s"
-            }
-          ]
-        }
-      ],
-      "layout" : {
-        "kind" : "Terminal",
-        "name" : "L",
-        "nodeType" : "Layout",
-        "regex" : {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 9
-              },
-              {
-                "kind" : "Char",
-                "val" : 10
-              },
-              {
-                "kind" : "Char",
-                "val" : 13
-              },
-              {
-                "kind" : "Char",
-                "val" : 32
-              }
-            ]
-          }
-        }
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(Element CharData)*",
-        "nodeType" : "Star"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(Element CharData)+",
-          "nodeType" : "Plus"
-        }
-      ],
-      "layout" : {
-        "kind" : "Terminal",
-        "name" : "L",
-        "nodeType" : "Layout",
-        "regex" : {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 9
-              },
-              {
-                "kind" : "Char",
-                "val" : 10
-              },
-              {
-                "kind" : "Char",
-                "val" : 13
-              },
-              {
-                "kind" : "Char",
-                "val" : 32
-              }
-            ]
-          }
-        }
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "(Element CharData)*",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(Element CharData)",
-          "symbols" : [
-            {
-              "kind" : "Nonterminal",
-              "name" : "Element"
-            },
-            {
-              "kind" : "Terminal",
-              "name" : "CharData",
-              "nodeType" : "Regex",
-              "regex" : {
-                "kind" : "regex.Star",
-                "regex" : {
-                  "kind" : "regex.Alt",
-                  "symbols" : [
-                    {
-                      "kind" : "CharRange",
-                      "start" : 65,
-                      "end" : 90
-                    },
-                    {
-                      "kind" : "CharRange",
-                      "start" : 97,
-                      "end" : 122
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(Element CharData)*",
-        "nodeType" : "Star"
-      },
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Star",
-        "name" : "(Element CharData)*",
-        "s" : {
-          "kind" : "Sequence",
-          "name" : "(Element CharData)",
-          "symbols" : [
-            {
-              "kind" : "Nonterminal",
-              "name" : "Element"
-            },
-            {
-              "kind" : "Terminal",
-              "name" : "CharData",
-              "nodeType" : "Regex",
-              "regex" : {
-                "kind" : "regex.Star",
-                "regex" : {
-                  "kind" : "regex.Alt",
-                  "symbols" : [
-                    {
-                      "kind" : "CharRange",
-                      "start" : 65,
-                      "end" : 90
-                    },
-                    {
-                      "kind" : "CharRange",
-                      "start" : 97,
-                      "end" : 122
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(Element CharData)",
-        "nodeType" : "Seq"
-      },
-      "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "Element"
@@ -1127,60 +1207,8 @@
               ]
             }
           }
-        },
-        {
-          "kind" : "Terminal",
-          "name" : "CharData",
-          "nodeType" : "Regex",
-          "regex" : {
-            "kind" : "regex.Star",
-            "regex" : {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "CharRange",
-                  "start" : 65,
-                  "end" : 90
-                },
-                {
-                  "kind" : "CharRange",
-                  "start" : 97,
-                  "end" : 122
-                }
-              ]
-            }
-          }
         }
       ],
-      "layout" : {
-        "kind" : "Terminal",
-        "name" : "L",
-        "nodeType" : "Layout",
-        "regex" : {
-          "kind" : "regex.Star",
-          "regex" : {
-            "kind" : "regex.Alt",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 9
-              },
-              {
-                "kind" : "Char",
-                "val" : 10
-              },
-              {
-                "kind" : "Char",
-                "val" : 13
-              },
-              {
-                "kind" : "Char",
-                "val" : 32
-              }
-            ]
-          }
-        }
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -1199,37 +1227,9 @@
         "assoc_rhs" : -1
       },
       "definition" : {
-        "kind" : "Sequence",
-        "name" : "(Element CharData)",
-        "symbols" : [
-          {
-            "kind" : "Nonterminal",
-            "name" : "Element"
-          },
-          {
-            "kind" : "Terminal",
-            "name" : "CharData",
-            "nodeType" : "Regex",
-            "regex" : {
-              "kind" : "regex.Star",
-              "regex" : {
-                "kind" : "regex.Alt",
-                "symbols" : [
-                  {
-                    "kind" : "CharRange",
-                    "start" : 65,
-                    "end" : 90
-                  },
-                  {
-                    "kind" : "CharRange",
-                    "start" : 97,
-                    "end" : 122
-                  }
-                ]
-              }
-            }
-          }
-        ]
+        "kind" : "Start",
+        "name" : "Start(Element)",
+        "startSymbol" : "Element"
       }
     }
   ],

@@ -1,7 +1,5 @@
 package org.iguana.parsetree;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public interface ParseTreeNode {
@@ -11,33 +9,12 @@ public interface ParseTreeNode {
     Object getGrammarDefinition();
     String getText();
 
-    Object accept(ParseTreeVisitor visitor);
+    <T> Object accept(ParseTreeVisitor<T> visitor);
 
-    default List<ParseTreeNode> children() {
-        return Collections.emptyList();
-    }
+    List<ParseTreeNode> children();
 
-    default ParseTreeNode getChildWithName(String name) {
-        for (ParseTreeNode node : children()) {
-            if (name.equals(node.getName())) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    default List<ParseTreeNode> getChildrenWithName(String name) {
-        List<ParseTreeNode> parseTreeNodes = new ArrayList<>();
-        for (ParseTreeNode node : children()) {
-            if (name.equals(node.getName())) {
-                parseTreeNodes.add(node);
-            }
-        }
-        return parseTreeNodes;
-    }
-
-    default boolean hasChild(String name) {
-        return getChildWithName(name) != null;
+    default boolean hasChildren() {
+        return !children().isEmpty();
     }
 
     default ParseTreeNode childAt(int i) {
@@ -45,5 +22,4 @@ public interface ParseTreeNode {
             throw new IndexOutOfBoundsException();
         return children().get(i);
     }
-
 }

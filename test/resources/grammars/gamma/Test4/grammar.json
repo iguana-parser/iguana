@@ -24,9 +24,11 @@
                       "kind" : "Identifier",
                       "name" : "S"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -40,9 +42,11 @@
                       "kind" : "Identifier",
                       "name" : "S"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -59,16 +63,19 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
     }
   ],
   "literals" : {
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     }

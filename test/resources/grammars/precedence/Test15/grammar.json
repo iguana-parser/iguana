@@ -18,7 +18,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -49,9 +50,11 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -81,7 +84,8 @@
                   ],
                   "associativity" : "LEFT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -104,9 +108,11 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -123,7 +129,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -131,19 +138,19 @@
     }
   ],
   "literals" : {
-    "'-'" : {
+    "-" : {
       "kind" : "Char",
       "val" : 45
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'*'" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

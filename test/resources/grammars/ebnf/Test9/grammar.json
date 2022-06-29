@@ -28,9 +28,11 @@
                         "name" : "A"
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -59,7 +61,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -67,7 +70,7 @@
     }
   ],
   "literals" : {
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

@@ -37,7 +37,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -77,9 +78,11 @@
                       "kind" : "Identifier",
                       "name" : "Exp"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -119,9 +122,11 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -138,7 +143,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -180,23 +186,23 @@
     }
   },
   "literals" : {
-    "\";\"" : {
+    ";" : {
       "kind" : "Char",
       "val" : 59
     },
-    "'x'" : {
+    "x" : {
       "kind" : "Char",
       "val" : 120
     },
-    "'='" : {
+    "=" : {
       "kind" : "Char",
       "val" : 61
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

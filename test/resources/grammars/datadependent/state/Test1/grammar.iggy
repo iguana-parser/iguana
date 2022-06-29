@@ -1,6 +1,6 @@
-global x = 0
-global y = 0
-global z = 0
+var x = 0
+var y = 0
+var z = 0
 
 start S
   = A var m = 3; C B var n = 4; D

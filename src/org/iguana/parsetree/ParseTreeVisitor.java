@@ -4,97 +4,116 @@ package org.iguana.parsetree;
 import org.iguana.grammar.symbol.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-public interface ParseTreeVisitor {
+public interface ParseTreeVisitor<T> {
 
-    Object visitNonterminalNode(NonterminalNode node);
+    T visitNonterminalNode(NonterminalNode node);
 
-    default Object visitAmbiguityNode(AmbiguityNode node) {
+    default List<T> visitAmbiguityNode(AmbiguityNode node) {
         throw new RuntimeException("Ambiguity");
     }
 
-    default Object visitTerminalNode(TerminalNode node) {
+    default T visitTerminalNode(TerminalNode node) {
         return null;
     }
 
-    default Object visitMetaSymbolNode(MetaSymbolNode node) {
-        Symbol symbol = node.getGrammarDefinition();
+    default List<T> visitStarNode(MetaSymbolNode.StarNode node) {
+        return visitStarOrPlusNode(node);
+    }
 
-        boolean shouldBeFlattened = (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
+    default List<T> visitPlusNode(MetaSymbolNode.PlusNode node) {
+        return visitStarOrPlusNode(node);
+    }
 
-        // Flatten sequence inside star and plus
-        if (shouldBeFlattened) {
-            if (symbol instanceof Opt) {
-                if (node.children().size() == 0) {
-                    return null;
-                }
-                List<Object> result = (List<Object>) node.childAt(0).accept(this);
-                if (result.size() == 1) {
-                    return result.get(0);
-                }
-                return result;
-            } else {
-                int size = node.children().size();
-                List<Object> result = new ArrayList<>(size);
-                for (int i = 0; i < size; i++) {
-                    ParseTreeNode child = node.childAt(i);
-                    List<Object> childResult = (List<Object>) child.accept(this);
-                    // This can happen when we have lists with separators, e.g., {A ','}*
-                    if (childResult != null) {
-                        result.addAll(childResult);
-                    }
-                }
-                return result;
+    default Optional<T> visitOptionNode(MetaSymbolNode.OptionNode node) {
+        if (node.children().size() == 0) {
+            return Optional.empty();
+        }
+        return Optional.of((T) node.childAt(0).accept(this));
+    }
+
+    default T visitStartNode(MetaSymbolNode.StartNode node) {
+        return (T) node.childAt(0).accept(this);
+    }
+
+    default T visitAltNode(MetaSymbolNode.AltNode node) {
+        return (T) node.childAt(0).accept(this);
+    }
+
+    default List<T> visitGroupNode(MetaSymbolNode.GroupNode node) {
+        List<T> result = new ArrayList<>(node.children().size());
+        for (int i = 0; i < node.children().size(); i++) {
+            ParseTreeNode child = node.childAt(i);
+            T childResult = (T) child.accept(this);
+            if (childResult != null) {
+                result.add(childResult);
             }
         }
+        return result;
+    }
 
-        if (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Group) {
-            List<Object> result = new ArrayList<>(node.children().size());
-            for (int i = 0; i < node.children().size(); i++) {
+    default List<T> visitStarOrPlusNode(MetaSymbolNode node) {
+        if (node.children().size() == 0) {
+            return Collections.emptyList();
+        }
+
+        Symbol symbol = node.getGrammarDefinition();
+
+        if (getSymbol(symbol) instanceof Group) {
+            int size = node.children().size();
+            List<T> result = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
                 ParseTreeNode child = node.childAt(i);
-                Object childResult = child.accept(this);
+                List<T> childResult = (List<T>) child.accept(this);
+                // This can happen when we have lists with separators, e.g., {A ','}*
                 if (childResult != null) {
-                    result.add(childResult);
+                    result.addAll(childResult);
                 }
             }
             return result;
-        } else if (symbol instanceof Alt) {
-            return node.childAt(0).accept(this);
-        } else { // Opt
-            if (node.children().size() == 0) {
-                return null;
-            }
-            return node.childAt(0).accept(this);
-        }
-    }
-
-    default Object visitChildren(ParseTreeNode node) {
-        int size = node.children().size();
-
-        if (size == 1) {
-            return node.childAt(0).accept(this);
         }
 
-        List<Object> result = new ArrayList<>(size);
-
-        for (int i = 0; i < size; i++) {
+        List<T> result = new ArrayList<>(node.children().size());
+        for (int i = 0; i < node.children().size(); i++) {
             ParseTreeNode child = node.childAt(i);
-            Object childResult = child.accept(this);
+            T childResult = (T) child.accept(this);
             if (childResult != null) {
                 result.add(childResult);
             }
         }
 
-        if (result.isEmpty()) {
-            return null;
+        return result;
+    }
+
+    default List<? extends T> visitChildren(ParseTreeNode node) {
+        int size = node.children().size();
+
+        List<T> result = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            ParseTreeNode child = node.childAt(i);
+            T childResult = (T) child.accept(this);
+            if (childResult != null) {
+                if (childResult instanceof List<?>) {
+                    result.addAll((List<T>) childResult);
+                } else {
+                    result.add(childResult);
+                }
+            }
         }
 
-        if (result.size() == 1) {
-            return result.get(0);
+        if (result.isEmpty()) {
+            return Collections.emptyList();
         }
 
         return result;
+    }
+
+    default boolean shouldBeFlatted(Symbol symbol) {
+        return (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
     }
 
     static Symbol getSymbol(Symbol symbol) {

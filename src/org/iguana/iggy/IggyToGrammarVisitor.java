@@ -8,102 +8,44 @@ import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
+import org.iguana.iggy.gen.IggyParseTree;
+import org.iguana.iggy.gen.IggyParseTree.RegexRule;
+import org.iguana.iggy.gen.IggyParseTreeVisitor;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.parsetree.ParseTreeVisitor;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Seq;
+import org.iguana.util.Tuple;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
-public class IggyToGrammarVisitor implements ParseTreeVisitor {
+public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
     private String start;
     private org.iguana.grammar.symbol.Identifier layout;
-    private final Map<String, Expression> globals = new HashMap<>();
 
     @Override
-    public Object visitNonterminalNode(NonterminalNode node) {
-        switch (node.getName()) {
-            case "Definition":
-                return visitDefinition(node);
-
-            case "Rule":
-                return visitRule(node);
-
-            case "Parameters":
-                return visitParameters(node);
-
-            case "PriorityLevels":
-                return visitPriorityLevels(node);
-
-            case "Alternative":
-                return visitAlternative(node);
-
-            case "Sequence":
-                return visitSequence(node);
-
-            case "Label":
-                return visitLabel(node);
-
-            case "Symbol":
-                return visitSymbol(node);
-
-            case "Binding":
-                return visitBinding(node);
-
-            case "Regex":
-                return visitRegex(node);
-
-            case "CharClass":
-                return visitCharClass(node);
-
-            case "Range":
-                return visitRange(node);
-
-            case "Expression":
-                return visitExpression(node);
-
-            case "Statement":
-                return visitStatement(node);
-
-            case "Global":
-                return visitGlobal(node);
-
-            case "Name":
-                return visitName(node);
-
-            case "VarName":
-                return visitVarName(node);
-        }
-
-        return visitChildren(node);
-    }
-
-    private Identifier visitName(NonterminalNode node) {
-        return getIdentifier(node);
-    }
-
-    private Identifier visitVarName(NonterminalNode node) {
-        return getIdentifier(node);
-    }
-
-    /*
-     * Definition = (Rule | Global)+;
-     */
-    private Grammar visitDefinition(NonterminalNode node) {
+    public Grammar visitGrammar(IggyParseTree.Grammar node) {
+        Optional<Identifier> name = (Optional<Identifier>) node.name().accept(this);
         Grammar.Builder builder = new Grammar.Builder();
-        List<Rule> rules = (List<Rule>) node.childAt(0).accept(this);
-        for (Rule rule : rules) {
-            if (rule != null) { // null means a global definition
-                builder.addRule(rule);
+        List<Object> defs = (List<Object>) node.defs().accept(this);
+
+        final Map<String, Expression> globals = new HashMap<>();
+
+        for (Object def : defs) {
+            if (def instanceof Rule) {
+                builder.addRule((Rule) def);
+            } else { // Tuple<String, Expression)
+                Tuple<String, Expression> var = (Tuple<String, Expression>) def;
+                globals.put(var.getFirst(), var.getSecond());
             }
         }
         for (Map.Entry<String, RegularExpression> entry : regularExpressionMap.entrySet()) {
@@ -117,50 +59,598 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
         builder.setStartSymbol(Start.from(start));
         builder.setLayout(layout);
+        name.ifPresent(identifier -> builder.setName(identifier.getName()));
         return builder.build();
     }
 
-    /*
-     * Rule : ("start" | "layout")? Identifier Parameters? ":" Body          %Syntax
-     *      | "layout"? "terminal" Identifier ":" RegexBody     %Lexical
-     *      ;
-     */
-    private Rule visitRule(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
-            case "Syntax":
-                Identifier nonterminalName = getIdentifier(node.getChildWithName("Name"));
-                List<String> parameters = (List<String>) node.getChildWithName("Parameters?").accept(this);
-                if (parameters == null) parameters = Collections.emptyList();
-                List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.getChildWithName("Body").accept(this);
+    @Override
+    public Tuple<String, Expression> visitTopLevelVar(IggyParseTree.TopLevelVar node) {
+        String key = node.id().getText();
+        Expression value = (Expression) node.exp().accept(this);
+        return Tuple.of(key, value);
+    }
 
-                if (!node.childAt(0).children().isEmpty()) { // start symbol
-                    String text = node.childAt(0).getText();
-                    if (text.equals("start")) {
-                        start = nonterminalName.getName();
-                    } else { // "layout"
-                        layout = nonterminalName;
-                    }
-                }
+    @Override
+    public Object visitContextFreeRule(IggyParseTree.ContextFreeRule node) {
+        Identifier nonterminalName = (Identifier) node.name().accept(this);
+        Optional<List<Identifier>> parameters = (Optional<List<Identifier>>) node.params().accept(this);
+        List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.body().accept(this);
 
-                Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters).build();
-                return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
-
-            // RegexBody : { RegexSequence "|" }*;
-            // RegexSequence : Regex+;
-            case "Lexical":
-                List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.getChildWithName("RegexBody").accept(this);
-                Identifier identifier = getIdentifier(node.getChildWithName("Name"));
-                regularExpressionMap.put(identifier.getName(), getRegex(alts));
-
-                if (!node.childAt(0).children().isEmpty()) {
-                    layout = identifier;
-                }
-
-                return null;
-
-            default:
-                throw new RuntimeException("Unexpected label");
+        if (node.modifier().hasChildren()) { // start symbol
+            String text = node.modifier().getText();
+            if (text.equals("start")) {
+                start = nonterminalName.getName();
+            } else { // "layout"
+                layout = nonterminalName;
+            }
         }
+
+        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList())).build();
+        return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
+    }
+
+    @Override
+    public Void visitRegexRule(RegexRule node) {
+        List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.body().accept(this);
+        Identifier identifier = (Identifier) node.name().accept(this);
+        regularExpressionMap.put(identifier.getName(), getRegex(alts));
+
+        if (node.modifier().hasChildren()) {
+            layout = identifier;
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Identifier> visitParameters(IggyParseTree.Parameters node) {
+        return (List<Identifier>) visitChildren(node);
+    }
+
+    @Override
+    public Object visitRegexBody(IggyParseTree.RegexBody node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    public Object visitBody(IggyParseTree.Body node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    public PriorityLevel visitPriorityLevels(IggyParseTree.PriorityLevels node) {
+        PriorityLevel.Builder builder = new PriorityLevel.Builder();
+        builder.addAlternatives((List<Alternative>) visitChildren(node));
+        return builder.build();
+    }
+
+    @Override
+    public Alternative visitSequenceAlternative(IggyParseTree.SequenceAlternative node) {
+        Alternative.Builder builder = new Alternative.Builder();
+        builder.addSequence((Sequence) node.seq().accept(this));
+        return builder.build();
+    }
+
+    @Override
+    public Object visitAssociativityAlternative(IggyParseTree.AssociativityAlternative node) {
+        Associativity associativity = getAssociativity(node.assoc());
+        List<Sequence> seqs = (List<Sequence>) node.seqs().accept(this);
+        return new Alternative.Builder(seqs, associativity).build();
+    }
+
+    @Override
+    public Object visitEmptyAlternative(IggyParseTree.EmptyAlternative node) {
+        Optional<String> label = (Optional<String>) node.label().accept(this);
+        if (label.isPresent()) {
+            Sequence sequence = new Sequence.Builder().setLabel(label.get()).build();
+            return new Alternative.Builder().addSequence(sequence).build();
+        } else {
+            return new Alternative.Builder().build();
+        }
+    }
+
+    @Override
+    public Object visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node) {
+        Associativity associativity = null;
+        if (node.hasChildren()) {
+            associativity = getAssociativity(node.assoc());
+        }
+        Sequence.Builder builder = new Sequence.Builder();
+        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
+        List<Symbol> symbols = new ArrayList<>();
+        Symbol symbol = (Symbol) node.first().accept(this);
+        SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
+        if (expressions.isPresent()) {
+            for (Expression expression : expressions.get()) {
+                symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
+            }
+        }
+        symbols.add(symbolBuilder.build());
+        symbols.addAll((List<Symbol>) node.rest().accept(this));
+        builder.addSymbols(symbols);
+        Optional<Expression> returnExpression = (Optional<Expression>) node.ret().accept(this);
+        if (returnExpression.isPresent()) {
+            builder.addSymbol(Return.ret(returnExpression.get()));
+        }
+        Optional<String> label = (Optional<String>) node.label().accept(this);
+        builder.setAssociativity(associativity);
+        if (label.isPresent()) {
+            builder.setLabel(label.get());
+        }
+        return builder.build();
+    }
+
+    @Override
+    public Object visitSingleElemSequence(IggyParseTree.SingleElemSequence node) {
+        Sequence.Builder builder = new Sequence.Builder();
+        Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
+        if (expressions.isPresent()) {
+            for (Expression expression : expressions.get()) {
+                symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
+            }
+        }
+        Optional<Expression> returnExpression = (Optional<Expression>) node.ret().accept(this);
+        if (returnExpression.isPresent()) {
+            builder.addSymbol(Return.ret(returnExpression.get()));
+        }
+        builder.addSymbol(symbolBuilder.build());
+        Optional<String> label = (Optional<String>) node.label().accept(this);
+        if (label.isPresent()) {
+            builder.setLabel(label.get());
+        }
+        return builder.build();
+    }
+
+    @Override
+    public Object visitCondition(IggyParseTree.Condition node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    public Nonterminal visitCallSymbol(IggyParseTree.CallSymbol node) {
+        Expression[] expressions = ((List<Expression>) node.args().accept(this)).toArray(new Expression[]{});
+        Identifier id = (Identifier) node.id().accept(this);
+        return new Nonterminal.Builder(id.getName()).apply(expressions).build();
+    }
+
+    @Override
+    public Offside visitOffsideSymbol(IggyParseTree.OffsideSymbol node) {
+        return Offside.offside((Symbol) node.sym().accept(this));
+    }
+
+    @Override
+    public Star visitStarSymbol(IggyParseTree.StarSymbol node) {
+        return Star.from((Symbol) node.sym().accept(this));
+    }
+
+    @Override
+    public Plus visitPlusSymbol(IggyParseTree.PlusSymbol node) {
+        return Plus.from((Symbol) node.sym().accept(this));
+    }
+
+    @Override
+    public Object visitOptionSymbol(IggyParseTree.OptionSymbol node) {
+        return Opt.from((Symbol) node.sym().accept(this));
+    }
+
+    @Override
+    public Object visitSequenceSymbol(IggyParseTree.SequenceSymbol node) {
+        List<Symbol> symbols = (List<Symbol>) node.syms().accept(this);
+        return Group.from(symbols);
+    }
+
+    @Override
+    public Object visitAlternationSymbol(IggyParseTree.AlternationSymbol node) {
+        List<Symbol> symbols = new ArrayList<>();
+        List<Symbol> first = (List<Symbol>) node.first().accept(this);
+        List<List<Symbol>> second = (List<List<Symbol>>) node.rest().accept(this);
+        if (first.size() == 1) {
+            symbols.add(first.get(0));
+        } else {
+            symbols.add(Group.from(first));
+        }
+        for (List<Symbol> list : second) {
+            if (list.size() == 1) {
+                symbols.add(list.get(0));
+            } else {
+                symbols.add(Group.from(list));
+            }
+        }
+        return Alt.from(symbols);
+    }
+
+    @Override
+    public Object visitAlignSymbol(IggyParseTree.AlignSymbol node) {
+        return Align.align((Symbol) node.sym().accept(this));
+    }
+
+    @Override
+    public Object visitIgnoreSymbol(IggyParseTree.IgnoreSymbol node) {
+        return Ignore.ignore((Symbol) node.sym().accept(this));
+    }
+
+    @Override
+    public Object visitLabeledSymbol(IggyParseTree.LabeledSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        Identifier id = (Identifier) node.id().accept(this);
+        return symbol.copy().setLabel(id.getName()).build();
+    }
+
+    @Override
+    public Object visitStatementSymbol(IggyParseTree.StatementSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<List<Statement>> statements = (List<List<Statement>>) node.stmts().accept(this);
+        return Code.code(symbol, flatten(statements).toArray(new Statement[0]));
+    }
+
+    @Override
+    public Object visitPostConditionSymbol(IggyParseTree.PostConditionSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<Expression> expressions = (List<Expression>) node.cond().accept(this);
+        SymbolBuilder<? extends Symbol> builder = symbol.copy();
+        for (Expression expression : expressions) {
+            builder.addPostCondition(DataDependentCondition.predicate(expression));
+        }
+        return builder.build();
+    }
+
+    @Override
+    public Object visitPrecedeSymbol(IggyParseTree.PrecedeSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
+        return symbol.copy().addPreCondition(RegularExpressionCondition.precede(regex)).build();
+    }
+
+    @Override
+    public Object visitNotPrecedeSymbol(IggyParseTree.NotPrecedeSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
+        return symbol.copy().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
+    }
+
+    @Override
+    public Object visitFollowSymbol(IggyParseTree.FollowSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
+        return symbol.copy().addPostCondition(RegularExpressionCondition.follow(regex)).build();
+    }
+
+    @Override
+    public Object visitNotFollowSymbol(IggyParseTree.NotFollowSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
+        return symbol.copy().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
+    }
+
+    @Override
+    public Object visitExcludeSymbol(IggyParseTree.ExcludeSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        RegularExpression regex = (RegularExpression) node.reg().accept(this);
+        return symbol.copy().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
+    }
+
+    @Override
+    public Object visitExceptSymbol(IggyParseTree.ExceptSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        Identifier id = (Identifier) node.id().accept(this);
+        if (symbol instanceof Identifier) {
+            return ((Identifier) symbol).copy().addExcept(id.getName()).build();
+        } else {
+            // TODO: I think nonterminal calls are also allowed here, handle it.
+            throw new RuntimeException("Unexpected symbol");
+        }
+    }
+
+    @Override
+    public Object visitIfThenElseSymbol(IggyParseTree.IfThenElseSymbol node) {
+        return IfThenElse.ifThenElse(
+            (Expression) node.exp().accept(this),
+            (Symbol) node.thenPart().accept(this),
+            (Symbol) node.elsePart().accept(this)
+        );
+    }
+
+    @Override
+    public Identifier visitIdentifierSymbol(IggyParseTree.IdentifierSymbol node) {
+        return (Identifier) node.id().accept(this);
+    }
+
+    @Override
+    public Object visitStringSymbol(IggyParseTree.StringSymbol node) {
+        String text = stripQuotes(node);
+        RegularExpression regex = getCharsRegex(text);
+        literals.put(text, regex);
+        return new Terminal.Builder(regex)
+            .setNodeType(TerminalNodeType.Literal)
+            .build();
+    }
+
+    @Override
+    public Star visitStarSepSymbol(IggyParseTree.StarSepSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<Symbol> seps = (List<Symbol>) node.sep().accept(this);
+        return new Star.Builder(symbol).addSeparators(seps).build();
+    }
+
+    @Override
+    public Plus visitPlusSepSymbol(IggyParseTree.PlusSepSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        List<Symbol> seps = (List<Symbol>) node.sep().accept(this);
+        return new Plus.Builder(symbol).addSeparators(seps).build();
+    }
+
+    @Override
+    public List<Expression> visitArguments(IggyParseTree.Arguments node) {
+        return (List<Expression>) visitChildren(node);
+    }
+
+    @Override
+    public Object visitCallStatement(IggyParseTree.CallStatement node) {
+        return Collections.singletonList(AST.stat(getCall(node.fun().getText(), node.args())));
+    }
+
+    @Override
+    public List<Statement> visitBindingStatement(IggyParseTree.BindingStatement node) {
+        return (List<Statement>) node.bindings().accept(this);
+    }
+
+    @Override
+    public List<Statement> visitAssignBinding(IggyParseTree.AssignBinding node) {
+        List<Statement> statements = new ArrayList<>();
+        Identifier id = (Identifier) node.varName().accept(this);
+        statements.add(AST.stat(AST.assign(id.getName(), (Expression) node.exp().accept(this))));
+        return statements;
+    }
+
+    @Override
+    public List<Statement> visitDeclareBinding(IggyParseTree.DeclareBinding node) {
+        List<Statement> statements = new ArrayList<>();
+        List<Object> elems = (List<Object>) node.decls().accept(this);
+        int i = 0;
+        while (i < elems.size()) {
+            statements.add(AST.varDeclStat(((Identifier) elems.get(i)).getName(), (Expression) elems.get(i + 1)));
+            i += 2;
+        }
+        return statements;
+    }
+
+    @Override
+    public org.iguana.regex.Star visitStarRegex(IggyParseTree.StarRegex node) {
+        return org.iguana.regex.Star.from((RegularExpression) node.reg().accept(this));
+    }
+
+    @Override
+    public org.iguana.regex.Plus visitPlusRegex(IggyParseTree.PlusRegex node) {
+        return org.iguana.regex.Plus.from((RegularExpression) node.reg().accept(this));
+    }
+
+    @Override
+    public org.iguana.regex.Opt visitOptionRegex(IggyParseTree.OptionRegex node) {
+        return org.iguana.regex.Opt.from((RegularExpression) node.reg().accept(this));
+    }
+
+    @Override
+    public RegularExpression visitBracketRegex(IggyParseTree.BracketRegex node) {
+        return (RegularExpression) node.reg().accept(this);
+    }
+
+    @Override
+    public org.iguana.regex.Seq visitSequenceRegex(IggyParseTree.SequenceRegex node) {
+        List<RegularExpression> list = new ArrayList<>();
+        list.add((RegularExpression) node.first().accept(this));
+        list.addAll((List<RegularExpression>) node.rest().accept(this));
+        return org.iguana.regex.Seq.from(list);
+    }
+
+    @Override
+    public org.iguana.regex.Alt<?> visitAlternationRegex(IggyParseTree.AlternationRegex node) {
+        List<List<RegularExpression>> listOfList = (List<List<RegularExpression>>) node.regs().accept(this);
+        List<RegularExpression> list = listOfList.stream().map(l -> {
+            if (l.size() == 1) return l.get(0);
+            else return Seq.from(l);
+        }).collect(Collectors.toList());
+        return org.iguana.regex.Alt.from(list);
+    }
+
+    @Override
+    public org.iguana.regex.Reference visitNontRegex(IggyParseTree.NontRegex node) {
+        Identifier id = (Identifier) node.name().accept(this);
+        return org.iguana.regex.Reference.from(id.getName());
+    }
+
+    @Override
+    public org.iguana.regex.Alt<RegularExpression> visitCharClassRegex(IggyParseTree.CharClassRegex node) {
+        return (org.iguana.regex.Alt<RegularExpression>) node.charClass().accept(this);
+    }
+
+    @Override
+    public Object visitStringRegex(IggyParseTree.StringRegex node) {
+        return getCharsRegex(stripQuotes(node));
+    }
+
+    @Override
+    public org.iguana.regex.Alt visitCharsCharClass(IggyParseTree.CharsCharClass node) {
+        return org.iguana.regex.Alt.from((List<RegularExpression>) node.ranges().accept(this));
+    }
+
+    @Override
+    public org.iguana.regex.Alt visitNotCharsCharClass(IggyParseTree.NotCharsCharClass node) {
+        return org.iguana.regex.Alt.not((List<RegularExpression>) node.ranges().accept(this));
+    }
+
+    @Override
+    public CharRange visitRangeRange(IggyParseTree.RangeRange node) {
+        int start = getRangeChar(node.first().getText());
+        int end = getRangeChar(node.second().getText());
+        return CharRange.in(start, end);
+    }
+
+    @Override
+    public Char visitCharacterRange(IggyParseTree.CharacterRange node) {
+        int c = getRangeChar(node.range().getText());
+        return Char.from(c);
+    }
+
+    @Override
+    public Expression.Call visitCallExpression(IggyParseTree.CallExpression node) {
+        return getCall(node.fun().getText(), node.args());
+    }
+
+    @Override
+    public Expression.Not visitNotExpression(IggyParseTree.NotExpression node) {
+        Expression exp = (Expression) node.exp().accept(this);
+        return AST.not(exp);
+    }
+
+    @Override
+    public Expression.Multiply visitMultiplicationExpression(IggyParseTree.MultiplicationExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.multiply(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Divide visitDivisionExpression(IggyParseTree.DivisionExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.divide(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Add visitAdditionExpression(IggyParseTree.AdditionExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.add(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Subtract visitSubtractionExpression(IggyParseTree.SubtractionExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.subtract(lhs, rhs);
+    }
+
+    @Override
+    public Object visitGreaterEqExpression(IggyParseTree.GreaterEqExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.greaterEq(lhs, rhs);
+    }
+
+    @Override
+    public Expression.LessThanEqual visitLessEqExpression(IggyParseTree.LessEqExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.lessEq(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Greater visitGreaterExpression(IggyParseTree.GreaterExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.greater(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Less visitLessExpression(IggyParseTree.LessExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.less(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Equal visitEqualExpression(IggyParseTree.EqualExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.equal(lhs, rhs);
+    }
+
+    @Override
+    public Expression.NotEqual visitNotEqualExpression(IggyParseTree.NotEqualExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.notEqual(lhs, rhs);
+    }
+
+    @Override
+    public Expression.And visitAndExpression(IggyParseTree.AndExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.and(lhs, rhs);
+    }
+
+    @Override
+    public Expression.Or visitOrExpression(IggyParseTree.OrExpression node) {
+        Expression lhs = (Expression) node.lhs().accept(this);
+        Expression rhs = (Expression) node.rhs().accept(this);
+        return AST.or(lhs, rhs);
+    }
+
+    @Override
+    public Expression.LeftExtent visitLExtentExpression(IggyParseTree.LExtentExpression node) {
+        String l = node.id().getText();
+        return AST.lExt(l);
+    }
+
+    @Override
+    public Expression.RightExtent visitRExtentExpression(IggyParseTree.RExtentExpression node) {
+        String r = node.id().getText();
+        return AST.rExt(r);
+    }
+
+    @Override
+    public Expression.Yield visitYieldExpression(IggyParseTree.YieldExpression node) {
+        String yield = node.id().getText();
+        return AST.yield(yield);
+    }
+
+    @Override
+    public Expression.Val visitValExpression(IggyParseTree.ValExpression node) {
+        String val = node.id().getText();
+        return AST.val(val);
+    }
+
+    @Override
+    public Expression.Name visitNameExpression(IggyParseTree.NameExpression node) {
+        return AST.var((node.varName().getText()));
+    }
+
+    @Override
+    public Expression.Integer visitNumberExpression(IggyParseTree.NumberExpression node) {
+        return AST.integer(Integer.parseInt(node.number().getText()));
+    }
+
+    @Override
+    public Expression visitBracketExpression(IggyParseTree.BracketExpression node) {
+        return (Expression) node.exp().accept(this);
+    }
+
+    @Override
+    public Expression visitReturnExpression(IggyParseTree.ReturnExpression node) {
+        return (Expression) node.exp().accept(this);
+    }
+
+    @Override
+    public Identifier visitVarName(IggyParseTree.VarName node) {
+        return (Identifier) node.id().accept(this);
+    }
+
+    @Override
+    public String visitLabel(IggyParseTree.Label node) {
+        Identifier id = (Identifier) node.id().accept(this);
+        return id.getName();
+    }
+
+    @Override
+    public Identifier visitName(IggyParseTree.Name node) {
+        return (Identifier) node.id().accept(this);
+    }
+
+    @Override
+    public Identifier visitIdentifier(IggyParseTree.Identifier node) {
+        return Identifier.fromName(node.getText());
     }
 
     private static RegularExpression getRegex(List<List<RegularExpression>> listOfList) {
@@ -181,638 +671,21 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         return org.iguana.regex.Seq.from(list);
     }
 
-    /*
-     * Parameters: "(" { Identifier "," }* ")";
-     */
-    private List<String> visitParameters(NonterminalNode node) {
-        return node.childAt(1).children().stream()
-            .filter(s -> !s.getText().equals(","))
-            .map(ParseTreeNode::getText).collect(Collectors.toList());
-    }
-
-    /*
-     * Alternatives: { Alternative '|' }+
-     */
-    private PriorityLevel visitPriorityLevels(NonterminalNode node) {
-        PriorityLevel.Builder builder = new PriorityLevel.Builder();
-        builder.addAlternatives((List<Alternative>) node.childAt(0).accept(this));
-        return builder.build();
-    }
-
-    /*
-     * Alternative
-     *   : Sequence                                             %Sequence
-     *   | Associativity "(" Sequence ("|" Sequence)+ ")"       %Assoc
-     *   | Label?                                               %Empty
-     *   ;
-     */
-    private Alternative visitAlternative(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
-            case "Sequence": {
-                Alternative.Builder builder = new Alternative.Builder();
-                builder.addSequence((Sequence) node.childAt(0).accept(this));
-                return builder.build();
-            }
-
-            case "Assoc": {
-                Associativity associativity = getAssociativity(node.childAt(0));
-                List<Sequence> seqs = new ArrayList<>();
-                seqs.add((Sequence) node.childAt(2).accept(this));
-                seqs.addAll((List<Sequence>) node.childAt(3).accept(this));
-                return new Alternative.Builder(seqs, associativity).build();
-            }
-
-            case "Empty":
-                String label = (String) node.childAt(0).accept(this);
-                if (label != null) {
-                    Sequence sequence = new Sequence.Builder().setLabel(label).build();
-                    return new Alternative.Builder().addSequence(sequence).build();
-                } else {
-                    return new Alternative.Builder().build();
-                }
-
+    private static Associativity getAssociativity(ParseTreeNode node) {
+        switch (node.getText()) {
+            case "left":
+                return Associativity.LEFT;
+            case "right":
+                return Associativity.RIGHT;
+            case "non-assoc":
+                return Associativity.NON_ASSOC;
             default:
-                throw new RuntimeException("Unexpected label");
+                return Associativity.UNDEFINED;
         }
     }
 
-    /*
-     * Sequence: Associativity? PreCondition? Symbol Symbol+ ReturnExpression? Label?     %MoreThanOne
-     *         | PreCondition? Symbol ReturnExpression? Label?                            %Single
-     *         ;
-     */
-    private Sequence visitSequence(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
-            case "MoreThanOne": {
-                Associativity associativity = null;
-                if (!node.childAt(0).children().isEmpty()) {
-                    associativity = getAssociativity(node.childAt(0).childAt(0));
-                }
-                Sequence.Builder builder = new Sequence.Builder();
-                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
-                List<Symbol> symbols = new ArrayList<>();
-                Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
-                if (expressions != null) {
-                    for (Expression expression : expressions) {
-                        symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
-                    }
-                }
-                symbols.add(symbolBuilder.build());
-                symbols.addAll((List<Symbol>) node.childAt(3).accept(this));
-                builder.addSymbols(symbols);
-                Expression returnExpression = (Expression) node.childAt(4).accept(this);
-                if (returnExpression != null) {
-                    builder.addSymbol(Return.ret(returnExpression));
-                }
-                String label = (String) node.childAt(5).accept(this);
-                builder.setAssociativity(associativity);
-                builder.setLabel(label);
-                return builder.build();
-            }
-
-            case "Single": {
-                Sequence.Builder builder = new Sequence.Builder();
-                List<Expression> expressions = (List<Expression>) node.childAt(0).accept(this);
-                Symbol symbol = (Symbol) node.childAt(1).accept(this);
-                SymbolBuilder<? extends Symbol> symbolBuilder = symbol.copy();
-                if (expressions != null) {
-                    for (Expression expression : expressions) {
-                        symbolBuilder.addPreCondition(DataDependentCondition.predicate(expression));
-                    }
-                }
-                Expression returnExpression = (Expression) node.childAt(2).accept(this);
-                if (returnExpression != null) {
-                    builder.addSymbol(Return.ret(returnExpression));
-                }
-                builder.addSymbol(symbolBuilder.build());
-                String label = (String) node.childAt(3).accept(this);
-                builder.setLabel(label);
-                return builder.build();
-            }
-
-            default:
-                throw new RuntimeException("Unexpected label: " + node.getGrammarDefinition().getLabel());
-        }
-    }
-
-    /*
-     * Label: "%" Identifier
-     */
-    private String visitLabel(NonterminalNode node) {
-        return getIdentifier(node.childAt(1)).getName();
-    }
-
-    /*
-     * Symbol
-     *   : Identifier Arguments                   %Call
-     *   > "offside" Symbol                       %Offside
-     *   > Symbol "*"                             %Star
-     *   | Symbol "+"                             %Plus
-     *   | Symbol "?"                             %Option
-     *   | "(" Symbol Symbol+ ")"                 %Sequence
-     *   | "(" Symbol+ ("|" Symbol+)+ ")"         %Alternation
-     *   > "align" Symbol                         %Align
-     *   | "ignore" Symbol                        %Ignore
-     *   | "if" Expression Symbol "else" Symbol   %IfThenElse
-     *   > Identifier ":" Symbol                  %Labeled
-     *   | Symbol "[" {Expression ","}+ "]"       %Constraint
-     *   | "{" {Binding ","}+ "}"                 %Bindings
-     *   | Regex "<<" Symbol                      %Precede
-     *   | Regex "!<<" Symbol                     %NotPrecede
-     *   > Symbol ">>" Regex                      %Follow
-     *   | Symbol "!>>" Regex                     %NotFollow
-     *   | Symbol "\\" Regex                      %Exclude
-     *   | Symbol "!" Identifier                  %Except
-     *   | Identifier                             %Nont
-     *   | String                                 %String
-     *   | Char                                   %Character
-     *   | CharClass                              %CharClass
-     *   | "{" Symbol Symbol+ "}" "*"             %StarSep
-     *   | "{" Symbol Symbol+ "}" "+"             %PlusSep
-     *   | Symbol Expression                      %Statement
-     *   ;
-     */
-    private Symbol visitSymbol(NonterminalNode node) {
-        String label = node.getGrammarDefinition().getLabel();
-
-        switch (label) {
-            case "Call": {
-                Expression[] expressions = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
-                return new Nonterminal.Builder(getIdentifier(node.childAt(0)).getName()).apply(expressions).build();
-            }
-
-            case "Offside":
-                return Offside.offside((Symbol) node.childAt(1).accept(this));
-
-            case "Star":
-                return Star.from((Symbol) node.childAt(0).accept(this));
-
-            case "Plus":
-                return Plus.from((Symbol) node.childAt(0).accept(this));
-
-            case "Sequence": {
-                List<Symbol> symbols = new ArrayList<>();
-                symbols.add((Symbol) node.childAt(1).accept(this));
-                symbols.addAll((List<? extends Symbol>) node.childAt(2).accept(this));
-                return Group.from(symbols);
-            }
-
-            case "Alternation": {
-                List<Symbol> symbols = new ArrayList<>();
-                List<Symbol> first = (List<Symbol>) node.childAt(1).accept(this);
-                List<List<Symbol>> second = (List<List<Symbol>>) node.childAt(2).accept(this);
-                if (first.size() == 1) {
-                    symbols.add(first.get(0));
-                } else {
-                    symbols.add(Group.from(first));
-                }
-                for (List<Symbol> list : second) {
-                    if (list.size() == 1) {
-                        symbols.add(list.get(0));
-                    } else {
-                        symbols.add(Group.from(list));
-                    }
-                }
-                return Alt.from(symbols);
-            }
-
-            case "Option":
-                return Opt.from((Symbol) node.childAt(0).accept(this));
-
-            case "Align":
-                return Align.align((Symbol) node.childAt(1).accept(this));
-
-            case "Ignore":
-                return Ignore.ignore((Symbol) node.childAt(1).accept(this));
-
-            case "IfThenElse":
-                return IfThenElse.ifThenElse(
-                        (Expression) node.childAt(1).accept(this),
-                        (Symbol) node.childAt(2).accept(this),
-                        (Symbol) node.childAt(4).accept(this)
-                );
-
-            case "Labeled": {
-                Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                return symbol.copy().setLabel(getIdentifier(node.childAt(0)).getName()).build();
-            }
-
-            case "Precede": {
-                Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
-                return symbol.copy().addPreCondition(RegularExpressionCondition.precede(regex)).build();
-            }
-
-            case "NotPrecede": {
-                Symbol symbol = (Symbol) node.childAt(2).accept(this);
-                RegularExpression regex = (RegularExpression) node.childAt(0).accept(this);
-                return symbol.copy().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
-            }
-
-            case "Follow": {
-                Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copy().addPostCondition(RegularExpressionCondition.follow(regex)).build();
-            }
-
-            case "NotFollow": {
-                Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copy().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
-            }
-
-            case "Exclude": {
-                Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                RegularExpression regex = (RegularExpression) node.childAt(2).accept(this);
-                return symbol.copy().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
-            }
-
-            case "Except": {
-                Identifier symbol = (Identifier) node.childAt(0).accept(this);
-                return symbol.copy().addExcept(getIdentifier(node.childAt(2)).getName()).build();
-            }
-
-            case "Nont":
-                return org.iguana.grammar.symbol.Identifier.fromName(getIdentifier(node).getName());
-
-            case "String":
-                String text = stripQuotes(node);
-                RegularExpression regex = getCharsRegex(text);
-                literals.put(text, regex);
-                return new Terminal.Builder(regex)
-                    .setNodeType(TerminalNodeType.Literal)
-                    .build();
-
-            case "StarSep": {
-                Symbol symbol = (Symbol) node.childAt(1).accept(this);
-                List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
-                return new Star.Builder(symbol).addSeparators(seps).build();
-            }
-
-            case "PlusSep": {
-                Symbol symbol = (Symbol) node.childAt(1).accept(this);
-                List<Symbol> seps = (List<Symbol>) node.childAt(2).accept(this);
-                return new Plus.Builder(symbol).addSeparators(seps).build();
-            }
-
-            case "Statement": {
-                Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                List<List<Statement>> statements = (List<List<Statement>>) node.childAt(1).accept(this);
-                return Code.code(symbol, flatten(statements).toArray(new Statement[0]));
-            }
-
-            case "PostCondition": {
-                Symbol symbol = (Symbol) node.childAt(0).accept(this);
-                List<Expression> expressions = (List<Expression>) node.childAt(1).accept(this);
-                SymbolBuilder<? extends Symbol> builder = symbol.copy();
-                for (Expression expression : expressions) {
-                    builder.addPostCondition(DataDependentCondition.predicate(expression));
-                }
-                return builder.build();
-             }
-
-            default:
-                throw new RuntimeException("Unexpected label: " + label);
-        }
-    }
-
-    // Strip the " characters
-    private String stripQuotes(NonterminalNode node) {
-        return node.getText().substring(1, node.getText().length() - 1);
-    }
-
-    /**
-     * Binding: Identifier "=" Expression                 %Assign
-     *        | "var" {(Identifier "=" Expression) ","}+  %Declare
-     */
-    private List<Statement> visitBinding(NonterminalNode node) {
-        List<Statement> statements = new ArrayList<>();
-        String label = node.getGrammarDefinition().getLabel();
-        switch (label) {
-            case "Assign":
-                statements.add(AST.stat(AST.assign(getIdentifier(node.childAt(0)).getName(), (Expression) node.childAt(2).accept(this))));
-                break;
-
-            case "Declare":
-                List<Object> elems = (List<Object>) node.childAt(1).accept(this);
-                int i = 0;
-                while (i < elems.size()) {
-                    statements.add(AST.varDeclStat(((Identifier) elems.get(i)).getName(), (Expression) elems.get(i + 1)));
-                    i += 2;
-                }
-                break;
-
-            default:
-                throw new RuntimeException("Unexpected label: " + label);
-        }
-        return statements;
-    }
-
-    /**
-     * Regex
-     *  : Regex "*"                     %Star
-     *  | Regex "+"                     %Plus
-     *  | Regex "?"                     %Option
-     *  | "(" Regex ")"                 %Bracket
-     *  | "(" Regex Regex+ ")"          %Sequence
-     *  | "(" Regex+ ("|" Regex+)+ ")"  %Alternation
-     *  | Identifier                    %Reference
-     *  | CharClass                     %CharClass
-     *  | String                        %String
-     *  | Char                          %Char
-     */
-    private RegularExpression visitRegex(NonterminalNode node) {
-        String label = node.getGrammarDefinition().getLabel();
-        switch (label) {
-            case "Star":
-                return org.iguana.regex.Star.from((RegularExpression) node.childAt(0).accept(this));
-
-            case "Plus":
-                return org.iguana.regex.Plus.from((RegularExpression) node.childAt(0).accept(this));
-
-            case "Option":
-                return org.iguana.regex.Opt.from((RegularExpression) node.childAt(0).accept(this));
-
-            case "Bracket":
-                return (RegularExpression) node.childAt(1).accept(this);
-
-            case "Sequence": {
-                List<RegularExpression> list = new ArrayList<>();
-                list.add((RegularExpression) node.childAt(1).accept(this));
-                list.addAll((Collection<? extends RegularExpression>) node.childAt(2).accept(this));
-                return org.iguana.regex.Seq.from(list);
-            }
-
-            case "Alternation": {
-                List<RegularExpression> list = new ArrayList<>();
-                List<RegularExpression> first = (List<RegularExpression>) node.childAt(1).accept(this);
-                if (first.size() == 1) {
-                    list.add(first.get(0));
-                } else {
-                    list.add(org.iguana.regex.Seq.from(first));
-                }
-                List<List<RegularExpression>> second = (List<List<RegularExpression>>) node.childAt(2).accept(this);
-                for (List<RegularExpression> l : second) {
-                    if (l.size() == 1) {
-                        list.add(l.get(0));
-                    } else {
-                        list.add(org.iguana.regex.Seq.from(l));
-                    }
-                }
-                return org.iguana.regex.Alt.from(list);
-            }
-
-            case "Nont":
-                return org.iguana.regex.Reference.from(getIdentifier(node.childAt(0)).getName());
-
-            case "CharClass":
-                return (org.iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this);
-
-            // String: String
-            case "String":
-                return getCharsRegex(stripQuotes(node));
-
-            default:
-                throw new RuntimeException("Unexpected label: " + label);
-        }
-    }
-
-    /*
-     * CharClass
-     *   : '[' Range* ']'    #Chars
-     *   | '!' '[' Range* ']'   #NotChars
-     *   ;
-     */
-    private org.iguana.regex.Alt visitCharClass(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
-            case "Chars":
-                return org.iguana.regex.Alt.from((List<RegularExpression>) node.childAt(1).accept(this));
-
-            case "NotChars":
-                return org.iguana.regex.Alt.not((List<RegularExpression>) node.childAt(2).accept(this));
-
-            default:
-                throw new RuntimeException("Unexpected label");
-        }
-    }
-
-    /*
-     * Range
-     *  : RangeChar "-" RangeChar #Range
-     *  | RangeChar               #Character
-     *  ;
-     */
-    private RegularExpression visitRange(NonterminalNode node) {
-        switch (node.getGrammarDefinition().getLabel()) {
-            case "Range": {
-                int start = getRangeChar(node.childAt(0).getText());
-                int end = getRangeChar(node.childAt(2).getText());
-                return CharRange.in(start, end);
-            }
-
-            case "Character":
-                int c = getRangeChar(node.childAt(0).getText());
-                return Char.from(c);
-
-            default:
-                throw new RuntimeException("Unexpected label");
-        }
-    }
-
-    /*
-     * Statement
-     *   = Identifier Arguments     %Call
-     *   | Binding                  %Binding
-     */
-    private List<Statement> visitStatement(NonterminalNode node) {
-        String label = node.getGrammarDefinition().getLabel();
-        switch (label) {
-            case "Call":
-                return Collections.singletonList(AST.stat(getCall(node)));
-
-            case "Binding":
-                return (List<Statement>) node.childAt(0).accept(this);
-
-            default:
-                throw new RuntimeException("Unexpected label: " + label);
-        }
-    }
-
-    /**
-     * Global
-     *   = "global" Identifier "=" Expression
-     */
-    private Object visitGlobal(NonterminalNode node) {
-        String key = node.childAt(1).getText();
-        Expression value = (Expression) node.childAt(3).accept(this);
-        globals.put(key, value);
-        return null;
-    }
-
-    /**
-     * MapEntry
-     *   = Identifier '=' Initializer
-     */
-    private Map.Entry<String, Object> visitMapEntry(NonterminalNode node) {
-        return new Map.Entry<String, Object>() {
-            @Override
-            public String getKey() {
-                return node.childAt(0).getText();
-            }
-
-            @Override
-            public Object getValue() {
-                return node.childAt(2).accept(IggyToGrammarVisitor.this);
-            }
-
-            @Override
-            public Object setValue(Object value) {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
-
-    /*
-     * Expression
-     * =           Identifier Arguments           %Call
-     *             "!" Expression                 %Not
-     * > left      (Expression "*" Expression     %Multiplication
-     * |            Expression "/" Expression     %Division)
-     * > left      (Expression "+" Expression     %Addition
-     * |            Expression "-" Expression     %Subtraction)
-     * > non-assoc (Expression "\>=" Expression   %GreaterEq
-     * |            Expression "\<=" Expression   %LessEq
-     * |            Expression "\>" Expression    %Greater
-     * |            Expression "\<" Expression    %Less)
-     * > non-assoc (Expression "==" Expression    %Equal
-     * |            Expression "!=" Expression    %NotEqual)
-     * > left      (Expression "&&" Expression    %And
-     * |            Expression "||" Expression    %Or)
-     * |           Identifier ".l"                %LExtent
-     * |           Identifier ".r"                %RExtent
-     * |           Identifier ".yield"            %Yield
-     * |           Identifier ".val"              %Val
-     * |           VarName                        %Name
-     * |           Number                         %Number
-     * |           "(" Expression ")"             %Bracket
-     * ;
-     */
-    private Expression visitExpression(NonterminalNode node) {
-        String label = node.getGrammarDefinition().getLabel();
-        switch (label) {
-            case "Call":
-                return getCall(node);
-
-            case "Not":
-                Expression exp = (Expression) node.childAt(1).accept(this);
-                return AST.not(exp);
-
-            case "Addition": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.add(lhs, rhs);
-            }
-
-            case "Subtraction": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.subtract(lhs, rhs);
-            }
-
-            case "Multiplication": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.multiply(lhs, rhs);
-            }
-
-            case "Division": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.divide(lhs, rhs);
-            }
-
-            case "GreaterEq": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.greaterEq(lhs, rhs);
-            }
-
-            case "LessEq": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.lessEq(lhs, rhs);
-            }
-
-            case "Less": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.less(lhs, rhs);
-            }
-
-            case "Greater": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.greater(lhs, rhs);
-            }
-
-            case "Equal": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.equal(lhs, rhs);
-            }
-
-            case "NotEqual": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.notEqual(lhs, rhs);
-            }
-
-            case "And": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.and(lhs, rhs);
-            }
-
-            case "Or": {
-                Expression lhs = (Expression) node.childAt(0).accept(this);
-                Expression rhs = (Expression) node.childAt(2).accept(this);
-                return AST.or(lhs, rhs);
-            }
-
-            case "LExtent":
-                String l = node.childAt(0).getText();
-                return AST.lExt(l);
-
-            case "RExtent":
-                String r = node.childAt(0).getText();
-                return AST.rExt(r);
-
-            case "Yield":
-                String yield = node.childAt(0).getText();
-                return AST.yield(yield);
-
-            case "Val":
-                String val = node.childAt(0).getText();
-                return AST.val(val);
-
-            case "Name":
-                return AST.var((node.childAt(0).getText()));
-
-            case "Number":
-                return AST.integer(Integer.parseInt(node.childAt(0).getText()));
-
-            case "Bracket":
-                return (Expression) node.childAt(1).accept(this);
-
-            default:
-                throw new RuntimeException("Unexpected label: " +  label);
-        }
-    }
-
-    private Expression.Call getCall(NonterminalNode node) {
-        String funName = node.childAt(0).getText();
-        Expression[] arguments = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
+    private Expression.Call getCall(String funName, IggyParseTree.Arguments args) {
+        Expression[] arguments = ((List<Expression>) args.accept(this)).toArray(new Expression[]{});
         switch (funName) {
             case "println":
                 return AST.println(arguments);
@@ -831,46 +704,8 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
         }
     }
 
-    private Associativity getAssociativity(ParseTreeNode node) {
-        if (node == null) return null;
-        switch (node.getText()) {
-            case "left":
-                return Associativity.LEFT;
-            case "right":
-                return Associativity.RIGHT;
-            case "non-assoc":
-                return Associativity.NON_ASSOC;
-            default:
-                return Associativity.UNDEFINED;
-        }
-    }
-
-    private Identifier getIdentifier(ParseTreeNode node) {
-        return Identifier.fromName(node.getText());
-    }
-
-    private static int getRangeChar(String s) {
-        switch (s) {
-            case "\\n": return '\n';
-            case "\\r": return '\r';
-            case "\\t": return '\t';
-            case "\\f": return '\f';
-            case "\\'": return '\'';
-            case "\\\"": return '\"';
-            case "\\ ": return ' ';
-            case "\\[": return '[';
-            case "\\]": return ']';
-            case "\\-": return '-';
-        }
-        return s.charAt(0);
-    }
-
-    private RegularExpression getCharsRegex(String s) {
-        int[] chars = getChars(s);
-        if (chars.length == 1) {
-            return Char.from(chars[0]);
-        }
-        return org.iguana.regex.Seq.from(chars);
+    private static String stripQuotes(NonterminalNode node) {
+        return node.getText().substring(1, node.getText().length() - 1);
     }
 
     private static int[] getChars(String s) {
@@ -895,5 +730,39 @@ public class IggyToGrammarVisitor implements ParseTreeVisitor {
             }
         }
         return Arrays.copyOf(chars, j);
+    }
+
+    private static RegularExpression getCharsRegex(String s) {
+        int[] chars = getChars(s);
+        if (chars.length == 1) {
+            return Char.from(chars[0]);
+        }
+        return org.iguana.regex.Seq.from(chars);
+    }
+
+    private static int getRangeChar(String s) {
+        switch (s) {
+            case "\\n":
+                return '\n';
+            case "\\r":
+                return '\r';
+            case "\\t":
+                return '\t';
+            case "\\f":
+                return '\f';
+            case "\\'":
+                return '\'';
+            case "\\\"":
+                return '\"';
+            case "\\ ":
+                return ' ';
+            case "\\[":
+                return '[';
+            case "\\]":
+                return ']';
+            case "\\-":
+                return '-';
+        }
+        return s.charAt(0);
     }
 }

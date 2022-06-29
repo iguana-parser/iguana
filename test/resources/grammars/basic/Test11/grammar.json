@@ -29,9 +29,11 @@
                         "val" : 98
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -60,20 +62,23 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
     }
   ],
   "literals" : {
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

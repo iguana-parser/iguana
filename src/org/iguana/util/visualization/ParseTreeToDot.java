@@ -1,18 +1,20 @@
 package org.iguana.util.visualization;
 
+import org.iguana.parsetree.*;
 import org.iguana.utils.input.Input;
 import org.iguana.utils.visualization.DotGraph;
-import org.iguana.parsetree.*;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.iguana.utils.visualization.DotGraph.newEdge;
 import static org.iguana.utils.visualization.DotGraph.newNode;
 
-public class ParseTreeToDot implements ParseTreeVisitor {
+public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
 
-    private DotGraph dotGraph;
+    private final DotGraph dotGraph;
     private final Input input;
     private final Set<String> exclude;
 
@@ -43,22 +45,51 @@ public class ParseTreeToDot implements ParseTreeVisitor {
     }
 
     @Override
-    public Integer visitMetaSymbolNode(MetaSymbolNode node) {
+    public List<Integer> visitStarNode(MetaSymbolNode.StarNode node) {
+        return visitMetaSymbolNode(node);
+    }
+
+    @Override
+    public List<Integer> visitPlusNode(MetaSymbolNode.PlusNode node) {
+        return visitMetaSymbolNode(node);
+    }
+
+    @Override
+    public Optional<Integer> visitOptionNode(MetaSymbolNode.OptionNode node) {
+        return Optional.of(visitMetaSymbolNode(node).get(0));
+    }
+
+    @Override
+    public Integer visitStartNode(MetaSymbolNode.StartNode node) {
+        return visitMetaSymbolNode(node).get(0);
+    }
+
+    @Override
+    public Integer visitAltNode(MetaSymbolNode.AltNode node) {
+        return visitMetaSymbolNode(node).get(0);
+    }
+
+    @Override
+    public List<Integer> visitGroupNode(MetaSymbolNode.GroupNode node) {
+        return visitMetaSymbolNode(node);
+    }
+
+    private List<Integer> visitMetaSymbolNode(MetaSymbolNode node) {
         int id = nextId();
         String label = String.format("%s", node.getName());
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));
 
         visitChildren(node, id);
-        return id;
+        return Collections.singletonList(id);
     }
 
     @Override
-    public Integer visitAmbiguityNode(AmbiguityNode node) {
+    public List<Integer> visitAmbiguityNode(AmbiguityNode node) {
         int id = nextId();
         dotGraph.addNode(newNode(id).setShape(DotGraph.Shape.DIAMOND).setColor(DotGraph.Color.RED));
 
         visitChildren(node, id);
-        return id;
+        return Collections.singletonList(id);
     }
 
     @Override
@@ -84,9 +115,16 @@ public class ParseTreeToDot implements ParseTreeVisitor {
     private void visitChildren(ParseTreeNode node, int nodeId) {
         for (ParseTreeNode child : node.children()) {
             if (child != null) {
-                Integer childId = (Integer) child.accept(this);
-                if (childId != null)
-                    addEdgeToChild(nodeId, childId);
+                Object childId = child.accept(this);
+                if (childId != null) {
+                    if (childId instanceof List<?>) {
+                        addEdgeToChild(nodeId, ((List<Integer>) childId).get(0));
+                    } else if (childId instanceof Optional<?>) {
+                        addEdgeToChild(nodeId, ((Optional<Integer>) childId).get());
+                    } else {
+                        addEdgeToChild(nodeId, (Integer) childId);
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 
-global bCounter = 1
-global cCounter = 2
+var bCounter = 1
+var cCounter = 2
 
 start S
   = X

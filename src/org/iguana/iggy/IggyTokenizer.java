@@ -20,7 +20,7 @@ public class IggyTokenizer {
     }
 
     private static IguanaTokenizer createIggyTokenizer() {
-        RuntimeGrammar grammar = IggyParser.iggyGrammar().toRuntimeGrammar();
+        RuntimeGrammar grammar = IggyParserBootstrap.iggyGrammar().toRuntimeGrammar();
         Map<RegularExpression, String> regularExpressionCategories = new LinkedHashMap<>();
 
         regularExpressionCategories.put(Seq.from("var"), "Keyword");

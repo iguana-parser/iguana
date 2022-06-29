@@ -1,150 +1,142 @@
+grammar Iggy
 
-global env = set()
+var env = set()
 
-start Definition
-  = (Rule | Global)+
+start Grammar
+  = "grammar"? name:Identifier? defs:(Rule | TopLevelVar)+
 
-Global
- = "global" id:Identifier "=" Expression  env=put(env,id.yield)
+TopLevelVar
+ = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = ("start" | "layout")? Name Parameters? "=" Body        %Syntax
-  | "layout"? "regex" Name "=" RegexBody                   %Lexical
+  = modifier: ("start" | "layout")? name:Name params:Parameters? "=" body:Body      %ContextFree
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                        %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
 
-RegexRule
-  = Name ":" RegexBody    %Regex
+RegexBody
+  = { Regex+ "|" }*
 
 Body
   = {PriorityLevels ">"}+
 
 PriorityLevels
-  = {Alternative "|"}+  %Prec
+  = {Alternative "|"}+
 
 Alternative
-  = Sequence                                         %Sequence
-  | Associativity "(" Sequence ("|" Sequence)+ ")"   %Assoc
-  | Label?                                           %Empty
-
-RegexBody
-  = {RegexSequence "|"}*
+  = seq:Sequence                                        %Sequence
+  | assoc:Associativity "(" seqs: {Sequence "|"}+ ")"   %Associativity
+  | label:Label?                                        %Empty
 
 Sequence
-  = Associativity? Condition? Symbol Symbol+ ReturnExpression? Label?   %MoreThanOne
-  | Condition? Symbol ReturnExpression? Label?                          %Single
+  = assoc:Associativity? cond:Condition? first:Symbol rest:Symbol+ ret:ReturnExpression? label:Label?   %MoreThanOneElem
+  | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
 
 Condition
   = "[" {Expression ","}* "]"
 
-RegexSequence
-  = Regex+    %Sequence
-
 Symbol
-  = Identifier Arguments                    %Call
-  > "offside" Symbol                        %Offside
-  > Symbol "*"                              %Star
-  | Symbol "+"                              %Plus
-  | Symbol "?"                              %Option
-  | "(" Symbol Symbol* ")"                  %Sequence
-  | "(" Symbol+ ("|" Symbol+)+ ")"          %Alternation
-  > "align" Symbol                          %Align
-  | "ignore" Symbol                         %Ignore
-  > Identifier ":" Symbol                   %Labeled
-  > Symbol!Statement Statement+             %Statement
-  | Symbol Condition                        %PostCondition
-  > Regex "<<" Symbol                       %Precede
-  | Regex "!<<" Symbol                      %NotPrecede
-  > Symbol ">>" Regex                       %Follow
-  | Symbol "!>>" Regex                      %NotFollow
-  | Symbol "\\" Regex                       %Exclude
-  | Symbol "!" Identifier                   %Except
-  | "if" Expression Symbol "else" Symbol    %IfThenElse
-  | Identifier                              %Nont
-  | String                                  %String
-  | "{" Symbol Symbol+ "}" "*"              %StarSep
-  | "{" Symbol Symbol+ "}" "+"              %PlusSep
+  = id:Identifier args:Arguments                                 %Call
+  > "offside" sym:Symbol                                         %Offside
+  > sym:Symbol "*"                                               %Star
+  | sym:Symbol "+"                                               %Plus
+  | sym:Symbol "?"                                               %Option
+  | "(" syms:Symbol+ ")"                                         %Sequence
+  | "(" first:Symbol+ rest:("|" Symbol+)+ ")"                    %Alternation
+  > "align" sym:Symbol                                           %Align
+  | "ignore" sym:Symbol                                          %Ignore
+  > id:Identifier ":" sym:Symbol                                 %Labeled
+  > sym:Symbol !Statement stmts:Statement+                       %Statement
+  | sym:Symbol cond:Condition                                    %PostCondition
+  > reg:Regex "<<" sym:Symbol                                    %Precede
+  | reg:Regex "!<<" sym:Symbol                                   %NotPrecede
+  > sym:Symbol ">>" reg:Regex                                    %Follow
+  | sym:Symbol "!>>" reg:Regex                                   %NotFollow
+  | sym:Symbol "\\" reg:Regex                                    %Exclude
+  | sym:Symbol "!" id:Identifier                                 %Except
+  | "if" exp:Expression thenPart:Symbol "else" elsePart:Symbol   %IfThenElse
+  | id:Identifier                                                %Identifier
+  | string:String                                                %String
+  | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
+  | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
 
 Arguments
   = "(" {Expression ","}* ")"
 
 Statement
-  = FunName Arguments ";"?    %Call
-  | Binding ";"?              %Binding
+  = fun:FunName args:Arguments ";"?    %Call
+  | bindings:Binding ";"?              %Binding
 
 Binding
-  = VarName "=" Expression                                            %Assign
-  | "var" {(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
+  = varName:VarName "=" exp:Expression                                      %Assign
+  | "var" decls:{(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
 
 Regex
-  = Regex "*"                     %Star
-  | Regex "+"                     %Plus
-  | Regex "?"                     %Option
-  | "(" Regex ")"                 %Bracket
-  | "(" Regex Regex+ ")"          %Sequence
-  | "(" Regexs ("|" Regexs)+ ")"  %Alternation
-  | Name                          %Nont
-  | CharClass                     %CharClass
-  | String                        %String
-
-Regexs
-  = Regex+  %Sequence
+  = reg:Regex "*"                     %Star
+  | reg:Regex "+"                     %Plus
+  | reg:Regex "?"                     %Option
+  | "(" reg:Regex ")"                 %Bracket
+  | "(" first:Regex rest:Regex+ ")"   %Sequence
+  | "(" regs:{ Regex+ "|" }+ ")"      %Alternation
+  | name:Name                         %Nont
+  | charClass:CharClass               %CharClass
+  | string:String                     %String
 
 CharClass
-  = "[" Range* "]"      %Chars
-  | "!" "[" Range* "]"  %NotChars
+  = "[" ranges:Range* "]"      %Chars
+  | "!" "[" ranges:Range* "]"  %NotChars
 
 Range
-  = RangeChar "-" RangeChar   %Range
-  | RangeChar                 %Character
+  = first:RangeChar "-" second:RangeChar   %Range
+  | range:RangeChar                        %Character
 
 Expression
-  =           FunName Arguments            %Call
-  |           "!" Expression               %Not
-  > left      (Expression "*" Expression   %Multiplication
-  |            Expression "/" Expression   %Division)
-  > left      (Expression "+" Expression   %Addition
-  |            Expression "-" Expression   %Subtraction)
-  > non-assoc (Expression ">=" Expression  %GreaterEq
-  |            Expression "<=" Expression  %LessEq
-  |            Expression ">" Expression   %Greater
-  |            Expression "<" Expression   %Less)
-  > non-assoc (Expression "==" Expression  %Equal
-  |            Expression "!=" Expression  %NotEqual)
-  > left      (Expression "&&" Expression  %And
-  |            Expression "||" Expression  %Or)
-  |           Identifier ".l"              %LExtent
-  |           Identifier ".r"              %RExtent
-  |           Identifier ".yield"          %Yield
-  |           Identifier ".val"            %Val
-  |           VarName                      %Name
-  |           Number                       %Number
-  |           "(" Expression ")"           %Bracket
+  =           fun:FunName args:Arguments            %Call
+  |           "!" exp:Expression                    %Not
+  > left      (lhs:Expression "*" rhs:Expression    %Multiplication
+  |            lhs:Expression "/" rhs:Expression    %Division)
+  > left      (lhs:Expression "+" rhs:Expression    %Addition
+  |            lhs:Expression "-" rhs:Expression    %Subtraction)
+  > non-assoc (lhs:Expression ">=" rhs:Expression   %GreaterEq
+  |            lhs:Expression "<=" rhs:Expression   %LessEq
+  |            lhs:Expression ">" rhs:Expression    %Greater
+  |            lhs:Expression "<" rhs:Expression    %Less)
+  > non-assoc (lhs:Expression "==" rhs:Expression   %Equal
+  |            lhs:Expression "!=" rhs:Expression   %NotEqual)
+  > left      (lhs:Expression "&&" rhs:Expression   %And
+  |            lhs:Expression "||" rhs:Expression   %Or)
+  |           id:Identifier ".l"                    %LExtent
+  |           id:Identifier ".r"                    %RExtent
+  |           id:Identifier ".yield"                %Yield
+  |           id:Identifier ".val"                  %Val
+  |           varName:VarName                       %Name
+  |           number:Number                         %Number
+  |           "(" exp:Expression ")"                %Bracket
 
 ReturnExpression
-  = "{" Expression "}"    %ReturnExpression
+  = "{" exp:Expression "}"
 
 VarName
   = id:Identifier   [contains(env,id.yield)]
 
 Label
-  = '%' Identifier
+  = '%' id:Identifier
 
 Name
   = id:Identifier   [!contains(env,id.yield)]
 
 Identifier
-  = [A-Z_a-z] !<< LetterOrDigits \ Keywords %Ident
+  = [A-Z_a-z] !<< LetterOrDigits \ Keywords
 
-regex Letter
-  = [A-Za-z_]
+regex LetterOrDigits
+  = Letter (Letter | LetterOrDigit)*
 
 regex LetterOrDigit
   = [A-Za-z_0-9]
 
-regex LetterOrDigits
-  = Letter (Letter | LetterOrDigit)*
+regex Letter
+  = [A-Za-z_]
 
 regex Number
   = [0]

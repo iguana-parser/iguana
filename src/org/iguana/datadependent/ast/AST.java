@@ -62,7 +62,7 @@ public class AST {
         return new Expression.String(value);
     }
 
-    public static Expression not(Expression exp) {
+    public static Expression.Not not(Expression exp) {
         return new Expression.Not(exp);
     }
 
@@ -74,7 +74,7 @@ public class AST {
         return new Expression.IntTuple2(element1, element2);
     }
 
-    public static Expression var(java.lang.String name) {
+    public static Expression.Name var(java.lang.String name) {
         return new Expression.Name(name);
     }
 
@@ -840,59 +840,59 @@ public class AST {
         return new Expression.AndIndent(index, first, lExt, returnIndex);
     }
 
-    public static Expression or(Expression lhs, Expression rhs) {
+    public static Expression.Or or(Expression lhs, Expression rhs) {
         return new Expression.Or(lhs, rhs);
     }
 
-    public static Expression and(Expression lhs, Expression rhs) {
+    public static Expression.And and(Expression lhs, Expression rhs) {
         return new Expression.And(lhs, rhs);
     }
 
-    public static Expression less(Expression lhs, Expression rhs) {
+    public static Expression.Less less(Expression lhs, Expression rhs) {
         return new Expression.Less(lhs, rhs);
     }
 
-    public static Expression lessEq(Expression lhs, Expression rhs) {
+    public static Expression.LessThanEqual lessEq(Expression lhs, Expression rhs) {
         return new Expression.LessThanEqual(lhs, rhs);
     }
 
-    public static Expression greater(Expression lhs, Expression rhs) {
+    public static Expression.Greater greater(Expression lhs, Expression rhs) {
         return new Expression.Greater(lhs, rhs);
     }
 
-    public static Expression greaterEq(Expression lhs, Expression rhs) {
+    public static Expression.GreaterThanEqual greaterEq(Expression lhs, Expression rhs) {
         return new Expression.GreaterThanEqual(lhs, rhs);
     }
 
-    public static Expression equal(Expression lhs, Expression rhs) {
+    public static Expression.Equal equal(Expression lhs, Expression rhs) {
         return new Expression.Equal(lhs, rhs);
     }
 
-    public static Expression notEqual(Expression lhs, Expression rhs) {
+    public static Expression.NotEqual notEqual(Expression lhs, Expression rhs) {
         return new Expression.NotEqual(lhs, rhs);
     }
 
-    public static Expression lExt(String label) {
+    public static Expression.LeftExtent lExt(String label) {
         return new Expression.LeftExtent(label);
     }
 
-    public static Expression rExt(String label) {
+    public static Expression.RightExtent rExt(String label) {
         return new Expression.RightExtent(label);
     }
 
-    public static Expression yield(String label) {
+    public static Expression.Yield yield(String label) {
         return new Expression.Yield(label);
     }
 
-    public static Expression yield(String label, int i) {
+    public static Expression.Yield yield(String label, int i) {
         return new Expression.Yield(label, i);
     }
 
-    public static Expression val(String label) {
+    public static Expression.Val val(String label) {
         return new Expression.Val(label);
     }
 
-    public static Expression endOfFile(Expression index) {
+    public static Expression.EndOfFile endOfFile(Expression index) {
         return new Expression.EndOfFile(index);
     }
 
@@ -900,11 +900,11 @@ public class AST {
         return new Expression.IfThenElse(condition, thenPart, elsePart);
     }
 
-    public static Expression assign(java.lang.String id, Expression exp) {
+    public static Expression.Assignment assign(java.lang.String id, Expression exp) {
         return new Expression.Assignment(id, exp);
     }
 
-    public static Expression assign(java.lang.String id, int i, Expression exp) {
+    public static Expression.Assignment assign(java.lang.String id, int i, Expression exp) {
         return new Expression.Assignment(id, i, exp);
     }
 
@@ -951,19 +951,19 @@ public class AST {
         return new VariableDeclaration(name, i, exp);
     }
 
-    public static Expression add(Expression lhs, Expression rhs) {
+    public static Expression.Add add(Expression lhs, Expression rhs) {
         return new Expression.Add(lhs, rhs);
     }
 
-    public static Expression subtract(Expression lhs, Expression rhs) {
+    public static Expression.Subtract subtract(Expression lhs, Expression rhs) {
         return new Expression.Subtract(lhs, rhs);
     }
 
-    public static Expression multiply(Expression lhs, Expression rhs) {
+    public static Expression.Multiply multiply(Expression lhs, Expression rhs) {
         return new Expression.Multiply(lhs, rhs);
     }
 
-    public static Expression divide(Expression lhs, Expression rhs) {
+    public static Expression.Divide divide(Expression lhs, Expression rhs) {
         return new Expression.Divide(lhs, rhs);
     }
 }

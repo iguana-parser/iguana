@@ -3,392 +3,12 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
-          "nodeType" : "Plus"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
-          "nodeType" : "Alt"
-        }
-      ],
-      "recursion" : "LEFT_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : 1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
-        "s" : {
-          "kind" : "Alt",
-          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
-          "symbols" : [
-            {
-              "kind" : "Nonterminal",
-              "name" : "B",
-              "label" : "b"
-            },
-            {
-              "kind" : "Sequence",
-              "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
-              "symbols" : [
-                {
-                  "kind" : "Code",
-                  "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
-                  "symbol" : {
-                    "kind" : "Nonterminal",
-                    "name" : "C",
-                    "label" : "c"
-                  },
-                  "statements" : [
-                    {
-                      "kind" : "ExpressionStatement",
-                      "exp" : {
-                        "kind" : "Assert",
-                        "arguments" : [
-                          {
-                            "kind" : "Or",
-                            "lhs" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "c"
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 1
-                              }
-                            },
-                            "rhs" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "c"
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 3
-                              }
-                            }
-                          }
-                        ],
-                        "fun" : "assert"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "kind" : "Nonterminal",
-                  "name" : "D",
-                  "label" : "d"
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
-        "nodeType" : "Plus"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
-          "nodeType" : "Alt"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      },
-      "definition" : {
-        "kind" : "Plus",
-        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
-        "s" : {
-          "kind" : "Alt",
-          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
-          "symbols" : [
-            {
-              "kind" : "Nonterminal",
-              "name" : "B",
-              "label" : "b"
-            },
-            {
-              "kind" : "Sequence",
-              "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
-              "symbols" : [
-                {
-                  "kind" : "Code",
-                  "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
-                  "symbol" : {
-                    "kind" : "Nonterminal",
-                    "name" : "C",
-                    "label" : "c"
-                  },
-                  "statements" : [
-                    {
-                      "kind" : "ExpressionStatement",
-                      "exp" : {
-                        "kind" : "Assert",
-                        "arguments" : [
-                          {
-                            "kind" : "Or",
-                            "lhs" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "c"
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 1
-                              }
-                            },
-                            "rhs" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "c"
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 3
-                              }
-                            }
-                          }
-                        ],
-                        "fun" : "assert"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "kind" : "Nonterminal",
-                  "name" : "D",
-                  "label" : "d"
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "A"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "a",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 97
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "B"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "b",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 98
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
         "name" : "S"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "X"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "C"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "c",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 99
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "D"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "d",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "Char",
-            "val" : 100
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "X"
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "A"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))*",
-          "label" : "s",
-          "nodeType" : "Star"
         }
       ],
       "recursion" : "NON_REC",
@@ -740,13 +360,121 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Start(S)",
-        "nodeType" : "Start"
+        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
+        "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
+          "nodeType" : "Alt"
+        }
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
+        "s" : {
+          "kind" : "Alt",
+          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "label" : "b"
+            },
+            {
+              "kind" : "Sequence",
+              "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
+              "symbols" : [
+                {
+                  "kind" : "Code",
+                  "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "c"
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Assert",
+                        "arguments" : [
+                          {
+                            "kind" : "Or",
+                            "lhs" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "c"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
+                            },
+                            "rhs" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "c"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 3
+                              }
+                            }
+                          }
+                        ],
+                        "fun" : "assert"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind" : "Nonterminal",
+                  "name" : "D",
+                  "label" : "d"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
+          "nodeType" : "Alt"
         }
       ],
       "recursion" : "NON_REC",
@@ -767,9 +495,75 @@
         "assoc_rhs" : -1
       },
       "definition" : {
-        "kind" : "Start",
-        "name" : "Start(S)",
-        "startSymbol" : "S"
+        "kind" : "Plus",
+        "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))+",
+        "s" : {
+          "kind" : "Alt",
+          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))",
+          "symbols" : [
+            {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "label" : "b"
+            },
+            {
+              "kind" : "Sequence",
+              "name" : "(c:C {assert(c.lExt == 1 || c.lExt == 3)} D)",
+              "symbols" : [
+                {
+                  "kind" : "Code",
+                  "name" : "c:C {assert(c.lExt == 1 || c.lExt == 3)}",
+                  "symbol" : {
+                    "kind" : "Nonterminal",
+                    "name" : "C",
+                    "label" : "c"
+                  },
+                  "statements" : [
+                    {
+                      "kind" : "ExpressionStatement",
+                      "exp" : {
+                        "kind" : "Assert",
+                        "arguments" : [
+                          {
+                            "kind" : "Or",
+                            "lhs" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "c"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 1
+                              }
+                            },
+                            "rhs" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "c"
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 3
+                              }
+                            }
+                          }
+                        ],
+                        "fun" : "assert"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind" : "Nonterminal",
+                  "name" : "D",
+                  "label" : "d"
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     {
@@ -969,6 +763,212 @@
             }
           ]
         }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "X"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "A"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "(B | (c:C {assert(c.lExt == 1 || c.lExt == 3)} D))*",
+          "label" : "s",
+          "nodeType" : "Star"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "a",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 97
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "b",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 98
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "C"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "c",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 99
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "D"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "d",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 100
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Start(S)",
+        "nodeType" : "Start"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Start",
+        "name" : "Start(S)",
+        "startSymbol" : "S"
       }
     }
   ],

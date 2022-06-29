@@ -28,9 +28,11 @@
                       "kind" : "Identifier",
                       "name" : "D"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -59,9 +61,12 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
@@ -89,9 +94,12 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
@@ -119,9 +127,12 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
@@ -149,16 +160,19 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
     }
   ],
   "literals" : {
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

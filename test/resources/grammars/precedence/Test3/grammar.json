@@ -32,7 +32,8 @@
                   ],
                   "associativity" : "RIGHT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -49,7 +50,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -57,11 +59,11 @@
     }
   ],
   "literals" : {
-    "'^'" : {
+    "^" : {
       "kind" : "Char",
       "val" : 94
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

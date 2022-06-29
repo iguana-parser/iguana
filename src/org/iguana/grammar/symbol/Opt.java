@@ -50,8 +50,8 @@ public class Opt extends AbstractSymbol {
 	}
 
 	@Override
-	public SymbolBuilder<? extends Symbol> copy() {
-		return new Builder(s);
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	@Override

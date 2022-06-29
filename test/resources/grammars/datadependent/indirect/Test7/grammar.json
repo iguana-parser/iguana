@@ -18,7 +18,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -56,7 +57,8 @@
                   ],
                   "associativity" : "RIGHT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -78,7 +80,8 @@
                         "name" : "Arg"
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 },
                 {
                   "symbols" : [
@@ -95,7 +98,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 },
                 {
                   "symbols" : [
@@ -112,7 +116,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "NON_ASSOC"
@@ -145,7 +150,8 @@
                   ],
                   "associativity" : "LEFT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -162,7 +168,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -186,7 +193,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -203,7 +211,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -211,27 +220,27 @@
     }
   ],
   "literals" : {
-    "'^'" : {
+    "^" : {
       "kind" : "Char",
       "val" : 94
     },
-    "'*'" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "'&'" : {
+    "&" : {
       "kind" : "Char",
       "val" : 38
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     },
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     }

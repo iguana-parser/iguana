@@ -29,9 +29,11 @@
                         "val" : 100
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -48,7 +50,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -77,24 +80,27 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
-            { }
+            {
+              "associativity" : "UNDEFINED"
+            }
           ]
         }
       ]
     }
   ],
   "literals" : {
-    "'d'" : {
+    "d" : {
       "kind" : "Char",
       "val" : 100
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     },
-    "'b'" : {
+    "b" : {
       "kind" : "Char",
       "val" : 98
     }

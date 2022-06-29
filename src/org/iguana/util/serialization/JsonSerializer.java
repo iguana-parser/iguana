@@ -3,16 +3,11 @@ package org.iguana.util.serialization;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.KeyDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.iguana.grammar.symbol.Alt;
-import org.iguana.grammar.symbol.Opt;
-import org.iguana.grammar.symbol.Plus;
-import org.iguana.grammar.symbol.Star;
-import org.iguana.regex.*;
-import org.iguana.regex.automaton.Automaton;
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -23,12 +18,22 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
-import org.iguana.grammar.runtime.*;
+import org.iguana.grammar.runtime.AssociativityGroup;
+import org.iguana.grammar.runtime.PrecedenceLevel;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parser.ParseError;
 import org.iguana.parsetree.*;
+import org.iguana.regex.*;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.utils.input.Input;
 
 import java.io.*;
 import java.util.List;
@@ -166,7 +171,12 @@ public class JsonSerializer {
         mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
         mapper.addMixIn(NonterminalNode.class, NonterminalNodeMixIn.class);
         mapper.addMixIn(AmbiguityNode.class, AmbiguityNodeMixIn.class);
-        mapper.addMixIn(MetaSymbolNode.class, MetaSymbolNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.StarNode.class, StarNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.PlusNode.class, PlusNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.GroupNode.class, GroupNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.AltNode.class, AltNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.OptionNode.class, OptionNodeMixIn.class);
+        mapper.addMixIn(MetaSymbolNode.StartNode.class, StartNodeMixIn.class);
         mapper.addMixIn(DefaultTerminalNode.class, DefaultTerminalNodeMixIn.class);
         mapper.addMixIn(KeywordTerminalNode.class, KeywordTerminalNodeMixIn.class);
 
@@ -270,23 +280,10 @@ public class JsonSerializer {
     abstract static class PriorityLevelMixIn { }
 
     @JsonDeserialize(builder = Alternative.Builder.class)
-    abstract static class AlternativeMixIn {
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
-        Associativity associativity;
-    }
+    abstract static class AlternativeMixIn { }
 
     @JsonDeserialize(builder = Sequence.Builder.class)
-    abstract static class SequenceMixIn {
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = AssociativityFilter.class)
-        Associativity associativity;
-    }
-
-    private static class AssociativityFilter {
-        @Override
-        public boolean equals(Object obj) {
-            return obj == null || obj == Associativity.UNDEFINED;
-        }
-    }
+    abstract static class SequenceMixIn { }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
@@ -331,8 +328,13 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=DefaultTerminalNode.class, name="TerminalNode"),
         @JsonSubTypes.Type(value=KeywordTerminalNode.class, name="KeywordTerminalNode"),
         @JsonSubTypes.Type(value=NonterminalNode.class, name="NonterminalNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.class, name="MetaSymbolNode"),
-        @JsonSubTypes.Type(value=AmbiguityNode.class, name="AmbiguityNode")
+        @JsonSubTypes.Type(value=AmbiguityNode.class, name="AmbiguityNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.StarNode.class, name="StarNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.PlusNode.class, name="PlusNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.GroupNode.class, name="GroupNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.OptionNode.class, name="OptionNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.AltNode.class, name="AltNode"),
+        @JsonSubTypes.Type(value=MetaSymbolNode.StartNode.class, name="StartNode")
     })
     abstract static class ParseTreeNodeMixIn { }
 
@@ -363,10 +365,50 @@ public class JsonSerializer {
             @JsonProperty("end") int end) { }
     }
 
-    abstract static class MetaSymbolNodeMixIn {
-        MetaSymbolNodeMixIn(
+    abstract static class StarNodeMixIn {
+        StarNodeMixIn(
             @JsonProperty("symbol") Symbol symbol,
-            @JsonProperty("symbols") List<ParseTreeNode> symbols,
+            @JsonProperty("children") List<ParseTreeNode> children,
+            @JsonProperty("start") int start,
+            @JsonProperty("end") int end) { }
+    }
+
+    abstract static class PlusNodeMixIn {
+        PlusNodeMixIn(
+            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("children") List<ParseTreeNode> children,
+            @JsonProperty("start") int start,
+            @JsonProperty("end") int end) { }
+    }
+
+    abstract static class GroupNodeMixIn {
+        GroupNodeMixIn(
+            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("children") List<ParseTreeNode> children,
+            @JsonProperty("start") int start,
+            @JsonProperty("end") int end) { }
+    }
+
+    abstract static class OptionNodeMixIn {
+        OptionNodeMixIn(
+            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("child") ParseTreeNode child,
+            @JsonProperty("start") int start,
+            @JsonProperty("end") int end) { }
+    }
+
+    abstract static class AltNodeMixIn {
+        AltNodeMixIn(
+            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("child") ParseTreeNode child,
+            @JsonProperty("start") int start,
+            @JsonProperty("end") int end) { }
+    }
+
+    abstract static class StartNodeMixIn {
+        StartNodeMixIn(
+            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("child") ParseTreeNode child,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
     }

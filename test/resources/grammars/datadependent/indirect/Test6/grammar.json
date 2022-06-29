@@ -28,7 +28,8 @@
                   ],
                   "associativity" : "NON_ASSOC"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -50,7 +51,8 @@
                   ],
                   "associativity" : "NON_ASSOC"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -72,7 +74,8 @@
                   ],
                   "associativity" : "NON_ASSOC"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -94,7 +97,8 @@
                   ],
                   "associativity" : "NON_ASSOC"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -122,9 +126,11 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -154,7 +160,8 @@
                   ],
                   "associativity" : "LEFT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -171,7 +178,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -195,7 +203,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -203,23 +212,23 @@
     }
   ],
   "literals" : {
-    "'/'" : {
+    "/" : {
       "kind" : "Char",
       "val" : 47
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'-'" : {
+    "-" : {
       "kind" : "Char",
       "val" : 45
     },
-    "'*'" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "'--'" : {
+    "--" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -232,11 +241,11 @@
         }
       ]
     },
-    "'&'" : {
+    "&" : {
       "kind" : "Char",
       "val" : 38
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

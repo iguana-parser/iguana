@@ -1,10 +1,12 @@
 package org.iguana.iggy;
 
-import org.iguana.utils.input.Input;
 import org.iguana.grammar.Grammar;
+import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.ParseTreeVisitorGenerator;
 import org.iguana.util.serialization.JsonSerializer;
+import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,20 +14,20 @@ import java.nio.file.Paths;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 
-public class IggyParser {
+public class IggyParserBootstrap {
 
     private static IguanaParser iggyParser;
 
     public static IguanaParser iggyParser() {
         if (iggyParser == null) {
-            iggyParser = new IguanaParser(iggyGrammar());
+            iggyParser = new IggyParser(iggyGrammar());
         }
         return iggyParser;
     }
 
     public static Grammar iggyGrammar() {
         try {
-            String content = readFile(IggyParser.class.getResourceAsStream("/iggy.json"));
+            String content = readFile(IggyParserBootstrap.class.getResourceAsStream("/iggy.json"));
             return JsonSerializer.deserialize(content, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -35,8 +37,12 @@ public class IggyParser {
     public static void main(String[] args) throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         Grammar grammar = getGrammar(path);
-//        System.out.println(JsonSerializer.toJSON(grammar));
-        JsonSerializer.serialize(grammar, Paths.get("src/resources/iggy.json").toAbsolutePath().toString());
+        String jsonPath = "src/resources/iggy.json";
+        JsonSerializer.serialize(grammar, Paths.get(jsonPath).toAbsolutePath().toString());
+        System.out.println("New Json file is generated: " + "src/resources/iggy.json");
+
+        ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammar.getName(), "org.iguana.iggy.gen", Paths.get("src/org/iguana/iggy/gen").toAbsolutePath().toString());
+        generator.generate();
     }
 
     public static Grammar fromGrammar(String grammar)  {

@@ -29,9 +29,11 @@
                       "kind" : "Identifier",
                       "name" : "field"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -52,7 +54,8 @@
                   ],
                   "associativity" : "LEFT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -75,9 +78,11 @@
                       "kind" : "Identifier",
                       "name" : "expr"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -107,7 +112,8 @@
                   ],
                   "associativity" : "LEFT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -134,7 +140,8 @@
                       "kind" : "Identifier",
                       "name" : "expr"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 },
                 {
                   "symbols" : [
@@ -155,7 +162,8 @@
                       "kind" : "Identifier",
                       "name" : "expr"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "LEFT"
@@ -250,9 +258,11 @@
                       "kind" : "Identifier",
                       "name" : "expr"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -282,7 +292,8 @@
                   ],
                   "associativity" : "RIGHT"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -310,9 +321,11 @@
                         "val" : 41
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
@@ -324,7 +337,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -447,23 +461,23 @@
     }
   },
   "literals" : {
-    "'.'" : {
+    "." : {
       "kind" : "Char",
       "val" : 46
     },
-    "'-'" : {
+    "-" : {
       "kind" : "Char",
       "val" : 45
     },
-    "'*'" : {
+    "*" : {
       "kind" : "Char",
       "val" : 42
     },
-    "'+'" : {
+    "+" : {
       "kind" : "Char",
       "val" : 43
     },
-    "'if'" : {
+    "if" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -476,7 +490,7 @@
         }
       ]
     },
-    "'then'" : {
+    "then" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -497,7 +511,7 @@
         }
       ]
     },
-    "'else'" : {
+    "else" : {
       "kind" : "regex.Seq",
       "symbols" : [
         {
@@ -518,15 +532,15 @@
         }
       ]
     },
-    "';'" : {
+    ";" : {
       "kind" : "Char",
       "val" : 59
     },
-    "'('" : {
+    "(" : {
       "kind" : "Char",
       "val" : 40
     },
-    "')'" : {
+    ")" : {
       "kind" : "Char",
       "val" : 41
     }

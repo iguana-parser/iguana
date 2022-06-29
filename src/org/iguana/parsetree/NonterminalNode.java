@@ -44,7 +44,7 @@ public class NonterminalNode implements ParseTreeNode {
     }
 
     @Override
-    public Object accept(ParseTreeVisitor visitor) {
+    public <T> T accept(ParseTreeVisitor<T> visitor) {
         return visitor.visitNonterminalNode(this);
     }
 

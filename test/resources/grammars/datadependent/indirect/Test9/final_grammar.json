@@ -433,6 +433,55 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "Y",
+        "parameters" : [
+          "p0"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "X",
+          "variable" : "r",
+          "arguments" : [
+            {
+              "kind" : "Name",
+              "name" : "p0",
+              "i" : -1
+            }
+          ]
+        },
+        {
+          "kind" : "Return",
+          "name" : "{r}",
+          "expression" : {
+            "kind" : "Name",
+            "name" : "r",
+            "i" : -1
+          }
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : 1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 2,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "X",
         "parameters" : [
           "p0"
@@ -548,55 +597,6 @@
         "undefined" : 1,
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : true,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 2,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Y",
-        "parameters" : [
-          "p0"
-        ]
-      },
-      "body" : [
-        {
-          "kind" : "Nonterminal",
-          "name" : "X",
-          "variable" : "r",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "p0",
-              "i" : -1
-            }
-          ]
-        },
-        {
-          "kind" : "Return",
-          "name" : "{r}",
-          "expression" : {
-            "kind" : "Name",
-            "name" : "r",
-            "i" : -1
-          }
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : 1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : 1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
         "hasPostfixUnaryBelow" : false,
         "index" : 2,

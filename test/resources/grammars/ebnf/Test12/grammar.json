@@ -33,7 +33,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -62,7 +63,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -70,11 +72,11 @@
     }
   ],
   "literals" : {
-    "','" : {
+    "," : {
       "kind" : "Char",
       "val" : 44
     },
-    "'a'" : {
+    "a" : {
       "kind" : "Char",
       "val" : 97
     }

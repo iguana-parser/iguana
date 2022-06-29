@@ -38,7 +38,7 @@ public class IggyTokenizerTest {
         Input input = Input.fromString("var a = 1");
         iguanaTokenizer.prepare(input, 0);
 
-        RuntimeGrammar grammar = IggyParser.iggyGrammar().toRuntimeGrammar();
+        RuntimeGrammar grammar = IggyParserBootstrap.iggyGrammar().toRuntimeGrammar();
         RegularExpression id = grammar.getRegularExpressions().get("LetterOrDigits");
         RegularExpression number = grammar.getRegularExpressions().get("Number");
         RegularExpression whitespace = grammar.getRegularExpressions().get("WhiteSpace");
