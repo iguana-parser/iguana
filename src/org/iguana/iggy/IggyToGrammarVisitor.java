@@ -375,26 +375,26 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitCallStatement(IggyParseTree.CallStatement node) {
-        return Collections.singletonList(AST.stat(getCall(node)));
+        return Collections.singletonList(AST.stat(getCall(node.fun().getText(), node.args())));
     }
 
     @Override
     public List<Statement> visitBindingStatement(IggyParseTree.BindingStatement node) {
-        return (List<Statement>) node.childAt(0).accept(this);
+        return (List<Statement>) node.bindings().accept(this);
     }
 
     @Override
     public List<Statement> visitAssignBinding(IggyParseTree.AssignBinding node) {
         List<Statement> statements = new ArrayList<>();
-        statements.add(AST.stat(AST.assign(getIdentifier(node.childAt(0)).getName(), (Expression) node.childAt(2).accept(this))));
+        Identifier id = (Identifier) node.varName().accept(this);
+        statements.add(AST.stat(AST.assign(id.getName(), (Expression) node.exp().accept(this))));
         return statements;
     }
 
     @Override
     public List<Statement> visitDeclareBinding(IggyParseTree.DeclareBinding node) {
         List<Statement> statements = new ArrayList<>();
-        String label = node.getGrammarDefinition().getLabel();
-        List<Object> elems = (List<Object>) node.childAt(1).accept(this);
+        List<Object> elems = (List<Object>) node.decls().accept(this);
         int i = 0;
         while (i < elems.size()) {
             statements.add(AST.varDeclStat(((Identifier) elems.get(i)).getName(), (Expression) elems.get(i + 1)));
@@ -405,35 +405,35 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public org.iguana.regex.Star visitStarRegex(IggyParseTree.StarRegex node) {
-        return org.iguana.regex.Star.from((RegularExpression) node.childAt(0).accept(this));
+        return org.iguana.regex.Star.from((RegularExpression) node.reg().accept(this));
     }
 
     @Override
     public org.iguana.regex.Plus visitPlusRegex(IggyParseTree.PlusRegex node) {
-        return org.iguana.regex.Plus.from((RegularExpression) node.childAt(0).accept(this));
+        return org.iguana.regex.Plus.from((RegularExpression) node.reg().accept(this));
     }
 
     @Override
     public org.iguana.regex.Opt visitOptionRegex(IggyParseTree.OptionRegex node) {
-        return org.iguana.regex.Opt.from((RegularExpression) node.childAt(0).accept(this));
+        return org.iguana.regex.Opt.from((RegularExpression) node.reg().accept(this));
     }
 
     @Override
     public RegularExpression visitBracketRegex(IggyParseTree.BracketRegex node) {
-        return (RegularExpression) node.childAt(1).accept(this);
+        return (RegularExpression) node.reg().accept(this);
     }
 
     @Override
     public org.iguana.regex.Seq visitSequenceRegex(IggyParseTree.SequenceRegex node) {
         List<RegularExpression> list = new ArrayList<>();
-        list.add((RegularExpression) node.childAt(1).accept(this));
-        list.addAll((Collection<? extends RegularExpression>) node.childAt(2).accept(this));
+        list.add((RegularExpression) node.first().accept(this));
+        list.addAll((List<RegularExpression>) node.rest().accept(this));
         return org.iguana.regex.Seq.from(list);
     }
 
     @Override
     public org.iguana.regex.Alt<?> visitAlternationRegex(IggyParseTree.AlternationRegex node) {
-        List<List<RegularExpression>> listOfList = (List<List<RegularExpression>>) node.childAt(1).accept(this);
+        List<List<RegularExpression>> listOfList = (List<List<RegularExpression>>) node.regs().accept(this);
         List<RegularExpression> list = listOfList.stream().map(l -> {
             if (l.size() == 1) return l.get(0);
             else return Seq.from(l);
@@ -443,12 +443,13 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
 
     @Override
     public org.iguana.regex.Reference visitNontRegex(IggyParseTree.NontRegex node) {
-        return org.iguana.regex.Reference.from(getIdentifier(node.childAt(0)).getName());
+        Identifier id = (Identifier) node.name().accept(this);
+        return org.iguana.regex.Reference.from(id.getName());
     }
 
     @Override
     public org.iguana.regex.Alt<RegularExpression> visitCharClassRegex(IggyParseTree.CharClassRegex node) {
-        return (org.iguana.regex.Alt<RegularExpression>) node.childAt(0).accept(this);
+        return (org.iguana.regex.Alt<RegularExpression>) node.charClass().accept(this);
     }
 
     @Override
@@ -457,31 +458,31 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitCharsCharClass(IggyParseTree.CharsCharClass node) {
-        return org.iguana.regex.Alt.from((List<RegularExpression>) node.childAt(1).accept(this));
+    public org.iguana.regex.Alt visitCharsCharClass(IggyParseTree.CharsCharClass node) {
+        return org.iguana.regex.Alt.from((List<RegularExpression>) node.ranges().accept(this));
     }
 
     @Override
-    public Object visitNotCharsCharClass(IggyParseTree.NotCharsCharClass node) {
-        return org.iguana.regex.Alt.not((List<RegularExpression>) node.childAt(2).accept(this));
+    public org.iguana.regex.Alt visitNotCharsCharClass(IggyParseTree.NotCharsCharClass node) {
+        return org.iguana.regex.Alt.not((List<RegularExpression>) node.ranges().accept(this));
     }
 
     @Override
     public CharRange visitRangeRange(IggyParseTree.RangeRange node) {
-        int start = getRangeChar(node.childAt(0).getText());
-        int end = getRangeChar(node.childAt(2).getText());
+        int start = getRangeChar(node.first().getText());
+        int end = getRangeChar(node.second().getText());
         return CharRange.in(start, end);
     }
 
     @Override
     public Char visitCharacterRange(IggyParseTree.CharacterRange node) {
-        int c = getRangeChar(node.childAt(0).getText());
+        int c = getRangeChar(node.range().getText());
         return Char.from(c);
     }
 
     @Override
     public Expression.Call visitCallExpression(IggyParseTree.CallExpression node) {
-        return getCall(node);
+        return getCall(node.childAt(0).getText(), (IggyParseTree.Arguments) node.childAt(1));
     }
 
     @Override
@@ -673,9 +674,8 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
         }
     }
 
-    private Expression.Call getCall(NonterminalNode node) {
-        String funName = node.childAt(0).getText();
-        Expression[] arguments = ((List<Expression>) node.childAt(1).accept(this)).toArray(new Expression[]{});
+    private Expression.Call getCall(String funName, IggyParseTree.Arguments args) {
+        Expression[] arguments = ((List<Expression>) args.accept(this)).toArray(new Expression[]{});
         switch (funName) {
             case "println":
                 return AST.println(arguments);

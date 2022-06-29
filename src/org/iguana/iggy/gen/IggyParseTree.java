@@ -864,6 +864,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public TerminalNode fun() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public Arguments args() {
+           return (Arguments) childAt(1);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -877,6 +885,10 @@ public class IggyParseTree {
     public static class BindingStatement extends Statement {
         public BindingStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Binding bindings() {
+           return (Binding) childAt(0);
         }
 
         @Override
@@ -901,6 +913,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public VarName varName() {
+           return (VarName) childAt(0);
+        }
+
+        public Expression exp() {
+           return (Expression) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -914,6 +934,10 @@ public class IggyParseTree {
     public static class DeclareBinding extends Binding {
         public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public PlusNode decls() {
+           return (PlusNode) childAt(1);
         }
 
         @Override
@@ -938,6 +962,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Regex reg() {
+           return (Regex) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -951,6 +979,10 @@ public class IggyParseTree {
     public static class PlusRegex extends Regex {
         public PlusRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Regex reg() {
+           return (Regex) childAt(0);
         }
 
         @Override
@@ -968,6 +1000,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Regex reg() {
+           return (Regex) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -981,6 +1017,10 @@ public class IggyParseTree {
     public static class BracketRegex extends Regex {
         public BracketRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public Regex reg() {
+           return (Regex) childAt(1);
         }
 
         @Override
@@ -998,6 +1038,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Regex first() {
+           return (Regex) childAt(1);
+        }
+
+        public PlusNode rest() {
+           return (PlusNode) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1011,6 +1059,10 @@ public class IggyParseTree {
     public static class AlternationRegex extends Regex {
         public AlternationRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public PlusNode regs() {
+           return (PlusNode) childAt(1);
         }
 
         @Override
@@ -1028,6 +1080,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public Name name() {
+           return (Name) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1043,6 +1099,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public CharClass charClass() {
+           return (CharClass) childAt(0);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1056,6 +1116,10 @@ public class IggyParseTree {
     public static class StringRegex extends Regex {
         public StringRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public TerminalNode string() {
+           return (TerminalNode) childAt(0);
         }
 
         @Override
@@ -1080,6 +1144,10 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public StarNode ranges() {
+           return (StarNode) childAt(1);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1093,6 +1161,10 @@ public class IggyParseTree {
     public static class NotCharsCharClass extends CharClass {
         public NotCharsCharClass(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public StarNode ranges() {
+           return (StarNode) childAt(2);
         }
 
         @Override
@@ -1117,6 +1189,14 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
+        public TerminalNode first() {
+           return (TerminalNode) childAt(0);
+        }
+
+        public TerminalNode second() {
+           return (TerminalNode) childAt(2);
+        }
+
         @Override
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
@@ -1130,6 +1210,10 @@ public class IggyParseTree {
     public static class CharacterRange extends Range {
         public CharacterRange(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
+        }
+
+        public TerminalNode range() {
+           return (TerminalNode) childAt(0);
         }
 
         @Override

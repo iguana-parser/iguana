@@ -64,31 +64,31 @@ Arguments
   = "(" {Expression ","}* ")"
 
 Statement
-  = FunName Arguments ";"?    %Call
-  | Binding ";"?              %Binding
+  = fun:FunName args:Arguments ";"?    %Call
+  | bindings:Binding ";"?              %Binding
 
 Binding
-  = VarName "=" Expression                                            %Assign
-  | "var" {(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
+  = varName:VarName "=" exp:Expression                                      %Assign
+  | "var" decls:{(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
 
 Regex
-  = Regex "*"                     %Star
-  | Regex "+"                     %Plus
-  | Regex "?"                     %Option
-  | "(" Regex ")"                 %Bracket
-  | "(" Regex Regex+ ")"          %Sequence
-  | "(" { Regex+ "|" }+ ")"       %Alternation
-  | Name                          %Nont
-  | CharClass                     %CharClass
-  | String                        %String
+  = reg:Regex "*"                     %Star
+  | reg:Regex "+"                     %Plus
+  | reg:Regex "?"                     %Option
+  | "(" reg:Regex ")"                 %Bracket
+  | "(" first:Regex rest:Regex+ ")"   %Sequence
+  | "(" regs:{ Regex+ "|" }+ ")"      %Alternation
+  | name:Name                         %Nont
+  | charClass:CharClass               %CharClass
+  | string:String                     %String
 
 CharClass
-  = "[" Range* "]"      %Chars
-  | "!" "[" Range* "]"  %NotChars
+  = "[" ranges:Range* "]"      %Chars
+  | "!" "[" ranges:Range* "]"  %NotChars
 
 Range
-  = RangeChar "-" RangeChar   %Range
-  | RangeChar                 %Character
+  = first:RangeChar "-" second:RangeChar   %Range
+  | range:RangeChar                        %Character
 
 Expression
   =           FunName Arguments            %Call

@@ -1829,11 +1829,13 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "FunName"
+                      "name" : "FunName",
+                      "label" : "fun"
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Arguments"
+                      "name" : "Arguments",
+                      "label" : "args"
                     },
                     {
                       "kind" : "Opt",
@@ -1861,7 +1863,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Binding"
+                      "name" : "Binding",
+                      "label" : "bindings"
                     },
                     {
                       "kind" : "Opt",
@@ -1901,7 +1904,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "VarName"
+                      "name" : "VarName",
+                      "label" : "varName"
                     },
                     {
                       "kind" : "Terminal",
@@ -1914,7 +1918,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Expression"
+                      "name" : "Expression",
+                      "label" : "exp"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -1952,6 +1957,7 @@
                     {
                       "kind" : "Plus",
                       "name" : "(id:Name {env = put(env,id.yield)} = Expression)+",
+                      "label" : "decls",
                       "s" : {
                         "kind" : "Sequence",
                         "name" : "(id:Name {env = put(env,id.yield)} = Expression)",
@@ -2043,7 +2049,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Regex"
+                      "name" : "Regex",
+                      "label" : "reg"
                     },
                     {
                       "kind" : "Terminal",
@@ -2067,7 +2074,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Regex"
+                      "name" : "Regex",
+                      "label" : "reg"
                     },
                     {
                       "kind" : "Terminal",
@@ -2091,7 +2099,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Regex"
+                      "name" : "Regex",
+                      "label" : "reg"
                     },
                     {
                       "kind" : "Terminal",
@@ -2124,7 +2133,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Regex"
+                      "name" : "Regex",
+                      "label" : "reg"
                     },
                     {
                       "kind" : "Terminal",
@@ -2157,11 +2167,13 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Regex"
+                      "name" : "Regex",
+                      "label" : "first"
                     },
                     {
                       "kind" : "Plus",
                       "name" : "Regex+",
+                      "label" : "rest",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Regex"
@@ -2199,6 +2211,7 @@
                     {
                       "kind" : "Plus",
                       "name" : "Regex++",
+                      "label" : "regs",
                       "s" : {
                         "kind" : "Plus",
                         "name" : "Regex+",
@@ -2241,7 +2254,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Name"
+                      "name" : "Name",
+                      "label" : "name"
                     }
                   ],
                   "label" : "Nont"
@@ -2255,7 +2269,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "CharClass"
+                      "name" : "CharClass",
+                      "label" : "charClass"
                     }
                   ],
                   "label" : "CharClass"
@@ -2269,7 +2284,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "String"
+                      "name" : "String",
+                      "label" : "string"
                     }
                   ],
                   "label" : "String"
@@ -2305,6 +2321,7 @@
                     {
                       "kind" : "Star",
                       "name" : "Range*",
+                      "label" : "ranges",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Range"
@@ -2351,6 +2368,7 @@
                     {
                       "kind" : "Star",
                       "name" : "Range*",
+                      "label" : "ranges",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Range"
@@ -2390,7 +2408,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "RangeChar"
+                      "name" : "RangeChar",
+                      "label" : "first"
                     },
                     {
                       "kind" : "Terminal",
@@ -2403,7 +2422,8 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "RangeChar"
+                      "name" : "RangeChar",
+                      "label" : "second"
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -2418,7 +2438,8 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "RangeChar"
+                      "name" : "RangeChar",
+                      "label" : "range"
                     }
                   ],
                   "label" : "Character"
