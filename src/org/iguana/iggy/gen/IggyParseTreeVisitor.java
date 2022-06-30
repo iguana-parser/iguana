@@ -169,10 +169,10 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitVarName(VarName node);
 
-    public abstract T visitLabel(Label node);
-
     public abstract T visitName(Name node);
 
     public abstract T visitIdentifier(Identifier node);
+
+    public abstract T visitLabel(Label node);
 
 }

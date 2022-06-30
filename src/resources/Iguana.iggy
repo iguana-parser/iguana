@@ -120,14 +120,14 @@ ReturnExpression
 VarName
   = id:Identifier   [contains(env,id.yield)]
 
-Label
-  = '%' id:Identifier
-
 Name
   = id:Identifier   [!contains(env,id.yield)]
 
 Identifier
   = [A-Z_a-z] !<< LetterOrDigits \ Keywords
+
+lexical Label
+  = '%' id:Identifier
 
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*

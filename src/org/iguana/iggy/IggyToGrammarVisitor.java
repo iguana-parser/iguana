@@ -76,17 +76,23 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
         Optional<List<Identifier>> parameters = (Optional<List<Identifier>>) node.params().accept(this);
         List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.body().accept(this);
 
+        LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
         if (node.modifier().hasChildren()) { // start symbol
             String text = node.modifier().getText();
             if (text.equals("start")) {
                 start = nonterminalName.getName();
+            } else if (text.equals("lexical")) {
+                layoutStrategy = LayoutStrategy.NO_LAYOUT;
             } else { // "layout"
                 layout = nonterminalName;
             }
         }
 
         Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList())).build();
-        return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
+        return new Rule.Builder(nonterminal)
+            .addPriorityLevels(priorityLevels)
+            .setLayoutStrategy(layoutStrategy)
+            .build();
     }
 
     @Override

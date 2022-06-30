@@ -1729,25 +1729,6 @@ public class IggyParseTree {
         }
     }
 
-    // Label = '%' id:Identifier
-    public static class Label extends NonterminalNode {
-        public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public Identifier id() {
-           return (Identifier) childAt(1);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
     // Name = id:Identifier
     public static class Name extends NonterminalNode {
         public Name(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
@@ -1777,6 +1758,25 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitIdentifier(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Label = '%' id:Identifier
+    public static class Label extends NonterminalNode {
+        public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(1);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
             }
             return visitor.visitNonterminalNode(this);
         }

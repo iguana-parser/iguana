@@ -229,12 +229,12 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                 return new ReturnExpression(rule, children, leftExtent, rightExtent);
             case "VarName":
                 return new VarName(rule, children, leftExtent, rightExtent);
-            case "Label":
-                return new Label(rule, children, leftExtent, rightExtent);
             case "Name":
                 return new Name(rule, children, leftExtent, rightExtent);
             case "Identifier":
                 return new Identifier(rule, children, leftExtent, rightExtent);
+            case "Label":
+                return new Label(rule, children, leftExtent, rightExtent);
             default:
                 throw new RuntimeException("Unexpected nonterminal:" + name);
         }

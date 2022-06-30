@@ -90,7 +90,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -221,7 +222,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -380,7 +382,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -470,7 +473,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -514,7 +518,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -554,7 +559,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -594,7 +600,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -694,7 +701,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -810,7 +818,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -869,7 +878,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -1766,7 +1776,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -1825,7 +1836,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -1900,7 +1912,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2045,7 +2058,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2307,7 +2321,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2404,7 +2419,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2461,7 +2477,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3142,7 +3159,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3187,7 +3205,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3235,43 +3254,8 @@
             }
           ]
         }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Label"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "%",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 37
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Identifier",
-                      "label" : "id"
-                    }
-                  ],
-                  "associativity" : "UNDEFINED"
-                }
-              ],
-              "associativity" : "UNDEFINED"
-            }
-          ]
-        }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3322,7 +3306,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3382,7 +3367,45 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Label"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "%",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 37
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier",
+                      "label" : "id"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     }
   ],
   "regularExpressions" : {
