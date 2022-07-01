@@ -34,7 +34,7 @@ Sequence
   | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
 
 Condition
-  = "[" {Expression ","}* "]"
+  = "{" {Expression ","}* "}" "?"
 
 Symbol
   = id:Identifier args:Arguments                                 %Call
@@ -118,10 +118,10 @@ ReturnExpression
   = "{" exp:Expression "}"
 
 VarName
-  = id:Identifier   [contains(env,id.yield)]
+  = id:Identifier {contains(env,id.yield)}?
 
 Name
-  = id:Identifier   [!contains(env,id.yield)]
+  = id:Identifier {!contains(env,id.yield)}?
 
 Identifier
   = [A-Z_a-z] !<< LetterOrDigits \ Keywords

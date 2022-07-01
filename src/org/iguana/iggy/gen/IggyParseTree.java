@@ -325,7 +325,7 @@ public class IggyParseTree {
         }
     }
 
-    // Condition = '[' Expression* ']'
+    // Condition = '{' Expression* '}' '?'
     public static class Condition extends NonterminalNode {
         public Condition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);

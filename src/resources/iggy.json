@@ -835,11 +835,11 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "[",
+                      "name" : "{",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 91
+                        "val" : 123
                       }
                     },
                     {
@@ -863,11 +863,20 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "]",
+                      "name" : "}",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 93
+                        "val" : 125
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "?",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 63
                       }
                     }
                   ],
@@ -4947,13 +4956,17 @@
       "kind" : "Char",
       "val" : 62
     },
-    "[" : {
+    "{" : {
       "kind" : "Char",
-      "val" : 91
+      "val" : 123
     },
-    "]" : {
+    "}" : {
       "kind" : "Char",
-      "val" : 93
+      "val" : 125
+    },
+    "?" : {
+      "kind" : "Char",
+      "val" : 63
     },
     "offside" : {
       "kind" : "regex.Seq",
@@ -4995,10 +5008,6 @@
     "+" : {
       "kind" : "Char",
       "val" : 43
-    },
-    "?" : {
-      "kind" : "Char",
-      "val" : 63
     },
     "align" : {
       "kind" : "regex.Seq",
@@ -5160,17 +5169,17 @@
         }
       ]
     },
-    "{" : {
-      "kind" : "Char",
-      "val" : 123
-    },
-    "}" : {
-      "kind" : "Char",
-      "val" : 125
-    },
     ";" : {
       "kind" : "Char",
       "val" : 59
+    },
+    "[" : {
+      "kind" : "Char",
+      "val" : 91
+    },
+    "]" : {
+      "kind" : "Char",
+      "val" : 93
     },
     "-" : {
       "kind" : "Char",
