@@ -1,0 +1,1771 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Program"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "begin",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 98
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 103
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Declarations",
+                      "label" : "decls"
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Statement*",
+                      "label" : "body",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Statement"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ";",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 59
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "end",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 100
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "Program"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Declarations"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "declare",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 100
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 99
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 114
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "IdType*",
+                      "label" : "decls",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "IdType"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ",",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ";",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 59
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "IdType"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Id",
+                      "label" : "id"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ":",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 58
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Type",
+                      "label" : "t"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Statement"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Id",
+                      "label" : "variable"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ":=",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 58
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 61
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "val"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "Assign"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "if",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "cond"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "then",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 104
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Statement*",
+                      "label" : "thenPart",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Statement"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ";",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 59
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "else",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 115
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Statement*",
+                      "label" : "elsePart",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Statement"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ";",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 59
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "fi",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "IfThenElseCond"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "if",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "cond"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "then",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 104
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Statement*",
+                      "label" : "thenPart",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Statement"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ";",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 59
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "fi",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 102
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "IfThenCond"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "while",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 119
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 104
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "cond"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "do",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 100
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "Statement*",
+                      "label" : "body",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Statement"
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : ";",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 59
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "od",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 111
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 100
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "Loop"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Type"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "natural",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 117
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 114
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 97
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "Natural"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "string",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 115
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 114
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 103
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "String"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "nil-type",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 110
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 105
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 108
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 45
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 116
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 121
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 112
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 101
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "label" : "Nil"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Expression"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Id",
+                      "label" : "name"
+                    }
+                  ],
+                  "label" : "Id"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "String",
+                      "label" : "string"
+                    }
+                  ],
+                  "label" : "Strcon"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Natural",
+                      "label" : "natcon"
+                    }
+                  ],
+                  "label" : "Natcon"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "(",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 40
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "e"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : ")",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 41
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "Bracket"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "lhs"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "||",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 124
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 124
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "rhs"
+                    }
+                  ],
+                  "associativity" : "LEFT",
+                  "label" : "Concat"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        },
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "lhs"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "+",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 43
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "rhs"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "Add"
+                },
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "lhs"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "-",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 45
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Expression",
+                      "label" : "rhs"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "Min"
+                }
+              ],
+              "associativity" : "LEFT"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Id"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "(a-z)",
+                      "nodeType" : "Regex",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "CharRange",
+                            "start" : 97,
+                            "end" : 122
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "(a-z | 0-9)*",
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "CharRange",
+                                "start" : 97,
+                                "end" : 122
+                              },
+                              {
+                                "kind" : "CharRange",
+                                "start" : 48,
+                                "end" : 57
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(a-z | 0-9)",
+                        "nodeType" : "Regex",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 97,
+                              "end" : 122
+                            },
+                            {
+                              "kind" : "CharRange",
+                              "start" : 48,
+                              "end" : 57
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Natural"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Plus",
+                      "name" : "(0-9)+",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(0-9)",
+                        "nodeType" : "Regex",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 48,
+                              "end" : 57
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "String"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "\"",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 34
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "(\\u0001-! | #-\\u10FFFF)*",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(\\u0001-! | #-\\u10FFFF)",
+                        "nodeType" : "Regex",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 1,
+                              "end" : 33
+                            },
+                            {
+                              "kind" : "CharRange",
+                              "start" : 35,
+                              "end" : 1114111
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "\"",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 34
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Layout"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Star",
+                      "name" : "WhitespaceAndComment*",
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Alt",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 32
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 9
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 10
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 13
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 37
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "WhitespaceAndComment"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "WhitespaceAndComment"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "(\\u0020 | \\u0009 | \\\\u000A | \\\\u000D)",
+                      "nodeType" : "Regex",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 32
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 9
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 10
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 13
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "%",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 37
+                      }
+                    },
+                    {
+                      "kind" : "Plus",
+                      "name" : "(\\u0001-$ | &-\\u10FFFF)+",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(\\u0001-$ | &-\\u10FFFF)",
+                        "nodeType" : "Regex",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 1,
+                              "end" : 36
+                            },
+                            {
+                              "kind" : "CharRange",
+                              "start" : 38,
+                              "end" : 1114111
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "%",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 37
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "%%",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 37
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 37
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "(\\u0001-\\u0009 | \\u000B-\\u10FFFF)*",
+                      "preConditions" : [
+                        {
+                          "kind" : "PositionalCondition",
+                          "type" : "END_OF_LINE"
+                        }
+                      ],
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "(\\u0001-\\u0009 | \\u000B-\\u10FFFF)",
+                        "nodeType" : "Regex",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "start" : 1,
+                              "end" : 9
+                            },
+                            {
+                              "kind" : "CharRange",
+                              "start" : 11,
+                              "end" : 1114111
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
+    }
+  ],
+  "literals" : {
+    "begin" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 98
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 103
+        },
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
+    },
+    ";" : {
+      "kind" : "Char",
+      "val" : 59
+    },
+    "end" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        },
+        {
+          "kind" : "Char",
+          "val" : 100
+        }
+      ]
+    },
+    "declare" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 100
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 99
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 97
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        }
+      ]
+    },
+    "," : {
+      "kind" : "Char",
+      "val" : 44
+    },
+    ":" : {
+      "kind" : "Char",
+      "val" : 58
+    },
+    ":=" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 58
+        },
+        {
+          "kind" : "Char",
+          "val" : 61
+        }
+      ]
+    },
+    "if" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 102
+        }
+      ]
+    },
+    "then" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 116
+        },
+        {
+          "kind" : "Char",
+          "val" : 104
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        }
+      ]
+    },
+    "else" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 101
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 115
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        }
+      ]
+    },
+    "fi" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 102
+        },
+        {
+          "kind" : "Char",
+          "val" : 105
+        }
+      ]
+    },
+    "while" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 119
+        },
+        {
+          "kind" : "Char",
+          "val" : 104
+        },
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        }
+      ]
+    },
+    "do" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 100
+        },
+        {
+          "kind" : "Char",
+          "val" : 111
+        }
+      ]
+    },
+    "od" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 111
+        },
+        {
+          "kind" : "Char",
+          "val" : 100
+        }
+      ]
+    },
+    "natural" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 110
+        },
+        {
+          "kind" : "Char",
+          "val" : 97
+        },
+        {
+          "kind" : "Char",
+          "val" : 116
+        },
+        {
+          "kind" : "Char",
+          "val" : 117
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        },
+        {
+          "kind" : "Char",
+          "val" : 97
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        }
+      ]
+    },
+    "string" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 115
+        },
+        {
+          "kind" : "Char",
+          "val" : 116
+        },
+        {
+          "kind" : "Char",
+          "val" : 114
+        },
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 110
+        },
+        {
+          "kind" : "Char",
+          "val" : 103
+        }
+      ]
+    },
+    "nil-type" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 110
+        },
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 108
+        },
+        {
+          "kind" : "Char",
+          "val" : 45
+        },
+        {
+          "kind" : "Char",
+          "val" : 116
+        },
+        {
+          "kind" : "Char",
+          "val" : 121
+        },
+        {
+          "kind" : "Char",
+          "val" : 112
+        },
+        {
+          "kind" : "Char",
+          "val" : 101
+        }
+      ]
+    },
+    "(" : {
+      "kind" : "Char",
+      "val" : 40
+    },
+    ")" : {
+      "kind" : "Char",
+      "val" : 41
+    },
+    "||" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 124
+        },
+        {
+          "kind" : "Char",
+          "val" : 124
+        }
+      ]
+    },
+    "+" : {
+      "kind" : "Char",
+      "val" : 43
+    },
+    "-" : {
+      "kind" : "Char",
+      "val" : 45
+    },
+    "\\\"" : {
+      "kind" : "Char",
+      "val" : 34
+    },
+    "%" : {
+      "kind" : "Char",
+      "val" : 37
+    },
+    "%%" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 37
+        },
+        {
+          "kind" : "Char",
+          "val" : 37
+        }
+      ]
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(Program)",
+    "startSymbol" : "Program"
+  },
+  "layout" : {
+    "kind" : "Identifier",
+    "name" : "Layout"
+  }
+}

@@ -14,10 +14,7 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.Grammar;
-import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.ConditionType;
-import org.iguana.grammar.condition.DataDependentCondition;
-import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.condition.*;
 import org.iguana.grammar.runtime.AssociativityGroup;
 import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.RuntimeGrammar;
@@ -86,6 +83,7 @@ public class JsonSerializer {
         mapper.addMixIn(Condition.class, ConditionMixIn.class);
         mapper.addMixIn(RegularExpressionCondition.class, RegularExpressionConditionMixIn.class);
         mapper.addMixIn(DataDependentCondition.class, DataDependentConditionMixIn.class);
+        mapper.addMixIn(PositionalCondition.class, PositionalConditionMixIn.class);
 
         // Expression
         mapper.addMixIn(Expression.class, ExpressionMixIn.class);
@@ -512,7 +510,8 @@ public class JsonSerializer {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
         @JsonSubTypes.Type(value=RegularExpressionCondition.class, name="RegularExpressionCondition"),
-        @JsonSubTypes.Type(value=DataDependentCondition.class, name="DataDependentCondition")
+        @JsonSubTypes.Type(value=DataDependentCondition.class, name="DataDependentCondition"),
+        @JsonSubTypes.Type(value=PositionalCondition.class, name="PositionalCondition")
     })
     abstract static class ConditionMixIn { }
 
@@ -906,6 +905,11 @@ public class JsonSerializer {
         @JsonCreator
         DataDependentConditionMixIn(@JsonProperty("type") ConditionType type,
                                     @JsonProperty("expression") Expression expression) { }
+    }
+
+    abstract static class PositionalConditionMixIn {
+        @JsonCreator
+        PositionalConditionMixIn(@JsonProperty("type") ConditionType type) { }
     }
 
     abstract static class AbstractAttrsMixIn {

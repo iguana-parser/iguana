@@ -69,6 +69,8 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitNotPrecedeSymbol(NotPrecedeSymbol node);
 
+    public abstract T visitStartOfLineSymbol(StartOfLineSymbol node);
+
     public abstract T visitFollowSymbol(FollowSymbol node);
 
     public abstract T visitNotFollowSymbol(NotFollowSymbol node);
@@ -76,6 +78,10 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
     public abstract T visitExcludeSymbol(ExcludeSymbol node);
 
     public abstract T visitExceptSymbol(ExceptSymbol node);
+
+    public abstract T visitEndOfLineSymbol(EndOfLineSymbol node);
+
+    public abstract T visitEndOfFileSymbol(EndOfFileSymbol node);
 
     public abstract T visitIfThenElseSymbol(IfThenElseSymbol node);
 

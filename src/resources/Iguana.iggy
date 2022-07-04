@@ -51,10 +51,13 @@ Symbol
   | sym:Symbol cond:Condition                                    %PostCondition
   > reg:Regex "<<" sym:Symbol                                    %Precede
   | reg:Regex "!<<" sym:Symbol                                   %NotPrecede
+  | "^" sym:Symbol                                               %StartOfLine
   > sym:Symbol ">>" reg:Regex                                    %Follow
   | sym:Symbol "!>>" reg:Regex                                   %NotFollow
   | sym:Symbol "\\" reg:Regex                                    %Exclude
   | sym:Symbol "!" id:Identifier                                 %Except
+  | sym:Symbol "$"                                               %EndOfLine
+  | sym:Symbol "$$"                                              %EndOfFile
   | "if" exp:Expression thenPart:Symbol "else" elsePart:Symbol   %IfThenElse
   | id:Identifier                                                %Identifier
   | string:String                                                %String

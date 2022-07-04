@@ -1432,6 +1432,31 @@
                 }
               ],
               "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "^",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 94
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol",
+                      "label" : "sym"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "StartOfLine"
+                }
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -1575,6 +1600,65 @@
                   ],
                   "associativity" : "UNDEFINED",
                   "label" : "Except"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol",
+                      "label" : "sym"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "$",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 36
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "EndOfLine"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol",
+                      "label" : "sym"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "$$",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 36
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 36
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "EndOfFile"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -5112,6 +5196,10 @@
         }
       ]
     },
+    "^" : {
+      "kind" : "Char",
+      "val" : 94
+    },
     ">>" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -5149,6 +5237,23 @@
     "!" : {
       "kind" : "Char",
       "val" : 33
+    },
+    "$" : {
+      "kind" : "Char",
+      "val" : 36
+    },
+    "$$" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 36
+        },
+        {
+          "kind" : "Char",
+          "val" : 36
+        }
+      ]
     },
     "if" : {
       "kind" : "regex.Seq",

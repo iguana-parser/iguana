@@ -96,6 +96,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new PrecedeSymbol(rule, children, leftExtent, rightExtent);
                     case "NotPrecede":
                         return new NotPrecedeSymbol(rule, children, leftExtent, rightExtent);
+                    case "StartOfLine":
+                        return new StartOfLineSymbol(rule, children, leftExtent, rightExtent);
                     case "Follow":
                         return new FollowSymbol(rule, children, leftExtent, rightExtent);
                     case "NotFollow":
@@ -104,6 +106,10 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new ExcludeSymbol(rule, children, leftExtent, rightExtent);
                     case "Except":
                         return new ExceptSymbol(rule, children, leftExtent, rightExtent);
+                    case "EndOfLine":
+                        return new EndOfLineSymbol(rule, children, leftExtent, rightExtent);
+                    case "EndOfFile":
+                        return new EndOfFileSymbol(rule, children, leftExtent, rightExtent);
                     case "IfThenElse":
                         return new IfThenElseSymbol(rule, children, leftExtent, rightExtent);
                     case "Identifier":

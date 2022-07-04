@@ -641,6 +641,25 @@ public class IggyParseTree {
         }
     }
 
+    // Symbol = '^' sym:Symbol
+    public static class StartOfLineSymbol extends Symbol {
+        public StartOfLineSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol sym() {
+           return (Symbol) childAt(1);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStartOfLineSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
     // Symbol = sym:Symbol '>>' reg:Regex
     public static class FollowSymbol extends Symbol {
         public FollowSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
@@ -728,6 +747,44 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitExceptSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Symbol = sym:Symbol '$'
+    public static class EndOfLineSymbol extends Symbol {
+        public EndOfLineSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol sym() {
+           return (Symbol) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEndOfLineSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Symbol = sym:Symbol '$$'
+    public static class EndOfFileSymbol extends Symbol {
+        public EndOfFileSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol sym() {
+           return (Symbol) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEndOfFileSymbol(this);
             }
             return visitor.visitNonterminalNode(this);
         }

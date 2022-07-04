@@ -2,7 +2,7 @@ var x = 0
 var y = 0
 
 start S
-  = A assert(x == 666) A assert(y == 999) [x == 666 && y == 999]
+  = A assert(x == 666) A assert(y == 999) {x == 666 && y == 999}?
 
 A = B C
 
