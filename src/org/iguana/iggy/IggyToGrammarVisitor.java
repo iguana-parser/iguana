@@ -374,6 +374,14 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
+    public Object visitCharClassSymbol(IggyParseTree.CharClassSymbol node) {
+        RegularExpression regex = (RegularExpression) node.charClass().accept(this);
+        return new Terminal.Builder(regex)
+            .setNodeType(TerminalNodeType.Regex)
+            .build();
+    }
+
+    @Override
     public Star visitStarSepSymbol(IggyParseTree.StarSepSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         List<Symbol> seps = (List<Symbol>) node.sep().accept(this);
@@ -721,14 +729,30 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
         while (i < s.length()) {
             if (s.charAt(i) == '\\') {
                 switch (s.charAt(i + 1)) {
-                    case  'n': chars[j++] = '\n'; break;
-                    case  'r': chars[j++] = '\r'; break;
-                    case  't': chars[j++] = '\t'; break;
-                    case  'f': chars[j++] = '\f'; break;
-                    case  ' ': chars[j++] = ' ';  break;
-                    case '\\': chars[j++] = '\\'; break;
-                    case '\'': chars[j++] = '\''; break;
-                    case  '"': chars[j++] = '"';  break;
+                    case 'n':
+                        chars[j++] = '\n';
+                        break;
+                    case 'r':
+                        chars[j++] = '\r';
+                        break;
+                    case 't':
+                        chars[j++] = '\t';
+                        break;
+                    case 'f':
+                        chars[j++] = '\f';
+                        break;
+                    case ' ':
+                        chars[j++] = ' ';
+                        break;
+                    case '\\':
+                        chars[j++] = '\\';
+                        break;
+                    case '\'':
+                        chars[j++] = '\'';
+                        break;
+                    case '"':
+                        chars[j++] = '"';
+                        break;
                 }
                 i += 2;
             } else {

@@ -83,6 +83,8 @@ public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
 
     public abstract T visitStringSymbol(StringSymbol node);
 
+    public abstract T visitCharClassSymbol(CharClassSymbol node);
+
     public abstract T visitStarSepSymbol(StarSepSymbol node);
 
     public abstract T visitPlusSepSymbol(PlusSepSymbol node);

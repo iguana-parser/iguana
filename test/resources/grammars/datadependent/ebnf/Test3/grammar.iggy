@@ -1,7 +1,7 @@
 start S
   = X
 
-X = a:A b:(B [a.r == b.l])*
+X = a:A b:(B {a.r == b.l}?)*
 
 A = 'a'
 

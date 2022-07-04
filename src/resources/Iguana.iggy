@@ -58,6 +58,7 @@ Symbol
   | "if" exp:Expression thenPart:Symbol "else" elsePart:Symbol   %IfThenElse
   | id:Identifier                                                %Identifier
   | string:String                                                %String
+  | charClass:CharClass                                          %CharClass
   | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
   | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
 

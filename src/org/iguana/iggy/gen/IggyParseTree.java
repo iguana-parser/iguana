@@ -798,6 +798,25 @@ public class IggyParseTree {
         }
     }
 
+    // Symbol = charClass:CharClass
+    public static class CharClassSymbol extends Symbol {
+        public CharClassSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public CharClass charClass() {
+           return (CharClass) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCharClassSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
     // Symbol = '{' sym:Symbol sep:Symbol+ '}' '*'
     public static class StarSepSymbol extends Symbol {
         public StarSepSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {

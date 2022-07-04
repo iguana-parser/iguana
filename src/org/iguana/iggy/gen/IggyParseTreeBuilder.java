@@ -110,6 +110,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new IdentifierSymbol(rule, children, leftExtent, rightExtent);
                     case "String":
                         return new StringSymbol(rule, children, leftExtent, rightExtent);
+                    case "CharClass":
+                        return new CharClassSymbol(rule, children, leftExtent, rightExtent);
                     case "StarSep":
                         return new StarSepSymbol(rule, children, leftExtent, rightExtent);
                     case "PlusSep":

@@ -1684,6 +1684,21 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Identifier",
+                      "name" : "CharClass",
+                      "label" : "charClass"
+                    }
+                  ],
+                  "label" : "CharClass"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
                       "kind" : "Terminal",
                       "name" : "{",
                       "nodeType" : "Literal",
