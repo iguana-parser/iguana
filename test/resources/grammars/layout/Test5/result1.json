@@ -25,15 +25,6 @@
         {
           "kind" : "Nonterminal",
           "name" : "B"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "L",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "C"
         }
       ],
       "layout" : {
@@ -127,42 +118,14 @@
             "kind" : "Nonterminal",
             "name" : "B"
           },
-          "recursion" : "NON_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : -1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : -1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 1,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
-        },
-        "start" : 2,
-        "end" : 2
-      },
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
-            "kind" : "Nonterminal",
-            "name" : "C"
-          },
           "body" : [
             {
               "kind" : "Terminal",
-              "name" : "c",
+              "name" : "b",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
-                "val" : 99
+                "val" : 98
               }
             }
           ],
@@ -194,11 +157,11 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "c",
+              "name" : "b",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
-                "val" : 99
+                "val" : 98
               }
             },
             "start" : 2,

@@ -7,6 +7,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.iggy.gen.IggyParseTree;
@@ -89,7 +90,20 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
             }
         }
 
-        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList())).build();
+        NonterminalNodeType nonterminalNodeType;
+        if (layout == null) {
+            nonterminalNodeType = NonterminalNodeType.Basic;
+        } else {
+            if (layout.getName().equals(nonterminalName.getName())) {
+                nonterminalNodeType = NonterminalNodeType.Layout;
+            } else {
+                nonterminalNodeType = NonterminalNodeType.Basic;
+            }
+        }
+        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName())
+            .addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList()))
+            .setNodeType(nonterminalNodeType)
+            .build();
         return new Rule.Builder(nonterminal)
             .addPriorityLevels(priorityLevels)
             .setLayoutStrategy(layoutStrategy)

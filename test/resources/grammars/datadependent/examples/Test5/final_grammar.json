@@ -343,8 +343,7 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
-      },
-      "label" : "Program"
+      }
     },
     {
       "head" : {
@@ -3184,7 +3183,8 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Layout"
+        "name" : "Layout",
+        "nodeType" : "Layout"
       },
       "body" : [
         {

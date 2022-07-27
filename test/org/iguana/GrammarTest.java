@@ -55,8 +55,8 @@ public class GrammarTest {
 
         List<DynamicTest> grammarTests = new ArrayList<>();
 
-        for (Path test : testPaths) {
-            test(grammarTests, test);
+        for (Path testPath : testPaths) {
+            test(grammarTests, testPath);
         }
 
         return grammarTests;
@@ -153,17 +153,19 @@ public class GrammarTest {
             try {
                 actualParseTree = parser.getParseTree();
                 // No parse error
-                if (actualParseTree != null && REGENERATE_FILES) {
+                String pdfPath = testPath + "/tree" + j + ".pdf";
+                if (actualParseTree != null && !Files.exists(Paths.get(pdfPath))) {
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
-                    dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                    dotGraph.generate(pdfPath);
                 }
             } catch (AmbiguityException e) {
                 try {
                     if (parser.getStatistics().getAmbiguousNodesCount() < 10) {
                         actualParseTree = parser.getParseTree(true, true);
-                        if (REGENERATE_FILES) {
+                        String pdfPath = testPath + "/tree" + j + ".pdf";
+                        if (!Files.exists(Paths.get(pdfPath))) {
                             DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
-                            dotGraph.generate(testPath + "/tree" + j + ".pdf");
+                            dotGraph.generate(pdfPath);
                         }
                     }
                 } catch (CyclicGrammarException ee) {

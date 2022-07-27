@@ -90,8 +90,7 @@
                       }
                     }
                   ],
-                  "associativity" : "UNDEFINED",
-                  "label" : "Program"
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -1172,7 +1171,8 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Layout"
+        "name" : "Layout",
+        "nodeType" : "Layout"
       },
       "priorityLevels" : [
         {

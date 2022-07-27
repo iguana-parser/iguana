@@ -1,0 +1,394 @@
+{
+  "kind" : "StartNode",
+  "symbol" : {
+    "kind" : "Start",
+    "name" : "Start(Program)",
+    "startSymbol" : "Program"
+  },
+  "child" : {
+    "kind" : "NonterminalNode",
+    "rule" : {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Program"
+      },
+      "body" : [
+        {
+          "kind" : "Terminal",
+          "name" : "begin",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 98
+              },
+              {
+                "kind" : "Char",
+                "val" : 101
+              },
+              {
+                "kind" : "Char",
+                "val" : 103
+              },
+              {
+                "kind" : "Char",
+                "val" : 105
+              },
+              {
+                "kind" : "Char",
+                "val" : 110
+              }
+            ]
+          }
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Declarations",
+          "label" : "decls"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "{Statement, ;, null}*",
+          "label" : "body",
+          "nodeType" : "Star"
+        },
+        {
+          "kind" : "Nonterminal",
+          "name" : "Layout",
+          "nodeType" : "Layout"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "end",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 101
+              },
+              {
+                "kind" : "Char",
+                "val" : 110
+              },
+              {
+                "kind" : "Char",
+                "val" : 100
+              }
+            ]
+          }
+        }
+      ],
+      "layout" : {
+        "kind" : "Nonterminal",
+        "name" : "Layout",
+        "nodeType" : "Layout"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    "children" : [
+      {
+        "kind" : "KeywordTerminalNode",
+        "terminal" : {
+          "kind" : "Terminal",
+          "name" : "begin",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 98
+              },
+              {
+                "kind" : "Char",
+                "val" : 101
+              },
+              {
+                "kind" : "Char",
+                "val" : 103
+              },
+              {
+                "kind" : "Char",
+                "val" : 105
+              },
+              {
+                "kind" : "Char",
+                "val" : 110
+              }
+            ]
+          }
+        },
+        "start" : 0,
+        "end" : 5
+      },
+      {
+        "kind" : "NonterminalNode",
+        "rule" : {
+          "head" : {
+            "kind" : "Nonterminal",
+            "name" : "Declarations"
+          },
+          "body" : [
+            {
+              "kind" : "Terminal",
+              "name" : "declare",
+              "nodeType" : "Literal",
+              "regex" : {
+                "kind" : "regex.Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 100
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 101
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 99
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 108
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 97
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 114
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 101
+                  }
+                ]
+              }
+            },
+            {
+              "kind" : "Nonterminal",
+              "name" : "Layout",
+              "nodeType" : "Layout"
+            },
+            {
+              "kind" : "Nonterminal",
+              "name" : "{IdType, ,, null}*",
+              "label" : "decls",
+              "nodeType" : "Star"
+            },
+            {
+              "kind" : "Nonterminal",
+              "name" : "Layout",
+              "nodeType" : "Layout"
+            },
+            {
+              "kind" : "Terminal",
+              "name" : ";",
+              "nodeType" : "Literal",
+              "regex" : {
+                "kind" : "Char",
+                "val" : 59
+              }
+            }
+          ],
+          "layout" : {
+            "kind" : "Nonterminal",
+            "name" : "Layout",
+            "nodeType" : "Layout"
+          },
+          "recursion" : "NON_REC",
+          "irecursion" : "NON_REC",
+          "associativity" : "UNDEFINED",
+          "precedence" : -1,
+          "precedenceLevel" : {
+            "lhs" : 1,
+            "rhs" : 1,
+            "undefined" : -1,
+            "hasPrefixUnary" : false,
+            "hasPostfixUnary" : false,
+            "hasPrefixUnaryBelow" : false,
+            "hasPostfixUnaryBelow" : false,
+            "index" : 1,
+            "containsAssociativityGroup" : false,
+            "assoc_lhs" : -1,
+            "assoc_rhs" : -1
+          }
+        },
+        "children" : [
+          {
+            "kind" : "KeywordTerminalNode",
+            "terminal" : {
+              "kind" : "Terminal",
+              "name" : "declare",
+              "nodeType" : "Literal",
+              "regex" : {
+                "kind" : "regex.Seq",
+                "symbols" : [
+                  {
+                    "kind" : "Char",
+                    "val" : 100
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 101
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 99
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 108
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 97
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 114
+                  },
+                  {
+                    "kind" : "Char",
+                    "val" : 101
+                  }
+                ]
+              }
+            },
+            "start" : 6,
+            "end" : 13
+          },
+          {
+            "kind" : "StarNode",
+            "symbol" : {
+              "kind" : "Star",
+              "name" : "IdType*",
+              "label" : "decls",
+              "s" : {
+                "kind" : "Nonterminal",
+                "name" : "IdType"
+              },
+              "separators" : [
+                {
+                  "kind" : "Terminal",
+                  "name" : ",",
+                  "nodeType" : "Literal",
+                  "regex" : {
+                    "kind" : "Char",
+                    "val" : 44
+                  }
+                }
+              ]
+            },
+            "start" : 13,
+            "end" : 13
+          },
+          {
+            "kind" : "KeywordTerminalNode",
+            "terminal" : {
+              "kind" : "Terminal",
+              "name" : ";",
+              "nodeType" : "Literal",
+              "regex" : {
+                "kind" : "Char",
+                "val" : 59
+              }
+            },
+            "start" : 13,
+            "end" : 14
+          }
+        ],
+        "start" : 6,
+        "end" : 14
+      },
+      {
+        "kind" : "StarNode",
+        "symbol" : {
+          "kind" : "Star",
+          "name" : "Statement*",
+          "label" : "body",
+          "s" : {
+            "kind" : "Nonterminal",
+            "name" : "Statement"
+          },
+          "separators" : [
+            {
+              "kind" : "Terminal",
+              "name" : ";",
+              "nodeType" : "Literal",
+              "regex" : {
+                "kind" : "Char",
+                "val" : 59
+              }
+            }
+          ]
+        },
+        "start" : 15,
+        "end" : 15
+      },
+      {
+        "kind" : "KeywordTerminalNode",
+        "terminal" : {
+          "kind" : "Terminal",
+          "name" : "end",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "regex.Seq",
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "val" : 101
+              },
+              {
+                "kind" : "Char",
+                "val" : 110
+              },
+              {
+                "kind" : "Char",
+                "val" : 100
+              }
+            ]
+          }
+        },
+        "start" : 15,
+        "end" : 18
+      }
+    ],
+    "start" : 0,
+    "end" : 18
+  },
+  "start" : 0,
+  "end" : 18
+}

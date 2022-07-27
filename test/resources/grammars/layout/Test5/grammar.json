@@ -19,10 +19,6 @@
                     {
                       "kind" : "Identifier",
                       "name" : "B"
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "C"
                     }
                   ],
                   "associativity" : "UNDEFINED"
@@ -75,32 +71,16 @@
         {
           "alternatives" : [
             {
-              "associativity" : "UNDEFINED"
-            }
-          ]
-        }
-      ],
-      "layoutStrategy" : "INHERITED"
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "C"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
               "seqs" : [
                 {
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "c",
+                      "name" : "b",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 99
+                        "val" : 98
                       }
                     }
                   ]
@@ -127,18 +107,8 @@
                 {
                   "symbols" : [
                     {
-                      "kind" : "Star",
-                      "name" : "\\u0020*",
-                      "postConditions" : [
-                        {
-                          "kind" : "RegularExpressionCondition",
-                          "type" : "NOT_FOLLOW",
-                          "regularExpression" : {
-                            "kind" : "Char",
-                            "val" : 32
-                          }
-                        }
-                      ],
+                      "kind" : "Opt",
+                      "name" : "\\u0020?",
                       "s" : {
                         "kind" : "Terminal",
                         "name" : "\\u0020",
@@ -165,9 +135,9 @@
       "kind" : "Char",
       "val" : 97
     },
-    "c" : {
+    "b" : {
       "kind" : "Char",
-      "val" : 99
+      "val" : 98
     },
     " " : {
       "kind" : "Char",
