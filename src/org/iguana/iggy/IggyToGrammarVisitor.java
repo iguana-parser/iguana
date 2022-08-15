@@ -87,6 +87,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
                 layoutStrategy = LayoutStrategy.NO_LAYOUT;
             } else { // "layout"
                 layout = nonterminalName;
+                layoutStrategy = LayoutStrategy.NO_LAYOUT;
             }
         }
 

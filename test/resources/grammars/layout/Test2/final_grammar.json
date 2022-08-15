@@ -171,11 +171,6 @@
           "nodeType" : "Plus"
         },
         {
-          "kind" : "Nonterminal",
-          "name" : "L",
-          "nodeType" : "Layout"
-        },
-        {
           "kind" : "Terminal",
           "name" : "\\u0020",
           "nodeType" : "Literal",
@@ -185,11 +180,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "L",
-        "nodeType" : "Layout"
-      },
       "recursion" : "LEFT_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -287,11 +277,6 @@
           "nodeType" : "Plus"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "L",
-        "nodeType" : "Layout"
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -403,11 +388,6 @@
           "nodeType" : "Star"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "L",
-        "nodeType" : "Layout"
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",

@@ -157,7 +157,7 @@
           ]
         }
       ],
-      "layoutStrategy" : "INHERITED"
+      "layoutStrategy" : "NO_LAYOUT"
     }
   ],
   "literals" : {

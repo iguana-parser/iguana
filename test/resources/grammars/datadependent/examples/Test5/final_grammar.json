@@ -2960,19 +2960,9 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Layout",
-          "nodeType" : "Layout"
-        },
-        {
-          "kind" : "Nonterminal",
           "name" : "WhitespaceAndComment"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "recursion" : "LEFT_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -3055,11 +3045,6 @@
           "nodeType" : "Plus"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -3224,11 +3209,6 @@
           "nodeType" : "Star"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "Layout",
-        "nodeType" : "Layout"
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",

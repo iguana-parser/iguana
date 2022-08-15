@@ -110,15 +110,6 @@ public interface Input {
 
 	int charAt(int index);
 
-	default int charAtIgnoreLayout(int index) {
-		while (true) {
-			int c = charAt(index++);
-			if (c == EOF) return EOF;
-			if (!isWhitespace(c))
-				return c;
-		}
-	}
-
 	default int[] calculateLineLengths(int lineCount) {
 		int[] lineStarts = new int[lineCount];
 		lineStarts[0] = 0;

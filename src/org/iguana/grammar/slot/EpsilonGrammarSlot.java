@@ -54,8 +54,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
-		// TODO: this is tricky for grammars that are layout sensitive.
-		int nextChar = input.charAtIgnoreLayout(i);
+		int nextChar = input.charAt(i);
 		FollowTest followTest = nonterminal.getFollowTest();
 		if (followTest.test(nextChar)) {
 			u.pop(input, this, epsilonSlot.getResult(input, i, this, u, runtime), value, runtime);
