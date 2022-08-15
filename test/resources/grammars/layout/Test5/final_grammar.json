@@ -143,11 +143,6 @@
           }
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "L",
-        "nodeType" : "Layout"
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -229,11 +224,6 @@
           "nodeType" : "Opt"
         }
       ],
-      "layout" : {
-        "kind" : "Nonterminal",
-        "name" : "L",
-        "nodeType" : "Layout"
-      },
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
