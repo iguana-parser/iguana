@@ -2,8 +2,8 @@ start S
   = E(2)
 
 E(v)
-  = [v > 1] 'a' 'b' 'c'
-  | [v == 0] A B C
+  = {v > 1}? 'a' 'b' 'c'
+  | {v == 0}? A B C
 
 A = 'a'
 

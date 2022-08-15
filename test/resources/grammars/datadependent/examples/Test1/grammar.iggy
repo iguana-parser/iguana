@@ -10,7 +10,7 @@ Content
   = CharData (Element CharData)*
 
 ETag(s)
-  = '</' n:Name [ n.yield == s ] '>'
+  = '</' n:Name {n.yield == s}? '>'
 
 layout regex L
   = [\t\n\r\ ]*

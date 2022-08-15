@@ -161,7 +161,61 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "L"
+        "name" : "\\u0020+",
+        "nodeType" : "Plus"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "\\u0020+",
+          "nodeType" : "Plus"
+        },
+        {
+          "kind" : "Terminal",
+          "name" : "\\u0020",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 32
+          }
+        }
+      ],
+      "recursion" : "LEFT_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : 1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "\\u0020+",
+        "s" : {
+          "kind" : "Terminal",
+          "name" : "\\u0020",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 32
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "\\u0020+",
+        "nodeType" : "Plus"
       },
       "body" : [
         {
@@ -195,13 +249,145 @@
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
         "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Plus",
+        "name" : "\\u0020+",
+        "s" : {
+          "kind" : "Terminal",
+          "name" : "\\u0020",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 32
+          }
+        }
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "L"
+        "name" : "\\u0020*",
+        "nodeType" : "Star"
       },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "\\u0020+",
+          "nodeType" : "Plus"
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "\\u0020*",
+        "postConditions" : [
+          {
+            "kind" : "RegularExpressionCondition",
+            "type" : "NOT_FOLLOW",
+            "regularExpression" : {
+              "kind" : "Char",
+              "val" : 32
+            }
+          }
+        ],
+        "s" : {
+          "kind" : "Terminal",
+          "name" : "\\u0020",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 32
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "\\u0020*",
+        "nodeType" : "Star"
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "hasPostfixUnaryBelow" : false,
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      },
+      "definition" : {
+        "kind" : "Star",
+        "name" : "\\u0020*",
+        "postConditions" : [
+          {
+            "kind" : "RegularExpressionCondition",
+            "type" : "NOT_FOLLOW",
+            "regularExpression" : {
+              "kind" : "Char",
+              "val" : 32
+            }
+          }
+        ],
+        "s" : {
+          "kind" : "Terminal",
+          "name" : "\\u0020",
+          "nodeType" : "Literal",
+          "regex" : {
+            "kind" : "Char",
+            "val" : 32
+          }
+        }
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "L",
+        "nodeType" : "Layout"
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "\\u0020*",
+          "postConditions" : [
+            {
+              "kind" : "RegularExpressionCondition",
+              "type" : "NOT_FOLLOW",
+              "regularExpression" : {
+                "kind" : "Char",
+                "val" : 32
+              }
+            }
+          ],
+          "nodeType" : "Star"
+        }
+      ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
       "associativity" : "UNDEFINED",
@@ -266,6 +452,23 @@
       }
     }
   ],
+  "ebnfLefts" : {
+    "$L*" : [
+      "$L+"
+    ],
+    "$L+" : [
+      "$L"
+    ]
+  },
+  "ebnfRights" : {
+    "$L*" : [
+      "$L+",
+      "$L"
+    ],
+    "$L+" : [
+      "$L"
+    ]
+  },
   "startSymbol" : {
     "kind" : "Start",
     "name" : "Start(S)",

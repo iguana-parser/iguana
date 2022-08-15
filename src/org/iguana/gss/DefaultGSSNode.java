@@ -149,7 +149,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
-		if (returnSlot.testFollow(input.charAtIgnoreLayout(poppedElement.getRightExtent()))) {
+		if (returnSlot.testFollow(input.charAt(poppedElement.getRightExtent()))) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
 			if (result != null) {
 				// TODO: verify if this fix is correct with more data-dependent examples.

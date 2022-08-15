@@ -92,7 +92,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     }
   ],
   "literals" : {

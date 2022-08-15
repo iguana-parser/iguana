@@ -28,7 +28,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     }
   ],
   "literals" : {

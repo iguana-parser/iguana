@@ -5,7 +5,9 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
+import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.iggy.gen.IggyParseTree;
@@ -71,22 +73,42 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitContextFreeRule(IggyParseTree.ContextFreeRule node) {
+    public Rule visitContextFreeRule(IggyParseTree.ContextFreeRule node) {
         Identifier nonterminalName = (Identifier) node.name().accept(this);
         Optional<List<Identifier>> parameters = (Optional<List<Identifier>>) node.params().accept(this);
         List<PriorityLevel> priorityLevels = (List<PriorityLevel>) node.body().accept(this);
 
+        LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
         if (node.modifier().hasChildren()) { // start symbol
             String text = node.modifier().getText();
             if (text.equals("start")) {
                 start = nonterminalName.getName();
+            } else if (text.equals("lexical")) {
+                layoutStrategy = LayoutStrategy.NO_LAYOUT;
             } else { // "layout"
                 layout = nonterminalName;
+                layoutStrategy = LayoutStrategy.NO_LAYOUT;
             }
         }
 
-        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName()).addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList())).build();
-        return new Rule.Builder(nonterminal).addPriorityLevels(priorityLevels).build();
+        NonterminalNodeType nonterminalNodeType;
+        if (layout == null) {
+            nonterminalNodeType = NonterminalNodeType.Basic;
+        } else {
+            if (layout.getName().equals(nonterminalName.getName())) {
+                nonterminalNodeType = NonterminalNodeType.Layout;
+            } else {
+                nonterminalNodeType = NonterminalNodeType.Basic;
+            }
+        }
+        Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName())
+            .addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList()))
+            .setNodeType(nonterminalNodeType)
+            .build();
+        return new Rule.Builder(nonterminal)
+            .addPriorityLevels(priorityLevels)
+            .setLayoutStrategy(layoutStrategy)
+            .build();
     }
 
     @Override
@@ -132,14 +154,14 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitAssociativityAlternative(IggyParseTree.AssociativityAlternative node) {
+    public Alternative visitAssociativityAlternative(IggyParseTree.AssociativityAlternative node) {
         Associativity associativity = getAssociativity(node.assoc());
         List<Sequence> seqs = (List<Sequence>) node.seqs().accept(this);
         return new Alternative.Builder(seqs, associativity).build();
     }
 
     @Override
-    public Object visitEmptyAlternative(IggyParseTree.EmptyAlternative node) {
+    public Alternative visitEmptyAlternative(IggyParseTree.EmptyAlternative node) {
         Optional<String> label = (Optional<String>) node.label().accept(this);
         if (label.isPresent()) {
             Sequence sequence = new Sequence.Builder().setLabel(label.get()).build();
@@ -150,7 +172,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node) {
+    public Sequence visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node) {
         Associativity associativity = null;
         if (node.hasChildren()) {
             associativity = getAssociativity(node.assoc());
@@ -181,7 +203,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitSingleElemSequence(IggyParseTree.SingleElemSequence node) {
+    public Sequence visitSingleElemSequence(IggyParseTree.SingleElemSequence node) {
         Sequence.Builder builder = new Sequence.Builder();
         Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
         Symbol symbol = (Symbol) node.sym().accept(this);
@@ -231,18 +253,18 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitOptionSymbol(IggyParseTree.OptionSymbol node) {
+    public Opt visitOptionSymbol(IggyParseTree.OptionSymbol node) {
         return Opt.from((Symbol) node.sym().accept(this));
     }
 
     @Override
-    public Object visitSequenceSymbol(IggyParseTree.SequenceSymbol node) {
+    public Group visitSequenceSymbol(IggyParseTree.SequenceSymbol node) {
         List<Symbol> symbols = (List<Symbol>) node.syms().accept(this);
         return Group.from(symbols);
     }
 
     @Override
-    public Object visitAlternationSymbol(IggyParseTree.AlternationSymbol node) {
+    public Alt visitAlternationSymbol(IggyParseTree.AlternationSymbol node) {
         List<Symbol> symbols = new ArrayList<>();
         List<Symbol> first = (List<Symbol>) node.first().accept(this);
         List<List<Symbol>> second = (List<List<Symbol>>) node.rest().accept(this);
@@ -262,31 +284,31 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitAlignSymbol(IggyParseTree.AlignSymbol node) {
+    public Align visitAlignSymbol(IggyParseTree.AlignSymbol node) {
         return Align.align((Symbol) node.sym().accept(this));
     }
 
     @Override
-    public Object visitIgnoreSymbol(IggyParseTree.IgnoreSymbol node) {
+    public Ignore visitIgnoreSymbol(IggyParseTree.IgnoreSymbol node) {
         return Ignore.ignore((Symbol) node.sym().accept(this));
     }
 
     @Override
-    public Object visitLabeledSymbol(IggyParseTree.LabeledSymbol node) {
+    public Symbol visitLabeledSymbol(IggyParseTree.LabeledSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         Identifier id = (Identifier) node.id().accept(this);
         return symbol.copy().setLabel(id.getName()).build();
     }
 
     @Override
-    public Object visitStatementSymbol(IggyParseTree.StatementSymbol node) {
+    public Symbol visitStatementSymbol(IggyParseTree.StatementSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         List<List<Statement>> statements = (List<List<Statement>>) node.stmts().accept(this);
         return Code.code(symbol, flatten(statements).toArray(new Statement[0]));
     }
 
     @Override
-    public Object visitPostConditionSymbol(IggyParseTree.PostConditionSymbol node) {
+    public Symbol visitPostConditionSymbol(IggyParseTree.PostConditionSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         List<Expression> expressions = (List<Expression>) node.cond().accept(this);
         SymbolBuilder<? extends Symbol> builder = symbol.copy();
@@ -297,42 +319,48 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitPrecedeSymbol(IggyParseTree.PrecedeSymbol node) {
+    public Symbol visitPrecedeSymbol(IggyParseTree.PrecedeSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPreCondition(RegularExpressionCondition.precede(regex)).build();
     }
 
     @Override
-    public Object visitNotPrecedeSymbol(IggyParseTree.NotPrecedeSymbol node) {
+    public Symbol visitNotPrecedeSymbol(IggyParseTree.NotPrecedeSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPreCondition(RegularExpressionCondition.notPrecede(regex)).build();
     }
 
     @Override
-    public Object visitFollowSymbol(IggyParseTree.FollowSymbol node) {
+    public Symbol visitStartOfLineSymbol(IggyParseTree.StartOfLineSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        return symbol.copy().addPreCondition(PositionalCondition.startOfLineCondition()).build();
+    }
+
+    @Override
+    public Symbol visitFollowSymbol(IggyParseTree.FollowSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPostCondition(RegularExpressionCondition.follow(regex)).build();
     }
 
     @Override
-    public Object visitNotFollowSymbol(IggyParseTree.NotFollowSymbol node) {
+    public Symbol visitNotFollowSymbol(IggyParseTree.NotFollowSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPostCondition(RegularExpressionCondition.notFollow(regex)).build();
     }
 
     @Override
-    public Object visitExcludeSymbol(IggyParseTree.ExcludeSymbol node) {
+    public Symbol visitExcludeSymbol(IggyParseTree.ExcludeSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         RegularExpression regex = (RegularExpression) node.reg().accept(this);
         return symbol.copy().addPostCondition(RegularExpressionCondition.notMatch(regex)).build();
     }
 
     @Override
-    public Object visitExceptSymbol(IggyParseTree.ExceptSymbol node) {
+    public Symbol visitExceptSymbol(IggyParseTree.ExceptSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
         Identifier id = (Identifier) node.id().accept(this);
         if (symbol instanceof Identifier) {
@@ -344,7 +372,19 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitIfThenElseSymbol(IggyParseTree.IfThenElseSymbol node) {
+    public Symbol visitEndOfLineSymbol(IggyParseTree.EndOfLineSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        return symbol.copy().addPreCondition(PositionalCondition.endOfLineCondition()).build();
+    }
+
+    @Override
+    public Symbol visitEndOfFileSymbol(IggyParseTree.EndOfFileSymbol node) {
+        Symbol symbol = (Symbol) node.sym().accept(this);
+        return symbol.copy().addPreCondition(PositionalCondition.endOfFileCondition()).build();
+    }
+
+    @Override
+    public Symbol visitIfThenElseSymbol(IggyParseTree.IfThenElseSymbol node) {
         return IfThenElse.ifThenElse(
             (Expression) node.exp().accept(this),
             (Symbol) node.thenPart().accept(this),
@@ -358,12 +398,20 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitStringSymbol(IggyParseTree.StringSymbol node) {
+    public Terminal visitStringSymbol(IggyParseTree.StringSymbol node) {
         String text = stripQuotes(node);
         RegularExpression regex = getCharsRegex(text);
         literals.put(text, regex);
         return new Terminal.Builder(regex)
             .setNodeType(TerminalNodeType.Literal)
+            .build();
+    }
+
+    @Override
+    public Terminal visitCharClassSymbol(IggyParseTree.CharClassSymbol node) {
+        RegularExpression regex = (RegularExpression) node.charClass().accept(this);
+        return new Terminal.Builder(regex)
+            .setNodeType(TerminalNodeType.Regex)
             .build();
     }
 
@@ -466,7 +514,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitStringRegex(IggyParseTree.StringRegex node) {
+    public RegularExpression visitStringRegex(IggyParseTree.StringRegex node) {
         return getCharsRegex(stripQuotes(node));
     }
 
@@ -533,7 +581,7 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Object visitGreaterEqExpression(IggyParseTree.GreaterEqExpression node) {
+    public Expression.GreaterThanEqual visitGreaterEqExpression(IggyParseTree.GreaterEqExpression node) {
         Expression lhs = (Expression) node.lhs().accept(this);
         Expression rhs = (Expression) node.rhs().accept(this);
         return AST.greaterEq(lhs, rhs);
@@ -715,14 +763,30 @@ public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
         while (i < s.length()) {
             if (s.charAt(i) == '\\') {
                 switch (s.charAt(i + 1)) {
-                    case  'n': chars[j++] = '\n'; break;
-                    case  'r': chars[j++] = '\r'; break;
-                    case  't': chars[j++] = '\t'; break;
-                    case  'f': chars[j++] = '\f'; break;
-                    case  ' ': chars[j++] = ' ';  break;
-                    case '\\': chars[j++] = '\\'; break;
-                    case '\'': chars[j++] = '\''; break;
-                    case  '"': chars[j++] = '"';  break;
+                    case 'n':
+                        chars[j++] = '\n';
+                        break;
+                    case 'r':
+                        chars[j++] = '\r';
+                        break;
+                    case 't':
+                        chars[j++] = '\t';
+                        break;
+                    case 'f':
+                        chars[j++] = '\f';
+                        break;
+                    case ' ':
+                        chars[j++] = ' ';
+                        break;
+                    case '\\':
+                        chars[j++] = '\\';
+                        break;
+                    case '\'':
+                        chars[j++] = '\'';
+                        break;
+                    case '"':
+                        chars[j++] = '"';
+                        break;
                 }
                 i += 2;
             } else {

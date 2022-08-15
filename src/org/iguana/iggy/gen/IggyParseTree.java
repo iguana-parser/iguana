@@ -62,7 +62,7 @@ public class IggyParseTree {
 
     }
 
-    // Rule = modifier:(start | layout)? name:Name params:Parameters? '=' body:Body
+    // Rule = modifier:RuleModifier? name:Name params:Parameters? '=' body:Body
     public static class ContextFreeRule extends Rule {
         public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -325,7 +325,7 @@ public class IggyParseTree {
         }
     }
 
-    // Condition = '[' Expression* ']'
+    // Condition = '{' Expression* '}' '?'
     public static class Condition extends NonterminalNode {
         public Condition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -641,6 +641,25 @@ public class IggyParseTree {
         }
     }
 
+    // Symbol = '^' sym:Symbol
+    public static class StartOfLineSymbol extends Symbol {
+        public StartOfLineSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol sym() {
+           return (Symbol) childAt(1);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitStartOfLineSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
     // Symbol = sym:Symbol '>>' reg:Regex
     public static class FollowSymbol extends Symbol {
         public FollowSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
@@ -733,6 +752,44 @@ public class IggyParseTree {
         }
     }
 
+    // Symbol = sym:Symbol '$'
+    public static class EndOfLineSymbol extends Symbol {
+        public EndOfLineSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol sym() {
+           return (Symbol) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEndOfLineSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Symbol = sym:Symbol '$$'
+    public static class EndOfFileSymbol extends Symbol {
+        public EndOfFileSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol sym() {
+           return (Symbol) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEndOfFileSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
     // Symbol = 'if' exp:Expression thenPart:Symbol 'else' elsePart:Symbol
     public static class IfThenElseSymbol extends Symbol {
         public IfThenElseSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
@@ -793,6 +850,25 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitStringSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Symbol = charClass:CharClass
+    public static class CharClassSymbol extends Symbol {
+        public CharClassSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public CharClass charClass() {
+           return (CharClass) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitCharClassSymbol(this);
             }
             return visitor.visitNonterminalNode(this);
         }
@@ -1729,25 +1805,6 @@ public class IggyParseTree {
         }
     }
 
-    // Label = '%' id:Identifier
-    public static class Label extends NonterminalNode {
-        public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public Identifier id() {
-           return (Identifier) childAt(1);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
     // Name = id:Identifier
     public static class Name extends NonterminalNode {
         public Name(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
@@ -1777,6 +1834,25 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitIdentifier(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Label = '%' id:Identifier
+    public static class Label extends NonterminalNode {
+        public Label(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Identifier id() {
+           return (Identifier) childAt(1);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
             }
             return visitor.visitNonterminalNode(this);
         }

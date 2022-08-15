@@ -96,6 +96,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new PrecedeSymbol(rule, children, leftExtent, rightExtent);
                     case "NotPrecede":
                         return new NotPrecedeSymbol(rule, children, leftExtent, rightExtent);
+                    case "StartOfLine":
+                        return new StartOfLineSymbol(rule, children, leftExtent, rightExtent);
                     case "Follow":
                         return new FollowSymbol(rule, children, leftExtent, rightExtent);
                     case "NotFollow":
@@ -104,12 +106,18 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new ExcludeSymbol(rule, children, leftExtent, rightExtent);
                     case "Except":
                         return new ExceptSymbol(rule, children, leftExtent, rightExtent);
+                    case "EndOfLine":
+                        return new EndOfLineSymbol(rule, children, leftExtent, rightExtent);
+                    case "EndOfFile":
+                        return new EndOfFileSymbol(rule, children, leftExtent, rightExtent);
                     case "IfThenElse":
                         return new IfThenElseSymbol(rule, children, leftExtent, rightExtent);
                     case "Identifier":
                         return new IdentifierSymbol(rule, children, leftExtent, rightExtent);
                     case "String":
                         return new StringSymbol(rule, children, leftExtent, rightExtent);
+                    case "CharClass":
+                        return new CharClassSymbol(rule, children, leftExtent, rightExtent);
                     case "StarSep":
                         return new StarSepSymbol(rule, children, leftExtent, rightExtent);
                     case "PlusSep":
@@ -229,12 +237,12 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                 return new ReturnExpression(rule, children, leftExtent, rightExtent);
             case "VarName":
                 return new VarName(rule, children, leftExtent, rightExtent);
-            case "Label":
-                return new Label(rule, children, leftExtent, rightExtent);
             case "Name":
                 return new Name(rule, children, leftExtent, rightExtent);
             case "Identifier":
                 return new Identifier(rule, children, leftExtent, rightExtent);
+            case "Label":
+                return new Label(rule, children, leftExtent, rightExtent);
             default:
                 throw new RuntimeException("Unexpected nonterminal:" + name);
         }

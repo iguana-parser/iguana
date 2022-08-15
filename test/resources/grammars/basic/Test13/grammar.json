@@ -41,7 +41,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     }
   ],
   "literals" : {

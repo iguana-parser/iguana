@@ -9,7 +9,7 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier: ("start" | "layout")? name:Name params:Parameters? "=" body:Body      %ContextFree
+  = modifier: RuleModifier? name:Name params:Parameters? "=" body:Body      %ContextFree
   | modifier: "layout"? "regex" name:Name "=" body:RegexBody                        %Regex
 
 Parameters
@@ -34,7 +34,7 @@ Sequence
   | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
 
 Condition
-  = "[" {Expression ","}* "]"
+  = "{" {Expression ","}* "}" "?"
 
 Symbol
   = id:Identifier args:Arguments                                 %Call
@@ -51,13 +51,17 @@ Symbol
   | sym:Symbol cond:Condition                                    %PostCondition
   > reg:Regex "<<" sym:Symbol                                    %Precede
   | reg:Regex "!<<" sym:Symbol                                   %NotPrecede
+  | "^" sym:Symbol                                               %StartOfLine
   > sym:Symbol ">>" reg:Regex                                    %Follow
   | sym:Symbol "!>>" reg:Regex                                   %NotFollow
   | sym:Symbol "\\" reg:Regex                                    %Exclude
   | sym:Symbol "!" id:Identifier                                 %Except
+  | sym:Symbol "$"                                               %EndOfLine
+  | sym:Symbol "$$"                                              %EndOfFile
   | "if" exp:Expression thenPart:Symbol "else" elsePart:Symbol   %IfThenElse
   | id:Identifier                                                %Identifier
   | string:String                                                %String
+  | charClass:CharClass                                          %CharClass
   | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
   | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
 
@@ -118,16 +122,16 @@ ReturnExpression
   = "{" exp:Expression "}"
 
 VarName
-  = id:Identifier   [contains(env,id.yield)]
-
-Label
-  = '%' id:Identifier
+  = id:Identifier {contains(env,id.yield)}?
 
 Name
-  = id:Identifier   [!contains(env,id.yield)]
+  = id:Identifier {!contains(env,id.yield)}?
 
 Identifier
   = [A-Z_a-z] !<< LetterOrDigits \ Keywords
+
+lexical Label
+  = '%' id:Identifier
 
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
@@ -202,6 +206,7 @@ regex Keywords
   | "set"
   | "contains"
   | "put"
+  | "lexical"
 
 regex FunName
   = "println"
@@ -210,3 +215,8 @@ regex FunName
   | "set"
   | "contains"
   | "put"
+
+regex RuleModifier
+  = "start"
+  | "layout"
+  | "lexical"

@@ -90,7 +90,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -221,7 +222,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -237,77 +239,11 @@
                   "symbols" : [
                     {
                       "kind" : "Opt",
-                      "name" : "(start | layout)?",
+                      "name" : "RuleModifier?",
                       "label" : "modifier",
                       "s" : {
-                        "kind" : "Alt",
-                        "name" : "(start | layout)",
-                        "symbols" : [
-                          {
-                            "kind" : "Terminal",
-                            "name" : "start",
-                            "nodeType" : "Literal",
-                            "regex" : {
-                              "kind" : "regex.Seq",
-                              "symbols" : [
-                                {
-                                  "kind" : "Char",
-                                  "val" : 115
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 116
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 97
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 114
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 116
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "kind" : "Terminal",
-                            "name" : "layout",
-                            "nodeType" : "Literal",
-                            "regex" : {
-                              "kind" : "regex.Seq",
-                              "symbols" : [
-                                {
-                                  "kind" : "Char",
-                                  "val" : 108
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 97
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 121
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 111
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 117
-                                },
-                                {
-                                  "kind" : "Char",
-                                  "val" : 116
-                                }
-                              ]
-                            }
-                          }
-                        ]
+                        "kind" : "Identifier",
+                        "name" : "RuleModifier"
                       }
                     },
                     {
@@ -446,7 +382,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -536,7 +473,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -580,7 +518,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -620,7 +559,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -660,7 +600,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -760,7 +701,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -876,7 +818,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -892,11 +835,11 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "[",
+                      "name" : "{",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 91
+                        "val" : 123
                       }
                     },
                     {
@@ -920,11 +863,20 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "]",
+                      "name" : "}",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
-                        "val" : 93
+                        "val" : 125
+                      }
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "?",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 63
                       }
                     }
                   ],
@@ -935,7 +887,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -1479,6 +1432,31 @@
                 }
               ],
               "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "^",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 94
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol",
+                      "label" : "sym"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "StartOfLine"
+                }
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         },
@@ -1631,6 +1609,65 @@
                 {
                   "symbols" : [
                     {
+                      "kind" : "Identifier",
+                      "name" : "Symbol",
+                      "label" : "sym"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "$",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 36
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "EndOfLine"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Symbol",
+                      "label" : "sym"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "$$",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "val" : 36
+                          },
+                          {
+                            "kind" : "Char",
+                            "val" : 36
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "EndOfFile"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
                       "kind" : "Terminal",
                       "name" : "if",
                       "nodeType" : "Literal",
@@ -1722,6 +1759,21 @@
                     }
                   ],
                   "label" : "String"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "CharClass",
+                      "label" : "charClass"
+                    }
+                  ],
+                  "label" : "CharClass"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -1832,7 +1884,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -1891,7 +1944,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -1966,7 +2020,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2111,7 +2166,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2373,7 +2429,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2470,7 +2527,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -2527,7 +2585,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3208,7 +3267,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3253,7 +3313,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3301,43 +3362,8 @@
             }
           ]
         }
-      ]
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Label"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "%",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 37
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Identifier",
-                      "label" : "id"
-                    }
-                  ],
-                  "associativity" : "UNDEFINED"
-                }
-              ],
-              "associativity" : "UNDEFINED"
-            }
-          ]
-        }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3388,7 +3414,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     },
     {
       "head" : {
@@ -3448,7 +3475,45 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Label"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "%",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 37
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier",
+                      "label" : "id"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     }
   ],
   "regularExpressions" : {
@@ -4536,6 +4601,39 @@
               "val" : 116
             }
           ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 120
+            },
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 99
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 108
+            }
+          ]
         }
       ]
     },
@@ -4705,6 +4803,98 @@
           ]
         }
       ]
+    },
+    "RuleModifier" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 115
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 114
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 121
+            },
+            {
+              "kind" : "Char",
+              "val" : 111
+            },
+            {
+              "kind" : "Char",
+              "val" : 117
+            },
+            {
+              "kind" : "Char",
+              "val" : 116
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 101
+            },
+            {
+              "kind" : "Char",
+              "val" : 120
+            },
+            {
+              "kind" : "Char",
+              "val" : 105
+            },
+            {
+              "kind" : "Char",
+              "val" : 99
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 108
+            }
+          ]
+        }
+      ]
     }
   },
   "literals" : {
@@ -4791,31 +4981,6 @@
       "kind" : "Char",
       "val" : 61
     },
-    "start" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 115
-        },
-        {
-          "kind" : "Char",
-          "val" : 116
-        },
-        {
-          "kind" : "Char",
-          "val" : 97
-        },
-        {
-          "kind" : "Char",
-          "val" : 114
-        },
-        {
-          "kind" : "Char",
-          "val" : 116
-        }
-      ]
-    },
     "layout" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -4890,13 +5055,17 @@
       "kind" : "Char",
       "val" : 62
     },
-    "[" : {
+    "{" : {
       "kind" : "Char",
-      "val" : 91
+      "val" : 123
     },
-    "]" : {
+    "}" : {
       "kind" : "Char",
-      "val" : 93
+      "val" : 125
+    },
+    "?" : {
+      "kind" : "Char",
+      "val" : 63
     },
     "offside" : {
       "kind" : "regex.Seq",
@@ -4938,10 +5107,6 @@
     "+" : {
       "kind" : "Char",
       "val" : 43
-    },
-    "?" : {
-      "kind" : "Char",
-      "val" : 63
     },
     "align" : {
       "kind" : "regex.Seq",
@@ -5031,6 +5196,10 @@
         }
       ]
     },
+    "^" : {
+      "kind" : "Char",
+      "val" : 94
+    },
     ">>" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -5069,6 +5238,23 @@
       "kind" : "Char",
       "val" : 33
     },
+    "$" : {
+      "kind" : "Char",
+      "val" : 36
+    },
+    "$$" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 36
+        },
+        {
+          "kind" : "Char",
+          "val" : 36
+        }
+      ]
+    },
     "if" : {
       "kind" : "regex.Seq",
       "symbols" : [
@@ -5103,17 +5289,17 @@
         }
       ]
     },
-    "{" : {
-      "kind" : "Char",
-      "val" : 123
-    },
-    "}" : {
-      "kind" : "Char",
-      "val" : 125
-    },
     ";" : {
       "kind" : "Char",
       "val" : 59
+    },
+    "[" : {
+      "kind" : "Char",
+      "val" : 91
+    },
+    "]" : {
+      "kind" : "Char",
+      "val" : 93
     },
     "-" : {
       "kind" : "Char",

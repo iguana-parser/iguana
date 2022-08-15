@@ -103,7 +103,8 @@
             }
           ]
         }
-      ]
+      ],
+      "layoutStrategy" : "INHERITED"
     }
   ],
   "regularExpressions" : {

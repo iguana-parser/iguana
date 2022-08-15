@@ -21,9 +21,12 @@ public class Rule {
 
     private final List<PriorityLevel> priorityLevels;
 
+    private final LayoutStrategy layoutStrategy;
+
     public Rule(Builder builder) {
         this.head = builder.head;
         this.priorityLevels = builder.priorityLevels;
+        this.layoutStrategy = builder.layoutStrategy;
     }
 
     public Nonterminal getHead() {
@@ -47,6 +50,10 @@ public class Rule {
         return Objects.hash(head, priorityLevels);
     }
 
+    public LayoutStrategy getLayoutStrategy() {
+        return layoutStrategy;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -64,7 +71,8 @@ public class Rule {
 
     public static class Builder {
         private Nonterminal head;
-        private List<PriorityLevel> priorityLevels = new ArrayList<>();
+        private final List<PriorityLevel> priorityLevels = new ArrayList<>();
+        private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 
         private Builder() { }
 
@@ -79,6 +87,11 @@ public class Rule {
 
         public Builder addPriorityLevels(List<PriorityLevel> priorityLevels) {
             this.priorityLevels.addAll(priorityLevels);
+            return this;
+        }
+
+        public Builder setLayoutStrategy(LayoutStrategy layoutStrategy) {
+            this.layoutStrategy = layoutStrategy;
             return this;
         }
 

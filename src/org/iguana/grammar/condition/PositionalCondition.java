@@ -66,4 +66,16 @@ public class PositionalCondition extends Condition {
 	public <T> T accept(IConditionVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	public static PositionalCondition startOfLineCondition() {
+		return new PositionalCondition(ConditionType.START_OF_LINE);
+	}
+
+	public static PositionalCondition endOfLineCondition() {
+		return new PositionalCondition(ConditionType.END_OF_LINE);
+	}
+
+	public static PositionalCondition endOfFileCondition() {
+		return new PositionalCondition(ConditionType.END_OF_FILE);
+	}
 }

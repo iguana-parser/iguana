@@ -1,0 +1,156 @@
+{
+  "rules" : [
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "S"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Identifier",
+                      "name" : "A"
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "B"
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "A"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "a",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 97
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "B"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "b",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 98
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "L",
+        "nodeType" : "Layout"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Opt",
+                      "name" : "\\u0020?",
+                      "s" : {
+                        "kind" : "Terminal",
+                        "name" : "\\u0020",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 32
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
+    }
+  ],
+  "literals" : {
+    "a" : {
+      "kind" : "Char",
+      "val" : 97
+    },
+    "b" : {
+      "kind" : "Char",
+      "val" : 98
+    },
+    " " : {
+      "kind" : "Char",
+      "val" : 32
+    }
+  },
+  "startSymbol" : {
+    "kind" : "Start",
+    "name" : "Start(S)",
+    "startSymbol" : "S"
+  },
+  "layout" : {
+    "kind" : "Identifier",
+    "name" : "L"
+  }
+}

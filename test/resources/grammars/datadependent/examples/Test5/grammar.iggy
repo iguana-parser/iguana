@@ -1,0 +1,46 @@
+
+start Program
+  = "begin" decls:Declarations body:{Statement  ";"}* "end"
+
+Declarations
+  = "declare" decls:{IdType ","}* ";"
+
+IdType = id:Id ":" t:Type
+
+Statement
+  = variable:Id ":=" val:Expression                                                                %Assign
+  | "if" cond:Expression "then" thenPart:{Statement ";"}* "else" elsePart:{Statement ";"}* "fi"    %IfThenElseCond
+  | "if" cond:Expression "then" thenPart:{Statement ";"}* "fi"                                     %IfThenCond
+  | "while" cond:Expression "do" body:{Statement ";"}* "od"                                        %Loop
+
+Type
+  = "natural"            %Natural
+  | "string"             %String
+  | "nil-type"           %Nil
+
+Expression
+  = name:Id                                         %Id
+  | string:String                                   %Strcon
+  | natcon:Natural                                  %Natcon
+  | "(" e:Expression ")"                            %Bracket
+  > left lhs:Expression "||" rhs:Expression         %Concat
+  > left ( lhs:Expression "+" rhs:Expression        %Add
+         | lhs:Expression "-" rhs:Expression        %Min
+         )
+
+lexical Id
+  = [a-z][a-z0-9]* !>> [a-z0-9]
+
+lexical Natural
+  = [0-9]+
+
+lexical String
+  = "\"" !["]*  "\""
+
+layout Layout =
+  WhitespaceAndComment* !>> [\ \t \n \r %]
+
+lexical WhitespaceAndComment
+   = [\ \t \n \r]
+   | "%" ![%]+ "%"
+   | "%%" ![\n]* $
