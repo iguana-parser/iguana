@@ -15,64 +15,73 @@ public class ParserGenerator {
         this.genDirectory = genDirectory;
     }
 
-    private void generateIggyParser() {
+    public void generate() {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n" +
                 "package " + packageName + ";\n" +
                 "\n" +
                 "import org.iguana.grammar.Grammar;\n" +
+                "import org.iguana.iggy.IggyToGrammarVisitor;\n" +
                 "import org.iguana.parser.IguanaParser;\n" +
                 "import org.iguana.parsetree.ParseTreeBuilder;\n" +
                 "import org.iguana.parsetree.ParseTreeNode;\n" +
+                "import org.iguana.util.serialization.JsonSerializer;\n" +
                 "import org.iguana.utils.input.Input;\n" +
                 "\n" +
-                "private class " + className + "Parser extends IguanaParser {\n" +
+                "import java.io.File;\n" +
+                "import java.io.IOException;\n" +
                 "\n" +
-                "    public IggyParser(Grammar grammar) {\n" +
+                "import static org.iguana.utils.io.FileUtils.readFile;\n" +
+                "\n" +
+                "public class " + className + "Parser extends IguanaParser {\n" +
+                "\n" +
+                "    private IggyParser(Grammar grammar) {\n" +
                 "        super(grammar);\n" +
                 "    }\n" +
                 "\n" +
-                "private static final String grammarName = " + grammarName + ";\n" +
+                "    private static final String grammarName = \"" + grammarName + "\";\n" +
                 "\n" +
-                "private static IggyParser parser;\n" +
+                "    private static IggyParser parser;\n" +
                 "\n" +
-                "private static Grammar grammar;\n" +
+                "    private static Grammar grammar;\n" +
                 "\n" +
-                "public static Grammar getGrammar() {\n"+
-                "    if (grammar == null) {\n"+
-                "         grammar = loadGrammar();\n"+
+                "    public static Grammar getGrammar() {\n"+
+                "        if (grammar == null) {\n"+
+                "            grammar = loadGrammar();\n"+
+                "        }\n" +
+                "        return grammar;\n" +
+                "     }\n" +
+                "\n" +
+                "    // Creates a Grammar form the provided .iggy file\n" +
+                "    public static Grammar fromIggyGrammarPath(String path) {\n" +
+                "        Input input;\n" +
+                "        try {\n" +
+                "            input = Input.fromFile(new File(path));\n" +
+                "        } catch (IOException e) {\n" +
+                "            throw new RuntimeException(e);" +
+                "        }\n" +
+                "        return createGrammar(input);\n" +
                 "    }\n" +
-                "    return grammar;\n" +
-                "}\n" +
                 "\n" +
-                "// Creates a Grammar form the provided .iggy file\n" +
-                "public static Grammar fromIggyGrammarPath(String path) {\n" +
-                "    Input input;\n" +
-                "    try {\n" +
-                "        input = Input.fromFile(new File(path));\n" +
-                "    } catch (IOException e) {\n" +
-                "        throw new RuntimeException(e);" +
+                "    // Creates a Grammar form the provided grammar in string form\n" +
+                "    public static Grammar fromIggyGrammar(String content) {\n" +
+                "        Input input = Input.fromString(content);\n" +
+                "        return createGrammar(input);\n" +
                 "    }\n" +
-                "    return createGrammar(input);\n" +
-                "}\n" +
                 "\n" +
-                "// Creates a Grammar form the provided grammar in string form\n" +
-                "public static Grammar fromIggyGrammar(String content) {\n" +
-                "    Input input = Input.fromString(content);\n" +
-                "    return createGrammar(input);\n" +
-                "}\n" +
-                "public static IggyParser getInstance() {\n" +
-                "    if (parser == null) {\n" +
-                "        parser = new IggyParser(getGrammar());\n" +
+                "    public static IggyParser getInstance() {\n" +
+                "        if (parser == null) {\n" +
+                "            parser = new IggyParser(getGrammar());\n" +
+                "        }\n" +
+                "        return parser;\n" +
                 "    }\n" +
-                "    return parser;\n" +
-                "}\n" +
                 "\n" +
                 "    @Override\n" +
                 "    protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {\n" +
                 "        return new " + className + "ParseTreeBuilder(input);\n" +
                 "    }\n" +
+                "\n" +
                 "    private static Grammar loadGrammar() {\n" +
                 "        try {\n" +
                 "            String content = readFile(IggyParser.class.getResourceAsStream(\"./\" + grammarName + \".json\"));\n" +
@@ -80,6 +89,7 @@ public class ParserGenerator {
                 "        } catch (IOException e) {\n" +
                 "            throw new RuntimeException(e);\n" +
                 "        }\n" +
+                "    }\n" +
                 "\n" +
                 "    private static Grammar createGrammar(Input input) {\n" +
                 "            IguanaParser parser = IggyParser.getInstance();\n" +

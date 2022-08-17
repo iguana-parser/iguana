@@ -1,6 +1,7 @@
 package org.iguana;
 
 import org.iguana.generator.ParseTreeVisitorGenerator;
+import org.iguana.generator.ParserGenerator;
 import org.iguana.grammar.Grammar;
 import org.iguana.iggy.IggyToGrammarVisitor;
 import org.iguana.iggy.gen.IggyParser;
@@ -48,6 +49,10 @@ public class Iguana implements Callable<Integer> {
         }
         Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
         JsonSerializer.serialize(grammar, new File(genDirectory, grammarName + ".json").toPath().toAbsolutePath().toString());
+
+        ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName, genDirectory.getAbsolutePath());
+        parserGenerator.generate();
+
         if (generateVisitors) {
             ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammar.getName(), packageName, genDirectory.getAbsolutePath());
             generator.generate();

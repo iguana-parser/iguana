@@ -31,7 +31,7 @@ public class IggyParser extends IguanaParser {
             grammar = loadGrammar();
         }
         return grammar;
-    }
+     }
 
     // Creates a Grammar form the provided .iggy file
     public static Grammar fromIggyGrammarPath(String path) {
@@ -39,8 +39,7 @@ public class IggyParser extends IguanaParser {
         try {
             input = Input.fromFile(new File(path));
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            throw new RuntimeException(e);        }
         return createGrammar(input);
     }
 
@@ -65,15 +64,15 @@ public class IggyParser extends IguanaParser {
     private static Grammar loadGrammar() {
         try {
             String content = readFile(IggyParser.class.getResourceAsStream("./" + grammarName + ".json"));
-            return JsonSerializer.deserialize(content, Grammar.class);
+             return JsonSerializer.deserialize(content, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private static Grammar createGrammar(Input input) {
-        IguanaParser parser = IggyParser.getInstance();
-        parser.parse(input);
+            IguanaParser parser = IggyParser.getInstance();
+            parser.parse(input);
         if (parser.hasParseError()) {
             System.out.println(parser.getParseError());
             throw new RuntimeException(parser.getParseError().toString());
