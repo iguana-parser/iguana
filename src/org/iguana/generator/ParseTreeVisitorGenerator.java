@@ -1,21 +1,21 @@
-package org.iguana.parsetree;
+package org.iguana.generator;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
-import org.iguana.utils.io.FileUtils;
+import org.iguana.parsetree.NonterminalNode;
+import org.iguana.parsetree.TerminalNode;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.iguana.generator.Utils.writeToFile;
+import static org.iguana.parsetree.MetaSymbolNode.*;
 import static org.iguana.regex.utils.RegexUtils.isLiteral;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
-import static org.iguana.parsetree.MetaSymbolNode.*;
 
 public class ParseTreeVisitorGenerator {
 
@@ -35,33 +35,6 @@ public class ParseTreeVisitorGenerator {
         generateParseTreeTypes(grammar);
         generateVisitor(grammar);
         generateParseTreeBuilder(grammar);
-        generateIggyParser();
-    }
-
-    private void generateIggyParser() {
-        String className = toFirstUpperCase(grammarName);
-        String content =
-            "// This file has been generated, do not directly edit this file!\n" +
-                "package " + packageName + ";\n" +
-                "\n" +
-                "import org.iguana.grammar.Grammar;\n" +
-                "import org.iguana.parser.IguanaParser;\n" +
-                "import org.iguana.parsetree.ParseTreeBuilder;\n" +
-                "import org.iguana.parsetree.ParseTreeNode;\n" +
-                "import org.iguana.utils.input.Input;\n" +
-                "\n" +
-                "public class " + className + "Parser extends IguanaParser {\n" +
-                "\n" +
-                "    public IggyParser(Grammar grammar) {\n" +
-                "        super(grammar);\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {\n" +
-                "        return new " + className + "ParseTreeBuilder(input);\n" +
-                "    }\n" +
-                "}\n";
-        writeToFile(content, className + "Parser");
     }
 
     private void generateParseTreeBuilder(RuntimeGrammar grammar) {
@@ -94,7 +67,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("    }\n");
         sb.append("}\n");
 
-        writeToFile(sb.toString(), className);
+        writeToFile(sb.toString(), genDirectory, className);
     }
 
     private void generateBuilderCases(RuntimeGrammar grammar, StringBuilder sb) {
@@ -155,7 +128,7 @@ public class ParseTreeVisitorGenerator {
             }
         }
         sb.append("}\n");
-        writeToFile(sb.toString(), className);
+        writeToFile(sb.toString(), genDirectory, className);
     }
 
     private void generateVisitor(RuntimeGrammar grammar) {
@@ -174,7 +147,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("    }\n\n");
         generateVisitMethods(grammar, sb);
         sb.append("}\n");
-        writeToFile(sb.toString(), className);
+        writeToFile(sb.toString(), genDirectory, className);
     }
 
     private void generateVisitMethods(RuntimeGrammar grammar, StringBuilder sb) {
@@ -199,14 +172,6 @@ public class ParseTreeVisitorGenerator {
 
     private String generateVisitorMethod(String name) {
         return "    public abstract T visit" + name + "(" + name + " node);\n\n";
-    }
-
-    private void writeToFile(String content, String className) {
-        try {
-            FileUtils.writeFile(content, new File(genDirectory, className + ".java").getAbsolutePath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {

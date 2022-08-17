@@ -1,11 +1,11 @@
 package org.iguana.gss;
 
-import org.iguana.grammar.Grammar;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.DefaultTerminalNode;
@@ -29,7 +29,7 @@ public class GSSNodeTest {
 
     @BeforeEach
     public void init() {
-        RuntimeGrammar grammar = Grammar.fromIggyGrammar(
+        RuntimeGrammar grammar = IggyParser.fromIggyGrammar(
             "start A = 'a'").toRuntimeGrammar();
 
         grammarGraph = GrammarGraphBuilder.from(grammar);
