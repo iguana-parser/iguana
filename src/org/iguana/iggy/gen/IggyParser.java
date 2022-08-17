@@ -23,16 +23,8 @@ public class IggyParser extends IguanaParser {
     private static final String grammarName = "iggy";
 
     private static IggyParser parser;
-    private static Grammar grammar;
 
-    private static Grammar loadGrammar() {
-        try {
-            String content = readFile(IggyParser.class.getResourceAsStream("./" + grammarName + ".json"));
-            return JsonSerializer.deserialize(content, Grammar.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static Grammar grammar;
 
     public static Grammar getGrammar() {
         if (grammar == null) {
@@ -58,19 +50,6 @@ public class IggyParser extends IguanaParser {
         return createGrammar(input);
     }
 
-    private static Grammar createGrammar(Input input) {
-        IguanaParser parser = IggyParser.getInstance();
-        parser.parse(input);
-        if (parser.hasParseError()) {
-            System.out.println(parser.getParseError());
-            throw new RuntimeException(parser.getParseError().toString());
-        }
-
-        ParseTreeNode parseTree = parser.getParseTree();
-
-        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
-    }
-
     public static IggyParser getInstance() {
         if (parser == null) {
             parser = new IggyParser(getGrammar());
@@ -81,5 +60,25 @@ public class IggyParser extends IguanaParser {
     @Override
     protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {
         return new IggyParseTreeBuilder(input);
+    }
+
+    private static Grammar loadGrammar() {
+        try {
+            String content = readFile(IggyParser.class.getResourceAsStream("./" + grammarName + ".json"));
+            return JsonSerializer.deserialize(content, Grammar.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Grammar createGrammar(Input input) {
+        IguanaParser parser = IggyParser.getInstance();
+        parser.parse(input);
+        if (parser.hasParseError()) {
+            System.out.println(parser.getParseError());
+            throw new RuntimeException(parser.getParseError().toString());
+        }
+        ParseTreeNode parseTree = parser.getParseTree();
+        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
     }
 }
