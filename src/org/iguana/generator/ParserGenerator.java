@@ -106,5 +106,6 @@ public class ParserGenerator {
                 "    }\n" +
                 "}\n";
         writeToFile(content, genDirectory, className + "Parser");
+        System.out.println(className + "Parser" + " has been generated.");
     }
 }

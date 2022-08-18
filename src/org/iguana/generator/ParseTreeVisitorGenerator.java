@@ -68,6 +68,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("}\n");
 
         writeToFile(sb.toString(), genDirectory, className);
+        System.out.println(className + " has been generated.");
     }
 
     private void generateBuilderCases(RuntimeGrammar grammar, StringBuilder sb) {
@@ -129,6 +130,7 @@ public class ParseTreeVisitorGenerator {
         }
         sb.append("}\n");
         writeToFile(sb.toString(), genDirectory, className);
+        System.out.println(className + " has been generated.");
     }
 
     private void generateVisitor(RuntimeGrammar grammar) {
@@ -148,6 +150,7 @@ public class ParseTreeVisitorGenerator {
         generateVisitMethods(grammar, sb);
         sb.append("}\n");
         writeToFile(sb.toString(), genDirectory, className);
+        System.out.println(className + " has been generated.");
     }
 
     private void generateVisitMethods(RuntimeGrammar grammar, StringBuilder sb) {
