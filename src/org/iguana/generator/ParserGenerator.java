@@ -31,6 +31,7 @@ public class ParserGenerator {
                 "\n" +
                 "import java.io.File;\n" +
                 "import java.io.IOException;\n" +
+                "import java.io.InputStream;\n" +
                 "\n" +
                 "import static org.iguana.utils.io.FileUtils.readFile;\n" +
                 "\n" +
@@ -83,9 +84,11 @@ public class ParserGenerator {
                 "    }\n" +
                 "\n" +
                 "    private static Grammar loadGrammar() {\n" +
-                "        try {\n" +
-                "            String content = readFile(IggyParser.class.getResourceAsStream(\"./\" + grammarName + \".json\"));\n" +
-                "             return JsonSerializer.deserialize(content, Grammar.class);\n" +
+                "        String grammarJsonFile = grammarName + \".json\";\n" +
+                "        try (InputStream in = IggyParser.class.getResourceAsStream(grammarJsonFile)) {\n" +
+                "            if (in == null) throw new RuntimeException(\"Grammar json file \" + grammarJsonFile + \" is not found.\");\n" +
+                "            String content = readFile(in);\n" +
+                "            return JsonSerializer.deserialize(content, Grammar.class);\n" +
                 "        } catch (IOException e) {\n" +
                 "            throw new RuntimeException(e);\n" +
                 "        }\n" +

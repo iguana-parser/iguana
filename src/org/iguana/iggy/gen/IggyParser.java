@@ -11,6 +11,7 @@ import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.iguana.utils.io.FileUtils.readFile;
 
@@ -62,9 +63,11 @@ public class IggyParser extends IguanaParser {
     }
 
     private static Grammar loadGrammar() {
-        try {
-            String content = readFile(IggyParser.class.getResourceAsStream("./" + grammarName + ".json"));
-             return JsonSerializer.deserialize(content, Grammar.class);
+        String grammarJsonFile = grammarName + ".json";
+        try (InputStream in = IggyParser.class.getResourceAsStream(grammarJsonFile)) {
+            if (in == null) throw new RuntimeException("Grammar json file " + grammarJsonFile + " is not found.");
+            String content = readFile(in);
+            return JsonSerializer.deserialize(content, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
