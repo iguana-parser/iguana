@@ -9,6 +9,7 @@ import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.junit.jupiter.api.Test;
 
+import static org.iguana.iggy.IggyParserUtils.fromIggyGrammar;
 import static org.iguana.utils.collections.CollectionsUtil.set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,7 +17,7 @@ public class FirstFollowTest {
 
     @Test
     public void test() {
-        RuntimeGrammar grammar = GrammarTransformer.transform(IggyParser.fromIggyGrammar(
+        RuntimeGrammar grammar = GrammarTransformer.transform(fromIggyGrammar(
             "start A = B C | 'a'\n" +
             "B = A | 'b'\n" +
             "C = 'c'").toRuntimeGrammar());

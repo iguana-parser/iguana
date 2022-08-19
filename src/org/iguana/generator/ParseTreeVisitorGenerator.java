@@ -47,18 +47,18 @@ public class ParseTreeVisitorGenerator {
         sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
         sb.append("import org.iguana.utils.input.Input;\n\n");
         sb.append("import java.util.List;\n\n");
-        sb.append("import static " + packageName + ".IggyParseTree.*;\n\n");
+        sb.append("import static " + packageName + "." + toFirstUpperCase(grammarName) + "ParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeBuilder";
         sb.append("public class " + className + " extends DefaultParseTreeBuilder {\n\n");
-        sb.append("    public IggyParseTreeBuilder(Input input) {\n");
+        sb.append("    public " + className + "(Input input) {\n");
         sb.append("        super(input);\n");
         sb.append("    }\n\n");
 
         sb.append("    @Override\n");
         sb.append("    public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {\n");
-        sb.append("        String name = rule.getHead().getName();\n");
-        sb.append("        String label = rule.getLabel();\n\n");
+        sb.append("        java.lang.String name = rule.getHead().getName();\n");
+        sb.append("        java.lang.String label = rule.getLabel();\n\n");
         sb.append("        switch (name) {\n");
         generateBuilderCases(grammar, sb);
         sb.append("            default:\n");
@@ -139,12 +139,12 @@ public class ParseTreeVisitorGenerator {
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n\n");
-        sb.append("import static " + packageName + ".IggyParseTree.*;\n\n");
+        sb.append("import static " + packageName + "." + toFirstUpperCase(grammarName) + "ParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
-        sb.append("public abstract class " + className + "<T> implements ParseTreeVisitor<T> {\n\n");
+        sb.append("public interface " + className + "<T> extends ParseTreeVisitor<T> {\n\n");
         sb.append("    @Override\n");
-        sb.append("    public T visitNonterminalNode(NonterminalNode node) {\n");
+        sb.append("    default T visitNonterminalNode(NonterminalNode node) {\n");
         sb.append("        throw new UnsupportedOperationException();\n");
         sb.append("    }\n\n");
         generateVisitMethods(grammar, sb);
@@ -174,7 +174,7 @@ public class ParseTreeVisitorGenerator {
     }
 
     private String generateVisitorMethod(String name) {
-        return "    public abstract T visit" + name + "(" + name + " node);\n\n";
+        return "    T visit" + name + "(" + name + " node);\n\n";
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {

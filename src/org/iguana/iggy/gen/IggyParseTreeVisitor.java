@@ -6,181 +6,181 @@ import org.iguana.parsetree.NonterminalNode;
 
 import static org.iguana.iggy.gen.IggyParseTree.*;
 
-public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
+public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     @Override
-    public T visitNonterminalNode(NonterminalNode node) {
+    default T visitNonterminalNode(NonterminalNode node) {
         throw new UnsupportedOperationException();
     }
 
-    public abstract T visitGrammar(Grammar node);
+    T visitGrammar(Grammar node);
 
-    public abstract T visitTopLevelVar(TopLevelVar node);
+    T visitTopLevelVar(TopLevelVar node);
 
-    public abstract T visitContextFreeRule(ContextFreeRule node);
+    T visitContextFreeRule(ContextFreeRule node);
 
-    public abstract T visitRegexRule(RegexRule node);
+    T visitRegexRule(RegexRule node);
 
-    public abstract T visitParameters(Parameters node);
+    T visitParameters(Parameters node);
 
-    public abstract T visitRegexBody(RegexBody node);
+    T visitRegexBody(RegexBody node);
 
-    public abstract T visitBody(Body node);
+    T visitBody(Body node);
 
-    public abstract T visitPriorityLevels(PriorityLevels node);
+    T visitPriorityLevels(PriorityLevels node);
 
-    public abstract T visitSequenceAlternative(SequenceAlternative node);
+    T visitSequenceAlternative(SequenceAlternative node);
 
-    public abstract T visitAssociativityAlternative(AssociativityAlternative node);
+    T visitAssociativityAlternative(AssociativityAlternative node);
 
-    public abstract T visitEmptyAlternative(EmptyAlternative node);
+    T visitEmptyAlternative(EmptyAlternative node);
 
-    public abstract T visitMoreThanOneElemSequence(MoreThanOneElemSequence node);
+    T visitMoreThanOneElemSequence(MoreThanOneElemSequence node);
 
-    public abstract T visitSingleElemSequence(SingleElemSequence node);
+    T visitSingleElemSequence(SingleElemSequence node);
 
-    public abstract T visitCondition(Condition node);
+    T visitCondition(Condition node);
 
-    public abstract T visitCallSymbol(CallSymbol node);
+    T visitCallSymbol(CallSymbol node);
 
-    public abstract T visitOffsideSymbol(OffsideSymbol node);
+    T visitOffsideSymbol(OffsideSymbol node);
 
-    public abstract T visitStarSymbol(StarSymbol node);
+    T visitStarSymbol(StarSymbol node);
 
-    public abstract T visitPlusSymbol(PlusSymbol node);
+    T visitPlusSymbol(PlusSymbol node);
 
-    public abstract T visitOptionSymbol(OptionSymbol node);
+    T visitOptionSymbol(OptionSymbol node);
 
-    public abstract T visitSequenceSymbol(SequenceSymbol node);
+    T visitSequenceSymbol(SequenceSymbol node);
 
-    public abstract T visitAlternationSymbol(AlternationSymbol node);
+    T visitAlternationSymbol(AlternationSymbol node);
 
-    public abstract T visitAlignSymbol(AlignSymbol node);
+    T visitAlignSymbol(AlignSymbol node);
 
-    public abstract T visitIgnoreSymbol(IgnoreSymbol node);
+    T visitIgnoreSymbol(IgnoreSymbol node);
 
-    public abstract T visitLabeledSymbol(LabeledSymbol node);
+    T visitLabeledSymbol(LabeledSymbol node);
 
-    public abstract T visitStatementSymbol(StatementSymbol node);
+    T visitStatementSymbol(StatementSymbol node);
 
-    public abstract T visitPostConditionSymbol(PostConditionSymbol node);
+    T visitPostConditionSymbol(PostConditionSymbol node);
 
-    public abstract T visitPrecedeSymbol(PrecedeSymbol node);
+    T visitPrecedeSymbol(PrecedeSymbol node);
 
-    public abstract T visitNotPrecedeSymbol(NotPrecedeSymbol node);
+    T visitNotPrecedeSymbol(NotPrecedeSymbol node);
 
-    public abstract T visitStartOfLineSymbol(StartOfLineSymbol node);
+    T visitStartOfLineSymbol(StartOfLineSymbol node);
 
-    public abstract T visitFollowSymbol(FollowSymbol node);
+    T visitFollowSymbol(FollowSymbol node);
 
-    public abstract T visitNotFollowSymbol(NotFollowSymbol node);
+    T visitNotFollowSymbol(NotFollowSymbol node);
 
-    public abstract T visitExcludeSymbol(ExcludeSymbol node);
+    T visitExcludeSymbol(ExcludeSymbol node);
 
-    public abstract T visitExceptSymbol(ExceptSymbol node);
+    T visitExceptSymbol(ExceptSymbol node);
 
-    public abstract T visitEndOfLineSymbol(EndOfLineSymbol node);
+    T visitEndOfLineSymbol(EndOfLineSymbol node);
 
-    public abstract T visitEndOfFileSymbol(EndOfFileSymbol node);
+    T visitEndOfFileSymbol(EndOfFileSymbol node);
 
-    public abstract T visitIfThenElseSymbol(IfThenElseSymbol node);
+    T visitIfThenElseSymbol(IfThenElseSymbol node);
 
-    public abstract T visitIdentifierSymbol(IdentifierSymbol node);
+    T visitIdentifierSymbol(IdentifierSymbol node);
 
-    public abstract T visitStringSymbol(StringSymbol node);
+    T visitStringSymbol(StringSymbol node);
 
-    public abstract T visitCharClassSymbol(CharClassSymbol node);
+    T visitCharClassSymbol(CharClassSymbol node);
 
-    public abstract T visitStarSepSymbol(StarSepSymbol node);
+    T visitStarSepSymbol(StarSepSymbol node);
 
-    public abstract T visitPlusSepSymbol(PlusSepSymbol node);
+    T visitPlusSepSymbol(PlusSepSymbol node);
 
-    public abstract T visitArguments(Arguments node);
+    T visitArguments(Arguments node);
 
-    public abstract T visitCallStatement(CallStatement node);
+    T visitCallStatement(CallStatement node);
 
-    public abstract T visitBindingStatement(BindingStatement node);
+    T visitBindingStatement(BindingStatement node);
 
-    public abstract T visitAssignBinding(AssignBinding node);
+    T visitAssignBinding(AssignBinding node);
 
-    public abstract T visitDeclareBinding(DeclareBinding node);
+    T visitDeclareBinding(DeclareBinding node);
 
-    public abstract T visitStarRegex(StarRegex node);
+    T visitStarRegex(StarRegex node);
 
-    public abstract T visitPlusRegex(PlusRegex node);
+    T visitPlusRegex(PlusRegex node);
 
-    public abstract T visitOptionRegex(OptionRegex node);
+    T visitOptionRegex(OptionRegex node);
 
-    public abstract T visitBracketRegex(BracketRegex node);
+    T visitBracketRegex(BracketRegex node);
 
-    public abstract T visitSequenceRegex(SequenceRegex node);
+    T visitSequenceRegex(SequenceRegex node);
 
-    public abstract T visitAlternationRegex(AlternationRegex node);
+    T visitAlternationRegex(AlternationRegex node);
 
-    public abstract T visitNontRegex(NontRegex node);
+    T visitNontRegex(NontRegex node);
 
-    public abstract T visitCharClassRegex(CharClassRegex node);
+    T visitCharClassRegex(CharClassRegex node);
 
-    public abstract T visitStringRegex(StringRegex node);
+    T visitStringRegex(StringRegex node);
 
-    public abstract T visitCharsCharClass(CharsCharClass node);
+    T visitCharsCharClass(CharsCharClass node);
 
-    public abstract T visitNotCharsCharClass(NotCharsCharClass node);
+    T visitNotCharsCharClass(NotCharsCharClass node);
 
-    public abstract T visitRangeRange(RangeRange node);
+    T visitRangeRange(RangeRange node);
 
-    public abstract T visitCharacterRange(CharacterRange node);
+    T visitCharacterRange(CharacterRange node);
 
-    public abstract T visitCallExpression(CallExpression node);
+    T visitCallExpression(CallExpression node);
 
-    public abstract T visitNotExpression(NotExpression node);
+    T visitNotExpression(NotExpression node);
 
-    public abstract T visitMultiplicationExpression(MultiplicationExpression node);
+    T visitMultiplicationExpression(MultiplicationExpression node);
 
-    public abstract T visitDivisionExpression(DivisionExpression node);
+    T visitDivisionExpression(DivisionExpression node);
 
-    public abstract T visitAdditionExpression(AdditionExpression node);
+    T visitAdditionExpression(AdditionExpression node);
 
-    public abstract T visitSubtractionExpression(SubtractionExpression node);
+    T visitSubtractionExpression(SubtractionExpression node);
 
-    public abstract T visitGreaterEqExpression(GreaterEqExpression node);
+    T visitGreaterEqExpression(GreaterEqExpression node);
 
-    public abstract T visitLessEqExpression(LessEqExpression node);
+    T visitLessEqExpression(LessEqExpression node);
 
-    public abstract T visitGreaterExpression(GreaterExpression node);
+    T visitGreaterExpression(GreaterExpression node);
 
-    public abstract T visitLessExpression(LessExpression node);
+    T visitLessExpression(LessExpression node);
 
-    public abstract T visitEqualExpression(EqualExpression node);
+    T visitEqualExpression(EqualExpression node);
 
-    public abstract T visitNotEqualExpression(NotEqualExpression node);
+    T visitNotEqualExpression(NotEqualExpression node);
 
-    public abstract T visitAndExpression(AndExpression node);
+    T visitAndExpression(AndExpression node);
 
-    public abstract T visitOrExpression(OrExpression node);
+    T visitOrExpression(OrExpression node);
 
-    public abstract T visitLExtentExpression(LExtentExpression node);
+    T visitLExtentExpression(LExtentExpression node);
 
-    public abstract T visitRExtentExpression(RExtentExpression node);
+    T visitRExtentExpression(RExtentExpression node);
 
-    public abstract T visitYieldExpression(YieldExpression node);
+    T visitYieldExpression(YieldExpression node);
 
-    public abstract T visitValExpression(ValExpression node);
+    T visitValExpression(ValExpression node);
 
-    public abstract T visitNameExpression(NameExpression node);
+    T visitNameExpression(NameExpression node);
 
-    public abstract T visitNumberExpression(NumberExpression node);
+    T visitNumberExpression(NumberExpression node);
 
-    public abstract T visitBracketExpression(BracketExpression node);
+    T visitBracketExpression(BracketExpression node);
 
-    public abstract T visitReturnExpression(ReturnExpression node);
+    T visitReturnExpression(ReturnExpression node);
 
-    public abstract T visitVarName(VarName node);
+    T visitVarName(VarName node);
 
-    public abstract T visitName(Name node);
+    T visitName(Name node);
 
-    public abstract T visitIdentifier(Identifier node);
+    T visitIdentifier(Identifier node);
 
-    public abstract T visitLabel(Label node);
+    T visitLabel(Label node);
 
 }

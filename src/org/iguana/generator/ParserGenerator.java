@@ -37,13 +37,13 @@ public class ParserGenerator {
                 "\n" +
                 "public class " + className + "Parser extends IguanaParser {\n" +
                 "\n" +
-                "    private IggyParser(Grammar grammar) {\n" +
+                "    private " + className + "Parser(Grammar grammar) {\n" +
                 "        super(grammar);\n" +
                 "    }\n" +
                 "\n" +
                 "    private static final String grammarName = \"" + grammarName + "\";\n" +
                 "\n" +
-                "    private static IggyParser parser;\n" +
+                "    private static " + className + "Parser parser;\n" +
                 "\n" +
                 "    private static Grammar grammar;\n" +
                 "\n" +
@@ -54,26 +54,9 @@ public class ParserGenerator {
                 "        return grammar;\n" +
                 "     }\n" +
                 "\n" +
-                "    // Creates a Grammar form the provided .iggy file\n" +
-                "    public static Grammar fromIggyGrammarPath(String path) {\n" +
-                "        Input input;\n" +
-                "        try {\n" +
-                "            input = Input.fromFile(new File(path));\n" +
-                "        } catch (IOException e) {\n" +
-                "            throw new RuntimeException(e);" +
-                "        }\n" +
-                "        return createGrammar(input);\n" +
-                "    }\n" +
-                "\n" +
-                "    // Creates a Grammar form the provided grammar in string form\n" +
-                "    public static Grammar fromIggyGrammar(String content) {\n" +
-                "        Input input = Input.fromString(content);\n" +
-                "        return createGrammar(input);\n" +
-                "    }\n" +
-                "\n" +
-                "    public static IggyParser getInstance() {\n" +
+                "    public static " + className + "Parser getInstance() {\n" +
                 "        if (parser == null) {\n" +
-                "            parser = new IggyParser(getGrammar());\n" +
+                "            parser = new " + className + "Parser(getGrammar());\n" +
                 "        }\n" +
                 "        return parser;\n" +
                 "    }\n" +
@@ -85,24 +68,13 @@ public class ParserGenerator {
                 "\n" +
                 "    private static Grammar loadGrammar() {\n" +
                 "        String grammarJsonFile = grammarName + \".json\";\n" +
-                "        try (InputStream in = IggyParser.class.getResourceAsStream(grammarJsonFile)) {\n" +
+                "        try (InputStream in = " + className + "Parser.class.getResourceAsStream(grammarJsonFile)) {\n" +
                 "            if (in == null) throw new RuntimeException(\"Grammar json file \" + grammarJsonFile + \" is not found.\");\n" +
                 "            String content = readFile(in);\n" +
                 "            return JsonSerializer.deserialize(content, Grammar.class);\n" +
                 "        } catch (IOException e) {\n" +
                 "            throw new RuntimeException(e);\n" +
                 "        }\n" +
-                "    }\n" +
-                "\n" +
-                "    private static Grammar createGrammar(Input input) {\n" +
-                "            IguanaParser parser = IggyParser.getInstance();\n" +
-                "            parser.parse(input);\n" +
-                "        if (parser.hasParseError()) {\n" +
-                "            System.out.println(parser.getParseError());\n" +
-                "            throw new RuntimeException(parser.getParseError().toString());\n" +
-                "        }\n" +
-                "        ParseTreeNode parseTree = parser.getParseTree();\n" +
-                "        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());\n" +
                 "    }\n" +
                 "}\n";
         writeToFile(content, genDirectory, className + "Parser");

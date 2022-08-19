@@ -19,8 +19,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
 
     @Override
     public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
-        String name = rule.getHead().getName();
-        String label = rule.getLabel();
+        java.lang.String name = rule.getHead().getName();
+        java.lang.String label = rule.getLabel();
 
         switch (name) {
             case "Grammar":

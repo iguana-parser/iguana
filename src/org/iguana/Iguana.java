@@ -28,9 +28,6 @@ public class Iguana implements Callable<Integer> {
     @Option(names = {"--output", "-o"}, description = "The output directory for generated files", required = true)
     private File genDirectory;
 
-    @Option(names = {"--visitor"}, description = "Should generate visitors?")
-    private boolean generateVisitors;
-
     @Option(names = "--package", description = "package name for the generated code")
     private String packageName;
 
@@ -53,10 +50,8 @@ public class Iguana implements Callable<Integer> {
         ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName, genDirectory.getAbsolutePath());
         parserGenerator.generate();
 
-        if (generateVisitors) {
-            ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammar.getName(), packageName, genDirectory.getAbsolutePath());
-            generator.generate();
-        }
+        ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammarName, packageName, genDirectory.getAbsolutePath());
+        generator.generate();
         return 0;
     }
 }

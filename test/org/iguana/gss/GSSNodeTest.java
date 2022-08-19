@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
+import static org.iguana.iggy.IggyParserUtils.fromIggyGrammar;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -29,7 +30,7 @@ public class GSSNodeTest {
 
     @BeforeEach
     public void init() {
-        RuntimeGrammar grammar = IggyParser.fromIggyGrammar(
+        RuntimeGrammar grammar = fromIggyGrammar(
             "start A = 'a'").toRuntimeGrammar();
 
         grammarGraph = GrammarGraphBuilder.from(grammar);
