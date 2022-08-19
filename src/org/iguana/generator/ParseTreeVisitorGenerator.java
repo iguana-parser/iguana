@@ -139,7 +139,6 @@ public class ParseTreeVisitorGenerator {
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n\n");
-        sb.append("import static " + packageName + "." + toFirstUpperCase(grammarName) + "ParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         sb.append("public interface " + className + "<T> extends ParseTreeVisitor<T> {\n\n");
@@ -174,7 +173,8 @@ public class ParseTreeVisitorGenerator {
     }
 
     private String generateVisitorMethod(String name) {
-        return "    T visit" + name + "(" + name + " node);\n\n";
+        String className = toFirstUpperCase(grammarName) + "ParseTree";
+        return "    T visit" + name + "(" + className + "." +  name + " node);\n\n";
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
