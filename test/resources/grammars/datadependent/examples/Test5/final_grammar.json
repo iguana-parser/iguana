@@ -3235,7 +3235,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "(\\u0020 | \t | \n | \r)",
+          "name" : "(\\u0020 | \\t | \\n | \\r)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3352,7 +3352,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)*",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
           "preConditions" : [
             {
               "kind" : "PositionalCondition",
@@ -3533,18 +3533,18 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)+",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)+",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)+",
           "nodeType" : "Plus"
         },
         {
           "kind" : "Terminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3582,10 +3582,10 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)+",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)+",
         "s" : {
           "kind" : "Terminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3608,13 +3608,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)+",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3657,10 +3657,10 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)+",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)+",
         "s" : {
           "kind" : "Terminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3683,13 +3683,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)*",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)+",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)+",
           "nodeType" : "Plus"
         }
       ],
@@ -3712,7 +3712,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)*",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
         "preConditions" : [
           {
             "kind" : "PositionalCondition",
@@ -3721,7 +3721,7 @@
         ],
         "s" : {
           "kind" : "Terminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3744,7 +3744,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)*",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -3766,7 +3766,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)*",
+        "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
         "preConditions" : [
           {
             "kind" : "PositionalCondition",
@@ -3775,7 +3775,7 @@
         ],
         "s" : {
           "kind" : "Terminal",
-          "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
+          "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",

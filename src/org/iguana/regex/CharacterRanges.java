@@ -129,11 +129,11 @@ public class CharacterRanges {
 
 	public static String getKnownWhitespaceString(int codePoint) {
 		switch (codePoint) {
-			case 9:  return "\t";
-			case 10: return "\n";
-			case 12: return "\f";
-			case 13: return "\r";
-			case 20: return "\u0020";
+			case 9:  return "\\t";
+			case 10: return "\\n";
+			case 12: return "\\f";
+			case 13: return "\\r";
+			case 20: return "\\u0020";
 			default: throw new RuntimeException("Unknown whitespace " + codePoint);
 		}
 	}
