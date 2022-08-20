@@ -1,6 +1,7 @@
 package org.iguana.iggy;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.iggy.gen.IggyParser;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
@@ -38,7 +39,7 @@ public class IggyTokenizerTest {
         Input input = Input.fromString("var a = 1");
         iguanaTokenizer.prepare(input, 0);
 
-        RuntimeGrammar grammar = IggyParserBootstrap.iggyGrammar().toRuntimeGrammar();
+        RuntimeGrammar grammar = IggyParser.getGrammar().toRuntimeGrammar();
         RegularExpression id = grammar.getRegularExpressions().get("LetterOrDigits");
         RegularExpression number = grammar.getRegularExpressions().get("Number");
         RegularExpression whitespace = grammar.getRegularExpressions().get("WhiteSpace");

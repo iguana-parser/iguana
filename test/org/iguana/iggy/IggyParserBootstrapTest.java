@@ -1,6 +1,7 @@
 package org.iguana.iggy;
 
 import org.iguana.grammar.Grammar;
+import org.iguana.iggy.gen.IggyParser;
 import org.iguana.util.serialization.JsonSerializer;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +17,9 @@ public class IggyParserBootstrapTest {
 
     @Test
     public void test() throws Exception {
-        Path grammarPath = Paths.get("src/resources/Iguana.iggy");
-        Grammar grammar = IggyParserBootstrap.getGrammar(grammarPath.toAbsolutePath().toString());
+        Grammar grammar = IggyParser.getGrammar();
 
-        String expectedJson = getFileContent(Paths.get("src/resources/iggy.json"));
+        String expectedJson = getFileContent(Paths.get("src/org/iguana/iggy/gen/iggy.json"));
         assertEquals(expectedJson.trim(), JsonSerializer.serialize(grammar).trim());
 
         Grammar deserializedGrammar = JsonSerializer.deserialize(expectedJson, Grammar.class);

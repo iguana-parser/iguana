@@ -7,7 +7,6 @@ import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
-import org.iguana.iggy.IggyParserBootstrap;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
@@ -28,10 +27,6 @@ public class Grammar {
     private final Symbol layout;
     private final Map<String, Expression> globals;
     private final String name;
-
-    private final Map<String, Set<String>> leftEnds = new HashMap<>();
-    private final Map<String, Set<String>> rightEnds = new HashMap<>();
-    private final Set<String> ebnfs = new HashSet<>();
 
     private RuntimeGrammar grammar;
 
@@ -75,7 +70,11 @@ public class Grammar {
 
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
-            computeEnds();
+            Map<String, Set<String>> leftEnds = new HashMap<>();
+            Map<String, Set<String>> rightEnds = new HashMap<>();
+            Set<String> ebnfs = new HashSet<>();
+
+            computeEnds(leftEnds, rightEnds, ebnfs);
 
             // TODO: make these transformations explicit
             Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressions);
@@ -85,7 +84,7 @@ public class Grammar {
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (Rule rule : rules) {
                 if (rule.getHead().toString().equals("$default$")) continue;
-                grammarBuilder.addRules(getRules(rule, resolveIdentifiers));
+                grammarBuilder.addRules(getRules(rule, resolveIdentifiers, leftEnds, rightEnds, ebnfs));
             }
             grammarBuilder.setStartSymbol(startSymbol);
 
@@ -128,13 +127,13 @@ public class Grammar {
         return grammar;
     }
 
-    private void computeEnds() {
+    private void computeEnds(Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         for (Rule rule : rules) {
             if (rule.getHead().toString().equals("$default$")) continue;
             for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
                 for (Alternative alternative : priorityLevel.getAlternatives()) {
                     for (Sequence seq : alternative.seqs()) {
-                        computeEnds(rule.getHead(), seq.getSymbols());
+                        computeEnds(rule.getHead(), seq.getSymbols(), leftEnds, rightEnds, ebnfs);
                     }
                 }
             }
@@ -183,10 +182,6 @@ public class Grammar {
                     changed = true;
             }
         }
-    }
-
-    public static Grammar fromIggyGrammar(String content) {
-        return IggyParserBootstrap.fromGrammar(content);
     }
 
     public static Grammar fromJsonFile(String path) {
@@ -270,7 +265,7 @@ public class Grammar {
         }
     }
 
-    private List<RuntimeRule> getRules(Rule highLevelRule, ResolveIdentifiers resolveIdentifiers) {
+    private List<RuntimeRule> getRules(Rule highLevelRule, ResolveIdentifiers resolveIdentifiers, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -290,7 +285,7 @@ public class Grammar {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, resolveIdentifiers, highLevelRule.getLayoutStrategy());
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
                         rules.add(rule);
@@ -301,7 +296,7 @@ public class Grammar {
                     List<Symbol> symbols = new ArrayList<>();
                     if (alternative.first() == null || alternative.first().isEmpty()) { // Empty alternative
                         String label = alternative.first() == null ? null : alternative.first().label;
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, resolveIdentifiers, highLevelRule.getLayoutStrategy());
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -309,7 +304,7 @@ public class Grammar {
                         symbols.add(alternative.first().first());
                         if (alternative.first().rest() != null)
                             addAll(symbols, alternative.first().rest());
-                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label, resolveIdentifiers, highLevelRule.getLayoutStrategy());
+                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
@@ -324,7 +319,8 @@ public class Grammar {
         return rules;
     }
 
-    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label, ResolveIdentifiers resolveIdentifiers, LayoutStrategy layoutStrategy) {
+    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label, ResolveIdentifiers resolveIdentifiers,
+                                LayoutStrategy layoutStrategy, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs, layout));
         boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs, layout));
 
@@ -388,7 +384,7 @@ public class Grammar {
             .build();
     }
 
-    private void computeEnds(Nonterminal head, List<Symbol> symbols) {
+    private void computeEnds(Nonterminal head, List<Symbol> symbols, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         if (symbols.size() >= 1) {
             Symbol first = symbols.get(0);
             Symbol last = symbols.get(symbols.size() - 1);

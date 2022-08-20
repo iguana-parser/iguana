@@ -4,183 +4,181 @@ package org.iguana.iggy.gen;
 import org.iguana.parsetree.ParseTreeVisitor;
 import org.iguana.parsetree.NonterminalNode;
 
-import static org.iguana.iggy.gen.IggyParseTree.*;
-
-public abstract class IggyParseTreeVisitor<T> implements ParseTreeVisitor<T> {
+public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     @Override
-    public T visitNonterminalNode(NonterminalNode node) {
+    default T visitNonterminalNode(NonterminalNode node) {
         throw new UnsupportedOperationException();
     }
 
-    public abstract T visitGrammar(Grammar node);
+    T visitGrammar(IggyParseTree.Grammar node);
 
-    public abstract T visitTopLevelVar(TopLevelVar node);
+    T visitTopLevelVar(IggyParseTree.TopLevelVar node);
 
-    public abstract T visitContextFreeRule(ContextFreeRule node);
+    T visitContextFreeRule(IggyParseTree.ContextFreeRule node);
 
-    public abstract T visitRegexRule(RegexRule node);
+    T visitRegexRule(IggyParseTree.RegexRule node);
 
-    public abstract T visitParameters(Parameters node);
+    T visitParameters(IggyParseTree.Parameters node);
 
-    public abstract T visitRegexBody(RegexBody node);
+    T visitRegexBody(IggyParseTree.RegexBody node);
 
-    public abstract T visitBody(Body node);
+    T visitBody(IggyParseTree.Body node);
 
-    public abstract T visitPriorityLevels(PriorityLevels node);
+    T visitPriorityLevels(IggyParseTree.PriorityLevels node);
 
-    public abstract T visitSequenceAlternative(SequenceAlternative node);
+    T visitSequenceAlternative(IggyParseTree.SequenceAlternative node);
 
-    public abstract T visitAssociativityAlternative(AssociativityAlternative node);
+    T visitAssociativityAlternative(IggyParseTree.AssociativityAlternative node);
 
-    public abstract T visitEmptyAlternative(EmptyAlternative node);
+    T visitEmptyAlternative(IggyParseTree.EmptyAlternative node);
 
-    public abstract T visitMoreThanOneElemSequence(MoreThanOneElemSequence node);
+    T visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node);
 
-    public abstract T visitSingleElemSequence(SingleElemSequence node);
+    T visitSingleElemSequence(IggyParseTree.SingleElemSequence node);
 
-    public abstract T visitCondition(Condition node);
+    T visitCondition(IggyParseTree.Condition node);
 
-    public abstract T visitCallSymbol(CallSymbol node);
+    T visitCallSymbol(IggyParseTree.CallSymbol node);
 
-    public abstract T visitOffsideSymbol(OffsideSymbol node);
+    T visitOffsideSymbol(IggyParseTree.OffsideSymbol node);
 
-    public abstract T visitStarSymbol(StarSymbol node);
+    T visitStarSymbol(IggyParseTree.StarSymbol node);
 
-    public abstract T visitPlusSymbol(PlusSymbol node);
+    T visitPlusSymbol(IggyParseTree.PlusSymbol node);
 
-    public abstract T visitOptionSymbol(OptionSymbol node);
+    T visitOptionSymbol(IggyParseTree.OptionSymbol node);
 
-    public abstract T visitSequenceSymbol(SequenceSymbol node);
+    T visitSequenceSymbol(IggyParseTree.SequenceSymbol node);
 
-    public abstract T visitAlternationSymbol(AlternationSymbol node);
+    T visitAlternationSymbol(IggyParseTree.AlternationSymbol node);
 
-    public abstract T visitAlignSymbol(AlignSymbol node);
+    T visitAlignSymbol(IggyParseTree.AlignSymbol node);
 
-    public abstract T visitIgnoreSymbol(IgnoreSymbol node);
+    T visitIgnoreSymbol(IggyParseTree.IgnoreSymbol node);
 
-    public abstract T visitLabeledSymbol(LabeledSymbol node);
+    T visitLabeledSymbol(IggyParseTree.LabeledSymbol node);
 
-    public abstract T visitStatementSymbol(StatementSymbol node);
+    T visitStatementSymbol(IggyParseTree.StatementSymbol node);
 
-    public abstract T visitPostConditionSymbol(PostConditionSymbol node);
+    T visitPostConditionSymbol(IggyParseTree.PostConditionSymbol node);
 
-    public abstract T visitPrecedeSymbol(PrecedeSymbol node);
+    T visitPrecedeSymbol(IggyParseTree.PrecedeSymbol node);
 
-    public abstract T visitNotPrecedeSymbol(NotPrecedeSymbol node);
+    T visitNotPrecedeSymbol(IggyParseTree.NotPrecedeSymbol node);
 
-    public abstract T visitStartOfLineSymbol(StartOfLineSymbol node);
+    T visitStartOfLineSymbol(IggyParseTree.StartOfLineSymbol node);
 
-    public abstract T visitFollowSymbol(FollowSymbol node);
+    T visitFollowSymbol(IggyParseTree.FollowSymbol node);
 
-    public abstract T visitNotFollowSymbol(NotFollowSymbol node);
+    T visitNotFollowSymbol(IggyParseTree.NotFollowSymbol node);
 
-    public abstract T visitExcludeSymbol(ExcludeSymbol node);
+    T visitExcludeSymbol(IggyParseTree.ExcludeSymbol node);
 
-    public abstract T visitExceptSymbol(ExceptSymbol node);
+    T visitExceptSymbol(IggyParseTree.ExceptSymbol node);
 
-    public abstract T visitEndOfLineSymbol(EndOfLineSymbol node);
+    T visitEndOfLineSymbol(IggyParseTree.EndOfLineSymbol node);
 
-    public abstract T visitEndOfFileSymbol(EndOfFileSymbol node);
+    T visitEndOfFileSymbol(IggyParseTree.EndOfFileSymbol node);
 
-    public abstract T visitIfThenElseSymbol(IfThenElseSymbol node);
+    T visitIfThenElseSymbol(IggyParseTree.IfThenElseSymbol node);
 
-    public abstract T visitIdentifierSymbol(IdentifierSymbol node);
+    T visitIdentifierSymbol(IggyParseTree.IdentifierSymbol node);
 
-    public abstract T visitStringSymbol(StringSymbol node);
+    T visitStringSymbol(IggyParseTree.StringSymbol node);
 
-    public abstract T visitCharClassSymbol(CharClassSymbol node);
+    T visitCharClassSymbol(IggyParseTree.CharClassSymbol node);
 
-    public abstract T visitStarSepSymbol(StarSepSymbol node);
+    T visitStarSepSymbol(IggyParseTree.StarSepSymbol node);
 
-    public abstract T visitPlusSepSymbol(PlusSepSymbol node);
+    T visitPlusSepSymbol(IggyParseTree.PlusSepSymbol node);
 
-    public abstract T visitArguments(Arguments node);
+    T visitArguments(IggyParseTree.Arguments node);
 
-    public abstract T visitCallStatement(CallStatement node);
+    T visitCallStatement(IggyParseTree.CallStatement node);
 
-    public abstract T visitBindingStatement(BindingStatement node);
+    T visitBindingStatement(IggyParseTree.BindingStatement node);
 
-    public abstract T visitAssignBinding(AssignBinding node);
+    T visitAssignBinding(IggyParseTree.AssignBinding node);
 
-    public abstract T visitDeclareBinding(DeclareBinding node);
+    T visitDeclareBinding(IggyParseTree.DeclareBinding node);
 
-    public abstract T visitStarRegex(StarRegex node);
+    T visitStarRegex(IggyParseTree.StarRegex node);
 
-    public abstract T visitPlusRegex(PlusRegex node);
+    T visitPlusRegex(IggyParseTree.PlusRegex node);
 
-    public abstract T visitOptionRegex(OptionRegex node);
+    T visitOptionRegex(IggyParseTree.OptionRegex node);
 
-    public abstract T visitBracketRegex(BracketRegex node);
+    T visitBracketRegex(IggyParseTree.BracketRegex node);
 
-    public abstract T visitSequenceRegex(SequenceRegex node);
+    T visitSequenceRegex(IggyParseTree.SequenceRegex node);
 
-    public abstract T visitAlternationRegex(AlternationRegex node);
+    T visitAlternationRegex(IggyParseTree.AlternationRegex node);
 
-    public abstract T visitNontRegex(NontRegex node);
+    T visitNontRegex(IggyParseTree.NontRegex node);
 
-    public abstract T visitCharClassRegex(CharClassRegex node);
+    T visitCharClassRegex(IggyParseTree.CharClassRegex node);
 
-    public abstract T visitStringRegex(StringRegex node);
+    T visitStringRegex(IggyParseTree.StringRegex node);
 
-    public abstract T visitCharsCharClass(CharsCharClass node);
+    T visitCharsCharClass(IggyParseTree.CharsCharClass node);
 
-    public abstract T visitNotCharsCharClass(NotCharsCharClass node);
+    T visitNotCharsCharClass(IggyParseTree.NotCharsCharClass node);
 
-    public abstract T visitRangeRange(RangeRange node);
+    T visitRangeRange(IggyParseTree.RangeRange node);
 
-    public abstract T visitCharacterRange(CharacterRange node);
+    T visitCharacterRange(IggyParseTree.CharacterRange node);
 
-    public abstract T visitCallExpression(CallExpression node);
+    T visitCallExpression(IggyParseTree.CallExpression node);
 
-    public abstract T visitNotExpression(NotExpression node);
+    T visitNotExpression(IggyParseTree.NotExpression node);
 
-    public abstract T visitMultiplicationExpression(MultiplicationExpression node);
+    T visitMultiplicationExpression(IggyParseTree.MultiplicationExpression node);
 
-    public abstract T visitDivisionExpression(DivisionExpression node);
+    T visitDivisionExpression(IggyParseTree.DivisionExpression node);
 
-    public abstract T visitAdditionExpression(AdditionExpression node);
+    T visitAdditionExpression(IggyParseTree.AdditionExpression node);
 
-    public abstract T visitSubtractionExpression(SubtractionExpression node);
+    T visitSubtractionExpression(IggyParseTree.SubtractionExpression node);
 
-    public abstract T visitGreaterEqExpression(GreaterEqExpression node);
+    T visitGreaterEqExpression(IggyParseTree.GreaterEqExpression node);
 
-    public abstract T visitLessEqExpression(LessEqExpression node);
+    T visitLessEqExpression(IggyParseTree.LessEqExpression node);
 
-    public abstract T visitGreaterExpression(GreaterExpression node);
+    T visitGreaterExpression(IggyParseTree.GreaterExpression node);
 
-    public abstract T visitLessExpression(LessExpression node);
+    T visitLessExpression(IggyParseTree.LessExpression node);
 
-    public abstract T visitEqualExpression(EqualExpression node);
+    T visitEqualExpression(IggyParseTree.EqualExpression node);
 
-    public abstract T visitNotEqualExpression(NotEqualExpression node);
+    T visitNotEqualExpression(IggyParseTree.NotEqualExpression node);
 
-    public abstract T visitAndExpression(AndExpression node);
+    T visitAndExpression(IggyParseTree.AndExpression node);
 
-    public abstract T visitOrExpression(OrExpression node);
+    T visitOrExpression(IggyParseTree.OrExpression node);
 
-    public abstract T visitLExtentExpression(LExtentExpression node);
+    T visitLExtentExpression(IggyParseTree.LExtentExpression node);
 
-    public abstract T visitRExtentExpression(RExtentExpression node);
+    T visitRExtentExpression(IggyParseTree.RExtentExpression node);
 
-    public abstract T visitYieldExpression(YieldExpression node);
+    T visitYieldExpression(IggyParseTree.YieldExpression node);
 
-    public abstract T visitValExpression(ValExpression node);
+    T visitValExpression(IggyParseTree.ValExpression node);
 
-    public abstract T visitNameExpression(NameExpression node);
+    T visitNameExpression(IggyParseTree.NameExpression node);
 
-    public abstract T visitNumberExpression(NumberExpression node);
+    T visitNumberExpression(IggyParseTree.NumberExpression node);
 
-    public abstract T visitBracketExpression(BracketExpression node);
+    T visitBracketExpression(IggyParseTree.BracketExpression node);
 
-    public abstract T visitReturnExpression(ReturnExpression node);
+    T visitReturnExpression(IggyParseTree.ReturnExpression node);
 
-    public abstract T visitVarName(VarName node);
+    T visitVarName(IggyParseTree.VarName node);
 
-    public abstract T visitName(Name node);
+    T visitName(IggyParseTree.Name node);
 
-    public abstract T visitIdentifier(Identifier node);
+    T visitIdentifier(IggyParseTree.Identifier node);
 
-    public abstract T visitLabel(Label node);
+    T visitLabel(IggyParseTree.Label node);
 
 }

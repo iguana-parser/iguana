@@ -67,6 +67,13 @@
             <resource>
                 <directory>src/resources</directory>
             </resource>
+            <resource>
+                <directory>src/org/iguana/iggy/gen</directory>
+                <includes>
+                    <include>**/*.json</include>
+                </includes>
+                <targetPath>${basedir}/target/classes/org/iguana/iggy/gen</targetPath>
+            </resource>
         </resources>
         <testSourceDirectory>test</testSourceDirectory>
         <testResources>

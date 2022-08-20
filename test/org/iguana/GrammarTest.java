@@ -3,7 +3,6 @@ package org.iguana;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.transformation.GrammarTransformer;
-import org.iguana.iggy.IggyParserBootstrap;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.traversal.exception.AmbiguityException;
@@ -33,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static org.iguana.iggy.IggyParserUtils.fromIggyGrammarPath;
 import static org.iguana.utils.io.FileUtils.readFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -70,7 +70,7 @@ public class GrammarTest {
 
         String grammarPath = test + "/grammar.iggy";
         System.out.println("Testing " + grammarPath);
-        Grammar grammar = IggyParserBootstrap.getGrammar(grammarPath);
+        Grammar grammar = fromIggyGrammarPath(grammarPath);
 
         String jsonGrammarPath = testPath + "/grammar.json";
 

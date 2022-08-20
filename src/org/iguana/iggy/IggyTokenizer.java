@@ -1,6 +1,7 @@
 package org.iguana.iggy;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.iggy.gen.IggyParser;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
@@ -20,7 +21,7 @@ public class IggyTokenizer {
     }
 
     private static IguanaTokenizer createIggyTokenizer() {
-        RuntimeGrammar grammar = IggyParserBootstrap.iggyGrammar().toRuntimeGrammar();
+        RuntimeGrammar grammar = IggyParser.getGrammar().toRuntimeGrammar();
         Map<RegularExpression, String> regularExpressionCategories = new LinkedHashMap<>();
 
         regularExpressionCategories.put(Seq.from("var"), "Keyword");

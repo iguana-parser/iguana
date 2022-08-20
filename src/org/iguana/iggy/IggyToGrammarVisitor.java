@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
-public class IggyToGrammarVisitor extends IggyParseTreeVisitor<Object> {
+public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
 
     private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
