@@ -13,6 +13,8 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
 @Command(name = "iguana", mixinStandardHelpOptions = true, version = "0.1-SNAPSHOT",
@@ -44,6 +46,10 @@ public class Iguana implements Callable<Integer> {
             System.out.println(parser.getParseError());
             return 1;
         }
+
+        // Create the gen directory if it doesn't already exist
+        Files.createDirectories(Paths.get(genDirectory.getAbsolutePath()));
+
         Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
         JsonSerializer.serialize(grammar, new File(genDirectory, grammarName + ".json").toPath().toAbsolutePath().toString());
 
