@@ -5,6 +5,7 @@ import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.TerminalNode;
+import org.iguana.regex.Char;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +48,6 @@ public class ParseTreeVisitorGenerator {
         sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
         sb.append("import org.iguana.utils.input.Input;\n\n");
         sb.append("import java.util.List;\n\n");
-        sb.append("import static " + packageName + "." + toFirstUpperCase(grammarName) + "ParseTree.*;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeBuilder";
         sb.append("public class " + className + " extends DefaultParseTreeBuilder {\n\n");
@@ -78,16 +78,16 @@ public class ParseTreeVisitorGenerator {
 
             sb.append("            case \"" + nonterminalName + "\":\n");
             if (alternatives.size() == 0) {
-                sb.append("                return new " + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
+                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
             } else if (alternatives.size() == 1) {
-                sb.append("                return new " + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
+                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
             } else {
                 sb.append("                switch (label) {\n");
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
                     sb.append("                    case \"" + alternative.getLabel() + "\":\n");
-                    String className = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
+                    String className = toFirstUpperCase(grammarName) + "ParseTree" + "." + alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
                     sb.append("                        return new " + className + "(rule, children, leftExtent, rightExtent);\n");
                 }
                 sb.append("                    default:\n");

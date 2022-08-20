@@ -1244,7 +1244,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "(\\u0020 | \\u0009 | \\\\u000A | \\\\u000D)",
+                      "name" : "(\\u0020 | \t | \n | \r)",
                       "nodeType" : "Regex",
                       "regex" : {
                         "kind" : "regex.Alt",
@@ -1349,7 +1349,7 @@
                     },
                     {
                       "kind" : "Star",
-                      "name" : "(\\u0001-\\u0009 | \\u000B-\\u10FFFF)*",
+                      "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)*",
                       "preConditions" : [
                         {
                           "kind" : "PositionalCondition",
@@ -1358,7 +1358,7 @@
                       ],
                       "s" : {
                         "kind" : "Terminal",
-                        "name" : "(\\u0001-\\u0009 | \\u000B-\\u10FFFF)",
+                        "name" : "(\\u0001-\t | \\u000B-\\u10FFFF)",
                         "nodeType" : "Regex",
                         "regex" : {
                           "kind" : "regex.Alt",

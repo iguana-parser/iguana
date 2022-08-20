@@ -75,8 +75,10 @@ public class Char extends AbstractRegularExpression {
 	}
 
 	public static String getName(int c) {
-		if(CharacterRanges.isPrintableAscii(c)) {
+		if (CharacterRanges.isPrintableAscii(c)) {
 			return (char) c + "";
+		} else if (CharacterRanges.isKnownWhitespace(c)) {
+			return CharacterRanges.getKnownWhitespaceString(c);
 		} else {
 			String s = "\\u" + String.format("%04X", c);
 			// Escape newline inside strings

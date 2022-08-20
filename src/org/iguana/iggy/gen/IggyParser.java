@@ -2,14 +2,12 @@
 package org.iguana.iggy.gen;
 
 import org.iguana.grammar.Grammar;
-import org.iguana.iggy.IggyToGrammarVisitor;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.utils.input.Input;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 

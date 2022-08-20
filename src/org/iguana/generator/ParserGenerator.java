@@ -22,14 +22,12 @@ public class ParserGenerator {
                 "package " + packageName + ";\n" +
                 "\n" +
                 "import org.iguana.grammar.Grammar;\n" +
-                "import org.iguana.iggy.IggyToGrammarVisitor;\n" +
                 "import org.iguana.parser.IguanaParser;\n" +
                 "import org.iguana.parsetree.ParseTreeBuilder;\n" +
                 "import org.iguana.parsetree.ParseTreeNode;\n" +
                 "import org.iguana.util.serialization.JsonSerializer;\n" +
                 "import org.iguana.utils.input.Input;\n" +
                 "\n" +
-                "import java.io.File;\n" +
                 "import java.io.IOException;\n" +
                 "import java.io.InputStream;\n" +
                 "\n" +
