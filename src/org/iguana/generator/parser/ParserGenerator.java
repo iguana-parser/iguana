@@ -1,6 +1,6 @@
-package org.iguana.generator;
+package org.iguana.generator.parser;
 
-import static org.iguana.generator.Utils.writeToFile;
+import static org.iguana.generator.GeneratorUtils.writeToFile;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
 public class ParserGenerator {

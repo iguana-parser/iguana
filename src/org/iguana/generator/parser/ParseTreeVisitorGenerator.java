@@ -1,18 +1,17 @@
-package org.iguana.generator;
+package org.iguana.generator.parser;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.TerminalNode;
-import org.iguana.regex.Char;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.iguana.generator.Utils.writeToFile;
+import static org.iguana.generator.GeneratorUtils.writeToFile;
 import static org.iguana.parsetree.MetaSymbolNode.*;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;

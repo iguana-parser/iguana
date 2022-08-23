@@ -1,7 +1,7 @@
 package org.iguana;
 
-import org.iguana.generator.ParseTreeVisitorGenerator;
-import org.iguana.generator.ParserGenerator;
+import org.iguana.generator.parser.ParseTreeVisitorGenerator;
+import org.iguana.generator.parser.ParserGenerator;
 import org.iguana.grammar.Grammar;
 import org.iguana.iggy.IggyToGrammarVisitor;
 import org.iguana.iggy.gen.IggyParser;

@@ -5,7 +5,7 @@ import org.iguana.utils.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class Utils {
+public class GeneratorUtils {
 
     public static void writeToFile(String content, String genDirectory, String className) {
         try {
