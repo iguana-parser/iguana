@@ -28,8 +28,19 @@
 package org.iguana.grammar.symbol;
 
 public enum Associativity {
-	LEFT,
-	RIGHT,
-	NON_ASSOC,
-	UNDEFINED
+	LEFT("left"),
+	RIGHT("right"),
+	NON_ASSOC("non_assoc"),
+	UNDEFINED("");
+
+	private final String name;
+
+	Associativity(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

@@ -57,15 +57,20 @@ public class Rule {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(head).append("\n  : ");
+        if (head.toString().length() == 1) {
+            sb.append(head).append(" =");
+        } else {
+            sb.append(head).append("\n  =");
+        }
         if (priorityLevels.isEmpty()) {
             sb.append("\n");
-        }
-        for (PriorityLevel alternatives : priorityLevels) {
-            sb.append(alternatives).append("  > ");
+        } else {
+            sb.append(" ");
+            for (PriorityLevel priorityLevel : priorityLevels) {
+                sb.append(priorityLevel).append("  > ");
+            }
         }
         sb.delete(sb.length() - 4, sb.length());
-        sb.append("  ;");
         return sb.toString();
     }
 

@@ -53,7 +53,7 @@ public class Alternative {
         }
         StringBuilder sb = new StringBuilder();
         if (associativity != null) {
-            sb.append(associativity).append(": ");
+            sb.append(associativity);
         }
         for (Sequence seq : seqs) {
             sb.append(seq.toString()).append(" ");
