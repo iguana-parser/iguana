@@ -120,6 +120,11 @@ public class Terminal extends AbstractSymbol {
 	}
 
 	@Override
+	public String toString() {
+		return regex.toString();
+	}
+
+	@Override
 	public <T> T accept(ISymbolVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

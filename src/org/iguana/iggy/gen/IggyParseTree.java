@@ -9,7 +9,7 @@ import java.util.List;
 import static org.iguana.parsetree.MetaSymbolNode.*;
 
 public class IggyParseTree {
-    // Grammar = grammar? name:Identifier? defs:(Rule | TopLevelVar)+
+    // Grammar = 'grammar'? name:Identifier? defs:(Rule | TopLevelVar)+
     public static class Grammar extends NonterminalNode {
         public Grammar(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -32,7 +32,7 @@ public class IggyParseTree {
         }
     }
 
-    // TopLevelVar = global? 'var' id:Identifier '=' exp:exp:Expression {env = put(env,id.yield)}
+    // TopLevelVar = 'global'? 'var' id:Identifier '=' exp:exp:Expression {env = put(env,id.yield)}
     public static class TopLevelVar extends NonterminalNode {
         public TopLevelVar(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -93,7 +93,7 @@ public class IggyParseTree {
         }
     }
 
-    // Rule = modifier:layout? 'regex' name:Name '=' body:RegexBody
+    // Rule = modifier:'layout'? 'regex' name:Name '=' body:RegexBody
     public static class RegexRule extends Rule {
         public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -120,7 +120,7 @@ public class IggyParseTree {
         }
     }
 
-    // Parameters = '(' id:Identifier {env = put(env,id.yield)}* ')'
+    // Parameters = '(' {id:Identifier {env = put(env,id.yield)} ','}* ')'
     public static class Parameters extends NonterminalNode {
         public Parameters(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -135,7 +135,7 @@ public class IggyParseTree {
         }
     }
 
-    // RegexBody = Regex+*
+    // RegexBody = {Regex+ '|'}*
     public static class RegexBody extends NonterminalNode {
         public RegexBody(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -325,7 +325,7 @@ public class IggyParseTree {
         }
     }
 
-    // Condition = '{' Expression* '}' '?'
+    // Condition = '{' {Expression ','}* '}' '?'
     public static class Condition extends NonterminalNode {
         public Condition(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -465,7 +465,7 @@ public class IggyParseTree {
         }
     }
 
-    // Symbol = '(' first:Symbol+ rest:(| Symbol+)+ ')'
+    // Symbol = '(' first:Symbol+ rest:('|' Symbol+)+ ')'
     public static class AlternationSymbol extends Symbol {
         public AlternationSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -920,7 +920,7 @@ public class IggyParseTree {
         }
     }
 
-    // Arguments = '(' Expression* ')'
+    // Arguments = '(' {Expression ','}* ')'
     public static class Arguments extends NonterminalNode {
         public Arguments(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -942,7 +942,7 @@ public class IggyParseTree {
 
     }
 
-    // Statement = fun:FunName args:Arguments ;?
+    // Statement = fun:FunName args:Arguments ';'?
     public static class CallStatement extends Statement {
         public CallStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -965,7 +965,7 @@ public class IggyParseTree {
         }
     }
 
-    // Statement = bindings:Binding ;?
+    // Statement = bindings:Binding ';'?
     public static class BindingStatement extends Statement {
         public BindingStatement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1014,7 +1014,7 @@ public class IggyParseTree {
         }
     }
 
-    // Binding = 'var' decls:(id:Name {env = put(env,id.yield)} = Expression)+
+    // Binding = 'var' decls:(id:Name {env = put(env,id.yield)} '=' Expression)+
     public static class DeclareBinding extends Binding {
         public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);

@@ -129,10 +129,10 @@
           "body" : [
             {
               "kind" : "Code",
-              "name" : "a {x = 1}",
+              "name" : "'a' {x = 1}",
               "symbol" : {
                 "kind" : "Terminal",
-                "name" : "a",
+                "name" : "'a'",
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
@@ -156,10 +156,10 @@
             },
             {
               "kind" : "Code",
-              "name" : "a {y = 2}",
+              "name" : "'a' {y = 2}",
               "symbol" : {
                 "kind" : "Terminal",
-                "name" : "a",
+                "name" : "'a'",
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
@@ -183,7 +183,7 @@
             },
             {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -229,7 +229,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "a",
+              "name" : "'a'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -243,7 +243,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "a",
+              "name" : "'a'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -257,7 +257,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -281,7 +281,7 @@
           "body" : [
             {
               "kind" : "Terminal",
-              "name" : "c",
+              "name" : "'c'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -312,7 +312,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "c",
+              "name" : "'c'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -340,10 +340,10 @@
           "body" : [
             {
               "kind" : "Code",
-              "name" : "b {z = x;assert(x == 1)}",
+              "name" : "'b' {z = x;assert(x == 1)}",
               "symbol" : {
                 "kind" : "Terminal",
-                "name" : "b",
+                "name" : "'b'",
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
@@ -389,7 +389,7 @@
             },
             {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -420,7 +420,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "b",
+              "name" : "'b'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -434,7 +434,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -458,7 +458,7 @@
           "body" : [
             {
               "kind" : "Terminal",
-              "name" : "d",
+              "name" : "'d'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -489,7 +489,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "d",
+              "name" : "'d'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",

@@ -44,7 +44,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "+",
+                      "name" : "'+'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -71,7 +71,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "let",
+                      "name" : "''l''e''t''",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -97,7 +97,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "in",
+                      "name" : "''i''n''",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -180,10 +180,10 @@
                   "symbols" : [
                     {
                       "kind" : "Ignore",
-                      "name" : "ignore {",
+                      "name" : "ignore '{'",
                       "symbol" : {
                         "kind" : "Terminal",
-                        "name" : "{",
+                        "name" : "'{'",
                         "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
@@ -197,14 +197,14 @@
                     },
                     {
                       "kind" : "Star",
-                      "name" : "(; Decl)*",
+                      "name" : "(';' Decl)*",
                       "s" : {
                         "kind" : "Sequence",
-                        "name" : "(; Decl)",
+                        "name" : "(';' Decl)",
                         "symbols" : [
                           {
                             "kind" : "Terminal",
-                            "name" : ";",
+                            "name" : "';'",
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
@@ -220,7 +220,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "}",
+                      "name" : "'}'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -256,7 +256,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "=",
+                      "name" : "'='",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",

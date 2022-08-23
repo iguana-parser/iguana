@@ -98,7 +98,7 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
     @Override
     public String toString() {
         if (symbols.stream().allMatch(c -> c instanceof Char))
-            return symbols.stream().map(a -> a.toString()).collect(Collectors.joining(""));
+            return "'" + symbols.stream().map(c -> Char.getName(((Char) c).getValue())).collect(Collectors.joining("")) + "'";
         return "(" + symbols.stream().map(a -> a.toString()).collect(Collectors.joining(" ")) + ")";
     }
 

@@ -65,7 +65,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -127,7 +127,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "c",
+          "name" : "'c'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -161,18 +161,18 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "\\u0020+",
+        "name" : "'\\u0020'+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "\\u0020+",
+          "name" : "'\\u0020'+",
           "nodeType" : "Plus"
         },
         {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -199,10 +199,10 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "\\u0020+",
+        "name" : "'\\u0020'+",
         "s" : {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -214,13 +214,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "\\u0020+",
+        "name" : "'\\u0020'+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -252,10 +252,10 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "\\u0020+",
+        "name" : "'\\u0020'+",
         "s" : {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -267,13 +267,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "\\u0020*",
+        "name" : "'\\u0020'*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "\\u0020+",
+          "name" : "'\\u0020'+",
           "nodeType" : "Plus"
         }
       ],
@@ -296,7 +296,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "\\u0020*",
+        "name" : "'\\u0020'*",
         "postConditions" : [
           {
             "kind" : "RegularExpressionCondition",
@@ -309,7 +309,7 @@
         ],
         "s" : {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -321,7 +321,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "\\u0020*",
+        "name" : "'\\u0020'*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -343,7 +343,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "\\u0020*",
+        "name" : "'\\u0020'*",
         "postConditions" : [
           {
             "kind" : "RegularExpressionCondition",
@@ -356,7 +356,7 @@
         ],
         "s" : {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -374,7 +374,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "\\u0020*",
+          "name" : "'\\u0020'*",
           "postConditions" : [
             {
               "kind" : "RegularExpressionCondition",

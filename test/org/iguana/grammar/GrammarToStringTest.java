@@ -28,4 +28,28 @@ public class GrammarToStringTest {
         assertEquals(grammarText, grammar.toString());
     }
 
+    @Test
+    public void test3() {
+        String grammarText =
+            "S = {C ','}*\n" +
+            "\n" +
+            "C = 'c'\n";
+        Grammar grammar = fromIggyGrammar(grammarText);
+
+        assertEquals(grammarText, grammar.toString());
+    }
+
+    @Test
+    public void test4() {
+        String grammarText =
+            "S = {C ',' ';' B}*\n" +
+            "\n" +
+            "B = 'b'\n" +
+            "\n" +
+            "C = 'c'\n";
+        Grammar grammar = fromIggyGrammar(grammarText);
+
+        assertEquals(grammarText, grammar.toString());
+    }
+
 }

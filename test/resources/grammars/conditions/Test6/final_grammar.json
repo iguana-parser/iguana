@@ -78,7 +78,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "for",
+          "name" : "''f''o''r''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -134,7 +134,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "forall",
+          "name" : "''f''o''r''a''l''l''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -444,7 +444,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",

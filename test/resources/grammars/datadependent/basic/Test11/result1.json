@@ -47,10 +47,10 @@
           "body" : [
             {
               "kind" : "Code",
-              "name" : "a:a [a.lExt == 0] {assert(a.rExt == 1,indent(a.rExt) == 2)}",
+              "name" : "'a' {assert(a.rExt == 1,indent(a.rExt) == 2)}",
               "symbol" : {
                 "kind" : "Terminal",
-                "name" : "a",
+                "name" : "'a'",
                 "label" : "a",
                 "postConditions" : [
                   {
@@ -134,10 +134,10 @@
             },
             {
               "kind" : "Code",
-              "name" : "b:b [b.lExt == 5] {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
+              "name" : "'b' {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
               "symbol" : {
                 "kind" : "Terminal",
-                "name" : "b",
+                "name" : "'b'",
                 "label" : "b",
                 "postConditions" : [
                   {
@@ -237,7 +237,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "a",
+              "name" : "'a'",
               "label" : "a",
               "postConditions" : [
                 {
@@ -291,7 +291,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "b",
+              "name" : "'b'",
               "label" : "b",
               "postConditions" : [
                 {

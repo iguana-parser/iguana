@@ -68,7 +68,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -99,7 +99,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -123,7 +123,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -154,7 +154,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -178,7 +178,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -209,7 +209,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -237,7 +237,7 @@
           "body" : [
             {
               "kind" : "Nonterminal",
-              "name" : "l*",
+              "name" : "'l'*",
               "nodeType" : "Star"
             }
           ],
@@ -264,10 +264,10 @@
             "kind" : "StarNode",
             "symbol" : {
               "kind" : "Star",
-              "name" : "l*",
+              "name" : "'l'*",
               "s" : {
                 "kind" : "Terminal",
-                "name" : "l",
+                "name" : "'l'",
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
@@ -303,7 +303,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -334,7 +334,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -358,7 +358,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -389,7 +389,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -413,7 +413,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -444,7 +444,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -468,7 +468,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -499,7 +499,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "b",
+                  "name" : "'b'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",

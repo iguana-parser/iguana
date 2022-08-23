@@ -1,13 +1,9 @@
 package org.iguana.grammar.symbol;
 
-import org.iguana.regex.RegularExpression;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static org.iguana.regex.utils.RegexUtils.isLiteral;
 
 public class Sequence {
 
@@ -68,11 +64,7 @@ public class Sequence {
             sb.append(associativity).append("  ");
         }
         for (Symbol symbol : symbols) {
-            if (symbol instanceof Terminal && isLiteral(((Terminal) symbol).getRegularExpression())) {
-                sb.append("'").append(symbol).append("'").append(" ");
-            } else {
-                sb.append(symbol).append(" ");
-            }
+            sb.append(symbol).append(" ");
         }
         if (sb.length() > 0) {
             sb.deleteCharAt(sb.length() - 1);

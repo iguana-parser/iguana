@@ -8,13 +8,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ;, null}+",
+        "name" : "{Statement, ';', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}+",
+          "name" : "{Statement, ';', null}+",
           "nodeType" : "Plus"
         },
         {
@@ -24,7 +24,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -73,7 +73,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -86,7 +86,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ;, null}+",
+        "name" : "{Statement, ';', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -127,7 +127,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -140,13 +140,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ;, null}*",
+        "name" : "{Statement, ';', null}*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}+",
+          "name" : "{Statement, ';', null}+",
           "nodeType" : "Plus"
         }
       ],
@@ -174,7 +174,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "Statement*",
+        "name" : "{Statement ';'}*",
         "label" : "body",
         "s" : {
           "kind" : "Nonterminal",
@@ -183,7 +183,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -196,7 +196,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ;, null}*",
+        "name" : "{Statement, ';', null}*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -218,7 +218,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "Statement*",
+        "name" : "{Statement ';'}*",
         "label" : "body",
         "s" : {
           "kind" : "Nonterminal",
@@ -227,7 +227,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -245,7 +245,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "begin",
+          "name" : "''b''e''g''i''n''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -290,7 +290,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}*",
+          "name" : "{Statement, ';', null}*",
           "label" : "body",
           "nodeType" : "Star"
         },
@@ -301,7 +301,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "end",
+          "name" : "''e''n''d''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -348,13 +348,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ,, null}+",
+        "name" : "{IdType, ',', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{IdType, ,, null}+",
+          "name" : "{IdType, ',', null}+",
           "nodeType" : "Plus"
         },
         {
@@ -364,7 +364,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ",",
+          "name" : "','",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -413,7 +413,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ",",
+            "name" : "','",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -426,7 +426,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ,, null}+",
+        "name" : "{IdType, ',', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -467,7 +467,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ",",
+            "name" : "','",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -480,13 +480,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ,, null}*",
+        "name" : "{IdType, ',', null}*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{IdType, ,, null}+",
+          "name" : "{IdType, ',', null}+",
           "nodeType" : "Plus"
         }
       ],
@@ -514,7 +514,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "IdType*",
+        "name" : "{IdType ','}*",
         "label" : "decls",
         "s" : {
           "kind" : "Nonterminal",
@@ -523,7 +523,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ",",
+            "name" : "','",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -536,7 +536,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ,, null}*",
+        "name" : "{IdType, ',', null}*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -558,7 +558,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "IdType*",
+        "name" : "{IdType ','}*",
         "label" : "decls",
         "s" : {
           "kind" : "Nonterminal",
@@ -567,7 +567,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ",",
+            "name" : "','",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -585,7 +585,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "declare",
+          "name" : "''d''e''c''l''a''r''e''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -628,7 +628,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{IdType, ,, null}*",
+          "name" : "{IdType, ',', null}*",
           "label" : "decls",
           "nodeType" : "Star"
         },
@@ -639,7 +639,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -688,7 +688,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ":",
+          "name" : "':'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -747,7 +747,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ":=",
+          "name" : "'':''=''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -812,7 +812,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "if",
+          "name" : "''i''f''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -851,7 +851,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "then",
+          "name" : "''t''h''e''n''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -882,7 +882,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}*",
+          "name" : "{Statement, ';', null}*",
           "label" : "thenPart",
           "nodeType" : "Star"
         },
@@ -893,7 +893,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "else",
+          "name" : "''e''l''s''e''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -924,7 +924,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}*",
+          "name" : "{Statement, ';', null}*",
           "label" : "elsePart",
           "nodeType" : "Star"
         },
@@ -935,7 +935,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "fi",
+          "name" : "''f''i''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -984,7 +984,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "if",
+          "name" : "''i''f''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1023,7 +1023,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "then",
+          "name" : "''t''h''e''n''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1054,7 +1054,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}*",
+          "name" : "{Statement, ';', null}*",
           "label" : "thenPart",
           "nodeType" : "Star"
         },
@@ -1065,7 +1065,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "fi",
+          "name" : "''f''i''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1114,7 +1114,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "while",
+          "name" : "''w''h''i''l''e''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1165,7 +1165,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "do",
+          "name" : "''d''o''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1188,7 +1188,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ;, null}*",
+          "name" : "{Statement, ';', null}*",
           "label" : "body",
           "nodeType" : "Star"
         },
@@ -1199,7 +1199,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "od",
+          "name" : "''o''d''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1248,7 +1248,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "natural",
+          "name" : "''n''a''t''u''r''a''l''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1317,7 +1317,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "string",
+          "name" : "''s''t''r''i''n''g''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1382,7 +1382,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "nil-type",
+          "name" : "''n''i''l''-''t''y''p''e''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1599,7 +1599,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "(",
+          "name" : "'('",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -1629,7 +1629,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ")",
+          "name" : "')'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -1749,7 +1749,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "||",
+          "name" : "''|''|''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -1894,7 +1894,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "+",
+          "name" : "'+'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -2049,7 +2049,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "-",
+          "name" : "'-'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -2906,7 +2906,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "\"",
+          "name" : "'\"'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -2920,7 +2920,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "\"",
+          "name" : "'\"'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -3235,7 +3235,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "(\\u0020 | \\t | \\n | \\r)",
+          "name" : "('\\u0020' | '\\t' | '\\n' | '\\r')",
           "nodeType" : "Regex",
           "regex" : {
             "kind" : "regex.Alt",
@@ -3286,7 +3286,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "%",
+          "name" : "'%'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -3300,7 +3300,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "%",
+          "name" : "'%'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -3334,7 +3334,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "%%",
+          "name" : "''%''%''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",

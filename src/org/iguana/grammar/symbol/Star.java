@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.iguana.utils.string.StringUtil.listToString;
+
 public class Star extends AbstractSymbol {
 
 	private final Symbol s;
@@ -129,7 +131,11 @@ public class Star extends AbstractSymbol {
 
 		@Override
 		public Star build() {
-			this.name = s.getName() + "*";
+			if (separators.isEmpty()) {
+				this.name = s.getName() + "*";
+			} else {
+				this.name = String.format("{%s %s}*", s.getName(), listToString(separators));
+			}
 			return new Star(this);
 		}
 	}
