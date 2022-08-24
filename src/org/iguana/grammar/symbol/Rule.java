@@ -65,12 +65,12 @@ public class Rule {
         if (priorityLevels.isEmpty()) {
             sb.append("\n");
         } else {
-            sb.append(" ");
             for (PriorityLevel priorityLevel : priorityLevels) {
                 sb.append(priorityLevel).append("  > ");
             }
         }
         sb.delete(sb.length() - 4, sb.length());
+        sb.append("\n");
         return sb.toString();
     }
 

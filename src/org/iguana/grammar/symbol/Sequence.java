@@ -60,7 +60,7 @@ public class Sequence {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         List<Symbol> symbols = getSymbols();
-        if (associativity != null) {
+        if (associativity != null && associativity != Associativity.UNDEFINED) {
             sb.append(associativity).append("  ");
         }
         for (Symbol symbol : symbols) {

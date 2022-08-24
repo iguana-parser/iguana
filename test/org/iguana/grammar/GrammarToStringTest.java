@@ -52,4 +52,13 @@ public class GrammarToStringTest {
         assertEquals(grammarText, grammar.toString());
     }
 
+    @Test
+    public void test5() {
+        String grammarText =
+            "E = left (E '*' E | E '/' E)\n" +
+            "  > left (E '+' E | E '-' E)\n";
+        Grammar grammar = fromIggyGrammar(grammarText);
+        System.out.println(grammar);
+    }
+
 }

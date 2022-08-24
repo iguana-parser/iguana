@@ -52,14 +52,21 @@ public class Alternative {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        if (associativity != null) {
-            sb.append(associativity);
-        }
-        for (Sequence seq : seqs) {
-            sb.append(seq.toString()).append(" ");
-        }
-        if (!seqs.isEmpty()) {
-            sb.deleteCharAt(sb.length() - 1);
+        if (seqs.size() > 1) {
+            if (associativity != null) {
+                sb.append(associativity).append("  ");
+            }
+            sb.append("(");
+            for (Sequence seq : seqs) {
+                sb.append(seq).append("\n  |        ");
+            }
+            sb.delete(sb.length() - 12, sb.length());
+            sb.append(")");
+
+        } else if (seqs.size() == 1) {
+            if (associativity != null) {
+                sb.append(associativity).append(" ").append(seqs.get(0));
+            }
         }
         return sb.toString();
     }

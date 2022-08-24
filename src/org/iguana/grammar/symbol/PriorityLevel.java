@@ -41,7 +41,7 @@ public class PriorityLevel {
         for (Alternative alternative : alternatives) {
             sb.append(alternative);
             sb.append("\n");
-            sb.append("  | ");
+            sb.append("  |");
         }
         sb.delete(sb.length() - 4, sb.length());
         return sb.toString();
