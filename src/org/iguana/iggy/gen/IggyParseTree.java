@@ -150,7 +150,7 @@ public class IggyParseTree {
         }
     }
 
-    // Body = PriorityLevels+
+    // Body = {PriorityLevels '>'}+
     public static class Body extends NonterminalNode {
         public Body(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -165,7 +165,7 @@ public class IggyParseTree {
         }
     }
 
-    // PriorityLevels = Alternative+
+    // PriorityLevels = {Alternative '|'}+
     public static class PriorityLevels extends NonterminalNode {
         public PriorityLevels(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -206,7 +206,7 @@ public class IggyParseTree {
         }
     }
 
-    // Alternative = assoc:Associativity '(' seqs:Sequence+ ')'
+    // Alternative = assoc:Associativity '(' seqs:{Sequence '|'}+ ')'
     public static class AssociativityAlternative extends Alternative {
         public AssociativityAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1014,7 +1014,7 @@ public class IggyParseTree {
         }
     }
 
-    // Binding = 'var' decls:(id:Name {env = put(env,id.yield)} '=' Expression)+
+    // Binding = 'var' decls:{(id:Name {env = put(env,id.yield)} '=' Expression) ','}+
     public static class DeclareBinding extends Binding {
         public DeclareBinding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1139,7 +1139,7 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' regs:Regex++ ')'
+    // Regex = '(' regs:{Regex+ '|'}+ ')'
     public static class AlternationRegex extends Regex {
         public AlternationRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);

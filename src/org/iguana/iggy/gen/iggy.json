@@ -535,7 +535,7 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "PriorityLevels+",
+                      "name" : "{PriorityLevels '>'}+",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "PriorityLevels"
@@ -576,7 +576,7 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "Alternative+",
+                      "name" : "{Alternative '|'}+",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "Alternative"
@@ -646,7 +646,7 @@
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "Sequence+",
+                      "name" : "{Sequence '|'}+",
                       "label" : "seqs",
                       "s" : {
                         "kind" : "Identifier",
@@ -2089,7 +2089,7 @@
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "(id:Name {env = put(env,id.yield)} '=' Expression)+",
+                      "name" : "{(id:Name {env = put(env,id.yield)} '=' Expression) ','}+",
                       "label" : "decls",
                       "s" : {
                         "kind" : "Sequence",
@@ -2344,7 +2344,7 @@
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "Regex++",
+                      "name" : "{Regex+ '|'}+",
                       "label" : "regs",
                       "s" : {
                         "kind" : "Plus",
