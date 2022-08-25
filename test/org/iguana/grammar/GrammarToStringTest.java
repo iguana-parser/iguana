@@ -58,6 +58,19 @@ public class GrammarToStringTest {
             "E = left (E '*' E | E '/' E)\n" +
             "  > left (E '+' E | E '-' E)\n";
         Grammar grammar = fromIggyGrammar(grammarText);
+
+        assertEquals(grammarText, grammar.toString());
+    }
+
+    @Test
+    public void test6() {
+        String grammarText =
+            "E =       '-' E\n" +
+            "  > right E '^' E\n" +
+            "  > left E '*' E\n" +
+            "  > left E '+' E\n" +
+            "  |      'a'";
+        Grammar grammar = fromIggyGrammar(grammarText);
         System.out.println(grammar);
     }
 

@@ -66,7 +66,7 @@ public class Rule {
             sb.append("\n");
         } else {
             for (PriorityLevel priorityLevel : priorityLevels) {
-                sb.append(priorityLevel).append("  > ");
+                sb.append(priorityLevel).append("\n  >");
             }
         }
         sb.delete(sb.length() - 4, sb.length());
