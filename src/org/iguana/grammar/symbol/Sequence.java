@@ -72,7 +72,11 @@ public class Sequence {
         if (!attributes.isEmpty()) {
             sb.append("  ");
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
-                sb.append(String.format("@%s=%s ", entry.getKey(), entry.getValue()));
+                if (entry.getValue() == null) {
+                    sb.append(String.format("@%s ", entry.getKey()));
+                } else {
+                    sb.append(String.format("@%s=%s ", entry.getKey(), entry.getValue()));
+                }
             }
             sb.deleteCharAt(sb.length() - 1);
         }
