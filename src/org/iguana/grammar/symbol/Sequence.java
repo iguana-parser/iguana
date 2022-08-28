@@ -1,9 +1,6 @@
 package org.iguana.grammar.symbol;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Sequence {
 
@@ -13,10 +10,13 @@ public class Sequence {
 
     public final String label;
 
+    private final Map<String, Object> attributes;
+
     public Sequence(Builder builder) {
         this.symbols = builder.symbols;
         this.associativity = builder.associativity;
         this.label = builder.label;
+        this.attributes = builder.attributes;
     }
 
     public boolean isEmpty() {
@@ -69,11 +69,19 @@ public class Sequence {
         if (sb.length() > 0) {
             sb.deleteCharAt(sb.length() - 1);
         }
+        if (!attributes.isEmpty()) {
+            sb.append("  ");
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                sb.append(String.format("@%s=%s ", entry.getKey(), entry.getValue()));
+            }
+            sb.deleteCharAt(sb.length() - 1);
+        }
         return sb.toString();
     }
 
     public static class Builder {
-        private List<Symbol> symbols = new ArrayList<>();
+        private final Map<String, Object> attributes = new HashMap<>();
+        private final List<Symbol> symbols = new ArrayList<>();
         private Associativity associativity;
         private String label;
 
@@ -94,6 +102,11 @@ public class Sequence {
 
         public Builder setLabel(String label) {
             this.label = label;
+            return this;
+        }
+
+        public Builder addAttribute(String key, Object value) {
+            this.attributes.put(key, value);
             return this;
         }
 
