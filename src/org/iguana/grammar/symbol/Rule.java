@@ -58,19 +58,19 @@ public class Rule {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (head.toString().length() == 1) {
-            sb.append(head).append(" =");
+            sb.append(head).append(" = ");
         } else {
-            sb.append(head).append("\n  =");
+            sb.append(head).append("\n  = ");
         }
         if (priorityLevels.isEmpty()) {
             sb.append("\n");
         } else {
             for (PriorityLevel priorityLevel : priorityLevels) {
-                sb.append(priorityLevel).append("\n  >");
+                sb.append(priorityLevel).append("\n  > ");
             }
+            sb.delete(sb.length() - 5, sb.length());
+            sb.append("\n");
         }
-        sb.delete(sb.length() - 4, sb.length());
-        sb.append("\n");
         return sb.toString();
     }
 

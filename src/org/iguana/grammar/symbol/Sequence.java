@@ -20,21 +20,20 @@ public class Sequence {
     }
 
     public boolean isEmpty() {
-        return symbols == null || symbols.isEmpty();
+        return symbols.isEmpty();
     }
 
     public Symbol first() {
-        if (symbols == null || symbols.isEmpty()) return null;
+        if (symbols.isEmpty()) return null;
         return symbols.get(0);
     }
 
     public List<Symbol> rest() {
-        if (symbols == null || symbols.isEmpty() || symbols.size() == 1) return null;
+        if (symbols.isEmpty() || symbols.size() == 1) return null;
         return symbols.subList(1, symbols.size());
     }
 
     public List<Symbol> getSymbols() {
-        if (symbols == null) return Collections.emptyList();
         return symbols;
     }
 
@@ -61,13 +60,16 @@ public class Sequence {
         StringBuilder sb = new StringBuilder();
         List<Symbol> symbols = getSymbols();
         if (associativity != null && associativity != Associativity.UNDEFINED) {
-            sb.append(associativity).append("  ");
+            sb.append(associativity).append(" ");
         }
         for (Symbol symbol : symbols) {
             sb.append(symbol).append(" ");
         }
         if (sb.length() > 0) {
             sb.deleteCharAt(sb.length() - 1);
+        }
+        if (label != null) {
+            sb.append("  ").append("%").append(label);
         }
         if (!attributes.isEmpty()) {
             sb.append("  ");

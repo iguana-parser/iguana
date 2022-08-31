@@ -40,10 +40,9 @@ public class PriorityLevel {
         StringBuilder sb = new StringBuilder();
         for (Alternative alternative : alternatives) {
             sb.append(alternative);
-            sb.append("\n");
-            sb.append("  |");
+            sb.append("\n  | ");
         }
-        sb.delete(sb.length() - 4, sb.length());
+        sb.delete(sb.length() - 5, sb.length());
         return sb.toString();
     }
 
@@ -61,6 +60,9 @@ public class PriorityLevel {
         }
 
         public PriorityLevel build() {
+            if (alternatives.isEmpty()) {
+                throw new RuntimeException("Alternatives cannot be empty");
+            }
             return new PriorityLevel(this);
         }
     }

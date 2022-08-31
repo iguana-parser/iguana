@@ -21,12 +21,12 @@ public class Alternative {
     }
 
     public Sequence first() {
-        if (seqs == null || seqs.isEmpty()) return null;
+        if (seqs.isEmpty()) return null;
         return seqs.get(0);
     }
 
     public List<Sequence> rest() {
-        if (seqs == null || seqs.size() < 2) return null;
+        if (seqs.size() < 2) return null;
         return seqs.subList(1, seqs.size());
     }
 
@@ -35,7 +35,7 @@ public class Alternative {
     }
 
     public List<Sequence> seqs() {
-        return seqs == null ? Collections.emptyList() : seqs;
+        return seqs;
     }
 
     @Override
@@ -48,24 +48,23 @@ public class Alternative {
 
     @Override
     public String toString() {
-        if (seqs == null) {
-            return "";
-        }
         StringBuilder sb = new StringBuilder();
         if (seqs.size() > 1) {
-            if (associativity != null) {
-                sb.append(associativity).append("  ");
+            if (associativity != Associativity.UNDEFINED) {
+                sb.append(associativity).append(" ");
             }
             sb.append("(");
             for (Sequence seq : seqs) {
-                sb.append(seq).append("\n  |        ");
+                sb.append(seq).append("\n  |       ");
             }
-            sb.delete(sb.length() - 12, sb.length());
+            sb.delete(sb.length() - 11, sb.length());
             sb.append(")");
 
         } else if (seqs.size() == 1) {
-            if (associativity != null) {
+            if (associativity != Associativity.UNDEFINED) {
                 sb.append(associativity).append(" ").append(seqs.get(0));
+            } else {
+                sb.append(seqs.get(0));
             }
         }
         return sb.toString();
@@ -73,11 +72,13 @@ public class Alternative {
 
     public static class Builder {
         private List<Sequence> seqs = new ArrayList<>();
-        public Associativity associativity = Associativity.UNDEFINED;
+        private Associativity associativity = Associativity.UNDEFINED;
 
         public Builder() { }
 
         public Builder(List<Sequence> sequences, Associativity associativity) {
+            if (sequences == null) throw new RuntimeException("Sequences cannot be null.");
+            if (associativity == null) throw new RuntimeException("Sequences cannot be null.");
             this.seqs = sequences;
             this.associativity = associativity;
         }
@@ -98,6 +99,12 @@ public class Alternative {
         }
 
         public Alternative build() {
+            if (associativity == null) {
+                throw new RuntimeException("Associativity cannot be null.");
+            }
+            if (seqs.isEmpty()) {
+                seqs = Collections.emptyList();
+            }
             return new Alternative(this);
         }
     }

@@ -10,8 +10,8 @@ public class GrammarToStringTest {
     @Test
     public void test1() {
         String grammarText =
-            "E = left  E '*' E\n" +
-            "  | left  E '+' E\n";
+            "E = left E '*' E\n" +
+            "  | left E '+' E\n";
         Grammar grammar = fromIggyGrammar(grammarText);
 
         assertEquals(grammarText, grammar.toString());
@@ -21,8 +21,8 @@ public class GrammarToStringTest {
     public void test2() {
         String grammarText =
             "Expr\n" +
-            "  = left  Expr '*' Expr\n" +
-            "  | left  Expr '+' Expr\n";
+            "  = left Expr '*' Expr\n" +
+            "  | left Expr '+' Expr\n";
         Grammar grammar = fromIggyGrammar(grammarText);
 
         assertEquals(grammarText, grammar.toString());
@@ -55,23 +55,25 @@ public class GrammarToStringTest {
     @Test
     public void test5() {
         String grammarText =
-            "E = left (E '*' E | E '/' E)\n" +
-            "  > left (E '+' E | E '-' E)\n";
+            "E = left (E '*' E\n" +
+            "  |       E '/' E)\n" +
+            "  > left (E '+' E\n" +
+            "  |       E '-' E)\n";
         Grammar grammar = fromIggyGrammar(grammarText);
 
-        System.out.println(grammar);
+        assertEquals(grammarText, grammar.toString());
     }
 
     @Test
     public void test6() {
         String grammarText =
-            "E =       '-' E\n" +
-            "  > right E '^' E\n" +
-            "  > left E '*' E\n" +
-            "  > left E '+' E\n" +
-            "  |      'a'";
+            "E = '-' E  %UnaryMin\n" +
+            "  > right E '^' E  %Power\n" +
+            "  > left E '*' E  %Multiply\n" +
+            "  > left E '+' E  %Plus\n" +
+            "  | 'a'  %Literal\n";
         Grammar grammar = fromIggyGrammar(grammarText);
-        System.out.println(grammar);
-    }
 
+        assertEquals(grammarText, grammar.toString());
+    }
 }
