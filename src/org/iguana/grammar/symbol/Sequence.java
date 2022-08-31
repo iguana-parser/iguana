@@ -1,9 +1,6 @@
 package org.iguana.grammar.symbol;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Sequence {
 
@@ -13,28 +10,30 @@ public class Sequence {
 
     public final String label;
 
+    private final Map<String, Object> attributes;
+
     public Sequence(Builder builder) {
         this.symbols = builder.symbols;
         this.associativity = builder.associativity;
         this.label = builder.label;
+        this.attributes = builder.attributes;
     }
 
     public boolean isEmpty() {
-        return symbols == null || symbols.isEmpty();
+        return symbols.isEmpty();
     }
 
     public Symbol first() {
-        if (symbols == null || symbols.isEmpty()) return null;
+        if (symbols.isEmpty()) return null;
         return symbols.get(0);
     }
 
     public List<Symbol> rest() {
-        if (symbols == null || symbols.isEmpty() || symbols.size() == 1) return null;
+        if (symbols.isEmpty() || symbols.size() == 1) return null;
         return symbols.subList(1, symbols.size());
     }
 
     public List<Symbol> getSymbols() {
-        if (symbols == null) return Collections.emptyList();
         return symbols;
     }
 
@@ -60,17 +59,35 @@ public class Sequence {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         List<Symbol> symbols = getSymbols();
+        if (associativity != null && associativity != Associativity.UNDEFINED) {
+            sb.append(associativity).append(" ");
+        }
         for (Symbol symbol : symbols) {
-            sb.append(symbol.toString()).append(" ");
+            sb.append(symbol).append(" ");
         }
         if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if (label != null) {
+            sb.append("  ").append("%").append(label);
+        }
+        if (!attributes.isEmpty()) {
+            sb.append("  ");
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                if (entry.getValue() == null) {
+                    sb.append(String.format("@%s ", entry.getKey()));
+                } else {
+                    sb.append(String.format("@%s=%s ", entry.getKey(), entry.getValue()));
+                }
+            }
             sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
     }
 
     public static class Builder {
-        private List<Symbol> symbols = new ArrayList<>();
+        private final Map<String, Object> attributes = new HashMap<>();
+        private final List<Symbol> symbols = new ArrayList<>();
         private Associativity associativity;
         private String label;
 
@@ -91,6 +108,11 @@ public class Sequence {
 
         public Builder setLabel(String label) {
             this.label = label;
+            return this;
+        }
+
+        public Builder addAttribute(String key, Object value) {
+            this.attributes.put(key, value);
             return this;
         }
 

@@ -15,7 +15,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{A, a, B, C, null}+",
+          "name" : "{A, 'a', B, C, null}+",
           "nodeType" : "Plus"
         }
       ],
@@ -50,7 +50,7 @@
           "separators" : [
             {
               "kind" : "Terminal",
-              "name" : "a",
+              "name" : "'a'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -78,7 +78,7 @@
               "body" : [
                 {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",
@@ -109,7 +109,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "a",
+                  "name" : "'a'",
                   "nodeType" : "Literal",
                   "regex" : {
                     "kind" : "Char",

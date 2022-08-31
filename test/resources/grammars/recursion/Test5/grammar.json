@@ -18,7 +18,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "c",
+                      "name" : "'c'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -41,7 +41,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "d",
+                      "name" : "'d'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -60,7 +60,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "e",
+                      "name" : "'e'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -95,7 +95,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "f",
+                      "name" : "'f'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -118,7 +118,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "g",
+                      "name" : "'g'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -154,7 +154,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "g",
+                      "name" : "'g'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",

@@ -15,7 +15,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "a*",
+          "name" : "'a'*",
           "nodeType" : "Star"
         }
       ],
@@ -42,10 +42,10 @@
         "kind" : "StarNode",
         "symbol" : {
           "kind" : "Star",
-          "name" : "a*",
+          "name" : "'a'*",
           "s" : {
             "kind" : "Terminal",
-            "name" : "a",
+            "name" : "'a'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -58,7 +58,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "a",
+              "name" : "'a'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",

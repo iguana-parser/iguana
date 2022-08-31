@@ -44,7 +44,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "+",
+                      "name" : "'+'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -71,7 +71,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "if",
+                      "name" : "''i''f''",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -93,7 +93,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "then",
+                      "name" : "''t''h''e''n''",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -123,7 +123,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "else",
+                      "name" : "''e''l''s''e''",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -163,7 +163,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "a",
+                      "name" : "'a'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",

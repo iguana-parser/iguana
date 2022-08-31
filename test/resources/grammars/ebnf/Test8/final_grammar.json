@@ -185,18 +185,18 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "a+",
+        "name" : "'a'+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "a+",
+          "name" : "'a'+",
           "nodeType" : "Plus"
         },
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -223,10 +223,10 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "a+",
+        "name" : "'a'+",
         "s" : {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -238,13 +238,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "a+",
+        "name" : "'a'+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -271,10 +271,10 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "a+",
+        "name" : "'a'+",
         "s" : {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -286,13 +286,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "a*",
+        "name" : "'a'*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "a+",
+          "name" : "'a'+",
           "nodeType" : "Plus"
         }
       ],
@@ -315,10 +315,10 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "a*",
+        "name" : "'a'*",
         "s" : {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -330,7 +330,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "a*",
+        "name" : "'a'*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -352,10 +352,10 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "a*",
+        "name" : "'a'*",
         "s" : {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -372,7 +372,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "a*",
+          "name" : "'a'*",
           "nodeType" : "Star"
         }
       ],

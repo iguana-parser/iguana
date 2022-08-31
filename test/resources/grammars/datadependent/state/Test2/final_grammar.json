@@ -209,10 +209,10 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "a {x = 999}",
+          "name" : "'a' {x = 999}",
           "symbol" : {
             "kind" : "Terminal",
-            "name" : "a",
+            "name" : "'a'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -236,10 +236,10 @@
         },
         {
           "kind" : "Code",
-          "name" : "a {y = 2}",
+          "name" : "'a' {y = 2}",
           "symbol" : {
             "kind" : "Terminal",
-            "name" : "a",
+            "name" : "'a'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -263,7 +263,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -321,10 +321,10 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "b {z = x}",
+          "name" : "'b' {z = x}",
           "symbol" : {
             "kind" : "Terminal",
-            "name" : "b",
+            "name" : "'b'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -349,7 +349,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -398,7 +398,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "d",
+          "name" : "'d'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -432,7 +432,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "c",
+          "name" : "'c'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",

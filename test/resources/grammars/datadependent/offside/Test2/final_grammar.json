@@ -36,7 +36,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ;, null}+",
+        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
         "parameters" : [
           "a0.lExt"
         ],
@@ -45,7 +45,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ;, null}+",
+          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
           "parameters" : [
             "a0.lExt"
           ],
@@ -93,7 +93,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -283,7 +283,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -296,7 +296,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ;, null}+",
+        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
         "parameters" : [
           "a0.lExt"
         ],
@@ -453,7 +453,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -471,7 +471,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ;, null}+",
+          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
           "label" : "a0",
           "parameters" : [
             "a0.lExt"
@@ -550,7 +550,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "x",
+          "name" : "'x'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -621,7 +621,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "=",
+          "name" : "'='",
           "label" : "o1",
           "preConditions" : [
             {
@@ -884,7 +884,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "+",
+          "name" : "'+'",
           "label" : "o1",
           "preConditions" : [
             {
@@ -955,7 +955,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "label" : "o2",
           "preConditions" : [
             {
@@ -1056,7 +1056,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -1247,12 +1247,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{Stat, ;, null}+" : [
+    "{Stat, ';', null}+" : [
       "Stat"
     ]
   },
   "ebnfRights" : {
-    "{Stat, ;, null}+" : [
+    "{Stat, ';', null}+" : [
       "Stat",
       "$Exp",
       "Exp"

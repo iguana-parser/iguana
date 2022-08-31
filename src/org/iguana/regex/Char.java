@@ -62,7 +62,6 @@ public class Char extends AbstractRegularExpression {
 
 	@Override
 	public boolean equals(Object obj) {
-		
 		if (this == obj)
 			return true;
 
@@ -88,7 +87,7 @@ public class Char extends AbstractRegularExpression {
 
 	@Override
 	public String toString() {
-		return getName(val);
+		return "'" + getName(val) + "'";
 	}
 
 	@Override
@@ -97,9 +96,9 @@ public class Char extends AbstractRegularExpression {
 	}
 	
 	@Override
-	public Set<org.iguana.regex.CharRange> getFirstSet() {
-		Set<org.iguana.regex.CharRange> firstSet = new HashSet<>();
-		firstSet.add(org.iguana.regex.CharRange.in(val, val));
+	public Set<CharRange> getFirstSet() {
+		Set<CharRange> firstSet = new HashSet<>();
+		firstSet.add(CharRange.in(val, val));
 		return firstSet;
 	}
 	

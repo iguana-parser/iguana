@@ -42,7 +42,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, *, null}+",
+        "name" : "{E, '*', null}+",
         "parameters" : [
           "p0"
         ],
@@ -51,7 +51,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, *, null}+",
+          "name" : "{E, '*', null}+",
           "arguments" : [
             {
               "kind" : "Integer",
@@ -62,7 +62,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "*",
+          "name" : "'*'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -130,7 +130,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : "*",
+            "name" : "'*'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -143,7 +143,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, *, null}+",
+        "name" : "{E, '*', null}+",
         "parameters" : [
           "p0"
         ],
@@ -211,7 +211,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : "*",
+            "name" : "'*'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -359,7 +359,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "*",
+          "name" : "'*'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -368,7 +368,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{E, *, null}+",
+          "name" : "{E, '*', null}+",
           "variable" : "r",
           "arguments" : [
             {
@@ -619,7 +619,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "->",
+          "name" : "''-''>''",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -765,7 +765,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "-",
+          "name" : "'-'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -835,7 +835,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -916,12 +916,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{E, *, null}+" : [
+    "{E, '*', null}+" : [
       "E"
     ]
   },
   "ebnfRights" : {
-    "{E, *, null}+" : [
+    "{E, '*', null}+" : [
       "$E",
       "E"
     ]

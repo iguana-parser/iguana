@@ -3,18 +3,18 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ;, null}+",
+        "name" : "{E, ';', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, ;, null}+",
+          "name" : "{E, ';', null}+",
           "nodeType" : "Plus"
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -59,7 +59,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -72,7 +72,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ;, null}+",
+        "name" : "{E, ';', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -114,7 +114,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -127,13 +127,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ;, null}*",
+        "name" : "{E, ';', null}*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, ;, null}+",
+          "name" : "{E, ';', null}+",
           "nodeType" : "Plus"
         }
       ],
@@ -156,7 +156,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "E*",
+        "name" : "{E ';'}*",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "E"
@@ -164,7 +164,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -177,7 +177,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ;, null}*",
+        "name" : "{E, ';', null}*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -199,7 +199,7 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "E*",
+        "name" : "{E ';'}*",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "E"
@@ -207,7 +207,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -225,7 +225,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, ;, null}*",
+          "name" : "{E, ';', null}*",
           "nodeType" : "Star"
         }
       ],
@@ -321,7 +321,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "+",
+          "name" : "'+'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -376,7 +376,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -447,22 +447,22 @@
     }
   ],
   "ebnfLefts" : {
-    "{E, ;, null}+" : [
+    "{E, ';', null}+" : [
       "E"
     ],
-    "{E, ;, null}*" : [
-      "{E, ;, null}+"
+    "{E, ';', null}*" : [
+      "{E, ';', null}+"
     ]
   },
   "ebnfRights" : {
-    "{E, ;, null}+" : [
+    "{E, ';', null}+" : [
       "$E",
       "E"
     ],
-    "{E, ;, null}*" : [
+    "{E, ';', null}*" : [
       "$E",
       "E",
-      "{E, ;, null}+"
+      "{E, ';', null}+"
     ]
   },
   "startSymbol" : {

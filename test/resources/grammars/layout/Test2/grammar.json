@@ -49,7 +49,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "a",
+                      "name" : "'a'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -96,7 +96,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "c",
+                      "name" : "'c'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -128,7 +128,7 @@
                   "symbols" : [
                     {
                       "kind" : "Star",
-                      "name" : "\\u0020*",
+                      "name" : "'\\u0020'*",
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
@@ -141,7 +141,7 @@
                       ],
                       "s" : {
                         "kind" : "Terminal",
-                        "name" : "\\u0020",
+                        "name" : "'\\u0020'",
                         "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",

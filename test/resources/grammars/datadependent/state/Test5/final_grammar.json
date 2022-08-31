@@ -111,7 +111,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "-",
+          "name" : "'-'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -372,7 +372,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "+",
+          "name" : "'+'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -559,10 +559,10 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "a {x = 1;y = 2}",
+          "name" : "'a' {x = 1;y = 2}",
           "symbol" : {
             "kind" : "Terminal",
-            "name" : "a",
+            "name" : "'a'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",

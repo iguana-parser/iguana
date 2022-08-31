@@ -212,6 +212,7 @@ public class Grammar {
         for (Rule rule : rules) {
             sb.append(rule).append("\n");
         }
+        sb.delete(sb.length() - 1, sb.length());
         return sb.toString();
     }
 

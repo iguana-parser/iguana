@@ -44,10 +44,10 @@
                   "symbols" : [
                     {
                       "kind" : "Star",
-                      "name" : "a*",
+                      "name" : "'a'*",
                       "s" : {
                         "kind" : "Terminal",
-                        "name" : "a",
+                        "name" : "'a'",
                         "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",

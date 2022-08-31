@@ -87,7 +87,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 	
 	@Override
 	public String toString(int j) {
-		return this.toString() + (j == 1? " . " : "");
+		return this + (j == 1 ? " . " : "");
 	}
 	
 }

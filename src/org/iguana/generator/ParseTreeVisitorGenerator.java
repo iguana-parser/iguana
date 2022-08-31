@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import static org.iguana.generator.Utils.writeToFile;
 import static org.iguana.parsetree.MetaSymbolNode.*;
-import static org.iguana.regex.utils.RegexUtils.isLiteral;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
@@ -219,11 +218,6 @@ public class ParseTreeVisitorGenerator {
 
     private String symbolToString(Symbol symbol) {
         String label = getLabel(symbol);
-        if (symbol instanceof Terminal) {
-            if (isLiteral(((Terminal) symbol).getRegularExpression())) {
-                return (label == null ? "" : label + ":") + "'" + symbol.getName() + "'";
-            }
-        }
         return (label == null ? "" : label + ":") + symbol.getName();
     }
 

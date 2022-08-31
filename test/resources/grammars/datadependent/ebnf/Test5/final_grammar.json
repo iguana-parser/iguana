@@ -1225,7 +1225,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -1259,7 +1259,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "b",
+          "name" : "'b'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -1293,7 +1293,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "c",
+          "name" : "'c'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",

@@ -40,7 +40,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "b",
+                      "name" : "'b'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",

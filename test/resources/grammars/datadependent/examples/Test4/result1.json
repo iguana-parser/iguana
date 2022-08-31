@@ -104,7 +104,7 @@
           "body" : [
             {
               "kind" : "Terminal",
-              "name" : "let",
+              "name" : "''l''e''t''",
               "label" : "o0",
               "preConditions" : [
                 {
@@ -269,7 +269,7 @@
             },
             {
               "kind" : "Terminal",
-              "name" : "in",
+              "name" : "''i''n''",
               "label" : "o2",
               "preConditions" : [
                 {
@@ -464,7 +464,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "let",
+              "name" : "''l''e''t''",
               "label" : "o0",
               "preConditions" : [
                 {
@@ -813,7 +813,7 @@
                         },
                         {
                           "kind" : "Terminal",
-                          "name" : "=",
+                          "name" : "'='",
                           "label" : "o1",
                           "preConditions" : [
                             {
@@ -1073,7 +1073,7 @@
                         "kind" : "KeywordTerminalNode",
                         "terminal" : {
                           "kind" : "Terminal",
-                          "name" : "=",
+                          "name" : "'='",
                           "label" : "o1",
                           "preConditions" : [
                             {
@@ -1449,7 +1449,7 @@
                         },
                         {
                           "kind" : "Terminal",
-                          "name" : "=",
+                          "name" : "'='",
                           "label" : "o1",
                           "preConditions" : [
                             {
@@ -1709,7 +1709,7 @@
                         "kind" : "KeywordTerminalNode",
                         "terminal" : {
                           "kind" : "Terminal",
-                          "name" : "=",
+                          "name" : "'='",
                           "label" : "o1",
                           "preConditions" : [
                             {
@@ -1764,7 +1764,7 @@
                           "body" : [
                             {
                               "kind" : "Terminal",
-                              "name" : "let",
+                              "name" : "''l''e''t''",
                               "label" : "o0",
                               "preConditions" : [
                                 {
@@ -1929,7 +1929,7 @@
                             },
                             {
                               "kind" : "Terminal",
-                              "name" : "in",
+                              "name" : "''i''n''",
                               "label" : "o2",
                               "preConditions" : [
                                 {
@@ -2124,7 +2124,7 @@
                             "kind" : "KeywordTerminalNode",
                             "terminal" : {
                               "kind" : "Terminal",
-                              "name" : "let",
+                              "name" : "''l''e''t''",
                               "label" : "o0",
                               "preConditions" : [
                                 {
@@ -2473,7 +2473,7 @@
                                         },
                                         {
                                           "kind" : "Terminal",
-                                          "name" : "=",
+                                          "name" : "'='",
                                           "label" : "o1",
                                           "preConditions" : [
                                             {
@@ -2733,7 +2733,7 @@
                                         "kind" : "KeywordTerminalNode",
                                         "terminal" : {
                                           "kind" : "Terminal",
-                                          "name" : "=",
+                                          "name" : "'='",
                                           "label" : "o1",
                                           "preConditions" : [
                                             {
@@ -3109,7 +3109,7 @@
                                         },
                                         {
                                           "kind" : "Terminal",
-                                          "name" : "=",
+                                          "name" : "'='",
                                           "label" : "o1",
                                           "preConditions" : [
                                             {
@@ -3369,7 +3369,7 @@
                                         "kind" : "KeywordTerminalNode",
                                         "terminal" : {
                                           "kind" : "Terminal",
-                                          "name" : "=",
+                                          "name" : "'='",
                                           "label" : "o1",
                                           "preConditions" : [
                                             {
@@ -3632,7 +3632,7 @@
                             "kind" : "KeywordTerminalNode",
                             "terminal" : {
                               "kind" : "Terminal",
-                              "name" : "in",
+                              "name" : "''i''n''",
                               "label" : "o2",
                               "preConditions" : [
                                 {
@@ -3834,7 +3834,7 @@
                                 },
                                 {
                                   "kind" : "Terminal",
-                                  "name" : "+",
+                                  "name" : "'+'",
                                   "label" : "o1",
                                   "preConditions" : [
                                     {
@@ -4262,7 +4262,7 @@
                                 "kind" : "KeywordTerminalNode",
                                 "terminal" : {
                                   "kind" : "Terminal",
-                                  "name" : "+",
+                                  "name" : "'+'",
                                   "label" : "o1",
                                   "preConditions" : [
                                     {
@@ -4533,7 +4533,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "in",
+              "name" : "''i''n''",
               "label" : "o2",
               "preConditions" : [
                 {
@@ -4735,7 +4735,7 @@
                 },
                 {
                   "kind" : "Terminal",
-                  "name" : "+",
+                  "name" : "'+'",
                   "label" : "o1",
                   "preConditions" : [
                     {
@@ -5105,7 +5105,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "+",
+                      "name" : "'+'",
                       "label" : "o1",
                       "preConditions" : [
                         {
@@ -5533,7 +5533,7 @@
                     "kind" : "KeywordTerminalNode",
                     "terminal" : {
                       "kind" : "Terminal",
-                      "name" : "+",
+                      "name" : "'+'",
                       "label" : "o1",
                       "preConditions" : [
                         {
@@ -5788,7 +5788,7 @@
                 "kind" : "KeywordTerminalNode",
                 "terminal" : {
                   "kind" : "Terminal",
-                  "name" : "+",
+                  "name" : "'+'",
                   "label" : "o1",
                   "preConditions" : [
                     {

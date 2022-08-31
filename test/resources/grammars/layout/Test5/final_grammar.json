@@ -56,7 +56,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -95,7 +95,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "b",
+          "name" : "'b'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -129,13 +129,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "\\u0020?",
+        "name" : "'\\u0020'?",
         "nodeType" : "Opt"
       },
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -162,10 +162,10 @@
       },
       "definition" : {
         "kind" : "Opt",
-        "name" : "\\u0020?",
+        "name" : "'\\u0020'?",
         "s" : {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -177,7 +177,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "\\u0020?",
+        "name" : "'\\u0020'?",
         "nodeType" : "Opt"
       },
       "recursion" : "NON_REC",
@@ -199,10 +199,10 @@
       },
       "definition" : {
         "kind" : "Opt",
-        "name" : "\\u0020?",
+        "name" : "'\\u0020'?",
         "s" : {
           "kind" : "Terminal",
-          "name" : "\\u0020",
+          "name" : "'\\u0020'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -220,7 +220,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "\\u0020?",
+          "name" : "'\\u0020'?",
           "nodeType" : "Opt"
         }
       ],

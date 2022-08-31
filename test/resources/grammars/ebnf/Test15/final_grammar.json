@@ -3,18 +3,18 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{A, a, B, C, null}+",
+        "name" : "{A, 'a', B, C, null}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{A, a, B, C, null}+",
+          "name" : "{A, 'a', B, C, null}+",
           "nodeType" : "Plus"
         },
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -61,7 +61,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : "a",
+            "name" : "'a'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -82,7 +82,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{A, a, B, C, null}+",
+        "name" : "{A, 'a', B, C, null}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -118,7 +118,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : "a",
+            "name" : "'a'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -144,7 +144,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{A, a, B, C, null}+",
+          "name" : "{A, 'a', B, C, null}+",
           "nodeType" : "Plus"
         }
       ],
@@ -174,7 +174,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -208,7 +208,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "b",
+          "name" : "'b'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -242,7 +242,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "c",
+          "name" : "'c'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -305,12 +305,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{A, a, B, C, null}+" : [
+    "{A, 'a', B, C, null}+" : [
       "A"
     ]
   },
   "ebnfRights" : {
-    "{A, a, B, C, null}+" : [
+    "{A, 'a', B, C, null}+" : [
       "A",
       "$A"
     ]

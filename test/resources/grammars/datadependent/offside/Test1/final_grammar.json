@@ -36,13 +36,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside Stat, ;, null}+",
+        "name" : "{offside Stat, ';', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside Stat, ;, null}+",
+          "name" : "{offside Stat, ';', null}+",
           "nodeType" : "Plus"
         },
         {
@@ -80,7 +80,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
@@ -210,7 +210,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -223,7 +223,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside Stat, ;, null}+",
+        "name" : "{offside Stat, ';', null}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -317,7 +317,7 @@
         "separators" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -335,7 +335,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside Stat, ;, null}+",
+          "name" : "{offside Stat, ';', null}+",
           "nodeType" : "Plus"
         }
       ],
@@ -403,7 +403,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "x",
+          "name" : "'x'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -474,7 +474,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "=",
+          "name" : "'='",
           "label" : "o1",
           "preConditions" : [
             {
@@ -737,7 +737,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "+",
+          "name" : "'+'",
           "label" : "o1",
           "preConditions" : [
             {
@@ -808,7 +808,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "label" : "o2",
           "preConditions" : [
             {
@@ -909,7 +909,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "a",
+          "name" : "'a'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -1100,12 +1100,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{Stat, ;, null}+" : [
+    "{Stat, ';', null}+" : [
       "Stat"
     ]
   },
   "ebnfRights" : {
-    "{Stat, ;, null}+" : [
+    "{Stat, ';', null}+" : [
       "Stat",
       "$Exp",
       "Exp"

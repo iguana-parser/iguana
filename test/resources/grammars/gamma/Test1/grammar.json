@@ -14,7 +14,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "a",
+                      "name" : "'a'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -45,7 +45,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "d",
+                      "name" : "'d'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
@@ -80,7 +80,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "a",
+                      "name" : "'a'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",

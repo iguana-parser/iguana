@@ -265,7 +265,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "+",
+          "name" : "'+'",
           "label" : "o1",
           "preConditions" : [
             {
@@ -494,7 +494,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "let",
+          "name" : "''l''e''t''",
           "label" : "o0",
           "preConditions" : [
             {
@@ -659,7 +659,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "in",
+          "name" : "''i''n''",
           "label" : "o2",
           "preConditions" : [
             {
@@ -1827,7 +1827,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "{",
+          "name" : "'{'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -1979,7 +1979,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "(; Decl)*",
+          "name" : "(';' Decl)*",
           "label" : "o2",
           "arguments" : [
             {
@@ -2061,7 +2061,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "}",
+          "name" : "'}'",
           "label" : "o3",
           "preConditions" : [
             {
@@ -2152,7 +2152,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(; Decl)",
+        "name" : "(';' Decl)",
         "parameters" : [
           "i",
           "ind",
@@ -2163,7 +2163,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : ";",
+          "name" : "';'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -2333,11 +2333,11 @@
       },
       "definition" : {
         "kind" : "Sequence",
-        "name" : "(; Decl)",
+        "name" : "(';' Decl)",
         "symbols" : [
           {
             "kind" : "Terminal",
-            "name" : ";",
+            "name" : "';'",
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
@@ -2354,7 +2354,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(; Decl)+",
+        "name" : "(';' Decl)+",
         "parameters" : [
           "i",
           "ind",
@@ -2365,7 +2365,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(; Decl)+",
+          "name" : "(';' Decl)+",
           "label" : "o0",
           "arguments" : [
             {
@@ -2447,7 +2447,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "(; Decl)",
+          "name" : "(';' Decl)",
           "label" : "o1",
           "arguments" : [
             {
@@ -2547,14 +2547,14 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "(; Decl)+",
+        "name" : "(';' Decl)+",
         "s" : {
           "kind" : "Sequence",
-          "name" : "(; Decl)",
+          "name" : "(';' Decl)",
           "symbols" : [
             {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -2572,7 +2572,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(; Decl)+",
+        "name" : "(';' Decl)+",
         "parameters" : [
           "i",
           "ind",
@@ -2583,7 +2583,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(; Decl)",
+          "name" : "(';' Decl)",
           "label" : "o0",
           "arguments" : [
             {
@@ -2683,14 +2683,14 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "(; Decl)+",
+        "name" : "(';' Decl)+",
         "s" : {
           "kind" : "Sequence",
-          "name" : "(; Decl)",
+          "name" : "(';' Decl)",
           "symbols" : [
             {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -2708,7 +2708,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(; Decl)*",
+        "name" : "(';' Decl)*",
         "parameters" : [
           "i",
           "ind",
@@ -2719,7 +2719,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "(; Decl)+",
+          "name" : "(';' Decl)+",
           "label" : "o0",
           "arguments" : [
             {
@@ -2819,14 +2819,14 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "(; Decl)*",
+        "name" : "(';' Decl)*",
         "s" : {
           "kind" : "Sequence",
-          "name" : "(; Decl)",
+          "name" : "(';' Decl)",
           "symbols" : [
             {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -2844,7 +2844,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "(; Decl)*",
+        "name" : "(';' Decl)*",
         "parameters" : [
           "i",
           "ind",
@@ -2871,14 +2871,14 @@
       },
       "definition" : {
         "kind" : "Star",
-        "name" : "(; Decl)*",
+        "name" : "(';' Decl)*",
         "s" : {
           "kind" : "Sequence",
-          "name" : "(; Decl)",
+          "name" : "(';' Decl)",
           "symbols" : [
             {
               "kind" : "Terminal",
-              "name" : ";",
+              "name" : "';'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "Char",
@@ -3016,7 +3016,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "=",
+          "name" : "'='",
           "label" : "o1",
           "preConditions" : [
             {
