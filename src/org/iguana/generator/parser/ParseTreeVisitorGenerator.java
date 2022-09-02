@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.iguana.generator.GeneratorUtils.writeToFile;
+import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
 import static org.iguana.parsetree.MetaSymbolNode.*;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
@@ -65,7 +66,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("    }\n");
         sb.append("}\n");
 
-        writeToFile(sb.toString(), genDirectory, className);
+        writeToJavaFile(sb.toString(), genDirectory, className);
         System.out.println(className + " has been generated.");
     }
 
@@ -127,7 +128,7 @@ public class ParseTreeVisitorGenerator {
             }
         }
         sb.append("}\n");
-        writeToFile(sb.toString(), genDirectory, className);
+        writeToJavaFile(sb.toString(), genDirectory, className);
         System.out.println(className + " has been generated.");
     }
 
@@ -146,7 +147,7 @@ public class ParseTreeVisitorGenerator {
         sb.append("    }\n\n");
         generateVisitMethods(grammar, sb);
         sb.append("}\n");
-        writeToFile(sb.toString(), genDirectory, className);
+        writeToJavaFile(sb.toString(), genDirectory, className);
         System.out.println(className + " has been generated.");
     }
 
@@ -178,17 +179,18 @@ public class ParseTreeVisitorGenerator {
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
         return
             "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass + " extends " + superType + " {\n" +
-                "        public " + symbolClass + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
-                "            super(rule, children, start, end);\n" +
-                "        }\n\n" +
-                generateSymbols(symbols) +
-                (isAbstract ? "" : generateAcceptMethod(symbolClass)) +
-                "    }\n\n";
+            "        public " + symbolClass + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
+            "            super(rule, children, start, end);\n" +
+            "        }\n\n" +
+            generateSymbols(symbols) +
+            (isAbstract ? "" : generateAcceptMethod(symbolClass)) +
+            "    }\n\n";
     }
 
     private String generateAcceptMethod(String symbolClass) {
         String visitorName = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
-        return "        @Override\n" +
+        return
+            "        @Override\n" +
             "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n" +
             "            if (visitor instanceof " + visitorName + ") {\n" +
             "                return ((" + visitorName + "<T>) visitor).visit" + symbolClass + "(this);\n" +
