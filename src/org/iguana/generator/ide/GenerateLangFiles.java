@@ -1,16 +1,18 @@
 package org.iguana.generator.ide;
 
+import java.io.File;
+
 import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
 public class GenerateLangFiles {
 
     private final String grammarName;
-    private final String genDirectory;
+    private final String langGenDirectory;
 
     public GenerateLangFiles(String grammarName, String genDirectory) {
         this.grammarName = grammarName;
-        this.genDirectory = genDirectory;
+        this.langGenDirectory = new File(genDirectory, "lang").getAbsolutePath();
     }
 
     public void generate() {
@@ -23,7 +25,7 @@ public class GenerateLangFiles {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n" +
-            "package " + grammarName.toLowerCase() + "ide.lang;\n" +
+            "package " + grammarName.toLowerCase() + ".ide.lang;\n" +
             "\n" +
             "import com.intellij.openapi.fileTypes.LanguageFileType;\n" +
             "import com.intellij.openapi.util.NlsContexts;\n" +
@@ -35,7 +37,7 @@ public class GenerateLangFiles {
             "\n" +
             "public class " + className + "FileType extends LanguageFileType {\n" +
             "\n" +
-            "  protected" + className + "FileType() {\n" +
+            "  protected " + className + "FileType() {\n" +
             "    super(" + className + "Lang.instance);\n" +
             "  }\n" +
             "\n" +
@@ -54,46 +56,47 @@ public class GenerateLangFiles {
             "  }\n" +
             "\n" +
             "  @Override\n" +
-            "  public Icon getIcon() {" +
-            "    return " + className + "Icon.icon;" +
+            "  public Icon getIcon() {\n" +
+            "    return " + className + "Icon.icon;\n" +
             "  }\n" +
             "}\n";
-        writeToJavaFile(content, genDirectory, className + "FileType");
+
+        writeToJavaFile(content, langGenDirectory, className + "FileType");
     }
 
     private void generateIcon() {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n" +
-            "package " + grammarName.toLowerCase() + "ide.lang;\n" +
+            "package " + grammarName.toLowerCase() + ".ide.lang;\n" +
             "\n" +
             "import com.intellij.openapi.util.IconLoader;\n" +
             "\n" +
             "import javax.swing.*;\n" +
             "\n" +
-            "public class" + className + "Icon {\n" +
+            "public class " + className + "Icon {\n" +
             "  public static final Icon icon = IconLoader.getIcon(\"/META-INF/pluginIcon.svg\", " + className + "Icon.class);\n" +
-            "}\n" +
-            "\n";
-        writeToJavaFile(content, genDirectory, className + "Icon");
+            "}\n";
+        writeToJavaFile(content, langGenDirectory, className + "Icon");
     }
 
     private void generateLang() {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n" +
-            "package " + grammarName.toLowerCase() + "ide.lang;\n" +
+            "package " + grammarName.toLowerCase() + ".ide.lang;\n" +
             "\n" +
             "import com.intellij.lang.Language;\n" +
             "\n" +
-            "public class" + className + "Lang {\n" +
-            "  public static final IggyLang instance = new " + className + "Lang();\n" +
+            "public class " + className + "Lang extends Language {\n" +
+            "\n" +
+            "  public static final " + className + "Lang instance = new " + className + "Lang();\n" +
             "\n" +
             "  private " + className + "Lang() {\n" +
-            "    super(\"" + className + "\");" +
+            "    super(\"" + className + "\");\n" +
             "  }\n" +
             "}\n" +
             "\n";
-        writeToJavaFile(content, genDirectory, className + "Lang");
+        writeToJavaFile(content, langGenDirectory, className + "Lang");
     }
 }
