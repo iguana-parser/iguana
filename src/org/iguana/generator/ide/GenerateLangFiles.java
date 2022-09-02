@@ -6,12 +6,10 @@ import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 public class GenerateLangFiles {
 
     private final String grammarName;
-    private final String packageName;
     private final String genDirectory;
 
-    public GenerateLangFiles(String grammarName, String packageName, String genDirectory) {
+    public GenerateLangFiles(String grammarName, String genDirectory) {
         this.grammarName = grammarName;
-        this.packageName = packageName;
         this.genDirectory = genDirectory;
     }
 
