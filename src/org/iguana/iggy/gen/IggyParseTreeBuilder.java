@@ -36,6 +36,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                 }
             case "Parameters":
                 return new IggyParseTree.Parameters(rule, children, leftExtent, rightExtent);
+            case "Annotation":
+                return new IggyParseTree.Annotation(rule, children, leftExtent, rightExtent);
             case "RegexBody":
                 return new IggyParseTree.RegexBody(rule, children, leftExtent, rightExtent);
             case "Body":

@@ -9,11 +9,14 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier: RuleModifier? name:Name params:Parameters? "=" body:Body      %ContextFree
-  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                        %Regex
+  = modifier: RuleModifier? annotation:Annotation? name:Name params:Parameters? "=" body:Body      %ContextFree
+  | modifier: "layout"? annotation:Annotation? "regex" name:Name "=" body:RegexBody     %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
+
+Annotation
+  = "@" name:Identifier "(" values:{String ","}* ")"
 
 RegexBody
   = { Regex+ "|" }*
@@ -133,6 +136,7 @@ Identifier
 lexical Label
   = '%' id:Identifier
 
+//@TokenType("Identifier")
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
 
@@ -172,9 +176,11 @@ regex Comment
   = SingleLineComment
   | MultiLineComment
 
+//@TokenType("LineComment")
 regex SingleLineComment
   = "//" ![\r \n]* [\r\n]
 
+//@TokenType("BlockComment")
 regex MultiLineComment
   = "/*" CommentChar* [*]+  "/"
 
@@ -187,6 +193,7 @@ regex Associativity
   | "right"
   | "non-assoc"
 
+//@TokenType("Keyword")
 regex Keywords
   = "start"
   | "regex"

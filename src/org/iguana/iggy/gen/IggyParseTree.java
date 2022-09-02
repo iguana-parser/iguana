@@ -62,7 +62,7 @@ public class IggyParseTree {
 
     }
 
-    // Rule = modifier:RuleModifier? name:Name params:Parameters? '=' body:Body
+    // Rule = modifier:RuleModifier? annotation:Annotation? name:Name params:Parameters? '=' body:Body
     public static class ContextFreeRule extends Rule {
         public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -72,16 +72,20 @@ public class IggyParseTree {
            return (OptionNode) childAt(0);
         }
 
+        public OptionNode annotation() {
+           return (OptionNode) childAt(1);
+        }
+
         public Name name() {
-           return (Name) childAt(1);
+           return (Name) childAt(2);
         }
 
         public OptionNode params() {
-           return (OptionNode) childAt(2);
+           return (OptionNode) childAt(3);
         }
 
         public Body body() {
-           return (Body) childAt(4);
+           return (Body) childAt(5);
         }
 
         @Override
@@ -93,7 +97,7 @@ public class IggyParseTree {
         }
     }
 
-    // Rule = modifier:'layout'? 'regex' name:Name '=' body:RegexBody
+    // Rule = modifier:'layout'? annotation:Annotation? 'regex' name:Name '=' body:RegexBody
     public static class RegexRule extends Rule {
         public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -103,12 +107,16 @@ public class IggyParseTree {
            return (OptionNode) childAt(0);
         }
 
+        public OptionNode annotation() {
+           return (OptionNode) childAt(1);
+        }
+
         public Name name() {
-           return (Name) childAt(2);
+           return (Name) childAt(3);
         }
 
         public RegexBody body() {
-           return (RegexBody) childAt(4);
+           return (RegexBody) childAt(5);
         }
 
         @Override
@@ -130,6 +138,29 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitParameters(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Annotation = '@' name:Identifier '(' values:{String ','}* ')'
+    public static class Annotation extends NonterminalNode {
+        public Annotation(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Identifier name() {
+           return (Identifier) childAt(1);
+        }
+
+        public StarNode values() {
+           return (StarNode) childAt(3);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAnnotation(this);
             }
             return visitor.visitNonterminalNode(this);
         }

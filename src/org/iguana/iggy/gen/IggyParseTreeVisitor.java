@@ -21,6 +21,8 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitParameters(IggyParseTree.Parameters node);
 
+    T visitAnnotation(IggyParseTree.Annotation node);
+
     T visitRegexBody(IggyParseTree.RegexBody node);
 
     T visitBody(IggyParseTree.Body node);

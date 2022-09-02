@@ -247,6 +247,15 @@
                       }
                     },
                     {
+                      "kind" : "Opt",
+                      "name" : "Annotation?",
+                      "label" : "annotation",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Annotation"
+                      }
+                    },
+                    {
                       "kind" : "Identifier",
                       "name" : "Name",
                       "label" : "name"
@@ -322,6 +331,15 @@
                             }
                           ]
                         }
+                      }
+                    },
+                    {
+                      "kind" : "Opt",
+                      "name" : "Annotation?",
+                      "label" : "annotation",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Annotation"
                       }
                     },
                     {
@@ -443,6 +461,81 @@
                             }
                           }
                         ]
+                      },
+                      "separators" : [
+                        {
+                          "kind" : "Terminal",
+                          "name" : "','",
+                          "nodeType" : "Literal",
+                          "regex" : {
+                            "kind" : "Char",
+                            "val" : 44
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "')'",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 41
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "INHERITED"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Annotation"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "'@'",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 64
+                      }
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "Identifier",
+                      "label" : "name"
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "'('",
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "val" : 40
+                      }
+                    },
+                    {
+                      "kind" : "Star",
+                      "name" : "{String ','}*",
+                      "label" : "values",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "String"
                       },
                       "separators" : [
                         {
@@ -5046,6 +5139,10 @@
     ")" : {
       "kind" : "Char",
       "val" : 41
+    },
+    "@" : {
+      "kind" : "Char",
+      "val" : 64
     },
     "|" : {
       "kind" : "Char",

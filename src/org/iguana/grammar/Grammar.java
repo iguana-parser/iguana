@@ -27,6 +27,7 @@ public class Grammar {
     private final Symbol layout;
     private final Map<String, Expression> globals;
     private final String name;
+    private final List<Annotation> annotations;
 
     private RuntimeGrammar grammar;
 
@@ -38,6 +39,7 @@ public class Grammar {
         this.layout = builder.layout;
         this.globals = builder.globals;
         this.name = builder.name;
+        this.annotations = builder.annotations;
     }
 
     public List<Rule> getRules() {
@@ -221,6 +223,7 @@ public class Grammar {
         private final Map<String, RegularExpression> regularExpressions = new LinkedHashMap<>();
         public final Map<String, RegularExpression> literals = new LinkedHashMap<>();
         public String name;
+        public List<Annotation> annotations = new ArrayList<>();
         private Start startSymbol;
         private Symbol layout;
         private final Map<String, Expression> globals = new HashMap<>();
@@ -258,6 +261,11 @@ public class Grammar {
         // TODO: differentiate between global variables and top-level variables
         public Builder addGlobal(String key, Expression value) {
             this.globals.put(key, value);
+            return this;
+        }
+
+        public Builder addAnnotation(Annotation annotation) {
+            this.annotations.add(annotation);
             return this;
         }
 
