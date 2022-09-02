@@ -136,7 +136,7 @@ Identifier
 lexical Label
   = '%' id:Identifier
 
-//@TokenType("Identifier")
+@TokenType("Identifier")
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
 
@@ -176,11 +176,11 @@ regex Comment
   = SingleLineComment
   | MultiLineComment
 
-//@TokenType("LineComment")
+@TokenType("LineComment")
 regex SingleLineComment
   = "//" ![\r \n]* [\r\n]
 
-//@TokenType("BlockComment")
+@TokenType("BlockComment")
 regex MultiLineComment
   = "/*" CommentChar* [*]+  "/"
 
@@ -193,7 +193,7 @@ regex Associativity
   | "right"
   | "non-assoc"
 
-//@TokenType("Keyword")
+@TokenType("Keyword")
 regex Keywords
   = "start"
   | "regex"

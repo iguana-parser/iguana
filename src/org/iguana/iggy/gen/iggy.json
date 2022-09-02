@@ -5584,5 +5584,35 @@
       "fun" : "set"
     }
   },
-  "name" : "Iggy"
+  "name" : "Iggy",
+  "annotations" : [
+    {
+      "name" : "TokenType",
+      "symbol" : {
+        "kind" : "Identifier",
+        "name" : "LetterOrDigits"
+      }
+    },
+    {
+      "name" : "TokenType",
+      "symbol" : {
+        "kind" : "Identifier",
+        "name" : "SingleLineComment"
+      }
+    },
+    {
+      "name" : "TokenType",
+      "symbol" : {
+        "kind" : "Identifier",
+        "name" : "MultiLineComment"
+      }
+    },
+    {
+      "name" : "TokenType",
+      "symbol" : {
+        "kind" : "Identifier",
+        "name" : "Keywords"
+      }
+    }
+  ]
 }
