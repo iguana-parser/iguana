@@ -28,6 +28,7 @@
 package org.iguana.grammar.runtime;
 
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.Annotation;
 import org.iguana.grammar.exception.GrammarValidationException;
 import org.iguana.grammar.exception.NonterminalNotDefinedException;
 import org.iguana.grammar.symbol.Nonterminal;
@@ -71,6 +72,8 @@ public class RuntimeGrammar {
 
 	private final String name;
 
+	private final List<Annotation> annotations;
+
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -86,6 +89,7 @@ public class RuntimeGrammar {
 		this.literals = builder.literals;
 		this.globals = builder.globals;
 		this.name = builder.name;
+		this.annotations = builder.annotations;
 	}
 	
 	public Map<Nonterminal, List<RuntimeRule>> getDefinitions() {
@@ -206,7 +210,11 @@ public class RuntimeGrammar {
 	public static Builder builder() {
 		return new Builder();
 	}
- 	
+
+	public List<Annotation> getAnnotations() {
+		return annotations;
+	}
+
 	public static class Builder {
 		
 		private final Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
@@ -221,6 +229,8 @@ public class RuntimeGrammar {
 		private Map<String, Set<String>> ebnfRights = new HashMap<>();
 		private Map<String, Expression> globals = new HashMap<>();
 
+		private List<Annotation> annotations;
+
         public Builder() { }
 
         public Builder(RuntimeGrammar grammar) {
@@ -233,6 +243,7 @@ public class RuntimeGrammar {
 			regularExpressions = grammar.getRegularExpressions();
 			globals = grammar.globals;
 			name = grammar.name;
+			this.annotations = grammar.annotations;
         }
 		
 		public RuntimeGrammar build() {
@@ -323,6 +334,11 @@ public class RuntimeGrammar {
 
 		public Builder setLiterals(Map<String, RegularExpression> literals) {
 			this.literals = literals;
+			return this;
+		}
+
+		public Builder setAnnotations(List<Annotation> annotations) {
+			this.annotations = annotations;
 			return this;
 		}
 

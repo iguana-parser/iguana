@@ -16,6 +16,7 @@ import org.iguana.iggy.gen.IggyParseTree.RegexRule;
 import org.iguana.iggy.gen.IggyParseTreeVisitor;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.TerminalNode;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
@@ -109,9 +110,9 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
             .setNodeType(nonterminalNodeType)
             .build();
 
-        Optional<Tuple<Identifier, List<String>>> tuple = (Optional<Tuple<Identifier, List<String>>>) node.annotation().accept(this);
+        Optional<Tuple<Identifier, String>> tuple = (Optional<Tuple<Identifier, String>>) node.annotation().accept(this);
         if (tuple.isPresent()) {
-            annotations.add(new Annotation(tuple.get().getFirst().getName(), tuple.get().getSecond(), nonterminalName));
+            annotations.add(new Annotation(tuple.get().getFirst().getName(), tuple.get().getSecond(), nonterminalName.getName()));
         }
 
         return new Rule.Builder(nonterminal)
@@ -126,9 +127,9 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
         Identifier identifier = (Identifier) node.name().accept(this);
         regularExpressionMap.put(identifier.getName(), getRegex(alts));
 
-        Optional<Tuple<Identifier, List<String>>> tuple = (Optional<Tuple<Identifier, List<String>>>) node.annotation().accept(this);
+        Optional<Tuple<Identifier, String>> tuple = (Optional<Tuple<Identifier, String>>) node.annotation().accept(this);
         if (tuple.isPresent()) {
-            annotations.add(new Annotation(tuple.get().getFirst().getName(), tuple.get().getSecond(), identifier));
+            annotations.add(new Annotation(tuple.get().getFirst().getName(), tuple.get().getSecond(), identifier.getName()));
         }
 
         if (node.modifier().hasChildren()) {
@@ -144,10 +145,10 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
     }
 
     @Override
-    public Tuple<Identifier, List<String>> visitAnnotation(IggyParseTree.Annotation node) {
+    public Tuple<Identifier, String> visitAnnotation(IggyParseTree.Annotation node) {
         Identifier id = (Identifier) node.name().accept(this);
-        List<String> values = (List<String>) node.values().accept(this);
-        return Tuple.of(id, values);
+        String value = stripQuotes(node.value());
+        return Tuple.of(id, value);
     }
 
     @Override
@@ -773,7 +774,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
         }
     }
 
-    private static String stripQuotes(NonterminalNode node) {
+    private static String stripQuotes(ParseTreeNode node) {
         return node.getText().substring(1, node.getText().length() - 1);
     }
 
@@ -822,7 +823,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
         if (chars.length == 1) {
             return Char.from(chars[0]);
         }
-        return org.iguana.regex.Seq.from(chars);
+        return Seq.from(chars);
     }
 
     private static int getRangeChar(String s) {

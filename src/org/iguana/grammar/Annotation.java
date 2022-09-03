@@ -1,30 +1,26 @@
 package org.iguana.grammar;
 
-import org.iguana.grammar.symbol.Symbol;
-
-import java.util.List;
-
 public class Annotation {
 
     private final String name;
-    private final List<String> values;
-    private final Symbol symbol;
+    private final String value;
+    private final String symbolName;
 
-    public Annotation(String name, List<String> values, Symbol symbol) {
+    public Annotation(String name, String value, String symbolName) {
         this.name = name;
-        this.values = values;
-        this.symbol = symbol;
+        this.value = value;
+        this.symbolName = symbolName;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<String> getValues() {
-        return values;
+    public String getValue() {
+        return value;
     }
 
-    public Symbol getSymbol() {
-        return symbol;
+    public String getSymbolName() {
+        return symbolName;
     }
 }

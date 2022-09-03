@@ -16,7 +16,7 @@ Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
 
 Annotation
-  = "@" name:Identifier "(" values:{String ","}* ")"
+  = "@" name:Identifier "(" value:String ")"
 
 RegexBody
   = { Regex+ "|" }*
@@ -146,6 +146,7 @@ regex LetterOrDigit
 regex Letter
   = [A-Za-z_]
 
+@TokenType("Number")
 regex Number
   = [0]
   | [1-9][0-9]*
@@ -158,6 +159,7 @@ regex RangeChar
   = "\\" [\\ \[ \] \- t f r n \ ]
   | ![\\ \[ \] \- \t \f \r \n \ ]
 
+@TokenType("String")
 regex String
   = "\"" Character* "\""
   | "\'" Character* "\'"
@@ -169,6 +171,7 @@ regex WhiteSpaceOrComment
   = WhiteSpace
   | Comment
 
+@TokenType("WhiteSpace")
 regex WhiteSpace
   = [\ \t \f \r \n]+
 

@@ -70,6 +70,10 @@ public class Grammar {
         return name;
     }
 
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
             Map<String, Set<String>> leftEnds = new HashMap<>();
@@ -107,6 +111,7 @@ public class Grammar {
             grammarBuilder.setGlobals(globals);
             grammarBuilder.setRegularExpressions(regularExpressions);
             grammarBuilder.setLiterals(literals);
+            grammarBuilder.setAnnotations(annotations);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
             Map<String, Set<String>> ebnfRights = new HashMap<>();

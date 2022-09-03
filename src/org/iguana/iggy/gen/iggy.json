@@ -530,24 +530,9 @@
                       }
                     },
                     {
-                      "kind" : "Star",
-                      "name" : "{String ','}*",
-                      "label" : "values",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "String"
-                      },
-                      "separators" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "','",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 44
-                          }
-                        }
-                      ]
+                      "kind" : "Identifier",
+                      "name" : "String",
+                      "label" : "value"
                     },
                     {
                       "kind" : "Terminal",
@@ -5588,31 +5573,38 @@
   "annotations" : [
     {
       "name" : "TokenType",
-      "symbol" : {
-        "kind" : "Identifier",
-        "name" : "LetterOrDigits"
-      }
+      "value" : "Identifier",
+      "symbolName" : "LetterOrDigits"
     },
     {
       "name" : "TokenType",
-      "symbol" : {
-        "kind" : "Identifier",
-        "name" : "SingleLineComment"
-      }
+      "value" : "Number",
+      "symbolName" : "Number"
     },
     {
       "name" : "TokenType",
-      "symbol" : {
-        "kind" : "Identifier",
-        "name" : "MultiLineComment"
-      }
+      "value" : "String",
+      "symbolName" : "String"
     },
     {
       "name" : "TokenType",
-      "symbol" : {
-        "kind" : "Identifier",
-        "name" : "Keywords"
-      }
+      "value" : "WhiteSpace",
+      "symbolName" : "WhiteSpace"
+    },
+    {
+      "name" : "TokenType",
+      "value" : "LineComment",
+      "symbolName" : "SingleLineComment"
+    },
+    {
+      "name" : "TokenType",
+      "value" : "BlockComment",
+      "symbolName" : "MultiLineComment"
+    },
+    {
+      "name" : "TokenType",
+      "value" : "Keyword",
+      "symbolName" : "Keywords"
     }
   ]
 }

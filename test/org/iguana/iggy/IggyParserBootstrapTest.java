@@ -2,7 +2,9 @@ package org.iguana.iggy;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.iggy.gen.IggyParser;
+import org.iguana.parser.IguanaParser;
 import org.iguana.util.serialization.JsonSerializer;
+import org.iguana.utils.input.Input;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -16,7 +18,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class IggyParserBootstrapTest {
 
     @Test
-    public void test() throws Exception {
+    public void test1() throws IOException {
+        IguanaParser parser = IggyParser.getInstance();
+        parser.parse(Input.fromFile(Paths.get("src/resources/Iguana.iggy").toFile()));
+        if (parser.hasParseError()) {
+            throw new RuntimeException(parser.getParseError().toString());
+        }
+
+        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
+
+        assertEquals(grammar, IggyParser.getGrammar());
+    }
+
+    @Test
+    public void test2() throws Exception {
         Grammar grammar = IggyParser.getGrammar();
 
         String expectedJson = getFileContent(Paths.get("src/org/iguana/iggy/gen/iggy.json"));

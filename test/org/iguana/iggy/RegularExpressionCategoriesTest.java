@@ -1,5 +1,6 @@
 package org.iguana.iggy;
 
+import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.iggy.gen.IggyParser;
 import org.iguana.regex.IguanaTokenizer;
@@ -16,14 +17,14 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IggyTokenizerTest {
+public class RegularExpressionCategoriesTest {
 
     @Test
-    public void testIguanaGrammar() throws IOException {
+    public void testIggyGrammar() throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         String inputString = FileUtils.readFile(path);
 
-        IguanaTokenizer iguanaTokenizer = IggyTokenizer.getIggyTokenizer();
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(IggyParser.getGrammar()));
         iguanaTokenizer.prepare(Input.fromString(inputString), 0);
         StringBuilder sb = new StringBuilder();
         while (iguanaTokenizer.hasNextToken()) {
@@ -35,16 +36,17 @@ public class IggyTokenizerTest {
 
     @Test
     public void testOrderOfRegularExpressions() {
-        IguanaTokenizer iguanaTokenizer = IggyTokenizer.getIggyTokenizer();
+        Grammar grammar = IggyParser.getGrammar();
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(grammar));
         Input input = Input.fromString("var a = 1");
         iguanaTokenizer.prepare(input, 0);
 
-        RuntimeGrammar grammar = IggyParser.getGrammar().toRuntimeGrammar();
-        RegularExpression id = grammar.getRegularExpressions().get("LetterOrDigits");
-        RegularExpression number = grammar.getRegularExpressions().get("Number");
-        RegularExpression whitespace = grammar.getRegularExpressions().get("WhiteSpace");
-        RegularExpression equals = grammar.getLiterals().get("=");
-        RegularExpression var = grammar.getLiterals().get("var");
+        RuntimeGrammar runtimeGrammar = grammar.toRuntimeGrammar();
+        RegularExpression id = runtimeGrammar.getRegularExpressions().get("LetterOrDigits");
+        RegularExpression number = runtimeGrammar.getRegularExpressions().get("Number");
+        RegularExpression whitespace = runtimeGrammar.getRegularExpressions().get("WhiteSpace");
+        RegularExpression equals = runtimeGrammar.getLiterals().get("=");
+        RegularExpression var = runtimeGrammar.getLiterals().get("var");
 
         List<Token> expected = Arrays.asList(
             new Token(var, "Keyword", input, 0, 3),

@@ -143,7 +143,7 @@ public class IggyParseTree {
         }
     }
 
-    // Annotation = '@' name:Identifier '(' values:{String ','}* ')'
+    // Annotation = '@' name:Identifier '(' value:String ')'
     public static class Annotation extends NonterminalNode {
         public Annotation(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -153,8 +153,8 @@ public class IggyParseTree {
            return (Identifier) childAt(1);
         }
 
-        public StarNode values() {
-           return (StarNode) childAt(3);
+        public TerminalNode value() {
+           return (TerminalNode) childAt(3);
         }
 
         @Override
