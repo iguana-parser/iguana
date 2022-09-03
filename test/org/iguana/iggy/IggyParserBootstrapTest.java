@@ -1,6 +1,7 @@
 package org.iguana.iggy;
 
 import org.iguana.grammar.Grammar;
+import org.iguana.iggy.gen.IggyGrammar;
 import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
 import org.iguana.util.serialization.JsonSerializer;
@@ -27,12 +28,12 @@ public class IggyParserBootstrapTest {
 
         Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
 
-        assertEquals(grammar, IggyParser.getGrammar());
+        assertEquals(grammar, IggyGrammar.getGrammar());
     }
 
     @Test
     public void test2() throws Exception {
-        Grammar grammar = IggyParser.getGrammar();
+        Grammar grammar = IggyGrammar.getGrammar();
 
         String expectedJson = getFileContent(Paths.get("src/org/iguana/iggy/gen/iggy.json"));
         assertEquals(expectedJson.trim(), JsonSerializer.serialize(grammar).trim());

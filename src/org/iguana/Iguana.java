@@ -65,11 +65,13 @@ public class Iguana implements Callable<Integer> {
 
         if (command.generateGrammar || command.generateTypes) {
             JsonSerializer.serialize(grammar, new File(genDirectory, grammarName + ".json").toPath().toAbsolutePath().toString());
+            ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName, genDirectory.getAbsolutePath());
+            parserGenerator.generateGrammar();
         }
 
         if (command.generateTypes) {
             ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName, genDirectory.getAbsolutePath());
-            parserGenerator.generate();
+            parserGenerator.generateParser();
             ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammarName, packageName, genDirectory.getAbsolutePath());
             generator.generate();
         }

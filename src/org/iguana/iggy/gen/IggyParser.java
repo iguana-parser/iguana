@@ -5,13 +5,7 @@ import org.iguana.grammar.Grammar;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.util.serialization.JsonSerializer;
 import org.iguana.utils.input.Input;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.iguana.utils.io.FileUtils.readFile;
 
 public class IggyParser extends IguanaParser {
 
@@ -23,18 +17,9 @@ public class IggyParser extends IguanaParser {
 
     private static IggyParser parser;
 
-    private static Grammar grammar;
-
-    public static Grammar getGrammar() {
-        if (grammar == null) {
-            grammar = loadGrammar();
-        }
-        return grammar;
-     }
-
     public static IggyParser getInstance() {
         if (parser == null) {
-            parser = new IggyParser(getGrammar());
+            parser = new IggyParser(IggyGrammar.getGrammar());
         }
         return parser;
     }
@@ -42,16 +27,5 @@ public class IggyParser extends IguanaParser {
     @Override
     protected ParseTreeBuilder<ParseTreeNode> getParseTreeBuilder(Input input) {
         return new IggyParseTreeBuilder(input);
-    }
-
-    private static Grammar loadGrammar() {
-        String grammarJsonFile = grammarName + ".json";
-        try (InputStream in = IggyParser.class.getResourceAsStream(grammarJsonFile)) {
-            if (in == null) throw new RuntimeException("Grammar json file " + grammarJsonFile + " is not found.");
-            String content = readFile(in);
-            return JsonSerializer.deserialize(content, Grammar.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

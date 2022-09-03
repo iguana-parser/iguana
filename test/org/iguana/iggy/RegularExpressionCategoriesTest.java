@@ -2,7 +2,7 @@ package org.iguana.iggy;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.iggy.gen.IggyParser;
+import org.iguana.iggy.gen.IggyGrammar;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
@@ -24,7 +24,7 @@ public class RegularExpressionCategoriesTest {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         String inputString = FileUtils.readFile(path);
 
-        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(IggyParser.getGrammar()));
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(IggyGrammar.getGrammar()));
         iguanaTokenizer.prepare(Input.fromString(inputString), 0);
         StringBuilder sb = new StringBuilder();
         while (iguanaTokenizer.hasNextToken()) {
@@ -36,7 +36,7 @@ public class RegularExpressionCategoriesTest {
 
     @Test
     public void testOrderOfRegularExpressions() {
-        Grammar grammar = IggyParser.getGrammar();
+        Grammar grammar = IggyGrammar.getGrammar();
         IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(grammar));
         Input input = Input.fromString("var a = 1");
         iguanaTokenizer.prepare(input, 0);
