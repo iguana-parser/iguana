@@ -1,5 +1,6 @@
 package org.iguana.generator.parser;
 
+import org.iguana.generator.Generator;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
@@ -11,33 +12,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.iguana.generator.GeneratorUtils.writeToFile;
 import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
 import static org.iguana.parsetree.MetaSymbolNode.*;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
-public class ParseTreeVisitorGenerator {
-
-    private final RuntimeGrammar grammar;
-    private final String grammarName;
-    private final String packageName;
-    private final String genDirectory;
+public class ParseTreeVisitorGenerator extends Generator {
 
     public ParseTreeVisitorGenerator(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
-        this.grammar = grammar;
-        this.grammarName = grammarName;
-        this.packageName = packageName;
-        this.genDirectory = genDirectory;
+        super(grammar, grammarName, packageName, genDirectory);
     }
 
     public void generate() {
-        generateParseTreeTypes(grammar);
-        generateVisitor(grammar);
-        generateParseTreeBuilder(grammar);
+        generateParseTreeTypes();
+        generateVisitor();
+        generateParseTreeBuilder();
     }
 
-    private void generateParseTreeBuilder(RuntimeGrammar grammar) {
+    private void generateParseTreeBuilder() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
@@ -96,7 +88,7 @@ public class ParseTreeVisitorGenerator {
         }
     }
 
-    private void generateParseTreeTypes(RuntimeGrammar grammar) {
+    private void generateParseTreeTypes() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
@@ -132,7 +124,7 @@ public class ParseTreeVisitorGenerator {
         System.out.println(className + " has been generated.");
     }
 
-    private void generateVisitor(RuntimeGrammar grammar) {
+    private void generateVisitor() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
@@ -215,19 +207,6 @@ public class ParseTreeVisitorGenerator {
             }
         }
         return sb.toString();
-    }
-
-    private String symbolToString(Symbol symbol) {
-        String label = getLabel(symbol);
-        return (label == null ? "" : label + ":") + symbol.getName();
-    }
-
-    private String getLabel(Symbol symbol) {
-        if (symbol instanceof Code) {
-            if (symbol.getLabel() != null) return symbol.getLabel();
-            return ((Code) symbol).getSymbol().getLabel();
-        }
-        return symbol.getLabel();
     }
 
     private String getSymbolType(Symbol symbol) {

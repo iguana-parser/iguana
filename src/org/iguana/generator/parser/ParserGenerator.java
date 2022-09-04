@@ -1,18 +1,14 @@
 package org.iguana.generator.parser;
 
+import org.iguana.generator.Generator;
+
 import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
-public class ParserGenerator {
-
-    private final String grammarName;
-    private final String packageName;
-    private final String genDirectory;
+public class ParserGenerator extends Generator {
 
     public ParserGenerator(String grammarName, String packageName, String genDirectory) {
-        this.grammarName = grammarName;
-        this.packageName = packageName;
-        this.genDirectory = genDirectory;
+        super(null, grammarName, packageName, genDirectory);
     }
 
     public void generateGrammar() {
