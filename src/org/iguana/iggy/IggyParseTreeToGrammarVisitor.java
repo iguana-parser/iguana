@@ -14,9 +14,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.iggy.gen.IggyParseTree;
 import org.iguana.iggy.gen.IggyParseTree.RegexRule;
 import org.iguana.iggy.gen.IggyParseTreeVisitor;
-import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
-import org.iguana.parsetree.TerminalNode;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
@@ -28,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
-public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
+public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Object> {
 
     private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();

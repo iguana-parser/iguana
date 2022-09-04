@@ -35,6 +35,6 @@ public class IggyParserUtils {
             throw new RuntimeException(parser.getParseError().toString());
         }
         ParseTreeNode parseTree = parser.getParseTree();
-        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+        return (Grammar) parseTree.accept(new IggyParseTreeToGrammarVisitor());
     }
 }

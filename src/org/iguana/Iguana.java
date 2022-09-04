@@ -5,7 +5,7 @@ import org.iguana.generator.ide.GeneratePSIElements;
 import org.iguana.generator.parser.ParseTreeVisitorGenerator;
 import org.iguana.generator.parser.ParserGenerator;
 import org.iguana.grammar.Grammar;
-import org.iguana.iggy.IggyToGrammarVisitor;
+import org.iguana.iggy.IggyParseTreeToGrammarVisitor;
 import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
 import org.iguana.util.serialization.JsonSerializer;
@@ -62,7 +62,7 @@ public class Iguana implements Callable<Integer> {
         // Create the gen directory if it doesn't already exist
         Files.createDirectories(Paths.get(genDirectory.getAbsolutePath()));
 
-        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
+        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyParseTreeToGrammarVisitor());
 
         if (command.generateGrammar || command.generateTypes) {
             JsonSerializer.serialize(grammar, new File(genDirectory, grammarName + ".json").toPath().toAbsolutePath().toString());

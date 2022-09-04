@@ -26,7 +26,7 @@ public class IggyParserBootstrapTest {
             throw new RuntimeException(parser.getParseError().toString());
         }
 
-        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyToGrammarVisitor());
+        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyParseTreeToGrammarVisitor());
 
         assertEquals(grammar, IggyGrammar.getGrammar());
     }
