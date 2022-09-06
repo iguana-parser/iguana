@@ -2,6 +2,7 @@ package org.iguana;
 
 import org.iguana.generator.ide.GenerateLangFiles;
 import org.iguana.generator.ide.GeneratePSIElements;
+import org.iguana.generator.ide.GenerateParserFiles;
 import org.iguana.generator.parser.ParseTreeVisitorGenerator;
 import org.iguana.generator.parser.ParserGenerator;
 import org.iguana.grammar.Grammar;
@@ -82,6 +83,8 @@ public class Iguana implements Callable<Integer> {
             generateLangFiles.generate();
             GeneratePSIElements generatePSIElements = new GeneratePSIElements(grammar.toRuntimeGrammar(), grammarName, packageName, genDirectory.getAbsolutePath());
             generatePSIElements.generate();
+            GenerateParserFiles generateParserFiles = new GenerateParserFiles(grammar.toRuntimeGrammar(), grammarName, packageName, genDirectory.getAbsolutePath());
+            generateParserFiles.generate();
         }
 
         return 0;
