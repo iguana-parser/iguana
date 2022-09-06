@@ -30,7 +30,6 @@ public class GeneratePSIElements extends Generator {
         sb.append("\n");
         sb.append("import com.intellij.extapi.psi.ASTWrapperPsiElement;\n");
         sb.append("import com.intellij.lang.ASTNode;\n");
-        sb.append("\n");
         sb.append("import com.intellij.psi.PsiElement;\n");
         sb.append("import org.jetbrains.annotations.NotNull;\n");
         sb.append("\n");
@@ -77,39 +76,63 @@ public class GeneratePSIElements extends Generator {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < symbols.size(); i++) {
             Symbol symbol = symbols.get(i);
-            String type = getSymbolType(symbol);
+            Type type = getSymbolType(symbol);
             // When type == null, it's a data-dependent construct that does not contribute to parse trees
             if (type != null) {
                 String label = getLabel(symbol);
                 if (label != null) {
                     sb.append("        public " + type + " " + label + "() {\n");
-                    sb.append("           return (" + type + ") childAt(" + i + ");\n");
-                    sb.append("        }\n\n");
+                    switch (type.name) {
+                        case "Optional":
+                            sb.append("           return Optional.of(getChildren()[" + i + "]);\n");
+                            break;
+                        default:
+                            sb.append("           return (" + type + ") getChildren()[" + i + "];\n");
+                            break;
+                    }
+                    sb.append("        }\n");
                 }
             }
         }
         return sb.toString();
     }
 
-    private String getSymbolType(Symbol symbol) {
+    private static class Type {
+        private final String name;
+        private final String parameter;
+
+        public Type(String name) {
+            this(name, null);
+        }
+        public Type(String name, String parameter) {
+            this.name = name;
+            this.parameter = parameter;
+        }
+
+        @Override
+        public String toString() {
+            if (parameter == null) return name;
+            else return String.format("%s<%s>", name, parameter);
+        }
+    }
+
+    private Type getSymbolType(Symbol symbol) {
         if (symbol instanceof Nonterminal) {
-            return toFirstUpperCase(grammarName) + "PsiElement." + symbol.getName();
+            return new Type(toFirstUpperCase(grammarName) + "PsiElement." + symbol.getName());
         } else if (symbol instanceof Terminal) {
-            return "PsiElement";
+            return new Type("PsiElement");
         } else if (symbol instanceof Star) {
-            return "List<PsiElement>";
+            return new Type("List", "PsiElement");
         } else if (symbol instanceof Plus) {
-            String name = ((Plus) symbol).getSymbol().getName();
-            return "List<PsiElement>";
+            return new Type("List", "PsiElement");
         } else if (symbol instanceof Group) {
-            return "List<PsiElement>";
+            return new Type("List", "PsiElement");
         } else if (symbol instanceof Alt) {
-            return "PsiElement";
+            return new Type("PsiElement");
         } else if (symbol instanceof Opt) {
-            String name = ((Opt) symbol).getSymbol().getName();
-            return "Optional<PsiElement>";
+            return new Type("Optional", "PsiElement");
         } else if (symbol instanceof Start) {
-            return "PsiElement";
+            return new Type("PsiElement");
         } else if (symbol instanceof Code) {
             return getSymbolType(((Code) symbol).getSymbol());
         } else {
