@@ -17,14 +17,14 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RegularExpressionCategoriesTest {
+public class IggyRegexCategoriesTest {
 
     @Test
     public void testIggyGrammar() throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         String inputString = FileUtils.readFile(path);
 
-        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(IggyGrammar.getGrammar()));
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(IggyRegexCategories.getCategories());
         iguanaTokenizer.prepare(Input.fromString(inputString), 0);
         StringBuilder sb = new StringBuilder();
         while (iguanaTokenizer.hasNextToken()) {
@@ -37,7 +37,7 @@ public class RegularExpressionCategoriesTest {
     @Test
     public void testOrderOfRegularExpressions() {
         Grammar grammar = IggyGrammar.getGrammar();
-        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(RegularExpressionCategories.getCategories(grammar));
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(IggyRegexCategories.getCategories());
         Input input = Input.fromString("var a = 1");
         iguanaTokenizer.prepare(input, 0);
 

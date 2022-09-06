@@ -1,8 +1,8 @@
 package org.iguana.iggy;
 
 import org.iguana.grammar.Annotation;
-import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.iggy.gen.IggyGrammar;
 import org.iguana.regex.Alt;
 import org.iguana.regex.RegularExpression;
 
@@ -11,18 +11,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RegularExpressionCategories {
+public class IggyRegexCategories {
 
-    public static Map<RegularExpression, String> getCategories(Grammar grammar) {
-        RuntimeGrammar runtimeGrammar = grammar.toRuntimeGrammar();
+    private static final Map<RegularExpression, String> regularExpressionCategories;
+
+    static {
+        RuntimeGrammar runtimeGrammar = IggyGrammar.getGrammar().toRuntimeGrammar();
         List<Annotation> annotations = runtimeGrammar.getAnnotations();
         List<Annotation> tokenTypeAnnotations = annotations.stream()
             .filter(annotation -> annotation.getName().equals("TokenType"))
             .collect(Collectors.toList());
 
-        Map<RegularExpression, String> regularExpressionCategories = new LinkedHashMap<>();
+        Map<RegularExpression, String> map = new LinkedHashMap<>();
         for (Map.Entry<String, RegularExpression> entry : runtimeGrammar.getLiterals().entrySet()) {
-            regularExpressionCategories.put(entry.getValue(), entry.getKey());
+            map.put(entry.getValue(), entry.getKey());
         }
 
         for (Annotation annotation : tokenTypeAnnotations) {
@@ -31,12 +33,20 @@ public class RegularExpressionCategories {
             if (annotation.getValue().equals("Keyword")) {
                 Alt<?> alt = (Alt<?>) regularExpression;
                 for (RegularExpression regex : alt.getSymbols()) {
-                    regularExpressionCategories.put(regex, annotation.getValue());
+                    map.put(regex, annotation.getValue());
                 }
             } else {
-                regularExpressionCategories.put(regularExpression, annotation.getValue());
+                map.put(regularExpression, annotation.getValue());
             }
         }
+        regularExpressionCategories = map;
+    }
+
+    public static Map<RegularExpression, String> getCategories() {
         return regularExpressionCategories;
+    }
+
+    public static String getCategory(RegularExpression regex) {
+        return regularExpressionCategories.get(regex);
     }
 }
