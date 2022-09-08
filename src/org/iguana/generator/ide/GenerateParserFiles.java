@@ -6,6 +6,7 @@ import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Nonterminal;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -27,6 +28,8 @@ public class GenerateParserFiles extends Generator {
     }
 
     private void generateIggyElementTypes() {
+        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt");
+
         String className = toFirstUpperCase(grammarName);
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
@@ -42,11 +45,15 @@ public class GenerateParserFiles extends Generator {
         sb.append("import java.util.function.Function;\n");
         sb.append("\n");
         sb.append("public class " + className + "ElementTypes {\n");
+        metaSymbolNodes.forEach(s -> sb.append(generateElementType(s)));
+        sb.append("\n");
         generateTypes(sb, this::generateElementType);
         sb.append("\n");
         sb.append("    private static final Map<IElementType, Function<ASTNode, PsiElement>> map = new IdentityHashMap<>();\n");
         sb.append("\n");
         sb.append("    static {\n");
+        metaSymbolNodes.forEach(s -> sb.append(generateMapEntry(s)));
+        sb.append("\n");
         generateTypes(sb, this::generateMapEntry);
         sb.append("    }\n");
         sb.append("\n");

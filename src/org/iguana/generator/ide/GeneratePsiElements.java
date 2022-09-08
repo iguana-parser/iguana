@@ -7,6 +7,7 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.parsetree.NonterminalNode;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -14,16 +15,18 @@ import java.util.Map;
 import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
-public class GeneratePSIElements extends Generator {
+public class GeneratePsiElements extends Generator {
 
     private final String psiGenDirectory;
 
-    public GeneratePSIElements(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
+    public GeneratePsiElements(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
         super(grammar, grammarName, packageName, genDirectory);
         this.psiGenDirectory = new File(genDirectory, "psi").getAbsolutePath();
     }
 
     public void generate() {
+        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt");
+
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + grammarName.toLowerCase() + ".ide.psi;\n");
@@ -39,6 +42,11 @@ public class GeneratePSIElements extends Generator {
         String className = toFirstUpperCase(grammarName) + "PsiElement";
         sb.append("public class " + className + " {\n");
         sb.append("\n");
+
+        metaSymbolNodes.forEach(node ->
+            sb.append(generateSymbolClass(node, null, false, Collections.emptyList())));
+        sb.append("\n");
+
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
             String nonterminalName = entry.getKey().getName();
             List<RuntimeRule> alternatives = entry.getValue();

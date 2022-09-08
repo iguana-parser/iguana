@@ -37,6 +37,8 @@ public class GenerateLangFiles {
             "\n" +
             "public class " + className + "FileType extends LanguageFileType {\n" +
             "\n" +
+            "public static final " + className + "FileType instance = new " + className + "FileType();\n" +
+            "\n" +
             "  protected " + className + "FileType() {\n" +
             "    super(" + className + "Lang.instance);\n" +
             "  }\n" +
