@@ -127,7 +127,6 @@ public class SimpleImmutableEnvironment implements Environment {
 			return parent.lookup(name);
 		
 		if (value != null) {
-			
 			if (value == VariableDeclaration.defaultValue)
 				throw UndefinedRuntimeValueException.instance;
 			

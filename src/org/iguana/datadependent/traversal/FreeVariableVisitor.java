@@ -140,7 +140,11 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Not not) {
-		return not.getExp().accept(this);
+		org.iguana.datadependent.ast.Expression expression = not.getExp();
+
+		expression.setEnv(not.getEnv());
+		expression.accept(this);
+		return null;
 	}
 
 	@Override
@@ -297,17 +301,17 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 
 	@Override
 	public Void visit(Subtract expression) {
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	@Override
 	public Void visit(Multiply expression) {
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	@Override
 	public Void visit(Divide expression) {
-		return null;
+		return visitBinaryExpression(expression);
 	}
 
 	private Void visitBinaryExpression(BinaryExpression expression) {

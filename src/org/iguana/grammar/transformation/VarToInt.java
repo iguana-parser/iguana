@@ -259,7 +259,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public AbstractAST visit(Not not) {
-        return not.accept(this);
+        return AST.not((org.iguana.datadependent.ast.Expression) not.getExp().accept(this));
     }
 
     @Override

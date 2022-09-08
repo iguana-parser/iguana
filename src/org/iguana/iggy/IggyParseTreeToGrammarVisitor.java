@@ -22,6 +22,7 @@ import org.iguana.regex.Seq;
 import org.iguana.util.Tuple;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.iguana.utils.collections.CollectionsUtil.flatten;
@@ -60,7 +61,9 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         for (Map.Entry<String, RegularExpression> entry : literals.entrySet()) {
             builder.addLiteral(entry.getKey(), entry.getValue());
         }
-        builder.setStartSymbol(Start.from(start));
+        if (start != null) {
+            builder.setStartSymbol(Start.from(start));
+        }
         builder.setLayout(layout);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
         annotations.forEach(builder::addAnnotation);
@@ -456,7 +459,9 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public Object visitCallStatement(IggyParseTree.CallStatement node) {
-        return Collections.singletonList(AST.stat(getCall(node.fun().getText(), node.args())));
+        Function<Expression[], Expression.Call> fun = (Function<Expression[], Expression.Call>) node.fun().accept(this);
+        Expression[] arguments = ((List<Expression>) node.args().accept(this)).toArray(new Expression[]{});
+        return Collections.singletonList(AST.stat(fun.apply(arguments)));
     }
 
     @Override
@@ -563,7 +568,9 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public Expression.Call visitCallExpression(IggyParseTree.CallExpression node) {
-        return getCall(node.fun().getText(), node.args());
+        Function<Expression[], Expression.Call> fun = (Function<Expression[], Expression.Call>) node.fun().accept(this);
+        Expression[] arguments = ((List<Expression>) node.args().accept(this)).toArray(new Expression[]{});
+        return fun.apply(arguments);
     }
 
     @Override
@@ -717,6 +724,36 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     }
 
     @Override
+    public Function<Expression[], Expression.Call> visitPrintlnFunName(IggyParseTree.PrintlnFunName node) {
+        return AST::println;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitIndentFunName(IggyParseTree.IndentFunName node) {
+        return AST::indent;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitAssertFunName(IggyParseTree.AssertFunName node) {
+        return AST::assertion;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitSetFunName(IggyParseTree.SetFunName node) {
+        return AST::set;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitContainsFunName(IggyParseTree.ContainsFunName node) {
+        return AST::contains;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitPutFunName(IggyParseTree.PutFunName node) {
+        return AST::put;
+    }
+
+    @Override
     public Identifier visitIdentifier(IggyParseTree.Identifier node) {
         return Identifier.fromName(node.getText());
     }
@@ -749,26 +786,6 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
                 return Associativity.NON_ASSOC;
             default:
                 return Associativity.UNDEFINED;
-        }
-    }
-
-    private Expression.Call getCall(String funName, IggyParseTree.Arguments args) {
-        Expression[] arguments = ((List<Expression>) args.accept(this)).toArray(new Expression[]{});
-        switch (funName) {
-            case "println":
-                return AST.println(arguments);
-            case "indent":
-                return AST.indent(arguments[0]);
-            case "assert":
-                return AST.assertion(arguments);
-            case "set":
-                return AST.set(arguments);
-            case "put":
-                return AST.put(arguments[0], arguments[1]);
-            case "contains":
-                return AST.contains(arguments[0], arguments[1]);
-            default:
-                throw new RuntimeException("Unknown function name: " + funName);
         }
     }
 

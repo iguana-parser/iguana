@@ -62,7 +62,7 @@ public class IggyParseTree {
 
     }
 
-    // Rule = modifier:RuleModifier? annotation:Annotation? name:Name params:Parameters? '=' body:Body
+    // Rule = modifier:('start' | 'layout' | 'lexical')? annotation:Annotation? name:Name params:Parameters? '=' body:Body
     public static class ContextFreeRule extends Rule {
         public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -979,8 +979,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public TerminalNode fun() {
-           return (TerminalNode) childAt(0);
+        public FunName fun() {
+           return (FunName) childAt(0);
         }
 
         public Arguments args() {
@@ -1353,8 +1353,8 @@ public class IggyParseTree {
             super(rule, children, start, end);
         }
 
-        public TerminalNode fun() {
-           return (TerminalNode) childAt(0);
+        public FunName fun() {
+           return (FunName) childAt(0);
         }
 
         public Arguments args() {
@@ -1850,6 +1850,103 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    public static abstract class FunName extends NonterminalNode {
+        public FunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+    }
+
+    // FunName = 'println'
+    public static class PrintlnFunName extends FunName {
+        public PrintlnFunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPrintlnFunName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // FunName = 'indent'
+    public static class IndentFunName extends FunName {
+        public IndentFunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitIndentFunName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // FunName = 'assert'
+    public static class AssertFunName extends FunName {
+        public AssertFunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitAssertFunName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // FunName = 'set'
+    public static class SetFunName extends FunName {
+        public SetFunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitSetFunName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // FunName = 'contains'
+    public static class ContainsFunName extends FunName {
+        public ContainsFunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitContainsFunName(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // FunName = 'put'
+    public static class PutFunName extends FunName {
+        public PutFunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitPutFunName(this);
             }
             return visitor.visitNonterminalNode(this);
         }

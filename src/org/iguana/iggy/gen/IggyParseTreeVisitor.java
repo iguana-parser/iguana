@@ -179,6 +179,18 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitName(IggyParseTree.Name node);
 
+    T visitPrintlnFunName(IggyParseTree.PrintlnFunName node);
+
+    T visitIndentFunName(IggyParseTree.IndentFunName node);
+
+    T visitAssertFunName(IggyParseTree.AssertFunName node);
+
+    T visitSetFunName(IggyParseTree.SetFunName node);
+
+    T visitContainsFunName(IggyParseTree.ContainsFunName node);
+
+    T visitPutFunName(IggyParseTree.PutFunName node);
+
     T visitIdentifier(IggyParseTree.Identifier node);
 
     T visitLabel(IggyParseTree.Label node);

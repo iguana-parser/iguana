@@ -10,6 +10,9 @@ public class KeywordTerminalNode extends TerminalNode {
 
     @Override
     public String getText() {
-        return getTerminal().getName();
+        // Keyword names start and end with ', so here we have to strip them.
+        // TODO: document this somewhere
+        String name = getTerminal().getName();
+        return name.substring(1, name.length() - 1);
     }
 }

@@ -9,8 +9,8 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier: RuleModifier? annotation:Annotation? name:Name params:Parameters? "=" body:Body      %ContextFree
-  | modifier: "layout"? annotation:Annotation? "regex" name:Name "=" body:RegexBody     %Regex
+  = modifier: ("start" | "layout" | "lexical")? annotation:Annotation? name:Name params:Parameters? "=" body:Body    %ContextFree
+  | modifier: "layout"? annotation:Annotation? "regex" name:Name "=" body:RegexBody                                  %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
@@ -130,6 +130,14 @@ VarName
 Name
   = id:Identifier {!contains(env,id.yield)}?
 
+FunName
+  = "println"       %Println
+  | "indent"        %Indent
+  | "assert"        %Assert
+  | "set"           %Set
+  | "contains"      %Contains
+  | "put"           %Put
+
 Identifier
   = [A-Z_a-z] !<< LetterOrDigits \ Keywords
 
@@ -216,17 +224,4 @@ regex Keywords
   | "set"
   | "contains"
   | "put"
-  | "lexical"
-
-regex FunName
-  = "println"
-  | "indent"
-  | "assert"
-  | "set"
-  | "contains"
-  | "put"
-
-regex RuleModifier
-  = "start"
-  | "layout"
   | "lexical"
