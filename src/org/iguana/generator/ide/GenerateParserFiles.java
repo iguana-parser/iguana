@@ -40,6 +40,7 @@ public class GenerateParserFiles extends Generator {
         sb.append("import com.intellij.psi.tree.IElementType;\n");
         sb.append("import iggy.ide.lang.IggyLang;\n");
         sb.append("\n");
+        sb.append("import java.util.HashMap;\n");
         sb.append("import java.util.IdentityHashMap;\n");
         sb.append("import java.util.Map;\n");
         sb.append("import java.util.function.Function;\n");
@@ -49,16 +50,25 @@ public class GenerateParserFiles extends Generator {
         sb.append("\n");
         generateTypes(sb, this::generateElementType);
         sb.append("\n");
-        sb.append("    private static final Map<IElementType, Function<ASTNode, PsiElement>> map = new IdentityHashMap<>();\n");
+        sb.append("    private static final Map<String, IElementType> stringToElementTypeMap = new HashMap<>();\n");
+        sb.append("    private static final Map<IElementType, Function<ASTNode, PsiElement>> elementTypeToPsiElementMap = new IdentityHashMap<>();\n");
         sb.append("\n");
         sb.append("    static {\n");
-        metaSymbolNodes.forEach(s -> sb.append(generateMapEntry(s)));
+        metaSymbolNodes.forEach(s -> sb.append(generateStringToElementTypetMapEntry(s)));
         sb.append("\n");
-        generateTypes(sb, this::generateMapEntry);
+        metaSymbolNodes.forEach(s -> sb.append(generateTypeToPsiElementMapEntry(s)));
+        sb.append("\n");
+        generateTypes(sb, this::generateStringToElementTypetMapEntry);
+        sb.append("\n");
+        generateTypes(sb, this::generateTypeToPsiElementMapEntry);
         sb.append("    }\n");
         sb.append("\n");
         sb.append("    public static PsiElement createPsiElement(ASTNode node) {\n");
-        sb.append("        return map.get(node.getElementType()).apply(node);\n");
+        sb.append("        return elementTypeToPsiElementMap.get(node.getElementType()).apply(node);\n");
+        sb.append("    }\n");
+        sb.append("\n");
+        sb.append("    public static IElementType getElementType(String name) {\n");
+        sb.append("        return stringToElementTypeMap.get(name);\n");
         sb.append("    }\n");
         sb.append("}\n");
 
@@ -89,7 +99,11 @@ public class GenerateParserFiles extends Generator {
         return "    public static IElementType " + type + " = new IggyElementType(\"" + type + "\", IggyLang.instance);\n";
     }
 
-    private String generateMapEntry(String type) {
-        return "        map.put(" + type + ", node -> new iggy.ide.psi.IggyPsiElement." + type + "(node));\n";
+    private String generateTypeToPsiElementMapEntry(String type) {
+        return "        elementTypeToPsiElementMap.put(" + type + ", node -> new iggy.ide.psi.IggyPsiElement." + type + "(node));\n";
+    }
+
+    private String generateStringToElementTypetMapEntry(String type) {
+        return "        stringToElementTypeMap.put(\"" + type + "\"" + ", " + type + ");\n";
     }
 }
