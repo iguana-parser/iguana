@@ -60,9 +60,9 @@ public interface Symbol extends Attr {
 
 	String getName();
 	
-	Set<Condition> getPreConditions();
+	List<Condition> getPreConditions();
 	
-	Set<Condition> getPostConditions();
+	List<Condition> getPostConditions();
 	
 	String getLabel();
 	

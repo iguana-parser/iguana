@@ -229,7 +229,7 @@ public class GrammarGraphBuilder {
 
             validateNumberOfArguments(nonterminalSlot.getNonterminal(), arguments);
 
-            Set<Condition> preConditions = (i == 0 && j == -1) ? new LinkedHashSet<>() : symbol.getPreConditions();
+            List<Condition> preConditions = (i == 0 && j == -1) ? new ArrayList<>() : symbol.getPreConditions();
             setTransition(new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, getConditions(preConditions)));
 
             currentSlot = slot;
@@ -298,7 +298,7 @@ public class GrammarGraphBuilder {
             else
                 slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), symbol.getLabel(), null, null);
 
-            Set<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptySet() : symbol.getPreConditions();
+            List<Condition> preConditions = (i == 0 && j == -1) ? Collections.emptyList() : symbol.getPreConditions();
             TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions, symbol.getPostConditions());
             setTransition(transition);
             currentSlot = slot;
@@ -369,8 +369,10 @@ public class GrammarGraphBuilder {
     }
 
     private TerminalTransition getTerminalTransition(TerminalGrammarSlot slot,
-                                                     BodyGrammarSlot origin, BodyGrammarSlot dest,
-                                                     Set<Condition> preConditions, Set<Condition> postConditions) {
+                                                     BodyGrammarSlot origin,
+                                                     BodyGrammarSlot dest,
+                                                     List<Condition> preConditions,
+                                                     List<Condition> postConditions) {
 
         return new TerminalTransition(slot, origin, dest, getConditions(preConditions), getConditions(postConditions));
     }
@@ -393,7 +395,7 @@ public class GrammarGraphBuilder {
         } else {
             // TODO: This is not a final solution; in particular,
             //       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.
-            Set<Condition> preConditions = new LinkedHashSet<>(rule.symbolAt(0).getPreConditions());
+            List<Condition> preConditions = new ArrayList<>(rule.symbolAt(0).getPreConditions());
 
             slot = new BodyGrammarSlot(rule.getPosition(0, 0), rule.symbolAt(0).getLabel(), null, null, getConditions(preConditions), FollowTest.DEFAULT);
         }
@@ -436,7 +438,7 @@ public class GrammarGraphBuilder {
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
     }
 
-    private Conditions getConditions(Set<Condition> conditions) {
+    private Conditions getConditions(List<Condition> conditions) {
         if (conditions.isEmpty())
             return ConditionsFactory.DEFAULT;
         return ConditionsFactory.getConditions(conditions, matcherFactory);

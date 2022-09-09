@@ -27,18 +27,17 @@
 
 package org.iguana.grammar.condition;
 
-import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
+import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.result.Result;
 import org.iguana.traversal.ToSlotActionConditionVisitor;
+import org.iguana.utils.input.Input;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.iguana.utils.string.StringUtil.listToString;
@@ -59,7 +58,7 @@ public class ConditionsFactory {
 		}
 	};
 	
-	public static Conditions getConditions(Set<Condition> conditions, MatcherFactory factory) {
+	public static Conditions getConditions(List<Condition> conditions, MatcherFactory factory) {
 		
 		List<Condition> list = new ArrayList<>(conditions);
 		

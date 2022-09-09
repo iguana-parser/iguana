@@ -21,14 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class IggyParserBootstrapTest {
 
     @Test
-    public void test1() throws IOException {
+    public void testIggyGrammar() throws IOException {
         Grammar grammar = IggyParserUtils.fromIggyGrammarPath("src/resources/Iguana.iggy");
 
         assertEquals(grammar, IggyGrammar.getGrammar());
     }
 
     @Test
-    public void test2() throws Exception {
+    public void testJsonGrammar() throws Exception {
         Grammar grammar = IggyGrammar.getGrammar();
 
         String expectedJson = getFileContent(Paths.get("src/org/iguana/iggy/gen/iggy.json"));

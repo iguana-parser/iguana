@@ -4,8 +4,9 @@ import org.iguana.datadependent.ast.Statement;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
 
@@ -25,13 +26,13 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
     }
 
     @Override
-    public Set<Condition> getPreConditions() {
-        return null;
+    public List<Condition> getPreConditions() {
+        return Collections.emptyList();
     }
 
     @Override
-    public Set<Condition> getPostConditions() {
-        return null;
+    public List<Condition> getPostConditions() {
+        return Collections.emptyList();
     }
 
     @Override
