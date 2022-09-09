@@ -17,16 +17,22 @@ import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
 public class GeneratePsiElements extends Generator {
 
+    private final List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt", "Start");
     private final String psiGenDirectory;
+    private final String className;
 
     public GeneratePsiElements(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
         super(grammar, grammarName, packageName, genDirectory);
         this.psiGenDirectory = new File(genDirectory, "psi").getAbsolutePath();
+        this.className = toFirstUpperCase(grammarName);
     }
 
     public void generate() {
-        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt", "Start");
+        generatePsiElements();
+        generatePsiElementFactory();
+    }
 
+    private void generatePsiElements() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + grammarName.toLowerCase() + ".ide.psi;\n");
@@ -68,6 +74,43 @@ public class GeneratePsiElements extends Generator {
         sb.append("}\n");
         writeToJavaFile(sb.toString(), psiGenDirectory, className);
         System.out.println(className + " has been generated.");
+    }
+
+    private void generatePsiElementFactory() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("package " + grammarName.toLowerCase() + ".ide.psi;\n");
+        sb.append("\n");
+        sb.append("import com.intellij.lang.ASTNode;\n");
+        sb.append("import com.intellij.psi.PsiElement;\n");
+        sb.append("import com.intellij.psi.tree.IElementType;\n");
+        sb.append("\n");
+        sb.append("import java.util.IdentityHashMap;\n");
+        sb.append("import java.util.Map;\n");
+        sb.append("import java.util.function.Function;\n");
+        sb.append("\n");
+        sb.append("import static iggy.ide.parser.IggyElementTypes.*;\n");
+        sb.append("\n");
+        sb.append("public class " + className + "PsiElementFactory {\n");
+        sb.append("\n");
+        sb.append("    private static final Map<IElementType, Function<ASTNode, PsiElement>> elementTypeToPsiElementMap = new IdentityHashMap<>();\n");
+        sb.append("\n");
+        sb.append("    static {\n");
+        metaSymbolNodes.forEach(s -> sb.append(generateTypeToPsiElementMapEntry(s)));
+        sb.append("\n");
+        generateTypes(sb, this::generateTypeToPsiElementMapEntry);
+        sb.append("\n");
+        sb.append("    }\n");
+        sb.append("    public static PsiElement createPsiElement(ASTNode node) {\n");
+        sb.append("       return elementTypeToPsiElementMap.get(node.getElementType()).apply(node);\n");
+        sb.append("    }\n");
+        sb.append("}\n");
+
+        writeToJavaFile(sb.toString(), psiGenDirectory, className + "PsiElementFactory");
+    }
+
+    private String generateTypeToPsiElementMapEntry(String type) {
+        return "        elementTypeToPsiElementMap.put(" + type + ", node -> new IggyPsiElement." + type + "(node));\n";
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
