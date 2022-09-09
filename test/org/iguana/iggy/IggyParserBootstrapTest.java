@@ -3,10 +3,7 @@ package org.iguana.iggy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.iguana.grammar.Grammar;
 import org.iguana.iggy.gen.IggyGrammar;
-import org.iguana.iggy.gen.IggyParser;
-import org.iguana.parser.IguanaParser;
 import org.iguana.util.serialization.JsonSerializer;
-import org.iguana.utils.input.Input;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class IggyParserBootstrapTest {
 
     @Test
-    public void testIggyGrammar() throws IOException {
+    public void testIggyGrammar() {
         Grammar grammar = IggyParserUtils.fromIggyGrammarPath("src/resources/Iguana.iggy");
 
         assertEquals(grammar, IggyGrammar.getGrammar());
