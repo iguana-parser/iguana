@@ -20,13 +20,7 @@ public class IggyParserBootstrapTest {
 
     @Test
     public void test1() throws IOException {
-        IguanaParser parser = IggyParser.getInstance();
-        parser.parse(Input.fromFile(Paths.get("src/resources/Iguana.iggy").toFile()));
-        if (parser.hasParseError()) {
-            throw new RuntimeException(parser.getParseError().toString());
-        }
-
-        Grammar grammar = (Grammar) parser.getParseTree().accept(new IggyParseTreeToGrammarVisitor());
+        Grammar grammar = IggyParserUtils.fromIggyGrammarPath("src/resources/Iguana.iggy");
 
         assertEquals(grammar, IggyGrammar.getGrammar());
     }
