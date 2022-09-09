@@ -494,7 +494,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "''l''e''t''",
+          "name" : "'let'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -659,7 +659,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "''i''n''",
+          "name" : "'in'",
           "label" : "o2",
           "preConditions" : [
             {

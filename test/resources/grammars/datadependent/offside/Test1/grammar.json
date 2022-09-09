@@ -14,7 +14,7 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "offside Stat+",
+                      "name" : "{offside Stat ';'}+",
                       "s" : {
                         "kind" : "Offside",
                         "name" : "offside Stat",

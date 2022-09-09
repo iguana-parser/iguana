@@ -187,7 +187,7 @@
             },
             {
               "kind" : "Terminal",
-              "name" : "''-''>''",
+              "name" : "'->'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "regex.Seq",
@@ -680,7 +680,7 @@
                 "kind" : "PlusNode",
                 "symbol" : {
                   "kind" : "Plus",
-                  "name" : "R+",
+                  "name" : "{R '*'}+",
                   "s" : {
                     "kind" : "Nonterminal",
                     "name" : "R"
@@ -851,7 +851,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "''-''>''",
+              "name" : "'->'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "regex.Seq",
@@ -1097,7 +1097,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "''-''>''",
+                      "name" : "'->'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -1313,7 +1313,7 @@
                     "kind" : "KeywordTerminalNode",
                     "terminal" : {
                       "kind" : "Terminal",
-                      "name" : "''-''>''",
+                      "name" : "'->'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -1690,7 +1690,7 @@
                         "kind" : "PlusNode",
                         "symbol" : {
                           "kind" : "Plus",
-                          "name" : "R+",
+                          "name" : "{R '*'}+",
                           "s" : {
                             "kind" : "Nonterminal",
                             "name" : "R"

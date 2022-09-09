@@ -1126,7 +1126,7 @@
                           "body" : [
                             {
                               "kind" : "Terminal",
-                              "name" : "''<''/''",
+                              "name" : "'</'",
                               "nodeType" : "Literal",
                               "regex" : {
                                 "kind" : "regex.Seq",
@@ -1300,7 +1300,7 @@
                             "kind" : "KeywordTerminalNode",
                             "terminal" : {
                               "kind" : "Terminal",
-                              "name" : "''<''/''",
+                              "name" : "'</'",
                               "nodeType" : "Literal",
                               "regex" : {
                                 "kind" : "regex.Seq",
@@ -1985,7 +1985,7 @@
                           "body" : [
                             {
                               "kind" : "Terminal",
-                              "name" : "''<''/''",
+                              "name" : "'</'",
                               "nodeType" : "Literal",
                               "regex" : {
                                 "kind" : "regex.Seq",
@@ -2159,7 +2159,7 @@
                             "kind" : "KeywordTerminalNode",
                             "terminal" : {
                               "kind" : "Terminal",
-                              "name" : "''<''/''",
+                              "name" : "'</'",
                               "nodeType" : "Literal",
                               "regex" : {
                                 "kind" : "regex.Seq",
@@ -2277,7 +2277,7 @@
           "body" : [
             {
               "kind" : "Terminal",
-              "name" : "''<''/''",
+              "name" : "'</'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "regex.Seq",
@@ -2451,7 +2451,7 @@
             "kind" : "KeywordTerminalNode",
             "terminal" : {
               "kind" : "Terminal",
-              "name" : "''<''/''",
+              "name" : "'</'",
               "nodeType" : "Literal",
               "regex" : {
                 "kind" : "regex.Seq",

@@ -153,7 +153,7 @@
         "kind" : "PlusNode",
         "symbol" : {
           "kind" : "Plus",
-          "name" : "B+",
+          "name" : "{B ','}+",
           "s" : {
             "kind" : "Nonterminal",
             "name" : "B"

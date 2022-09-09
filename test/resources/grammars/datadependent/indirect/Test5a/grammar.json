@@ -53,7 +53,7 @@
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "R+",
+                      "name" : "{R '*'}+",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "R"
@@ -91,7 +91,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "''-''>''",
+                      "name" : "'->'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",

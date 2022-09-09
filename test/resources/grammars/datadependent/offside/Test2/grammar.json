@@ -14,10 +14,10 @@
                   "symbols" : [
                     {
                       "kind" : "Align",
-                      "name" : "align offside Stat+",
+                      "name" : "align {offside Stat ';'}+",
                       "symbol" : {
                         "kind" : "Plus",
-                        "name" : "offside Stat+",
+                        "name" : "{offside Stat ';'}+",
                         "s" : {
                           "kind" : "Offside",
                           "name" : "offside Stat",

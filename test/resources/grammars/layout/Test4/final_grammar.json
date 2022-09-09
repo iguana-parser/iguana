@@ -93,7 +93,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "B+",
+        "name" : "{B ','}+",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "B"
@@ -154,7 +154,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "B+",
+        "name" : "{B ','}+",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "B"

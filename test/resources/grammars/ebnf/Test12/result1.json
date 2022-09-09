@@ -42,7 +42,7 @@
         "kind" : "PlusNode",
         "symbol" : {
           "kind" : "Plus",
-          "name" : "A+",
+          "name" : "{A ','}+",
           "s" : {
             "kind" : "Nonterminal",
             "name" : "A"

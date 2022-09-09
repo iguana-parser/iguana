@@ -15,7 +15,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "''f''o''r''a''l''l''",
+          "name" : "'forall'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -71,7 +71,7 @@
         "kind" : "KeywordTerminalNode",
         "terminal" : {
           "kind" : "Terminal",
-          "name" : "''f''o''r''a''l''l''",
+          "name" : "'forall'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",

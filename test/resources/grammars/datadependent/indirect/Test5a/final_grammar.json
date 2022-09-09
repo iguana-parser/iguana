@@ -110,7 +110,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "R+",
+        "name" : "{R '*'}+",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "R"
@@ -179,7 +179,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "R+",
+        "name" : "{R '*'}+",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "R"
@@ -595,7 +595,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "''-''>''",
+          "name" : "'->'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",

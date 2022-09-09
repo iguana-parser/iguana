@@ -86,7 +86,7 @@
         "kind" : "PlusNode",
         "symbol" : {
           "kind" : "Plus",
-          "name" : "offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat+",
+          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat ';'}+",
           "label" : "a0",
           "s" : {
             "kind" : "Offside",

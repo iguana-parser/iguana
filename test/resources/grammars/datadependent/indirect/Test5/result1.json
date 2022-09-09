@@ -405,7 +405,7 @@
             "kind" : "PlusNode",
             "symbol" : {
               "kind" : "Plus",
-              "name" : "E+",
+              "name" : "{E '*'}+",
               "s" : {
                 "kind" : "Nonterminal",
                 "name" : "E",

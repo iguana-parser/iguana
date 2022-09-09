@@ -159,7 +159,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "''<''/''",
+                      "name" : "'</'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",

@@ -71,7 +71,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "''l''e''t''",
+                      "name" : "'let'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -97,7 +97,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "''i''n''",
+                      "name" : "'in'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
