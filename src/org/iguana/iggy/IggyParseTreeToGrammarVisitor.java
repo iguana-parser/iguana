@@ -719,6 +719,11 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     }
 
     @Override
+    public Object visitLayout(IggyParseTree.Layout node) {
+        throw new RuntimeException("Layout is handled in ContextFreeRule, this method should not be called");
+    }
+
+    @Override
     public Identifier visitName(IggyParseTree.Name node) {
         return (Identifier) node.id().accept(this);
     }

@@ -40,7 +40,6 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	protected Object object;
 
 	protected Set<Condition> preConditions = new LinkedHashSet<>();
-	
 	protected Set<Condition> postConditions = new LinkedHashSet<>();
 
 	public SymbolBuilder(T symbol) {

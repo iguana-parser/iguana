@@ -3961,6 +3961,95 @@
         }
       ],
       "layoutStrategy" : "NO_LAYOUT"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
+        "name" : "Layout",
+        "nodeType" : "Layout"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Star",
+                      "name" : "(WhiteSpace | SingleLineComment | MultiLineComment)*",
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "Reference",
+                            "name" : "WhiteSpace"
+                          }
+                        },
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Seq",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 47
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 47
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Seq",
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "val" : 47
+                              },
+                              {
+                                "kind" : "Char",
+                                "val" : 42
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "s" : {
+                        "kind" : "Alt",
+                        "name" : "(WhiteSpace | SingleLineComment | MultiLineComment)",
+                        "symbols" : [
+                          {
+                            "kind" : "Identifier",
+                            "name" : "WhiteSpace"
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "SingleLineComment"
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "MultiLineComment"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
     }
   ],
   "regularExpressions" : {
@@ -4281,26 +4370,6 @@
         }
       ]
     },
-    "Layout" : {
-      "kind" : "regex.Star",
-      "regex" : {
-        "kind" : "Reference",
-        "name" : "WhiteSpaceOrComment"
-      }
-    },
-    "WhiteSpaceOrComment" : {
-      "kind" : "regex.Alt",
-      "symbols" : [
-        {
-          "kind" : "Reference",
-          "name" : "WhiteSpace"
-        },
-        {
-          "kind" : "Reference",
-          "name" : "Comment"
-        }
-      ]
-    },
     "WhiteSpace" : {
       "kind" : "regex.Plus",
       "regex" : {
@@ -4328,19 +4397,6 @@
           }
         ]
       }
-    },
-    "Comment" : {
-      "kind" : "regex.Alt",
-      "symbols" : [
-        {
-          "kind" : "Reference",
-          "name" : "SingleLineComment"
-        },
-        {
-          "kind" : "Reference",
-          "name" : "MultiLineComment"
-        }
-      ]
     },
     "SingleLineComment" : {
       "kind" : "regex.Seq",

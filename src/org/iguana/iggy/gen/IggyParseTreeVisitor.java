@@ -195,4 +195,6 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitLabel(IggyParseTree.Label node);
 
+    T visitLayout(IggyParseTree.Layout node);
+
 }

@@ -172,20 +172,12 @@ regex String
   = "\"" Character* "\""
   | "\'" Character* "\'"
 
-layout regex Layout
-  = WhiteSpaceOrComment*
-
-regex WhiteSpaceOrComment
-  = WhiteSpace
-  | Comment
+layout Layout
+  = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
 
 @TokenType("WhiteSpace")
 regex WhiteSpace
   = [\ \t \f \r \n]+
-
-regex Comment
-  = SingleLineComment
-  | MultiLineComment
 
 @TokenType("LineComment")
 regex SingleLineComment

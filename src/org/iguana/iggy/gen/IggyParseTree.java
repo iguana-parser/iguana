@@ -1986,4 +1986,19 @@ public class IggyParseTree {
         }
     }
 
+    // Layout = (WhiteSpace | SingleLineComment | MultiLineComment)*
+    public static class Layout extends NonterminalNode {
+        public Layout(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitLayout(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
 }

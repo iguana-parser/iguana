@@ -260,6 +260,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                 return new IggyParseTree.Identifier(rule, children, leftExtent, rightExtent);
             case "Label":
                 return new IggyParseTree.Label(rule, children, leftExtent, rightExtent);
+            case "Layout":
+                return new IggyParseTree.Layout(rule, children, leftExtent, rightExtent);
             default:
                 throw new RuntimeException("Unexpected nonterminal:" + name);
         }
