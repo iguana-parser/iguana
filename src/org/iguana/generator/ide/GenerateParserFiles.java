@@ -28,7 +28,7 @@ public class GenerateParserFiles extends Generator {
     }
 
     private void generateIggyElementTypes() {
-        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt");
+        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt", "Start");
 
         String className = toFirstUpperCase(grammarName);
         StringBuilder sb = new StringBuilder();

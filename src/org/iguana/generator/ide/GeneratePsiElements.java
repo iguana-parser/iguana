@@ -25,7 +25,7 @@ public class GeneratePsiElements extends Generator {
     }
 
     public void generate() {
-        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt");
+        List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt", "Start");
 
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
