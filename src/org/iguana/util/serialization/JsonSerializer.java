@@ -416,7 +416,7 @@ public class JsonSerializer {
     abstract static class StartNodeMixIn {
         StartNodeMixIn(
             @JsonProperty("symbol") Symbol symbol,
-            @JsonProperty("child") ParseTreeNode child,
+            @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
     }

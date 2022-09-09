@@ -5,343 +5,421 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
-  "child" : {
-    "kind" : "NonterminalNode",
-    "rule" : {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "S",
-        "parameters" : [
-          "x",
-          "y",
-          "z"
-        ]
-      },
-      "body" : [
-        {
-          "kind" : "Code",
-          "name" : "x=A(x,y) {var m = 3}",
-          "symbol" : {
-            "kind" : "Nonterminal",
-            "name" : "A",
-            "state" : [
-              "x"
-            ],
-            "arguments" : [
-              {
-                "kind" : "Name",
-                "name" : "x",
-                "i" : -1
-              },
-              {
-                "kind" : "Name",
-                "name" : "y",
-                "i" : -1
-              }
-            ]
-          },
-          "statements" : [
-            {
-              "kind" : "VariableDeclaration",
-              "decl" : {
-                "name" : "m",
-                "i" : -1,
-                "expression" : {
-                  "kind" : "Integer",
-                  "value" : 3
-                }
-              }
-            }
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "S",
+          "parameters" : [
+            "x",
+            "y",
+            "z"
           ]
         },
-        {
-          "kind" : "Nonterminal",
-          "name" : "C"
-        },
-        {
-          "kind" : "Code",
-          "name" : "B(x,z) {var n = 4}",
-          "symbol" : {
-            "kind" : "Nonterminal",
-            "name" : "B",
-            "arguments" : [
-              {
-                "kind" : "Name",
-                "name" : "x",
-                "i" : -1
-              },
-              {
-                "kind" : "Name",
-                "name" : "z",
-                "i" : -1
-              }
-            ]
-          },
-          "statements" : [
-            {
-              "kind" : "VariableDeclaration",
-              "decl" : {
-                "name" : "n",
-                "i" : -1,
-                "expression" : {
-                  "kind" : "Integer",
-                  "value" : 4
-                }
-              }
-            }
-          ]
-        },
-        {
-          "kind" : "Nonterminal",
-          "name" : "D"
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    "children" : [
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
-            "kind" : "Nonterminal",
-            "name" : "A",
-            "parameters" : [
-              "x",
-              "y"
-            ]
-          },
-          "body" : [
-            {
-              "kind" : "Code",
-              "name" : "'a' {x = 1}",
-              "symbol" : {
-                "kind" : "Terminal",
-                "name" : "'a'",
-                "nodeType" : "Literal",
-                "regex" : {
-                  "kind" : "Char",
-                  "val" : 97
-                }
-              },
-              "statements" : [
+        "body" : [
+          {
+            "kind" : "Code",
+            "name" : "x=A(x,y) {var m = 3}",
+            "symbol" : {
+              "kind" : "Nonterminal",
+              "name" : "A",
+              "state" : [
+                "x"
+              ],
+              "arguments" : [
                 {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assignment",
-                    "id" : "x",
-                    "exp" : {
-                      "kind" : "Integer",
-                      "value" : 1
-                    },
-                    "i" : -1
-                  }
+                  "kind" : "Name",
+                  "name" : "x",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Name",
+                  "name" : "y",
+                  "i" : -1
                 }
               ]
             },
-            {
-              "kind" : "Code",
-              "name" : "'a' {y = 2}",
-              "symbol" : {
-                "kind" : "Terminal",
-                "name" : "'a'",
-                "nodeType" : "Literal",
-                "regex" : {
-                  "kind" : "Char",
-                  "val" : 97
-                }
-              },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assignment",
-                    "id" : "y",
-                    "exp" : {
-                      "kind" : "Integer",
-                      "value" : 2
-                    },
-                    "i" : -1
+            "statements" : [
+              {
+                "kind" : "VariableDeclaration",
+                "decl" : {
+                  "name" : "m",
+                  "i" : -1,
+                  "expression" : {
+                    "kind" : "Integer",
+                    "value" : 3
                   }
                 }
-              ]
-            },
-            {
-              "kind" : "Terminal",
-              "name" : "';'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 59
               }
-            },
-            {
-              "kind" : "Return",
-              "name" : "{(x)}",
-              "expression" : {
-                "kind" : "Tuple",
-                "elements" : [
-                  {
-                    "kind" : "Name",
-                    "name" : "x",
-                    "i" : -1
-                  }
-                ],
-                "length" : 1
-              }
-            }
-          ],
-          "recursion" : "NON_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : -1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : -1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 1,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
-        },
-        "children" : [
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'a'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 97
-              }
-            },
-            "start" : 0,
-            "end" : 1
+            ]
           },
           {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'a'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 97
-              }
-            },
-            "start" : 1,
-            "end" : 2
-          },
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "';'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 59
-              }
-            },
-            "start" : 2,
-            "end" : 3
-          }
-        ],
-        "start" : 0,
-        "end" : 3
-      },
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
             "kind" : "Nonterminal",
             "name" : "C"
           },
-          "body" : [
-            {
-              "kind" : "Terminal",
-              "name" : "'c'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 99
-              }
-            }
-          ],
-          "recursion" : "NON_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : -1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : -1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 1,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
-        },
-        "children" : [
           {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'c'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 99
-              }
+            "kind" : "Code",
+            "name" : "B(x,z) {var n = 4}",
+            "symbol" : {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "arguments" : [
+                {
+                  "kind" : "Name",
+                  "name" : "x",
+                  "i" : -1
+                },
+                {
+                  "kind" : "Name",
+                  "name" : "z",
+                  "i" : -1
+                }
+              ]
             },
-            "start" : 3,
-            "end" : 4
-          }
-        ],
-        "start" : 3,
-        "end" : 4
-      },
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
-            "kind" : "Nonterminal",
-            "name" : "B",
-            "parameters" : [
-              "x",
-              "z"
+            "statements" : [
+              {
+                "kind" : "VariableDeclaration",
+                "decl" : {
+                  "name" : "n",
+                  "i" : -1,
+                  "expression" : {
+                    "kind" : "Integer",
+                    "value" : 4
+                  }
+                }
+              }
             ]
           },
-          "body" : [
+          {
+            "kind" : "Nonterminal",
+            "name" : "D"
+          }
+        ],
+        "recursion" : "NON_REC",
+        "irecursion" : "NON_REC",
+        "associativity" : "UNDEFINED",
+        "precedence" : -1,
+        "precedenceLevel" : {
+          "lhs" : 1,
+          "rhs" : 1,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
+          "index" : 1,
+          "containsAssociativityGroup" : false,
+          "assoc_lhs" : -1,
+          "assoc_rhs" : -1
+        }
+      },
+      "children" : [
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "A",
+              "parameters" : [
+                "x",
+                "y"
+              ]
+            },
+            "body" : [
+              {
+                "kind" : "Code",
+                "name" : "'a' {x = 1}",
+                "symbol" : {
+                  "kind" : "Terminal",
+                  "name" : "'a'",
+                  "nodeType" : "Literal",
+                  "regex" : {
+                    "kind" : "Char",
+                    "val" : 97
+                  }
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assignment",
+                      "id" : "x",
+                      "exp" : {
+                        "kind" : "Integer",
+                        "value" : 1
+                      },
+                      "i" : -1
+                    }
+                  }
+                ]
+              },
+              {
+                "kind" : "Code",
+                "name" : "'a' {y = 2}",
+                "symbol" : {
+                  "kind" : "Terminal",
+                  "name" : "'a'",
+                  "nodeType" : "Literal",
+                  "regex" : {
+                    "kind" : "Char",
+                    "val" : 97
+                  }
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assignment",
+                      "id" : "y",
+                      "exp" : {
+                        "kind" : "Integer",
+                        "value" : 2
+                      },
+                      "i" : -1
+                    }
+                  }
+                ]
+              },
+              {
+                "kind" : "Terminal",
+                "name" : "';'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              },
+              {
+                "kind" : "Return",
+                "name" : "{(x)}",
+                "expression" : {
+                  "kind" : "Tuple",
+                  "elements" : [
+                    {
+                      "kind" : "Name",
+                      "name" : "x",
+                      "i" : -1
+                    }
+                  ],
+                  "length" : 1
+                }
+              }
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
             {
-              "kind" : "Code",
-              "name" : "'b' {z = x;assert(x == 1)}",
-              "symbol" : {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'a'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 97
+                }
+              },
+              "start" : 0,
+              "end" : 1
+            },
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'a'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 97
+                }
+              },
+              "start" : 1,
+              "end" : 2
+            },
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "';'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              },
+              "start" : 2,
+              "end" : 3
+            }
+          ],
+          "start" : 0,
+          "end" : 3
+        },
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "C"
+            },
+            "body" : [
+              {
+                "kind" : "Terminal",
+                "name" : "'c'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 99
+                }
+              }
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'c'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 99
+                }
+              },
+              "start" : 3,
+              "end" : 4
+            }
+          ],
+          "start" : 3,
+          "end" : 4
+        },
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "B",
+              "parameters" : [
+                "x",
+                "z"
+              ]
+            },
+            "body" : [
+              {
+                "kind" : "Code",
+                "name" : "'b' {z = x;assert(x == 1)}",
+                "symbol" : {
+                  "kind" : "Terminal",
+                  "name" : "'b'",
+                  "nodeType" : "Literal",
+                  "regex" : {
+                    "kind" : "Char",
+                    "val" : 98
+                  }
+                },
+                "statements" : [
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assignment",
+                      "id" : "z",
+                      "exp" : {
+                        "kind" : "Name",
+                        "name" : "x",
+                        "i" : -1
+                      },
+                      "i" : -1
+                    }
+                  },
+                  {
+                    "kind" : "ExpressionStatement",
+                    "exp" : {
+                      "kind" : "Assert",
+                      "arguments" : [
+                        {
+                          "kind" : "Equal",
+                          "lhs" : {
+                            "kind" : "Name",
+                            "name" : "x",
+                            "i" : -1
+                          },
+                          "rhs" : {
+                            "kind" : "Integer",
+                            "value" : 1
+                          }
+                        }
+                      ],
+                      "fun" : "assert"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind" : "Terminal",
+                "name" : "';'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
+                }
+              }
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
                 "kind" : "Terminal",
                 "name" : "'b'",
                 "nodeType" : "Literal",
@@ -350,163 +428,87 @@
                   "val" : 98
                 }
               },
-              "statements" : [
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assignment",
-                    "id" : "z",
-                    "exp" : {
-                      "kind" : "Name",
-                      "name" : "x",
-                      "i" : -1
-                    },
-                    "i" : -1
-                  }
-                },
-                {
-                  "kind" : "ExpressionStatement",
-                  "exp" : {
-                    "kind" : "Assert",
-                    "arguments" : [
-                      {
-                        "kind" : "Equal",
-                        "lhs" : {
-                          "kind" : "Name",
-                          "name" : "x",
-                          "i" : -1
-                        },
-                        "rhs" : {
-                          "kind" : "Integer",
-                          "value" : 1
-                        }
-                      }
-                    ],
-                    "fun" : "assert"
-                  }
+              "start" : 4,
+              "end" : 5
+            },
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "';'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 59
                 }
-              ]
-            },
-            {
-              "kind" : "Terminal",
-              "name" : "';'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 59
-              }
+              },
+              "start" : 5,
+              "end" : 6
             }
           ],
-          "recursion" : "NON_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : -1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : -1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 1,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
+          "start" : 4,
+          "end" : 6
         },
-        "children" : [
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'b'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 98
-              }
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "D"
             },
-            "start" : 4,
-            "end" : 5
-          },
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "';'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 59
+            "body" : [
+              {
+                "kind" : "Terminal",
+                "name" : "'d'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 100
+                }
               }
-            },
-            "start" : 5,
-            "end" : 6
-          }
-        ],
-        "start" : 4,
-        "end" : 6
-      },
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
-            "kind" : "Nonterminal",
-            "name" : "D"
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
           },
-          "body" : [
+          "children" : [
             {
-              "kind" : "Terminal",
-              "name" : "'d'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 100
-              }
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'d'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 100
+                }
+              },
+              "start" : 6,
+              "end" : 7
             }
           ],
-          "recursion" : "NON_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : -1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : -1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 1,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
-        },
-        "children" : [
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'d'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 100
-              }
-            },
-            "start" : 6,
-            "end" : 7
-          }
-        ],
-        "start" : 6,
-        "end" : 7
-      }
-    ],
-    "start" : 0,
-    "end" : 7
-  },
+          "start" : 6,
+          "end" : 7
+        }
+      ],
+      "start" : 0,
+      "end" : 7
+    }
+  ],
   "start" : 0,
   "end" : 7
 }

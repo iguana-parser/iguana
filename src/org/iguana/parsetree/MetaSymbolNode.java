@@ -166,9 +166,9 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         }
     }
 
-    public static class StartNode extends SingleChildMetaSymbolNode {
-        public StartNode(Symbol symbol, ParseTreeNode child, int start, int end) {
-            super(symbol, child, start, end);
+    public static class StartNode extends MultiChildMetaSymbolNode {
+        public StartNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
+            super(symbol, children, start, end);
         }
 
         @Override

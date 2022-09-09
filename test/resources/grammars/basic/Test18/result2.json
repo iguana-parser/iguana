@@ -5,593 +5,595 @@
     "name" : "Start(E)",
     "startSymbol" : "E"
   },
-  "child" : {
-    "kind" : "AmbiguityNode",
-    "alternatives" : [
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
-            "kind" : "Nonterminal",
-            "name" : "E"
-          },
-          "body" : [
-            {
+  "children" : [
+    {
+      "kind" : "AmbiguityNode",
+      "alternatives" : [
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
               "kind" : "Nonterminal",
               "name" : "E"
             },
-            {
-              "kind" : "Terminal",
-              "name" : "'+'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 43
+            "body" : [
+              {
+                "kind" : "Nonterminal",
+                "name" : "E"
+              },
+              {
+                "kind" : "Terminal",
+                "name" : "'+'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 43
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "E"
               }
+            ],
+            "recursion" : "LEFT_RIGHT_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : 1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : 1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 2,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "E"
+                },
+                "body" : [
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "E"
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "'+'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 43
+                    }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "E"
+                  }
+                ],
+                "recursion" : "LEFT_RIGHT_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : 1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : 1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "E"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : 1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "KeywordTerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 0,
+                      "end" : 1
+                    }
+                  ],
+                  "start" : 0,
+                  "end" : 1
+                },
+                {
+                  "kind" : "KeywordTerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "'+'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 43
+                    }
+                  },
+                  "start" : 1,
+                  "end" : 2
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "E"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : 1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "KeywordTerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 2,
+                      "end" : 3
+                    }
+                  ],
+                  "start" : 2,
+                  "end" : 3
+                }
+              ],
+              "start" : 0,
+              "end" : 3
             },
             {
-              "kind" : "Nonterminal",
-              "name" : "E"
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'+'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 43
+                }
+              },
+              "start" : 3,
+              "end" : 4
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "E"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "'a'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  }
+                ],
+                "recursion" : "NON_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : -1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : 1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "KeywordTerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "'a'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  },
+                  "start" : 4,
+                  "end" : 5
+                }
+              ],
+              "start" : 4,
+              "end" : 5
             }
           ],
-          "recursion" : "LEFT_RIGHT_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : 1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : 1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 2,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
+          "start" : 0,
+          "end" : 5
         },
-        "children" : [
-          {
-            "kind" : "NonterminalNode",
-            "rule" : {
-              "head" : {
-                "kind" : "Nonterminal",
-                "name" : "E"
-              },
-              "body" : [
-                {
-                  "kind" : "Nonterminal",
-                  "name" : "E"
-                },
-                {
-                  "kind" : "Terminal",
-                  "name" : "'+'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 43
-                  }
-                },
-                {
-                  "kind" : "Nonterminal",
-                  "name" : "E"
-                }
-              ],
-              "recursion" : "LEFT_RIGHT_REC",
-              "irecursion" : "NON_REC",
-              "associativity" : "UNDEFINED",
-              "precedence" : 1,
-              "precedenceLevel" : {
-                "lhs" : 1,
-                "rhs" : 1,
-                "undefined" : 1,
-                "hasPrefixUnary" : false,
-                "hasPostfixUnary" : false,
-                "hasPrefixUnaryBelow" : false,
-                "hasPostfixUnaryBelow" : false,
-                "index" : 2,
-                "containsAssociativityGroup" : false,
-                "assoc_lhs" : -1,
-                "assoc_rhs" : -1
-              }
-            },
-            "children" : [
-              {
-                "kind" : "NonterminalNode",
-                "rule" : {
-                  "head" : {
-                    "kind" : "Nonterminal",
-                    "name" : "E"
-                  },
-                  "body" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    }
-                  ],
-                  "recursion" : "NON_REC",
-                  "irecursion" : "NON_REC",
-                  "associativity" : "UNDEFINED",
-                  "precedence" : -1,
-                  "precedenceLevel" : {
-                    "lhs" : 1,
-                    "rhs" : 1,
-                    "undefined" : 1,
-                    "hasPrefixUnary" : false,
-                    "hasPostfixUnary" : false,
-                    "hasPrefixUnaryBelow" : false,
-                    "hasPostfixUnaryBelow" : false,
-                    "index" : 2,
-                    "containsAssociativityGroup" : false,
-                    "assoc_lhs" : -1,
-                    "assoc_rhs" : -1
-                  }
-                },
-                "children" : [
-                  {
-                    "kind" : "KeywordTerminalNode",
-                    "terminal" : {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    },
-                    "start" : 0,
-                    "end" : 1
-                  }
-                ],
-                "start" : 0,
-                "end" : 1
-              },
-              {
-                "kind" : "KeywordTerminalNode",
-                "terminal" : {
-                  "kind" : "Terminal",
-                  "name" : "'+'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 43
-                  }
-                },
-                "start" : 1,
-                "end" : 2
-              },
-              {
-                "kind" : "NonterminalNode",
-                "rule" : {
-                  "head" : {
-                    "kind" : "Nonterminal",
-                    "name" : "E"
-                  },
-                  "body" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    }
-                  ],
-                  "recursion" : "NON_REC",
-                  "irecursion" : "NON_REC",
-                  "associativity" : "UNDEFINED",
-                  "precedence" : -1,
-                  "precedenceLevel" : {
-                    "lhs" : 1,
-                    "rhs" : 1,
-                    "undefined" : 1,
-                    "hasPrefixUnary" : false,
-                    "hasPostfixUnary" : false,
-                    "hasPrefixUnaryBelow" : false,
-                    "hasPostfixUnaryBelow" : false,
-                    "index" : 2,
-                    "containsAssociativityGroup" : false,
-                    "assoc_lhs" : -1,
-                    "assoc_rhs" : -1
-                  }
-                },
-                "children" : [
-                  {
-                    "kind" : "KeywordTerminalNode",
-                    "terminal" : {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    },
-                    "start" : 2,
-                    "end" : 3
-                  }
-                ],
-                "start" : 2,
-                "end" : 3
-              }
-            ],
-            "start" : 0,
-            "end" : 3
-          },
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'+'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 43
-              }
-            },
-            "start" : 3,
-            "end" : 4
-          },
-          {
-            "kind" : "NonterminalNode",
-            "rule" : {
-              "head" : {
-                "kind" : "Nonterminal",
-                "name" : "E"
-              },
-              "body" : [
-                {
-                  "kind" : "Terminal",
-                  "name" : "'a'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 97
-                  }
-                }
-              ],
-              "recursion" : "NON_REC",
-              "irecursion" : "NON_REC",
-              "associativity" : "UNDEFINED",
-              "precedence" : -1,
-              "precedenceLevel" : {
-                "lhs" : 1,
-                "rhs" : 1,
-                "undefined" : 1,
-                "hasPrefixUnary" : false,
-                "hasPostfixUnary" : false,
-                "hasPrefixUnaryBelow" : false,
-                "hasPostfixUnaryBelow" : false,
-                "index" : 2,
-                "containsAssociativityGroup" : false,
-                "assoc_lhs" : -1,
-                "assoc_rhs" : -1
-              }
-            },
-            "children" : [
-              {
-                "kind" : "KeywordTerminalNode",
-                "terminal" : {
-                  "kind" : "Terminal",
-                  "name" : "'a'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 97
-                  }
-                },
-                "start" : 4,
-                "end" : 5
-              }
-            ],
-            "start" : 4,
-            "end" : 5
-          }
-        ],
-        "start" : 0,
-        "end" : 5
-      },
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
-            "kind" : "Nonterminal",
-            "name" : "E"
-          },
-          "body" : [
-            {
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
               "kind" : "Nonterminal",
               "name" : "E"
             },
-            {
-              "kind" : "Terminal",
-              "name" : "'+'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 43
+            "body" : [
+              {
+                "kind" : "Nonterminal",
+                "name" : "E"
+              },
+              {
+                "kind" : "Terminal",
+                "name" : "'+'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 43
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "E"
               }
+            ],
+            "recursion" : "LEFT_RIGHT_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : 1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : 1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 2,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "E"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "'a'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  }
+                ],
+                "recursion" : "NON_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : -1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : 1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "KeywordTerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "'a'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  },
+                  "start" : 0,
+                  "end" : 1
+                }
+              ],
+              "start" : 0,
+              "end" : 1
             },
             {
-              "kind" : "Nonterminal",
-              "name" : "E"
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'+'",
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "val" : 43
+                }
+              },
+              "start" : 1,
+              "end" : 2
+            },
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "E"
+                },
+                "body" : [
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "E"
+                  },
+                  {
+                    "kind" : "Terminal",
+                    "name" : "'+'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 43
+                    }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "E"
+                  }
+                ],
+                "recursion" : "LEFT_RIGHT_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : 1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : 1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "E"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : 1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "KeywordTerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 2,
+                      "end" : 3
+                    }
+                  ],
+                  "start" : 2,
+                  "end" : 3
+                },
+                {
+                  "kind" : "KeywordTerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "'+'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 43
+                    }
+                  },
+                  "start" : 3,
+                  "end" : 4
+                },
+                {
+                  "kind" : "NonterminalNode",
+                  "rule" : {
+                    "head" : {
+                      "kind" : "Nonterminal",
+                      "name" : "E"
+                    },
+                    "body" : [
+                      {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      }
+                    ],
+                    "recursion" : "NON_REC",
+                    "irecursion" : "NON_REC",
+                    "associativity" : "UNDEFINED",
+                    "precedence" : -1,
+                    "precedenceLevel" : {
+                      "lhs" : 1,
+                      "rhs" : 1,
+                      "undefined" : 1,
+                      "hasPrefixUnary" : false,
+                      "hasPostfixUnary" : false,
+                      "hasPrefixUnaryBelow" : false,
+                      "hasPostfixUnaryBelow" : false,
+                      "index" : 2,
+                      "containsAssociativityGroup" : false,
+                      "assoc_lhs" : -1,
+                      "assoc_rhs" : -1
+                    }
+                  },
+                  "children" : [
+                    {
+                      "kind" : "KeywordTerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "'a'",
+                        "nodeType" : "Literal",
+                        "regex" : {
+                          "kind" : "Char",
+                          "val" : 97
+                        }
+                      },
+                      "start" : 4,
+                      "end" : 5
+                    }
+                  ],
+                  "start" : 4,
+                  "end" : 5
+                }
+              ],
+              "start" : 2,
+              "end" : 5
             }
           ],
-          "recursion" : "LEFT_RIGHT_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : 1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : 1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 2,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
-        },
-        "children" : [
-          {
-            "kind" : "NonterminalNode",
-            "rule" : {
-              "head" : {
-                "kind" : "Nonterminal",
-                "name" : "E"
-              },
-              "body" : [
-                {
-                  "kind" : "Terminal",
-                  "name" : "'a'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 97
-                  }
-                }
-              ],
-              "recursion" : "NON_REC",
-              "irecursion" : "NON_REC",
-              "associativity" : "UNDEFINED",
-              "precedence" : -1,
-              "precedenceLevel" : {
-                "lhs" : 1,
-                "rhs" : 1,
-                "undefined" : 1,
-                "hasPrefixUnary" : false,
-                "hasPostfixUnary" : false,
-                "hasPrefixUnaryBelow" : false,
-                "hasPostfixUnaryBelow" : false,
-                "index" : 2,
-                "containsAssociativityGroup" : false,
-                "assoc_lhs" : -1,
-                "assoc_rhs" : -1
-              }
-            },
-            "children" : [
-              {
-                "kind" : "KeywordTerminalNode",
-                "terminal" : {
-                  "kind" : "Terminal",
-                  "name" : "'a'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 97
-                  }
-                },
-                "start" : 0,
-                "end" : 1
-              }
-            ],
-            "start" : 0,
-            "end" : 1
-          },
-          {
-            "kind" : "KeywordTerminalNode",
-            "terminal" : {
-              "kind" : "Terminal",
-              "name" : "'+'",
-              "nodeType" : "Literal",
-              "regex" : {
-                "kind" : "Char",
-                "val" : 43
-              }
-            },
-            "start" : 1,
-            "end" : 2
-          },
-          {
-            "kind" : "NonterminalNode",
-            "rule" : {
-              "head" : {
-                "kind" : "Nonterminal",
-                "name" : "E"
-              },
-              "body" : [
-                {
-                  "kind" : "Nonterminal",
-                  "name" : "E"
-                },
-                {
-                  "kind" : "Terminal",
-                  "name" : "'+'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 43
-                  }
-                },
-                {
-                  "kind" : "Nonterminal",
-                  "name" : "E"
-                }
-              ],
-              "recursion" : "LEFT_RIGHT_REC",
-              "irecursion" : "NON_REC",
-              "associativity" : "UNDEFINED",
-              "precedence" : 1,
-              "precedenceLevel" : {
-                "lhs" : 1,
-                "rhs" : 1,
-                "undefined" : 1,
-                "hasPrefixUnary" : false,
-                "hasPostfixUnary" : false,
-                "hasPrefixUnaryBelow" : false,
-                "hasPostfixUnaryBelow" : false,
-                "index" : 2,
-                "containsAssociativityGroup" : false,
-                "assoc_lhs" : -1,
-                "assoc_rhs" : -1
-              }
-            },
-            "children" : [
-              {
-                "kind" : "NonterminalNode",
-                "rule" : {
-                  "head" : {
-                    "kind" : "Nonterminal",
-                    "name" : "E"
-                  },
-                  "body" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    }
-                  ],
-                  "recursion" : "NON_REC",
-                  "irecursion" : "NON_REC",
-                  "associativity" : "UNDEFINED",
-                  "precedence" : -1,
-                  "precedenceLevel" : {
-                    "lhs" : 1,
-                    "rhs" : 1,
-                    "undefined" : 1,
-                    "hasPrefixUnary" : false,
-                    "hasPostfixUnary" : false,
-                    "hasPrefixUnaryBelow" : false,
-                    "hasPostfixUnaryBelow" : false,
-                    "index" : 2,
-                    "containsAssociativityGroup" : false,
-                    "assoc_lhs" : -1,
-                    "assoc_rhs" : -1
-                  }
-                },
-                "children" : [
-                  {
-                    "kind" : "KeywordTerminalNode",
-                    "terminal" : {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    },
-                    "start" : 2,
-                    "end" : 3
-                  }
-                ],
-                "start" : 2,
-                "end" : 3
-              },
-              {
-                "kind" : "KeywordTerminalNode",
-                "terminal" : {
-                  "kind" : "Terminal",
-                  "name" : "'+'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 43
-                  }
-                },
-                "start" : 3,
-                "end" : 4
-              },
-              {
-                "kind" : "NonterminalNode",
-                "rule" : {
-                  "head" : {
-                    "kind" : "Nonterminal",
-                    "name" : "E"
-                  },
-                  "body" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    }
-                  ],
-                  "recursion" : "NON_REC",
-                  "irecursion" : "NON_REC",
-                  "associativity" : "UNDEFINED",
-                  "precedence" : -1,
-                  "precedenceLevel" : {
-                    "lhs" : 1,
-                    "rhs" : 1,
-                    "undefined" : 1,
-                    "hasPrefixUnary" : false,
-                    "hasPostfixUnary" : false,
-                    "hasPrefixUnaryBelow" : false,
-                    "hasPostfixUnaryBelow" : false,
-                    "index" : 2,
-                    "containsAssociativityGroup" : false,
-                    "assoc_lhs" : -1,
-                    "assoc_rhs" : -1
-                  }
-                },
-                "children" : [
-                  {
-                    "kind" : "KeywordTerminalNode",
-                    "terminal" : {
-                      "kind" : "Terminal",
-                      "name" : "'a'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 97
-                      }
-                    },
-                    "start" : 4,
-                    "end" : 5
-                  }
-                ],
-                "start" : 4,
-                "end" : 5
-              }
-            ],
-            "start" : 2,
-            "end" : 5
-          }
-        ],
-        "start" : 0,
-        "end" : 5
-      }
-    ]
-  },
+          "start" : 0,
+          "end" : 5
+        }
+      ]
+    }
+  ],
   "start" : 0,
   "end" : 5
 }
