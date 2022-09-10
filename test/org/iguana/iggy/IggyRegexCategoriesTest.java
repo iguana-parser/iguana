@@ -38,31 +38,37 @@ public class IggyRegexCategoriesTest {
     public void testOrderOfRegularExpressions() {
         Grammar grammar = IggyGrammar.getGrammar();
         IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(IggyRegexCategories.getCategories());
-        Input input = Input.fromString("var a = 1");
+        Input input = Input.fromString(
+            "// this is a comment\n" +
+            "     " +
+            "var a = 1");
         iguanaTokenizer.prepare(input, 0);
 
         RuntimeGrammar runtimeGrammar = grammar.toRuntimeGrammar();
+        RegularExpression singleLineComment = runtimeGrammar.getRegularExpressions().get("SingleLineComment");
         RegularExpression id = runtimeGrammar.getRegularExpressions().get("LetterOrDigits");
         RegularExpression number = runtimeGrammar.getRegularExpressions().get("Number");
         RegularExpression whitespace = runtimeGrammar.getRegularExpressions().get("WhiteSpace");
         RegularExpression equals = runtimeGrammar.getLiterals().get("=");
         RegularExpression var = runtimeGrammar.getLiterals().get("var");
 
-        List<Token> expected = Arrays.asList(
-            new Token(var, "Keyword", input, 0, 3),
-            new Token(whitespace, "WhiteSpace", input, 3, 4),
-            new Token(id, "Identifier", input, 4, 5),
-            new Token(whitespace, "WhiteSpace", input, 5, 6),
-            new Token(equals, "=", input, 6, 7),
-            new Token(whitespace, "WhiteSpace", input, 7, 8),
-            new Token(number, "Number", input, 8, 9)
-        );
-
         List<Token> actual = new ArrayList<>();
         while (iguanaTokenizer.hasNextToken()) {
             Token token = iguanaTokenizer.nextToken();
             actual.add(token);
         }
+
+        List<Token> expected = Arrays.asList(
+            new Token(singleLineComment, "LineComment", input, 0, 21),
+            new Token(whitespace, "WhiteSpace", input, 21, 26),
+            new Token(var, "Keyword", input, 26, 29),
+            new Token(whitespace, "WhiteSpace", input, 29, 30),
+            new Token(id, "Identifier", input, 30, 31),
+            new Token(whitespace, "WhiteSpace", input, 31, 32),
+            new Token(equals, "=", input, 32, 33),
+            new Token(whitespace, "WhiteSpace", input, 33, 34),
+            new Token(number, "Number", input, 34, 35)
+        );
 
         assertEquals(expected, actual);
     }

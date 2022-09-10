@@ -65,4 +65,15 @@ public class StringUtil {
 		if (s.length() == 0) return s;
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
+
+	public static String escapeNewLine(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '\n') 		sb.append("\\n");
+			else if (c == '\r') sb.append("\\r");
+			else 				sb.append(c);
+		}
+		return sb.toString();
+	}
 }
