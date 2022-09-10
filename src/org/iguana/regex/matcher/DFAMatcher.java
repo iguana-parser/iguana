@@ -38,7 +38,8 @@ import org.iguana.utils.collections.rangemap.IntRangeMap;
 import org.iguana.utils.collections.rangemap.RangeMapBuilder;
 import org.iguana.utils.input.Input;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DFAMatcher implements Matcher {
 	
@@ -113,19 +114,23 @@ public class DFAMatcher implements Matcher {
 		return maximumMatched;
 	}
 
-	public List<RegularExpression> getMatchedRegularExpressions() {
+	public RegularExpression getMatchedRegularExpression() {
 		if (finalStateId == -1) {
 			throw new IllegalStateException("This method should be called after a successful match.");
 		}
 		if (finalStatesMap.get(finalStateId).getRegularExpressions().isEmpty()) {
-			return Collections.singletonList(EOF.getInstance());
+			return EOF.getInstance();
 		}
 
-		List<RegularExpression> matchedRegularExpressions = new ArrayList<>();
+		int min = Integer.MAX_VALUE;
+		RegularExpression matchedRegularExpression = null;
 		for (Tuple<RegularExpression, Integer> t : finalStatesMap.get(finalStateId).getRegularExpressions()) {
-			matchedRegularExpressions.add(t.getFirst());
+			if (t.getSecond() < min) {
+				min = t.getSecond();
+				matchedRegularExpression = t.getFirst();
+			}
 		}
-		return matchedRegularExpressions;
+		return matchedRegularExpression;
 	}
 
 }
