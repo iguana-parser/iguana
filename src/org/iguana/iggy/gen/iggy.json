@@ -5137,6 +5137,68 @@
               "val" : 108
             }
           ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 103
+            },
+            {
+              "kind" : "Char",
+              "val" : 114
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 109
+            },
+            {
+              "kind" : "Char",
+              "val" : 109
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 114
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 103
+            },
+            {
+              "kind" : "Char",
+              "val" : 108
+            },
+            {
+              "kind" : "Char",
+              "val" : 111
+            },
+            {
+              "kind" : "Char",
+              "val" : 98
+            },
+            {
+              "kind" : "Char",
+              "val" : 97
+            },
+            {
+              "kind" : "Char",
+              "val" : 108
+            }
+          ]
         }
       ]
     }

@@ -217,3 +217,5 @@ regex Keywords
   | "contains"
   | "put"
   | "lexical"
+  | "grammar"
+  | "global"
