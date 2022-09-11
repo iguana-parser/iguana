@@ -45,10 +45,10 @@ public class IggyRegexCategoriesTest {
         iguanaTokenizer.prepare(input, 0);
 
         RuntimeGrammar runtimeGrammar = grammar.toRuntimeGrammar();
-        RegularExpression singleLineComment = runtimeGrammar.getRegularExpressions().get("SingleLineComment");
-        RegularExpression id = runtimeGrammar.getRegularExpressions().get("LetterOrDigits");
-        RegularExpression number = runtimeGrammar.getRegularExpressions().get("Number");
-        RegularExpression whitespace = runtimeGrammar.getRegularExpressions().get("WhiteSpace");
+        RegularExpression singleLineComment = runtimeGrammar.getRegularExpressionDefinitions().get("SingleLineComment");
+        RegularExpression id = runtimeGrammar.getRegularExpressionDefinitions().get("LetterOrDigits");
+        RegularExpression number = runtimeGrammar.getRegularExpressionDefinitions().get("Number");
+        RegularExpression whitespace = runtimeGrammar.getRegularExpressionDefinitions().get("WhiteSpace");
         RegularExpression equals = runtimeGrammar.getLiterals().get("=");
         RegularExpression var = runtimeGrammar.getLiterals().get("var");
 

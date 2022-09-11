@@ -346,7 +346,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "field" : {
       "kind" : "regex.Seq",
       "symbols" : [

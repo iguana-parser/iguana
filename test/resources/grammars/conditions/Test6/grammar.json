@@ -194,7 +194,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "Char" : {
       "kind" : "regex.Alt",
       "symbols" : [

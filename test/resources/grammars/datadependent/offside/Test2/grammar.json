@@ -158,7 +158,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "Layout" : {
       "kind" : "Reference",
       "name" : "WhiteSpace"

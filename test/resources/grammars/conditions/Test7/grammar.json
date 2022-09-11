@@ -181,7 +181,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "Chars" : {
       "kind" : "regex.Plus",
       "regex" : {

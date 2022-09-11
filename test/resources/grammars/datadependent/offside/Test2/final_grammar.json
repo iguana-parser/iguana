@@ -164,6 +164,33 @@
                   ]
                 }
               }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Equal",
+                "lhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a1"
+                    }
+                  ]
+                },
+                "rhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a0"
+                    }
+                  ]
+                }
+              }
             }
           ],
           "arguments" : [
@@ -308,6 +335,33 @@
           "name" : "Stat",
           "label" : "a1",
           "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Equal",
+                "lhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a1"
+                    }
+                  ]
+                },
+                "rhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a0"
+                    }
+                  ]
+                }
+              }
+            },
             {
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",

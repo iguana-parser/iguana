@@ -16,7 +16,7 @@ public class IggyRegexCategories {
         RuntimeGrammar runtimeGrammar = IggyGrammar.getGrammar().toRuntimeGrammar();
 
         // TODO: this is a hack, find a better solution to mark keywords
-        RegularExpression keywords = runtimeGrammar.getRegularExpressions().get("Keywords");
+        RegularExpression keywords = runtimeGrammar.getRegularExpressionDefinitions().get("Keywords");
         if (keywords != null) {
             Alt<?> alt = (Alt<?>) keywords;
             for (RegularExpression regex : alt.getSymbols()) {
@@ -30,7 +30,7 @@ public class IggyRegexCategories {
             }
         }
 
-        for (Map.Entry<String, RegularExpression> entry : runtimeGrammar.getRegularExpressions().entrySet()) {
+        for (Map.Entry<String, RegularExpression> entry : runtimeGrammar.getRegularExpressionDefinitions().entrySet()) {
             RegularExpression regularExpression = entry.getValue();
             String category = entry.getKey();
 

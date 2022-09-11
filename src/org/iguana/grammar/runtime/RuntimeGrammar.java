@@ -59,7 +59,7 @@ public class RuntimeGrammar {
 	
 	private final List<RuntimeRule> rules;
 
-	private final Map<String, RegularExpression> regularExpressions;
+	private final Map<String, RegularExpression> regularExpressionDefinitions;
 	private final Map<String, RegularExpression> literals;
 
 	private final Map<String, Set<String>> ebnfLefts;
@@ -82,7 +82,7 @@ public class RuntimeGrammar {
 		this.rules = builder.rules;
 		this.ebnfLefts = builder.ebnfLefts;
 		this.ebnfRights = builder.ebnfRights;
-		this.regularExpressions = builder.regularExpressions;
+		this.regularExpressionDefinitions = builder.regularExpressionDefinitions;
 		this.literals = builder.literals;
 		this.globals = builder.globals;
 		this.name = builder.name;
@@ -124,8 +124,8 @@ public class RuntimeGrammar {
 		return num;
 	}
 	
-	public Map<String, RegularExpression> getRegularExpressions() {
-		return regularExpressions;
+	public Map<String, RegularExpression> getRegularExpressionDefinitions() {
+		return regularExpressionDefinitions;
 	}
 
 	public Map<String, RegularExpression> getLiterals() {
@@ -210,7 +210,7 @@ public class RuntimeGrammar {
 		public String name;
 		private Symbol layout;
 		private Start startSymbol;
-		private Map<String, RegularExpression> regularExpressions;
+		private Map<String, RegularExpression> regularExpressionDefinitions;
 		private Map<String, RegularExpression> literals;
 
 		private Map<String, Set<String>> ebnfLefts = new HashMap<>();
@@ -226,7 +226,7 @@ public class RuntimeGrammar {
             ebnfLefts.putAll(grammar.ebnfLefts);
             ebnfRights.putAll(grammar.ebnfRights);
             startSymbol = grammar.startSymbol;
-			regularExpressions = grammar.getRegularExpressions();
+			regularExpressionDefinitions = grammar.getRegularExpressionDefinitions();
 			globals = grammar.globals;
 			name = grammar.name;
         }
@@ -312,8 +312,8 @@ public class RuntimeGrammar {
 			return this;
 		}
 
-		public Builder setRegularExpressions(Map<String, RegularExpression> regularExpressions) {
-			this.regularExpressions = regularExpressions;
+		public Builder setRegularExpressionDefinitions(Map<String, RegularExpression> regularExpressionDefinitions) {
+			this.regularExpressionDefinitions = regularExpressionDefinitions;
 			return this;
 		}
 

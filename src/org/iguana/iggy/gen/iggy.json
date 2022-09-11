@@ -3974,7 +3974,7 @@
       "layoutStrategy" : "NO_LAYOUT"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "LetterOrDigits" : {
       "kind" : "regex.Seq",
       "symbols" : [

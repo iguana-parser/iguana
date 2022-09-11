@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class Grammar {
 
     private final List<Rule> rules;
-    private final Map<String, RegularExpression> regularExpressions;
+    private final Map<String, RegularExpression> regularExpressionDefinitions;
     private final Map<String, RegularExpression> literals;
     private final Start startSymbol;
     private final Symbol layout;
@@ -40,7 +40,7 @@ public class Grammar {
 
     Grammar(Builder builder) {
         this.rules = builder.rules;
-        this.regularExpressions = builder.regularExpressions;
+        this.regularExpressionDefinitions = builder.regularExpressionDefinitions;
         this.literals = builder.literals;
         this.startSymbol = builder.startSymbol;
         this.layout = builder.layout;
@@ -52,8 +52,8 @@ public class Grammar {
         return rules;
     }
 
-    public Map<String, RegularExpression> getRegularExpressions() {
-        return regularExpressions;
+    public Map<String, RegularExpression> getRegularExpressionDefinitions() {
+        return regularExpressionDefinitions;
     }
 
     public Map<String, RegularExpression> getLiterals() {
@@ -85,7 +85,7 @@ public class Grammar {
             computeEnds(leftEnds, rightEnds, ebnfs);
 
             // TODO: make these transformations explicit
-            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressions);
+            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressionDefinitions);
             Set<String> topLevelRegularExpressions = getTopLevelRegularExpressions(this);
             Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
             ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
@@ -120,7 +120,7 @@ public class Grammar {
                     iterator.remove();
                 }
             }
-            grammarBuilder.setRegularExpressions(regularExpressions);
+            grammarBuilder.setRegularExpressionDefinitions(regularExpressions);
             grammarBuilder.setLiterals(literals);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
@@ -235,7 +235,7 @@ public class Grammar {
 
     public static class Builder {
         private final List<Rule> rules = new ArrayList<>();
-        private final Map<String, RegularExpression> regularExpressions = new LinkedHashMap<>();
+        private final Map<String, RegularExpression> regularExpressionDefinitions = new LinkedHashMap<>();
         public final Map<String, RegularExpression> literals = new LinkedHashMap<>();
         public String name;
         private Start startSymbol;
@@ -263,7 +263,7 @@ public class Grammar {
         }
 
         public Builder addRegularExpression(String name, RegularExpression regularExpression) {
-            regularExpressions.put(name, regularExpression);
+            regularExpressionDefinitions.put(name, regularExpression);
             return this;
         }
 
@@ -576,7 +576,7 @@ public class Grammar {
         @Override
         public Void visit(Identifier identifier) {
             visitConditions(identifier);
-            if (grammar.getRegularExpressions().containsKey(identifier.getName())) {
+            if (grammar.getRegularExpressionDefinitions().containsKey(identifier.getName())) {
                 references.add(identifier.getName());
             }
             return null;

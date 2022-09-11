@@ -181,7 +181,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "Whitespaces" : {
       "kind" : "regex.Star",
       "regex" : {
