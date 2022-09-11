@@ -4157,96 +4157,6 @@
         }
       ]
     },
-    "RangeChar" : {
-      "kind" : "regex.Alt",
-      "symbols" : [
-        {
-          "kind" : "regex.Seq",
-          "symbols" : [
-            {
-              "kind" : "Char",
-              "val" : 92
-            },
-            {
-              "kind" : "regex.Alt",
-              "symbols" : [
-                {
-                  "kind" : "Char",
-                  "val" : 92
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 91
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 93
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 45
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 116
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 102
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 114
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 110
-                },
-                {
-                  "kind" : "Char",
-                  "val" : 32
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "kind" : "regex.Alt",
-          "symbols" : [
-            {
-              "kind" : "CharRange",
-              "start" : 1,
-              "end" : 8
-            },
-            {
-              "kind" : "CharRange",
-              "start" : 11,
-              "end" : 11
-            },
-            {
-              "kind" : "CharRange",
-              "start" : 14,
-              "end" : 31
-            },
-            {
-              "kind" : "CharRange",
-              "start" : 33,
-              "end" : 44
-            },
-            {
-              "kind" : "CharRange",
-              "start" : 46,
-              "end" : 90
-            },
-            {
-              "kind" : "CharRange",
-              "start" : 94,
-              "end" : 1114111
-            }
-          ]
-        }
-      ]
-    },
     "String" : {
       "kind" : "regex.Alt",
       "symbols" : [
@@ -4553,6 +4463,96 @@
             {
               "kind" : "Char",
               "val" : 99
+            }
+          ]
+        }
+      ]
+    },
+    "RangeChar" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "regex.Seq",
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "val" : 92
+            },
+            {
+              "kind" : "regex.Alt",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 92
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 91
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 93
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 45
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 116
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 102
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 114
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 110
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind" : "regex.Alt",
+          "symbols" : [
+            {
+              "kind" : "CharRange",
+              "start" : 1,
+              "end" : 8
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 11,
+              "end" : 11
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 14,
+              "end" : 31
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 33,
+              "end" : 44
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 46,
+              "end" : 90
+            },
+            {
+              "kind" : "CharRange",
+              "start" : 94,
+              "end" : 1114111
             }
           ]
         }

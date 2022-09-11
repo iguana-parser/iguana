@@ -161,10 +161,6 @@ regex Character
   = "\\" [' " \\ t f r n]
   | ![' " \\]
 
-regex RangeChar
-  = "\\" [\\ \[ \] \- t f r n \ ]
-  | ![\\ \[ \] \- \t \f \r \n \ ]
-
 regex String
   = "\"" Character* "\""
   | "\'" Character* "\'"
@@ -186,6 +182,10 @@ regex Associativity
   = "left"
   | "right"
   | "non-assoc"
+
+regex RangeChar
+  = "\\" [\\ \[ \] \- t f r n \ ]
+  | ![\\ \[ \] \- \t \f \r \n \ ]
 
 regex Keywords
   = "start"
