@@ -351,15 +351,6 @@
                       }
                     },
                     {
-                      "kind" : "Opt",
-                      "name" : "Annotation?",
-                      "label" : "annotation",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Annotation"
-                      }
-                    },
-                    {
                       "kind" : "Identifier",
                       "name" : "Name",
                       "label" : "name"
@@ -435,15 +426,6 @@
                             }
                           ]
                         }
-                      }
-                    },
-                    {
-                      "kind" : "Opt",
-                      "name" : "Annotation?",
-                      "label" : "annotation",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Annotation"
                       }
                     },
                     {
@@ -577,66 +559,6 @@
                           }
                         }
                       ]
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "')'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 41
-                      }
-                    }
-                  ],
-                  "associativity" : "UNDEFINED"
-                }
-              ],
-              "associativity" : "UNDEFINED"
-            }
-          ]
-        }
-      ],
-      "layoutStrategy" : "INHERITED"
-    },
-    {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "Annotation"
-      },
-      "priorityLevels" : [
-        {
-          "alternatives" : [
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Terminal",
-                      "name" : "'@'",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 64
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "Identifier",
-                      "label" : "name"
-                    },
-                    {
-                      "kind" : "Terminal",
-                      "name" : "'('",
-                      "nodeType" : "Literal",
-                      "regex" : {
-                        "kind" : "Char",
-                        "val" : 40
-                      }
-                    },
-                    {
-                      "kind" : "Identifier",
-                      "name" : "String",
-                      "label" : "value"
                     },
                     {
                       "kind" : "Terminal",
@@ -5411,10 +5333,6 @@
       "kind" : "Char",
       "val" : 41
     },
-    "@" : {
-      "kind" : "Char",
-      "val" : 64
-    },
     "|" : {
       "kind" : "Char",
       "val" : 124
@@ -6017,42 +5935,5 @@
       "fun" : "set"
     }
   },
-  "name" : "Iggy",
-  "annotations" : [
-    {
-      "name" : "TokenType",
-      "value" : "Identifier",
-      "symbolName" : "LetterOrDigits"
-    },
-    {
-      "name" : "TokenType",
-      "value" : "Number",
-      "symbolName" : "Number"
-    },
-    {
-      "name" : "TokenType",
-      "value" : "String",
-      "symbolName" : "String"
-    },
-    {
-      "name" : "TokenType",
-      "value" : "WhiteSpace",
-      "symbolName" : "WhiteSpace"
-    },
-    {
-      "name" : "TokenType",
-      "value" : "LineComment",
-      "symbolName" : "SingleLineComment"
-    },
-    {
-      "name" : "TokenType",
-      "value" : "BlockComment",
-      "symbolName" : "MultiLineComment"
-    },
-    {
-      "name" : "TokenType",
-      "value" : "Keyword",
-      "symbolName" : "Keywords"
-    }
-  ]
+  "name" : "Iggy"
 }

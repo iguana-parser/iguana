@@ -9,14 +9,11 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier: ("start" | "layout" | "lexical")? annotation:Annotation? name:Name params:Parameters? "=" body:Body    %ContextFree
-  | modifier: "layout"? annotation:Annotation? "regex" name:Name "=" body:RegexBody                                  %Regex
+  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body    %ContextFree
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                                  %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
-
-Annotation
-  = "@" name:Identifier "(" value:String ")"
 
 RegexBody
   = { Regex+ "|" }*
@@ -144,7 +141,9 @@ Identifier
 lexical Label
   = '%' id:Identifier
 
-@TokenType("Identifier")
+layout Layout
+  = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
+
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
 
@@ -154,7 +153,6 @@ regex LetterOrDigit
 regex Letter
   = [A-Za-z_]
 
-@TokenType("Number")
 regex Number
   = [0]
   | [1-9][0-9]*
@@ -167,23 +165,16 @@ regex RangeChar
   = "\\" [\\ \[ \] \- t f r n \ ]
   | ![\\ \[ \] \- \t \f \r \n \ ]
 
-@TokenType("String")
 regex String
   = "\"" Character* "\""
   | "\'" Character* "\'"
 
-layout Layout
-  = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
-
-@TokenType("WhiteSpace")
 regex WhiteSpace
   = [\ \t \f \r \n]+
 
-@TokenType("LineComment")
 regex SingleLineComment
   = "//" ![\r \n]* [\r\n]
 
-@TokenType("BlockComment")
 regex MultiLineComment
   = "/*" CommentChar* [*]+  "/"
 
@@ -196,7 +187,6 @@ regex Associativity
   | "right"
   | "non-assoc"
 
-@TokenType("Keyword")
 regex Keywords
   = "start"
   | "regex"

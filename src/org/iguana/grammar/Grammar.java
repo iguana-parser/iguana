@@ -1,14 +1,22 @@
 package org.iguana.grammar;
 
 import org.iguana.datadependent.ast.Expression;
+import org.iguana.grammar.condition.DataDependentCondition;
+import org.iguana.grammar.condition.PositionalCondition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
+import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.serialization.JsonSerializer;
 
@@ -27,7 +35,6 @@ public class Grammar {
     private final Symbol layout;
     private final Map<String, Expression> globals;
     private final String name;
-    private final List<Annotation> annotations;
 
     private RuntimeGrammar grammar;
 
@@ -39,7 +46,6 @@ public class Grammar {
         this.layout = builder.layout;
         this.globals = builder.globals;
         this.name = builder.name;
-        this.annotations = builder.annotations;
     }
 
     public List<Rule> getRules() {
@@ -70,10 +76,6 @@ public class Grammar {
         return name;
     }
 
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
     public RuntimeGrammar toRuntimeGrammar() {
         if (grammar == null) {
             Map<String, Set<String>> leftEnds = new HashMap<>();
@@ -84,6 +86,7 @@ public class Grammar {
 
             // TODO: make these transformations explicit
             Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressions);
+            Set<String> topLevelRegularExpressions = getTopLevelRegularExpressions(this);
             Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
             ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
 
@@ -109,9 +112,16 @@ public class Grammar {
 
             grammarBuilder.setLayout(newLayout);
             grammarBuilder.setGlobals(globals);
+
+            Iterator<Map.Entry<String, RegularExpression>> iterator = regularExpressions.entrySet().iterator();
+            while (iterator.hasNext()) {
+                String key = iterator.next().getKey();
+                if (!topLevelRegularExpressions.contains(key)) {
+                    iterator.remove();
+                }
+            }
             grammarBuilder.setRegularExpressions(regularExpressions);
             grammarBuilder.setLiterals(literals);
-            grammarBuilder.setAnnotations(annotations);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
             Map<String, Set<String>> ebnfRights = new HashMap<>();
@@ -228,7 +238,6 @@ public class Grammar {
         private final Map<String, RegularExpression> regularExpressions = new LinkedHashMap<>();
         public final Map<String, RegularExpression> literals = new LinkedHashMap<>();
         public String name;
-        public List<Annotation> annotations = new ArrayList<>();
         private Start startSymbol;
         private Symbol layout;
         private final Map<String, Expression> globals = new HashMap<>();
@@ -266,11 +275,6 @@ public class Grammar {
         // TODO: differentiate between global variables and top-level variables
         public Builder addGlobal(String key, Expression value) {
             this.globals.put(key, value);
-            return this;
-        }
-
-        public Builder addAnnotation(Annotation annotation) {
-            this.annotations.add(annotation);
             return this;
         }
 
@@ -335,15 +339,15 @@ public class Grammar {
 
     private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label, ResolveIdentifiers resolveIdentifiers,
                                 LayoutStrategy layoutStrategy, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
-        boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs, layout));
-        boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs, layout));
+        boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs));
+        boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs));
 
-        IsRecursive visitor = new IsRecursive(head, Recursion.iLEFT_REC, leftEnds, ebnfs, layout);
+        IsRecursive visitor = new IsRecursive(head, Recursion.iLEFT_REC, leftEnds, ebnfs);
 
         boolean isiLeft = body.size() != 0 && body.get(0).accept(visitor);
         String leftEnd = visitor.getEnd();
 
-        visitor = new IsRecursive(head, Recursion.iRIGHT_REC, rightEnds, ebnfs, layout);
+        visitor = new IsRecursive(head, Recursion.iRIGHT_REC, rightEnds, ebnfs);
         boolean isiRight = body.size() != 0 && body.get(body.size() - 1).accept(visitor);
         String rightEnd = visitor.getEnd();
 
@@ -431,11 +435,225 @@ public class Grammar {
         }
     }
 
+    private static Set<String> getTopLevelRegularExpressions(Grammar grammar) {
+        Set<String> references = new LinkedHashSet<>();
+        for (Rule rule : grammar.getRules()) {
+            for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
+                for (Alternative alternative : priorityLevel.getAlternatives()) {
+                    for (Sequence seq : alternative.seqs()) {
+                        for (Symbol symbol : seq.getSymbols()) {
+                            GatherTopLevelRegularExpressionsVisitor visitor = new GatherTopLevelRegularExpressionsVisitor(grammar);
+                            symbol.accept(visitor);
+                            references.addAll(visitor.references);
+                        }
+                    }
+                }
+            }
+        }
+        return references;
+    }
+
+    // Top-level regular expressions are the ones that are directly reachable from context free rules.
+    // They define the tokens of the language.
+    // TODO: unify this with SymbolToSymbolVisitor
+    private static class GatherTopLevelRegularExpressionsVisitor implements ISymbolVisitor<Void>, RegularExpressionVisitor<Void>, IConditionVisitor<Void> {
+
+        private final Set<String> references = new LinkedHashSet<>();
+        private final Grammar grammar;
+
+        GatherTopLevelRegularExpressionsVisitor(Grammar grammar) {
+            this.grammar = grammar;
+        }
+
+        private Void visitChildren(Symbol symbol) {
+            symbol.getChildren().forEach(child -> child.accept(this));
+            visitConditions(symbol);
+            return null;
+        }
+
+        private Void visitConditions(Symbol symbol) {
+            symbol.getPreConditions().forEach(c -> c.accept(this));
+            symbol.getPostConditions().forEach(c -> c.accept(this));
+            return null;
+        }
+
+        private Void visitChildren(RegularExpression regex) {
+            regex.getChildren().forEach(child -> child.accept(this));
+            return null;
+        }
+
+        @Override
+        public Void visit(Align align) {
+            return visitChildren(align);
+        }
+
+        @Override
+        public Void visit(Block block) {
+            return visitChildren(block);
+        }
+
+        @Override
+        public Void visit(Code code) {
+            return visitChildren(code);
+        }
+
+        @Override
+        public Void visit(Conditional conditional) {
+            return visitChildren(conditional);
+        }
+
+        @Override
+        public Void visit(IfThen ifThen) {
+            return visitChildren(ifThen);
+        }
+
+        @Override
+        public Void visit(IfThenElse ifThenElse) {
+            return visitChildren(ifThenElse);
+        }
+
+        @Override
+        public Void visit(Ignore ignore) {
+            return visitChildren(ignore);
+        }
+
+        @Override
+        public Void visit(Nonterminal nonterminal) {
+            visitConditions(nonterminal);
+            return null;
+        }
+
+        @Override
+        public Void visit(Offside offside) {
+            return visitChildren(offside);
+        }
+
+        @Override
+        public Void visit(Terminal terminal) {
+            return null;
+        }
+
+        @Override
+        public Void visit(While whileSymbol) {
+            return visitChildren(whileSymbol);
+        }
+
+        @Override
+        public Void visit(Return returnSymbol) {
+            return visitChildren(returnSymbol);
+        }
+
+        @Override
+        public Void visit(Alt alt) {
+            return visitChildren(alt);
+        }
+
+        @Override
+        public Void visit(Opt opt) {
+            return visitChildren(opt);
+        }
+
+        @Override
+        public Void visit(Plus plus) {
+            return visitChildren(plus);
+        }
+
+        @Override
+        public Void visit(Group group) {
+            return visitChildren(group);
+        }
+
+        @Override
+        public Void visit(Star star) {
+            return visitChildren(star);
+        }
+
+        @Override
+        public Void visit(Start start) {
+            return null;
+        }
+
+        @Override
+        public Void visit(Identifier identifier) {
+            visitConditions(identifier);
+            if (grammar.getRegularExpressions().containsKey(identifier.getName())) {
+                references.add(identifier.getName());
+            }
+            return null;
+        }
+
+        @Override
+        public Void visit(Char c) {
+            return null;
+        }
+
+        @Override
+        public Void visit(CharRange r) {
+            return null;
+        }
+
+        @Override
+        public Void visit(EOF eof) {
+            return null;
+        }
+
+        @Override
+        public Void visit(Epsilon e) {
+            return null;
+        }
+
+        @Override
+        public Void visit(org.iguana.regex.Star s) {
+            return visitChildren(s);
+        }
+
+        @Override
+        public Void visit(org.iguana.regex.Plus p) {
+            return visitChildren(p);
+        }
+
+        @Override
+        public Void visit(org.iguana.regex.Opt o) {
+            return visitChildren(o);
+        }
+
+        @Override
+        public <E extends RegularExpression> Void visit(org.iguana.regex.Alt<E> alt) {
+            return visitChildren(alt);
+        }
+
+        @Override
+        public <E extends RegularExpression> Void visit(Seq<E> seq) {
+            return visitChildren(seq);
+        }
+
+        @Override
+        public Void visit(Reference ref) {
+            references.add(ref.getName());
+            return null;
+        }
+
+        @Override
+        public Void visit(DataDependentCondition condition) {
+            return null;
+        }
+
+        @Override
+        public Void visit(PositionalCondition condition) {
+            return null;
+        }
+
+        @Override
+        public Void visit(RegularExpressionCondition condition) {
+            condition.getRegularExpression().accept(this);
+            return null;
+        }
+    }
+
     private static class IsRecursive implements ISymbolVisitor<Boolean>, RegularExpressionVisitor<Boolean> {
 
         private final Recursion recursion;
         private final Nonterminal head;
-        private final Symbol layout;
 
         private final Map<String, Set<String>> ends;
         private final Set<String> ebnfs;
@@ -443,13 +661,12 @@ public class Grammar {
         private String end = "";
 
         public IsRecursive(Nonterminal head, Recursion recursion, Set<String> ebnfs) {
-            this(head, recursion, new HashMap<>(), ebnfs, null);
+            this(head, recursion, new HashMap<>(), ebnfs);
         }
 
-        public IsRecursive(Nonterminal head, Recursion recursion, Map<String, Set<String>> ends, Set<String> ebnfs, Symbol layout) {
+        public IsRecursive(Nonterminal head, Recursion recursion, Map<String, Set<String>> ends, Set<String> ebnfs) {
             this.recursion = recursion;
             this.head = head;
-            this.layout = layout;
             this.ends = ends;
             this.ebnfs = ebnfs;
         }
@@ -465,11 +682,11 @@ public class Grammar {
 
         @Override
         public Boolean visit(Block symbol) {
-            Symbol[] symbols = symbol.getSymbols();
+            List<Symbol> symbols = symbol.getSymbols();
             if (recursion == Recursion.LEFT_REC || recursion == Recursion.iLEFT_REC)
-                return symbols[0].accept(this);
+                return symbols.get(0).accept(this);
             else
-                return symbols[symbols.length - 1].accept(this);
+                return symbols.get(symbols.size() - 1).accept(this);
         }
 
         @Override
@@ -606,7 +823,7 @@ public class Grammar {
                 return false;
             } else {
 
-                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs, null);
+                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs);
                 symbol.getSymbol().accept(visitor);
 
                 String name = EBNFToBNF.getName(Nonterminal.withName(visitor.end), symbol.getSeparators(), null) + "+";
@@ -639,7 +856,7 @@ public class Grammar {
                 ebnfs.add(name);
 
             } else {
-                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs, null);
+                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs);
 
                 if (recursion == Recursion.iLEFT_REC)
                     symbol.getSymbols().get(0).accept(visitor);
@@ -677,7 +894,7 @@ public class Grammar {
                 return false;
             } else {
 
-                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs, null);
+                IsRecursive visitor = new IsRecursive(head, recursion, ends, ebnfs);
                 symbol.getSymbol().accept(visitor);
 
                 String base = EBNFToBNF.getName(Nonterminal.withName(visitor.end), symbol.getSeparators(), null);

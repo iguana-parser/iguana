@@ -13,7 +13,6 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.attrs.AbstractAttrs;
-import org.iguana.grammar.Annotation;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.*;
 import org.iguana.grammar.runtime.AssociativityGroup;
@@ -53,7 +52,6 @@ public class JsonSerializer {
 
         mapper.addMixIn(RuntimeGrammar.class, RuntimeGrammarMixIn.class);
         mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);
-        mapper.addMixIn(Annotation.class, AnnotationMixIn.class);
 
         mapper.addMixIn(Grammar.class, GrammarMixIn.class);
         mapper.addMixIn(Rule.class, RuleMixIn.class);

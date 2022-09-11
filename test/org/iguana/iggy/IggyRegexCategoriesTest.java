@@ -59,11 +59,11 @@ public class IggyRegexCategoriesTest {
         }
 
         List<Token> expected = Arrays.asList(
-            new Token(singleLineComment, "LineComment", input, 0, 21),
+            new Token(singleLineComment, "SingleLineComment", input, 0, 21),
             new Token(whitespace, "WhiteSpace", input, 21, 26),
             new Token(var, "Keyword", input, 26, 29),
             new Token(whitespace, "WhiteSpace", input, 29, 30),
-            new Token(id, "Identifier", input, 30, 31),
+            new Token(id, "LetterOrDigits", input, 30, 31),
             new Token(whitespace, "WhiteSpace", input, 31, 32),
             new Token(equals, "=", input, 32, 33),
             new Token(whitespace, "WhiteSpace", input, 33, 34),

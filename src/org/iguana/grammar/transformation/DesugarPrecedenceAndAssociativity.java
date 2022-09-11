@@ -2344,8 +2344,8 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
 		@Override
 		public Symbol visit(Block symbol) {
-			Symbol[] symbols = symbol.getSymbols();
-			Symbol[] syms = new Symbol[symbols.length];
+			List<Symbol> symbols = symbol.getSymbols();
+			Symbol[] syms = new Symbol[symbols.size()];
 			
 			boolean isFirst = this.isFirst;
 			boolean isLast = this.isLast;
@@ -2357,7 +2357,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				if (isFirst && j == 0) this.isFirst = true;
 				else this.isFirst = false;
 				
-				if (isLast && j == symbols.length - 1) this.isLast = true;
+				if (isLast && j == symbols.size() - 1) this.isLast = true;
 				else this.isLast = false;
 				
 				syms[j] = sym.accept(this);

@@ -1,45 +1,43 @@
 package org.iguana.iggy;
 
-import org.iguana.grammar.Annotation;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.iggy.gen.IggyGrammar;
 import org.iguana.regex.Alt;
 import org.iguana.regex.RegularExpression;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class IggyRegexCategories {
 
-    private static final Map<RegularExpression, String> regularExpressionCategories;
+    private static final Map<RegularExpression, String> regularExpressionCategories = new LinkedHashMap<>();
 
     static {
         RuntimeGrammar runtimeGrammar = IggyGrammar.getGrammar().toRuntimeGrammar();
-        List<Annotation> annotations = runtimeGrammar.getAnnotations();
-        List<Annotation> tokenTypeAnnotations = annotations.stream()
-            .filter(annotation -> annotation.getName().equals("TokenType"))
-            .collect(Collectors.toList());
 
-        Map<RegularExpression, String> map = new LinkedHashMap<>();
-        for (Map.Entry<String, RegularExpression> entry : runtimeGrammar.getLiterals().entrySet()) {
-            map.put(entry.getValue(), entry.getKey());
-        }
-
-        for (Annotation annotation : tokenTypeAnnotations) {
-            RegularExpression regularExpression = runtimeGrammar.getRegularExpressions().get(annotation.getSymbolName());
-            // TODO: this is a hack, find a better solution to mark keywords
-            if (annotation.getValue().equals("Keyword")) {
-                Alt<?> alt = (Alt<?>) regularExpression;
-                for (RegularExpression regex : alt.getSymbols()) {
-                    map.put(regex, annotation.getValue());
-                }
-            } else {
-                map.put(regularExpression, annotation.getValue());
+        // TODO: this is a hack, find a better solution to mark keywords
+        RegularExpression keywords = runtimeGrammar.getRegularExpressions().get("Keywords");
+        if (keywords != null) {
+            Alt<?> alt = (Alt<?>) keywords;
+            for (RegularExpression regex : alt.getSymbols()) {
+                regularExpressionCategories.put(regex, "Keyword");
             }
         }
-        regularExpressionCategories = map;
+
+        for (Map.Entry<String, RegularExpression> entry : runtimeGrammar.getLiterals().entrySet()) {
+            if (!regularExpressionCategories.containsKey(entry.getValue())) {
+                regularExpressionCategories.put(entry.getValue(), entry.getKey());
+            }
+        }
+
+        for (Map.Entry<String, RegularExpression> entry : runtimeGrammar.getRegularExpressions().entrySet()) {
+            RegularExpression regularExpression = entry.getValue();
+            String category = entry.getKey();
+
+            if (!category.equals("Keywords")) {
+                regularExpressionCategories.put(regularExpression, category);
+            }
+        }
     }
 
     public static Map<RegularExpression, String> getCategories() {

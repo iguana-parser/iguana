@@ -3,7 +3,6 @@ package org.iguana.iggy;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
-import org.iguana.grammar.Annotation;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
@@ -29,9 +28,10 @@ import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
 public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Object> {
 
-    private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
+    // A map from the name of the regular expressions (as they are defined in the grammar) to the regular expression.
+    private final Map<String, RegularExpression> regularExpressionDefinitions = new LinkedHashMap<>();
+
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
-    private final List<Annotation> annotations = new ArrayList<>();
 
     private String start;
     private Identifier layout;
@@ -52,7 +52,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
                 globals.put(var.getFirst(), var.getSecond());
             }
         }
-        for (Map.Entry<String, RegularExpression> entry : regularExpressionMap.entrySet()) {
+        for (Map.Entry<String, RegularExpression> entry : regularExpressionDefinitions.entrySet()) {
             builder.addRegularExpression(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<String, Expression> entry : globals.entrySet()) {
@@ -66,7 +66,6 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         }
         builder.setLayout(layout);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
-        annotations.forEach(builder::addAnnotation);
         return builder.build();
     }
 
@@ -111,11 +110,6 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
             .setNodeType(nonterminalNodeType)
             .build();
 
-        Optional<Tuple<Identifier, String>> tuple = (Optional<Tuple<Identifier, String>>) node.annotation().accept(this);
-        if (tuple.isPresent()) {
-            annotations.add(new Annotation(tuple.get().getFirst().getName(), tuple.get().getSecond(), nonterminalName.getName()));
-        }
-
         return new Rule.Builder(nonterminal)
             .addPriorityLevels(priorityLevels)
             .setLayoutStrategy(layoutStrategy)
@@ -126,12 +120,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     public Void visitRegexRule(RegexRule node) {
         List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.body().accept(this);
         Identifier identifier = (Identifier) node.name().accept(this);
-        regularExpressionMap.put(identifier.getName(), getRegex(alts));
-
-        Optional<Tuple<Identifier, String>> tuple = (Optional<Tuple<Identifier, String>>) node.annotation().accept(this);
-        if (tuple.isPresent()) {
-            annotations.add(new Annotation(tuple.get().getFirst().getName(), tuple.get().getSecond(), identifier.getName()));
-        }
+        regularExpressionDefinitions.put(identifier.getName(), getRegex(alts));
 
         if (node.modifier().hasChildren()) {
             layout = identifier;
@@ -143,13 +132,6 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     @Override
     public List<Identifier> visitParameters(IggyParseTree.Parameters node) {
         return (List<Identifier>) visitChildren(node);
-    }
-
-    @Override
-    public Tuple<Identifier, String> visitAnnotation(IggyParseTree.Annotation node) {
-        Identifier id = (Identifier) node.name().accept(this);
-        String value = stripQuotes(node.value());
-        return Tuple.of(id, value);
     }
 
     @Override

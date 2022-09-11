@@ -29,6 +29,7 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.traversal.ISymbolVisitor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +37,7 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Block extends AbstractSymbol {
 
-	private final Symbol[] symbols;
+	private final List<Symbol> symbols;
 
 	Block(Builder builder) {
 		super(builder);
@@ -47,7 +48,7 @@ public class Block extends AbstractSymbol {
 		return new Builder(symbols).build();
 	}
 	
-	public Symbol[] getSymbols() {
+	public List<Symbol> getSymbols() {
 		return symbols;
 	}
 	
@@ -58,7 +59,7 @@ public class Block extends AbstractSymbol {
 
 	@Override
 	public List<Symbol> getChildren() {
-		return Arrays.asList(symbols);
+		return symbols;
 	}
 
 	@Override
@@ -76,11 +77,11 @@ public class Block extends AbstractSymbol {
 	
 	@Override
 	public String toString(int j) {
-		String[] strings = new String[symbols.length];
+		List<String> strings = new ArrayList<>(symbols.size());
 		
 		int k = 0;
 		for (Symbol symbol : symbols) {
-			strings[k] = j <= 1? symbol.toString(j) : symbol.toString();
+			strings.set(k, j <= 1? symbol.toString(j) : symbol.toString());
 			j = j - symbol.size();
 			k++;
 		}
@@ -90,7 +91,7 @@ public class Block extends AbstractSymbol {
 	
 	public static class Builder extends SymbolBuilder<Block> {
 		
-		private Symbol[] symbols;
+		private List<Symbol> symbols;
 
 		public Builder(Block block) {
 			super(block);
@@ -100,12 +101,12 @@ public class Block extends AbstractSymbol {
 		public Builder(Symbol...symbols) {
 			assert symbols.length != 0;
 			
-			this.symbols = symbols;
+			this.symbols = Arrays.asList(symbols);
 		}
 
 		@Override
 		public SymbolBuilder<Block> setChildren(List<Symbol> symbols) {
-			this.symbols = symbols.toArray(new Symbol[] {});
+			this.symbols = new ArrayList<>(symbols);
 			return this;
 		}
 
