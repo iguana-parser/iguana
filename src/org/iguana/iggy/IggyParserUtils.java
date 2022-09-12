@@ -8,6 +8,8 @@ import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IggyParserUtils {
 
@@ -35,6 +37,16 @@ public class IggyParserUtils {
             throw new RuntimeException(parser.getParseError().toString());
         }
         ParseTreeNode parseTree = parser.getParseTree();
-        return (Grammar) parseTree.accept(new IggyToGrammarVisitor());
+        Object result = parseTree.accept(new IggyParseTreeToGrammarVisitor());
+        if (result instanceof List<?>) { // When there is a start symbol
+            List<?> nodes = (List<?>) result;
+            if (nodes.size() == 1) { // No layout definition
+                return (Grammar) nodes.get(0);
+            } else { // Layout Grammar Layout
+                return (Grammar) nodes.get(1);
+            }
+        } else {
+            return (Grammar) result;
+        }
     }
 }

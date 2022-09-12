@@ -2,11 +2,12 @@ package org.iguana.regex;
 
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class Reference extends AbstractRegularExpression {
 
-    private String name;
+    private final String name;
 
     public static Reference from(String name) {
         return new Builder(name).build();
@@ -27,7 +28,7 @@ public class Reference extends AbstractRegularExpression {
     }
 
     @Override
-    public Set<org.iguana.regex.CharRange> getFirstSet() {
+    public Set<CharRange> getFirstSet() {
         throw new UnsupportedOperationException();
     }
 
@@ -39,6 +40,19 @@ public class Reference extends AbstractRegularExpression {
     @Override
     public int length() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Reference)) return false;
+        Reference reference = (Reference) o;
+        return Objects.equals(name, reference.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
     @Override

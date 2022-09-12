@@ -178,7 +178,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "''i''f''",
+                      "name" : "'if'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -200,7 +200,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "''t''h''e''n''",
+                      "name" : "'then'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -230,7 +230,7 @@
                     },
                     {
                       "kind" : "Terminal",
-                      "name" : "''e''l''s''e''",
+                      "name" : "'else'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -346,7 +346,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "field" : {
       "kind" : "regex.Seq",
       "symbols" : [

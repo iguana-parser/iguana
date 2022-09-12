@@ -12,9 +12,8 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditionVisitor<Condition>, RegularExpressionVisitor<RegularExpression> {
@@ -205,16 +204,16 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
         }
     }
 
-    default Set<Condition> visitPreConditions(Symbol symbol) {
-        Set<Condition> preConditions = new LinkedHashSet<>();
+    default List<Condition> visitPreConditions(Symbol symbol) {
+        List<Condition> preConditions = new ArrayList<>();
         for (Condition condition : symbol.getPreConditions()) {
             preConditions.add(condition.accept(this));
         }
         return preConditions;
     }
 
-    default Set<Condition> visitPostConditions(Symbol symbol) {
-        Set<Condition> postConditions = new LinkedHashSet<>();
+    default List<Condition> visitPostConditions(Symbol symbol) {
+        List<Condition> postConditions = new ArrayList<>();
         for (Condition condition : symbol.getPostConditions()) {
             postConditions.add(condition.accept(this));
         }

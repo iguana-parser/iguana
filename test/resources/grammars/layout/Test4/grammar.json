@@ -18,7 +18,7 @@
                     },
                     {
                       "kind" : "Plus",
-                      "name" : "B+",
+                      "name" : "{B ','}+",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "B"
@@ -144,7 +144,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "L" : {
       "kind" : "regex.Opt",
       "regex" : {

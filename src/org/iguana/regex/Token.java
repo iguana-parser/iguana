@@ -4,6 +4,8 @@ import org.iguana.utils.input.Input;
 
 import java.util.Objects;
 
+import static org.iguana.utils.string.StringUtil.escapeNewLine;
+
 public class Token {
 
     private final RegularExpression regularExpression;
@@ -59,6 +61,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return String.format("(%s, %s)", category, getLexeme());
+        return String.format("(%s, %d, %d, \"%s\")", category, start, end, escapeNewLine(getLexeme()));
     }
 }

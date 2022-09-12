@@ -254,8 +254,8 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 
 		@Override
 		public Symbol visit(Block symbol) {
-			Symbol[] symbols = symbol.getSymbols();
-			Symbol[] syms = new Symbol[symbols.length];
+			List<Symbol> symbols = symbol.getSymbols();
+			Symbol[] syms = new Symbol[symbols.size()];
 			
 			int j = 0;
 			boolean modified = false;

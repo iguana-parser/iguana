@@ -163,6 +163,11 @@ public class AST {
         }
     }
 
+    public static Indent indent(Expression...args) {
+        if (args.length != 1) throw new RuntimeException("args size should be one");
+        return indent(args[0]);
+    }
+
     public static Indent indent(Expression arg) {
         return new Indent(arg);
     }
@@ -515,6 +520,11 @@ public class AST {
         }
     }
 
+    public static Put put(Expression... args) {
+        if (args.length != 2) throw new RuntimeException("args size should be two");
+        return put(args[0], args[1]);
+    }
+
     public static Put put(Expression arg1, Expression arg2) {
         return new Put(arg1, arg2);
     }
@@ -563,6 +573,11 @@ public class AST {
 
             return s.contains(value);
         }
+    }
+
+    public static Contains contains(Expression...args) {
+        if (args.length != 2) throw new RuntimeException("args size should be two");
+        return contains(args[0], args[1]);
     }
 
     public static Contains contains(Expression arg1, Expression arg2) {

@@ -51,7 +51,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "E+",
+        "name" : "{E ';'}+",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "E"
@@ -106,7 +106,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "E+",
+        "name" : "{E ';'}+",
         "s" : {
           "kind" : "Nonterminal",
           "name" : "E"

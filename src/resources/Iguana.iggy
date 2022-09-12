@@ -9,8 +9,8 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier: RuleModifier? name:Name params:Parameters? "=" body:Body      %ContextFree
-  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                        %Regex
+  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body    %ContextFree
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                                  %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
@@ -127,11 +127,22 @@ VarName
 Name
   = id:Identifier {!contains(env,id.yield)}?
 
+FunName
+  = "println"       %Println
+  | "indent"        %Indent
+  | "assert"        %Assert
+  | "set"           %Set
+  | "contains"      %Contains
+  | "put"           %Put
+
 Identifier
   = [A-Z_a-z] !<< LetterOrDigits \ Keywords
 
 lexical Label
   = '%' id:Identifier
+
+layout Layout
+  = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
 
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
@@ -150,27 +161,12 @@ regex Character
   = "\\" [' " \\ t f r n]
   | ![' " \\]
 
-regex RangeChar
-  = "\\" [\\ \[ \] \- t f r n \ ]
-  | ![\\ \[ \] \- \t \f \r \n \ ]
-
 regex String
   = "\"" Character* "\""
   | "\'" Character* "\'"
 
-layout regex Layout
-  = WhiteSpaceOrComment*
-
-regex WhiteSpaceOrComment
-  = WhiteSpace
-  | Comment
-
 regex WhiteSpace
   = [\ \t \f \r \n]+
-
-regex Comment
-  = SingleLineComment
-  | MultiLineComment
 
 regex SingleLineComment
   = "//" ![\r \n]* [\r\n]
@@ -186,6 +182,10 @@ regex Associativity
   = "left"
   | "right"
   | "non-assoc"
+
+regex RangeChar
+  = "\\" [\\ \[ \] \- t f r n \ ]
+  | ![\\ \[ \] \- \t \f \r \n \ ]
 
 regex Keywords
   = "start"
@@ -207,16 +207,5 @@ regex Keywords
   | "contains"
   | "put"
   | "lexical"
-
-regex FunName
-  = "println"
-  | "indent"
-  | "assert"
-  | "set"
-  | "contains"
-  | "put"
-
-regex RuleModifier
-  = "start"
-  | "layout"
-  | "lexical"
+  | "grammar"
+  | "global"

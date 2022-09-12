@@ -35,8 +35,8 @@ public interface ParseTreeVisitor<T> {
         return Optional.of((T) node.childAt(0).accept(this));
     }
 
-    default T visitStartNode(MetaSymbolNode.StartNode node) {
-        return (T) node.childAt(0).accept(this);
+    default List<T> visitStartNode(MetaSymbolNode.StartNode node) {
+        return visitList(node.children());
     }
 
     default T visitAltNode(MetaSymbolNode.AltNode node) {
@@ -44,9 +44,14 @@ public interface ParseTreeVisitor<T> {
     }
 
     default List<T> visitGroupNode(MetaSymbolNode.GroupNode node) {
-        List<T> result = new ArrayList<>(node.children().size());
-        for (int i = 0; i < node.children().size(); i++) {
-            ParseTreeNode child = node.childAt(i);
+        return visitList(node.children());
+    }
+
+    default List<T> visitList(List<ParseTreeNode> children) {
+        int size = children.size();
+        List<T> result = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            ParseTreeNode child = children.get(i);
             T childResult = (T) child.accept(this);
             if (childResult != null) {
                 result.add(childResult);
@@ -110,10 +115,6 @@ public interface ParseTreeVisitor<T> {
         }
 
         return result;
-    }
-
-    default boolean shouldBeFlatted(Symbol symbol) {
-        return (symbol instanceof Star || symbol instanceof Plus || symbol instanceof Opt) && getSymbol(symbol) instanceof Group;
     }
 
     static Symbol getSymbol(Symbol symbol) {

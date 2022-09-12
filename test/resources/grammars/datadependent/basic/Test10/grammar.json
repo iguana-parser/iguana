@@ -257,7 +257,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "Layout" : {
       "kind" : "regex.Star",
       "regex" : {

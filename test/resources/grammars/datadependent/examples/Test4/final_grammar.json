@@ -494,7 +494,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "''l''e''t''",
+          "name" : "'let'",
           "label" : "o0",
           "preConditions" : [
             {
@@ -659,7 +659,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "''i''n''",
+          "name" : "'in'",
           "label" : "o2",
           "preConditions" : [
             {
@@ -1125,6 +1125,33 @@
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",
               "expression" : {
+                "kind" : "Equal",
+                "lhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a1"
+                    }
+                  ]
+                },
+                "rhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a0"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
                 "kind" : "OrIndent",
                 "index" : {
                   "kind" : "Name",
@@ -1281,6 +1308,33 @@
           "name" : "Decl",
           "label" : "a1",
           "preConditions" : [
+            {
+              "kind" : "DataDependentCondition",
+              "type" : "DATA_DEPENDENT",
+              "expression" : {
+                "kind" : "Equal",
+                "lhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a1"
+                    }
+                  ]
+                },
+                "rhs" : {
+                  "kind" : "Indent",
+                  "fun" : "indent",
+                  "arguments" : [
+                    {
+                      "kind" : "LeftExtent",
+                      "label" : "a0"
+                    }
+                  ]
+                }
+              }
+            },
             {
               "kind" : "DataDependentCondition",
               "type" : "DATA_DEPENDENT",

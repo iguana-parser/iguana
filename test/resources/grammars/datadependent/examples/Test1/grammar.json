@@ -159,7 +159,7 @@
                   "symbols" : [
                     {
                       "kind" : "Terminal",
-                      "name" : "''<''/''",
+                      "name" : "'</'",
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
@@ -220,7 +220,7 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
-  "regularExpressions" : {
+  "regularExpressionDefinitions" : {
     "L" : {
       "kind" : "regex.Star",
       "regex" : {

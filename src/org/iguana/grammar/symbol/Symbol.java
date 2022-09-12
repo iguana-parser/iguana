@@ -30,7 +30,6 @@ package org.iguana.grammar.symbol;
 import org.iguana.datadependent.attrs.Attr;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
-import org.iguana.utils.collections.CollectionsUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,17 +60,9 @@ public interface Symbol extends Attr {
 
 	String getName();
 	
-	Set<Condition> getPreConditions();
+	List<Condition> getPreConditions();
 	
-	Set<Condition> getPostConditions();
-	
-	default Set<Condition> getConditions() {
-		return CollectionsUtil.union(getPreConditions(), getPostConditions());
-	}
-	
-	default boolean hasConditions() {
-		return !getConditions().isEmpty();
-	}
+	List<Condition> getPostConditions();
 	
 	String getLabel();
 	

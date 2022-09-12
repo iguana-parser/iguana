@@ -32,7 +32,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Start extends AbstractSymbol {
 
-	private String startSymbol;
+	private final String startSymbol;
 	
     public static Start from(String startSymbol) {
         return new Builder(startSymbol).build();
@@ -82,6 +82,8 @@ public class Start extends AbstractSymbol {
 
 		@Override
 		public Start build() {
+			if (startSymbol == null)
+				throw new IllegalArgumentException("startSymbol cannot be null.");
 			this.name = "Start(" + startSymbol + ")";
 			return new Start(this);
 		}

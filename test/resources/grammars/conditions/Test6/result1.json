@@ -5,111 +5,113 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
-  "child" : {
-    "kind" : "NonterminalNode",
-    "rule" : {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "S"
-      },
-      "body" : [
-        {
-          "kind" : "Terminal",
-          "name" : "''f''o''r''a''l''l''",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "regex.Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 102
-              },
-              {
-                "kind" : "Char",
-                "val" : 111
-              },
-              {
-                "kind" : "Char",
-                "val" : 114
-              },
-              {
-                "kind" : "Char",
-                "val" : 97
-              },
-              {
-                "kind" : "Char",
-                "val" : 108
-              },
-              {
-                "kind" : "Char",
-                "val" : 108
-              }
-            ]
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
+          "kind" : "Nonterminal",
+          "name" : "S"
+        },
+        "body" : [
+          {
+            "kind" : "Terminal",
+            "name" : "'forall'",
+            "nodeType" : "Literal",
+            "regex" : {
+              "kind" : "regex.Seq",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 102
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 111
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 114
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 97
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 108
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 108
+                }
+              ]
+            }
           }
+        ],
+        "recursion" : "NON_REC",
+        "irecursion" : "NON_REC",
+        "associativity" : "UNDEFINED",
+        "precedence" : -1,
+        "precedenceLevel" : {
+          "lhs" : 1,
+          "rhs" : 1,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
+          "index" : 1,
+          "containsAssociativityGroup" : false,
+          "assoc_lhs" : -1,
+          "assoc_rhs" : -1
+        }
+      },
+      "children" : [
+        {
+          "kind" : "KeywordTerminalNode",
+          "terminal" : {
+            "kind" : "Terminal",
+            "name" : "'forall'",
+            "nodeType" : "Literal",
+            "regex" : {
+              "kind" : "regex.Seq",
+              "symbols" : [
+                {
+                  "kind" : "Char",
+                  "val" : 102
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 111
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 114
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 97
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 108
+                },
+                {
+                  "kind" : "Char",
+                  "val" : 108
+                }
+              ]
+            }
+          },
+          "start" : 0,
+          "end" : 6
         }
       ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    "children" : [
-      {
-        "kind" : "KeywordTerminalNode",
-        "terminal" : {
-          "kind" : "Terminal",
-          "name" : "''f''o''r''a''l''l''",
-          "nodeType" : "Literal",
-          "regex" : {
-            "kind" : "regex.Seq",
-            "symbols" : [
-              {
-                "kind" : "Char",
-                "val" : 102
-              },
-              {
-                "kind" : "Char",
-                "val" : 111
-              },
-              {
-                "kind" : "Char",
-                "val" : 114
-              },
-              {
-                "kind" : "Char",
-                "val" : 97
-              },
-              {
-                "kind" : "Char",
-                "val" : 108
-              },
-              {
-                "kind" : "Char",
-                "val" : 108
-              }
-            ]
-          }
-        },
-        "start" : 0,
-        "end" : 6
-      }
-    ],
-    "start" : 0,
-    "end" : 6
-  },
+      "start" : 0,
+      "end" : 6
+    }
+  ],
   "start" : 0,
   "end" : 6
 }

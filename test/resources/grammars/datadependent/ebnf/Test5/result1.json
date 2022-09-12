@@ -5,1053 +5,1055 @@
     "name" : "Start(S)",
     "startSymbol" : "S"
   },
-  "child" : {
-    "kind" : "NonterminalNode",
-    "rule" : {
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "S",
-        "parameters" : [
-          "bCounter",
-          "cCounter"
-        ]
-      },
-      "body" : [
-        {
+  "children" : [
+    {
+      "kind" : "NonterminalNode",
+      "rule" : {
+        "head" : {
           "kind" : "Nonterminal",
-          "name" : "X",
-          "arguments" : [
-            {
-              "kind" : "Name",
-              "name" : "bCounter",
-              "i" : -1
-            },
-            {
-              "kind" : "Name",
-              "name" : "cCounter",
-              "i" : -1
-            }
+          "name" : "S",
+          "parameters" : [
+            "bCounter",
+            "cCounter"
           ]
-        }
-      ],
-      "recursion" : "NON_REC",
-      "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
-      "precedence" : -1,
-      "precedenceLevel" : {
-        "lhs" : 1,
-        "rhs" : 1,
-        "undefined" : -1,
-        "hasPrefixUnary" : false,
-        "hasPostfixUnary" : false,
-        "hasPrefixUnaryBelow" : false,
-        "hasPostfixUnaryBelow" : false,
-        "index" : 1,
-        "containsAssociativityGroup" : false,
-        "assoc_lhs" : -1,
-        "assoc_rhs" : -1
-      }
-    },
-    "children" : [
-      {
-        "kind" : "NonterminalNode",
-        "rule" : {
-          "head" : {
+        },
+        "body" : [
+          {
             "kind" : "Nonterminal",
             "name" : "X",
-            "parameters" : [
-              "bCounter",
-              "cCounter"
+            "arguments" : [
+              {
+                "kind" : "Name",
+                "name" : "bCounter",
+                "i" : -1
+              },
+              {
+                "kind" : "Name",
+                "name" : "cCounter",
+                "i" : -1
+              }
             ]
-          },
-          "body" : [
-            {
-              "kind" : "Nonterminal",
-              "name" : "A",
-              "label" : "a"
-            },
-            {
-              "kind" : "Nonterminal",
-              "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
-              "label" : "b",
-              "parameters" : [
-                "a",
-                "bCounter",
-                "cCounter"
-              ],
-              "arguments" : [
-                {
-                  "kind" : "Name",
-                  "name" : "a",
-                  "i" : -1
-                },
-                {
-                  "kind" : "Name",
-                  "name" : "bCounter",
-                  "i" : -1
-                },
-                {
-                  "kind" : "Name",
-                  "name" : "cCounter",
-                  "i" : -1
-                }
-              ],
-              "nodeType" : "Star"
-            }
-          ],
-          "recursion" : "NON_REC",
-          "irecursion" : "NON_REC",
-          "associativity" : "UNDEFINED",
-          "precedence" : -1,
-          "precedenceLevel" : {
-            "lhs" : 1,
-            "rhs" : 1,
-            "undefined" : -1,
-            "hasPrefixUnary" : false,
-            "hasPostfixUnary" : false,
-            "hasPrefixUnaryBelow" : false,
-            "hasPostfixUnaryBelow" : false,
-            "index" : 1,
-            "containsAssociativityGroup" : false,
-            "assoc_lhs" : -1,
-            "assoc_rhs" : -1
-          }
-        },
-        "children" : [
-          {
-            "kind" : "NonterminalNode",
-            "rule" : {
-              "head" : {
-                "kind" : "Nonterminal",
-                "name" : "A"
-              },
-              "body" : [
-                {
-                  "kind" : "Terminal",
-                  "name" : "'a'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 97
-                  }
-                }
-              ],
-              "recursion" : "NON_REC",
-              "irecursion" : "NON_REC",
-              "associativity" : "UNDEFINED",
-              "precedence" : -1,
-              "precedenceLevel" : {
-                "lhs" : 1,
-                "rhs" : 1,
-                "undefined" : -1,
-                "hasPrefixUnary" : false,
-                "hasPostfixUnary" : false,
-                "hasPrefixUnaryBelow" : false,
-                "hasPostfixUnaryBelow" : false,
-                "index" : 1,
-                "containsAssociativityGroup" : false,
-                "assoc_lhs" : -1,
-                "assoc_rhs" : -1
-              }
-            },
-            "children" : [
-              {
-                "kind" : "KeywordTerminalNode",
-                "terminal" : {
-                  "kind" : "Terminal",
-                  "name" : "'a'",
-                  "nodeType" : "Literal",
-                  "regex" : {
-                    "kind" : "Char",
-                    "val" : 97
-                  }
-                },
-                "start" : 0,
-                "end" : 1
-              }
-            ],
-            "start" : 0,
-            "end" : 1
-          },
-          {
-            "kind" : "StarNode",
-            "symbol" : {
-              "kind" : "Star",
-              "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
-              "label" : "b",
-              "s" : {
-                "kind" : "Sequence",
-                "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
-                "symbols" : [
-                  {
-                    "kind" : "Code",
-                    "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
-                    "symbol" : {
-                      "kind" : "Nonterminal",
-                      "name" : "B",
-                      "label" : "b",
-                      "postConditions" : [
-                        {
-                          "kind" : "DataDependentCondition",
-                          "type" : "DATA_DEPENDENT",
-                          "expression" : {
-                            "kind" : "Equal",
-                            "lhs" : {
-                              "kind" : "LeftExtent",
-                              "label" : "b"
-                            },
-                            "rhs" : {
-                              "kind" : "RightExtent",
-                              "label" : "a"
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    "statements" : [
-                      {
-                        "kind" : "ExpressionStatement",
-                        "exp" : {
-                          "kind" : "Assert",
-                          "arguments" : [
-                            {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "bCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              }
-                            }
-                          ],
-                          "fun" : "assert"
-                        }
-                      },
-                      {
-                        "kind" : "ExpressionStatement",
-                        "exp" : {
-                          "kind" : "Assignment",
-                          "id" : "bCounter",
-                          "exp" : {
-                            "kind" : "Add",
-                            "lhs" : {
-                              "kind" : "Name",
-                              "name" : "bCounter",
-                              "i" : -1
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          },
-                          "i" : -1
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "kind" : "Code",
-                    "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
-                    "symbol" : {
-                      "kind" : "Nonterminal",
-                      "name" : "C",
-                      "label" : "c"
-                    },
-                    "statements" : [
-                      {
-                        "kind" : "ExpressionStatement",
-                        "exp" : {
-                          "kind" : "Assert",
-                          "arguments" : [
-                            {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "cCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "c"
-                              }
-                            }
-                          ],
-                          "fun" : "assert"
-                        }
-                      },
-                      {
-                        "kind" : "ExpressionStatement",
-                        "exp" : {
-                          "kind" : "Assignment",
-                          "id" : "cCounter",
-                          "exp" : {
-                            "kind" : "Add",
-                            "lhs" : {
-                              "kind" : "Name",
-                              "name" : "cCounter",
-                              "i" : -1
-                            },
-                            "rhs" : {
-                              "kind" : "Integer",
-                              "value" : 2
-                            }
-                          },
-                          "i" : -1
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            },
-            "children" : [
-              {
-                "kind" : "GroupNode",
-                "symbol" : {
-                  "kind" : "Sequence",
-                  "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
-                  "symbols" : [
-                    {
-                      "kind" : "Code",
-                      "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B",
-                        "label" : "b",
-                        "postConditions" : [
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              },
-                              "rhs" : {
-                                "kind" : "RightExtent",
-                                "label" : "a"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assert",
-                            "arguments" : [
-                              {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "bCounter",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
-                                }
-                              }
-                            ],
-                            "fun" : "assert"
-                          }
-                        },
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "bCounter",
-                            "exp" : {
-                              "kind" : "Add",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "bCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 2
-                              }
-                            },
-                            "i" : -1
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Code",
-                      "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C",
-                        "label" : "c"
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assert",
-                            "arguments" : [
-                              {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "cCounter",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "c"
-                                }
-                              }
-                            ],
-                            "fun" : "assert"
-                          }
-                        },
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "cCounter",
-                            "exp" : {
-                              "kind" : "Add",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "cCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 2
-                              }
-                            },
-                            "i" : -1
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "children" : [
-                  {
-                    "kind" : "NonterminalNode",
-                    "rule" : {
-                      "head" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B"
-                      },
-                      "body" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "'b'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 98
-                          }
-                        }
-                      ],
-                      "recursion" : "NON_REC",
-                      "irecursion" : "NON_REC",
-                      "associativity" : "UNDEFINED",
-                      "precedence" : -1,
-                      "precedenceLevel" : {
-                        "lhs" : 1,
-                        "rhs" : 1,
-                        "undefined" : -1,
-                        "hasPrefixUnary" : false,
-                        "hasPostfixUnary" : false,
-                        "hasPrefixUnaryBelow" : false,
-                        "hasPostfixUnaryBelow" : false,
-                        "index" : 1,
-                        "containsAssociativityGroup" : false,
-                        "assoc_lhs" : -1,
-                        "assoc_rhs" : -1
-                      }
-                    },
-                    "children" : [
-                      {
-                        "kind" : "KeywordTerminalNode",
-                        "terminal" : {
-                          "kind" : "Terminal",
-                          "name" : "'b'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 98
-                          }
-                        },
-                        "start" : 1,
-                        "end" : 2
-                      }
-                    ],
-                    "start" : 1,
-                    "end" : 2
-                  },
-                  {
-                    "kind" : "NonterminalNode",
-                    "rule" : {
-                      "head" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C"
-                      },
-                      "body" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "'c'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 99
-                          }
-                        }
-                      ],
-                      "recursion" : "NON_REC",
-                      "irecursion" : "NON_REC",
-                      "associativity" : "UNDEFINED",
-                      "precedence" : -1,
-                      "precedenceLevel" : {
-                        "lhs" : 1,
-                        "rhs" : 1,
-                        "undefined" : -1,
-                        "hasPrefixUnary" : false,
-                        "hasPostfixUnary" : false,
-                        "hasPrefixUnaryBelow" : false,
-                        "hasPostfixUnaryBelow" : false,
-                        "index" : 1,
-                        "containsAssociativityGroup" : false,
-                        "assoc_lhs" : -1,
-                        "assoc_rhs" : -1
-                      }
-                    },
-                    "children" : [
-                      {
-                        "kind" : "KeywordTerminalNode",
-                        "terminal" : {
-                          "kind" : "Terminal",
-                          "name" : "'c'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 99
-                          }
-                        },
-                        "start" : 2,
-                        "end" : 3
-                      }
-                    ],
-                    "start" : 2,
-                    "end" : 3
-                  }
-                ],
-                "start" : 1,
-                "end" : 3
-              },
-              {
-                "kind" : "GroupNode",
-                "symbol" : {
-                  "kind" : "Sequence",
-                  "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
-                  "symbols" : [
-                    {
-                      "kind" : "Code",
-                      "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B",
-                        "label" : "b",
-                        "postConditions" : [
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              },
-                              "rhs" : {
-                                "kind" : "RightExtent",
-                                "label" : "a"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assert",
-                            "arguments" : [
-                              {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "bCounter",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
-                                }
-                              }
-                            ],
-                            "fun" : "assert"
-                          }
-                        },
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "bCounter",
-                            "exp" : {
-                              "kind" : "Add",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "bCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 2
-                              }
-                            },
-                            "i" : -1
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Code",
-                      "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C",
-                        "label" : "c"
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assert",
-                            "arguments" : [
-                              {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "cCounter",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "c"
-                                }
-                              }
-                            ],
-                            "fun" : "assert"
-                          }
-                        },
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "cCounter",
-                            "exp" : {
-                              "kind" : "Add",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "cCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 2
-                              }
-                            },
-                            "i" : -1
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "children" : [
-                  {
-                    "kind" : "NonterminalNode",
-                    "rule" : {
-                      "head" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B"
-                      },
-                      "body" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "'b'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 98
-                          }
-                        }
-                      ],
-                      "recursion" : "NON_REC",
-                      "irecursion" : "NON_REC",
-                      "associativity" : "UNDEFINED",
-                      "precedence" : -1,
-                      "precedenceLevel" : {
-                        "lhs" : 1,
-                        "rhs" : 1,
-                        "undefined" : -1,
-                        "hasPrefixUnary" : false,
-                        "hasPostfixUnary" : false,
-                        "hasPrefixUnaryBelow" : false,
-                        "hasPostfixUnaryBelow" : false,
-                        "index" : 1,
-                        "containsAssociativityGroup" : false,
-                        "assoc_lhs" : -1,
-                        "assoc_rhs" : -1
-                      }
-                    },
-                    "children" : [
-                      {
-                        "kind" : "KeywordTerminalNode",
-                        "terminal" : {
-                          "kind" : "Terminal",
-                          "name" : "'b'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 98
-                          }
-                        },
-                        "start" : 3,
-                        "end" : 4
-                      }
-                    ],
-                    "start" : 3,
-                    "end" : 4
-                  },
-                  {
-                    "kind" : "NonterminalNode",
-                    "rule" : {
-                      "head" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C"
-                      },
-                      "body" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "'c'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 99
-                          }
-                        }
-                      ],
-                      "recursion" : "NON_REC",
-                      "irecursion" : "NON_REC",
-                      "associativity" : "UNDEFINED",
-                      "precedence" : -1,
-                      "precedenceLevel" : {
-                        "lhs" : 1,
-                        "rhs" : 1,
-                        "undefined" : -1,
-                        "hasPrefixUnary" : false,
-                        "hasPostfixUnary" : false,
-                        "hasPrefixUnaryBelow" : false,
-                        "hasPostfixUnaryBelow" : false,
-                        "index" : 1,
-                        "containsAssociativityGroup" : false,
-                        "assoc_lhs" : -1,
-                        "assoc_rhs" : -1
-                      }
-                    },
-                    "children" : [
-                      {
-                        "kind" : "KeywordTerminalNode",
-                        "terminal" : {
-                          "kind" : "Terminal",
-                          "name" : "'c'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 99
-                          }
-                        },
-                        "start" : 4,
-                        "end" : 5
-                      }
-                    ],
-                    "start" : 4,
-                    "end" : 5
-                  }
-                ],
-                "start" : 3,
-                "end" : 5
-              },
-              {
-                "kind" : "GroupNode",
-                "symbol" : {
-                  "kind" : "Sequence",
-                  "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
-                  "symbols" : [
-                    {
-                      "kind" : "Code",
-                      "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B",
-                        "label" : "b",
-                        "postConditions" : [
-                          {
-                            "kind" : "DataDependentCondition",
-                            "type" : "DATA_DEPENDENT",
-                            "expression" : {
-                              "kind" : "Equal",
-                              "lhs" : {
-                                "kind" : "LeftExtent",
-                                "label" : "b"
-                              },
-                              "rhs" : {
-                                "kind" : "RightExtent",
-                                "label" : "a"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assert",
-                            "arguments" : [
-                              {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "bCounter",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "b"
-                                }
-                              }
-                            ],
-                            "fun" : "assert"
-                          }
-                        },
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "bCounter",
-                            "exp" : {
-                              "kind" : "Add",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "bCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 2
-                              }
-                            },
-                            "i" : -1
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kind" : "Code",
-                      "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
-                      "symbol" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C",
-                        "label" : "c"
-                      },
-                      "statements" : [
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assert",
-                            "arguments" : [
-                              {
-                                "kind" : "Equal",
-                                "lhs" : {
-                                  "kind" : "Name",
-                                  "name" : "cCounter",
-                                  "i" : -1
-                                },
-                                "rhs" : {
-                                  "kind" : "LeftExtent",
-                                  "label" : "c"
-                                }
-                              }
-                            ],
-                            "fun" : "assert"
-                          }
-                        },
-                        {
-                          "kind" : "ExpressionStatement",
-                          "exp" : {
-                            "kind" : "Assignment",
-                            "id" : "cCounter",
-                            "exp" : {
-                              "kind" : "Add",
-                              "lhs" : {
-                                "kind" : "Name",
-                                "name" : "cCounter",
-                                "i" : -1
-                              },
-                              "rhs" : {
-                                "kind" : "Integer",
-                                "value" : 2
-                              }
-                            },
-                            "i" : -1
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "children" : [
-                  {
-                    "kind" : "NonterminalNode",
-                    "rule" : {
-                      "head" : {
-                        "kind" : "Nonterminal",
-                        "name" : "B"
-                      },
-                      "body" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "'b'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 98
-                          }
-                        }
-                      ],
-                      "recursion" : "NON_REC",
-                      "irecursion" : "NON_REC",
-                      "associativity" : "UNDEFINED",
-                      "precedence" : -1,
-                      "precedenceLevel" : {
-                        "lhs" : 1,
-                        "rhs" : 1,
-                        "undefined" : -1,
-                        "hasPrefixUnary" : false,
-                        "hasPostfixUnary" : false,
-                        "hasPrefixUnaryBelow" : false,
-                        "hasPostfixUnaryBelow" : false,
-                        "index" : 1,
-                        "containsAssociativityGroup" : false,
-                        "assoc_lhs" : -1,
-                        "assoc_rhs" : -1
-                      }
-                    },
-                    "children" : [
-                      {
-                        "kind" : "KeywordTerminalNode",
-                        "terminal" : {
-                          "kind" : "Terminal",
-                          "name" : "'b'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 98
-                          }
-                        },
-                        "start" : 5,
-                        "end" : 6
-                      }
-                    ],
-                    "start" : 5,
-                    "end" : 6
-                  },
-                  {
-                    "kind" : "NonterminalNode",
-                    "rule" : {
-                      "head" : {
-                        "kind" : "Nonterminal",
-                        "name" : "C"
-                      },
-                      "body" : [
-                        {
-                          "kind" : "Terminal",
-                          "name" : "'c'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 99
-                          }
-                        }
-                      ],
-                      "recursion" : "NON_REC",
-                      "irecursion" : "NON_REC",
-                      "associativity" : "UNDEFINED",
-                      "precedence" : -1,
-                      "precedenceLevel" : {
-                        "lhs" : 1,
-                        "rhs" : 1,
-                        "undefined" : -1,
-                        "hasPrefixUnary" : false,
-                        "hasPostfixUnary" : false,
-                        "hasPrefixUnaryBelow" : false,
-                        "hasPostfixUnaryBelow" : false,
-                        "index" : 1,
-                        "containsAssociativityGroup" : false,
-                        "assoc_lhs" : -1,
-                        "assoc_rhs" : -1
-                      }
-                    },
-                    "children" : [
-                      {
-                        "kind" : "KeywordTerminalNode",
-                        "terminal" : {
-                          "kind" : "Terminal",
-                          "name" : "'c'",
-                          "nodeType" : "Literal",
-                          "regex" : {
-                            "kind" : "Char",
-                            "val" : 99
-                          }
-                        },
-                        "start" : 6,
-                        "end" : 7
-                      }
-                    ],
-                    "start" : 6,
-                    "end" : 7
-                  }
-                ],
-                "start" : 5,
-                "end" : 7
-              }
-            ],
-            "start" : 1,
-            "end" : 7
           }
         ],
-        "start" : 0,
-        "end" : 7
-      }
-    ],
-    "start" : 0,
-    "end" : 7
-  },
+        "recursion" : "NON_REC",
+        "irecursion" : "NON_REC",
+        "associativity" : "UNDEFINED",
+        "precedence" : -1,
+        "precedenceLevel" : {
+          "lhs" : 1,
+          "rhs" : 1,
+          "undefined" : -1,
+          "hasPrefixUnary" : false,
+          "hasPostfixUnary" : false,
+          "hasPrefixUnaryBelow" : false,
+          "hasPostfixUnaryBelow" : false,
+          "index" : 1,
+          "containsAssociativityGroup" : false,
+          "assoc_lhs" : -1,
+          "assoc_rhs" : -1
+        }
+      },
+      "children" : [
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "X",
+              "parameters" : [
+                "bCounter",
+                "cCounter"
+              ]
+            },
+            "body" : [
+              {
+                "kind" : "Nonterminal",
+                "name" : "A",
+                "label" : "a"
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
+                "label" : "b",
+                "parameters" : [
+                  "a",
+                  "bCounter",
+                  "cCounter"
+                ],
+                "arguments" : [
+                  {
+                    "kind" : "Name",
+                    "name" : "a",
+                    "i" : -1
+                  },
+                  {
+                    "kind" : "Name",
+                    "name" : "bCounter",
+                    "i" : -1
+                  },
+                  {
+                    "kind" : "Name",
+                    "name" : "cCounter",
+                    "i" : -1
+                  }
+                ],
+                "nodeType" : "Star"
+              }
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "hasPostfixUnaryBelow" : false,
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
+            {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "A"
+                },
+                "body" : [
+                  {
+                    "kind" : "Terminal",
+                    "name" : "'a'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  }
+                ],
+                "recursion" : "NON_REC",
+                "irecursion" : "NON_REC",
+                "associativity" : "UNDEFINED",
+                "precedence" : -1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : -1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "hasPostfixUnaryBelow" : false,
+                  "index" : 1,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "KeywordTerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "'a'",
+                    "nodeType" : "Literal",
+                    "regex" : {
+                      "kind" : "Char",
+                      "val" : 97
+                    }
+                  },
+                  "start" : 0,
+                  "end" : 1
+                }
+              ],
+              "start" : 0,
+              "end" : 1
+            },
+            {
+              "kind" : "StarNode",
+              "symbol" : {
+                "kind" : "Star",
+                "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
+                "label" : "b",
+                "s" : {
+                  "kind" : "Sequence",
+                  "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+                  "symbols" : [
+                    {
+                      "kind" : "Code",
+                      "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+                      "symbol" : {
+                        "kind" : "Nonterminal",
+                        "name" : "B",
+                        "label" : "b",
+                        "postConditions" : [
+                          {
+                            "kind" : "DataDependentCondition",
+                            "type" : "DATA_DEPENDENT",
+                            "expression" : {
+                              "kind" : "Equal",
+                              "lhs" : {
+                                "kind" : "LeftExtent",
+                                "label" : "b"
+                              },
+                              "rhs" : {
+                                "kind" : "RightExtent",
+                                "label" : "a"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assert",
+                            "arguments" : [
+                              {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "bCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                }
+                              }
+                            ],
+                            "fun" : "assert"
+                          }
+                        },
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assignment",
+                            "id" : "bCounter",
+                            "exp" : {
+                              "kind" : "Add",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "bCounter",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 2
+                              }
+                            },
+                            "i" : -1
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind" : "Code",
+                      "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+                      "symbol" : {
+                        "kind" : "Nonterminal",
+                        "name" : "C",
+                        "label" : "c"
+                      },
+                      "statements" : [
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assert",
+                            "arguments" : [
+                              {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "cCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "c"
+                                }
+                              }
+                            ],
+                            "fun" : "assert"
+                          }
+                        },
+                        {
+                          "kind" : "ExpressionStatement",
+                          "exp" : {
+                            "kind" : "Assignment",
+                            "id" : "cCounter",
+                            "exp" : {
+                              "kind" : "Add",
+                              "lhs" : {
+                                "kind" : "Name",
+                                "name" : "cCounter",
+                                "i" : -1
+                              },
+                              "rhs" : {
+                                "kind" : "Integer",
+                                "value" : 2
+                              }
+                            },
+                            "i" : -1
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "GroupNode",
+                  "symbol" : {
+                    "kind" : "Sequence",
+                    "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+                    "symbols" : [
+                      {
+                        "kind" : "Code",
+                        "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+                        "symbol" : {
+                          "kind" : "Nonterminal",
+                          "name" : "B",
+                          "label" : "b",
+                          "postConditions" : [
+                            {
+                              "kind" : "DataDependentCondition",
+                              "type" : "DATA_DEPENDENT",
+                              "expression" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "a"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "bCounter",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          },
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "bCounter",
+                              "exp" : {
+                                "kind" : "Add",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "bCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Code",
+                        "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+                        "symbol" : {
+                          "kind" : "Nonterminal",
+                          "name" : "C",
+                          "label" : "c"
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "cCounter",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "c"
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          },
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "cCounter",
+                              "exp" : {
+                                "kind" : "Add",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "cCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "B"
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "'b'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 98
+                            }
+                          }
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 1,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "KeywordTerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "'b'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 98
+                            }
+                          },
+                          "start" : 1,
+                          "end" : 2
+                        }
+                      ],
+                      "start" : 1,
+                      "end" : 2
+                    },
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "C"
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "'c'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 99
+                            }
+                          }
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 1,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "KeywordTerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "'c'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 99
+                            }
+                          },
+                          "start" : 2,
+                          "end" : 3
+                        }
+                      ],
+                      "start" : 2,
+                      "end" : 3
+                    }
+                  ],
+                  "start" : 1,
+                  "end" : 3
+                },
+                {
+                  "kind" : "GroupNode",
+                  "symbol" : {
+                    "kind" : "Sequence",
+                    "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+                    "symbols" : [
+                      {
+                        "kind" : "Code",
+                        "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+                        "symbol" : {
+                          "kind" : "Nonterminal",
+                          "name" : "B",
+                          "label" : "b",
+                          "postConditions" : [
+                            {
+                              "kind" : "DataDependentCondition",
+                              "type" : "DATA_DEPENDENT",
+                              "expression" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "a"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "bCounter",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          },
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "bCounter",
+                              "exp" : {
+                                "kind" : "Add",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "bCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Code",
+                        "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+                        "symbol" : {
+                          "kind" : "Nonterminal",
+                          "name" : "C",
+                          "label" : "c"
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "cCounter",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "c"
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          },
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "cCounter",
+                              "exp" : {
+                                "kind" : "Add",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "cCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "B"
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "'b'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 98
+                            }
+                          }
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 1,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "KeywordTerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "'b'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 98
+                            }
+                          },
+                          "start" : 3,
+                          "end" : 4
+                        }
+                      ],
+                      "start" : 3,
+                      "end" : 4
+                    },
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "C"
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "'c'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 99
+                            }
+                          }
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 1,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "KeywordTerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "'c'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 99
+                            }
+                          },
+                          "start" : 4,
+                          "end" : 5
+                        }
+                      ],
+                      "start" : 4,
+                      "end" : 5
+                    }
+                  ],
+                  "start" : 3,
+                  "end" : 5
+                },
+                {
+                  "kind" : "GroupNode",
+                  "symbol" : {
+                    "kind" : "Sequence",
+                    "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+                    "symbols" : [
+                      {
+                        "kind" : "Code",
+                        "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+                        "symbol" : {
+                          "kind" : "Nonterminal",
+                          "name" : "B",
+                          "label" : "b",
+                          "postConditions" : [
+                            {
+                              "kind" : "DataDependentCondition",
+                              "type" : "DATA_DEPENDENT",
+                              "expression" : {
+                                "kind" : "Equal",
+                                "lhs" : {
+                                  "kind" : "LeftExtent",
+                                  "label" : "b"
+                                },
+                                "rhs" : {
+                                  "kind" : "RightExtent",
+                                  "label" : "a"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "bCounter",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "b"
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          },
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "bCounter",
+                              "exp" : {
+                                "kind" : "Add",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "bCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind" : "Code",
+                        "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+                        "symbol" : {
+                          "kind" : "Nonterminal",
+                          "name" : "C",
+                          "label" : "c"
+                        },
+                        "statements" : [
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assert",
+                              "arguments" : [
+                                {
+                                  "kind" : "Equal",
+                                  "lhs" : {
+                                    "kind" : "Name",
+                                    "name" : "cCounter",
+                                    "i" : -1
+                                  },
+                                  "rhs" : {
+                                    "kind" : "LeftExtent",
+                                    "label" : "c"
+                                  }
+                                }
+                              ],
+                              "fun" : "assert"
+                            }
+                          },
+                          {
+                            "kind" : "ExpressionStatement",
+                            "exp" : {
+                              "kind" : "Assignment",
+                              "id" : "cCounter",
+                              "exp" : {
+                                "kind" : "Add",
+                                "lhs" : {
+                                  "kind" : "Name",
+                                  "name" : "cCounter",
+                                  "i" : -1
+                                },
+                                "rhs" : {
+                                  "kind" : "Integer",
+                                  "value" : 2
+                                }
+                              },
+                              "i" : -1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "B"
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "'b'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 98
+                            }
+                          }
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 1,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "KeywordTerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "'b'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 98
+                            }
+                          },
+                          "start" : 5,
+                          "end" : 6
+                        }
+                      ],
+                      "start" : 5,
+                      "end" : 6
+                    },
+                    {
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "C"
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Terminal",
+                            "name" : "'c'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 99
+                            }
+                          }
+                        ],
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : -1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "hasPostfixUnaryBelow" : false,
+                          "index" : 1,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "KeywordTerminalNode",
+                          "terminal" : {
+                            "kind" : "Terminal",
+                            "name" : "'c'",
+                            "nodeType" : "Literal",
+                            "regex" : {
+                              "kind" : "Char",
+                              "val" : 99
+                            }
+                          },
+                          "start" : 6,
+                          "end" : 7
+                        }
+                      ],
+                      "start" : 6,
+                      "end" : 7
+                    }
+                  ],
+                  "start" : 5,
+                  "end" : 7
+                }
+              ],
+              "start" : 1,
+              "end" : 7
+            }
+          ],
+          "start" : 0,
+          "end" : 7
+        }
+      ],
+      "start" : 0,
+      "end" : 7
+    }
+  ],
   "start" : 0,
   "end" : 7
 }

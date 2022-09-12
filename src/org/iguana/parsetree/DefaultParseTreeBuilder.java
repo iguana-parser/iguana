@@ -51,7 +51,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
         } else if (symbol instanceof Opt) {
             node = new OptionNode(symbol, children.isEmpty() ? null : children.get(0), leftExtent, rightExtent);
         } else if (symbol instanceof Start) {
-            node = new StartNode(symbol, children.get(0), leftExtent, rightExtent);
+            node = new StartNode(symbol, children, leftExtent, rightExtent);
         } else {
             throw new RuntimeException("Unknown meta symbol type: " + symbol);
         }

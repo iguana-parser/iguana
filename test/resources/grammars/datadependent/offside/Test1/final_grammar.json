@@ -198,7 +198,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "offside Stat+",
+        "name" : "{offside Stat ';'}+",
         "s" : {
           "kind" : "Offside",
           "name" : "offside Stat",
@@ -305,7 +305,7 @@
       },
       "definition" : {
         "kind" : "Plus",
-        "name" : "offside Stat+",
+        "name" : "{offside Stat ';'}+",
         "s" : {
           "kind" : "Offside",
           "name" : "offside Stat",

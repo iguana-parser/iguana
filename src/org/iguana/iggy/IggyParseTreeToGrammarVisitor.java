@@ -13,7 +13,6 @@ import org.iguana.grammar.symbol.*;
 import org.iguana.iggy.gen.IggyParseTree;
 import org.iguana.iggy.gen.IggyParseTree.RegexRule;
 import org.iguana.iggy.gen.IggyParseTreeVisitor;
-import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
@@ -22,17 +21,20 @@ import org.iguana.regex.Seq;
 import org.iguana.util.Tuple;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.iguana.utils.collections.CollectionsUtil.flatten;
 
-public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
+public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Object> {
 
-    private final Map<String, RegularExpression> regularExpressionMap = new LinkedHashMap<>();
+    // A map from the name of the regular expressions (as they are defined in the grammar) to the regular expression.
+    private final Map<String, RegularExpression> regularExpressionDefinitions = new LinkedHashMap<>();
+
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
     private String start;
-    private org.iguana.grammar.symbol.Identifier layout;
+    private Identifier layout;
 
     @Override
     public Grammar visitGrammar(IggyParseTree.Grammar node) {
@@ -50,7 +52,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
                 globals.put(var.getFirst(), var.getSecond());
             }
         }
-        for (Map.Entry<String, RegularExpression> entry : regularExpressionMap.entrySet()) {
+        for (Map.Entry<String, RegularExpression> entry : regularExpressionDefinitions.entrySet()) {
             builder.addRegularExpression(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<String, Expression> entry : globals.entrySet()) {
@@ -59,7 +61,9 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
         for (Map.Entry<String, RegularExpression> entry : literals.entrySet()) {
             builder.addLiteral(entry.getKey(), entry.getValue());
         }
-        builder.setStartSymbol(Start.from(start));
+        if (start != null) {
+            builder.setStartSymbol(Start.from(start));
+        }
         builder.setLayout(layout);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
         return builder.build();
@@ -105,6 +109,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
             .addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList()))
             .setNodeType(nonterminalNodeType)
             .build();
+
         return new Rule.Builder(nonterminal)
             .addPriorityLevels(priorityLevels)
             .setLayoutStrategy(layoutStrategy)
@@ -115,7 +120,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
     public Void visitRegexRule(RegexRule node) {
         List<List<RegularExpression>> alts = (List<List<RegularExpression>>) node.body().accept(this);
         Identifier identifier = (Identifier) node.name().accept(this);
-        regularExpressionMap.put(identifier.getName(), getRegex(alts));
+        regularExpressionDefinitions.put(identifier.getName(), getRegex(alts));
 
         if (node.modifier().hasChildren()) {
             layout = identifier;
@@ -436,7 +441,9 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
 
     @Override
     public Object visitCallStatement(IggyParseTree.CallStatement node) {
-        return Collections.singletonList(AST.stat(getCall(node.fun().getText(), node.args())));
+        Function<Expression[], Expression.Call> fun = (Function<Expression[], Expression.Call>) node.fun().accept(this);
+        Expression[] arguments = ((List<Expression>) node.args().accept(this)).toArray(new Expression[]{});
+        return Collections.singletonList(AST.stat(fun.apply(arguments)));
     }
 
     @Override
@@ -543,7 +550,9 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
 
     @Override
     public Expression.Call visitCallExpression(IggyParseTree.CallExpression node) {
-        return getCall(node.fun().getText(), node.args());
+        Function<Expression[], Expression.Call> fun = (Function<Expression[], Expression.Call>) node.fun().accept(this);
+        Expression[] arguments = ((List<Expression>) node.args().accept(this)).toArray(new Expression[]{});
+        return fun.apply(arguments);
     }
 
     @Override
@@ -692,8 +701,43 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
     }
 
     @Override
+    public Object visitLayout(IggyParseTree.Layout node) {
+        throw new RuntimeException("Layout is handled in ContextFreeRule, this method should not be called");
+    }
+
+    @Override
     public Identifier visitName(IggyParseTree.Name node) {
         return (Identifier) node.id().accept(this);
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitPrintlnFunName(IggyParseTree.PrintlnFunName node) {
+        return AST::println;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitIndentFunName(IggyParseTree.IndentFunName node) {
+        return AST::indent;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitAssertFunName(IggyParseTree.AssertFunName node) {
+        return AST::assertion;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitSetFunName(IggyParseTree.SetFunName node) {
+        return AST::set;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitContainsFunName(IggyParseTree.ContainsFunName node) {
+        return AST::contains;
+    }
+
+    @Override
+    public Function<Expression[], Expression.Call> visitPutFunName(IggyParseTree.PutFunName node) {
+        return AST::put;
     }
 
     @Override
@@ -732,27 +776,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
         }
     }
 
-    private Expression.Call getCall(String funName, IggyParseTree.Arguments args) {
-        Expression[] arguments = ((List<Expression>) args.accept(this)).toArray(new Expression[]{});
-        switch (funName) {
-            case "println":
-                return AST.println(arguments);
-            case "indent":
-                return AST.indent(arguments[0]);
-            case "assert":
-                return AST.assertion(arguments);
-            case "set":
-                return AST.set(arguments);
-            case "put":
-                return AST.put(arguments[0], arguments[1]);
-            case "contains":
-                return AST.contains(arguments[0], arguments[1]);
-            default:
-                throw new RuntimeException("Unknown function name: " + funName);
-        }
-    }
-
-    private static String stripQuotes(NonterminalNode node) {
+    private static String stripQuotes(ParseTreeNode node) {
         return node.getText().substring(1, node.getText().length() - 1);
     }
 
@@ -801,7 +825,7 @@ public class IggyToGrammarVisitor implements IggyParseTreeVisitor<Object> {
         if (chars.length == 1) {
             return Char.from(chars[0]);
         }
-        return org.iguana.regex.Seq.from(chars);
+        return Seq.from(chars);
     }
 
     private static int getRangeChar(String s) {

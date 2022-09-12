@@ -237,10 +237,29 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                 return new IggyParseTree.VarName(rule, children, leftExtent, rightExtent);
             case "Name":
                 return new IggyParseTree.Name(rule, children, leftExtent, rightExtent);
+            case "FunName":
+                switch (label) {
+                    case "Println":
+                        return new IggyParseTree.PrintlnFunName(rule, children, leftExtent, rightExtent);
+                    case "Indent":
+                        return new IggyParseTree.IndentFunName(rule, children, leftExtent, rightExtent);
+                    case "Assert":
+                        return new IggyParseTree.AssertFunName(rule, children, leftExtent, rightExtent);
+                    case "Set":
+                        return new IggyParseTree.SetFunName(rule, children, leftExtent, rightExtent);
+                    case "Contains":
+                        return new IggyParseTree.ContainsFunName(rule, children, leftExtent, rightExtent);
+                    case "Put":
+                        return new IggyParseTree.PutFunName(rule, children, leftExtent, rightExtent);
+                    default:
+                        throw new RuntimeException("Unexpected label:" + label);
+                }
             case "Identifier":
                 return new IggyParseTree.Identifier(rule, children, leftExtent, rightExtent);
             case "Label":
                 return new IggyParseTree.Label(rule, children, leftExtent, rightExtent);
+            case "Layout":
+                return new IggyParseTree.Layout(rule, children, leftExtent, rightExtent);
             default:
                 throw new RuntimeException("Unexpected nonterminal:" + name);
         }

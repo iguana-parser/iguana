@@ -31,6 +31,7 @@ import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.condition.Condition;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.iguana.utils.string.StringUtil.listToString;
@@ -41,26 +42,26 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
 	protected final String label;
 
-	protected final Set<Condition> preConditions;
+	protected final List<Condition> preConditions;
 
-	protected final Set<Condition> postConditions;
+	protected final List<Condition> postConditions;
 
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
 		if (builder.name == null) 
 			throw new IllegalArgumentException("Name cannot be null");
 		this.name = builder.name;
 		this.label = builder.label;
-		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptySet() : builder.preConditions;
-		this.postConditions = builder.postConditions.isEmpty() ? Collections.emptySet() : builder.postConditions;
+		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptyList() : builder.preConditions;
+		this.postConditions = builder.postConditions.isEmpty() ? Collections.emptyList() : builder.postConditions;
 	}
 	
 	@Override
-	public Set<Condition> getPreConditions() {
+	public List<Condition> getPreConditions() {
 		return preConditions;
 	}
 	
 	@Override
-	public Set<Condition> getPostConditions() {
+	public List<Condition> getPostConditions() {
 		return postConditions;
 	}
 	

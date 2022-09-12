@@ -11,19 +11,19 @@ import java.util.Map;
 public class IguanaTokenizer {
 
     private final DFAMatcher matcher;
-    private final Map<RegularExpression, String> regularExpressions;
+    private final Map<RegularExpression, String> regularExpressionCategories;
 
     private Input input;
     private int inputIndex;
     private Token nextToken;
 
-    public IguanaTokenizer(Map<RegularExpression, String> regularExpressions) {
-        this.regularExpressions = regularExpressions;
+    public IguanaTokenizer(Map<RegularExpression, String> regularExpressionCategories) {
+        this.regularExpressionCategories = regularExpressionCategories;
 
         int order = 0;
         State startState = new State();
         State finalState = new State();
-        for (RegularExpression regularExpression : regularExpressions.keySet()) {
+        for (RegularExpression regularExpression : regularExpressionCategories.keySet()) {
             Automaton automaton = regularExpression.getAutomaton();
             for (State state : automaton.getFinalStates()) {
                 state.addRegularExpression(regularExpression, order++);
@@ -57,8 +57,8 @@ public class IguanaTokenizer {
             throw new RuntimeException();
         } else if (length != -1) {
             RegularExpression regularExpression = matcher.getMatchedRegularExpression();
-            String name = regularExpressions.get(regularExpression);
-            nextToken = new Token(regularExpression, name, input, inputIndex, inputIndex + length);
+            String category = regularExpressionCategories.get(regularExpression);
+            nextToken = new Token(regularExpression, category, input, inputIndex, inputIndex + length);
             inputIndex = inputIndex + length;
             return true;
         } else {

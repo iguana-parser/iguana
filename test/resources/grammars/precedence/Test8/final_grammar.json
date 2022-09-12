@@ -194,7 +194,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "''.''[''",
+          "name" : "'.['",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -422,7 +422,7 @@
       "body" : [
         {
           "kind" : "Terminal",
-          "name" : "''i''f''",
+          "name" : "'if'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
@@ -450,7 +450,7 @@
         },
         {
           "kind" : "Terminal",
-          "name" : "''t''h''e''n''",
+          "name" : "'then'",
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",

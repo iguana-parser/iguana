@@ -251,8 +251,26 @@ public abstract class Expression extends AbstractAST {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (!(obj instanceof Not)) return false;
+            Not other = (Not) obj;
+            return other.exp == this.exp;
+        }
+
+        @Override
+        public int hashCode() {
+            return exp.hashCode();
+        }
+
+        @Override
         public <T> T accept(IAbstractASTVisitor<T> visitor) {
-            return null;
+            return visitor.visit(this);
+        }
+
+        @Override
+        public java.lang.String toString() {
+            return "!" + exp;
         }
     }
 

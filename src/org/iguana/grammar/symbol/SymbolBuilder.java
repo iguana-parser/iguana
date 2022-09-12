@@ -29,7 +29,9 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.grammar.condition.Condition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class SymbolBuilder<T extends Symbol> {
 	
@@ -39,15 +41,14 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	
 	protected Object object;
 
-	protected Set<Condition> preConditions = new LinkedHashSet<>();
-	
-	protected Set<Condition> postConditions = new LinkedHashSet<>();
+	protected List<Condition> preConditions = new ArrayList<>();
+	protected List<Condition> postConditions = new ArrayList<>();
 
 	public SymbolBuilder(T symbol) {
 		this.name = symbol.getName();
 		this.label = symbol.getLabel();
-		this.preConditions = new LinkedHashSet<>(symbol.getPreConditions());
-		this.postConditions = new LinkedHashSet<>(symbol.getPostConditions());
+		this.preConditions = new ArrayList<>(symbol.getPreConditions());
+		this.postConditions = new ArrayList<>(symbol.getPostConditions());
 	}
 	
 	public SymbolBuilder() { }
@@ -104,13 +105,13 @@ public abstract class SymbolBuilder<T extends Symbol> {
  		return this;
  	}
 
-	public SymbolBuilder<T> setPreConditions(Set<Condition> conditions) {
-		preConditions = conditions;
+	public SymbolBuilder<T> setPreConditions(List<Condition> conditions) {
+		preConditions = new ArrayList<>(conditions);
 		return this;
 	}
 
-	public SymbolBuilder<T> setPostConditions(Set<Condition> conditions) {
-		postConditions = conditions;
+	public SymbolBuilder<T> setPostConditions(List<Condition> conditions) {
+		postConditions = new ArrayList<>(conditions);
 		return this;
 	}
 

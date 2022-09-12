@@ -14,7 +14,7 @@
                   "symbols" : [
                     {
                       "kind" : "Plus",
-                      "name" : "A+",
+                      "name" : "{A ','}+",
                       "s" : {
                         "kind" : "Identifier",
                         "name" : "A"

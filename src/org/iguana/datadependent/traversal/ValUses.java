@@ -172,7 +172,8 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 
 	@Override
 	public Void visit(Not not) {
-		return not.getExp().accept(this);
+		not.getExp().accept(this);
+		return null;
 	}
 
 	@Override

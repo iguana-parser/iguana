@@ -29,7 +29,6 @@ package org.iguana.regex;
 
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
-import org.iguana.regex.visitor.ToAutomatonRegexVisitor;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,11 +39,11 @@ public interface RegularExpression {
 
 	boolean isNullable();
 
-    Set<org.iguana.regex.CharRange> getLookaheads();
+    Set<CharRange> getLookaheads();
 
-    Set<org.iguana.regex.CharRange> getLookbehinds();
+    Set<CharRange> getLookbehinds();
 	
-	Set<org.iguana.regex.CharRange> getFirstSet();
+	Set<CharRange> getFirstSet();
 	
 	/**
 	 * The set of characters (ranges) that cannot follow this regular expressions. 

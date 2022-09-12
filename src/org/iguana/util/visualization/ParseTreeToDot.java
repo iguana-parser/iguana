@@ -60,8 +60,8 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     @Override
-    public Integer visitStartNode(MetaSymbolNode.StartNode node) {
-        return visitMetaSymbolNode(node).get(0);
+    public List<Integer> visitStartNode(MetaSymbolNode.StartNode node) {
+        return visitMetaSymbolNode(node);
     }
 
     @Override

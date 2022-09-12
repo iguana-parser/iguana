@@ -4,7 +4,7 @@ import org.iguana.regex.visitor.GatherReferencesVisitor;
 import org.iguana.regex.visitor.InlineReferencesVisitor;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +12,9 @@ import java.util.Map;
 public class InlineReferences {
 
     public static Map<String, RegularExpression> inline(Map<String, RegularExpression> definitions) {
-        Map<String, List<String>> referencesMap = new HashMap<>();
+        Map<String, List<String>> referencesMap = new LinkedHashMap<>();
         for (Map.Entry<String, RegularExpression> entry : definitions.entrySet()) {
-            org.iguana.regex.visitor.GatherReferencesVisitor gatherReferencesVisitor = new GatherReferencesVisitor();
+            GatherReferencesVisitor gatherReferencesVisitor = new GatherReferencesVisitor();
             entry.getValue().accept(gatherReferencesVisitor);
             referencesMap.put(entry.getKey(), gatherReferencesVisitor.getReferences());
         }
@@ -34,7 +34,7 @@ public class InlineReferences {
         while (true) {
             RegularExpressionVisitor<RegularExpression> visitor = new InlineReferencesVisitor(current);
 
-            Map<String, RegularExpression> newMap = new HashMap<>();
+            Map<String, RegularExpression> newMap = new LinkedHashMap<>();
             for (Map.Entry<String, RegularExpression> entry : current.entrySet()) {
                 newMap.put(entry.getKey(), entry.getValue().accept(visitor));
             }

@@ -274,6 +274,14 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Rule.Builder.class)
     abstract static class RuleMixIn { }
 
+    abstract static class AnnotationMixIn {
+        @JsonCreator
+        AnnotationMixIn(
+            @JsonProperty("name") String name,
+            @JsonProperty("value") String value,
+            @JsonProperty("symbolName") String symbolName) { }
+    }
+
     @JsonDeserialize(builder = PriorityLevel.Builder.class)
     abstract static class PriorityLevelMixIn { }
 
@@ -406,7 +414,7 @@ public class JsonSerializer {
     abstract static class StartNodeMixIn {
         StartNodeMixIn(
             @JsonProperty("symbol") Symbol symbol,
-            @JsonProperty("child") ParseTreeNode child,
+            @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
     }
