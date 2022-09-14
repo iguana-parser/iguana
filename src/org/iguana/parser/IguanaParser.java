@@ -77,7 +77,7 @@ public class IguanaParser extends IguanaRecognizer {
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
         if (parseError != null) {
-            System.out.println(parseError);
+            throw new ParseErrorException(parseError);
         } else {
             System.out.println("Parsing finished in " + (end - start) / 1000_000 + "ms.");
         }
@@ -99,16 +99,12 @@ public class IguanaParser extends IguanaRecognizer {
         return getParseTree(false, true);
     }
 
-    public ParseTreeNode getParseTree(boolean ambiguous, boolean ignoreLayout) {
-        if (parseTree != null) {
-            return parseTree;
-        }
+    public ParseTreeNode getParseTree(boolean allowAmbigities, boolean ignoreLayout) {
+        if (parseTree != null) return parseTree;
 
-        if (sppf == null) {
-            return null;
-        }
+        if (sppf == null) return null;
 
-        if (ambiguous) {
+        if (allowAmbigities) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(getParseTreeBuilder(input), ignoreLayout, parserResultOps);
             long start = System.nanoTime();
             ParseTreeNode node = (ParseTreeNode) sppf.accept(visitor).getValues().get(0);
