@@ -3,13 +3,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{A, 'a', B, C, null}+",
+        "name" : "{A 'a' B C}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{A, 'a', B, C, null}+",
+          "name" : "{A 'a' B C}+",
           "nodeType" : "Plus"
         },
         {
@@ -82,7 +82,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{A, 'a', B, C, null}+",
+        "name" : "{A 'a' B C}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -144,7 +144,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{A, 'a', B, C, null}+",
+          "name" : "{A 'a' B C}+",
           "nodeType" : "Plus"
         }
       ],
@@ -305,12 +305,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{A, 'a', B, C, null}+" : [
+    "{A 'a' B C}+" : [
       "A"
     ]
   },
   "ebnfRights" : {
-    "{A, 'a', B, C, null}+" : [
+    "{A 'a' B C}+" : [
       "A",
       "$A"
     ]

@@ -16,7 +16,7 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "{A, 'a', B, C, null}+",
+            "name" : "{A 'a' B C}+",
             "nodeType" : "Plus"
           }
         ],

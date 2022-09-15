@@ -16,7 +16,7 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "{E, ';', null}*",
+            "name" : "{E ';'}*",
             "nodeType" : "Star"
           }
         ],

@@ -3,13 +3,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ';', null}+",
+        "name" : "{E ';'}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, ';', null}+",
+          "name" : "{E ';'}+",
           "nodeType" : "Plus"
         },
         {
@@ -72,7 +72,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ';', null}+",
+        "name" : "{E ';'}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -127,13 +127,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ';', null}*",
+        "name" : "{E ';'}*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, ';', null}+",
+          "name" : "{E ';'}+",
           "nodeType" : "Plus"
         }
       ],
@@ -177,7 +177,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, ';', null}*",
+        "name" : "{E ';'}*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -225,7 +225,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, ';', null}*",
+          "name" : "{E ';'}*",
           "nodeType" : "Star"
         }
       ],
@@ -447,22 +447,22 @@
     }
   ],
   "ebnfLefts" : {
-    "{E, ';', null}+" : [
-      "E"
+    "{E ';'}*" : [
+      "{E ';'}+"
     ],
-    "{E, ';', null}*" : [
-      "{E, ';', null}+"
+    "{E ';'}+" : [
+      "E"
     ]
   },
   "ebnfRights" : {
-    "{E, ';', null}+" : [
+    "{E ';'}*" : [
+      "{E ';'}+",
       "$E",
       "E"
     ],
-    "{E, ';', null}*" : [
+    "{E ';'}+" : [
       "$E",
-      "E",
-      "{E, ';', null}+"
+      "E"
     ]
   },
   "startSymbol" : {

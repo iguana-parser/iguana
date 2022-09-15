@@ -32,7 +32,7 @@
           },
           {
             "kind" : "Nonterminal",
-            "name" : "{B, ',', null}+",
+            "name" : "{B ','}+",
             "nodeType" : "Plus"
           },
           {

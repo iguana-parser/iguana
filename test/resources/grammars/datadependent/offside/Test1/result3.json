@@ -16,7 +16,7 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "{offside Stat, ';', null}+",
+            "name" : "{offside Stat ';'}+",
             "nodeType" : "Plus"
           }
         ],

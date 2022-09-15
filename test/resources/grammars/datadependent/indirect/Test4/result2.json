@@ -406,7 +406,7 @@
                   },
                   {
                     "kind" : "Nonterminal",
-                    "name" : "{E, '*', null}+",
+                    "name" : "{E '*'}+",
                     "arguments" : [
                       {
                         "kind" : "Integer",
@@ -1137,7 +1137,7 @@
                       },
                       {
                         "kind" : "Nonterminal",
-                        "name" : "{E, '*', null}+",
+                        "name" : "{E '*'}+",
                         "arguments" : [
                           {
                             "kind" : "Integer",

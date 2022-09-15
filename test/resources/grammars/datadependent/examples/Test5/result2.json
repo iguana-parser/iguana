@@ -61,7 +61,7 @@
           },
           {
             "kind" : "Nonterminal",
-            "name" : "{Statement, ';', null}*",
+            "name" : "{Statement ';'}*",
             "label" : "body",
             "nodeType" : "Star"
           },
@@ -205,7 +205,7 @@
               },
               {
                 "kind" : "Nonterminal",
-                "name" : "{IdType, ',', null}*",
+                "name" : "{IdType ','}*",
                 "label" : "decls",
                 "nodeType" : "Star"
               },
@@ -1959,7 +1959,7 @@
                   },
                   {
                     "kind" : "Nonterminal",
-                    "name" : "{Statement, ';', null}*",
+                    "name" : "{Statement ';'}*",
                     "label" : "body",
                     "nodeType" : "Star"
                   },
