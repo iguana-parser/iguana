@@ -29,6 +29,7 @@ package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -48,19 +49,27 @@ public class IguanaParser extends IguanaRecognizer {
     private Input input;
 
     public IguanaParser(Grammar grammar) {
-        this(grammar, grammar.getStartSymbol().getStartSymbol(), Configuration.load());
+        this(grammar, Nonterminal.withName(assertStartSymbolNotNull(grammar.getStartSymbol()).getName()), Configuration.load());
     }
 
-    public IguanaParser(Grammar grammar, String startNonterminal, Configuration config) {
-        super(grammar, startNonterminal, config);
+    public IguanaParser(Grammar grammar, Nonterminal start) {
+        this(grammar, start, Configuration.load());
     }
 
-    public IguanaParser(RuntimeGrammar grammar, Configuration config) {
-        super(grammar, config);
+    public IguanaParser(Grammar grammar, Nonterminal start, Configuration config) {
+        super(grammar, start, config);
     }
 
     public IguanaParser(RuntimeGrammar grammar) {
-        super(grammar, Configuration.load());
+        this(grammar, Nonterminal.withName(assertStartSymbolNotNull(grammar.getStartSymbol()).getName()), Configuration.load());
+    }
+
+    public IguanaParser(RuntimeGrammar grammar, Nonterminal start) {
+        this(grammar, start, Configuration.load());
+    }
+
+    public IguanaParser(RuntimeGrammar grammar, Nonterminal start, Configuration config) {
+        super(grammar, start, config);
     }
 
     public void parse(Input input) {

@@ -81,7 +81,7 @@ public class GrammarTest {
             assertEquals(jsonGrammar, grammar);
         }
 
-        RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar(), grammar.getStartSymbol().getStartSymbol());
+        RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar());
 
         String finalGrammarPath = test + "/final_grammar.json";
         if (REGENERATE_FILES || !Files.exists(Paths.get(finalGrammarPath))) {
