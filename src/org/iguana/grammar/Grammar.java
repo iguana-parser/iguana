@@ -92,7 +92,6 @@ public class Grammar {
 
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
             for (Rule rule : rules) {
-                if (rule.getHead().toString().equals("$default$")) continue;
                 grammarBuilder.addRules(getRules(rule, resolveIdentifiers, leftEnds, rightEnds, ebnfs));
             }
             grammarBuilder.setStartSymbol(startSymbol);
@@ -146,7 +145,6 @@ public class Grammar {
 
     private void computeEnds(Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         for (Rule rule : rules) {
-            if (rule.getHead().toString().equals("$default$")) continue;
             for (PriorityLevel priorityLevel : rule.getPriorityLevels()) {
                 for (Alternative alternative : priorityLevel.getAlternatives()) {
                     for (Sequence seq : alternative.seqs()) {

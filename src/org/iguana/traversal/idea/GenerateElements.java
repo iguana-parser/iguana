@@ -54,8 +54,6 @@ public class GenerateElements {
         Map<String, Set<String>> elements = new LinkedHashMap<>();
         for (RuntimeRule rule : rules) {
 
-            if (rule.getHead().getName().equals("$default$")) continue;
-
             Set<String> labels = elements.get(rule.getHead().getName());
             if (labels == null) {
                 labels = new HashSet<>();
@@ -146,9 +144,6 @@ public class GenerateElements {
         Map<String, Map<String, Map<String, NUM>>> elements = new LinkedHashMap<>();
 
         for (RuntimeRule rule : rules) {
-
-            if (rule.getHead().getName().equals("$default$")) continue;
-
             Map<String, Map<String, NUM>> m1 = elements.get(rule.getHead().getName());
             if (m1 == null) {
                 m1 = new LinkedHashMap<>();
