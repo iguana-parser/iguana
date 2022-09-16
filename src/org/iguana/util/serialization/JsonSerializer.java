@@ -274,7 +274,10 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Rule.Builder.class)
-    abstract static class RuleMixIn { }
+    abstract static class RuleMixIn {
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
 
     abstract static class AnnotationMixIn {
         @JsonCreator
@@ -291,7 +294,10 @@ public class JsonSerializer {
     abstract static class AlternativeMixIn { }
 
     @JsonDeserialize(builder = Sequence.Builder.class)
-    abstract static class SequenceMixIn { }
+    abstract static class SequenceMixIn {
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({

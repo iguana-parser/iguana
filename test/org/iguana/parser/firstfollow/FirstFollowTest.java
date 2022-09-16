@@ -4,7 +4,6 @@ import org.iguana.grammar.operations.FirstFollowSets;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.GrammarTransformer;
-import org.iguana.iggy.gen.IggyParser;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.junit.jupiter.api.Test;
