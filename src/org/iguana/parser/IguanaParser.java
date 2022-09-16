@@ -49,46 +49,42 @@ public class IguanaParser extends IguanaRecognizer {
     private Input input;
 
     public IguanaParser(Grammar grammar) {
-        this(grammar, Nonterminal.withName(assertStartSymbolNotNull(grammar.getStartSymbol()).getName()), Configuration.load());
+        this(grammar, Configuration.load());
     }
 
-    public IguanaParser(Grammar grammar, Nonterminal start) {
-        this(grammar, start, Configuration.load());
-    }
-
-    public IguanaParser(Grammar grammar, Nonterminal start, Configuration config) {
-        super(grammar, start, config);
+    public IguanaParser(Grammar grammar, Configuration config) {
+        super(grammar, config);
     }
 
     public IguanaParser(RuntimeGrammar grammar) {
-        this(grammar, Nonterminal.withName(assertStartSymbolNotNull(grammar.getStartSymbol()).getName()), Configuration.load());
+        this(grammar, Configuration.load());
     }
 
-    public IguanaParser(RuntimeGrammar grammar, Nonterminal start) {
-        this(grammar, start, Configuration.load());
-    }
-
-    public IguanaParser(RuntimeGrammar grammar, Nonterminal start, Configuration config) {
-        super(grammar, start, config);
+    public IguanaParser(RuntimeGrammar grammar, Configuration config) {
+        super(grammar, config);
     }
 
     public void parse(Input input) {
-        parse(input, new ParseOptions.Builder().setGlobal(false).build());
+        parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), new ParseOptions.Builder().setGlobal(false).build());
     }
 
-    public void parse(Input input, ParseOptions options) {
+    public void parse(Input input, Nonterminal start) {
+        parse(input, start, new ParseOptions.Builder().setGlobal(false).build());
+    }
+
+    public void parse(Input input, Nonterminal start, ParseOptions options) {
         clear();
         this.input = input;
         IguanaRuntime<?> runtime = new IguanaRuntime<>(config, parserResultOps);
-        long start = System.nanoTime();
-        this.sppf = (NonterminalNode) runtime.run(input, grammarGraph, options.getMap(), options.isGlobal());
-        long end = System.nanoTime();
+        long startTime = System.nanoTime();
+        this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, options.getMap(), options.isGlobal());
+        long endTime = System.nanoTime();
         this.statistics = runtime.getStatistics();
         this.parseError = runtime.getParseError();
         if (parseError != null) {
             throw new ParseErrorException(parseError);
         } else {
-            System.out.println("Parsing finished in " + (end - start) / 1000_000 + "ms.");
+            System.out.println("Parsing finished in " + (endTime - startTime) / 1000_000 + "ms.");
         }
     }
 

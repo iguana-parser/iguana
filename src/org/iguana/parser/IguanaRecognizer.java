@@ -24,32 +24,34 @@ public class IguanaRecognizer {
 
     protected ParseError parseError;
     protected RecognizerStatistics statistics;
+    protected final Start start;
 
     public IguanaRecognizer(Grammar grammar) {
-        this(grammar, Nonterminal.withName(assertStartSymbolNotNull(grammar.getStartSymbol()).getName()), Configuration.load());
+        this(grammar, Configuration.load());
     }
 
-    public IguanaRecognizer(Grammar grammar, Nonterminal start, Configuration config) {
-        this(GrammarTransformer.transform(grammar.toRuntimeGrammar()), start, config);
+    public IguanaRecognizer(Grammar grammar, Configuration config) {
+        this(GrammarTransformer.transform(grammar.toRuntimeGrammar()), config);
     }
 
     public IguanaRecognizer(RuntimeGrammar grammar) {
-        this(grammar, Nonterminal.withName(assertStartSymbolNotNull(grammar.getStartSymbol()).getName()), Configuration.load());
+        this(grammar, Configuration.load());
     }
 
-    public IguanaRecognizer(RuntimeGrammar grammar, Nonterminal start, Configuration config) {
-        this.grammarGraph = GrammarGraphBuilder.from(grammar, start, config);
+    public IguanaRecognizer(RuntimeGrammar grammar, Configuration config) {
+        this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.config = config;
+        start = grammar.getStartSymbol();
     }
 
     public boolean recognize(Input input) {
-        return recognize(input, Collections.emptyMap(), false);
+        return recognize(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), Collections.emptyMap(), false);
     }
 
-    public boolean recognize(Input input,  Map<String, Object> map, boolean global) {
+    public boolean recognize(Input input, Nonterminal start, Map<String, Object> map, boolean global) {
         clear();
         IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps);
-        RecognizerResult root = (RecognizerResult) runtime.run(input, grammarGraph, map, global);
+        RecognizerResult root = (RecognizerResult) runtime.run(input, start, grammarGraph, map, global);
         this.parseError = runtime.getParseError();
         this.statistics = runtime.getStatistics();
         if (root == null) return false;

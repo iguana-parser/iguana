@@ -75,18 +75,18 @@ public class GrammarGraphBuilder {
 
     private static final MatcherFactory matcherFactory = new DFAMatcherFactory();
 
-    public static GrammarGraph from(RuntimeGrammar grammar, Nonterminal start) {
-        return from(grammar, start, Configuration.load());
+    public static GrammarGraph from(RuntimeGrammar grammar) {
+        return from(grammar, Configuration.load());
     }
 
-    public static GrammarGraph from(RuntimeGrammar grammar, Nonterminal start, Configuration config) {
+    public static GrammarGraph from(RuntimeGrammar grammar, Configuration config) {
         GrammarGraphBuilder builder = new GrammarGraphBuilder(grammar, config);
         builder.convert();
         List<GrammarSlot> grammarSlots = new ArrayList<>();
         grammarSlots.addAll(builder.nonterminalsMap.values());
         grammarSlots.addAll(builder.terminalsMap.values());
         grammarSlots.addAll(builder.bodyGrammarSlots);
-        return new GrammarGraph(grammarSlots, builder.getHead(start), grammar.getGlobals());
+        return new GrammarGraph(grammarSlots, builder.nonterminalsMap, grammar.getGlobals());
     }
 
     private void convert() {

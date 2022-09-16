@@ -1,5 +1,6 @@
 package org.iguana.parser;
 
+import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -60,7 +61,7 @@ public class IguanaRuntime<T extends Result> {
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
     }
 
-    public Result run(Input input, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
+    public Result run(Input input, Nonterminal start, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
         this.input = input;
 
         IEvaluatorContext ctx = getEvaluatorContext();
@@ -68,7 +69,7 @@ public class IguanaRuntime<T extends Result> {
         if (global)
             map.forEach(ctx::declareGlobalVariable);
 
-        NonterminalGrammarSlot startSymbol = grammarGraph.getStartSlot();
+        NonterminalGrammarSlot startSymbol = grammarGraph.getStartSlot(start);
 
         int inputLength = input.length() - 1;
 
