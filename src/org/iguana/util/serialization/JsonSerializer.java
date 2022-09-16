@@ -263,6 +263,8 @@ public class JsonSerializer {
     abstract static class RuntimeRuleMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LayoutStrategyFilter.class)
         LayoutStrategy layoutStrategy;
+        @JsonIgnore
+        Map<String, Object> attributes;
     }
 
     @JsonDeserialize(builder = Grammar.Builder.class)
