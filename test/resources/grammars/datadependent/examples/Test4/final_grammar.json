@@ -3285,7 +3285,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Start"
+          "name" : "Start",
+          "label" : "top"
         },
         {
           "kind" : "Terminal",

@@ -286,7 +286,8 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "E"
+          "name" : "E",
+          "label" : "top"
         }
       ],
       "recursion" : "NON_REC",

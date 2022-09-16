@@ -3809,7 +3809,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Program"
+          "name" : "Program",
+          "label" : "top"
         },
         {
           "kind" : "Nonterminal",

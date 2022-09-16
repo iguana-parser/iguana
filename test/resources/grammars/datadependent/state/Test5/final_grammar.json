@@ -649,6 +649,7 @@
         {
           "kind" : "Nonterminal",
           "name" : "S",
+          "label" : "top",
           "arguments" : [
             {
               "kind" : "Name",

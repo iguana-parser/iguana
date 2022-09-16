@@ -392,7 +392,8 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "Id"
+          "name" : "Id",
+          "label" : "top"
         }
       ],
       "recursion" : "NON_REC",

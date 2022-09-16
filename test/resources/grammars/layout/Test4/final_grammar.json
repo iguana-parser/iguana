@@ -405,7 +405,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "label" : "top"
         },
         {
           "kind" : "Terminal",

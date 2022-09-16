@@ -215,7 +215,8 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "X"
+          "name" : "X",
+          "label" : "top"
         }
       ],
       "recursion" : "NON_REC",
