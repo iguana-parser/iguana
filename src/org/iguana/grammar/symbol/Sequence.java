@@ -72,15 +72,16 @@ public class Sequence {
             sb.append("  ").append("%").append(label);
         }
         if (!attributes.isEmpty()) {
-            sb.append("  ");
+            sb.append("  {");
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
                 if (entry.getValue() == null) {
-                    sb.append(String.format("@%s ", entry.getKey()));
+                    sb.append(String.format("%s ", entry.getKey()));
                 } else {
-                    sb.append(String.format("@%s=%s ", entry.getKey(), entry.getValue()));
+                    sb.append(String.format("%s=%s ", entry.getKey(), entry.getValue()));
                 }
             }
             sb.deleteCharAt(sb.length() - 1);
+            sb.append("}");
         }
         return sb.toString();
     }
