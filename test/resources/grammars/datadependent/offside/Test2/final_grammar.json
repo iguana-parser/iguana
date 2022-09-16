@@ -36,7 +36,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
+        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat ';'}+",
         "parameters" : [
           "a0.lExt"
         ],
@@ -45,7 +45,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
+          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat ';'}+",
           "parameters" : [
             "a0.lExt"
           ],
@@ -323,7 +323,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
+        "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat ';'}+",
         "parameters" : [
           "a0.lExt"
         ],
@@ -525,7 +525,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
+          "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat ';'}+",
           "label" : "a0",
           "parameters" : [
             "a0.lExt"
@@ -1240,7 +1240,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "label" : "top"
         },
         {
           "kind" : "Terminal",
@@ -1301,12 +1302,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{Stat, ';', null}+" : [
+    "{Stat ';'}+" : [
       "Stat"
     ]
   },
   "ebnfRights" : {
-    "{Stat, ';', null}+" : [
+    "{Stat ';'}+" : [
       "Stat",
       "$Exp",
       "Exp"

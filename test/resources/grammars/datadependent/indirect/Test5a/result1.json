@@ -472,7 +472,7 @@
                   },
                   {
                     "kind" : "Nonterminal",
-                    "name" : "{R, '*', null}+",
+                    "name" : "{R '*'}+",
                     "variable" : "r",
                     "arguments" : [
                       {
@@ -1482,7 +1482,7 @@
                           },
                           {
                             "kind" : "Nonterminal",
-                            "name" : "{R, '*', null}+",
+                            "name" : "{R '*'}+",
                             "variable" : "r",
                             "arguments" : [
                               {

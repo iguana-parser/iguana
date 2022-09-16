@@ -36,13 +36,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside Stat, ';', null}+",
+        "name" : "{offside Stat ';'}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside Stat, ';', null}+",
+          "name" : "{offside Stat ';'}+",
           "nodeType" : "Plus"
         },
         {
@@ -223,7 +223,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{offside Stat, ';', null}+",
+        "name" : "{offside Stat ';'}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -335,7 +335,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{offside Stat, ';', null}+",
+          "name" : "{offside Stat ';'}+",
           "nodeType" : "Plus"
         }
       ],
@@ -1039,7 +1039,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "label" : "top"
         },
         {
           "kind" : "Terminal",
@@ -1100,12 +1101,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{Stat, ';', null}+" : [
+    "{Stat ';'}+" : [
       "Stat"
     ]
   },
   "ebnfRights" : {
-    "{Stat, ';', null}+" : [
+    "{Stat ';'}+" : [
       "Stat",
       "$Exp",
       "Exp"

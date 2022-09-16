@@ -228,6 +228,7 @@
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "label" : "top",
           "arguments" : [
             {
               "kind" : "Integer",

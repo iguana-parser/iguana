@@ -1177,7 +1177,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Element"
+          "name" : "Element",
+          "label" : "top"
         },
         {
           "kind" : "Terminal",

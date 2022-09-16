@@ -8,13 +8,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ';', null}+",
+        "name" : "{Statement ';'}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}+",
+          "name" : "{Statement ';'}+",
           "nodeType" : "Plus"
         },
         {
@@ -86,7 +86,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ';', null}+",
+        "name" : "{Statement ';'}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -140,13 +140,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ';', null}*",
+        "name" : "{Statement ';'}*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}+",
+          "name" : "{Statement ';'}+",
           "nodeType" : "Plus"
         }
       ],
@@ -196,7 +196,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{Statement, ';', null}*",
+        "name" : "{Statement ';'}*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -290,7 +290,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}*",
+          "name" : "{Statement ';'}*",
           "label" : "body",
           "nodeType" : "Star"
         },
@@ -348,13 +348,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ',', null}+",
+        "name" : "{IdType ','}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{IdType, ',', null}+",
+          "name" : "{IdType ','}+",
           "nodeType" : "Plus"
         },
         {
@@ -426,7 +426,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ',', null}+",
+        "name" : "{IdType ','}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -480,13 +480,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ',', null}*",
+        "name" : "{IdType ','}*",
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{IdType, ',', null}+",
+          "name" : "{IdType ','}+",
           "nodeType" : "Plus"
         }
       ],
@@ -536,7 +536,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{IdType, ',', null}*",
+        "name" : "{IdType ','}*",
         "nodeType" : "Star"
       },
       "recursion" : "NON_REC",
@@ -628,7 +628,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{IdType, ',', null}*",
+          "name" : "{IdType ','}*",
           "label" : "decls",
           "nodeType" : "Star"
         },
@@ -882,7 +882,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}*",
+          "name" : "{Statement ';'}*",
           "label" : "thenPart",
           "nodeType" : "Star"
         },
@@ -924,7 +924,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}*",
+          "name" : "{Statement ';'}*",
           "label" : "elsePart",
           "nodeType" : "Star"
         },
@@ -1054,7 +1054,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}*",
+          "name" : "{Statement ';'}*",
           "label" : "thenPart",
           "nodeType" : "Star"
         },
@@ -1188,7 +1188,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{Statement, ';', null}*",
+          "name" : "{Statement ';'}*",
           "label" : "body",
           "nodeType" : "Star"
         },
@@ -3809,7 +3809,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "Program"
+          "name" : "Program",
+          "label" : "top"
         },
         {
           "kind" : "Nonterminal",

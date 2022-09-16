@@ -251,7 +251,8 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "label" : "top"
         }
       ],
       "recursion" : "NON_REC",

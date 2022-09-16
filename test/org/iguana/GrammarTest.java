@@ -140,7 +140,19 @@ public class GrammarTest {
             ParseTreeNode actualParseTree = null;
             boolean isCyclic = false;
 
-            parser.parse(input);
+            String resultPath = testPath + "/result" + j + ".json";
+
+            try {
+                parser.parse(input);
+            } catch (ParseErrorException e) {
+                Assertions.assertNotNull(parser.getParseError());
+                if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
+                    record(parser.getParseError(), resultPath);
+                } else {
+                    ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
+                    assertEquals(expectedParseError, parser.getParseError());
+                }
+            }
 
             String statisticsPath = testPath + "/statistics" + j + ".json";
             if (REGENERATE_FILES || !Files.exists(Paths.get(statisticsPath))) {
@@ -176,24 +188,12 @@ public class GrammarTest {
             }
 
             if (!isCyclic) {
-                String resultPath = testPath + "/result" + j + ".json";
-
-                if (parser.hasParseError()) {
-                    Assertions.assertNotNull(parser.getParseError());
+                if (actualParseTree != null) {
                     if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
-                        record(parser.getParseError(), resultPath);
+                        record(actualParseTree, resultPath);
                     } else {
-                        ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
-                        assertEquals(expectedParseError, parser.getParseError());
-                    }
-                } else {
-                    if (actualParseTree != null) {
-                        if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
-                            record(actualParseTree, resultPath);
-                        } else {
-                            ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
-                            assertEquals(expectedParseTree, actualParseTree);
-                        }
+                        ParseTreeNode expectedParseTree = JsonSerializer.deserialize(readFile(resultPath), ParseTreeNode.class);
+                        assertEquals(expectedParseTree, actualParseTree);
                     }
                 }
             }

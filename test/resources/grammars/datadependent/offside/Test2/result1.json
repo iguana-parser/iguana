@@ -16,7 +16,7 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat, ';', null}+",
+            "name" : "{offside [indent(a1.lExt) == indent(a0.lExt)]a1:Stat ';'}+",
             "label" : "a0",
             "parameters" : [
               "a0.lExt"

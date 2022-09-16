@@ -15,13 +15,13 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{B, ',', null}+",
+        "name" : "{B ','}+",
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{B, ',', null}+",
+          "name" : "{B ','}+",
           "nodeType" : "Plus"
         },
         {
@@ -114,7 +114,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{B, ',', null}+",
+        "name" : "{B ','}+",
         "nodeType" : "Plus"
       },
       "body" : [
@@ -196,7 +196,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{B, ',', null}+",
+          "name" : "{B ','}+",
           "nodeType" : "Plus"
         },
         {
@@ -405,7 +405,8 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "label" : "top"
         },
         {
           "kind" : "Terminal",

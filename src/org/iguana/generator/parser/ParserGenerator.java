@@ -71,13 +71,11 @@ public class ParserGenerator extends Generator {
             "        super(grammar);\n" +
             "    }\n" +
             "\n" +
-            "    private static final String grammarName = \"" + grammarName + "\";\n" +
-            "\n" +
             "    private static " + className + "Parser parser;\n" +
             "\n" +
             "    public static " + className + "Parser getInstance() {\n" +
             "        if (parser == null) {\n" +
-            "            parser = new " + className + "Parser(IggyGrammar.getGrammar());\n" +
+            "            parser = new " + className + "Parser(" + className + "Grammar.getGrammar());\n" +
             "        }\n" +
             "        return parser;\n" +
             "    }\n" +

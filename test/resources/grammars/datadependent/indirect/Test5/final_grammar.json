@@ -42,7 +42,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, '*', null}+",
+        "name" : "{E '*'}+",
         "parameters" : [
           "p0"
         ],
@@ -51,7 +51,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E, '*', null}+",
+          "name" : "{E '*'}+",
           "arguments" : [
             {
               "kind" : "Integer",
@@ -143,7 +143,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E, '*', null}+",
+        "name" : "{E '*'}+",
         "parameters" : [
           "p0"
         ],
@@ -368,7 +368,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{E, '*', null}+",
+          "name" : "{E '*'}+",
           "variable" : "r",
           "arguments" : [
             {
@@ -888,7 +888,8 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "label" : "top"
         }
       ],
       "recursion" : "NON_REC",
@@ -916,12 +917,12 @@
     }
   ],
   "ebnfLefts" : {
-    "{E, '*', null}+" : [
+    "{E '*'}+" : [
       "E"
     ]
   },
   "ebnfRights" : {
-    "{E, '*', null}+" : [
+    "{E '*'}+" : [
       "$E",
       "E"
     ]

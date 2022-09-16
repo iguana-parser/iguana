@@ -3,6 +3,7 @@ package org.iguana.iggy;
 import org.iguana.grammar.Grammar;
 import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
+import org.iguana.parser.ParseErrorException;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.utils.input.Input;
 
@@ -31,11 +32,13 @@ public class IggyParserUtils {
 
     private static Grammar createGrammar(Input input) {
         IguanaParser parser = IggyParser.getInstance();
-        parser.parse(input);
-        if (parser.hasParseError()) {
+        try {
+            parser.parse(input);
+        } catch (ParseErrorException e) {
             System.out.println(parser.getParseError());
             throw new RuntimeException(parser.getParseError().toString());
         }
+
         ParseTreeNode parseTree = parser.getParseTree();
         Object result = parseTree.accept(new IggyParseTreeToGrammarVisitor());
         if (result instanceof List<?>) { // When there is a start symbol

@@ -30,10 +30,10 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.traversal.FreeVariableVisitor;
+import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.Recursion;
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
@@ -54,11 +54,6 @@ public class EBNFToBNF implements GrammarTransformation {
 	
 	private Map<String, Set<String>> ebnfLefts;
 	private Map<String, Set<String>> ebnfRights;
-
-	public static RuntimeGrammar convert(RuntimeGrammar grammar) {
-        EBNFToBNF ebnfToBNF = new EBNFToBNF();
-        return ebnfToBNF.transform(grammar);
-    }
 
 	@Override
 	public RuntimeGrammar transform(RuntimeGrammar grammar) {
@@ -112,19 +107,13 @@ public class EBNFToBNF implements GrammarTransformation {
 				.build();
 	}
 	
-	public static List<Symbol> rewrite(List<Symbol> list, Nonterminal layout) {
-		EBNFVisitor visitor = new EBNFVisitor(new HashSet<>(), new HashSet<>(), layout, LayoutStrategy.INHERITED, new HashMap<>(), new HashMap<>());
-		return list.stream().map(s -> s.accept(visitor)).collect(Collectors.toList());
-	}
-
-	
 	public static String getName(Symbol symbol, List<Symbol> separators, Symbol layout) {
 		if (separators.isEmpty() && layout == null) {
 			return symbol.getName();
 		} else {
 			return "{" + symbol.getName() +
-					  ", " + separators.stream().map(Symbol::getName).collect(Collectors.joining(", ")) +
-					  ", " + layout + 
+					  " " +  separators.stream().map(Symbol::getName).collect(Collectors.joining(" ")) +
+					  (layout == null ? "" : " " + layout) +
 				   "}";	
 		}
 	}
@@ -179,7 +168,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
-				parameters = freeVars.stream().toArray(String[]::new);
+				parameters = freeVars.toArray(new String[0]);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -213,7 +202,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
-				parameters = freeVars.stream().toArray(String[]::new);
+				parameters = freeVars.toArray(new String[0]);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -258,7 +247,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
-				parameters = freeVars.stream().toArray(String[]::new);
+				parameters = freeVars.toArray(new String[0]);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -308,7 +297,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
-				parameters = freeVars.stream().toArray(String[]::new);
+				parameters = freeVars.toArray(new String[0]);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -347,7 +336,7 @@ public class EBNFToBNF implements GrammarTransformation {
 			
 			if (!freeVars.isEmpty()) {
 				freeVars.removeAll(state);
-				parameters = freeVars.stream().toArray(String[]::new);
+				parameters = freeVars.toArray(new String[0]);
 				arguments = freeVars.stream().map(v -> AST.var(v)).toArray(Expression[]::new);
 			}
 			
@@ -394,8 +383,8 @@ public class EBNFToBNF implements GrammarTransformation {
 			Symbol thenPart = symbol.getThenPart().accept(this);
 			
 			init();
-			String[] parameters = null;
-			Expression[] arguments = null;
+			String[] parameters;
+			Expression[] arguments;
 			
 			thenPart.setEmpty();
 			visitor.visitSymbol(thenPart);

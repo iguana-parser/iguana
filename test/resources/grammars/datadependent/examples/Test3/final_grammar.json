@@ -2327,6 +2327,7 @@
         {
           "kind" : "Nonterminal",
           "name" : "expr",
+          "label" : "top",
           "arguments" : [
             {
               "kind" : "Integer",
