@@ -52,8 +52,6 @@ public class Nonterminal extends AbstractSymbol {
 	
 	private final Set<String> excepts;
 	
-	private final Map<String, Object> attributes;
-
 	/**
 	 * The type of this nonterminal. This field is used to track EBNF to BNF conversion
 	 * information for each nonterminal. See NonterminalNodeType.
@@ -74,7 +72,6 @@ public class Nonterminal extends AbstractSymbol {
 		this.arguments = builder.arguments;
 		this.excepts = builder.excepts;
 		this.nodeType = builder.nodeType;
-		this.attributes = builder.attributes;
 	}
 	
 	public boolean isEbnfList() {
@@ -112,10 +109,6 @@ public class Nonterminal extends AbstractSymbol {
 	public NonterminalNodeType getNodeType() {
 		return nodeType;
 	}
-
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
 
 	@Override
 	public String toString() {
@@ -186,7 +179,6 @@ public class Nonterminal extends AbstractSymbol {
 			this.arguments = nonterminal.arguments;
 			this.excepts = nonterminal.excepts;
 			this.nodeType = nonterminal.nodeType;
-			this.attributes = nonterminal.attributes;
 		}
 
 		public Builder(String name) {

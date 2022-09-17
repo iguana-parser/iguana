@@ -32,7 +32,7 @@ import org.iguana.grammar.condition.Condition;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static org.iguana.utils.string.StringUtil.listToString;
 
@@ -46,6 +46,8 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
 	protected final List<Condition> postConditions;
 
+	private final Map<String, Object> attributes;
+
 	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
 		if (builder.name == null) 
 			throw new IllegalArgumentException("Name cannot be null");
@@ -53,6 +55,7 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 		this.label = builder.label;
 		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptyList() : builder.preConditions;
 		this.postConditions = builder.postConditions.isEmpty() ? Collections.emptyList() : builder.postConditions;
+		this.attributes = builder.attributes.isEmpty() ? Collections.emptyMap() : builder.attributes;
 	}
 	
 	@Override
@@ -85,10 +88,13 @@ public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 		return s;
 	}
 	
-	
 	@Override
 	public String toString(int j) {
 		return this + (j == 1 ? " . " : "");
 	}
-	
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
 }

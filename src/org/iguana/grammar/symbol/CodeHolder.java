@@ -6,6 +6,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
@@ -48,6 +49,11 @@ public class CodeHolder implements org.iguana.grammar.symbol.Symbol {
     @Override
     public String toString(int j) {
         return null;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return Collections.emptyMap();
     }
 
     @Override

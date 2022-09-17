@@ -33,7 +33,6 @@ Sequence
   | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
   | label:Label?                                                                                        %Empty
 
-
 Condition
   = "{" {Expression ","}* "}" "?"
 
