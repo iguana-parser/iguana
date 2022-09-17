@@ -45,6 +45,10 @@ public class Sequence {
         return label;
     }
 
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

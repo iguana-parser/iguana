@@ -103,6 +103,7 @@ public class EBNFToBNF implements GrammarTransformation {
 				.setLeftEnds(rule.getLeftEnds())
 				.setRightEnds(rule.getRightEnds())
 				.setLabel(rule.getLabel())
+				.setAttributes(rule.getAttributes())
 				.setDefinition(rule.getDefinition())
 				.build();
 	}

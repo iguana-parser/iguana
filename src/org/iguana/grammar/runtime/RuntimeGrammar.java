@@ -159,7 +159,7 @@ public class RuntimeGrammar {
 		StringBuilder sb = new StringBuilder();
 		
 		for (Nonterminal nonterminal : definitions.keySet()) {
-			sb.append(nonterminal).append(" ::= ");
+			sb.append(nonterminal).append(" = ");
 			for (List<Symbol> alternatives : definitions.get(nonterminal).stream().map(r -> r.getBody()).collect(Collectors.toList())) {
 				if (alternatives == null) continue;
 				sb.append(listToString(alternatives)).append("\n");

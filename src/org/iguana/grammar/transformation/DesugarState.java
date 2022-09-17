@@ -175,7 +175,7 @@ public class DesugarState implements GrammarTransformation {
 		}
 		
 		if (builder == null)
-			builder = rule.copyBuilder();
+			builder = rule.copy();
 		
 		List<Symbol> symbols = new ArrayList<>();
 		

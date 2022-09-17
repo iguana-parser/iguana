@@ -2172,7 +2172,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r").build());
 					else if (isHeadWithLabeledRules)
 						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
-					else builder = rule.copyBuilder();
+					else builder = rule.copy();
 					
 					builder = builder.setSymbols(symbols);
 					
@@ -2202,7 +2202,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("p").build());
 					else if (isHeadWithLabeledRules)
 						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
-					else builder = rule.copyBuilder();
+					else builder = rule.copy();
 					
 					boolean isIndirectEnd = false;
 					

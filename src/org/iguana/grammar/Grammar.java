@@ -303,7 +303,12 @@ public class Grammar {
                         Sequence sequence = seqIt.previous();
                         RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = assocGroup.getPrecedence(rule);
-                        rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).setAssociativityGroup(assocGroup).build();
+                        rule = rule.copy()
+                            .setPrecedence(precedence)
+                            .setPrecedenceLevel(level)
+                            .setAssociativityGroup(assocGroup)
+                            .setAttributes(sequence.getAttributes())
+                            .build();
                         rules.add(rule);
                     }
                     assocGroup.done();
@@ -314,15 +319,20 @@ public class Grammar {
                         String label = alternative.first() == null ? null : alternative.first().label;
                         RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
-                        rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rule = rule.copy().setPrecedence(precedence).setPrecedenceLevel(level).build();
                         rules.add(rule);
                     } else {
-                        symbols.add(alternative.first().first());
-                        if (alternative.first().rest() != null)
-                            addAll(symbols, alternative.first().rest());
-                        RuntimeRule rule = getRule(head, symbols, alternative.first().associativity, alternative.first().label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        Sequence sequence = alternative.first();
+                        symbols.add(sequence.first());
+                        if (sequence.rest() != null)
+                            addAll(symbols, sequence.rest());
+                        RuntimeRule rule = getRule(head, symbols, sequence.associativity, sequence.label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
-                        rule = rule.copyBuilder().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rule = rule.copy()
+                            .setPrecedence(precedence)
+                            .setPrecedenceLevel(level)
+                            .setAttributes(sequence.getAttributes())
+                            .build();
                         rules.add(rule);
                     }
                 }

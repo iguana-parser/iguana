@@ -75,7 +75,7 @@ public class Names implements GrammarTransformation {
         }
 
         public RuntimeRule visitRule(RuntimeRule rule) {
-            RuntimeRule.Builder builder = rule.copyBuilder();
+            RuntimeRule.Builder builder = rule.copy();
             List<Symbol> symbols = new ArrayList<>();
             for (Symbol symbol : rule.getBody())
                 symbols.add(visitSymbol(symbol));
