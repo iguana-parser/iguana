@@ -75,6 +75,9 @@
         {
           "alternatives" : [
             {
+              "seqs" : [
+                { }
+              ],
               "associativity" : "UNDEFINED"
             }
           ]

@@ -229,25 +229,6 @@ public class IggyParseTree {
         }
     }
 
-    // Alternative = label:Label?
-    public static class EmptyAlternative extends Alternative {
-        public EmptyAlternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
-            super(rule, children, start, end);
-        }
-
-        public OptionNode label() {
-           return (OptionNode) childAt(0);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<T> visitor) {
-            if (visitor instanceof IggyParseTreeVisitor) {
-                return ((IggyParseTreeVisitor<T>) visitor).visitEmptyAlternative(this);
-            }
-            return visitor.visitNonterminalNode(this);
-        }
-    }
-
     public static abstract class Sequence extends NonterminalNode {
         public Sequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -320,6 +301,25 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitSingleElemSequence(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // Sequence = label:Label?
+    public static class EmptySequence extends Sequence {
+        public EmptySequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public OptionNode label() {
+           return (OptionNode) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitEmptySequence(this);
             }
             return visitor.visitNonterminalNode(this);
         }

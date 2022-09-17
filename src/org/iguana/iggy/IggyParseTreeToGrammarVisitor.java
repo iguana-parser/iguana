@@ -166,17 +166,6 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     }
 
     @Override
-    public Alternative visitEmptyAlternative(IggyParseTree.EmptyAlternative node) {
-        Optional<String> label = (Optional<String>) node.label().accept(this);
-        if (label.isPresent()) {
-            Sequence sequence = new Sequence.Builder().setLabel(label.get()).build();
-            return new Alternative.Builder().addSequence(sequence).build();
-        } else {
-            return new Alternative.Builder().build();
-        }
-    }
-
-    @Override
     public Sequence visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node) {
         Associativity associativity = null;
         if (node.hasChildren()) {
@@ -228,6 +217,12 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
             builder.setLabel(label.get());
         }
         return builder.build();
+    }
+
+    @Override
+    public Sequence visitEmptySequence(IggyParseTree.EmptySequence node) {
+        Optional<String> label = (Optional<String>) node.label().accept(this);
+        return new Sequence.Builder().setLabel(label.orElse(null)).build();
     }
 
     @Override

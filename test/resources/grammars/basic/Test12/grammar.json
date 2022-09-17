@@ -45,6 +45,9 @@
               "associativity" : "UNDEFINED"
             },
             {
+              "seqs" : [
+                { }
+              ],
               "associativity" : "UNDEFINED"
             }
           ]

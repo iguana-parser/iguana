@@ -315,11 +315,16 @@ public class Grammar {
                     level.containsAssociativityGroup(assocGroup.getLhs(), assocGroup.getRhs());
                 } else {
                     List<Symbol> symbols = new ArrayList<>();
-                    if (alternative.first() == null || alternative.first().isEmpty()) { // Empty alternative
-                        String label = alternative.first() == null ? null : alternative.first().label;
+                    if (alternative.first().isEmpty()) { // Empty alternative
+                        Sequence sequence = alternative.first();
+                        String label = sequence.label;
                         RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
-                        rule = rule.copy().setPrecedence(precedence).setPrecedenceLevel(level).build();
+                        rule = rule.copy()
+                            .setPrecedence(precedence)
+                            .setPrecedenceLevel(level)
+                            .setAttributes(sequence.getAttributes())
+                            .build();
                         rules.add(rule);
                     } else {
                         Sequence sequence = alternative.first();

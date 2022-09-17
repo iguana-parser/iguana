@@ -48,8 +48,6 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new IggyParseTree.SequenceAlternative(rule, children, leftExtent, rightExtent);
                     case "Associativity":
                         return new IggyParseTree.AssociativityAlternative(rule, children, leftExtent, rightExtent);
-                    case "Empty":
-                        return new IggyParseTree.EmptyAlternative(rule, children, leftExtent, rightExtent);
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
@@ -59,6 +57,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new IggyParseTree.MoreThanOneElemSequence(rule, children, leftExtent, rightExtent);
                     case "SingleElem":
                         return new IggyParseTree.SingleElemSequence(rule, children, leftExtent, rightExtent);
+                    case "Empty":
+                        return new IggyParseTree.EmptySequence(rule, children, leftExtent, rightExtent);
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
