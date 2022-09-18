@@ -9,7 +9,7 @@ import java.util.*;
 
 public abstract class VisitResult {
 
-    public abstract MergeResultVisitor<VisitResult> visitor();
+    public abstract MergeResultVisitor visitor();
     public abstract VisitResult merge(VisitResult other);
     public abstract <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode);
     public abstract java.util.List<Object> getValues();
@@ -24,10 +24,6 @@ public abstract class VisitResult {
 
     public static List list(java.util.List<Object> values) {
         return new VisitResult.List(values);
-    }
-
-    public static ListOfResult listOfResult(java.util.List<VisitResult> values) {
-        return new ListOfResult(values);
     }
 
     public static EBNF ebnf(java.util.List<Object> values, Symbol symbol) {
@@ -75,7 +71,7 @@ public abstract class VisitResult {
         }
 
         public VisitResult merge(VisitResult other) {
-            return other.visitor().visit(this);
+            return (VisitResult) other.visitor().visit(this);
         }
 
         @Override
@@ -121,7 +117,7 @@ public abstract class VisitResult {
         }
 
         public VisitResult merge(VisitResult other) {
-            return other.visitor().visit(this);
+            return (VisitResult) other.visitor().visit(this);
         }
 
         @Override
@@ -159,7 +155,7 @@ public abstract class VisitResult {
         }
 
         public VisitResult merge(VisitResult other) {
-            return other.visitor().visit(this);
+            return (VisitResult) other.visitor().visit(this);
         }
 
         @Override
@@ -210,7 +206,7 @@ public abstract class VisitResult {
 
         @Override
         public VisitResult merge(VisitResult other) {
-            return other.visitor().visit(this);
+            return (VisitResult) other.visitor().visit(this);
         }
 
         @Override
@@ -241,15 +237,15 @@ public abstract class VisitResult {
         }
     }
 
-    interface MergeResultVisitor<T> {
-        T visit(Empty other);
-        T visit(Single other);
-        T visit(List other);
-        T visit(EBNF other);
-        T visit(ListOfResult other);
+    interface MergeResultVisitor {
+        Object visit(Empty other);
+        Object visit(Single other);
+        Object visit(List other);
+        Object visit(EBNF other);
+        Object visit(ListOfResult other);
     }
 
-    class SingleVisitor implements MergeResultVisitor<VisitResult> {
+    class SingleVisitor implements MergeResultVisitor {
 
         private Single result;
 
@@ -298,7 +294,7 @@ public abstract class VisitResult {
         }
     }
 
-    class ListVisitor implements MergeResultVisitor<VisitResult> {
+    class ListVisitor implements MergeResultVisitor {
 
         private List result;
 
@@ -338,7 +334,7 @@ public abstract class VisitResult {
         }
     }
 
-    class EBNFResultVisitor implements MergeResultVisitor<VisitResult> {
+    class EBNFResultVisitor implements MergeResultVisitor {
 
         private EBNF result;
 
@@ -378,7 +374,7 @@ public abstract class VisitResult {
         }
     }
 
-    class ListOfResultVisitor implements MergeResultVisitor<VisitResult> {
+    class ListOfResultVisitor implements MergeResultVisitor {
 
         private ListOfResult result;
 
@@ -434,7 +430,7 @@ public abstract class VisitResult {
         }
     }
 
-    class EmptyVisitor implements MergeResultVisitor<VisitResult> {
+    class EmptyVisitor implements MergeResultVisitor {
 
         @Override
         public VisitResult visit(Empty other) {
