@@ -39,8 +39,8 @@ public abstract class TerminalNode extends NonPackedNode {
 	}
 
 	@Override
-	public <R> R accept(SPPFVisitor<R> visitAction) {
-		return visitAction.visit(this);
+	public <R> R accept(SPPFVisitor<R> visitor) {
+		return visitor.visit(this);
 	}
 
 	@Override

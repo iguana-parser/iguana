@@ -43,10 +43,11 @@ public interface SPPFNode extends Result {
 
 	int getLeftExtent();
 
-	<R> R accept(SPPFVisitor<R> visitAction);
+	<R> R accept(SPPFVisitor<R> visitor);
 
 	default Object getValue() {
 		return null;
 	}
+	
 	default boolean isDummy() { return false; }
 }
