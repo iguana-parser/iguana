@@ -26,6 +26,8 @@ public class IguanaRecognizer {
     protected RecognizerStatistics statistics;
     protected final Start start;
 
+    protected final RuntimeGrammar finalGrammar;
+
     public IguanaRecognizer(Grammar grammar) {
         this(grammar, Configuration.load());
     }
@@ -41,7 +43,8 @@ public class IguanaRecognizer {
     public IguanaRecognizer(RuntimeGrammar grammar, Configuration config) {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.config = config;
-        start = grammar.getStartSymbol();
+        this.start = grammar.getStartSymbol();
+        this.finalGrammar = grammar;
     }
 
     public boolean recognize(Input input) {
@@ -64,6 +67,10 @@ public class IguanaRecognizer {
 
     public ParseError getParseError() {
         return parseError;
+    }
+
+    public RuntimeGrammar getFinalGrammar() {
+        return finalGrammar;
     }
 
     protected void clear() {
