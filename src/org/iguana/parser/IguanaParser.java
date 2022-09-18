@@ -118,9 +118,9 @@ public class IguanaParser extends IguanaRecognizer {
             return node;
         }
 
-        DefaultSPPFToParseTreeVisitor<?> converter = new DefaultSPPFToParseTreeVisitor<>(getParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
+        DefaultSPPFToParseTreeVisitor<ParseTreeNode> visitor = new DefaultSPPFToParseTreeVisitor<>(getParseTreeBuilder(input), input, ignoreLayout, parserResultOps);
         long start = System.nanoTime();
-        this.parseTree = (ParseTreeNode) converter.convertNonterminalNode(sppf);
+        this.parseTree = sppf.accept(visitor);
         long end = System.nanoTime();
         System.out.println("Parse tree creation finished in " + (end - start) / 1000_000 + "ms.");
 

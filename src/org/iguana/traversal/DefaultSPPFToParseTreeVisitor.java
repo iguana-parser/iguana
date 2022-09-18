@@ -1,7 +1,5 @@
 package org.iguana.traversal;
 
-import org.iguana.utils.input.Input;
-import org.iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
@@ -12,6 +10,8 @@ import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.*;
 import org.iguana.traversal.exception.AmbiguityException;
 import org.iguana.util.visualization.SPPFToDot;
+import org.iguana.utils.input.Input;
+import org.iguana.utils.visualization.DotGraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,13 @@ import static java.util.Collections.emptyList;
 
 /**
  *
- * Unambiguous Nonterminal nodes have only one child:
- *
- * Unambiguous Intermediate nodes two child:
+ * Unambiguous Nonterminal nodes have only one child.
+ * Unambiguous Intermediate nodes two children:
  *  - The left child is an intermediate node and the right child a nonterminal or terminal node
  *  - Both left and right children are nonterminal or terminal nodes
  *
  */
-public class DefaultSPPFToParseTreeVisitor<T> {
+public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
 
     private final ParseTreeBuilder<T> parseTreeBuilder;
     private final Input input;
@@ -41,7 +40,8 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         this.resultOps = resultOps;
     }
 
-    public T convertNonterminalNode(NonterminalNode node) {
+    @Override
+    public T visit(NonterminalNode node) {
         if (node.isAmbiguous()) {
             List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
             for (int i = 0; i < packedNodes.size(); i++) {
@@ -97,21 +97,24 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         }
         List<T> children = new ArrayList<>(bodySize);
 
-        if (child instanceof IntermediateNode) {
-            convertIntermediateNode((IntermediateNode) child, children);
-        } else {
-            T result = convertSPPFNode(child);
-            if (result != null) {
-                children.add(result);
-            }
-        }
+        addChildren(child.accept(this), children);
 
         reverse(children);
         return parseTreeBuilder.nonterminalNode(slot.getRule(), children, leftExtent, rightExtent);
     }
 
+    private static <T> void addChildren(T result, List<T> children) {
+        if (result instanceof List<?>) {
+            children.addAll((List<T>) result);
+        } else {
+            if (result != null) {
+                children.add(result);
+            }
+        }
+    }
+
     private T convertStar(NonPackedNode node, Star symbol, int leftExtent, int rightExtent) {
-        T result = convertSPPFNode(node);
+        T result = node.accept(this);
         List<T> children;
         if (result == null) {
             children = emptyList();
@@ -135,7 +138,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                     node = (NonPackedNode) nextPlusNode.getChildAt(0);
                 }
             } else {
-                T result = convertSPPFNode(node);
+                T result = node.accept(this);
                 if (result != null) {
                     children.add(result);
                 }
@@ -149,34 +152,21 @@ public class DefaultSPPFToParseTreeVisitor<T> {
 
     private T convertSeq(NonPackedNode node, Group symbol, int leftExtent, int rightExtent) {
         List<T> children = new ArrayList<>();
-        if (node instanceof IntermediateNode) {
-            convertIntermediateNode((IntermediateNode) node, children);
-        } else {
-            children.add(convertSPPFNode(node));
-        }
-
+        addChildren(node.accept(this), children);
         reverse(children);
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
     private T convertStart(NonPackedNode node, Start symbol, int leftExtent, int rightExtent) {
         List<T> children = new ArrayList<>(ignoreLayout ? 3 : 1); // Layout is inserted before and after the start symbol
-        if (node instanceof IntermediateNode) {
-            convertIntermediateNode((IntermediateNode) node, children);
-        } else {
-            T result = convertSPPFNode(node);
-            if (result != null) {
-                children.add(result);
-            }
-        }
-
+        addChildren(node.accept(this), children);
         reverse(children);
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
     private T convertAltOpt(NonPackedNode node, Symbol symbol, int leftExtent, int rightExtent) {
         List<T> children;
-        T result = convertSPPFNode(node);
+        T result = node.accept(this);
         if (result == null) {
             children = emptyList();
         } else {
@@ -186,28 +176,25 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
-    private void convertIntermediateNode(IntermediateNode node, List<T> children) {
+    @Override
+    public Object visit(IntermediateNode node) {
         if (node.isAmbiguous()) {
             throw new AmbiguityException(node, input);
         }
 
+        List<T> children = new ArrayList<>();
+
         NonPackedNode leftChild = (NonPackedNode) node.getChildAt(0);
         NonPackedNode rightChild = (NonPackedNode) node.getChildAt(1);
 
-        T result = convertSPPFNode(rightChild);
+        T result = rightChild.accept(this);
         if (result != null) {
             children.add(result);
         }
 
-        if (leftChild instanceof IntermediateNode) {
-            convertIntermediateNode((IntermediateNode) leftChild, children);
-        }
-        else {
-            result = convertSPPFNode(leftChild);
-            if (result != null) {
-                children.add(result);
-            }
-        }
+        addChildren(leftChild.accept(this), children);
+
+        return children;
     }
 
     private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, List<T> children) {
@@ -227,7 +214,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         NonPackedNode leftChild = (NonPackedNode) node.getChildAt(0);
         NonPackedNode rightChild = (NonPackedNode) node.getChildAt(1);
 
-        T result = convertSPPFNode(rightChild);
+        T result = rightChild.accept(this);
         if (result != null) {
             children.add(result);
         }
@@ -242,7 +229,7 @@ public class DefaultSPPFToParseTreeVisitor<T> {
                     return (NonterminalNode) leftChild;
                 }
             }
-            result = convertSPPFNode(leftChild);
+            result = leftChild.accept(this);
             if (result != null) {
                 children.add(result);
             }
@@ -250,20 +237,12 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         return null;
     }
 
-    private T convertTerminalNode(TerminalNode node) {
+    @Override
+    public T visit(TerminalNode node) {
         if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
             return null;
         }
         return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
-    }
-
-    private T convertSPPFNode(SPPFNode node) {
-        if (node instanceof TerminalNode) {
-            return convertTerminalNode((TerminalNode) node);
-        } else if (node instanceof NonterminalNode) {
-            return convertNonterminalNode((NonterminalNode) node);
-        }
-        throw new RuntimeException("Can only be a terminal or nonterminal node, but got: " + node);
     }
 
     private void reverse(List<T> list) {
@@ -278,4 +257,8 @@ public class DefaultSPPFToParseTreeVisitor<T> {
         }
     }
 
+    @Override
+    public Object visit(PackedNode node) {
+        return null;
+    }
 }
