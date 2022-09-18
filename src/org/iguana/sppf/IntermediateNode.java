@@ -48,7 +48,7 @@ public class IntermediateNode extends NonPackedNode {
 
     @Override
     public <R> R accept(SPPFVisitor<R> visitor) {
-        return visitor.visit(this);
+        return (R) visitor.visit(this);
     }
 
     @Override

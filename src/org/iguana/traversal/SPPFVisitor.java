@@ -46,8 +46,8 @@ public interface SPPFVisitor<T> {
 
 	T visit(NonterminalNode node);
 
-	T visit(IntermediateNode node);
+	Object visit(IntermediateNode node);
 
-	T visit(PackedNode node);
+	Object visit(PackedNode node);
 
 }
