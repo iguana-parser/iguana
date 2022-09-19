@@ -58,9 +58,4 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
 
         return node;
     }
-
-    @Override
-    public List<ParseTreeNode> getChildren(ParseTreeNode node) {
-        return node.children();
-    }
 }

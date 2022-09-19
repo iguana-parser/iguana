@@ -12,5 +12,4 @@ public interface ParseTreeBuilder<T> {
     T nonterminalNode(RuntimeRule rule, List<T> children, int leftExtent, int rightExtent);
     T ambiguityNode(Set<T> node);
     T metaSymbolNode(Symbol symbol, List<T> children, int leftExtent, int rightExtent);
-    List<T> getChildren(T node);
 }
