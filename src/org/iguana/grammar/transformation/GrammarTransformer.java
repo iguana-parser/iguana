@@ -14,7 +14,7 @@ public class GrammarTransformer {
         grammar = desugarAlignAndOffside.transform(grammar);
         Start startSymbol = runtimeGrammar.getStartSymbol();
         if (startSymbol != null) {
-            grammar = new DesugarStartSymbol(startSymbol.getStartSymbol()).transform(grammar);
+            grammar = new DesugarStartSymbol(startSymbol).transform(grammar);
         }
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
