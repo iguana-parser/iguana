@@ -41,18 +41,17 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
     }
 
     @Override
+    public T visit(TerminalNode node) {
+        if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
+            return null;
+        }
+        return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
+    }
+
+    @Override
     public T visit(NonterminalNode node) {
         if (node.isAmbiguous()) {
-            List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
-            for (int i = 0; i < packedNodes.size(); i++) {
-                try {
-                    DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
-                    dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            throw new AmbiguityException(node, input);
+            handleAmbiguousNode(node);
         }
 
         if (ignoreLayout && node.getGrammarSlot().getNonterminal().getNodeType() == NonterminalNodeType.Layout) {
@@ -90,6 +89,32 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
         }
     }
 
+    @Override
+    public Object visit(IntermediateNode node) {
+        if (node.isAmbiguous()) {
+            throw new AmbiguityException(node, input);
+        }
+
+        List<T> children = new ArrayList<>();
+
+        NonPackedNode leftChild = (NonPackedNode) node.getChildAt(0);
+        NonPackedNode rightChild = (NonPackedNode) node.getChildAt(1);
+
+        T result = rightChild.accept(this);
+        if (result != null) {
+            children.add(result);
+        }
+
+        addChildren(leftChild.accept(this), children);
+
+        return children;
+    }
+
+    @Override
+    public Object visit(PackedNode node) {
+        throw new RuntimeException("Should not visit packed nodes.");
+    }
+
     private T convertBasicAndLayout(BodyGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {
         int bodySize = slot.getRule().getBody().size();
         if (ignoreLayout) { // Layout is insert between symbols in the body of a rule
@@ -114,17 +139,26 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
     }
 
     private T convertStar(NonPackedNode node, Star symbol, int leftExtent, int rightExtent) {
-        T result = node.accept(this);
+        if (node.isAmbiguous()) {
+            handleAmbiguousNode(node);
+        }
         List<T> children;
-        if (result == null) {
+        if (node instanceof EmptyTerminalNode) { // Empty star
             children = emptyList();
         } else {
-            children = parseTreeBuilder.getChildren(result);
+            Plus plus = (Plus) ((NonterminalNode) node).getRule().getDefinition();
+            children = flattenChildrenUnderPlus((NonPackedNode) node.getChildAt(0), plus);
+            return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
         }
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
     private T convertPlus(NonPackedNode leftChild, Plus symbol, int leftExtent, int rightExtent) {
+        List<T> children = flattenChildrenUnderPlus(leftChild, symbol);
+        return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
+    }
+
+    private List<T> flattenChildrenUnderPlus(NonPackedNode leftChild, Plus symbol) {
         NonPackedNode node = leftChild;
 
         List<T> children = new ArrayList<>();
@@ -147,7 +181,7 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
         }
 
         reverse(children);
-        return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
+        return children;
     }
 
     private T convertSeq(NonPackedNode node, Group symbol, int leftExtent, int rightExtent) {
@@ -176,39 +210,9 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
     }
 
-    @Override
-    public Object visit(IntermediateNode node) {
-        if (node.isAmbiguous()) {
-            throw new AmbiguityException(node, input);
-        }
-
-        List<T> children = new ArrayList<>();
-
-        NonPackedNode leftChild = (NonPackedNode) node.getChildAt(0);
-        NonPackedNode rightChild = (NonPackedNode) node.getChildAt(1);
-
-        T result = rightChild.accept(this);
-        if (result != null) {
-            children.add(result);
-        }
-
-        addChildren(leftChild.accept(this), children);
-
-        return children;
-    }
-
     private NonterminalNode convertUnderPlus(Plus plus, IntermediateNode node, List<T> children) {
         if (node.isAmbiguous()) {
-            List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
-            for (int i = 0; i < packedNodes.size(); i++) {
-                try {
-                    DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
-                    dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            throw new RuntimeException("Ambiguity found: " + node);
+            handleAmbiguousNode(node);
         }
 
         NonPackedNode leftChild = (NonPackedNode) node.getChildAt(0);
@@ -237,12 +241,17 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
         return null;
     }
 
-    @Override
-    public T visit(TerminalNode node) {
-        if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
-            return null;
+    private void handleAmbiguousNode(NonPackedNode node) {
+        List<PackedNode> packedNodes = resultOps.getPackedNodes(node);
+        for (int i = 0; i < packedNodes.size(); i++) {
+            try {
+                DotGraph dotGraph = SPPFToDot.getDotGraph(packedNodes.get(i), input);
+                dotGraph.generate("/Users/afroozeh/tree" + i + ".pdf");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(), node.getRightExtent());
+        throw new AmbiguityException(node, input);
     }
 
     private void reverse(List<T> list) {
@@ -255,10 +264,5 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
             list.set(size - i - 1, list.get(i));
             list.set(i, tmp);
         }
-    }
-
-    @Override
-    public Object visit(PackedNode node) {
-        return null;
     }
 }

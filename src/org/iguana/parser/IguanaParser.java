@@ -104,12 +104,12 @@ public class IguanaParser extends IguanaRecognizer {
         return getParseTree(false, true);
     }
 
-    public ParseTreeNode getParseTree(boolean allowAmbigities, boolean ignoreLayout) {
+    public ParseTreeNode getParseTree(boolean allowAmbiguities, boolean ignoreLayout) {
         if (parseTree != null) return parseTree;
 
         if (sppf == null) return null;
 
-        if (allowAmbigities) {
+        if (allowAmbiguities) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor = new AmbiguousSPPFToParseTreeVisitor<>(getParseTreeBuilder(input), ignoreLayout, parserResultOps);
             long start = System.nanoTime();
             ParseTreeNode node = (ParseTreeNode) sppf.accept(visitor).getValues().get(0);

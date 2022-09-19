@@ -172,7 +172,7 @@ public class GrammarTest {
                 }
             } catch (AmbiguityException e) {
                 try {
-                    if (parser.getStatistics().getAmbiguousNodesCount() < 10) {
+                    if (parser.getStatistics().getAmbiguousNodesCount() < 20) {
                         actualParseTree = parser.getParseTree(true, true);
                         String pdfPath = testPath + "/tree" + j + ".pdf";
                         if (!Files.exists(Paths.get(pdfPath))) {
