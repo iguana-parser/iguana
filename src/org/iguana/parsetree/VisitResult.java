@@ -505,7 +505,6 @@ public abstract class VisitResult {
         public java.util.List<T> visit(EBNF result, PackedNode packedNode) {
             T ebnfNode = parseTreeBuilder.metaSymbolNode(result.getSymbol(), (java.util.List<T>) result.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent());
             return CollectionsUtil.list(ebnfNode);
-
         }
 
         @Override

@@ -38,24 +38,32 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     }
 
     @Override
-    public MetaSymbolNode metaSymbolNode(Symbol symbol, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
-        MetaSymbolNode node;
-        if (symbol instanceof Star) {
-            node = new StarNode(symbol, children, leftExtent, rightExtent);
-        } else if (symbol instanceof Plus) {
-            node = new PlusNode(symbol, children, leftExtent, rightExtent);
-        } else if (symbol instanceof Group) {
-            node = new GroupNode(symbol, children, leftExtent, rightExtent);
-        } else if (symbol instanceof Alt) {
-            node = new AltNode(symbol, children.get(0), leftExtent, rightExtent);
-        } else if (symbol instanceof Opt) {
-            node = new OptionNode(symbol, children.isEmpty() ? null : children.get(0), leftExtent, rightExtent);
-        } else if (symbol instanceof Start) {
-            node = new StartNode(symbol, children, leftExtent, rightExtent);
-        } else {
-            throw new RuntimeException("Unknown meta symbol type: " + symbol);
-        }
+    public ParseTreeNode starNode(Star symbol, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
+        return new StarNode(symbol, children, leftExtent, rightExtent);
+    }
 
-        return node;
+    @Override
+    public ParseTreeNode plusNode(Plus symbol, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
+        return new PlusNode(symbol, children, leftExtent, rightExtent);
+    }
+
+    @Override
+    public ParseTreeNode optNode(Opt symbol, ParseTreeNode child, int leftExtent, int rightExtent) {
+        return new OptionNode(symbol,child, leftExtent, rightExtent);
+    }
+
+    @Override
+    public ParseTreeNode altNode(Alt symbol, ParseTreeNode child, int leftExtent, int rightExtent) {
+        return new AltNode(symbol, child, leftExtent, rightExtent);
+    }
+
+    @Override
+    public ParseTreeNode groupNode(Group symbol, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
+        return new GroupNode(symbol, children, leftExtent, rightExtent);
+    }
+
+    @Override
+    public ParseTreeNode startNode(Start symbol, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
+        return new StartNode(symbol, children, leftExtent, rightExtent);
     }
 }

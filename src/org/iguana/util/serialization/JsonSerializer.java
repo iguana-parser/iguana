@@ -381,7 +381,7 @@ public class JsonSerializer {
 
     abstract static class StarNodeMixIn {
         StarNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Star symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -389,7 +389,7 @@ public class JsonSerializer {
 
     abstract static class PlusNodeMixIn {
         PlusNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Plus symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -397,7 +397,7 @@ public class JsonSerializer {
 
     abstract static class GroupNodeMixIn {
         GroupNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Group symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -405,7 +405,7 @@ public class JsonSerializer {
 
     abstract static class OptionNodeMixIn {
         OptionNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Opt symbol,
             @JsonProperty("child") ParseTreeNode child,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -413,7 +413,7 @@ public class JsonSerializer {
 
     abstract static class AltNodeMixIn {
         AltNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Alt symbol,
             @JsonProperty("child") ParseTreeNode child,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -421,7 +421,7 @@ public class JsonSerializer {
 
     abstract static class StartNodeMixIn {
         StartNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Start symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
