@@ -31,7 +31,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 
 public class NonterminalNotDefinedException extends RuntimeException {
 
-	private Nonterminal nonterminal;
+	private final Nonterminal nonterminal;
 
 	public NonterminalNotDefinedException(Nonterminal nonterminal) {
 		super(nonterminal + " not defined.");

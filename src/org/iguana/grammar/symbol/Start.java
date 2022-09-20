@@ -49,7 +49,7 @@ public class Start extends AbstractSymbol {
 
 	@Override
 	public Builder copy() {
-		return new Builder(name);
+		return new Builder(startSymbol);
 	}
 
     @Override
