@@ -57,23 +57,23 @@ import static org.iguana.grammar.GrammarGraph.epsilonSlot;
 
 public class GrammarGraphBuilder {
 
-    private Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
+    private final Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 
-    private Map<Terminal, TerminalGrammarSlot> terminalsMap;
+    private final Map<Terminal, TerminalGrammarSlot> terminalsMap;
 
-    private List<BodyGrammarSlot> bodyGrammarSlots;
+    private final List<BodyGrammarSlot> bodyGrammarSlots;
 
     private FirstFollowSets firstFollow;
 
-    private RuntimeGrammar grammar;
+    private final RuntimeGrammar grammar;
 
-    private Configuration config;
+    private final Configuration config;
 
     private final Map<Integer, Map<String, Integer>> mapping;
 
     private Map<String, Integer> current;
 
-    private static MatcherFactory matcherFactory = new DFAMatcherFactory();
+    private static final MatcherFactory matcherFactory = new DFAMatcherFactory();
 
     public static GrammarGraph from(RuntimeGrammar grammar) {
         return from(grammar, Configuration.load());
@@ -86,7 +86,7 @@ public class GrammarGraphBuilder {
         grammarSlots.addAll(builder.nonterminalsMap.values());
         grammarSlots.addAll(builder.terminalsMap.values());
         grammarSlots.addAll(builder.bodyGrammarSlots);
-        return new GrammarGraph(grammarSlots, builder.getHead(Nonterminal.withName(grammar.getStartSymbol().getName())), grammar.getGlobals());
+        return new GrammarGraph(grammarSlots, builder.nonterminalsMap, grammar.getGlobals());
     }
 
     private void convert() {

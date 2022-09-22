@@ -9,6 +9,9 @@
         {
           "alternatives" : [
             {
+              "seqs" : [
+                { }
+              ],
               "associativity" : "UNDEFINED"
             }
           ]

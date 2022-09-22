@@ -211,13 +211,8 @@ public class RuntimeRule {
 
     @Override
 	public String toString() {
-
-		if(body == null) {
-			return "";
-		}
-		
 		StringBuilder sb = new StringBuilder();
-		sb.append(head).append(" ::= ");
+		sb.append(head).append(" = ");
 		for(Symbol s : body) {
 			sb.append(s).append(" ");
 		}
@@ -270,7 +265,7 @@ public class RuntimeRule {
 		return new Position(this, i, j);
 	}
 	
-	public Builder copyBuilder() {
+	public Builder copy() {
 		return new Builder(this);
 	}
 	
@@ -304,7 +299,7 @@ public class RuntimeRule {
     public static class Builder {
 
         private Nonterminal head;
-        private List<Symbol> body;
+        private List<Symbol> body = new ArrayList<>();
         private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
         private Symbol layout;
 
@@ -326,11 +321,9 @@ public class RuntimeRule {
 
         private Map<String, Object> attributes = new HashMap<>();
         private Symbol definition;
-        public boolean terminalRule;
 
         public Builder(Nonterminal head) {
             this.head = head;
-            this.body = new ArrayList<>();
         }
 
         public Builder() {}

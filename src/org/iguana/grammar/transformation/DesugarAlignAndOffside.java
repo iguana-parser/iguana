@@ -147,7 +147,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			
 			if (doAlign) {
 				List<Symbol> symbols = new ArrayList<>();
-				RuntimeRule.Builder builder = rule.copyBuilder();
+				RuntimeRule.Builder builder = rule.copy();
 				
 				if (this.rule.getBody() != null) {
 					
@@ -181,7 +181,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 			if (isOffsided)
 				builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters(index, ind, first).build());
 			else
-				builder = rule.copyBuilder();
+				builder = rule.copy();
 			
 			List<Symbol> symbols = new ArrayList<>();
 			

@@ -81,7 +81,7 @@ public class GrammarTest {
             assertEquals(jsonGrammar, grammar);
         }
 
-        RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar(), grammar.getStartSymbol().getStartSymbol());
+        RuntimeGrammar runtimeGrammar = GrammarTransformer.transform(grammar.toRuntimeGrammar());
 
         String finalGrammarPath = test + "/final_grammar.json";
         if (REGENERATE_FILES || !Files.exists(Paths.get(finalGrammarPath))) {
@@ -172,7 +172,7 @@ public class GrammarTest {
                 }
             } catch (AmbiguityException e) {
                 try {
-                    if (parser.getStatistics().getAmbiguousNodesCount() < 10) {
+                    if (parser.getStatistics().getAmbiguousNodesCount() < 20) {
                         actualParseTree = parser.getParseTree(true, true);
                         String pdfPath = testPath + "/tree" + j + ".pdf";
                         if (!Files.exists(Paths.get(pdfPath))) {

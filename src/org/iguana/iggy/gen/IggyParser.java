@@ -13,8 +13,6 @@ public class IggyParser extends IguanaParser {
         super(grammar);
     }
 
-    private static final String grammarName = "iggy";
-
     private static IggyParser parser;
 
     public static IggyParser getInstance() {

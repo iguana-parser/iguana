@@ -1,6 +1,6 @@
 package org.iguana.parsetree;
 
-import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -112,7 +112,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     public static class StarNode extends MultiChildMetaSymbolNode {
-        public StarNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
+        public StarNode(Star symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
         }
 
@@ -123,7 +123,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     public static class PlusNode extends MultiChildMetaSymbolNode {
-        public PlusNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
+        public PlusNode(Plus symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
         }
 
@@ -134,7 +134,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     public static class GroupNode extends MultiChildMetaSymbolNode {
-        public GroupNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
+        public GroupNode(Group symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
         }
 
@@ -145,7 +145,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     public static class OptionNode extends SingleChildMetaSymbolNode {
-        public OptionNode(Symbol symbol, ParseTreeNode child, int start, int end) {
+        public OptionNode(Opt symbol, ParseTreeNode child, int start, int end) {
             super(symbol, child, start, end);
         }
 
@@ -156,7 +156,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     public static class AltNode extends SingleChildMetaSymbolNode {
-        public AltNode(Symbol symbol, ParseTreeNode child, int start, int end) {
+        public AltNode(Alt symbol, ParseTreeNode child, int start, int end) {
             super(symbol, child, start, end);
         }
 
@@ -167,7 +167,7 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
     }
 
     public static class StartNode extends MultiChildMetaSymbolNode {
-        public StartNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
+        public StartNode(Start symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, children, start, end);
         }
 

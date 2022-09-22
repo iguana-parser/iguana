@@ -783,25 +783,6 @@
                 }
               ],
               "associativity" : "UNDEFINED"
-            },
-            {
-              "seqs" : [
-                {
-                  "symbols" : [
-                    {
-                      "kind" : "Opt",
-                      "name" : "Label?",
-                      "label" : "label",
-                      "s" : {
-                        "kind" : "Identifier",
-                        "name" : "Label"
-                      }
-                    }
-                  ],
-                  "label" : "Empty"
-                }
-              ],
-              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -916,6 +897,25 @@
                   ],
                   "associativity" : "UNDEFINED",
                   "label" : "SingleElem"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Opt",
+                      "name" : "Label?",
+                      "label" : "label",
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Label"
+                      }
+                    }
+                  ],
+                  "label" : "Empty"
                 }
               ],
               "associativity" : "UNDEFINED"

@@ -33,6 +33,7 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -77,6 +78,8 @@ public interface Symbol extends Attr {
 	}
 		
 	String toString(int j);
+
+	Map<String, Object> getAttributes();
 	
 	<T> T accept(ISymbolVisitor<T> visitor);
 }	

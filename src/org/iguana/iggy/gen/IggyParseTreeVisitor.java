@@ -31,11 +31,11 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitAssociativityAlternative(IggyParseTree.AssociativityAlternative node);
 
-    T visitEmptyAlternative(IggyParseTree.EmptyAlternative node);
-
     T visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node);
 
     T visitSingleElemSequence(IggyParseTree.SingleElemSequence node);
+
+    T visitEmptySequence(IggyParseTree.EmptySequence node);
 
     T visitCondition(IggyParseTree.Condition node);
 

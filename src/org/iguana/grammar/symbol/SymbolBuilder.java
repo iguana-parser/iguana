@@ -29,9 +29,7 @@ package org.iguana.grammar.symbol;
 
 import org.iguana.grammar.condition.Condition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public abstract class SymbolBuilder<T extends Symbol> {
 	
@@ -42,13 +40,17 @@ public abstract class SymbolBuilder<T extends Symbol> {
 	protected Object object;
 
 	protected List<Condition> preConditions = new ArrayList<>();
+
 	protected List<Condition> postConditions = new ArrayList<>();
+
+	protected Map<String, Object> attributes = new HashMap<>();
 
 	public SymbolBuilder(T symbol) {
 		this.name = symbol.getName();
 		this.label = symbol.getLabel();
 		this.preConditions = new ArrayList<>(symbol.getPreConditions());
 		this.postConditions = new ArrayList<>(symbol.getPostConditions());
+		this.attributes = new HashMap<>(symbol.getAttributes());
 	}
 	
 	public SymbolBuilder() { }
@@ -112,6 +114,11 @@ public abstract class SymbolBuilder<T extends Symbol> {
 
 	public SymbolBuilder<T> setPostConditions(List<Condition> conditions) {
 		postConditions = new ArrayList<>(conditions);
+		return this;
+	}
+
+	public SymbolBuilder<T> addAttribute(String key, Object value) {
+		this.attributes.put(key, value);
 		return this;
 	}
 

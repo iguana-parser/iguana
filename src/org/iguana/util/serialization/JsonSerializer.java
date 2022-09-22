@@ -263,6 +263,8 @@ public class JsonSerializer {
     abstract static class RuntimeRuleMixIn {
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LayoutStrategyFilter.class)
         LayoutStrategy layoutStrategy;
+        @JsonIgnore
+        Map<String, Object> attributes;
     }
 
     @JsonDeserialize(builder = Grammar.Builder.class)
@@ -272,7 +274,10 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Rule.Builder.class)
-    abstract static class RuleMixIn { }
+    abstract static class RuleMixIn {
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
 
     abstract static class AnnotationMixIn {
         @JsonCreator
@@ -289,7 +294,10 @@ public class JsonSerializer {
     abstract static class AlternativeMixIn { }
 
     @JsonDeserialize(builder = Sequence.Builder.class)
-    abstract static class SequenceMixIn { }
+    abstract static class SequenceMixIn {
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
@@ -373,7 +381,7 @@ public class JsonSerializer {
 
     abstract static class StarNodeMixIn {
         StarNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Star symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -381,7 +389,7 @@ public class JsonSerializer {
 
     abstract static class PlusNodeMixIn {
         PlusNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Plus symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -389,7 +397,7 @@ public class JsonSerializer {
 
     abstract static class GroupNodeMixIn {
         GroupNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Group symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -397,7 +405,7 @@ public class JsonSerializer {
 
     abstract static class OptionNodeMixIn {
         OptionNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Opt symbol,
             @JsonProperty("child") ParseTreeNode child,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -405,7 +413,7 @@ public class JsonSerializer {
 
     abstract static class AltNodeMixIn {
         AltNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Alt symbol,
             @JsonProperty("child") ParseTreeNode child,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }
@@ -413,7 +421,7 @@ public class JsonSerializer {
 
     abstract static class StartNodeMixIn {
         StartNodeMixIn(
-            @JsonProperty("symbol") Symbol symbol,
+            @JsonProperty("symbol") Start symbol,
             @JsonProperty("children") List<ParseTreeNode> children,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end) { }

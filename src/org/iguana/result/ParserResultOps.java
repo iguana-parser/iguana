@@ -37,7 +37,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         }
 
         @Override
-        public <R> R accept(SPPFVisitor<R> visitAction) { throw new UnsupportedOperationException(); }
+        public <R> R accept(SPPFVisitor<R> visitor) { throw new UnsupportedOperationException(); }
 
         @Override
         public void setAmbiguous(boolean ambiguous) {

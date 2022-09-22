@@ -27,11 +27,11 @@ PriorityLevels
 Alternative
   = seq:Sequence                                        %Sequence
   | assoc:Associativity "(" seqs: {Sequence "|"}+ ")"   %Associativity
-  | label:Label?                                        %Empty
 
 Sequence
   = assoc:Associativity? cond:Condition? first:Symbol rest:Symbol+ ret:ReturnExpression? label:Label?   %MoreThanOneElem
   | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
+  | label:Label?                                                                                        %Empty
 
 Condition
   = "{" {Expression ","}* "}" "?"

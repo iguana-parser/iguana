@@ -57,6 +57,7 @@ public class LayoutWeaver implements GrammarTransformation {
 												.setPrecedence(rule.getPrecedence())
 												.setPrecedenceLevel(rule.getPrecedenceLevel())
 												.setLabel(rule.getLabel())
+												.setAttributes(rule.getAttributes())
 												.setDefinition(rule.getDefinition());
 
 			if (rule.size() == 0) {

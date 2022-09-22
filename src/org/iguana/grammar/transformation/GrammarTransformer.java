@@ -1,21 +1,21 @@
 package org.iguana.grammar.transformation;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.symbol.Start;
 
 public class GrammarTransformer {
 
     public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar) {
-        return transform(runtimeGrammar, runtimeGrammar.getStartSymbol().getStartSymbol());
-    }
-
-    public static RuntimeGrammar transform(RuntimeGrammar runtimeGrammar, String startNonterminal) {
         DesugarAlignAndOffside desugarAlignAndOffside = new DesugarAlignAndOffside();
         desugarAlignAndOffside.doAlign();
         RuntimeGrammar grammar = desugarAlignAndOffside.transform(runtimeGrammar);
         grammar = new EBNFToBNF().transform(grammar);
         desugarAlignAndOffside.doOffside();
         grammar = desugarAlignAndOffside.transform(grammar);
-        grammar = new DesugarStartSymbol(startNonterminal).transform(grammar);
+        Start startSymbol = runtimeGrammar.getStartSymbol();
+        if (startSymbol != null) {
+            grammar = new DesugarStartSymbol(startSymbol).transform(grammar);
+        }
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
         grammar = precedenceAndAssociativity.transform(grammar);
