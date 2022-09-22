@@ -37,26 +37,8 @@ public class NonterminalNotDefinedException extends RuntimeException {
 		super(nonterminal + " not defined.");
 		this.nonterminal = nonterminal;
 	}
-	
-	@Override
-	public int hashCode() {
-		return nonterminal.hashCode();
+
+	public Nonterminal getNonterminal() {
+		return nonterminal;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof NonterminalNotDefinedException)) {
-			return false;
-		}
-		
-		NonterminalNotDefinedException other = (NonterminalNotDefinedException) obj;
-		
-		return nonterminal.equals(other.nonterminal);
-	}
-	
 }
