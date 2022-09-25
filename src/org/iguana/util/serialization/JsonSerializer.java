@@ -164,6 +164,7 @@ public class JsonSerializer {
         mapper.addMixIn(Char.class, CharMixIn.class);
         mapper.addMixIn(CharRange.class, CharRangeMixIn.class);
         mapper.addMixIn(Reference.class, ReferenceMixIn.class);
+        mapper.addMixIn(Epsilon.class, EpsilonMixIn.class);
 
         // Parse tree
         mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
@@ -183,7 +184,7 @@ public class JsonSerializer {
         mapper.addMixIn(PrecedenceLevel.class, PrecedenceLevelMixIn.class);
         mapper.addMixIn(AssociativityGroup.class, AssociativityGroupMixIn.class);
 
-        // Some @JsonIgnore doesn't work on a map property with non-string keys and Jackson
+        // Since @JsonIgnore doesn't work on a map property with non-string keys and Jackson
         // tries to deserialize the definitions field. This is a solution to let Jackson know
         // about the Nonterminal key type.
         class NonterminalKeyDeserializer extends KeyDeserializer {
@@ -207,10 +208,6 @@ public class JsonSerializer {
     }
 
     public static void serialize(Object obj, String path) throws IOException {
-        serialize(obj, path, false);
-    }
-
-    public static void serialize(Object obj, String path, boolean gzip) throws IOException {
         OutputStream out = new FileOutputStream(path);
         try (Writer writer = new OutputStreamWriter(out)) {
             DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
@@ -320,16 +317,22 @@ public class JsonSerializer {
     })
     abstract static class SymbolMixIn { }
 
+    abstract static class AbstractSymbolMixIn extends SymbolMixIn {
+        @JsonIgnore
+        Map<String, Object> attributes;
+    }
+
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value= Seq.class, name="regex.Seq"),
-        @JsonSubTypes.Type(value= org.iguana.regex.Alt.class, name="regex.Alt"),
-        @JsonSubTypes.Type(value= org.iguana.regex.Star.class, name="regex.Star"),
-        @JsonSubTypes.Type(value= org.iguana.regex.Plus.class, name="regex.Plus"),
-        @JsonSubTypes.Type(value= org.iguana.regex.Opt.class, name="regex.Opt"),
-        @JsonSubTypes.Type(value= Char.class, name="Char"),
-        @JsonSubTypes.Type(value= CharRange.class, name="CharRange"),
-        @JsonSubTypes.Type(value= Reference.class, name="Reference")
+        @JsonSubTypes.Type(value = org.iguana.regex.Seq.class, name="regex.Seq"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Alt.class, name="regex.Alt"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Star.class, name="regex.Star"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Plus.class, name="regex.Plus"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Opt.class, name="regex.Opt"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Char.class, name="Char"),
+        @JsonSubTypes.Type(value = org.iguana.regex.CharRange.class, name="CharRange"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Reference.class, name="Reference"),
+        @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name="Epsilon")
     })
     abstract static class RegularExpressionMixIn { }
 
@@ -432,7 +435,7 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)
-    abstract static class NonterminalMixIn {
+    abstract static class NonterminalMixIn extends AbstractSymbolMixIn {
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         int index;
@@ -455,49 +458,49 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Star.Builder.class)
-    abstract static class StarMixIn { }
+    abstract static class StarMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Start.Builder.class)
-    abstract static class StartMixIn { }
+    abstract static class StartMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Code.Builder.class)
-    abstract static class CodeMixIn { }
+    abstract static class CodeMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = CodeHolder.Builder.class)
-    abstract static class CodeHolderMixIn { }
+    abstract static class CodeHolderMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Plus.Builder.class)
-    abstract static class PlusMixIn { }
+    abstract static class PlusMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Opt.Builder.class)
-    abstract static class OptMixIn { }
+    abstract static class OptMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Alt.Builder.class)
-    abstract static class AltMixIn { }
+    abstract static class AltMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Group.Builder.class)
-    abstract static class GroupMixIn { }
+    abstract static class GroupMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Identifier.Builder.class)
-    abstract static class IdentifierMixIn { }
+    abstract static class IdentifierMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Terminal.Builder.class)
-    abstract static class TerminalMixIn { }
+    abstract static class TerminalMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Return.Builder.class)
-    abstract static class ReturnMixIn { }
+    abstract static class ReturnMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = IfThenElse.Builder.class)
-    abstract static class IfThenElseMixIn { }
+    abstract static class IfThenElseMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Offside.Builder.class)
-    abstract static class OffsideMixIn { }
+    abstract static class OffsideMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Align.Builder.class)
-    abstract static class AlignMixIn { }
+    abstract static class AlignMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = Ignore.Builder.class)
-    abstract static class IgnoreMixIn { }
+    abstract static class IgnoreMixIn extends AbstractSymbolMixIn { }
 
     @JsonDeserialize(builder = org.iguana.regex.Seq.Builder.class)
     abstract static class SeqMixIn extends AbstractRegularExpressionMixIn { }
@@ -522,6 +525,11 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = org.iguana.regex.Reference.Builder.class)
     abstract static class ReferenceMixIn extends AbstractRegularExpressionMixIn { }
+
+    abstract static class EpsilonMixIn extends AbstractRegularExpressionMixIn {
+        @JsonCreator
+        public abstract Epsilon getInstance();
+    }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
