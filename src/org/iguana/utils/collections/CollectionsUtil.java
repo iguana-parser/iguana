@@ -247,12 +247,6 @@ public class CollectionsUtil {
 			Map.Entry<K, V> elem = map.entrySet().iterator().next();
 			return Collections.singletonMap(elem.getKey(), elem.getValue());
 		}
-		if (map.size() == 2) {
-			Iterator<Map.Entry<K, V>> it = map.entrySet().iterator();
-			Map.Entry<K, V> elem1 = it.next();
-			Map.Entry<K, V> elem2 = it.next();
-			return Map.of(elem1.getKey(), elem1.getValue(), elem2.getKey(), elem2.getValue());
-		}
 		return map;
 	}
 }

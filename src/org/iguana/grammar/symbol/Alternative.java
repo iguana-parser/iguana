@@ -110,7 +110,7 @@ public class Alternative {
             // inherit the associativity of the group.
             if (associativity != Associativity.UNDEFINED) {
                 if (seqs.size() < 2)
-                    throw new RuntimeException("Associativity groups should have at least two sequences");
+                    throw new RuntimeException("Associativity groups should have at least two sequences: " + seqs);
 
                 List<Sequence> seqsWithAssociativity = new ArrayList<>(seqs.size());
                 for (Sequence seq : seqs) {
