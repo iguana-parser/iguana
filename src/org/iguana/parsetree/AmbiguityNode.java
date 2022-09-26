@@ -38,6 +38,11 @@ public class AmbiguityNode implements ParseTreeNode {
     }
 
     @Override
+    public boolean hasChildren() {
+        return !alternatives.isEmpty();
+    }
+
+    @Override
     public <T> List<T> accept(ParseTreeVisitor<T> visitor) {
         return visitor.visitAmbiguityNode(this);
     }

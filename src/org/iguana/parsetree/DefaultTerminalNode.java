@@ -16,4 +16,9 @@ public class DefaultTerminalNode extends TerminalNode {
     public String getText() {
         return input.subString(getStart(), getEnd());
     }
+
+    @Override
+    public boolean hasChildren() {
+        return false;
+    }
 }

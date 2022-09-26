@@ -15,4 +15,9 @@ public class KeywordTerminalNode extends TerminalNode {
         String name = getTerminal().getName();
         return name.substring(1, name.length() - 1);
     }
+
+    @Override
+    public boolean hasChildren() {
+        return false;
+    }
 }

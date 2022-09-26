@@ -615,7 +615,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -656,7 +657,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -697,7 +699,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -725,6 +728,7 @@
                       "label" : "seq"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Sequence"
                 }
               ],
@@ -915,6 +919,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Empty"
                 }
               ],
@@ -1847,6 +1852,7 @@
                       "label" : "id"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Identifier"
                 }
               ],
@@ -1862,6 +1868,7 @@
                       "label" : "string"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "String"
                 }
               ],
@@ -1877,6 +1884,7 @@
                       "label" : "charClass"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "CharClass"
                 }
               ],
@@ -2496,6 +2504,7 @@
                       "label" : "name"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Nont"
                 }
               ],
@@ -2511,6 +2520,7 @@
                       "label" : "charClass"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "CharClass"
                 }
               ],
@@ -2526,6 +2536,7 @@
                       "label" : "string"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "String"
                 }
               ],
@@ -2682,6 +2693,7 @@
                       "label" : "range"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Character"
                 }
               ],
@@ -3315,6 +3327,7 @@
                       "label" : "varName"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Name"
                 }
               ],
@@ -3330,6 +3343,7 @@
                       "label" : "number"
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Number"
                 }
               ],
@@ -3459,7 +3473,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -3511,7 +3526,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -3572,6 +3588,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Println"
                 }
               ],
@@ -3616,6 +3633,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Indent"
                 }
               ],
@@ -3660,6 +3678,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Assert"
                 }
               ],
@@ -3692,6 +3711,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Set"
                 }
               ],
@@ -3744,6 +3764,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Contains"
                 }
               ],
@@ -3776,6 +3797,7 @@
                       }
                     }
                   ],
+                  "associativity" : "UNDEFINED",
                   "label" : "Put"
                 }
               ],
@@ -3837,7 +3859,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -3963,7 +3986,8 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

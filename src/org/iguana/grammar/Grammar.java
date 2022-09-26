@@ -26,6 +26,9 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.iguana.utils.collections.CollectionsUtil.buildList;
+import static org.iguana.utils.collections.CollectionsUtil.buildMap;
+
 public class Grammar {
 
     private final List<Rule> rules;
@@ -112,14 +115,14 @@ public class Grammar {
             grammarBuilder.setLayout(newLayout);
             grammarBuilder.setGlobals(globals);
 
-            Iterator<Map.Entry<String, RegularExpression>> iterator = regularExpressions.entrySet().iterator();
-            while (iterator.hasNext()) {
-                String key = iterator.next().getKey();
-                if (!topLevelRegularExpressions.contains(key)) {
-                    iterator.remove();
+            Map<String, RegularExpression> newRegularExpressions = new HashMap<>();
+            for (Map.Entry<String, RegularExpression> entry : regularExpressions.entrySet()) {
+                if (topLevelRegularExpressions.contains(entry.getKey())) {
+                    newRegularExpressions.put(entry.getKey(), entry.getValue());
                 }
             }
-            grammarBuilder.setRegularExpressionDefinitions(regularExpressions);
+
+            grammarBuilder.setRegularExpressionDefinitions(newRegularExpressions);
             grammarBuilder.setLiterals(literals);
 
             Map<String, Set<String>> ebnfLefts = new HashMap<>();
@@ -232,13 +235,13 @@ public class Grammar {
     }
 
     public static class Builder {
-        private final List<Rule> rules = new ArrayList<>();
-        private final Map<String, RegularExpression> regularExpressionDefinitions = new LinkedHashMap<>();
-        public final Map<String, RegularExpression> literals = new LinkedHashMap<>();
-        public String name;
+        private List<Rule> rules = new ArrayList<>();
+        private Map<String, RegularExpression> regularExpressionDefinitions = new LinkedHashMap<>();
+        private Map<String, RegularExpression> literals = new LinkedHashMap<>();
+        private String name;
         private Start startSymbol;
         private Symbol layout;
-        private final Map<String, Expression> globals = new HashMap<>();
+        private Map<String, Expression> globals = new HashMap<>();
 
         public Builder addRule(Rule rule) {
             this.rules.add(rule);
@@ -277,6 +280,10 @@ public class Grammar {
         }
 
         public Grammar build() {
+            rules = buildList(rules);
+            regularExpressionDefinitions = buildMap(regularExpressionDefinitions);
+            literals = buildMap(literals);
+            globals = buildMap(globals);
             return new Grammar(this);
         }
     }

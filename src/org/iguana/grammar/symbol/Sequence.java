@@ -93,7 +93,7 @@ public class Sequence {
     public static class Builder {
         private final Map<String, Object> attributes = new HashMap<>();
         private final List<Symbol> symbols = new ArrayList<>();
-        private Associativity associativity;
+        private Associativity associativity = Associativity.UNDEFINED;
         private String label;
 
         public Builder addSymbol(Symbol symbol) {

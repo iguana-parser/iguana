@@ -27,7 +27,6 @@
 
 package org.iguana.utils.collections;
 
-import org.iguana.regex.RegularExpression;
 import org.iguana.utils.collections.primitive.IntIterable;
 import org.iguana.utils.collections.primitive.IntIterator;
 import org.iguana.utils.collections.tuple.Tuple;
@@ -41,16 +40,12 @@ import java.util.stream.StreamSupport;
 
 public class CollectionsUtil {
 
-	private static Object[] objects = new Object[0];
-
 	@SafeVarargs
 	public static <T> Set<T> set(T...objects) {
 		if (objects.length == 0) return Collections.emptySet();
 		
 		Set<T>  set = new HashSet<>();
-		for (T t : objects) {
-			set.add(t);
-		}
+		Collections.addAll(set, objects);
 		return set;
 	}
 	
@@ -62,7 +57,6 @@ public class CollectionsUtil {
 	@SafeVarargs
 	public static <T> List<T> list(T...objects){
 		if (objects.length == 0) return Collections.emptyList();
-		
 		return Arrays.asList(objects);
 	}
 	
@@ -224,7 +218,41 @@ public class CollectionsUtil {
 		List<T> list = new ArrayList<>(list1.size() + list2.size());
 		list.addAll(list1);
 		list.addAll(list2);
+		return buildList(list);
+	}
+
+	public static <T> List<T> buildList(List<T> list) {
+		if (list == null) throw new NullPointerException("List cannot be null.");
+		if (list.isEmpty()) return Collections.emptyList();
+		if (list.size() == 1) return Collections.singletonList(list.get(0));
+		if (list.size() == 2) return List.of(list.get(0), list.get(1));
 		return list;
 	}
 
+	public static <T> Set<T> buildSet(Set<T> set) {
+		if (set == null) throw new NullPointerException("Set cannot be null.");
+		if (set.isEmpty()) return Collections.emptySet();
+		if (set.size() == 1) return Collections.singleton(set.iterator().next());
+		if (set.size() == 2) {
+			Iterator<T> it = set.iterator();
+			return Set.of(it.next(), it.next());
+		}
+		return set;
+	}
+
+	public static <K, V> Map<K, V> buildMap(Map<K, V> map) {
+		if (map == null) throw new NullPointerException("Map cannot be null.");
+		if (map.isEmpty()) return Collections.emptyMap();
+		if (map.size() == 1) {
+			Map.Entry<K, V> elem = map.entrySet().iterator().next();
+			return Collections.singletonMap(elem.getKey(), elem.getValue());
+		}
+		if (map.size() == 2) {
+			Iterator<Map.Entry<K, V>> it = map.entrySet().iterator();
+			Map.Entry<K, V> elem1 = it.next();
+			Map.Entry<K, V> elem2 = it.next();
+			return Map.of(elem1.getKey(), elem1.getValue(), elem2.getKey(), elem2.getValue());
+		}
+		return map;
+	}
 }

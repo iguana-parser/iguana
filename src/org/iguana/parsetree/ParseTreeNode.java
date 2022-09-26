@@ -13,9 +13,7 @@ public interface ParseTreeNode {
 
     List<ParseTreeNode> children();
 
-    default boolean hasChildren() {
-        return !children().isEmpty();
-    }
+    boolean hasChildren();
 
     default ParseTreeNode childAt(int i) {
         if (i < 0 || i >= children().size())
