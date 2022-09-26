@@ -2,6 +2,9 @@ package org.iguana.grammar.symbol;
 
 import java.util.*;
 
+import static org.iguana.utils.collections.CollectionsUtil.buildList;
+import static org.iguana.utils.collections.CollectionsUtil.buildMap;
+
 public class Sequence {
 
     private final List<Symbol> symbols;
@@ -49,6 +52,10 @@ public class Sequence {
         return attributes;
     }
 
+    public Builder copy() {
+        return new Builder(this);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -91,10 +98,19 @@ public class Sequence {
     }
 
     public static class Builder {
-        private final Map<String, Object> attributes = new HashMap<>();
-        private final List<Symbol> symbols = new ArrayList<>();
+        private Map<String, Object> attributes = new HashMap<>();
+        private List<Symbol> symbols = new ArrayList<>();
         private Associativity associativity = Associativity.UNDEFINED;
         private String label;
+
+        public Builder() { }
+
+        public Builder(Sequence seq) {
+            this.attributes = seq.getAttributes();
+            this.symbols = seq.symbols;
+            this.associativity = seq.associativity;
+            this.label = seq.label;
+        }
 
         public Builder addSymbol(Symbol symbol) {
             this.symbols.add(symbol);
@@ -122,6 +138,8 @@ public class Sequence {
         }
 
         public Sequence build() {
+            attributes = buildMap(attributes);
+            symbols = buildList(symbols);
             return new Sequence(this);
         }
     }

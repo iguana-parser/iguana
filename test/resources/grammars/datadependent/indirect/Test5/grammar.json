@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -162,7 +163,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

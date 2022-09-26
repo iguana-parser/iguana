@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "Exp"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -131,7 +132,8 @@
                       "kind" : "Identifier",
                       "name" : "Num"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -169,7 +171,8 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

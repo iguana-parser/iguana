@@ -90,7 +90,8 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -139,7 +140,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -170,7 +172,8 @@
                         "val" : 32
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

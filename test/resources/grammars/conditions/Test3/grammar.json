@@ -77,7 +77,8 @@
                         "name" : "Char"
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -89,16 +90,6 @@
     }
   ],
   "regularExpressionDefinitions" : {
-    "Char" : {
-      "kind" : "regex.Alt",
-      "symbols" : [
-        {
-          "kind" : "CharRange",
-          "start" : 97,
-          "end" : 122
-        }
-      ]
-    },
     "Nums" : {
       "kind" : "regex.Alt",
       "symbols" : [
@@ -106,6 +97,16 @@
           "kind" : "CharRange",
           "start" : 48,
           "end" : 57
+        }
+      ]
+    },
+    "Char" : {
+      "kind" : "regex.Alt",
+      "symbols" : [
+        {
+          "kind" : "CharRange",
+          "start" : 97,
+          "end" : 122
         }
       ]
     }

@@ -10,7 +10,9 @@
           "alternatives" : [
             {
               "seqs" : [
-                { }
+                {
+                  "associativity" : "UNDEFINED"
+                }
               ],
               "associativity" : "UNDEFINED"
             }

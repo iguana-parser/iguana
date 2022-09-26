@@ -526,7 +526,7 @@
                 ],
                 "recursion" : "LEFT_REC",
                 "irecursion" : "NON_REC",
-                "associativity" : "UNDEFINED",
+                "associativity" : "NON_ASSOC",
                 "associativityGroup" : {
                   "associativity" : "NON_ASSOC",
                   "precedenceLevel" : {
@@ -534,7 +534,7 @@
                     "rhs" : 2,
                     "undefined" : -1,
                     "hasPrefixUnary" : true,
-                    "hasPostfixUnary" : true,
+                    "hasPostfixUnary" : false,
                     "hasPrefixUnaryBelow" : false,
                     "hasPostfixUnaryBelow" : false,
                     "index" : 3,
@@ -552,7 +552,7 @@
                   "rhs" : 2,
                   "undefined" : -1,
                   "hasPrefixUnary" : true,
-                  "hasPostfixUnary" : true,
+                  "hasPostfixUnary" : false,
                   "hasPrefixUnaryBelow" : false,
                   "hasPostfixUnaryBelow" : false,
                   "index" : 3,
@@ -783,10 +783,7 @@
                       "prefixUnaryBelow" : [
                         2
                       ],
-                      "hasPostfixUnaryBelow" : true,
-                      "postfixUnaryBelow" : [
-                        2
-                      ],
+                      "hasPostfixUnaryBelow" : false,
                       "index" : 4,
                       "containsAssociativityGroup" : false,
                       "assoc_lhs" : -1,
@@ -1096,7 +1093,7 @@
                             ],
                             "recursion" : "RIGHT_REC",
                             "irecursion" : "NON_REC",
-                            "associativity" : "UNDEFINED",
+                            "associativity" : "NON_ASSOC",
                             "associativityGroup" : {
                               "associativity" : "NON_ASSOC",
                               "precedenceLevel" : {
@@ -1104,7 +1101,7 @@
                                 "rhs" : 2,
                                 "undefined" : -1,
                                 "hasPrefixUnary" : true,
-                                "hasPostfixUnary" : true,
+                                "hasPostfixUnary" : false,
                                 "hasPrefixUnaryBelow" : false,
                                 "hasPostfixUnaryBelow" : false,
                                 "index" : 3,
@@ -1122,7 +1119,7 @@
                               "rhs" : 2,
                               "undefined" : -1,
                               "hasPrefixUnary" : true,
-                              "hasPostfixUnary" : true,
+                              "hasPostfixUnary" : false,
                               "hasPrefixUnaryBelow" : false,
                               "hasPostfixUnaryBelow" : false,
                               "index" : 3,
@@ -1369,7 +1366,7 @@
                             ],
                             "recursion" : "RIGHT_REC",
                             "irecursion" : "NON_REC",
-                            "associativity" : "UNDEFINED",
+                            "associativity" : "NON_ASSOC",
                             "associativityGroup" : {
                               "associativity" : "NON_ASSOC",
                               "precedenceLevel" : {
@@ -1377,7 +1374,7 @@
                                 "rhs" : 2,
                                 "undefined" : -1,
                                 "hasPrefixUnary" : true,
-                                "hasPostfixUnary" : true,
+                                "hasPostfixUnary" : false,
                                 "hasPrefixUnaryBelow" : false,
                                 "hasPostfixUnaryBelow" : false,
                                 "index" : 3,
@@ -1395,7 +1392,7 @@
                               "rhs" : 2,
                               "undefined" : -1,
                               "hasPrefixUnary" : true,
-                              "hasPostfixUnary" : true,
+                              "hasPostfixUnary" : false,
                               "hasPrefixUnaryBelow" : false,
                               "hasPostfixUnaryBelow" : false,
                               "index" : 3,

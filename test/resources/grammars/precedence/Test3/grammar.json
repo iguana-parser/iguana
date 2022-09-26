@@ -48,7 +48,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -60,13 +61,13 @@
     }
   ],
   "literals" : {
-    "^" : {
-      "kind" : "Char",
-      "val" : 94
-    },
     "a" : {
       "kind" : "Char",
       "val" : 97
+    },
+    "^" : {
+      "kind" : "Char",
+      "val" : 94
     }
   },
   "startSymbol" : {

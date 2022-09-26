@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -87,7 +88,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 },
                 {
                   "symbols" : [
@@ -105,7 +106,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 },
                 {
                   "symbols" : [
@@ -123,7 +124,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 }
               ],
               "associativity" : "LEFT"
@@ -141,7 +142,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

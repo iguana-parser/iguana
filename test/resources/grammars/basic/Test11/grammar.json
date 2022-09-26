@@ -61,14 +61,17 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
-                { }
+                {
+                  "associativity" : "UNDEFINED"
+                }
               ],
               "associativity" : "UNDEFINED"
             }
@@ -79,13 +82,13 @@
     }
   ],
   "literals" : {
-    "b" : {
-      "kind" : "Char",
-      "val" : 98
-    },
     "a" : {
       "kind" : "Char",
       "val" : 97
+    },
+    "b" : {
+      "kind" : "Char",
+      "val" : 98
     }
   },
   "startSymbol" : {

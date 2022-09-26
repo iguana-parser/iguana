@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static org.iguana.utils.collections.CollectionsUtil.buildList;
+
 public class Alternative {
 
     private final List<Sequence> seqs;
@@ -102,9 +104,26 @@ public class Alternative {
             if (associativity == null) {
                 throw new RuntimeException("Associativity cannot be null.");
             }
-            if (seqs.isEmpty()) {
-                seqs = Collections.emptyList();
+            // Based on the grammar, associativity cannot be undefined for associativity groups.
+            // left (E '+' E | E '-' E) will translate into left (left E '+' E | left E '-' E).
+            // In other words, if the individual sequences do not define the associativity, they will
+            // inherit the associativity of the group.
+            if (associativity != Associativity.UNDEFINED) {
+                if (seqs.size() < 2)
+                    throw new RuntimeException("Associativity groups should have at least two sequences");
+
+                List<Sequence> seqsWithAssociativity = new ArrayList<>(seqs.size());
+                for (Sequence seq : seqs) {
+                    if (seq.associativity == Associativity.UNDEFINED) {
+                        seqsWithAssociativity.add(seq.copy().setAssociativity(associativity).build());
+                    } else {
+                        seqsWithAssociativity.add(seq);
+                    }
+                }
+                seqs = seqsWithAssociativity;
             }
+
+            seqs = buildList(seqs);
             return new Alternative(this);
         }
     }

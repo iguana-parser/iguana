@@ -141,7 +141,7 @@
                       "name" : "expr"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 },
                 {
                   "symbols" : [
@@ -163,7 +163,7 @@
                       "name" : "expr"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 }
               ],
               "associativity" : "LEFT"
@@ -335,7 +335,8 @@
                       "kind" : "Identifier",
                       "name" : "num"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

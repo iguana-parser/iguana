@@ -1,0 +1,6 @@
+
+start S
+  = E
+
+E = non-assoc (E "+" E | E "-" E)
+  | "a"

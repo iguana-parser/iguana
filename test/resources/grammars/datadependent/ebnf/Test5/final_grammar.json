@@ -1406,13 +1406,13 @@
     "startSymbol" : "S"
   },
   "globals" : {
-    "bCounter" : {
-      "kind" : "Integer",
-      "value" : 1
-    },
     "cCounter" : {
       "kind" : "Integer",
       "value" : 2
+    },
+    "bCounter" : {
+      "kind" : "Integer",
+      "value" : 1
     }
   }
 }

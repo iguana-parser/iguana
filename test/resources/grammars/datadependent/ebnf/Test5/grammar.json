@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "X"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -207,7 +208,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -238,7 +240,8 @@
                         "val" : 98
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -269,7 +272,8 @@
                         "val" : 99
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -300,13 +304,13 @@
     "startSymbol" : "S"
   },
   "globals" : {
-    "bCounter" : {
-      "kind" : "Integer",
-      "value" : 1
-    },
     "cCounter" : {
       "kind" : "Integer",
       "value" : 2
+    },
+    "bCounter" : {
+      "kind" : "Integer",
+      "value" : 1
     }
   }
 }

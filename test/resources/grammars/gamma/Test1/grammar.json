@@ -60,7 +60,9 @@
             },
             {
               "seqs" : [
-                { }
+                {
+                  "associativity" : "UNDEFINED"
+                }
               ],
               "associativity" : "UNDEFINED"
             }
@@ -90,7 +92,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -102,13 +105,13 @@
     }
   ],
   "literals" : {
-    "a" : {
-      "kind" : "Char",
-      "val" : 97
-    },
     "d" : {
       "kind" : "Char",
       "val" : 100
+    },
+    "a" : {
+      "kind" : "Char",
+      "val" : 97
     }
   },
   "startSymbol" : {

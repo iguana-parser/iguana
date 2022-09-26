@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -167,7 +168,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 },
                 {
                   "symbols" : [
@@ -189,7 +190,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "LEFT"
                 }
               ],
               "associativity" : "LEFT"
@@ -336,7 +337,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -348,19 +350,6 @@
     }
   ],
   "regularExpressionDefinitions" : {
-    "Id" : {
-      "kind" : "regex.Seq",
-      "symbols" : [
-        {
-          "kind" : "Char",
-          "val" : 105
-        },
-        {
-          "kind" : "Char",
-          "val" : 100
-        }
-      ]
-    },
     "Whitespaces" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -384,6 +373,19 @@
           }
         ]
       }
+    },
+    "Id" : {
+      "kind" : "regex.Seq",
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "val" : 105
+        },
+        {
+          "kind" : "Char",
+          "val" : 100
+        }
+      ]
     }
   },
   "literals" : {

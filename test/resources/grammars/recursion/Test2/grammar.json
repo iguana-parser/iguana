@@ -75,7 +75,8 @@
                         "val" : 99
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -106,14 +107,17 @@
                         "val" : 120
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
-                { }
+                {
+                  "associativity" : "UNDEFINED"
+                }
               ],
               "associativity" : "UNDEFINED"
             }
@@ -143,14 +147,17 @@
                         "val" : 121
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
             },
             {
               "seqs" : [
-                { }
+                {
+                  "associativity" : "UNDEFINED"
+                }
               ],
               "associativity" : "UNDEFINED"
             }

@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -82,7 +83,7 @@
                       }
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "NON_ASSOC"
                 },
                 {
                   "symbols" : [
@@ -100,7 +101,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "NON_ASSOC"
                 },
                 {
                   "symbols" : [
@@ -118,7 +119,7 @@
                       "name" : "E"
                     }
                   ],
-                  "associativity" : "UNDEFINED"
+                  "associativity" : "NON_ASSOC"
                 }
               ],
               "associativity" : "NON_ASSOC"
@@ -167,7 +168,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -193,7 +195,8 @@
                       "kind" : "Identifier",
                       "name" : "E"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -211,7 +214,8 @@
                         "val" : 98
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

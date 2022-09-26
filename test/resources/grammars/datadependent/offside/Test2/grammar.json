@@ -39,7 +39,8 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -147,7 +148,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -159,10 +161,6 @@
     }
   ],
   "regularExpressionDefinitions" : {
-    "Layout" : {
-      "kind" : "Reference",
-      "name" : "WhiteSpace"
-    },
     "WhiteSpace" : {
       "kind" : "regex.Star",
       "regex" : {
@@ -190,6 +188,10 @@
           }
         ]
       }
+    },
+    "Layout" : {
+      "kind" : "Reference",
+      "name" : "WhiteSpace"
     }
   },
   "literals" : {

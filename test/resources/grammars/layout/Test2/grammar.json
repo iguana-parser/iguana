@@ -56,7 +56,8 @@
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -76,7 +77,9 @@
           "alternatives" : [
             {
               "seqs" : [
-                { }
+                {
+                  "associativity" : "UNDEFINED"
+                }
               ],
               "associativity" : "UNDEFINED"
             }
@@ -106,7 +109,8 @@
                         "val" : 99
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -152,7 +156,8 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

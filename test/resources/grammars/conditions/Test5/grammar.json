@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "Id"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -104,7 +105,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

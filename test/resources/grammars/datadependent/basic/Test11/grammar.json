@@ -16,7 +16,8 @@
                       "kind" : "Identifier",
                       "name" : "S"
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"

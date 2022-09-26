@@ -1118,7 +1118,7 @@
       },
       "recursion" : "LEFT_RIGHT_REC",
       "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
+      "associativity" : "LEFT",
       "associativityGroup" : {
         "associativity" : "LEFT",
         "precedenceLevel" : {
@@ -1379,7 +1379,7 @@
       },
       "recursion" : "LEFT_RIGHT_REC",
       "irecursion" : "NON_REC",
-      "associativity" : "UNDEFINED",
+      "associativity" : "LEFT",
       "associativityGroup" : {
         "associativity" : "LEFT",
         "precedenceLevel" : {

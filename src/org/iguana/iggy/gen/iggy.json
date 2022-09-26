@@ -2786,7 +2786,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "LEFT",
                   "label" : "Multiplication"
                 },
                 {
@@ -2811,7 +2811,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "LEFT",
                   "label" : "Division"
                 }
               ],
@@ -2845,7 +2845,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "LEFT",
                   "label" : "Addition"
                 },
                 {
@@ -2870,7 +2870,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "LEFT",
                   "label" : "Subtraction"
                 }
               ],
@@ -2913,7 +2913,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "NON_ASSOC",
                   "label" : "GreaterEq"
                 },
                 {
@@ -2947,7 +2947,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "NON_ASSOC",
                   "label" : "LessEq"
                 },
                 {
@@ -2972,7 +2972,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "NON_ASSOC",
                   "label" : "Greater"
                 },
                 {
@@ -2997,7 +2997,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "NON_ASSOC",
                   "label" : "Less"
                 }
               ],
@@ -3040,7 +3040,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "NON_ASSOC",
                   "label" : "Equal"
                 },
                 {
@@ -3074,7 +3074,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "NON_ASSOC",
                   "label" : "NotEqual"
                 }
               ],
@@ -3117,7 +3117,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "LEFT",
                   "label" : "And"
                 },
                 {
@@ -3151,7 +3151,7 @@
                       "label" : "rhs"
                     }
                   ],
-                  "associativity" : "UNDEFINED",
+                  "associativity" : "LEFT",
                   "label" : "Or"
                 }
               ],
